@@ -8,6 +8,7 @@ export * from "./components/Link";
 export * from "./components/Skeleton";
 export * from "./components/Svg";
 export * from "./components/Text";
+export * from "./components/Dots";
 
 // Hooks
 export * from "./hooks";

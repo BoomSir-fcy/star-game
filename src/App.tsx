@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { ResetCSS, Flex, Box } from 'uikit'
+import StarrySky from 'components/StarrySky'
 
 const Home = lazy(() => import('./views/Home'))
 const Test = lazy(() => import('./views/Test'))
@@ -9,6 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <ResetCSS />
+      <StarrySky />
       <Suspense fallback="loading...">
         <Flex justifyContent="center">
           <Box margin="16px">
