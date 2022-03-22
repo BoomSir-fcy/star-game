@@ -2,47 +2,18 @@ import React, { useCallback } from 'react';
 import Modal from 'react-modal';
 import styled, { DefaultTheme } from 'styled-components';
 import { Heading, Flex, HelpIcon, Button, Box } from 'uikit';
-
 import useTheme from 'hooks/useTheme';
 
-const BoxStyle = styled(Box)<{ overflow?: string }>`
-  overflow-y: ${({ overflow }) => overflow || 'auto'};
-  max-height: calc(80vh - 100px);
-  padding-bottom: 3px;
-`;
+Modal.setAppElement('#scale-content');
 
-const getCustomStyles = (
-  theme: DefaultTheme,
-  fillBody?: boolean,
-  top?: string,
-  padding?: string,
-  left?: string,
-) => ({
-  content: {
-    top: top ? top : '50%',
-    left: left ? left : '50%',
-    right: 'auto',
-    bottom: 'auto',
-    transform: 'translate(-50%, -50%)',
-    minWidth: '320px',
-    border: 0,
-    overflow: 'visible',
-    padding: padding ? padding : fillBody ? '18px 0' : '18px 20px',
-    zIndex: 200,
-    inset: '50% auto auto 50%',
-    maxHeight: '80vh',
-  },
-  overlay: {
-    backgroundColor: 'rgba(98, 98, 98, 0.3)',
-    zIndex: 200,
-  },
-});
+const BoxStyled = styled(Box)<{ overflow?: string }>`
+  background-color: ${({ theme }) => theme.colors.backgroundModal};
+`;
 
 interface ModalHeaderProps {
   title?: string;
   onClose?: React.MouseEventHandler<HTMLButtonElement>;
   theme?: DefaultTheme;
-
 }
 const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose, theme }) => {
   return (
@@ -68,7 +39,7 @@ const scales = {
 interface ModalWrapperProps {
   visible: boolean;
   scale?: typeof scales[keyof typeof scales];
-  setVisible?: (state: boolean) => void;
+  setVisible?: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
   creactOnUse?: boolean;
   customizeTitle?: boolean;
@@ -76,7 +47,32 @@ interface ModalWrapperProps {
   theme?: DefaultTheme;
 }
 
-export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
+const getCustomStyles = (themes: DefaultTheme) => ({
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    transform: 'translate(-50%, -50%)',
+    minWidth: '320px',
+    border: 0,
+    zIndex: 200,
+    inset: '50% auto auto 50%',
+    maxHeight: '80vh',
+    background: 'transparent',
+    padding: '0',
+    margin: '0',
+  },
+  overlay: {
+    backgroundColor: themes.colors.overlay,
+    zIndex: 200,
+    // transform: 'scale(1)',
+    // width: '100vw',
+    // height: '100vw',
+  },
+});
+
+const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
   ({
     visible,
     setVisible,
@@ -101,13 +97,35 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
         isOpen={visible}
         onRequestClose={onClose}
         ariaHideApp={false}
+        style={getCustomStyles(themes)}
         shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
         contentLabel='Example Modal'
+        parentSelector={() =>
+          document.querySelector('#scale-content') || document.body
+        }
+        overlayElement={(props, contentElement) => {
+          const { width, height } =
+            window.document.documentElement.getBoundingClientRect();
+          const maxV = Math.max(width, height);
+          const rate = maxV / 1980;
+          return (
+            <div
+              {...props}
+              style={{
+                ...props.style,
+                height: `${(1 / rate) * 100}vmin`,
+                top: '0',
+                bottom: '0',
+                margin: 'auto',
+              }}
+            >
+              {contentElement}
+            </div>
+          );
+        }}
       >
-        <ModalHeader title={title} onClose={onClose} theme={themes}/>
-        <BoxStyle theme={themes}>
-          {children}
-        </BoxStyle>
+        <ModalHeader title={title} onClose={onClose} theme={themes} />
+        <BoxStyled>{children}</BoxStyled>
       </Modal>
     );
   },
@@ -116,3 +134,5 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
 ModalWrapper.defaultProps = {
   scale: scales.XL,
 };
+
+export default ModalWrapper;

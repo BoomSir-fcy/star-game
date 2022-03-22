@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
-import skyBg0 from 'assets/img/commons/sky-bg0.png';
-import skyBg1 from 'assets/img/commons/sky-bg1.jpg';
 import './spiders.css';
 
-export const backgroundVariants = [skyBg0, skyBg1];
+export const backgroundVariants = [
+  '/images/commons/sky-bg0.png',
+  '/images/commons/sky-bg1.jpg',
+];
 
 const getBackground = ({ type }: { type: number }) => {
   if (backgroundVariants[type]) {

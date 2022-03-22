@@ -22,6 +22,12 @@ export const scaleVariants = {
 };
 
 export const styleVariants = {
+  'login': {
+    background: `url(/images/sprite/button.png)`,
+    backgroundPosition: '0 0',
+    width: '16.13rem',
+    height: '5.63rem',
+  },
   [variants.PRIMARY]: {
     backgroundColor: "primary",
     color: "white",

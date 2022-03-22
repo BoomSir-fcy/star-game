@@ -71,13 +71,10 @@ export type Colors = {
   inputSecondary: string;
   inputSelect: string;
   background: string;
-  backgroundPage: string;
-  backgroundLight: string;
   backgroundDisabled: string;
-  backgroundPrimary: string;
-  backgroundMember: string;
-  backgroundCard: string;
   backgroundAlt: string;
+  backgroundModal: string;
+  backgroundCard: string;
   text: string;
   whiteBlack: string;
   memberNum: string;

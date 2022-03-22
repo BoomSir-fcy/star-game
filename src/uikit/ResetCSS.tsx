@@ -1,5 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import { mediaQueries } from "./theme/base";
+import { createGlobalStyle } from 'styled-components';
+import { mediaQueries } from './theme/base';
 
 const ResetCSS = createGlobalStyle`
   /* prettier-ignore */
@@ -35,6 +35,14 @@ const ResetCSS = createGlobalStyle`
   body{
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
+  }
+  body, html, #root, #detect-orient{
+    width: 100%;
+    height: 100%;
+  }
+  img{
+    width: 100%;
+    height: auto;
   }
   ol,
   ul {
