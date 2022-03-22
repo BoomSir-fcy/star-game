@@ -7,9 +7,9 @@ import Providers from './Providers'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Providers>
+    {/* <Providers> */}
       <App />
-    </Providers>
+    {/* </Providers> */}
   </React.StrictMode>,
   document.getElementById('root')
 );

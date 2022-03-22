@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Text, Button, useMatchBreakpoints } from 'uikit';
 import {
   walletLocalStorageKey,
-  connectorLocalStorageKey
+  connectorLocalStorageKey,
 } from 'config/wallet/config';
 import { ConnectorNames, Login, Config } from 'config/wallet';
 
@@ -20,7 +20,7 @@ const WalletButton = styled(Button).attrs({ width: '100%', variant: 'text' })`
   justify-content: flex-start;
   margin-left: auto;
   margin-right: auto;
-  background-color: ${({ theme }) => theme.colors.inputSelect};
+  /* background-color: ${({ theme }) => theme.colors.inputSelect}; */
   width: 200px;
   max-width: 100%;
   min-width: 100px;
@@ -38,7 +38,7 @@ const WalletItem: React.FC<Props> = ({ login, walletConfig }) => {
 
   return (
     <WalletButton
-      variant="tertiary"
+      variant='tertiary'
       onClick={() => {
         const isIOS =
           /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -53,20 +53,20 @@ const WalletItem: React.FC<Props> = ({ login, walletConfig }) => {
         localStorage.setItem(walletLocalStorageKey, walletConfig.title);
         localStorage.setItem(
           connectorLocalStorageKey,
-          walletConfig.connectorId
+          walletConfig.connectorId,
         );
         // onDismiss();
       }}
       id={`wallet-connect-${title.toLocaleLowerCase()}`}
     >
-      {
-        isMd || isLg || isXl || isXxl
-        ?
-        <Icon width="40px" mr="16px" />
-        :
-        <Icon width="30px" mr="8px" />
-      }
-      <Text ellipsis fontSize="14px">{title}</Text>
+      {isMd || isLg || isXl || isXxl ? (
+        <Icon width='40px' mr='16px' />
+      ) : (
+        <Icon width='30px' mr='8px' />
+      )}
+      <Text ellipsis fontSize='14px'>
+        {title}
+      </Text>
     </WalletButton>
   );
 };

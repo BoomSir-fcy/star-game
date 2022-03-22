@@ -1,6 +1,7 @@
 import { ConnectWalletButton } from "components/ConnectWallet/ConnectWalletButton";
 import React, { useEffect, useState } from "react";
 import { Heading, Text, Flex, Box } from "uikit";
+import Dashboard from 'components/Dashboard'
 
 const Home: React.FC = () => {
 
@@ -12,11 +13,7 @@ const Home: React.FC = () => {
 
   return (
     <Box>
-      <ConnectWalletButton />
-      <Flex flexDirection="column" alignItems="center">
-        <Heading>Home{count}</Heading>
-        <Text>这是首页</Text>
-      </Flex>
+      <Dashboard />
     </Box>
   )
 }

@@ -1,0 +1,12 @@
+{
+  "editor.tabSize": 2,
+  "editor.fontSize": 15,
+  "eslint.alwaysShowStatus": true,
+  "eslint.quiet": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.fixAll.eslint": true
+  },
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": true
+}

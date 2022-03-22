@@ -1,38 +1,39 @@
-import React from 'react'
-import { light, dark } from 'uikit'
-import { ThemeProvider } from 'styled-components'
+import React from 'react';
+import { light, dark } from 'uikit';
+import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
-import { HelmetProvider } from 'react-helmet-async'
+import { HelmetProvider } from 'react-helmet-async';
 import { Web3ReactProvider } from '@web3-react/core';
 import { getLibrary } from 'utils/web3Core';
-import { LanguageProvider } from 'contexts/Localization'
-import { RefreshContextProvider } from 'contexts/RefreshContext'
-import { ToastsProvider } from 'contexts/ToastsContext'
+import { LanguageProvider } from 'contexts/Localization';
+import { RefreshContextProvider } from 'contexts/RefreshContext';
+import { ToastsProvider } from 'contexts/ToastsContext';
 import { ConnectWalletProvider } from 'contexts/ConnectWallet';
+import store from 'state';
 
-const ThemeProviderWrapper: React.FC = (props) => {
-  const isDark = true
-  return <ThemeProvider theme={isDark ? dark : light} {...props}/>
-}
+const ThemeProviderWrapper: React.FC = props => {
+  const isDark = true;
+  return <ThemeProvider theme={isDark ? dark : light} {...props} />;
+};
 
 const Providers: React.FC = ({ children }) => {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <HelmetProvider>
-        <ThemeProviderWrapper>
-          <LanguageProvider>
-            <RefreshContextProvider>
-              <ToastsProvider>
-                <ConnectWalletProvider>
-                  {children}
-                </ConnectWalletProvider>
-              </ToastsProvider>
-            </RefreshContextProvider>
-          </LanguageProvider>
-        </ThemeProviderWrapper>
-      </HelmetProvider>
+      <Provider store={store}>
+        <HelmetProvider>
+          <ThemeProviderWrapper>
+            <LanguageProvider>
+              <RefreshContextProvider>
+                <ToastsProvider>
+                  <ConnectWalletProvider>{children}</ConnectWalletProvider>
+                </ToastsProvider>
+              </RefreshContextProvider>
+            </LanguageProvider>
+          </ThemeProviderWrapper>
+        </HelmetProvider>
+      </Provider>
     </Web3ReactProvider>
-  )
-}
+  );
+};
 
-export default Providers
+export default Providers;

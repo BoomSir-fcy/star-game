@@ -1,30 +1,27 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { ResetCSS, Flex, Box } from 'uikit'
-import StarrySky from 'components/StarrySky'
+import { ResetCSS, Flex, Box } from 'uikit';
+import StarrySky from 'components/StarrySky';
+import Providers from './Providers';
 
-const Home = lazy(() => import('./views/Home'))
-const Test = lazy(() => import('./views/Test'))
+const Home = lazy(() => import('./views/Home'));
+const Test = lazy(() => import('./views/Test'));
+const Login = lazy(() => import('./views/Login'));
 
 function App() {
   return (
     <BrowserRouter>
-      <ResetCSS />
-      <StarrySky />
-      <Suspense fallback="loading...">
-        <Flex justifyContent="center">
-          <Box margin="16px">
-            <Link to="/">Home</Link>
-          </Box>
-          <Box margin="16px">
-            <Link to="/test">Test</Link>
-          </Box>
-        </Flex>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/test" element={<Test />} />
-        </Routes>
-      </Suspense>
+      <Providers>
+        <ResetCSS />
+        <StarrySky />
+        <Suspense fallback='loading...'>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/test' element={<Test />} />
+          </Routes>
+        </Suspense>
+      </Providers>
     </BrowserRouter>
   );
 }

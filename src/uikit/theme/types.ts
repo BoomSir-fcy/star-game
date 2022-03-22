@@ -57,7 +57,6 @@ export type Gradients = {
 };
 
 export type Colors = {
-  white: string;
   primary: string;
   primaryBright: string;
   primaryDark: string;
@@ -66,26 +65,18 @@ export type Colors = {
   success: string;
   failure: string;
   warning: string;
-  avatarBg: string;
   cardBorder: string;
-  contrast: string;
-  dropdown: string;
-  dropdownDeep: string;
   invertedContrast: string;
   input: string;
-  inputPanel: string;
-  inpuShadows: string;
   inputSecondary: string;
   inputSelect: string;
   background: string;
   backgroundPage: string;
   backgroundLight: string;
-  backgroundSelect: string;
   backgroundDisabled: string;
   backgroundPrimary: string;
   backgroundMember: string;
   backgroundCard: string;
-  textValue: string;
   backgroundAlt: string;
   text: string;
   whiteBlack: string;
