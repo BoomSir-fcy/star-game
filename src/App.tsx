@@ -7,6 +7,7 @@ import Providers from './Providers';
 const Home = lazy(() => import('./views/Home'));
 const Test = lazy(() => import('./views/Test'));
 const Login = lazy(() => import('./views/Login'));
+const MysteryBox = lazy(() => import('./views/MysteryBox'));
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Login />} />
-              {/* <Route path='/login/next' element={<Login />} /> */}
+              <Route path='/mystery-box' element={<MysteryBox />} />
               <Route path='/test' element={<Test />} />
             </Routes>
           </Suspense>

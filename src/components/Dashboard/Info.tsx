@@ -1,12 +1,8 @@
-import React from "react";
-import { Box } from "uikit";
+import React from 'react';
+import { Box } from 'uikit';
 
 const Info = () => {
-  return (
-    <Box width='100%' background='pink'>
-      Info
-    </Box>
-  )
-}
+  return <Box width='100%'>1</Box>;
+};
 
 export default Info;

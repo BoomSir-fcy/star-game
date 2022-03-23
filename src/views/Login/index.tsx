@@ -41,16 +41,19 @@ const Login = () => {
       onConnectWallet();
       return;
     }
-    if (parsedQs.s === '') {
+    if (parsedQs.s === '1') {
       // TODO: 注册登录
-      // navigate(`${pathname}?s=${1}`, { replace: true });
+
+      navigate('/mystery-box');
     }
     setVisible(true);
-  }, [account, onConnectWallet, setVisible, parsedQs.s]);
+  }, [account, onConnectWallet, setVisible, parsedQs.s, navigate]);
 
   useEffect(() => {
     if (account) {
       navigate(`${pathname}?s=${1}`, { replace: true });
+    } else {
+      navigate(`${pathname}?s=${0}`, { replace: true });
     }
   }, [account, pathname, navigate]);
 
