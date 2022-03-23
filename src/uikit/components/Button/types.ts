@@ -11,6 +11,7 @@ export const scales = {
 
 export const variants = {
   LOGIN: "login",
+  GHOST: "ghost",
   PRIMARY: "primary",
   INFO: "info",
   SECONDARY: "secondary",

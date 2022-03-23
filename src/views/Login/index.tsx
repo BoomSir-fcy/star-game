@@ -83,9 +83,15 @@ const Login = () => {
           </Button>
         </EnterBoxMove>
       </Flex>
-      {/* <Modal visible={visible} setVisible={setVisible}>
-        <Image src='/images/commons/dsg-1.png' width={500} height={300} />
-      </Modal> */}
+      <Modal title='确认创建' visible={visible} setVisible={setVisible}>
+        <Flex pt='98px' flexDirection='column' alignItems='center'>
+          <Image src='/images/commons/dsg-1.png' width={109} height={114} />
+          <Text mt='42px' fontSize='24px'>
+            创建身份所需支付100 DSG
+          </Text>
+          <Button mt='58px'>确认支付</Button>
+        </Flex>
+      </Modal>
     </>
   );
 };

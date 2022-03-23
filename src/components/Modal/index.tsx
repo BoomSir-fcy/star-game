@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import Modal from 'react-modal';
 import styled, { DefaultTheme } from 'styled-components';
-import { Heading, Flex, HelpIcon, Button, Box } from 'uikit';
+import { Text, Flex, HelpIcon, Button, Box } from 'uikit';
 import useTheme from 'hooks/useTheme';
 
 Modal.setAppElement('#scale-content');
 
 const BoxStyled = styled(Box)<{ overflow?: string }>`
-  background-color: ${({ theme }) => theme.colors.backgroundModal};
+  margin: 40px 0 0 0;
 `;
 
 interface ModalHeaderProps {
@@ -15,6 +15,7 @@ interface ModalHeaderProps {
   onClose?: React.MouseEventHandler<HTMLButtonElement>;
   theme?: DefaultTheme;
 }
+
 const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose, theme }) => {
   return (
     <Flex
@@ -23,9 +24,13 @@ const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose, theme }) => {
       justifyContent='space-between'
       alignItems='center'
     >
-      <Heading>{title}</Heading>
-      <Button onClick={onClose} padding='0' variant='text'>
-        <HelpIcon width={16} color='white_black' />
+      <Text fontSize='30px' mt='8px' pl='20px' bold>
+        {title}
+      </Text>
+      <Button padding='0' onClick={onClose} variant='text'>
+        <Box width='55px'>
+          <img alt='' src='/images/commons/modal/cancle.png' />
+        </Box>
       </Button>
     </Flex>
   );
@@ -58,10 +63,11 @@ const getCustomStyles = (themes: DefaultTheme) => ({
     border: 0,
     zIndex: 200,
     inset: '50% auto auto 50%',
-    maxHeight: '80vh',
-    background: 'transparent',
-    padding: '0',
+    background: 'url(/images/commons/modal/bg.png)',
+    padding: '60px',
     margin: '0',
+    width: '1032px',
+    height: '802px',
   },
   overlay: {
     backgroundColor: themes.colors.overlay,
