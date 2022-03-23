@@ -1,7 +1,7 @@
-import styled, { DefaultTheme } from "styled-components";
-import { space, layout, variant } from "styled-system";
-import { scaleVariants, styleVariants } from "./theme";
-import { BaseButtonProps } from "./types";
+import styled, { DefaultTheme } from 'styled-components';
+import { space, layout, variant } from 'styled-system';
+import { scaleVariants, styleVariants } from './theme';
+import { BaseButtonProps } from './types';
 
 interface ThemedButtonProps extends BaseButtonProps {
   theme: DefaultTheme;
@@ -43,18 +43,18 @@ const getDisabledStyles = ({ $isLoading, theme }: TransientButtonProps) => {
  */
 
 const getOpacity = ({ $isLoading = false }: TransientButtonProps) => {
-  return $isLoading ? ".8" : "1";
+  return $isLoading ? '.8' : '1';
 };
 
 const StyledButton = styled.button<BaseButtonProps>`
   align-items: center;
   border: 0;
   border-radius: 16px;
-  box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,;
+  box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset;
   cursor: pointer;
   display: inline-flex;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 28px;
   font-weight: 600;
   justify-content: center;
   letter-spacing: 0.03em;
@@ -75,7 +75,7 @@ const StyledButton = styled.button<BaseButtonProps>`
 
   ${getDisabledStyles}
   ${variant({
-    prop: "scale",
+    prop: 'scale',
     variants: scaleVariants,
   })}
   background-size: 100% 100%;

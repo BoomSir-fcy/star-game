@@ -1,14 +1,11 @@
 import React from 'react';
-import { Box, Image } from 'uikit';
+import { Box, BoxProps, Image } from 'uikit';
 
-const StarGameBox = () => {
+const StarGameBox: React.FC<BoxProps> = props => {
   return (
-    <Image width={979} height={100} src='/images/login/star-game-box.png' />
-    // <Box width='979px' height='100px'>
-    //   <img src='/images/login/star-game-box.png' alt='' />
-    // </Box>
-    // <Flex>
-    // </Flex>
+    <Box {...props} width={980}>
+      <Image width={980} height={109} src='/images/login/star-game-box.png' />
+    </Box>
   );
 };
 

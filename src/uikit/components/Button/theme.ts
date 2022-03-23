@@ -22,11 +22,12 @@ export const scaleVariants = {
 };
 
 export const styleVariants = {
-  'login': {
-    background: `url(/images/sprite/button.png)`,
+  [variants.LOGIN]: {
+    background: `url(/images/commons/btn/enter.png)`,
     backgroundPosition: '0 0',
-    width: '16.13rem',
-    height: '5.63rem',
+    width: '210px',
+    height: '123px',
+    paddingBottom: '48px',
   },
   [variants.PRIMARY]: {
     backgroundColor: "primary",

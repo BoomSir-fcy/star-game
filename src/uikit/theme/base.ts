@@ -95,7 +95,7 @@ export const shadows = {
   success: "0px 0px 0px 1px #31D0AA, 0px 0px 0px 4px rgba(49, 208, 170, 0.2)",
   warning: "0px 0px 0px 1px #ED4B9E, 0px 0px 0px 4px rgba(237, 75, 158, 0.2)",
   focus: "0px 0px 0px 1px #fbf2e9, 0px 0px 0px 4px rgba(77, 205, 179, 0.6)",
-  input: "inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21);",
+  input: "inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35)",
   inset: "inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21)",
   box: '0px 0px 21px 0px rgba(25, 95, 81, 0.2)',
   nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)'
