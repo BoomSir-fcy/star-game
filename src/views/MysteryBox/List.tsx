@@ -3,7 +3,7 @@ import { Box, Text } from 'uikit';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 
-const MysteryBox = () => {
+const MysteryBoxList = () => {
   return (
     <Layout>
       <Dashboard />
@@ -12,4 +12,4 @@ const MysteryBox = () => {
   );
 };
 
-export default MysteryBox;
+export default MysteryBoxList;

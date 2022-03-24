@@ -3,13 +3,13 @@ import { Box, Text } from 'uikit';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 
-const MysteryBox = () => {
+const MysteryBoxState = () => {
   return (
     <Layout>
       <Dashboard />
-      <Text>盲盒</Text>
+      <Text>盲盒状态</Text>
     </Layout>
   );
 };
 
-export default MysteryBox;
+export default MysteryBoxState;

@@ -3,13 +3,13 @@ import { Box, Text } from 'uikit';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 
-const MysteryBox = () => {
+const PlantLeague = () => {
   return (
     <Layout>
       <Dashboard />
-      <Text>盲盒</Text>
+      <Text>星球联盟</Text>
     </Layout>
   );
 };
 
-export default MysteryBox;
+export default PlantLeague;

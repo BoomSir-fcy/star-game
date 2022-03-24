@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Flex, Box, Image } from 'uikit';
-import { ManAvatar } from 'components/Avatar';
 import Avatar from './Avatar';
 import Info from './Info';
 
@@ -19,8 +18,6 @@ const Dashboard = () => {
       <Flex flex={1}>
         <Info />
       </Flex>
-      {/* <Flex flex={8}>
-      </Flex> */}
     </FlexStyled>
   );
 };

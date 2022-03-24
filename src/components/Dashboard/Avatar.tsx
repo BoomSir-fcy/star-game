@@ -12,14 +12,11 @@ const ButtonStyled = styled(Button)`
   padding: 0;
   margin: 0;
   text-shadow: none;
-  &:hover {
-    opacity: 1 !important;
-  }
 `;
 
 const Avatar = () => {
   return (
-    <Box width='280px' position='relative'>
+    <Box width='272px' position='relative'>
       <Box position='absolute' top={20} width='100%'>
         <Text textAlign='center'>盘哥</Text>
       </Box>

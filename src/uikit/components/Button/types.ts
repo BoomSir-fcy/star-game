@@ -12,6 +12,7 @@ export const scales = {
 export const variants = {
   LOGIN: "login",
   GHOST: "ghost",
+  CUSTOM: "custom",
   PRIMARY: "primary",
   INFO: "info",
   SECONDARY: "secondary",
@@ -57,3 +58,7 @@ export interface BaseButtonProps extends LayoutProps, SpaceProps {
 }
 
 export type ButtonProps<P extends ElementType = "button"> = PolymorphicComponentProps<P, BaseButtonProps>;
+
+export type ButtonOnRefresh = () => Promise<any>;
+export type ButtonOnBack = () => void;
+
