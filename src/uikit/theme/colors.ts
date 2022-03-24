@@ -1,4 +1,4 @@
-import { Colors } from "./types";
+import { Colors, qualities } from "./types";
 
 export const baseColors = {
   failure: "#ED4B9E",
@@ -25,10 +25,20 @@ export const nftTokenColors = {
   meat: "#8A260E",
 };
 
+export const QualityColor = {
+  [qualities.ORDINARY]: '#FFFFFF',
+  [qualities.GOOD]: '#58DB6B',
+  [qualities.RARE]: '#3D98FF',
+  [qualities.EPIC]: '#D259EC',
+  [qualities.LEGEND]: '#FFB93D',
+  [qualities.MYTHOLOGY]: '#FF6F3D',
+};
+
 export const lightColors: Colors = {
   ...baseColors,
   ...additionalColors,
   ...nftTokenColors,
+  ...QualityColor,
   background: "#FAF9FA",
   backgroundModal: "#161920",
   backgroundDisabled: "#E9EAEB",
@@ -62,6 +72,7 @@ export const darkColors: Colors = {
   ...baseColors,
   ...additionalColors,
   ...nftTokenColors,
+  ...QualityColor,
   secondary: "#9A6AFF",
   background: "#08060B",
   backgroundModal: "#161920",

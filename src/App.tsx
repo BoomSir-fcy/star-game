@@ -11,7 +11,7 @@ import {
   StarUpgrade,
   StarSearch,
 } from './views/Star';
-import { TestBgCard, Test, TestCard, TestButton } from './views/Test';
+import { TestBgCard, Test, TestCard, TestButton, TestStar } from './views/Test';
 
 const Home = lazy(() => import('./views/Home'));
 const Login = lazy(() => import('./views/Login'));
@@ -61,6 +61,7 @@ function App() {
                 <Route path='card' element={<TestCard />} />
                 <Route path='bg-card' element={<TestBgCard />} />
                 <Route path='button' element={<TestButton />} />
+                <Route path='star' element={<TestStar />} />
               </Route>
             </Routes>
           </Suspense>

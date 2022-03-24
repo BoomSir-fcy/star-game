@@ -29,6 +29,11 @@ const Test: React.FC = () => {
                 label: '按钮',
                 path: '/test/button',
               },
+              {
+                id: 'star',
+                label: '星球',
+                path: '/test/star',
+              },
             ]}
           />
           <Flex ml='50px' flex={1}>

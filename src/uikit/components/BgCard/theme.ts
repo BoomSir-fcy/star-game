@@ -26,4 +26,9 @@ export const styleVariants = {
     width: "535px",
     height: "604px",
   },
+  [variants.SHORT]: {
+    background: "url(/images/commons/bg-card/short.png)",
+    width: "611px",
+    height: "99px",
+  },
 };

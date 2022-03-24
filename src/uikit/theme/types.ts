@@ -56,6 +56,17 @@ export type Gradients = {
   gold: string;
 };
 
+export const qualities = {
+  ORDINARY: 'ordinary', // 普通
+  GOOD: 'good', // 良好
+  RARE: 'rare', // 稀有
+  EPIC: 'epic', // 史诗
+  LEGEND: 'legend', // 传说
+  MYTHOLOGY: 'mythology', // 神话
+} as const;
+
+export type Qualities = typeof qualities[keyof typeof qualities];
+
 export type Colors = {
   primary: string;
   primaryBright: string;
@@ -96,6 +107,15 @@ export type Colors = {
   // NFT Token Colors
   triangleDinosaur: string;
   meat: string;
+
+  // quality
+  [qualities.ORDINARY]: string;
+  [qualities.GOOD]: string;
+  [qualities.RARE]: string;
+  [qualities.EPIC]: string;
+  [qualities.LEGEND]: string;
+  [qualities.MYTHOLOGY]: string;
+
 };
 
 export type Filters = {

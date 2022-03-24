@@ -7,6 +7,7 @@ export const variants = {
   SMALL: "small",
   LONG: "long",
   MEDIUM: "medium",
+  SHORT: "short",
 } as const;
 
 export type Variant = typeof variants[keyof typeof variants];
