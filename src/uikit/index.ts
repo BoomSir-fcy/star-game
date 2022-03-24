@@ -13,6 +13,7 @@ export * from "./components/Dots";
 export * from "./components/Label";
 export * from "./components/Input";
 export * from "./components/BgCard";
+export * from "./components/Fringe";
 
 // Hooks
 export * from "./hooks";

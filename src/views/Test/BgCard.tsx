@@ -1,13 +1,16 @@
 import React from 'react';
-import { Text, BgCard, Box } from 'uikit';
+import { Text, BgCard, Box, Flex } from 'uikit';
 
 const TestBgCard: React.FC = () => {
   return (
     <Box>
-      <BgCard padding='50px'>
+      <BgCard fringe padding='50px'>
         <Text>这是一个卡片</Text>
       </BgCard>
-      <BgCard variant='small' />
+      <Flex>
+        <BgCard fringe variant='small' />
+        <BgCard variant='small' />
+      </Flex>
     </Box>
   );
 };

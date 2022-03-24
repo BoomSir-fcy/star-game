@@ -14,4 +14,5 @@ export type Variant = typeof variants[keyof typeof variants];
 
 export interface BgCardProps extends SpaceProps, HTMLAttributes<HTMLDivElement> {
   variant?: Variant
+  fringe?: boolean // 刘海
 }
