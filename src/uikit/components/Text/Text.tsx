@@ -11,12 +11,17 @@ const getColor = ({ color, theme }: ThemedProps) => {
   return getThemeValue(`colors.${color}`, color)(theme);
 };
 
+const getTextShadows = ({ shadow, theme }: ThemedProps) => {
+  return getThemeValue(`textShadows.${shadow}`, shadow)(theme);
+};
+
 const getFontSize = ({ fontSize, small }: TextProps) => {
   return small ? '22px' : fontSize || '28px';
 };
 
 const Text = styled.div<TextProps>`
   color: ${getColor};
+  text-shadow: ${getTextShadows};
   font-size: ${getFontSize};
   font-weight: ${({ bold }) => (bold ? 600 : 400)};
   font-family: ${({ bold }) =>

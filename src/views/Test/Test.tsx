@@ -34,6 +34,11 @@ const Test: React.FC = () => {
                 label: '星球',
                 path: '/test/star',
               },
+              {
+                id: 'text',
+                label: '文字',
+                path: '/test/text',
+              },
             ]}
           />
           <Flex ml='50px' flex={1}>

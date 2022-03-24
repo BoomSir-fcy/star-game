@@ -15,10 +15,7 @@ export type CardTheme = {
   boxShadowSuccess: string;
   boxShadowWarning: string;
   cardHeaderBackground: {
-    default: string;
-    blue: string;
     bubblegum: string;
-    violet: string;
   };
   dropShadow: string;
 };

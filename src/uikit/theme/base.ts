@@ -43,26 +43,6 @@ const mediaQueriesMargin = `
   }
 
 `
-const mediaQueriesMarginRight = `
-  ${mediaQueries.xxs} {
-    margin-right: 4px;
-  }
-  ${mediaQueries.xs} {
-    margin-right: 8px;
-  }
-
-  ${mediaQueries.sm} {
-    margin-right: 16px;
-  }
-
-  ${mediaQueries.lg} {
-    margin-right: 24px;
-  }
-  ${mediaQueries.xl} {
-    margin-right: 32px;
-  }
-
-`
 const mediaQueriesPadding = `
   ${mediaQueries.xxs} {
     padding: 8px 4px;
@@ -86,7 +66,6 @@ const mediaQueriesPadding = `
 
 export const mediaQueriesSize: MediaQueriesSize = {
   margin: mediaQueriesMargin,
-  marginr: mediaQueriesMarginRight,
   padding: mediaQueriesPadding,
 }
 
@@ -99,6 +78,12 @@ export const shadows = {
   inset: "inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21)",
   box: 'inset 0px 7px 3px 0px rgba(0, 0, 0, 0.35)',
   nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)',
+};
+
+export const textShadows = {
+  primary: "1px 1px 5px #41B7FF, -1px -1px 5px #41B7FF",
+  secondary: "1px 1px 5px #E3681E, -1px -1px 5px #E3681E",
+  tertiary: "1px 1px 5px #E96262, -1px -1px 5px #E96262",
 };
 
 const spacing: Spacing = [0, 4, 8, 16, 24, 32, 48, 64];
@@ -123,6 +108,7 @@ export default {
   mediaQueries,
   spacing,
   shadows,
+  textShadows,
   radii,
   zIndices,
   mediaQueriesSize,

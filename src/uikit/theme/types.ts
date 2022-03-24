@@ -12,7 +12,6 @@ export type MediaQueries = {
 };
 export type MediaQueriesSize = {
   margin: string;
-  marginr: string;
   padding: string;
 };
 
@@ -46,14 +45,18 @@ export type Shadows = {
   nav: string;
 };
 
+export type TextShadows = {
+  active: string;
+  success: string;
+  warning: string;
+  focus: string;
+  inset: string;
+  box: string;
+  nav: string;
+};
+
 export type Gradients = {
   bubblegum: string;
-  inverseBubblegum: string;
-  cardHeader: string;
-  blue: string;
-  violet: string;
-  violetAlt: string;
-  gold: string;
 };
 
 export const qualities = {
@@ -68,28 +71,20 @@ export const qualities = {
 export type Qualities = typeof qualities[keyof typeof qualities];
 
 export type Colors = {
-  primary: string;
-  primaryBright: string;
-  primaryDark: string;
-  secondary: string;
-  tertiary: string;
-  success: string;
+  profit: string;
   failure: string;
   warning: string;
-  cardBorder: string;
-  invertedContrast: string;
+  blueSide: string,
+  redSide: string,
+  hp: string
   input: string;
   inputSecondary: string;
   inputSelect: string;
   background: string;
   backgroundDisabled: string;
-  backgroundAlt: string;
-  backgroundModal: string;
   backgroundCard: string;
   text: string;
-  whiteBlack: string;
-  memberNum: string;
-  textPrimary: string;
+  textSecondary: string;
   textDisabled: string;
   textSubtle: string;
   disabled: string;
