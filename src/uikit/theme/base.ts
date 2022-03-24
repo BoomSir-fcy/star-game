@@ -97,8 +97,8 @@ export const shadows = {
   focus: "0px 0px 0px 1px #fbf2e9, 0px 0px 0px 4px rgba(77, 205, 179, 0.6)",
   input: "inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35)",
   inset: "inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21)",
-  box: '0px 0px 21px 0px rgba(25, 95, 81, 0.2)',
-  nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)'
+  box: 'inset 0px 7px 3px 0px rgba(0, 0, 0, 0.35)',
+  nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)',
 };
 
 const spacing: Spacing = [0, 4, 8, 16, 24, 32, 48, 64];
@@ -108,7 +108,7 @@ const radii = {
   tag: "10px",
   default: "16px",
   nftImage: "10px",
-  card: "20px",
+  card: "10px",
   circle: "50%",
 };
 

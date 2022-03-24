@@ -12,6 +12,7 @@ export * from "./components/TweenText";
 export * from "./components/Dots";
 export * from "./components/Label";
 export * from "./components/Input";
+export * from "./components/BgCard";
 
 // Hooks
 export * from "./hooks";

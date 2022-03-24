@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Text, Image } from 'uikit';
 import ButtonGroup, { ButtonGroupProps } from './ButtonGroup';
 
@@ -53,9 +54,11 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
             <ButtonTag2 variant='custom' ml='8px'>
               月亮
             </ButtonTag2>
-            <ButtonTag2 variant='custom' ml='8px'>
-              月亮
-            </ButtonTag2>
+            <Link to='/test/card'>
+              <ButtonTag2 variant='custom' ml='8px'>
+                公共组件
+              </ButtonTag2>
+            </Link>
           </Box>
         </Flex>
       </Flex>

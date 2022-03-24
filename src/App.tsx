@@ -11,9 +11,9 @@ import {
   StarUpgrade,
   StarSearch,
 } from './views/Star';
+import { TestBgCard, Test, TestCard, TestButton } from './views/Test';
 
 const Home = lazy(() => import('./views/Home'));
-const Test = lazy(() => import('./views/Test'));
 const Login = lazy(() => import('./views/Login'));
 
 const MysteryBox = lazy(() => import('./views/MysteryBox'));
@@ -57,7 +57,11 @@ function App() {
               {/* 掠夺 */}
               <Route path='/plunder' element={<Plunder />} />
 
-              <Route path='/test' element={<Test />} />
+              <Route path='/test' element={<Test />}>
+                <Route path='card' element={<TestCard />} />
+                <Route path='bg-card' element={<TestBgCard />} />
+                <Route path='button' element={<TestButton />} />
+              </Route>
             </Routes>
           </Suspense>
         </ScaleOrientContent>
