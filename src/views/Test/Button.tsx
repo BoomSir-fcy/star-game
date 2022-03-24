@@ -1,8 +1,14 @@
 import React from 'react';
-import { Text, Button } from 'uikit';
+import { Text, Button, Box } from 'uikit';
 
 const TestButton: React.FC = () => {
-  return <Button padding='50px'>这是一个按钮</Button>;
+  return (
+    <Box>
+      <Button padding='50px'>这是一个按钮</Button>
+      <Button variant='vs'>这是一个按钮</Button>
+      <Button variant='vsRefresh'>这是一个按钮</Button>
+    </Box>
+  );
 };
 
 export default TestButton;

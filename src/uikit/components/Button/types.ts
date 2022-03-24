@@ -14,18 +14,11 @@ export const variants = {
   GHOST: "ghost",
   CUSTOM: "custom",
   PRIMARY: "primary",
-  INFO: "info",
   SECONDARY: "secondary",
   TERTIARY: "tertiary",
   TEXT: "text",
-  TEXTLINE: "textline",
-  DANGER: "danger",
-  SUBTLE: "subtle",
-  SUCCESS: "success",
-  CIRCULAR: "circular",
-  ORANGE: "orange",
-  LEFT: "left",
-  RIGHT: "right",
+  VS: 'vs',
+  VS_REFRESH: 'vsRefresh'
 } as const;
 
 export type Scale = typeof scales[keyof typeof scales];
