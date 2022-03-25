@@ -5,13 +5,15 @@ interface Window {
     isMetaMask?: true;
     on?: (...args: any[]) => Promise<void>;
     request?: (...args: any[]) => Promise<void>;
-    enable?: Function;
+    enable?: () => void;
   };
   BinanceChain?: {
     bnbSign?: (
       address: string,
-      message: string
+      message: string,
     ) => Promise<{ publicKey: string; signature: string }>;
   };
   MSStream?: boolean;
 }
+
+declare module 'react-grid-layout';
