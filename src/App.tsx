@@ -5,13 +5,6 @@ import ScaleOrientContent from 'components/ScaleOrientContent';
 import Providers from './Providers';
 
 import {
-  Star,
-  StarBuild,
-  StarGrow,
-  StarUpgrade,
-  StarSearch,
-} from './views/Star';
-import {
   TestBgCard,
   Test,
   TestCard,
@@ -30,6 +23,8 @@ const MysteryBoxState = lazy(() => import('./views/MysteryBox/State'));
 const PlantLeague = lazy(() => import('./views/PlantLeague'));
 
 const Plunder = lazy(() => import('./views/Plunder'));
+
+const Start = lazy(() => import('./views/Star/Layout'));
 
 function App() {
   return (
@@ -51,12 +46,7 @@ function App() {
               <Route path='/mystery-box/state' element={<MysteryBoxState />} />
 
               {/* 星球 */}
-              <Route path='/star' element={<Star />}>
-                <Route path='build' element={<StarBuild />} />
-                <Route path='grow' element={<StarGrow />} />
-                <Route path='upgrade' element={<StarUpgrade />} />
-              </Route>
-              <Route path='/star/search' element={<StarSearch />} />
+              <Route path='/star/*' element={<Start />} />
 
               {/* 星球联盟 */}
               <Route path='/plant-league' element={<PlantLeague />} />
