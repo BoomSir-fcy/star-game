@@ -15,3 +15,9 @@ interface Window {
   };
   MSStream?: boolean;
 }
+
+namespace NodeJS {
+  interface ProcessEnv {
+    REACT_APP_CHAIN_ID: string;
+  }
+}
