@@ -18,6 +18,7 @@ import {
   TestButton,
   TestStar,
   TestText,
+  TestLabel,
 } from './views/Test';
 
 const Home = lazy(() => import('./views/Home'));
@@ -70,6 +71,7 @@ function App() {
                 <Route path='button' element={<TestButton />} />
                 <Route path='star' element={<TestStar />} />
                 <Route path='text' element={<TestText />} />
+                <Route path='label' element={<TestLabel />} />
               </Route>
             </Routes>
           </Suspense>
