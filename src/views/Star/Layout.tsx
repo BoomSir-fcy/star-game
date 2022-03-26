@@ -10,7 +10,7 @@ const StarLayout = () => {
     <Routes>
       <Route element={<Container />}>
         <Route index element={<Grow />} />
-        <Route path='child' element={<Upgrade />} />
+        <Route path='upgrade' element={<Upgrade />} />
       </Route>
     </Routes>
   );
