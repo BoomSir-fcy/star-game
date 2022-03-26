@@ -47,7 +47,7 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
         </Box>
         <Flex ml='32px' pt='32px'>
           <Box>
-            <Link to='/star'>
+            <Link to='/star/planet'>
               <ButtonTag1 variant='custom'>月亮</ButtonTag1>
             </Link>
           </Box>

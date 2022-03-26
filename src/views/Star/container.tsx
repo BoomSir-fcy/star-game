@@ -5,7 +5,9 @@ import Nav from 'components/Nav';
 import Layout from 'components/Layout';
 import { StarHeader } from './components';
 
-const Star = () => {
+const Star: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   return (
     <Layout>
       <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
@@ -41,7 +43,7 @@ const Star = () => {
           ]}
         />
         <Flex ml='23px' flex={1}>
-          <Outlet />
+          {children}
         </Flex>
       </Flex>
     </Layout>

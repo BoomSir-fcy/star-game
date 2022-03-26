@@ -27,6 +27,7 @@ const PlantLeague = lazy(() => import('./views/PlantLeague'));
 const Plunder = lazy(() => import('./views/Plunder'));
 
 const Start = lazy(() => import('./views/Star/Layout'));
+const StartPlanet = lazy(() => import('./views/Star/planet'));
 
 function App() {
   useEagerConnect(); // 自动链接钱包
@@ -46,6 +47,8 @@ function App() {
             <Route path='/mystery-box/detail' element={<MysteryBoxDetail />} />
             <Route path='/mystery-box/state' element={<MysteryBoxState />} />
 
+            {/* 我的星球 */}
+            <Route path='/star/planet' element={<StartPlanet />} />
             {/* 星球 */}
             <Route path='/star/*' element={<Start />} />
 
