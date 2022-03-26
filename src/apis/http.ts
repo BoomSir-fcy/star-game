@@ -34,9 +34,10 @@ axios.interceptors.response.use(
 );
 
 export class Http {
+  // eslint-disable-next-line class-methods-use-this
   async request(configs: AxiosRequestConfigCustom) {
     let response;
-    let SSID = localStorage.getItem(storage.SSID);
+    const SSID = localStorage.getItem(storage.SSID);
 
     try {
       response = await axios({
@@ -50,6 +51,7 @@ export class Http {
       if (e?.status === 403) {
         eventBus.dispatchEvent(new Event('unauthorized'));
       }
+      return e
     }
   }
 

@@ -167,8 +167,8 @@ export const ETHEREUM_CHAIN = {
     ],
     blockExplorerUrls: [`${BASE_BSC_SCAN_URLS[ChainId.MAINNET]}/`],
   },
-  [ChainId.TESTNET]: {
-    chainId: `0x${ChainId.TESTNET.toString(16)}`,
+  [ChainId.BSC_TESTNET]: {
+    chainId: `0x${ChainId.BSC_TESTNET.toString(16)}`,
     chainName: 'Binance Smart Chain Testnet',
     nativeCurrency: {
       name: 'BNB',
@@ -176,9 +176,12 @@ export const ETHEREUM_CHAIN = {
       decimals: 18,
     },
     rpcUrls: [
-      'https://data-seed-prebsc-1-s2.binance.org:8545/',
-      'https://data-seed-prebsc-1-s3.binance.org:8545/',
+      'https://data-seed-prebsc-1-s1.binance.org:8545/',
+      // 'https://data-seed-prebsc-1-s2.binance.org:8545/',
+      // 'https://data-seed-prebsc-1-s3.binance.org:8545/',
       // 'https://data-seed-prebsc-2-s1.binance.org:8545/',
+      // 'https://data-seed-prebsc-2-s2.binance.org:8545/',
+      // 'https://data-seed-prebsc-2-s3.binance.org:8545/',
     ],
     blockExplorerUrls: [`${BASE_BSC_SCAN_URLS[ChainId.MAINNET]}/`],
   },

@@ -15,6 +15,12 @@ export function isAddress(value: any): string | false {
   }
 }
 
+// 字符串的字节码长度
+export const getStringOfBold =(str: string) => {
+  if (!str) return 0;
+  return new Blob([str], { type: 'text/plain, charset=utf-8' }).size;
+};
+
 export function getBscScanLink(
   data: string | number,
   type: 'transaction' | 'token' | 'address' | 'block' | 'countdown',

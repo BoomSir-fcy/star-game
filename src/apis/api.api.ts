@@ -5,6 +5,6 @@ const isSuccess = (res: Api.Error) => {
 };
 
 export const Api = {
-  isSuccess: isSuccess,
+  isSuccess,
   UserApi: new UserApi(),
 };
