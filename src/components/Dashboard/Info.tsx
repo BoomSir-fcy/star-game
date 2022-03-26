@@ -47,7 +47,9 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
         </Box>
         <Flex ml='32px' pt='32px'>
           <Box>
-            <ButtonTag1 variant='custom'>月亮</ButtonTag1>
+            <Link to='/star'>
+              <ButtonTag1 variant='custom'>月亮</ButtonTag1>
+            </Link>
           </Box>
           <Box ml='18px'>
             <ButtonTag2 variant='custom'>月亮</ButtonTag2>
