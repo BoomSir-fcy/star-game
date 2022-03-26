@@ -100,6 +100,11 @@ const Login = () => {
       onConnectWallet();
       return;
     }
+    // TODO: 测试入口
+    if (account) {
+      navigate('/mystery-box');
+      return;
+    }
     if (parsedQs.s === '0') {
       await handleLogin();
       navigate('/mystery-box');
