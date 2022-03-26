@@ -13,6 +13,7 @@ export interface UserAgentInfoView {
   userProfile_: string; // 用户信息合约地址
   price_: string; // 价格
   createdCount_: string; // 已创建数量
+  loading?: boolean
 }
 
 export interface UserInfoView {
@@ -21,14 +22,17 @@ export interface UserInfoView {
   tokenId: number;
   isActive: boolean;
   superior: string;
-  loading: boolean;
+  loading?: boolean;
 }
 export interface UserInfoState {
 
   infoView: UserAgentInfoView;
   userInfoView: UserInfoView;
   userInfo: Api.User.UserInfo;
-
+  allowance: {
+    allowance: string;
+    loading: boolean;
+  }
 }
 
 

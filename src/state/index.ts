@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import user from './user/reducer'
 import userInfoReducer from './userInfo/reducer'
 import { updateVersion } from './global/actions'
-import { State } from './types'
+
+export { useStore } from './util'
 
 const PERSISTED_KEYS: string[] = ['user']
 
@@ -26,12 +27,5 @@ store.dispatch(updateVersion())
 export type AppDispatch = typeof store.dispatch
 export type AppState = ReturnType<typeof store.getState>
 export const useAppDispatch = () => useDispatch()
-
-export function useStore<TSelected>(
-  selector: (state: State) => TSelected,
-  equalityFn?: (left: TSelected, right: TSelected) => boolean,
-) {
-  return useSelector<State, TSelected>(selector, equalityFn);
-}
 
 export default store
