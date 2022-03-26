@@ -39,6 +39,11 @@ const Test: React.FC = () => {
                 label: '文字',
                 path: '/test/text',
               },
+              {
+                id: 'label',
+                label: 'Label',
+                path: '/test/label',
+              },
             ]}
           />
           <Flex ml='50px' flex={1}>

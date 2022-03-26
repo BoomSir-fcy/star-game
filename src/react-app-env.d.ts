@@ -17,3 +17,8 @@ interface Window {
 }
 
 declare module 'react-grid-layout';
+namespace NodeJS {
+  interface ProcessEnv {
+    REACT_APP_CHAIN_ID: string;
+  }
+}
