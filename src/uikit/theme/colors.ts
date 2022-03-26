@@ -1,26 +1,26 @@
-import { Colors, qualities } from "./types";
+import { Colors, qualities } from './types';
 
 export const baseColors = {
-  failure: "#FF3A3A",
-  warning: "#FF7272",
-  profit: "#52FF83",
+  failure: '#FF3A3A',
+  warning: '#FF7272',
+  profit: '#52FF83',
   blueSide: '#2CCFFF',
   redSide: '#EB5231',
-  hp: '#FFAC36'
+  hp: '#FFAC36',
 };
 
 export const additionalColors = {
-  binance: "#F0B90B",
-  overlay: "rgba(98, 98, 98, 0.3)",
-  gold: "#FFC700",
-  silver: "#B2B2B2",
-  bronze: "#E7974D",
-  orange: "#FF780B",
+  binance: '#F0B90B',
+  overlay: 'rgba(98, 98, 98, 0.3)',
+  gold: '#FFC700',
+  silver: '#B2B2B2',
+  bronze: '#E7974D',
+  orange: '#FF780B',
 };
 
 export const nftTokenColors = {
-  triangleDinosaur: "#F3A5C4",
-  meat: "#8A260E",
+  triangleDinosaur: '#F3A5C4',
+  meat: '#8A260E',
 };
 
 export const QualityColor = {
@@ -37,19 +37,20 @@ export const lightColors: Colors = {
   ...additionalColors,
   ...nftTokenColors,
   ...QualityColor,
-  background: "#FAF9FA",
-  backgroundDisabled: "#E9EAEB",
-  backgroundCard: "#161920",
-  input: "#161920",
-  inputSecondary: "#173271",
-  inputSelect: "#DBDBDB",
-  text: "#283433",
-  textSecondary: "#D7C6C0",
-  textSubtle: "#9DB3C4",
-  textDisabled: "#BDC2C4",
-  disabled: "#E9EAEB",
+  background: '#FAF9FA',
+  backgroundDisabled: '#E9EAEB',
+  backgroundCard: '#161920',
+  input: '#161920',
+  inputSecondary: '#173271',
+  inputSelect: '#DBDBDB',
+  text: '#283433',
+  textSecondary: '#D7C6C0',
+  textSubtle: '#9DB3C4',
+  textDisabled: '#BDC2C4',
+  disabled: '#E9EAEB',
+  textTips: '#7D879C',
   gradients: {
-    bubblegum: "linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)",
+    bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
   },
 };
 
@@ -58,18 +59,19 @@ export const darkColors: Colors = {
   ...additionalColors,
   ...nftTokenColors,
   ...QualityColor,
-  background: "#08060B",
-  backgroundDisabled: "#3c3742",
-  backgroundCard: "#161920",
-  input: "#161920",
-  inputSelect: "#333E3C",
-  inputSecondary: "#173271",
-  text: "#FFFFFF",
-  textSecondary: "#D7C6C0",
-  textSubtle: "#9DB3C4",
-  textDisabled: "#666171",
-  disabled: "#524B63",
+  background: '#08060B',
+  backgroundDisabled: '#3c3742',
+  backgroundCard: '#161920',
+  input: '#161920',
+  inputSelect: '#333E3C',
+  inputSecondary: '#173271',
+  text: '#FFFFFF',
+  textSecondary: '#D7C6C0',
+  textSubtle: '#9DB3C4',
+  textDisabled: '#666171',
+  disabled: '#524B63',
+  textTips: '#7D879C',
   gradients: {
-    bubblegum: "linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)",
+    bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',
   },
 };

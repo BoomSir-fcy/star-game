@@ -74,9 +74,9 @@ export type Colors = {
   profit: string;
   failure: string;
   warning: string;
-  blueSide: string,
-  redSide: string,
-  hp: string
+  blueSide: string;
+  redSide: string;
+  hp: string;
   input: string;
   inputSecondary: string;
   inputSelect: string;
@@ -88,6 +88,7 @@ export type Colors = {
   textDisabled: string;
   textSubtle: string;
   disabled: string;
+  textTips: string;
 
   // Gradients
   gradients: Gradients;
@@ -110,14 +111,13 @@ export type Colors = {
   [qualities.EPIC]: string;
   [qualities.LEGEND]: string;
   [qualities.MYTHOLOGY]: string;
-
 };
 
 export type Filters = {
-  brightness: string
-  grayscale: string
-  blur: string
-}
+  brightness: string;
+  grayscale: string;
+  blur: string;
+};
 
 export type ZIndices = {
   dropdown: number;

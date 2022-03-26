@@ -1,63 +1,45 @@
+import StarAddBtn from 'components/StarAddBtn';
 import React from 'react';
-import { Box, Flex, BackButton, RefreshButton, Text } from 'uikit';
-import { StarGrid } from 'components';
+import styled from 'styled-components';
+import { Image, Flex, Text, BgCard, FlexProps, Card, Heading } from 'uikit';
+import { GradeBox, UpgradeCard } from './components/upgrade';
 
 const Upgrade = () => {
-  const [state, setState] = React.useState({
-    box: [
-      {
-        index: 1,
-        row: 2,
-        bgColor: 'red',
-      },
-      {
-        index: 2,
-        row: 1,
-        bgColor: 'green',
-      },
-      {
-        index: 3,
-        row: 1,
-        bgColor: 'blue',
-      },
-      {
-        index: 4,
-        row: 1,
-        bgColor: 'yellow',
-      },
-      {
-        index: 5,
-        row: 1,
-        bgColor: 'orange',
-      },
-      {
-        index: 6,
-        row: 1,
-        bgColor: 'grey',
-      },
-    ],
-  });
-
-  console.log(state.box);
-
   return (
-    <Box>
-      <Text>星球升级</Text>
-      <Box
-        style={{
-          width: '500px',
-          height: '500px',
-          margin: '0 auto',
-        }}
-      >
-        <StarGrid
-          data={state.box}
-          onLayoutChange={() => {}}
-          items={9}
-          cols={3}
-        />
-      </Box>
-    </Box>
+    <BgCard variant='big' padding='40px 68px'>
+      <Flex flexDirection='column'>
+        <Flex alignItems='center'>
+          <Flex width='320px' alignItems='center'>
+            <GradeBox>
+              <Text bold shadow='primary'>
+                Lv 1
+              </Text>
+            </GradeBox>
+            <Image
+              width={82}
+              height={42}
+              margin='0 28px'
+              src='/images/commons/icon/upgrade.png'
+            />
+            <GradeBox>
+              <Text bold color='legend' shadow='secondary'>
+                Lv 2
+              </Text>
+            </GradeBox>
+          </Flex>
+          <Flex ml='50px'>
+            <StarAddBtn />
+            <StarAddBtn />
+            <StarAddBtn />
+            <StarAddBtn />
+            <StarAddBtn />
+          </Flex>
+        </Flex>
+        <Flex>
+          <UpgradeCard />
+        </Flex>
+      </Flex>
+    </BgCard>
   );
 };
 
