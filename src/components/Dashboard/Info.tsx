@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Text, Image } from 'uikit';
+import Modal from 'components/Modal';
+import DepositWithdrawal from 'components/Deposit_withdrawal';
 import ButtonGroup, { ButtonGroupProps } from './ButtonGroup';
 
 const ButtonLeft = styled(Button)`
@@ -34,15 +36,34 @@ interface InfoProps extends ButtonGroupProps {
 }
 
 const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
+  const [visible, setVisible] = useState(false);
+  const [ActiveToken, setActiveToken] = useState('DSG');
+
   return (
     <Box width='100%'>
       <Flex height='179px' width='100%'>
         <Box pl='11px' pt='20px'>
           <Box>
-            <ButtonLeft1 variant='custom'>111</ButtonLeft1>
+            <ButtonLeft1
+              variant='custom'
+              onClick={() => {
+                setActiveToken('DSG');
+                setVisible(true);
+              }}
+            >
+              111
+            </ButtonLeft1>
           </Box>
           <Box pt='13px'>
-            <ButtonLeft2 variant='custom'>111</ButtonLeft2>
+            <ButtonLeft2
+              variant='custom'
+              onClick={() => {
+                setActiveToken('BOX');
+                setVisible(true);
+              }}
+            >
+              111
+            </ButtonLeft2>
           </Box>
         </Box>
         <Flex ml='32px' pt='32px'>
@@ -71,6 +92,13 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
         <Box>{children}</Box>
         <ButtonGroup onRefresh={onRefresh} onBack={onBack} />
       </Flex>
+      <Modal
+        title={`${ActiveToken}钱包`}
+        visible={visible}
+        setVisible={setVisible}
+      >
+        <DepositWithdrawal balance='1000' Token={ActiveToken} />
+      </Modal>
     </Box>
   );
 };
