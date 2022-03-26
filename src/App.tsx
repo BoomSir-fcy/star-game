@@ -2,15 +2,9 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ResetCSS } from 'uikit';
 import ScaleOrientContent from 'components/ScaleOrientContent';
+import useEagerConnect from 'hooks/useEagerConnect';
 import Providers from './Providers';
 
-import {
-  Star,
-  StarBuild,
-  StarGrow,
-  StarUpgrade,
-  StarSearch,
-} from './views/Star';
 import {
   TestBgCard,
   Test,
@@ -18,6 +12,7 @@ import {
   TestButton,
   TestStar,
   TestText,
+  TestLabel,
 } from './views/Test';
 
 const Home = lazy(() => import('./views/Home'));
@@ -31,51 +26,48 @@ const PlantLeague = lazy(() => import('./views/PlantLeague'));
 
 const Plunder = lazy(() => import('./views/Plunder'));
 
+const Start = lazy(() => import('./views/Star/Layout'));
+
 function App() {
+  useEagerConnect(); // 自动链接钱包
+
   return (
-    <BrowserRouter>
-      <Providers>
-        <ResetCSS />
-        <ScaleOrientContent>
-          <Suspense fallback='loading...'>
-            <Routes>
-              <Route path='/' element={<Login />} />
-              <Route path='/index' element={<Home />} />
+    // <BrowserRouter>
+    <>
+      <ResetCSS />
+      <ScaleOrientContent>
+        <Suspense fallback='loading...'>
+          <Routes>
+            <Route path='/' element={<Login />} />
+            <Route path='/index' element={<Home />} />
 
-              {/* 盲盒 */}
-              <Route path='/mystery-box' element={<MysteryBox />} />
-              <Route
-                path='/mystery-box/detail'
-                element={<MysteryBoxDetail />}
-              />
-              <Route path='/mystery-box/state' element={<MysteryBoxState />} />
+            {/* 盲盒 */}
+            <Route path='/mystery-box' element={<MysteryBox />} />
+            <Route path='/mystery-box/detail' element={<MysteryBoxDetail />} />
+            <Route path='/mystery-box/state' element={<MysteryBoxState />} />
 
-              {/* 星球 */}
-              <Route path='/star' element={<Star />}>
-                <Route path='build' element={<StarBuild />} />
-                <Route path='grow' element={<StarGrow />} />
-                <Route path='upgrade' element={<StarUpgrade />} />
-              </Route>
-              <Route path='/star/search' element={<StarSearch />} />
+            {/* 星球 */}
+            <Route path='/star/*' element={<Start />} />
 
-              {/* 星球联盟 */}
-              <Route path='/plant-league' element={<PlantLeague />} />
+            {/* 星球联盟 */}
+            <Route path='/plant-league' element={<PlantLeague />} />
 
-              {/* 掠夺 */}
-              <Route path='/plunder' element={<Plunder />} />
+            {/* 掠夺 */}
+            <Route path='/plunder' element={<Plunder />} />
 
-              <Route path='/test' element={<Test />}>
-                <Route path='card' element={<TestCard />} />
-                <Route path='bg-card' element={<TestBgCard />} />
-                <Route path='button' element={<TestButton />} />
-                <Route path='star' element={<TestStar />} />
-                <Route path='text' element={<TestText />} />
-              </Route>
-            </Routes>
-          </Suspense>
-        </ScaleOrientContent>
-      </Providers>
-    </BrowserRouter>
+            <Route path='/test' element={<Test />}>
+              <Route path='card' element={<TestCard />} />
+              <Route path='bg-card' element={<TestBgCard />} />
+              <Route path='button' element={<TestButton />} />
+              <Route path='star' element={<TestStar />} />
+              <Route path='text' element={<TestText />} />
+              <Route path='label' element={<TestLabel />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </ScaleOrientContent>
+    </>
+    // </BrowserRouter>
   );
 }
 

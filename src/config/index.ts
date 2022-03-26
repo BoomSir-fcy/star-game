@@ -12,7 +12,7 @@ export const BASE_BSC_SCAN_URLS = {
 };
 
 export const storage = {
-  Token: 'token',
+  SSID: 'SSID',
   UserInfo: 'userInfo',
   systemCustom: 'systemCustom',
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { light, dark } from 'uikit';
 import { ThemeProvider } from 'styled-components';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { HelmetProvider } from 'react-helmet-async';
 import { Web3ReactProvider } from '@web3-react/core';
@@ -18,21 +19,23 @@ const ThemeProviderWrapper: React.FC = props => {
 
 const Providers: React.FC = ({ children }) => {
   return (
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <Provider store={store}>
-        <HelmetProvider>
-          <ThemeProviderWrapper>
-            <LanguageProvider>
-              <RefreshContextProvider>
-                <ToastsProvider>
-                  <ConnectWalletProvider>{children}</ConnectWalletProvider>
-                </ToastsProvider>
-              </RefreshContextProvider>
-            </LanguageProvider>
-          </ThemeProviderWrapper>
-        </HelmetProvider>
-      </Provider>
-    </Web3ReactProvider>
+    <BrowserRouter>
+      <Web3ReactProvider getLibrary={getLibrary}>
+        <Provider store={store}>
+          <HelmetProvider>
+            <ThemeProviderWrapper>
+              <LanguageProvider>
+                <RefreshContextProvider>
+                  <ToastsProvider>
+                    <ConnectWalletProvider>{children}</ConnectWalletProvider>
+                  </ToastsProvider>
+                </RefreshContextProvider>
+              </LanguageProvider>
+            </ThemeProviderWrapper>
+          </HelmetProvider>
+        </Provider>
+      </Web3ReactProvider>
+    </BrowserRouter>
   );
 };
 

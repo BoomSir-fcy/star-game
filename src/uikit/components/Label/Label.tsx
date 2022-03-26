@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { space } from 'styled-system';
 import { FlexProps, Flex } from '../Box';
 
 const LabelBox = styled(Flex)`
@@ -9,6 +10,7 @@ const LabelBox = styled(Flex)`
   border-radius: ${({ theme }) => theme.radii.tag};
   padding-left: 59px;
   align-items: center;
+  ${space}
 `;
 
 const Label: React.FC<FlexProps> = ({ children, ...props }) => {
