@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { Box } from 'uikit';
 import detectOrient from 'utils/detectOrient';
 
-const Content = styled(Box)<{ scale: number }>`
-  width: 1980px;
+const Content = styled(Box) <{ scale: number }>`
+  width: 1920px;
   height: 900px;
   transform-origin: 0 0;
   z-index: 2;
@@ -24,7 +24,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
     const { width, height } =
       window.document.documentElement.getBoundingClientRect();
     const maxV = Math.max(width, height);
-    const rate = maxV / 1980;
+    const rate = maxV / 1920;
     setScale(rate);
     if (ref.current) {
       detectOrient(ref.current, false);
