@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { CountdownTime } from 'components';
 import styled from 'styled-components';
 import { Box, Text, Flex, Card } from 'uikit';
-import { UpgradeCard } from '.';
+import { UpgradeCard } from './UpgradeCard';
 
 const TimeCard = styled(Card)`
   width: 600px;
