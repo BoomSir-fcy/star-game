@@ -35,6 +35,14 @@ export interface UserInfoState {
   }
 }
 
+export interface MysteryBox {
+  TODO: string;
+}
+
+export interface MysteryBoxState {
+  TODO: string;
+  
+}
 
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, unknown, AnyAction>

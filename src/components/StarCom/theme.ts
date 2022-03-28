@@ -47,6 +47,5 @@ export const styleVariants = {
   },
   [variants.NONE]: {
     border: 'none',
-    background: 'red',
   },
 };

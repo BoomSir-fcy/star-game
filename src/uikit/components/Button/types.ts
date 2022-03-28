@@ -14,6 +14,7 @@ export const variants = {
   GHOST: 'ghost',
   CUSTOM: 'custom',
   PRIMARY: 'primary',
+  DANGER: 'danger',
   SECONDARY: 'secondary',
   TERTIARY: 'tertiary',
   TEXT: 'text',

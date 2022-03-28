@@ -46,13 +46,9 @@ export type Shadows = {
 };
 
 export type TextShadows = {
-  active: string;
-  success: string;
-  warning: string;
-  focus: string;
-  inset: string;
-  box: string;
-  nav: string;
+  primary: string,
+  secondary: string,
+  tertiary: string,
 };
 
 export type Gradients = {
@@ -101,6 +97,7 @@ export type Colors = {
   gold: string;
   silver: string;
   bronze: string;
+  navy: string;
 
   // NFT Token Colors
   triangleDinosaur: string;

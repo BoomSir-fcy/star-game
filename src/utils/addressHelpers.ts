@@ -22,6 +22,18 @@ export const getWEtherAddress = () => {
   return getAddress(addresses.WBNB)
 }
 
+export const getDsgAddress = () => {
+  return getAddress(addresses.DsgToken);
+};
+
+export const getTimeAddress = () => {
+  return getAddress(addresses.TimeToken);
+};
+
+export const getMatterAddress = () => {
+  return getAddress(addresses.MatterToken);
+};
+
 export const getUserAgentAddress = () => {
   return getAddress(addresses.UserAgent)
 }
