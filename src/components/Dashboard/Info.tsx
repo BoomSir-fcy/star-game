@@ -33,12 +33,28 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
   return (
     <Box width='100%'>
       <Flex height='179px' width='100%'>
-        <Box pl='6px' pt='18px'>
-          <Flex>
-            <Box>855456163</Box>
-          </Flex>
-          <Box pt='15px'>
-            <ButtonLeft2 variant='custom'>111</ButtonLeft2>
+        <Box pl='11px' pt='20px'>
+          <Box>
+            <ButtonLeft1
+              variant='custom'
+              onClick={() => {
+                setActiveToken('DSG');
+                setVisible(true);
+              }}
+            >
+              111
+            </ButtonLeft1>
+          </Box>
+          <Box pt='13px'>
+            <ButtonLeft2
+              variant='custom'
+              onClick={() => {
+                setActiveToken('BOX');
+                setVisible(true);
+              }}
+            >
+              111
+            </ButtonLeft2>
           </Box>
         </Box>
         <Flex ml='16px' pt='32px'>
