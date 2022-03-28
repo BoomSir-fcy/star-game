@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Card, Flex, Image, Text } from 'uikit';
+import { BoxProps, Card, CardProps, Flex, Image, Text } from 'uikit';
 
-const StyledCard = styled(Card)`
-  width: 300px;
+const StyledCard = styled(Card)<{ width?: string }>`
+  width: ${({ width }) => width || '300px'};
   justify-content: center;
   align-items: center;
   padding: 56px 35px;
@@ -24,12 +24,21 @@ const StyledImage = styled(Image)`
   flex-shrink: 0;
 `;
 
-interface UpgradeCardProps {
-  info?: any;
+interface UpgradeInfo {
+  level?: number;
 }
-export const UpgradeCard: React.FC<UpgradeCardProps> = () => {
+interface UpgradeCardProps extends CardProps {
+  info?: UpgradeInfo;
+  width?: string;
+}
+
+export const UpgradeCard: React.FC<UpgradeCardProps> = ({
+  info,
+  width,
+  ...props
+}) => {
   return (
-    <StyledCard>
+    <StyledCard width={width} {...props}>
       <Flex flexDirection='column'>
         <Text bold fontSize='22px' shadow='primary'>
           当前Lv1效果
