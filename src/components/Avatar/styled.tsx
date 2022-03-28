@@ -15,13 +15,13 @@ const positionCenter = `
   margin: auto;
 `;
 
-export const AvatarBorder = styled.img<{ active?: boolean }>`
+export const AvatarBorder = styled.img<{ active?: boolean; pointer?: boolean }>`
   width: ${({ active }) => (active ? '100%' : '203px')};
   height: ${({ active }) => (active ? '100%' : '199px')};
   /* background: url('/images/login/a-b-man.png'); */
   ${positionCenter}
   z-index: 2;
-  cursor: pointer;
+  cursor: ${({ pointer }) => (pointer ? 'pointer' : 'auto')};
 `;
 
 export const AvatarImage = styled.img<{ active?: boolean }>`
