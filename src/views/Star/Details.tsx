@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
 import { StarGrid } from 'components';
 
-import { GameModal } from './components';
+import { GameThing, GameInfo } from './components';
 
 const CardTab = styled(Card)`
   width: 227px;
@@ -70,39 +70,54 @@ const Upgrade = () => {
         bgColor: 'grey',
       },
     ],
+    currentTab: 1,
+    tabs: [
+      {
+        index: 1,
+        title: '经营类',
+      },
+      {
+        index: 2,
+        title: '战斗类',
+      },
+    ],
   });
 
   console.log(state.box);
 
   return (
     <Box>
-      <Flex>
+      <Flex justifyContent='space-between'>
         <StarGrid
           data={state.box}
           onLayoutChange={() => {}}
           items={9}
           cols={3}
         />
-        <Box>
-          <Text>111</Text>
-        </Box>
+        <GameInfo />
       </Flex>
 
       <BgCard variant='long' mt='12px' padding='40px'>
         <Flex>
           <Flex flexDirection='column'>
             <CardTab>
-              <TabsButton active variant='text'>
-                经营类
-              </TabsButton>
-              <TabsButton variant='text'>战斗类</TabsButton>
+              {(state.tabs ?? []).map(row => (
+                <TabsButton
+                  key={row.index}
+                  onClick={() => setState({ ...state, currentTab: row.index })}
+                  active={row.index === state.currentTab}
+                  variant='text'
+                >
+                  {row.title}
+                </TabsButton>
+              ))}
             </CardTab>
             <Text mt='13px' small>
               拖动建筑到需要的格子上
             </Text>
           </Flex>
           <Box ml='40px'>
-            <GameModal scale='sm' />
+            <GameThing scale='sm' text='防空塔' />
           </Box>
         </Flex>
       </BgCard>

@@ -23,7 +23,7 @@ const Star: React.FC<{
             {
               id: 'build',
               label: '星球建造',
-              path: '/star/build',
+              path: '/star',
             },
             {
               id: 'upgrade',
