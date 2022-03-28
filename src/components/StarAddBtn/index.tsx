@@ -33,14 +33,31 @@ const OwnerFlex = styled(Flex)`
   box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
   border-radius: ${({ theme }) => theme.radii.tag};
 `;
+
+const NumberFlex = styled(Flex)`
+  position: absolute;
+  bottom: 0;
+  justify-content: center;
+  align-items: center;
+  width: 134px;
+  height: 34px;
+  background: ${({ theme }) => theme.colors.backgroundCard};
+  box-shadow: inset 0px 0px 3px 1px rgba(255, 255, 255, 0.35);
+  border-radius: ${({ theme }) => theme.radii.tag};
+`;
+
 interface StarAddBtnProps extends BoxProps {
   active?: boolean;
   owner?: string;
+  No?: number;
+  Leve?: string;
 }
 
 const StarAddBtn: React.FC<StarAddBtnProps> = ({
   active,
   owner,
+  No,
+  Leve,
   children,
   ...props
 }) => {
@@ -52,6 +69,18 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
         </OwnerFlex>
       )}
       {children}
+      {No && (
+        <NumberFlex>
+          <Text fontSize='20px' shadow='primary'>
+            No.{No}
+          </Text>
+          {Leve && (
+            <Text ml='6px' fontSize='20px' shadow='primary'>
+              LV {Leve}
+            </Text>
+          )}
+        </NumberFlex>
+      )}
     </StyledStar>
   );
 };

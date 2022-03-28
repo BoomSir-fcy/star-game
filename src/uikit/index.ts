@@ -15,6 +15,7 @@ export * from './components/Input';
 export * from './components/BgCard';
 export * from './components/Fringe';
 export * from './components/InputPanel';
+export * from './components/Progress';
 
 // Hooks
 export * from './hooks';

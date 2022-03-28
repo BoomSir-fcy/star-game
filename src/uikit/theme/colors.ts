@@ -50,8 +50,11 @@ export const lightColors: Colors = {
   textDisabled: '#BDC2C4',
   disabled: '#E9EAEB',
   textTips: '#7D879C',
+  goldBorder: '#EB9C12',
+  progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
+    progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',
   },
 };
 
@@ -73,7 +76,10 @@ export const darkColors: Colors = {
   textDisabled: '#666171',
   disabled: '#524B63',
   textTips: '#7D879C',
+  goldBorder: '#EB9C12',
+  progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',
+    progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',
   },
 };

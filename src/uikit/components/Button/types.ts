@@ -1,24 +1,26 @@
-import { ComponentProps, ElementType, ReactElement, ReactNode } from "react";
-import { Link } from "react-router-dom";
-import { LayoutProps, SpaceProps } from "styled-system";
+import { ComponentProps, ElementType, ReactElement, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
+import { LayoutProps, SpaceProps } from 'styled-system';
 
 export const scales = {
-  LD: "ld",
-  MD: "md",
-  SM: "sm",
-  XS: "xs",
+  LD: 'ld',
+  MD: 'md',
+  SM: 'sm',
+  XS: 'xs',
 } as const;
 
 export const variants = {
-  LOGIN: "login",
-  GHOST: "ghost",
-  CUSTOM: "custom",
-  PRIMARY: "primary",
-  SECONDARY: "secondary",
-  TERTIARY: "tertiary",
-  TEXT: "text",
+  LOGIN: 'login',
+  GHOST: 'ghost',
+  CUSTOM: 'custom',
+  PRIMARY: 'primary',
+  SECONDARY: 'secondary',
+  TERTIARY: 'tertiary',
+  TEXT: 'text',
   VS: 'vs',
-  VS_REFRESH: 'vsRefresh'
+  VS_REFRESH: 'vsRefresh',
+  BLACK: 'black',
+  STOP: 'stop',
 } as const;
 
 export type Scale = typeof scales[keyof typeof scales];
@@ -31,16 +33,20 @@ export type AsProps<E extends ElementType = ElementType> = {
   as?: E;
 };
 
-export type MergeProps<E extends ElementType> = AsProps<E> & Omit<ComponentProps<E>, keyof AsProps>;
+export type MergeProps<E extends ElementType> = AsProps<E> &
+  Omit<ComponentProps<E>, keyof AsProps>;
 
-export type PolymorphicComponentProps<E extends ElementType, P> = P & MergeProps<E>;
+export type PolymorphicComponentProps<E extends ElementType, P> = P &
+  MergeProps<E>;
 
-export type PolymorphicComponent<P, D extends ElementType = "button"> = <E extends ElementType = D>(
-  props: PolymorphicComponentProps<E, P>
+export type PolymorphicComponent<P, D extends ElementType = 'button'> = <
+  E extends ElementType = D,
+>(
+  props: PolymorphicComponentProps<E, P>,
 ) => ReactElement | null;
 
 export interface BaseButtonProps extends LayoutProps, SpaceProps {
-  as?: "a" | "button" | typeof Link;
+  as?: 'a' | 'button' | typeof Link;
   external?: boolean;
   isLoading?: boolean;
   scale?: Scale;
@@ -50,8 +56,8 @@ export interface BaseButtonProps extends LayoutProps, SpaceProps {
   endIcon?: ReactNode;
 }
 
-export type ButtonProps<P extends ElementType = "button"> = PolymorphicComponentProps<P, BaseButtonProps>;
+export type ButtonProps<P extends ElementType = 'button'> =
+  PolymorphicComponentProps<P, BaseButtonProps>;
 
 export type ButtonOnRefresh = () => Promise<any>;
 export type ButtonOnBack = () => void;
-

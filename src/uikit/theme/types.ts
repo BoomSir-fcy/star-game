@@ -57,6 +57,7 @@ export type TextShadows = {
 
 export type Gradients = {
   bubblegum: string;
+  progress: string;
 };
 
 export const qualities = {
@@ -90,10 +91,10 @@ export type Colors = {
   textSubtle: string;
   disabled: string;
   textTips: string;
-
+  goldBorder: string;
   // Gradients
   gradients: Gradients;
-
+  progressBar: string;
   // Additional colors
   binance: string;
   overlay: string;
