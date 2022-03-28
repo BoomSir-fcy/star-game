@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useImperativeHandle } from 'react';
 import Chance from 'chance';
 import { Box, TweenText, Flex, Input, Label, Button, Text } from 'uikit';
 import { ManAvatar, WoManAvatar } from 'components/Avatar';
-import { Sex } from 'state/types';
+import { Gender } from 'state/types';
 import styled from 'styled-components';
 
 const chance = new Chance();
@@ -23,13 +23,26 @@ const TopBox = styled(Box)`
   padding-top: 26px;
 `;
 
-const Create = () => {
-  const [sex, setSex] = useState(Sex.MAN);
+export interface ForwardRefRenderProps {
+  getState: () => { name: string; gender: Gender };
+}
+
+const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
+  p,
+  ref,
+) => {
+  const [gender, setGender] = useState(Gender.MAN);
   const [name, setName] = useState('');
 
   const randomName = useCallback(() => {
     setName(chance.name());
   }, [setName]);
+
+  useImperativeHandle(ref, () => ({
+    getState() {
+      return { gender, name };
+    },
+  }));
 
   return (
     <BoxStyled>
@@ -39,15 +52,15 @@ const Create = () => {
       <Flex width='540px' mt='28px' justifyContent='space-between'>
         <ManAvatar
           onClick={() => {
-            return setSex(Sex.MAN);
+            return setGender(Gender.MAN);
           }}
-          active={sex === Sex.MAN}
+          active={gender === Gender.MAN}
         />
         <WoManAvatar
           onClick={() => {
-            return setSex(Sex.WOMAN);
+            return setGender(Gender.WOMAN);
           }}
-          active={sex === Sex.WOMAN}
+          active={gender === Gender.WOMAN}
         />
       </Flex>
       <Label mt={22} width={603} pr='18px'>
@@ -71,4 +84,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default React.forwardRef(Create);
