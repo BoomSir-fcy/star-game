@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { save, load } from 'redux-localstorage-simple'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import user from './user/reducer'
+import userInfoReducer from './userInfo/reducer'
 import { updateVersion } from './global/actions'
+
+export { useStore } from './util'
 
 const PERSISTED_KEYS: string[] = ['user']
 
@@ -10,8 +13,9 @@ const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   reducer: {
     user,
+    userInfo: userInfoReducer,
   },
-  middleware: [save({ states: PERSISTED_KEYS })],
+  middleware: (getDefaultMiddleware) => [...getDefaultMiddleware({ thunk: true }), save({ states: PERSISTED_KEYS })],
   preloadedState: load({ states: PERSISTED_KEYS }),
 })
 

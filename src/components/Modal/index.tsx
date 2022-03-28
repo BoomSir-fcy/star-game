@@ -6,7 +6,7 @@ import useTheme from 'hooks/useTheme';
 
 Modal.setAppElement('#scale-content');
 
-const BoxStyled = styled(Box)<{ overflow?: string }>`
+const BoxStyled = styled(Box) <{ overflow?: string }>`
   margin: 40px 0 0 0;
 `;
 
@@ -113,7 +113,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
           const { width, height } =
             window.document.documentElement.getBoundingClientRect();
           const maxV = Math.max(width, height);
-          const rate = maxV / 1980;
+          const rate = maxV / 1920;
           return (
             <div
               {...props}

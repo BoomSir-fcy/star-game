@@ -2,20 +2,20 @@ declare namespace Api {
   namespace User {
 
     interface UserInfo {
-      "id": 0,
-      "nickname": "string",
-      "address": "string",
-      "nft": "string",
-      "avatar": "string",
-      "firstLoginAt": 0,
-      "addTime": 0,
-      "updatedAt": "string"
+      id: number,
+      nickname: string,
+      address: string,
+      nft: string,
+      avatar: string,
+      firstLoginAt: number,
+      addTime: number,
+      updatedAt: string
     }
 
     interface ParamsSignIn {
-      "nonce": "string",
-      "timestamp": 0,
-      "signature": "string"
+      nonce: string,
+      timestamp: number,
+      signature: string
     }
 
     interface SignIn {

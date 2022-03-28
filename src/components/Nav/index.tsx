@@ -5,6 +5,10 @@ import { Button } from 'uikit';
 import StyledNav from './StyledNav';
 import { NavProps, NavConfig } from './types';
 
+const NavList = styled.div`
+  height: 95%;
+  overflow-y: auto;
+`;
 const ButtonStyled = styled(Button)`
   width: 203px;
   height: 70px;
@@ -58,33 +62,35 @@ const Nav: React.FC<NavProps> = ({
 
   return (
     <StyledNav {...props}>
-      {navList.map((item, index) => (
-        <div key={item.id}>
-          {item.id === active && (
-            <ActiveButton variant='custom'>{item.label}</ActiveButton>
-          )}
-          {item.id !== active && (
-            <ButtonStyled
-              disabled={!item.label}
-              onClick={() => {
-                if (item.label !== '') {
-                  setActive(item.id);
-                  if (onChangeNav) {
-                    onChangeNav({ ...item });
+      <NavList>
+        {navList.map((item, index) => (
+          <div key={item.id}>
+            {item.id === active && (
+              <ActiveButton variant='custom'>{item.label}</ActiveButton>
+            )}
+            {item.id !== active && (
+              <ButtonStyled
+                disabled={!item.label}
+                onClick={() => {
+                  if (item.label !== '') {
+                    setActive(item.id);
+                    if (onChangeNav) {
+                      onChangeNav({ ...item });
+                    }
+                    if (item.path) {
+                      navigate(item.path, { replace: true });
+                    }
                   }
-                  if (item.path) {
-                    navigate(item.path, { replace: true });
-                  }
-                }
-              }}
-              variant='custom'
-            >
-              {item.label}
-            </ButtonStyled>
-          )}
-          {index !== navList.length && <Line />}
-        </div>
-      ))}
+                }}
+                variant='custom'
+              >
+                {item.label}
+              </ButtonStyled>
+            )}
+            {index !== navList.length && <Line />}
+          </div>
+        ))}
+      </NavList>
     </StyledNav>
   );
 };

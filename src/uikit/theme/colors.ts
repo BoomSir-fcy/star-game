@@ -49,6 +49,7 @@ export const lightColors: Colors = {
   textSubtle: '#9DB3C4',
   textDisabled: '#BDC2C4',
   disabled: '#E9EAEB',
+  textTips: '#7D879C',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
   },
@@ -71,6 +72,7 @@ export const darkColors: Colors = {
   textSubtle: '#9DB3C4',
   textDisabled: '#666171',
   disabled: '#524B63',
+  textTips: '#7D879C',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',
   },

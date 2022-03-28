@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import useActiveWeb3React from './hooks/useActiveWeb3React';
 import { BLOCKED_ADDRESSES } from './config/constants';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Providers from './Providers';
+import App from './App';
 
 function BlockList({ children }: { children: React.ReactNode }) {
   const { account } = useActiveWeb3React();

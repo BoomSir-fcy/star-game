@@ -6,13 +6,6 @@ import useEagerConnect from 'hooks/useEagerConnect';
 import Providers from './Providers';
 
 import {
-  Star,
-  StarBuild,
-  StarGrow,
-  StarUpgrade,
-  StarSearch,
-} from './views/Star';
-import {
   TestBgCard,
   Test,
   TestCard,
@@ -32,6 +25,9 @@ const MysteryBoxState = lazy(() => import('./views/MysteryBox/State'));
 const PlantLeague = lazy(() => import('./views/PlantLeague'));
 
 const Plunder = lazy(() => import('./views/Plunder'));
+const Galaxy = lazy(() => import('./views/Galaxy'));
+
+const Start = lazy(() => import('./views/Star/Layout'));
 
 function App() {
   useEagerConnect(); // 自动链接钱包
@@ -52,15 +48,13 @@ function App() {
             <Route path='/mystery-box/state' element={<MysteryBoxState />} />
 
             {/* 星球 */}
-            <Route path='/star' element={<Star />}>
-              <Route path='build' element={<StarBuild />} />
-              <Route path='grow' element={<StarGrow />} />
-              <Route path='upgrade' element={<StarUpgrade />} />
-            </Route>
-            <Route path='/star/search' element={<StarSearch />} />
+            <Route path='/star/*' element={<Start />} />
 
             {/* 星球联盟 */}
             <Route path='/plant-league' element={<PlantLeague />} />
+
+            {/* 星系 */}
+            <Route path='/galaxy' element={<Galaxy />} />
 
             {/* 掠夺 */}
             <Route path='/plunder' element={<Plunder />} />

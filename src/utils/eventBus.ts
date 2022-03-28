@@ -11,6 +11,7 @@ class EventBus extends EventTarget {
   name = 'EventBus';
 
   private init() {
+    console.debug(this)
     // TODO:
   }
 }
