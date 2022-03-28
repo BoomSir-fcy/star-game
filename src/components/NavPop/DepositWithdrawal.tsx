@@ -10,7 +10,7 @@ const ShaDowBox = styled(Flex)`
   width: 100%;
   height: 90px;
   background: ${({ theme }) => theme.colors.backgroundCard};
-  box-shadow: inset 0px 1px 3px 0px rgba(255, 255, 255, 35%);
+  box-shadow: inset 0px -1px 3px 0px rgba(255, 255, 255, 35%);
   border-radius: 10px;
   padding: 8px 22px;
   margin-bottom: 40px;

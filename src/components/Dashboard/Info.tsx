@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Text, Image } from 'uikit';
 import Modal from 'components/Modal';
-import DepositWithdrawal from 'components/Deposit_withdrawal';
+import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
 import ButtonGroup, { ButtonGroupProps } from './ButtonGroup';
 
 const ButtonLeft = styled(Button)`

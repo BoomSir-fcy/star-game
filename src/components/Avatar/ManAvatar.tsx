@@ -11,6 +11,7 @@ const ManAvatar: React.FC<AvatarProps> = ({ active, onClick, ...props }) => {
         onClick={onClick}
         src='/images/login/a-b-man.png'
         active={active}
+        pointer
       />
     </AvatarBox>
   );
