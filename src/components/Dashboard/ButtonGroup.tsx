@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Flex,
   Button,
@@ -8,6 +9,7 @@ import {
   ButtonOnBack,
   ButtonOnRefresh,
   ButtonProps,
+  Box,
 } from 'uikit';
 
 export interface ButtonGroupProps {
@@ -17,33 +19,51 @@ export interface ButtonGroupProps {
 
 interface SecondaryButtonProps extends ButtonProps {
   tag: 'attack' | 'flag' | 'm-box' | 'star';
+  href: string;
 }
 const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   tag,
   children,
+  href,
   ...props
 }) => {
   return (
-    <Button
-      {...props}
-      variant='secondary'
-      mr='22px'
-      startIcon={
-        <Image width={50} height={50} src={`/images/commons/btn/${tag}.png`} />
-      }
-    >
-      {children}
-    </Button>
+    <Box mr='22px'>
+      <Link to={href}>
+        <Button
+          {...props}
+          variant='secondary'
+          startIcon={
+            <Image
+              width={50}
+              height={50}
+              src={`/images/commons/btn/${tag}.png`}
+            />
+          }
+        >
+          {children}
+        </Button>
+      </Link>
+    </Box>
   );
 };
 
 const ButtonGroup: React.FC<ButtonGroupProps> = ({ onBack, onRefresh }) => {
   return (
     <Flex>
-      <SecondaryButton tag='attack'>掠夺资源</SecondaryButton>
-      <SecondaryButton tag='flag'>占领恒星</SecondaryButton>
-      <SecondaryButton tag='star'>STAR GPOUP</SecondaryButton>
-      <SecondaryButton tag='m-box'>STAR BOX</SecondaryButton>
+      <SecondaryButton href='' tag='attack'>
+        掠夺资源
+      </SecondaryButton>
+
+      <SecondaryButton href='' tag='flag'>
+        占领恒星
+      </SecondaryButton>
+      <SecondaryButton href='' tag='star'>
+        STAR GPOUP
+      </SecondaryButton>
+      <SecondaryButton href='/mystery-box' tag='m-box'>
+        STAR BOX
+      </SecondaryButton>
       {/* <BackButton onBack={onBack} /> */}
       <RefreshButton mr='23px' onRefresh={onRefresh} />
     </Flex>

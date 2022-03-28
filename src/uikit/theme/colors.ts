@@ -16,6 +16,7 @@ export const additionalColors = {
   silver: '#B2B2B2',
   bronze: '#E7974D',
   orange: '#FF780B',
+  navy: '#35CEB7',
 };
 
 export const nftTokenColors = {
