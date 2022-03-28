@@ -3,9 +3,11 @@ import { SpaceProps } from "styled-system";
 
 export const variants = {
   BIG: "big",
+  S_FULL: "sFull",
   FULL: "full",
   SMALL: "small",
   LONG: "long",
+  LONG_MEDIUM: "longMedium",
   MEDIUM: "medium",
   SHORT: "short",
 } as const;

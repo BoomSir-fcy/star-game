@@ -8,7 +8,7 @@ const Container = styled(Flex)`
   justify-content: center;
   align-self: auto;
   flex-wrap: wrap;
-  border: 1px solid #fff;
+  border: 1px solid #373c45;
 `;
 
 const Normal = styled(Flex)<{ row: number }>`
@@ -16,7 +16,7 @@ const Normal = styled(Flex)<{ row: number }>`
   align-items: center;
   width: ${({ row }) => row * 158}px;
   height: ${({ row }) => row * 158}px;
-  border: 1px solid #fff;
+  border: 1px solid #373c45;
   transition: all 0.5s;
 `;
 
@@ -88,7 +88,7 @@ export const StarGrid: React.FC<any> = React.memo(props => {
             key={`${item.index}`}
             row={item.row}
             style={{ background: item.bgColor }}
-            draggable='true'
+            draggable
             onDragStart={dragStart}
             onDragEnd={dragEnd}
             onDragEnter={dragEnter}

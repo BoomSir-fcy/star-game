@@ -11,10 +11,21 @@ export const styleVariants = {
     width: "1662px",
     height: "858px",
   },
+  [variants.S_FULL]: {
+    background: "url(/images/commons/bg-card/full.png)",
+    width: "1328px",
+    height: "583px",
+    backgroundSize: "100% 100%",
+  },
   [variants.LONG]: {
     background: "url(/images/commons/bg-card/long.png)",
     width: "1627px",
     height: "243px",
+  },
+  [variants.LONG_MEDIUM]: {
+    background: "url(/images/commons/bg-card/long-medium.png)",
+    width: "1903px",
+    height: "604px",
   },
   [variants.MEDIUM]: {
     background: "url(/images/commons/bg-card/medium.png)",

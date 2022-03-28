@@ -8,7 +8,10 @@ interface StyledStarComProps extends StarProps {
   theme: DefaultTheme;
 }
 
-const getBoxShadow = ({ theme, quality }: StyledStarComProps) => {
+const getBoxShadow = ({ theme, quality, variant }: StyledStarComProps) => {
+  if (variant === variants.NONE) {
+    return 'none';
+  }
   const color = theme.colors[quality || qualities.ORDINARY];
 
   return `0px 0px 8px 0px ${color}, 0px 0px 0px 0.5px #ffffff, inset 0px 0px 5px 1px ${color}`;

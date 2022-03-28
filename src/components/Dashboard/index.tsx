@@ -11,12 +11,12 @@ const FlexStyled = styled(Flex)`
   height: 295px;
 `;
 
-const Dashboard = () => {
+const Dashboard: React.FC = ({ children }) => {
   return (
     <FlexStyled>
       <Avatar />
       <Flex flex={1}>
-        <Info />
+        <Info>{children}</Info>
       </Flex>
     </FlexStyled>
   );
