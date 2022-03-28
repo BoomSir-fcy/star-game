@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Box, Text, Flex } from 'uikit';
 import { qualities, QualityProps, MysteryBoxComProps } from './types';
 import { mysteryConfig } from './config';
@@ -32,6 +32,17 @@ export const BoxBaseStyled = styled(Box)<QualityProps>`
   z-index: 1;
 `;
 
+const move = keyframes`
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-18px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+`;
 export const BoxBoxStyled = styled(Box)<QualityProps>`
   background: url('/images/mystery-box/box-${({ quality }) => quality}.png');
   position: absolute;
@@ -41,5 +52,6 @@ export const BoxBoxStyled = styled(Box)<QualityProps>`
   left: 0;
   right: 0;
   margin: auto;
+  animation: ${move} 4s infinite;
   z-index: 3;
 `;
