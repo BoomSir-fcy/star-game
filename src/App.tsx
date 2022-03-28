@@ -26,6 +26,8 @@ const PlantLeague = lazy(() => import('./views/PlantLeague'));
 
 const Plunder = lazy(() => import('./views/Plunder'));
 const Galaxy = lazy(() => import('./views/Galaxy'));
+const Auction = lazy(() => import('./views/Galaxy/Auction'));
+const Stars = lazy(() => import('./views/Galaxy/Stars'));
 
 const Start = lazy(() => import('./views/Star/Layout'));
 
@@ -55,6 +57,8 @@ function App() {
 
             {/* 星系 */}
             <Route path='/galaxy' element={<Galaxy />} />
+            <Route path='/galaxy/auction' element={<Auction />} />
+            <Route path='/galaxy/stars' element={<Stars />} />
 
             {/* 掠夺 */}
             <Route path='/plunder' element={<Plunder />} />
