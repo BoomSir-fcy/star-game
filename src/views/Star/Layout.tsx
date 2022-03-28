@@ -2,17 +2,17 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 const Container = React.lazy(() => import('./container'));
-const Grow = React.lazy(() => import('./Grow'));
+const Details = React.lazy(() => import('./Details'));
 const Upgrade = React.lazy(() => import('./Upgrade'));
 
 const StarLayout = () => {
   return (
-    <Routes>
-      <Route element={<Container />}>
-        <Route index element={<Grow />} />
+    <Container>
+      <Routes>
+        <Route index element={<Details />} />
         <Route path='upgrade' element={<Upgrade />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </Container>
   );
 };
 

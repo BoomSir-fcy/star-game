@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Text, Image } from 'uikit';
 import { TokenImage } from 'components/TokenImage';
 import { getDsgAddress } from 'utils/addressHelpers';
 import StarCom from 'components/StarCom';
+import Modal from 'components/Modal';
+import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
 import ButtonGroup, { ButtonGroupProps } from './ButtonGroup';
 
 const ButtonLeft = styled(Button)`
@@ -29,11 +31,20 @@ interface InfoProps extends ButtonGroupProps {
 }
 
 const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
+  const [visible, setVisible] = useState(false);
+  const [ActiveToken, setActiveToken] = useState('DSG');
+
   return (
     <Box width='100%'>
       <Flex height='179px' width='100%'>
         <Box width='312px' pl='20px' pt='22px'>
-          <ButtonLeft variant='custom'>
+          <ButtonLeft
+            onClick={() => {
+              setActiveToken('DSG');
+              setVisible(true);
+            }}
+            variant='custom'
+          >
             <Flex width='100%' alignItems='center'>
               <Flex flex={1}>
                 <TokenImage
@@ -48,7 +59,14 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
               <Text mt='8px'>DSG</Text>
             </Flex>
           </ButtonLeft>
-          <ButtonLeft mt='28px' variant='custom'>
+          <ButtonLeft
+            onClick={() => {
+              setActiveToken('BOX');
+              setVisible(true);
+            }}
+            mt='28px'
+            variant='custom'
+          >
             <Flex width='100%' alignItems='center'>
               <Flex flex={1}>
                 <TokenImage
@@ -126,6 +144,13 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
         <Box height={80}>{children}</Box>
         <ButtonGroup onRefresh={onRefresh} onBack={onBack} />
       </Flex>
+      <Modal
+        title={`${ActiveToken}钱包`}
+        visible={visible}
+        setVisible={setVisible}
+      >
+        <DepositWithdrawal balance='1000' Token={ActiveToken} />
+      </Modal>
     </Box>
   );
 };

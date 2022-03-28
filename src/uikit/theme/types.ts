@@ -80,6 +80,7 @@ export type Colors = {
   backgroundDisabled: string;
   backgroundCard: string;
   text: string;
+  textLink: string;
   textSecondary: string;
   textDisabled: string;
   textSubtle: string;
