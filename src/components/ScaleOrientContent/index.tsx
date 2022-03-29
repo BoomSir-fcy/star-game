@@ -4,14 +4,15 @@ import styled from 'styled-components';
 import { Box } from 'uikit';
 import detectOrient from 'utils/detectOrient';
 
-const Content = styled(Box) <{ scale: number }>`
+const Content = styled(Box)<{ scale: number }>`
   width: 1920px;
   height: 900px;
   transform-origin: 0 0;
-  z-index: 2;
+  /* z-index: 0; */
   position: absolute;
   top: 50%;
   left: 50%;
+  /* background: pink; */
   transform: ${({ scale }) =>
     `translate(${-scale * 50}%, ${-scale * 50}%) scale(${scale})`};
 `;
@@ -39,7 +40,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
     };
   }, [handleResize]);
   return (
-    <Box overflow='hidden' position='relative' id='detect-orient' ref={ref}>
+    <Box position='relative' id='detect-orient' ref={ref}>
       <StarrySky />
       <Content id='scale-content' scale={scale}>
         {children}

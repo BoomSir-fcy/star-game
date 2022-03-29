@@ -4,6 +4,11 @@ import styled from 'styled-components';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import PeopleCard from './components/PeopleCard';
+import VsVideo from './components/VsVideo';
+
+const BoxStyled = styled(Box)`
+  height: 100%;
+`;
 
 const PeopleCardLeft = styled(PeopleCard)`
   position: absolute;
@@ -17,15 +22,23 @@ const PeopleCardRight = styled(PeopleCard)`
   top: 20px;
 `;
 
+const VsVideoStyled = styled(VsVideo)`
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+`;
+
 const Plunder = () => {
   return (
     <Layout>
       <Dashboard />
-      <Box position='relative'>
+      <BoxStyled position='relative'>
         <PeopleCardLeft />
         <Fringe />
+        <VsVideoStyled />
         <PeopleCardRight />
-      </Box>
+      </BoxStyled>
     </Layout>
   );
 };
