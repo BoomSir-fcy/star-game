@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Text, BoxProps, Flex, Image } from 'uikit';
+import { Text, BoxProps, Flex } from 'uikit';
 
 const StyledStar = styled.div<StarAddBtnProps>`
   position: relative;
@@ -11,7 +11,7 @@ const StyledStar = styled.div<StarAddBtnProps>`
   border: 0;
   box-shadow: none;
   cursor: pointer;
-  transition: 0.5s;
+  transition: 0.3s;
   z-index: 2;
 
   &:hover,
@@ -21,6 +21,7 @@ const StyledStar = styled.div<StarAddBtnProps>`
     background-size: 100%;
     width: ${({ size }) => size};
     height: ${({ size }) => size};
+    transform: scale(1.1);
   }
 `;
 
