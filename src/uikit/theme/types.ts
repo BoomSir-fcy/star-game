@@ -43,6 +43,7 @@ export type Shadows = {
   inset: string;
   box: string;
   nav: string;
+  primary: string;
 };
 
 export type TextShadows = {
