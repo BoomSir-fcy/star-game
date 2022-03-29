@@ -11,6 +11,7 @@ export * from './components/Text';
 export * from './components/TweenText';
 export * from './components/Dots';
 export * from './components/Label';
+export * from './components/Spinner';
 export * from './components/Input';
 export * from './components/BgCard';
 export * from './components/Fringe';

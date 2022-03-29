@@ -1,6 +1,15 @@
 import React from 'react';
 import { Outlet, Routes, Route, useLocation } from 'react-router-dom';
-import { Heading, Text, Flex, Box, Card, BgCard, BackButton } from 'uikit';
+import {
+  Heading,
+  Text,
+  Flex,
+  Box,
+  Card,
+  BgCard,
+  BackButton,
+  Spinner,
+} from 'uikit';
 import Nav from 'components/Nav';
 import Layout from 'components/Layout';
 
@@ -48,6 +57,7 @@ const Test: React.FC = () => {
           />
           <Flex ml='50px' flex={1}>
             <Outlet />
+            <Spinner />
           </Flex>
         </Flex>
       </Flex>

@@ -7,7 +7,7 @@ import PeopleCard from './components/PeopleCard';
 import VsVideo from './components/VsVideo';
 
 const BoxStyled = styled(Box)`
-  height: 100%;
+  /* height: 100%; */
 `;
 
 const PeopleCardLeft = styled(PeopleCard)`
@@ -27,6 +27,7 @@ const VsVideoStyled = styled(VsVideo)`
   left: 0;
   right: 0;
   margin: auto;
+  top: 50px;
 `;
 
 const Plunder = () => {
