@@ -1,10 +1,10 @@
-import { ThunkAction } from 'redux-thunk'
-import { AnyAction } from '@reduxjs/toolkit'
+import { ThunkAction } from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
 
 // 性别
 export enum Gender {
   MAN = 0,
-  WOMAN = 1
+  WOMAN = 1,
 }
 
 export interface UserAgentInfoView {
@@ -13,7 +13,7 @@ export interface UserAgentInfoView {
   userProfile_: string; // 用户信息合约地址
   price_: string; // 价格
   createdCount_: string; // 已创建数量
-  loading?: boolean
+  loading?: boolean;
 }
 
 export interface UserInfoView {
@@ -25,14 +25,13 @@ export interface UserInfoView {
   loading?: boolean;
 }
 export interface UserInfoState {
-
   infoView: UserAgentInfoView;
   userInfoView: UserInfoView;
   userInfo: Api.User.UserInfo;
   allowance: {
     allowance: string;
     loading: boolean;
-  }
+  };
 }
 
 export interface MysteryBoxView {
@@ -44,24 +43,48 @@ export interface MysteryBoxView {
   bnbPoolRatio: string; // 给bnb质押池的比例
   superiorRatio: string; // 给邀请人的比例
   defaultSuperior: string; // 默认邀请人
-  miniDistributeAmount: string; // 
+  miniDistributeAmount: string; //
   totalBurnt: string; // 总销毁量dsg
   totalVDsgDonated: string; // 总给vdsg的量dsg
   totalPoolSent: string; // 总给质押池的量dsg
   totalPoolSentBNB: string; // 总给质押池的量bnb
-  loading?: boolean
+  loading?: boolean;
 }
 
 export interface MysteryBoxState {
   boxView: MysteryBoxView;
-
-  
 }
 
+export interface GalaxyInfo extends Api.Galaxy.GalaxyInfo {
+  id: number;
+  label: string;
+  starTotal?: number;
+  starOwnerTotal?: number;
+}
 
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, unknown, AnyAction>
+interface StarLevelInfo {
+  id: number; // 恒星等级范围id
+  label: string; // // 恒星等级范围名称
+  levels: Api.Galaxy.StarInfo[];
+}
+
+export interface GalaxyState {
+  currentGalaxy: GalaxyInfo;
+  currentStarPeriod: StarLevelInfo;
+  galaxyList: GalaxyInfo[];
+  galaxyStarList: StarLevelInfo[];
+  loading: boolean;
+}
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  State,
+  unknown,
+  AnyAction
+>;
 
 export interface State {
-  userInfo: UserInfoState
-  mysteryBox: MysteryBoxState
+  userInfo: UserInfoState;
+  mysteryBox: MysteryBoxState;
+  galaxy: GalaxyState;
 }

@@ -58,8 +58,8 @@ export const StarBox = styled(Box)`
 `;
 
 export const ButtonStyled = styled(Button)`
-  width: 202px;
-  height: 52px;
+  width: 219px;
+  height: 61px;
   padding: 10px;
 `;
 
