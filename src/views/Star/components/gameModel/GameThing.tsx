@@ -55,7 +55,6 @@ const Container = styled(Card)<{ active?: boolean; border?: boolean }>`
     if (border) {
       return css`
         border: 1px solid #373c45;
-        border-radius: theme.radii.card;
       `;
     }
     if (active) {
@@ -76,12 +75,33 @@ export const GameThing: React.FC<{
   text?: string;
   active?: boolean;
   border?: boolean;
-}> = ({ scale, text, active, border }) => {
+  onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDragEnter?: (e: React.DragEvent<HTMLDivElement>) => void;
+}> = ({
+  scale,
+  text,
+  active,
+  border,
+  onDragStart,
+  onDrop,
+  onDragOver,
+  onDragEnter,
+}) => {
   const sizeBox = scaleVariants[scale];
 
   return (
     <Flex justifyContent='center' flexDirection='column'>
-      <Container draggable active={active} border={border}>
+      <Container
+        draggable
+        onDragStart={onDragStart}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        onDragEnter={onDragEnter}
+        active={active}
+        border={border}
+      >
         <Level shadow='primary' style={sizeBox?.text}>
           Lv 1
         </Level>
