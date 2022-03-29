@@ -27,7 +27,7 @@ export const Upgrading = () => {
                 Countdown Time
               </Text>
             </Flex>
-            <CountdownTime endTime={dayjs('2022-03-26 18:00:00').unix()} />
+            <CountdownTime endTime={dayjs('2022-03-29 18:00:00').unix()} />
           </Flex>
         </TimeCard>
         <UpgradeCard width='100%' />

@@ -52,6 +52,8 @@ export const lightColors: Colors = {
   textDisabled: '#BDC2C4',
   disabled: '#E9EAEB',
   textTips: '#7D879C',
+  textSuccess: '#84FF59',
+  textDanger: '#FF5353',
   goldBorder: '#EB9C12',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
   gradients: {
@@ -78,6 +80,8 @@ export const darkColors: Colors = {
   textDisabled: '#666171',
   disabled: '#524B63',
   textTips: '#7D879C',
+  textSuccess: '#84FF59',
+  textDanger: '#FF5353',
   goldBorder: '#EB9C12',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
   gradients: {

@@ -10,6 +10,7 @@ import {
   Button,
   Skeleton,
   Dots,
+  Input,
 } from 'uikit';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
@@ -29,6 +30,7 @@ import { mysteryConfig } from 'components/MysteryBoxCom/config';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
 import { useStore } from 'state';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
+import OpenModal from './components/OpenModal';
 
 const CardStyled = styled(Card)`
   width: 600px;
@@ -70,17 +72,19 @@ const MysteryBoxState = () => {
   }, [quality, handleBuy, priceBNB, setBought, setHandleLoading]);
 
   const { handleOpen } = useOpenMysteryBox();
-  const onHandleOpen = useCallback(async () => {
-    try {
-      setHandleLoading(true);
-      const res = await handleOpen(quality, '第一个星球');
-      setHandleLoading(false);
-      setBought(false);
-    } catch (error) {
-      console.error(error);
-      setHandleLoading(false);
-    }
-  }, [quality, handleOpen, setBought, setHandleLoading]);
+  const [visible, setVisible] = useState(false);
+  const onHandleOpen = useCallback(
+    async name => {
+      try {
+        const res = await handleOpen(quality, name);
+        setBought(false);
+        setVisible(false);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [quality, handleOpen, setBought],
+  );
 
   const existBox = useMemo(() => {
     return Boolean(Number(seedBlocks[quality])) || bought;
@@ -128,11 +132,20 @@ const MysteryBoxState = () => {
                 </Box>
               </Flex>
             </CardStyled>
+            <Input
+              style={{ borderRadius: '50%' }}
+              width={200}
+              height={200}
+              primary
+            />
+
             <Flex mt='34px' justifyContent='center'>
               {existBox ? (
                 <Button
                   disabled={handleLoading || loading}
-                  onClick={onHandleOpen}
+                  onClick={() => {
+                    setVisible(true);
+                  }}
                 >
                   {handleLoading ? <Dots>正在打开</Dots> : '打开盲盒'}
                 </Button>
@@ -148,6 +161,13 @@ const MysteryBoxState = () => {
           </Box>
         </Flex>
       </BgCard>
+      <OpenModal
+        visible={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+        onOpen={onHandleOpen}
+      />
     </Layout>
   );
 };

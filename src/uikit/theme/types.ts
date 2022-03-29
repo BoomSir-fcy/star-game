@@ -43,12 +43,13 @@ export type Shadows = {
   inset: string;
   box: string;
   nav: string;
+  primary: string;
 };
 
 export type TextShadows = {
-  primary: string,
-  secondary: string,
-  tertiary: string,
+  primary: string;
+  secondary: string;
+  tertiary: string;
 };
 
 export type Gradients = {
@@ -88,6 +89,9 @@ export type Colors = {
   textSubtle: string;
   disabled: string;
   textTips: string;
+  textSuccess: string;
+  textDanger: string;
+
   goldBorder: string;
   // Gradients
   gradients: Gradients;

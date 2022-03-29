@@ -80,3 +80,41 @@ export const getTimePeriod = (diffSeconds: number) => {
 
   return timeLeft;
 };
+
+export const getTimeDigital = (
+  hours: number,
+  minutes: number,
+  seconds: number,
+) => {
+  let hour1 = '';
+  let hour2 = '';
+  let minute1 = '';
+  let minute2 = '';
+  let second1 = '';
+  let second2 = '';
+  if (hours < 10) {
+    hour1 = '0';
+    hour2 = hours.toString();
+  } else {
+    const h = hours.toString();
+    hour1 = h.substring(0, 1);
+    hour2 = h.substring(1);
+  }
+  if (minutes < 10) {
+    minute1 = '0';
+    minute2 = minutes.toString();
+  } else {
+    const m = minutes.toString();
+    minute1 = m.substring(0, 1);
+    minute2 = m.substring(1);
+  }
+  if (seconds < 10) {
+    second1 = '0';
+    second2 = seconds.toString();
+  } else {
+    const s = seconds.toString();
+    second1 = s.substring(0, 1);
+    second2 = s.substring(1);
+  }
+  return { hour1, hour2, minute1, minute2, second1, second2 };
+};

@@ -1,7 +1,9 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Flex, Box, Card, Text, Image, Button } from 'uikit';
-import { GameThing } from './GameThing';
+
+import { ThingaddBlood, GameThing, ThingRepair } from '..';
+import { ThingDestoryModal, ThingUpgradesModal } from '../Modal';
 
 const Container = styled(Box)`
   width: 852px;
@@ -54,6 +56,11 @@ const ActionButton = styled(Button)`
 `;
 
 export const GameInfo = React.memo(() => {
+  const [state, setState] = React.useState({
+    destoryVisible: false,
+    upgradesVisible: false,
+  });
+
   return (
     <Container>
       <CardContent>
@@ -76,10 +83,11 @@ export const GameInfo = React.memo(() => {
                   />
                 </Box>
                 <Box>
-                  <Flex>
+                  <Flex alignItems='center'>
                     <Text color='textSubtle' small>
                       HP值
                     </Text>
+                    <ThingaddBlood />
                   </Flex>
                   <Text small>10/80</Text>
                 </Box>
@@ -93,10 +101,11 @@ export const GameInfo = React.memo(() => {
                   />
                 </Box>
                 <Box>
-                  <Flex>
+                  <Flex alignItems='center'>
                     <Text color='textSubtle' small>
                       耐久度
                     </Text>
+                    <ThingRepair />
                   </Flex>
                   <Text small>10/80</Text>
                 </Box>
@@ -203,11 +212,32 @@ export const GameInfo = React.memo(() => {
             </Text>
           </Flex>
           <Flex flexDirection='column'>
-            <ActionButton>建筑升级</ActionButton>
-            <ActionButton>摧毁建筑</ActionButton>
+            <ActionButton
+              onClick={() => setState({ ...state, upgradesVisible: true })}
+            >
+              建筑升级
+            </ActionButton>
+            <ActionButton
+              variant='danger'
+              onClick={() => setState({ ...state, destoryVisible: true })}
+            >
+              摧毁建筑
+            </ActionButton>
           </Flex>
         </Flex>
       </CardInfo>
+
+      {/* 销毁建筑 */}
+      <ThingDestoryModal
+        visible={state.destoryVisible}
+        onClose={() => setState({ ...state, destoryVisible: false })}
+      />
+
+      {/* 建筑升级 */}
+      <ThingUpgradesModal
+        visible={state.upgradesVisible}
+        onClose={() => setState({ ...state, upgradesVisible: false })}
+      />
     </Container>
   );
 });

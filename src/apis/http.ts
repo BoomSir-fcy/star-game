@@ -42,7 +42,7 @@ export class Http {
     try {
       response = await axios({
         ...configs,
-        headers: { ...configs.headers, SSID },
+        headers: SSID ? { ...configs.headers, SSID } : configs.headers,
       });
 
       dispatchHttpErrorEvent(response.data);

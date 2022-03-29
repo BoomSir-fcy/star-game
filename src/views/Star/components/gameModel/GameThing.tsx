@@ -5,6 +5,7 @@ import { Card, Flex, Box, Image, Text } from 'uikit';
 
 const scales = {
   LD: 'ld',
+  LG: 'lg',
   MD: 'md',
   SM: 'sm',
 } as const;
@@ -17,6 +18,15 @@ const scaleVariants = {
       top: 5,
       left: 13,
       fontSize: 20,
+    },
+  },
+  [scales.LG]: {
+    width: 295,
+    height: 295,
+    text: {
+      top: 20,
+      left: 28,
+      fontSize: 50,
     },
   },
   [scales.MD]: {
@@ -62,7 +72,7 @@ const Level = styled(Text)`
 `;
 
 export const GameThing: React.FC<{
-  scale: 'ld' | 'md' | 'sm';
+  scale: 'ld' | 'lg' | 'md' | 'sm';
   text?: string;
   active?: boolean;
   border?: boolean;
