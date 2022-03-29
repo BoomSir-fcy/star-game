@@ -75,6 +75,7 @@ interface StarAddBtnProps extends BoxProps {
   url?: string;
   size?: string;
   imgBorder?: boolean;
+  callBack?: () => void;
 }
 
 const StarAddBtn: React.FC<StarAddBtnProps> = ({
@@ -86,12 +87,18 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
   url,
   size = '175px',
   imgBorder,
+  callBack,
   ...props
 }) => {
   const { className, ...restProps } = props;
 
   return (
     <StyledStar
+      onClick={() => {
+        if (callBack) {
+          callBack();
+        }
+      }}
       className={`${active ? 'star-active' : ''} ${className}`}
       size={size}
       {...restProps}
