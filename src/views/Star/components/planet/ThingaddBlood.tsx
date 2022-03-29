@@ -1,7 +1,13 @@
 import React from 'react';
 import { Box, Image } from 'uikit';
 
+import { ThingHpModal } from '../Modal';
+
 export const ThingaddBlood = () => {
+  const [state, setState] = React.useState({
+    visible: false,
+  });
+
   return (
     <>
       <Box
@@ -10,6 +16,7 @@ export const ThingaddBlood = () => {
         style={{
           cursor: 'pointer',
         }}
+        onClick={() => setState({ ...state, visible: true })}
       >
         <Image
           src='/images/commons/icon/add_blood.png'
@@ -17,6 +24,11 @@ export const ThingaddBlood = () => {
           height={30}
         />
       </Box>
+
+      <ThingHpModal
+        visible={state.visible}
+        onClose={() => setState({ ...state, visible: false })}
+      />
     </>
   );
 };

@@ -8,6 +8,7 @@ export const baseColors = {
   redSide: '#EB5231',
   hp: '#FFAC36',
   up: '#ECA320',
+  force: '#F55B5A',
 };
 
 export const additionalColors = {

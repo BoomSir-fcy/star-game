@@ -51,7 +51,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
 const ButtonGroup: React.FC<ButtonGroupProps> = ({ onBack, onRefresh }) => {
   return (
     <Flex>
-      <SecondaryButton href='' tag='attack'>
+      <SecondaryButton href='/plunder' tag='attack'>
         掠夺资源
       </SecondaryButton>
 

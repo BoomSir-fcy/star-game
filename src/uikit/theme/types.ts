@@ -76,6 +76,7 @@ export type Colors = {
   redSide: string;
   hp: string;
   up: string;
+  force: string;
   input: string;
   inputSecondary: string;
   inputSelect: string;

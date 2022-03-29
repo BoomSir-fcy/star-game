@@ -6,7 +6,6 @@ const Group = styled(Flex)`
   flex: 1;
   justify-content: space-between;
   align-items: center;
-  margin-top: 14px;
   padding: 8px 20px;
   border: 1px solid #393b40;
   border-radius: ${({ theme }) => theme.radii.card};
