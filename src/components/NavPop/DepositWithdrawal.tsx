@@ -1,10 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Button, Input, Flex, Text, Image } from 'uikit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'contexts/Localization';
 import { useWeb3React } from '@web3-react/core';
+import { UserBalanceView } from 'state/types';
+import { useTokenBalance } from 'hooks/useTokenBalance';
+import { getBalanceAmount } from 'utils/formatBalance';
+import { BIG_TEN } from 'config/constants/bigNumber';
+import { FetchApproveNum, useRWA } from './hook';
 
 const ShaDowBox = styled(Flex)`
   width: 100%;
@@ -27,8 +32,9 @@ const MyInput = styled(Input)`
   padding: 23px 34px;
   height: 90px;
   border: 2px solid;
-  border-image: linear-gradient(-29deg, #14f1fd, #1caaf4) 2 2;
-  box-shadow: inset 0px 0px 20px 0px #f9f9f99c;
+  /* border-image: linear-gradient(-29deg, #14f1fd, #1caaf4) 2 2; */
+  border: 1px solid #14f1fd;
+  box-shadow: 0px 0px 9px 0px #41b7ff, inset 0px 0px 9px 0px #41b7ff;
   border-radius: 10px;
   background: ${({ theme }) => theme.colors.backgroundCard};
   font-size: 30px;
@@ -38,24 +44,31 @@ const MyInput = styled(Input)`
 `;
 
 interface DepositWithdrawalProps {
-  Token: string;
+  TokenInfo: UserBalanceView | any;
   decimals?: number;
-  balance: string;
 }
 
 const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
-  Token,
+  TokenInfo,
   decimals = 18,
-  balance,
 }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
+  const { amount: withdrawalBalance, symbol: Token } = TokenInfo;
+  const { balance: BigNumberBalance } = useTokenBalance(TokenInfo?.coinId);
+  const { Recharge, onApprove } = useRWA(TokenInfo?.coinId);
 
-  const [approvedNum, setapprovedNum] = useState(10);
+  const [approvedNum, setapprovedNum] = useState(0);
   const [val, setVal] = useState('');
   const [OperationType, setOperationType] = useState(1);
-  const [withdrawalBalance, setwithdrawalBalance] = useState('0');
+  const [pending, setpending] = useState(false);
+  const [LoadApprovedNum, setLoadApprovedNum] = useState(false);
 
+  const TokenBalance = useMemo(() => {
+    return getBalanceAmount(BigNumberBalance).toString();
+  }, [BigNumberBalance]);
+
+  // 复制地址
   const Copy = () => {
     const aux = document.createElement('input');
     const content = String(account);
@@ -66,6 +79,48 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
     document.body.removeChild(aux);
   };
 
+  // 充值、提取
+  const handSure = useCallback(async () => {
+    setpending(true);
+    if (OperationType === 1) {
+      // 充值
+      if (TokenBalance === '0') {
+        setpending(false);
+        return;
+      }
+      if (new BigNumber(val).isLessThanOrEqualTo(0) || !val) {
+        setpending(false);
+        return;
+      }
+      const addPrecisionNum = new BigNumber(val)
+        .times(BIG_TEN.pow(18))
+        .toString();
+      try {
+        let isChainToken = false;
+        if (Token === 'BNB') {
+          isChainToken = true;
+        }
+        await Recharge(TokenInfo?.coinId, addPrecisionNum, isChainToken);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setpending(false);
+      }
+    }
+  }, [OperationType, TokenBalance, TokenInfo?.coinId, Token, val, Recharge]);
+  // 授权
+  const handleApprove = useCallback(async () => {
+    setpending(true);
+    try {
+      await onApprove();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setpending(false);
+    }
+    setLoadApprovedNum(false);
+  }, [onApprove]);
+
   // 输入框输入限制
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
@@ -73,19 +128,35 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
         const val2 = _val.replace(/,/g, '.');
         if (
           new BigNumber(val2).isGreaterThan(
-            OperationType === 1 ? balance : withdrawalBalance,
+            OperationType === 1 ? TokenBalance : withdrawalBalance,
           )
         ) {
-          return OperationType === 1 ? balance : withdrawalBalance;
+          return OperationType === 1
+            ? String(TokenBalance)
+            : String(withdrawalBalance);
         }
-        return val2;
+        return String(val2);
       };
       if (e.currentTarget.validity.valid) {
         setVal(chkPrice(e.currentTarget.value));
       }
     },
-    [setVal, OperationType, balance, withdrawalBalance],
+    [setVal, OperationType, TokenBalance, withdrawalBalance],
   );
+
+  useEffect(() => {
+    const getApproveNum = async () => {
+      const Num = await FetchApproveNum(String(account), TokenInfo?.coinId);
+      console.log(Num);
+      if (Num) {
+        setapprovedNum(Num);
+      }
+    };
+    if (account && TokenInfo?.coinId && !LoadApprovedNum) {
+      getApproveNum();
+      setLoadApprovedNum(true);
+    }
+  }, [account, TokenInfo?.coinId, LoadApprovedNum]);
 
   return (
     <Box width='100%' padding='30px 15px'>
@@ -104,7 +175,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
                   alt=''
                 />
                 <Text fontSize='38px' mr='16px'>
-                  100
+                  {withdrawalBalance}
                 </Text>
                 <Text fontSize='24px' color='textSubtle'>
                   {Token}
@@ -143,8 +214,24 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
           />
         </InputBox>
         <Flex justifyContent='center' mt='40px'>
-          <Button width='270px'>
-            {OperationType === 1 ? t('确认充值') : t('确认转出')}
+          <Button
+            width='270px'
+            disabled={pending}
+            onClick={() => {
+              if (approvedNum > 0) {
+                // 充值、提现
+                handSure();
+              } else {
+                // 授权
+                handleApprove();
+              }
+            }}
+          >
+            {OperationType === 1
+              ? approvedNum > 0
+                ? t('确认充值')
+                : t('授权')
+              : t('确认转出')}
           </Button>
         </Flex>
       </Flex>
