@@ -7,6 +7,11 @@ export class UserApi extends Http {
     return this.get(`user/get/${uid}`);
   }
 
+  // 取指定用户信息
+  async getUserInfoByAccount(account: string): Promise<Api.Response<Api.User.UserInfo>> {
+    return this.get(`user/get/${account}`);
+  }
+
   // 用户登录
   async userSignIn(params: Api.User.ParamsSignIn): Promise<Api.Response<Api.User.SignIn>> {
     return this.post('user/signin', params)
