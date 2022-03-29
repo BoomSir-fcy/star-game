@@ -3,6 +3,8 @@ import { Button, Text, Flex, Card } from 'uikit';
 import styled from 'styled-components';
 import StarCom from 'components/StarCom';
 
+import { RechargeAssets } from '../Modal';
+
 const CardStyled = styled(Card)`
   width: 1610px;
   max-height: 140px;
@@ -20,6 +22,10 @@ const ButtonStyled = styled(Button)`
   padding: 10px;
 `;
 const StarHeader = () => {
+  const [state, setState] = React.useState({
+    visible: false,
+  });
+
   return (
     <Flex flex={1}>
       <CardStyled ml='82px'>
@@ -111,10 +117,20 @@ const StarHeader = () => {
             <TextStyled fontSize='20px' color='warning'>
               培育中，该星球暂时没有产能
             </TextStyled>
-            <ButtonStyled scale='sm'>补充资源</ButtonStyled>
+            <ButtonStyled
+              scale='sm'
+              onClick={() => setState({ ...state, visible: true })}
+            >
+              补充资源
+            </ButtonStyled>
           </Flex>
         </Flex>
       </CardStyled>
+
+      <RechargeAssets
+        visible={state.visible}
+        onClose={() => setState({ ...state, visible: false })}
+      />
     </Flex>
   );
 };

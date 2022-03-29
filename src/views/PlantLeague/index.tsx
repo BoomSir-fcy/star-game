@@ -1,13 +1,18 @@
 import React from 'react';
-import { Box, Text } from 'uikit';
+import { Box, Flex, Text } from 'uikit';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
+import JoinTheAlliance from './Join';
+import LeagueInfo from './LeagueInfo';
 
 const PlantLeague = () => {
   return (
     <Layout>
       <Dashboard />
-      <Text>星球联盟</Text>
+      <Flex justifyContent='space-between' padding='0 30px'>
+        <JoinTheAlliance />
+        <LeagueInfo />
+      </Flex>
     </Layout>
   );
 };

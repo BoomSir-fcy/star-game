@@ -61,7 +61,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
                   height={33}
                   src='/images/commons/icon/up.png'
                 />
-                <Text fontSize='22px' color='legend'>
+                <Text fontSize='22px' color='up'>
                   15
                 </Text>
               </UpFlex>

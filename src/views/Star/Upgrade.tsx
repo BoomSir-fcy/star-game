@@ -34,7 +34,7 @@ const Upgrade = () => {
                 src='/images/commons/icon/upgrade.png'
               />
               <GradeBox>
-                <Text bold color='legend' shadow='secondary'>
+                <Text bold color='up' shadow='secondary'>
                   Lv 2
                 </Text>
               </GradeBox>

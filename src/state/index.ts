@@ -3,6 +3,7 @@ import { save, load } from 'redux-localstorage-simple'
 import { useDispatch, useSelector } from 'react-redux'
 import user from './user/reducer'
 import userInfoReducer from './userInfo/reducer'
+import mysteryBoxReducer from './mysteryBox/reducer'
 import { updateVersion } from './global/actions'
 
 export { useStore } from './util'
@@ -14,6 +15,7 @@ const store = configureStore({
   reducer: {
     user,
     userInfo: userInfoReducer,
+    mysteryBox: mysteryBoxReducer,
   },
   middleware: (getDefaultMiddleware) => [...getDefaultMiddleware({ thunk: true }), save({ states: PERSISTED_KEYS })],
   preloadedState: load({ states: PERSISTED_KEYS }),

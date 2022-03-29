@@ -46,13 +46,14 @@ export type Shadows = {
 };
 
 export type TextShadows = {
-  primary: string,
-  secondary: string,
-  tertiary: string,
+  primary: string;
+  secondary: string;
+  tertiary: string;
 };
 
 export type Gradients = {
   bubblegum: string;
+  progress: string;
 };
 
 export const qualities = {
@@ -73,6 +74,7 @@ export type Colors = {
   blueSide: string;
   redSide: string;
   hp: string;
+  up: string;
   input: string;
   inputSecondary: string;
   inputSelect: string;
@@ -86,10 +88,13 @@ export type Colors = {
   textSubtle: string;
   disabled: string;
   textTips: string;
+  textSuccess: string;
+  textDanger: string;
 
+  goldBorder: string;
   // Gradients
   gradients: Gradients;
-
+  progressBar: string;
   // Additional colors
   binance: string;
   overlay: string;
