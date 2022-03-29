@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Flex, Box, Image } from 'uikit';
+import { useDispatch } from 'react-redux';
+import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
 import Avatar from './Avatar';
 import Info from './Info';
 
@@ -12,6 +14,12 @@ const FlexStyled = styled(Flex)`
 `;
 
 const Dashboard: React.FC = ({ children }) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUserBalanceAsync());
+  }, [dispatch]);
+
   return (
     <FlexStyled>
       <Avatar />

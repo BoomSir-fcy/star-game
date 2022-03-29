@@ -1,8 +1,15 @@
-import { createReducer, createSlice } from '@reduxjs/toolkit'
-import { AppThunk, UserInfoState } from 'state/types'
-import { fetchInfoView, fetchUserInfoById, fetchUserView, fetchAllowance, fetchUserInfoByAccount } from './fetchers'
+import { createReducer, createSlice } from '@reduxjs/toolkit';
+import { AppThunk, UserInfoState } from 'state/types';
+import {
+  fetchInfoView,
+  fetchUserInfoById,
+  fetchUserView,
+  fetchAllowance,
+  fetchUserBalance,
+  fetchUserInfoByAccount,
+} from './fetchers';
 
-const currentTimestamp = () => new Date().getTime()
+const currentTimestamp = () => new Date().getTime();
 
 export const initialState: UserInfoState = {
   userInfoView: {
@@ -24,93 +31,110 @@ export const initialState: UserInfoState = {
 
   userInfo: {
     id: 0,
-    nickname: "",
-    address: "",
-    nft: "",
-    avatar: "",
+    nickname: '',
+    address: '',
+    nft: '',
+    avatar: '',
     firstLoginAt: 0,
     addTime: 0,
-    updatedAt: ""
+    updatedAt: '',
   },
 
   allowance: {
     allowance: '0',
     loading: false,
   },
-}
+
+  userBalance: [],
+};
 
 export const fetchInfoViewAsync =
   (account: string): AppThunk =>
-  async (dispatch) => {
+  async dispatch => {
     const infoView = await fetchInfoView(account);
-    dispatch(setInfoView(infoView))
-}
+    dispatch(setInfoView(infoView));
+  };
 
-export const fetchUserViewAsync = (account: string): AppThunk => async (dispatch) => {
-  const userInfo = await fetchUserView(account);
-  dispatch(setUserInfoView(userInfo))
-}
+export const fetchUserViewAsync =
+  (account: string): AppThunk =>
+  async dispatch => {
+    const userInfo = await fetchUserView(account);
+    dispatch(setUserInfoView(userInfo));
+  };
 
-export const fetchUserInfoByIdAsync = (uid: number): AppThunk => async (dispatch) => {
-  const userInfo = await fetchUserInfoById(uid);
-  dispatch(setUserInfo(userInfo))
+export const fetchUserInfoByIdAsync =
+  (uid: number): AppThunk =>
+  async dispatch => {
+    const userInfo = await fetchUserInfoById(uid);
+    dispatch(setUserInfo(userInfo));
+  };
 
-}
+export const fetchUserInfoByAccountAsync =
+  (account: string): AppThunk =>
+  async dispatch => {
+    const userInfo = await fetchUserInfoByAccount(account);
+    dispatch(setUserInfo(userInfo));
+  };
 
-export const fetchUserInfoByAccountAsync = (account: string): AppThunk => async (dispatch) => {
-  const userInfo = await fetchUserInfoByAccount(account);
-  dispatch(setUserInfo(userInfo))
+export const fetchAllowanceAsync =
+  ({ account, token }: { account: string; token: string }): AppThunk =>
+  async dispatch => {
+    dispatch(setAllowance({ loading: true }));
+    const allowance = await fetchAllowance(account, token);
+    console.log(allowance, '=allowance=allowanceallowanceallowance__');
+    dispatch(setAllowance({ allowance, loading: false }));
+  };
 
-}
-
-export const fetchAllowanceAsync = ({ account, token }: { account: string; token: string }): AppThunk => async (dispatch) => {
-  dispatch(setAllowance({ loading: true }))
-  const allowance = await fetchAllowance(account, token);
-  console.log(allowance, '=allowance=allowanceallowanceallowance__')
-  dispatch(setAllowance({ allowance, loading: false }))
-
-}
-
+export const fetchUserBalanceAsync = (): AppThunk => async dispatch => {
+  const Balance = await fetchUserBalance();
+  dispatch(setBalance(Balance));
+};
 
 export const userInfoSlice = createSlice({
   name: 'userInfo',
   initialState,
   reducers: {
     setInfoView: (state, action) => {
-      const { payload } = action
+      const { payload } = action;
       if (payload) {
         state.infoView = {
           ...state.infoView,
           ...payload,
           loading: true,
-        }
+        };
       }
     },
     setUserInfoView: (state, action) => {
-      const { payload } = action
+      const { payload } = action;
       state.userInfoView = {
         ...state.userInfoView,
         ...payload,
         loading: false,
-      }
+      };
     },
     setUserInfo: (state, action) => {
-      const { payload } = action
+      const { payload } = action;
       state.userInfo = {
         ...state.userInfo,
         ...payload,
-      }
+      };
     },
 
     setAllowance: (state, action) => {
-      const { payload } = action
+      const { payload } = action;
       state.allowance = {
         ...state.allowance,
         ...payload,
+      };
+    },
+    setBalance: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        state.userBalance = payload;
       }
     },
-  }
-})
+  },
+});
 
 // Actions
 export const {
@@ -118,7 +142,7 @@ export const {
   setUserInfo,
   setUserInfoView,
   setAllowance,
+  setBalance,
 } = userInfoSlice.actions;
 
-export default userInfoSlice.reducer
-
+export default userInfoSlice.reducer;

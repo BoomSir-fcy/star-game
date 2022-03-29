@@ -1,9 +1,11 @@
-import { Api } from "apis";
-import { UserAgentInfoView, UserInfoView } from "state/types";
-import { getUserAgentAddress } from "utils/addressHelpers";
-import { getBep20Contract, getUserAgentContract } from "utils/contractHelpers"
+import { Api } from 'apis';
+import { UserAgentInfoView, UserInfoView } from 'state/types';
+import { getUserAgentAddress } from 'utils/addressHelpers';
+import { getBep20Contract, getUserAgentContract } from 'utils/contractHelpers';
 
-export const fetchUserView = async (account: string): Promise<UserInfoView|null> => {
+export const fetchUserView = async (
+  account: string,
+): Promise<UserInfoView | null> => {
   try {
     const contract = getUserAgentContract();
     const res = await contract.getUserView(account);
@@ -13,14 +15,16 @@ export const fetchUserView = async (account: string): Promise<UserInfoView|null>
       tokenId: Number(res.tokenId.toJSON().hex),
       isActive: res.isAcctive,
       superior: res.superior,
-    }
+    };
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return null;
   }
-}
+};
 
-export const fetchInfoView = async (account: string): Promise<UserAgentInfoView|null> => {
+export const fetchInfoView = async (
+  account: string,
+): Promise<UserAgentInfoView | null> => {
   try {
     const contract = getUserAgentContract();
     const res = await contract.infoView();
@@ -31,16 +35,17 @@ export const fetchInfoView = async (account: string): Promise<UserAgentInfoView|
       userProfile_: res.userProfile_, // 用户信息合约地址
       price_: res.price_.toJSON().hex, // 价格
       createdCount_: res.createdCount_.toJSON().hex, // 已创建数量
-    }
+    };
   } catch (error) {
     console.error(error);
     return null;
   }
-}
+};
 
-export const fetchUserInfoById = async (uid: number): Promise<Api.User.UserInfo|null> => {
+export const fetchUserInfoById = async (
+  uid: number,
+): Promise<Api.User.UserInfo | null> => {
   try {
-  
     const res = await Api.UserApi.getUserInfo(uid);
     if (Api.isSuccess(res)) {
       return res.data;
@@ -50,10 +55,11 @@ export const fetchUserInfoById = async (uid: number): Promise<Api.User.UserInfo|
     console.error(`fetch fetchUserInfoById error: ${error}`);
     return null;
   }
-}
-export const fetchUserInfoByAccount = async (account: string): Promise<Api.User.UserInfo|null> => {
+};
+export const fetchUserInfoByAccount = async (
+  account: string,
+): Promise<Api.User.UserInfo | null> => {
   try {
-  
     const res = await Api.UserApi.getUserInfoByAccount(account);
     if (Api.isSuccess(res)) {
       return res.data;
@@ -63,15 +69,31 @@ export const fetchUserInfoByAccount = async (account: string): Promise<Api.User.
     console.error(`fetch fetchUserInfoById error: ${error}`);
     return null;
   }
-}
+};
 
 export const fetchAllowance = async (account: string, token: string) => {
   try {
     const erc20Contract = getBep20Contract(token);
-    const allowance = await erc20Contract.allowance(account, getUserAgentAddress());
+    const allowance = await erc20Contract.allowance(
+      account,
+      getUserAgentAddress(),
+    );
     return allowance.toJSON().hex;
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return '0';
   }
-}
+};
+
+export const fetchUserBalance = async () => {
+  try {
+    const res = await Api.BalanceApi.getUserBalance();
+    if (Api.isSuccess(res)) {
+      return res.data.List;
+    }
+    return null;
+  } catch (error) {
+    console.error(`fetch fetchUserBalance error: ${error}`);
+    return null;
+  }
+};

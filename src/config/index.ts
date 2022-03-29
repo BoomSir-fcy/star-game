@@ -59,7 +59,8 @@ export const POST_UPLOAD_IMG = 4;
 
 export const BASE_USER_PROFILE_URL = '/me/profile/';
 
-export const BICONOMY_DAPP_API_KEY = 'njaxQMHS7.352026d6-de3c-4faf-a0f2-9a64acbbab1c'
+export const BICONOMY_DAPP_API_KEY =
+  'njaxQMHS7.352026d6-de3c-4faf-a0f2-9a64acbbab1c';
 
 // setTotalSupply []
 export const EXCEPT_TOTALSUPPPPLY_ADDRESS = [
@@ -76,4 +77,12 @@ export const TRIBE_FEE_DEFAULT_CREATOR_REWARD = '50'; // 创作者TIME奖励分�
 export const TRIBE_FEE_DEFAULT_MEMBER_REWARD = '0'; // 部落成员TIME奖励分配
 export const TRIBE_FEE_BNB_TOKEN = '0x0000000000000000000000000000000000000001'; // BNB token
 
-export const TEIBE_FILE_TYPES = ['doc', 'docx', 'xls', 'xlsx', 'pdf', 'txt', 'ppt']
+export const TEIBE_FILE_TYPES = [
+  'doc',
+  'docx',
+  'xls',
+  'xlsx',
+  'pdf',
+  'txt',
+  'ppt',
+];

@@ -1,10 +1,24 @@
-import { ThunkAction } from 'redux-thunk'
-import { AnyAction } from '@reduxjs/toolkit'
+import { ThunkAction } from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
 
 // 性别
 export enum Gender {
   MAN = 0,
-  WOMAN = 1
+  WOMAN = 1,
+}
+
+// 用户余额
+export interface UserBalanceView {
+  uid: number;
+  coinId: string;
+  amount: number;
+  frozen: number;
+  symbol: string;
+  name: string;
+  limitMini: number;
+  limitMax: number;
+  addTime: number;
+  updatedAt: string;
 }
 
 export interface UserAgentInfoView {
@@ -13,7 +27,7 @@ export interface UserAgentInfoView {
   userProfile_: string; // 用户信息合约地址
   price_: string; // 价格
   createdCount_: string; // 已创建数量
-  loading?: boolean
+  loading?: boolean;
 }
 
 export interface UserInfoView {
@@ -25,14 +39,14 @@ export interface UserInfoView {
   loading?: boolean;
 }
 export interface UserInfoState {
-
+  userBalance: UserBalanceView[];
   infoView: UserAgentInfoView;
   userInfoView: UserInfoView;
   userInfo: Api.User.UserInfo;
   allowance: {
     allowance: string;
     loading: boolean;
-  }
+  };
 }
 
 export interface MysteryBoxView {
@@ -44,24 +58,26 @@ export interface MysteryBoxView {
   bnbPoolRatio: string; // 给bnb质押池的比例
   superiorRatio: string; // 给邀请人的比例
   defaultSuperior: string; // 默认邀请人
-  miniDistributeAmount: string; // 
+  miniDistributeAmount: string; //
   totalBurnt: string; // 总销毁量dsg
   totalVDsgDonated: string; // 总给vdsg的量dsg
   totalPoolSent: string; // 总给质押池的量dsg
   totalPoolSentBNB: string; // 总给质押池的量bnb
-  loading?: boolean
+  loading?: boolean;
 }
 
 export interface MysteryBoxState {
   boxView: MysteryBoxView;
-
-  
 }
 
-
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, unknown, AnyAction>
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  State,
+  unknown,
+  AnyAction
+>;
 
 export interface State {
-  userInfo: UserInfoState
-  mysteryBox: MysteryBoxState
+  userInfo: UserInfoState;
+  mysteryBox: MysteryBoxState;
 }

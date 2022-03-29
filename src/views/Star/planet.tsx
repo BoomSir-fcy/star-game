@@ -20,7 +20,7 @@ import { PlanetSearch, PlanetBox } from './components';
 
 const Planet = () => {
   const parsedQs = useParsedQueryString();
-  const choose = parsedQs.choose;
+  const { choose } = parsedQs;
   console.log(choose);
 
   return (
