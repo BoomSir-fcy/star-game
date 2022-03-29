@@ -74,6 +74,7 @@ export type Colors = {
   blueSide: string;
   redSide: string;
   hp: string;
+  up: string;
   input: string;
   inputSecondary: string;
   inputSelect: string;

@@ -39,6 +39,5 @@ export const TokenImage: React.FC<TokenImageProps> = ({
   tokenAddress,
   ...props
 }) => {
-  console.log(getTokenLogoURLs(tokenAddress), 'getTokenLogoURLs(tokenAddress)');
   return <UIKitTokenImage srcs={getTokenLogoURLs(tokenAddress)} {...props} />;
 };

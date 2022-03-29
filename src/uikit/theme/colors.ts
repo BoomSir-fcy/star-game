@@ -7,6 +7,7 @@ export const baseColors = {
   blueSide: '#2CCFFF',
   redSide: '#EB5231',
   hp: '#FFAC36',
+  up: '#ECA320',
 };
 
 export const additionalColors = {

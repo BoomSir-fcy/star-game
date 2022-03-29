@@ -3,9 +3,11 @@ import { Box, Text, BgCard, Flex, TweenText } from 'uikit';
 import { Link } from 'react-router-dom';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
-import { MysteryBoxCom } from 'components/MysteryBoxCom';
+import { MysteryBoxCom, mysteryBoxQualities } from 'components/MysteryBoxCom';
+import { useFetchBoxView } from 'state/mysteryBox/hooks';
 
 const MysteryBox = () => {
+  useFetchBoxView();
   return (
     <Layout>
       <Dashboard>
@@ -22,14 +24,14 @@ const MysteryBox = () => {
         </BgCard>
       </Dashboard>
       <Flex margin='auto' width='80%' justifyContent='space-between'>
-        <Link to={`/mystery-box/state?q=${'ordinary'}`}>
-          <MysteryBoxCom quality='ordinary' />
+        <Link to={`/mystery-box/state?q=${mysteryBoxQualities.ORDINARY}`}>
+          <MysteryBoxCom quality={mysteryBoxQualities.ORDINARY} />
         </Link>
-        <Link to={`/mystery-box/state?q=${'advanced'}`}>
-          <MysteryBoxCom quality='advanced' />
+        <Link to={`/mystery-box/state?q=${mysteryBoxQualities.ADVANCED}`}>
+          <MysteryBoxCom quality={mysteryBoxQualities.ADVANCED} />
         </Link>
-        <Link to={`/mystery-box/state?q=${'super'}`}>
-          <MysteryBoxCom quality='super' />
+        <Link to={`/mystery-box/state?q=${mysteryBoxQualities.SUPER}`}>
+          <MysteryBoxCom quality={mysteryBoxQualities.SUPER} />
         </Link>
       </Flex>
     </Layout>

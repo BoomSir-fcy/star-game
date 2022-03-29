@@ -7,6 +7,7 @@ import {
   MysteryBoxStyled,
   MysteryBoxBaseStyled,
   MysteryBoxBoxStyled,
+  mysteryBoxQualities,
 } from 'components/MysteryBoxCom';
 import StarCom from 'components/StarCom';
 import Attributes from './components/Attributes';
@@ -22,8 +23,8 @@ const MysteryBoxDetail = () => {
       <Dashboard />
       <Flex>
         <MysteryBoxStyled>
-          <MysteryBoxBaseStyled quality='super' />
-          <MysteryBoxStarStyled quality='super'>
+          <MysteryBoxBaseStyled quality={mysteryBoxQualities.ORDINARY} />
+          <MysteryBoxStarStyled quality={mysteryBoxQualities.ORDINARY}>
             <StarCom variant='none' scale='ld' />
           </MysteryBoxStarStyled>
         </MysteryBoxStyled>
