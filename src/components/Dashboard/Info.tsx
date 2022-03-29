@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Text, Image } from 'uikit';
+import { useStore } from 'state/util';
 import { TokenImage } from 'components/TokenImage';
 import { getDsgAddress } from 'utils/addressHelpers';
 import StarCom from 'components/StarCom';
 import Modal from 'components/Modal';
 import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
+import { UserBalanceView } from 'state/types';
 import ButtonGroup, { ButtonGroupProps } from './ButtonGroup';
 
 const ButtonLeft = styled(Button)`
@@ -32,7 +34,23 @@ interface InfoProps extends ButtonGroupProps {
 
 const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
   const [visible, setVisible] = useState(false);
-  const [ActiveToken, setActiveToken] = useState('DSG');
+  const [ActiveToken, setActiveToken] = useState<UserBalanceView>();
+
+  const Balance = useStore(p => p.userInfo.userBalance);
+
+  const DSGblance = useMemo(() => {
+    const balance = Balance.filter(item => {
+      return item.symbol === 'DSG';
+    });
+    return balance[0];
+  }, [Balance]);
+
+  const BOXblance = useMemo(() => {
+    const balance = Balance.filter(item => {
+      return item.symbol === 'BOX';
+    });
+    return balance[0];
+  }, [Balance]);
 
   return (
     <Box width='100%'>
@@ -40,7 +58,7 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
         <Box width='312px' pl='20px' pt='22px'>
           <ButtonLeft
             onClick={() => {
-              setActiveToken('DSG');
+              setActiveToken(DSGblance);
               setVisible(true);
             }}
             variant='custom'
@@ -53,15 +71,15 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
                   tokenAddress={getDsgAddress()}
                 />
                 <Text mt='8px' ml='8px'>
-                  1
+                  {DSGblance?.amount}
                 </Text>
               </Flex>
-              <Text mt='8px'>DSG</Text>
+              <Text mt='8px'>{DSGblance?.symbol}</Text>
             </Flex>
           </ButtonLeft>
           <ButtonLeft
             onClick={() => {
-              setActiveToken('BOX');
+              setActiveToken(BOXblance);
               setVisible(true);
             }}
             mt='28px'
@@ -75,10 +93,10 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
                   tokenAddress={getDsgAddress()}
                 />
                 <Text mb='8px' ml='8px'>
-                  1
+                  {BOXblance?.amount}
                 </Text>
               </Flex>
-              <Text mb='8px'>DSG</Text>
+              <Text mb='8px'>{BOXblance?.symbol}</Text>
             </Flex>
           </ButtonLeft>
         </Box>
@@ -145,11 +163,11 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
         <ButtonGroup onRefresh={onRefresh} onBack={onBack} />
       </Flex>
       <Modal
-        title={`${ActiveToken}钱包`}
+        title={`${ActiveToken?.symbol}钱包`}
         visible={visible}
         setVisible={setVisible}
       >
-        <DepositWithdrawal balance='1000' Token={ActiveToken} />
+        <DepositWithdrawal TokenInfo={ActiveToken} />
       </Modal>
     </Box>
   );

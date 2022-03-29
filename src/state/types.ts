@@ -7,6 +7,20 @@ export enum Gender {
   WOMAN = 1,
 }
 
+// 用户余额
+export interface UserBalanceView {
+  uid: number;
+  coinId: string;
+  amount: number;
+  frozen: number;
+  symbol: string;
+  name: string;
+  limitMini: number;
+  limitMax: number;
+  addTime: number;
+  updatedAt: string;
+}
+
 export interface UserAgentInfoView {
   avatarNft_: string; // 头像nft的合约地址
   payToken_: string; // 要支付的token的合约地址
@@ -25,6 +39,7 @@ export interface UserInfoView {
   loading?: boolean;
 }
 export interface UserInfoState {
+  userBalance: UserBalanceView[];
   infoView: UserAgentInfoView;
   userInfoView: UserInfoView;
   userInfo: Api.User.UserInfo;
