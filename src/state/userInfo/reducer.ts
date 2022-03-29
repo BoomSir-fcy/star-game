@@ -1,6 +1,6 @@
 import { createReducer, createSlice } from '@reduxjs/toolkit'
 import { AppThunk, UserInfoState } from 'state/types'
-import { fetchInfoView, fetchUserInfoById, fetchUserView, fetchAllowance } from './fetchers'
+import { fetchInfoView, fetchUserInfoById, fetchUserView, fetchAllowance, fetchUserInfoByAccount } from './fetchers'
 
 const currentTimestamp = () => new Date().getTime()
 
@@ -53,6 +53,12 @@ export const fetchUserViewAsync = (account: string): AppThunk => async (dispatch
 
 export const fetchUserInfoByIdAsync = (uid: number): AppThunk => async (dispatch) => {
   const userInfo = await fetchUserInfoById(uid);
+  dispatch(setUserInfo(userInfo))
+
+}
+
+export const fetchUserInfoByAccountAsync = (account: string): AppThunk => async (dispatch) => {
+  const userInfo = await fetchUserInfoByAccount(account);
   dispatch(setUserInfo(userInfo))
 
 }

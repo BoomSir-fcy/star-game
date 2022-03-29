@@ -1,5 +1,6 @@
 import { useMysteryBoxContract } from 'hooks/useContract';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import { getPlanetContract } from 'utils/contractHelpers';
 
 export const useBuyMysteryBox = () => {
   const contract = useMysteryBoxContract();

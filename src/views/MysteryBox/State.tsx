@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
 import {
   Box,
@@ -10,7 +11,6 @@ import {
   Button,
   Skeleton,
   Dots,
-  Input,
 } from 'uikit';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
@@ -23,7 +23,7 @@ import {
 } from 'components/MysteryBoxCom';
 import styled from 'styled-components';
 import { TokenImage } from 'components/TokenImage';
-import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance';
+import { getBalanceNumber } from 'utils/formatBalance';
 import { getDsgAddress } from 'utils/addressHelpers';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { mysteryConfig } from 'components/MysteryBoxCom/config';
@@ -31,6 +31,7 @@ import { useFetchBoxView } from 'state/mysteryBox/hooks';
 import { useStore } from 'state';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import OpenModal from './components/OpenModal';
+import { queryMintEvent } from './event';
 
 const CardStyled = styled(Card)`
   width: 600px;
@@ -43,6 +44,7 @@ const MysteryBoxState = () => {
 
   useFetchBoxView();
   const { priceBNB, seedBlocks, loading } = useStore(p => p.mysteryBox.boxView);
+  const { account } = useWeb3React();
 
   const quality = useMemo(() => {
     const q = Number(paramsQs.q) as MysteryBoxQualities;
@@ -73,18 +75,32 @@ const MysteryBoxState = () => {
 
   const { handleOpen } = useOpenMysteryBox();
   const [visible, setVisible] = useState(false);
+  const fetchHandle = useCallback(async () => {
+    if (account) {
+      const event = await queryMintEvent(account);
+      return event;
+    }
+    return [];
+  }, [account]);
   const onHandleOpen = useCallback(
     async name => {
       try {
         const res = await handleOpen(quality, name);
+        const event = await fetchHandle();
+        console.log(res);
+        console.log(event, 'event');
         setBought(false);
         setVisible(false);
       } catch (error) {
         console.error(error);
       }
     },
-    [quality, handleOpen, setBought],
+    [quality, handleOpen, setBought, fetchHandle],
   );
+
+  useEffect(() => {
+    fetchHandle();
+  }, [fetchHandle]);
 
   const existBox = useMemo(() => {
     return Boolean(Number(seedBlocks[quality])) || bought;
@@ -132,13 +148,6 @@ const MysteryBoxState = () => {
                 </Box>
               </Flex>
             </CardStyled>
-            <Input
-              style={{ borderRadius: '50%' }}
-              width={200}
-              height={200}
-              primary
-            />
-
             <Flex mt='34px' justifyContent='center'>
               {existBox ? (
                 <Button

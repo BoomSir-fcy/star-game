@@ -78,7 +78,7 @@ export const shadows = {
   inset: "inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21)",
   box: 'inset 0px 7px 3px 0px rgba(0, 0, 0, 0.35)',
   nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)',
-  primary: 'inset 0px 0px 20px 0px #f9f9f99c',
+  primary: 'inset 0px 0px 60px -30px #F9F9F9;',
 };
 
 export const textShadows = {

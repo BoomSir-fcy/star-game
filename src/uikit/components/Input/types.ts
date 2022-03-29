@@ -13,5 +13,4 @@ export interface InputProps extends SpaceProps {
   isSuccess?: boolean;
   isWarning?: boolean;
   noShadow?: boolean;
-  primary?: boolean
 }
