@@ -30,26 +30,34 @@ const StarStyleImg = styled.img`
 const JoinTheAlliance = () => {
   return (
     <Box position='relative' width='40%' padding='0 80px 0 70px'>
-      <Flex alignItems='center' justifyContent='center'>
-        <BigStarAddBtn mb='-36px' No={1} Leve='2'>
-          <StarStyleImg src='/images/star/01.jpg' />
-        </BigStarAddBtn>
+      <Flex mb='-36px' alignItems='center' justifyContent='center'>
+        <StarAddBtn
+          imgBorder
+          size='200px'
+          url='/images/star/01.jpg'
+          No={1}
+          Leve='2'
+        />
       </Flex>
       <Flex alignItems='center' justifyContent='space-between'>
-        <BigStarAddBtn No={5}>
-          <StarStyleImg src='/images/star/05.jpg' />
-        </BigStarAddBtn>
-        <BigStarAddBtn No={2}>
-          <StarStyleImg src='/images/star/02.jpg' />
-        </BigStarAddBtn>
+        <StarAddBtn
+          imgBorder
+          size='200px'
+          url='/images/star/05.jpg'
+          No={5}
+          Leve='2'
+        />
+        <StarAddBtn
+          imgBorder
+          size='200px'
+          url='/images/star/02.jpg'
+          No={2}
+          Leve='2'
+        />
       </Flex>
       <Flex alignItems='center' justifyContent='center'>
-        <BigStarAddBtn No={4} mr='50px'>
-          <StarStyleImg src='/images/star/04.jpg' />
-        </BigStarAddBtn>
-        <BigStarAddBtn No={3}>
-          <StarStyleImg src='/images/star/03.jpg' />
-        </BigStarAddBtn>
+        <StarAddBtn imgBorder size='200px' No={4} Leve='2' />
+        <StarAddBtn imgBorder size='200px' No={3} Leve='2' />
       </Flex>
       <GalaxyBg>
         <img src='/images/planetary_alliance/1.png' alt='' />
