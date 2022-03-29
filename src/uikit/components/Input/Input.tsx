@@ -1,4 +1,6 @@
 import styled, { DefaultTheme } from 'styled-components';
+import { space, layout } from 'styled-system';
+
 import { InputProps, scales } from './types';
 
 interface StyledInputProps extends InputProps {
@@ -12,6 +14,7 @@ const getBoxShadow = ({
   isSuccess = false,
   isWarning = false,
   noShadow = false,
+  primary = false,
   theme,
 }: StyledInputProps) => {
   if (isWarning) {
@@ -24,6 +27,10 @@ const getBoxShadow = ({
 
   if (isSuccess) {
     return theme.shadows.success;
+  }
+
+  if (primary) {
+    return theme.shadows.primary;
   }
 
   return theme.shadows.inset;
@@ -54,6 +61,7 @@ const Input = styled.input<InputProps>`
   padding: 0;
   width: 100%;
   border: none;
+  ${({ primary }) => primary && `border: 2px solid;`}
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.textSubtle};
@@ -72,6 +80,8 @@ const Input = styled.input<InputProps>`
   &:focus:not(:disabled):not(:readonly) {
     box-shadow: none;
   }
+  ${space}
+  ${layout}
 `;
 
 Input.defaultProps = {

@@ -55,7 +55,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({ onBack, onRefresh }) => {
         掠夺资源
       </SecondaryButton>
 
-      <SecondaryButton href='' tag='flag'>
+      <SecondaryButton href='/galaxy' tag='flag'>
         占领恒星
       </SecondaryButton>
       <SecondaryButton href='' tag='star'>

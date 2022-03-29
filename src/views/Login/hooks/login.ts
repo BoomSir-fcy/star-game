@@ -24,22 +24,24 @@ export const useLogin = () => {
           const res = await Api.UserApi.userSignIn(params)
           if (Api.isSuccess(res)) {
             localStorage.setItem(storage.SSID, res.data.SSID);
-            dispatch(fetchUserInfoByIdAsync(1)); // TODO: replace 1 for uid
+            // dispatch(fetchUserInfoByIdAsync(0)); // TODO: replace 1 for uid
           }
           console.log(res)
-          return res
+          return res || {
+            code: -1
+          }
         } catch (error: any) {
           console.error(error);
           return {
-            code: error?.code || 0
+            code: error?.code || -1
           };
         }
       }
       return {
-        code: 0,
+        code: -1,
       }
     },
-    [library, account, dispatch]
+    [library, account]
   );
 
   return {
