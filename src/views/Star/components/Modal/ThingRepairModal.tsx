@@ -22,15 +22,15 @@ export const ThingRepairModal: React.FC<{
           >
             <Box width='100%'>
               <Text small>修复所有耐久需支付</Text>
-
-              <TextList
-                imgWidth={50}
-                imgHeight={50}
-                imgSrc='/images/commons/dsg-1.png'
-                number='100'
-                unit='DSG'
-              />
-
+              <Box mb='15px'>
+                <TextList
+                  imgWidth={50}
+                  imgHeight={50}
+                  imgSrc='/images/commons/dsg-1.png'
+                  number='100'
+                  unit='DSG'
+                />
+              </Box>
               <TextList
                 imgWidth={50}
                 imgHeight={50}
