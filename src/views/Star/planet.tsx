@@ -16,12 +16,29 @@ import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
 
-import { PlanetSearch, PlanetBox } from './components';
+import { Api } from 'apis';
+
+import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 
 const Planet = () => {
   const parsedQs = useParsedQueryString();
-  const choose = parsedQs.choose;
-  console.log(choose);
+  const { choose } = parsedQs;
+
+  const init = async () => {
+    try {
+      const res = await Api.PlanetApi.getMePlanet({
+        page: 1,
+        page_size: 10,
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    init();
+  });
 
   return (
     <Layout>
@@ -76,7 +93,10 @@ const Planet = () => {
         </Box>
         <Flex ml={choose ? '7px' : '23px'} flex={1}>
           <BgCard variant={choose ? 'full' : 'big'} fringe padding='40px 37px'>
-            <PlanetSearch />
+            <Flex justifyContent='space-between'>
+              <PlanetRaceTabs />
+              <PlanetSearch />
+            </Flex>
             <Flex
               mt='22px'
               justifyContent='space-between'
