@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Flex, Text, Image } from 'uikit';
 import styled from 'styled-components';
 import { StarAddBtn } from 'components';
@@ -28,10 +29,16 @@ const StarStyleImg = styled.img`
 `;
 
 const JoinTheAlliance = () => {
+  const navigate = useNavigate();
+  const addStar = () => {
+    navigate('/star/planet?choose=1');
+  };
+
   return (
     <Box position='relative' width='40%' padding='0 80px 0 70px'>
       <Flex mb='-36px' alignItems='center' justifyContent='center'>
         <StarAddBtn
+          callBack={addStar}
           imgBorder
           size='200px'
           url='/images/star/01.jpg'
