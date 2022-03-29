@@ -56,6 +56,20 @@ export const fetchUserInfoById = async (
     return null;
   }
 };
+export const fetchUserInfoByAccount = async (
+  account: string,
+): Promise<Api.User.UserInfo | null> => {
+  try {
+    const res = await Api.UserApi.getUserInfoByAccount(account);
+    if (Api.isSuccess(res)) {
+      return res.data;
+    }
+    return null;
+  } catch (error) {
+    console.error(`fetch fetchUserInfoById error: ${error}`);
+    return null;
+  }
+};
 
 export const fetchAllowance = async (account: string, token: string) => {
   try {

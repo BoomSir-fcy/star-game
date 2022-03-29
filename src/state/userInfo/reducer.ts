@@ -6,6 +6,7 @@ import {
   fetchUserView,
   fetchAllowance,
   fetchUserBalance,
+  fetchUserInfoByAccount,
 } from './fetchers';
 
 const currentTimestamp = () => new Date().getTime();
@@ -65,6 +66,13 @@ export const fetchUserInfoByIdAsync =
   (uid: number): AppThunk =>
   async dispatch => {
     const userInfo = await fetchUserInfoById(uid);
+    dispatch(setUserInfo(userInfo));
+  };
+
+export const fetchUserInfoByAccountAsync =
+  (account: string): AppThunk =>
+  async dispatch => {
+    const userInfo = await fetchUserInfoByAccount(account);
     dispatch(setUserInfo(userInfo));
   };
 

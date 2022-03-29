@@ -5,7 +5,7 @@ import random from 'lodash/random'
 import { signMessage } from "utils/web3React";
 import { Api } from "apis";
 import { storage } from "config";
-import { fetchUserInfoByIdAsync } from "state/userInfo/reducer";
+import { fetchUserInfoByAccountAsync } from "state/userInfo/reducer";
 
 export const useLogin = () => {
   const { account, library } = useActiveWeb3React();
@@ -24,7 +24,7 @@ export const useLogin = () => {
           const res = await Api.UserApi.userSignIn(params)
           if (Api.isSuccess(res)) {
             localStorage.setItem(storage.SSID, res.data.SSID);
-            // dispatch(fetchUserInfoByIdAsync(0)); // TODO: replace 1 for uid
+            dispatch(fetchUserInfoByAccountAsync(account)); // TODO: replace 1 for uid
           }
           console.log(res)
           return res || {
@@ -41,7 +41,7 @@ export const useLogin = () => {
         code: -1,
       }
     },
-    [library, account]
+    [library, account, dispatch]
   );
 
   return {
