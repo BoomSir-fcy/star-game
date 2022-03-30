@@ -1,28 +1,43 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, Flex, Text, Image } from 'uikit';
 import styled from 'styled-components';
+import { useStore } from 'state/util';
+import BigNumber from 'bignumber.js';
 
 const Addition = () => {
-  const AdditionList = [
-    {
-      type: 1,
-      total: 10,
-      capacity: '0.32',
-      speed: '1.5',
-    },
-    {
-      type: 2,
-      total: 10,
-      capacity: '0.32',
-      speed: '1.5',
-    },
-    {
-      type: 3,
-      total: 10,
-      capacity: '0.32',
-      speed: '1.5',
-    },
-  ];
+  const { alliance, energy } = useStore(p => p.alliance.allianceView);
+  const AdditionList = useMemo(() => {
+    const arr = [
+      {
+        type: 1,
+        name: '总矿石',
+        total: energy.total_stone,
+        capacity: energy.per_stone,
+        speed: new BigNumber(energy.per_stone)
+          .minus(alliance.beforeStoneCap || 0)
+          .toString(),
+      },
+      {
+        type: 2,
+        name: '总人口',
+        total: energy.total_population,
+        capacity: energy.per_population,
+        speed: new BigNumber(energy.per_population)
+          .minus(alliance.beforePopulationCap || 0)
+          .toString(),
+      },
+      {
+        type: 3,
+        name: '总能量',
+        total: energy.total_energy,
+        capacity: energy.per_energy,
+        speed: new BigNumber(energy.per_energy)
+          .minus(alliance.beforeEnergyCap || 0)
+          .toString(),
+      },
+    ];
+    return arr;
+  }, [alliance, energy]);
 
   return (
     <Flex
@@ -32,7 +47,7 @@ const Addition = () => {
       padding='30px'
     >
       {AdditionList.map(item => (
-        <ItemRow info={item} />
+        <ItemRow key={item.type} info={item} />
       ))}
     </Flex>
   );
@@ -40,8 +55,9 @@ const Addition = () => {
 
 interface AdditionInfo {
   type: number;
+  name: string;
   total: number;
-  capacity: string;
+  capacity: number;
   speed: string;
 }
 
@@ -59,7 +75,9 @@ const ItemRow: React.FC<{
           height={62}
         />
         <Box ml='24px'>
-          <Text fontSize='22px'>总矿石:{info.total}</Text>
+          <Text fontSize='22px'>
+            {info.name}:{info.total}
+          </Text>
           <Text fontSize='22px'>总产能:{info.capacity}%</Text>
         </Box>
       </Flex>

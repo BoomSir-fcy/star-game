@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { ThunkAction } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 
@@ -102,4 +103,64 @@ export interface State {
   userInfo: UserInfoState;
   mysteryBox: MysteryBoxState;
   galaxy: GalaxyState;
+  alliance: AllianceState;
+}
+
+export interface planetInfo {
+  id: number;
+  name: string;
+  owner: string;
+  oldOwner: string;
+  rarity: number;
+  level: number;
+  strengthenLevel: number;
+  working: true;
+  workTime: number;
+  areaX: number;
+  areaY: number;
+  oreYield: number;
+  oreConsumption: number;
+  energyYield: number;
+  energyConsumption: number;
+  populationYield: number;
+  populationConsumption: number;
+  settleAt: number;
+  addTime: number;
+  update_finish_time: number;
+  strengthen_finish_time: number;
+}
+export interface allianceInfo {
+  id: number;
+  uid: number;
+  beforeStoneCap: string;
+  beforePopulationCap: string;
+  beforeEnergyCap: string;
+  createTime: number;
+  laterExtractTime: number;
+  power: number;
+  working: number;
+}
+
+export interface orderInfo {
+  id: number;
+  planetId: number;
+  order: number;
+  uid: number;
+  planet: planetInfo;
+}
+export interface energyInfo {
+  total_population: number;
+  total_stone: number;
+  total_energy: number;
+  per_population: number;
+  per_stone: number;
+  per_energy: number;
+}
+export interface AllianceView {
+  alliance: allianceInfo;
+  order: orderInfo[];
+  energy: energyInfo;
+}
+export interface AllianceState {
+  allianceView: AllianceView;
 }
