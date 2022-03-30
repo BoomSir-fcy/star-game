@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -16,25 +18,27 @@ import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
 
-import { Api } from 'apis';
-
+import { fetchMePlanetAsync } from 'state/planet/fetchers';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 
+const ScrollBox = styled(Flex)`
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+  width: 100%;
+`;
+
 const Planet = () => {
+  const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
+  const [state, setState] = React.useState({
+    page: 1,
+  });
 
-  const init = async () => {
-    try {
-      const res = await Api.PlanetApi.getMePlanet({
-        page: 1,
-        page_size: 10,
-      });
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const init = React.useCallback(() => {
+    dispatch(fetchMePlanetAsync({ page: state.page, page_size: 10 }));
+  }, [dispatch, state]);
 
   React.useEffect(() => {
     init();
@@ -105,9 +109,13 @@ const Planet = () => {
                 overflow: 'auto',
               }}
             >
-              <PlanetBox level='rare' />
-              <PlanetBox status='upgrade' level='legend' />
-              <PlanetBox level='rare' />
+              <ScrollBox>
+                <Link to='/star'>
+                  <PlanetBox level='rare' />
+                </Link>
+                <PlanetBox status='upgrade' level='legend' />
+                <PlanetBox level='rare' />
+              </ScrollBox>
             </Flex>
           </BgCard>
         </Flex>
