@@ -70,6 +70,27 @@ export interface MysteryBoxState {
   boxView: MysteryBoxView;
 }
 
+export interface GalaxyInfo extends Api.Galaxy.GalaxyInfo {
+  id: number;
+  label: string;
+  starTotal?: number;
+  starOwnerTotal?: number;
+}
+
+interface StarLevelInfo {
+  id: number; // 恒星等级范围id
+  label: string; // // 恒星等级范围名称
+  levels: Api.Galaxy.StarInfo[];
+}
+
+export interface GalaxyState {
+  currentGalaxy: GalaxyInfo;
+  currentStarPeriod: StarLevelInfo;
+  galaxyList: GalaxyInfo[];
+  galaxyStarList: StarLevelInfo[];
+  loading: boolean;
+}
+
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   State,
@@ -80,4 +101,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 export interface State {
   userInfo: UserInfoState;
   mysteryBox: MysteryBoxState;
+  galaxy: GalaxyState;
 }

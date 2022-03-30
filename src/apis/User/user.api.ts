@@ -9,7 +9,7 @@ export class UserApi extends Http {
 
   // 取指定用户信息
   async getUserInfoByAccount(account: string): Promise<Api.Response<Api.User.UserInfo>> {
-    return this.get(`user/get/${account}`);
+    return this.get(`user/get/${account.toLowerCase()}`);
   }
 
   // 用户登录

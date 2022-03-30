@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from 'uikit';
@@ -56,7 +56,11 @@ const Nav: React.FC<NavProps> = ({
 
   // TODO: activeId 等功能优化
 
-  const [active, setActive] = useState(activeId || nav[0]?.id);
+  const [active, setActive] = useState(nav[0]?.id);
+
+  useEffect(() => {
+    if (activeId) setActive(activeId);
+  }, [activeId]);
 
   const navigate = useNavigate();
 

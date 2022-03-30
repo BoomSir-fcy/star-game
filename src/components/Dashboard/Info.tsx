@@ -102,7 +102,7 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
         </Box>
         <Flex ml='16px' pt='32px'>
           <Box>
-            <Link to='/star'>
+            <Link to='/star/planet'>
               <ButtonTag1 variant='custom'>
                 <Flex alignItems='center' width='100%'>
                   <StarCom variant='none' ml='16px' />
