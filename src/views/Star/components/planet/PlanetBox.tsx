@@ -11,12 +11,11 @@ import { PlanetDesc } from './PlanetDesc';
 const CardBox = styled(Card)`
   width: 760px;
   height: 200px;
-  padding: 18px;
-  margin-bottom: 20px;
+  padding: 16px;
 `;
 
 const Desc = styled(Flex)`
-  padding-bottom: 15px;
+  padding-bottom: 5px;
   border-bottom: 1px solid #424958;
 `;
 
@@ -66,24 +65,48 @@ export const PlanetBox: React.FC<{
           <Desc justifyContent='space-between'>
             {status === 'upgrade' ? (
               <>
-                <Flex alignItems='center'>
-                  <Text color={QualityColor[level]} bold>
-                    传说
-                  </Text>
-                  <Text ml='11px'>Lv1</Text>
-                </Flex>
-                <Flex flex='1' justifyContent='flex-end' alignItems='center'>
-                  <Text color='textSubtle' fontSize='20px' mr='28px'>
+                <Box>
+                  <Text fontSize='24px'>斯特拉星球</Text>
+                  <Flex alignItems='center' mt='2px'>
+                    <Text color={QualityColor[level]} bold small>
+                      传说
+                    </Text>
+                    <Text ml='12px' color='raceProtoss' bold small>
+                      神族
+                    </Text>
+                    <Text ml='12px' bold small>
+                      Lv1
+                    </Text>
+                    <Text ml='12px' small>
+                      格子:5x5
+                    </Text>
+                  </Flex>
+                </Box>
+                <Flex flex='1' flexDirection='column' alignItems='flex-end'>
+                  <Flex
+                    width='100%'
+                    justifyContent='flex-end'
+                    alignItems='center'
+                  >
+                    <Text shadow='primary' fontSize='24px' mr='15px'>
+                      升级中
+                    </Text>
+                    <Image
+                      src='/images/commons/icon/icon_arrow_right.png'
+                      width={22}
+                      height={27}
+                    />
+                  </Flex>
+                  <Text
+                    mt='2px'
+                    color='textSubtle'
+                    small
+                    style={{
+                      letterSpacing: '2px',
+                    }}
+                  >
                     {formatTime(state.time)}
                   </Text>
-                  <Text shadow='primary' fontSize='24px' mr='27px'>
-                    升级中
-                  </Text>
-                  <Image
-                    src='/images/commons/icon/icon_arrow_right.png'
-                    width={22}
-                    height={27}
-                  />
                 </Flex>
               </>
             ) : (
@@ -114,8 +137,8 @@ export const PlanetBox: React.FC<{
               <>
                 <Image
                   src='/images/commons/icon/icon-premiumGems.png'
-                  width={60}
-                  height={60}
+                  width={69}
+                  height={78}
                 />
                 <Text>普通、良好、稀有星球</Text>
               </>
