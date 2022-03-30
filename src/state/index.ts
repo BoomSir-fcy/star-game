@@ -5,6 +5,7 @@ import user from './user/reducer';
 import userInfoReducer from './userInfo/reducer';
 import mysteryBoxReducer from './mysteryBox/reducer';
 import galaxyReducer from './galaxy/reducer';
+import planetReducer from './planet/reducer';
 import { updateVersion } from './global/actions';
 
 export { useStore } from './util';
@@ -18,6 +19,7 @@ const store = configureStore({
     userInfo: userInfoReducer,
     mysteryBox: mysteryBoxReducer,
     galaxy: galaxyReducer,
+    planet: planetReducer,
   },
   middleware: getDefaultMiddleware => [
     ...getDefaultMiddleware({ thunk: true }),

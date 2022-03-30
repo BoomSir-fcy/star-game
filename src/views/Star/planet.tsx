@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -16,12 +18,32 @@ import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
 
-import { PlanetSearch, PlanetBox } from './components';
+import { fetchMePlanetAsync } from 'state/planet/fetchers';
+import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
+
+const ScrollBox = styled(Flex)`
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+  width: 100%;
+`;
 
 const Planet = () => {
+  const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
-  console.log(choose);
+
+  const [state, setState] = React.useState({
+    page: 1,
+  });
+
+  const init = React.useCallback(() => {
+    dispatch(fetchMePlanetAsync({ page: state.page, page_size: 10 }));
+  }, [dispatch, state]);
+
+  React.useEffect(() => {
+    init();
+  });
 
   return (
     <Layout>
@@ -76,7 +98,10 @@ const Planet = () => {
         </Box>
         <Flex ml={choose ? '7px' : '23px'} flex={1}>
           <BgCard variant={choose ? 'full' : 'big'} fringe padding='40px 37px'>
-            <PlanetSearch />
+            <Flex justifyContent='space-between'>
+              <PlanetRaceTabs />
+              <PlanetSearch />
+            </Flex>
             <Flex
               mt='22px'
               justifyContent='space-between'
@@ -85,9 +110,13 @@ const Planet = () => {
                 overflow: 'auto',
               }}
             >
-              <PlanetBox level='rare' />
-              <PlanetBox status='upgrade' level='legend' />
-              <PlanetBox level='rare' />
+              <ScrollBox>
+                <Link to='/star'>
+                  <PlanetBox level='rare' />
+                </Link>
+                <PlanetBox status='upgrade' level='legend' />
+                <PlanetBox level='rare' />
+              </ScrollBox>
             </Flex>
           </BgCard>
         </Flex>
