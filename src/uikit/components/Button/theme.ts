@@ -89,6 +89,7 @@ export const styleVariants = {
   },
   [variants.VS_REFRESH]: {
     background: 'url(/images/commons/btn/s1.png)',
+    backgroundSize: '100% 100%',
     backgroundColor: 'transparent',
     color: 'white',
     border: 'none',
