@@ -35,10 +35,6 @@ declare namespace Api {
       plunder_speed: number; // 掠夺速度
       race: number; // 种族  1-神族 2-人族 3-虫族
       stone: number; // 矿石
-      extra: ExtraInfo;
-    }
-
-    interface ExtraInfo {
       defense: number; // 防御加成
       attack: number; // 攻击加成
       hp: number; // hp加成
