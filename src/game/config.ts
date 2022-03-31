@@ -1,4 +1,8 @@
 const config = {
+  WIDTH: 800,
+  HEIGHT: 600,
+  resolution: 1,
+
   boardWidth: 100,
   boardHeight: 100,
 

@@ -6,6 +6,7 @@ import Dashboard from 'components/Dashboard';
 import { GameBoard } from 'game';
 import PeopleCard from './components/PeopleCard';
 import VsVideo from './components/VsVideo';
+import PixiTest from './components/PixiTest';
 import { States } from './types';
 
 const BoxStyled = styled(Box)`
@@ -99,7 +100,8 @@ const Plunder = () => {
         )}
         <PeopleCardRight state={state} />
         <GameBox>
-          <GameBoard />
+          {/* <GameBoard /> */}
+          <PixiTest />
         </GameBox>
 
         <ButtonBox justifyContent='center' alignItems='center'>

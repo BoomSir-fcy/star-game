@@ -1,67 +1,63 @@
-import config from '../config';
-import { BoardState } from '../types';
+import { Application, Texture, Sprite, TilingSprite } from 'pixi.js';
+// import { Stage, Layer, Group } from '@pixi/layers'
+import config from 'game/config';
 
+// const W = 800;
+// const H = 600;
+// const resolution = 1;
+// const WIDTH = W / resolution;
+// const HEIGHT = H / resolution;
+
+// const app = new PIXI.Application({ width: WIDTH, height: HEIGHT, resolution });
+// // document.body.appendChild(app.view);
+
+// const stage = new Stage();
+// app.stage = stage;
+
+
+interface BoardOptions {
+  src: string; // 精灵的资源地址
+}
 class Board {
-
-  private initialized = false;
   
-  private size = 1;
-
-  private x = 1;
-
-  private y = 1;
-
-  private state = BoardState.DEFAULT;
-
-  private dom = document.createElement('div');
-
-  init(x: number, y: number, state = BoardState.DEFAULT) {
-    this.state = state;
-    this.dom.style.border = `2px solid ${state}`;
-    this.dom.style.borderRadius = '10px';
-    this.dom.style.width = `${config.boardWidth}px`;
-    this.dom.style.height = `${config.boardHeight}px`;
-    this.dom.style.position = 'absolute';
-    this.x = x;
-    this.y = y;
-    this.dom.style.transform = `translate(${config.boardWidth * x}px, ${config.boardHeight * y}px)`;
-    this.dom.style.left = `${0}px`;
-    this.dom.style.top = `${0}px`;
-    this.dom.innerText = `${(x+ 1) * (y + 1)}`
-    this.dom.style.color = '#ffffff';
-
-
-    const img = document.createElement('img')
-    img.src = 'http://source.unsplash.com/random/150x150'
-    this.dom.append(img)
-    this.bindDrag()
-    this.initialized = true;
+  constructor(option: BoardOptions) {
+    this.init(option);
   }
 
-  bindDrag() {
-    this.dom.draggable = true;
+  src = '';
 
-    this.dom.addEventListener('dragstart', event => {
-      this.dom.style.borderStyle = 'dashed';
-      setTimeout(() => {
-        this.dom.style.display = 'none';
-        // this.className = 'invisible';
-      }, 0);
-    })
+  bunny: Sprite = new Sprite();
 
-    this.dom.addEventListener('dragend', event => {
-      this.dom.style.borderStyle = 'solid';
-      // this.dom.style.opacity = '1';
-      this.dom.style.display = 'block';
 
-    })
+  init({ src }: BoardOptions) {
+    this.src = src;
+
+    const texture = Texture.from(src);
+
+    this.bunny = new TilingSprite(texture, 500, 1500);
+    this.bunny.anchor.set(0.5);
+    this.bunny.x = 0;
+    this.bunny.y = 0;
+
+    // this.bunny.width = 50;
+    // this.bunny.height = 50;
+
+    // this.bunny.rotation = Math.PI
+
+    // this.bunny
+    // this.gameLoop()
+
   }
 
-  render(dom: HTMLElement) {
-    if (this.initialized) {
-      dom.appendChild(this.dom);
-    }
+  gameLoop() {
+
+    requestAnimationFrame(() => {
+      this.gameLoop()
+    });
+  
+    this.bunny.x += 1;
   }
+  
 }
 
 export default Board;

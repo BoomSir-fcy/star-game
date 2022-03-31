@@ -9,7 +9,7 @@ const Embattle = () => {
 
   useEffect(() => {
     if (ref.current) {
-      boards.render(ref.current);
+      ref.current.appendChild(boards.app?.view);
     }
   }, [ref, boards]);
 
