@@ -6,6 +6,7 @@ import StarCom from 'components/StarCom';
 import { Qualities } from 'uikit/theme/types';
 import { QualityColor } from 'uikit/theme/colors';
 
+import { planetInfo } from 'state/types';
 import { PlanetDesc } from './PlanetDesc';
 
 const CardBox = styled(Card)`
@@ -20,9 +21,10 @@ const Desc = styled(Flex)`
 `;
 
 export const PlanetBox: React.FC<{
+  info: planetInfo;
   status?: string;
-  level: Qualities;
-}> = ({ status, level = 'rare' }) => {
+  level?: Qualities;
+}> = ({ status = 'upgrade', level = 'rare', info }) => {
   const [state, setState] = React.useState({
     time: 86970,
   });
@@ -66,7 +68,7 @@ export const PlanetBox: React.FC<{
             {status === 'upgrade' ? (
               <>
                 <Box>
-                  <Text fontSize='24px'>斯特拉星球</Text>
+                  <Text fontSize='24px'>{info.name}</Text>
                   <Flex alignItems='center' mt='2px'>
                     <Text color={QualityColor[level]} bold small>
                       传说
@@ -75,7 +77,7 @@ export const PlanetBox: React.FC<{
                       神族
                     </Text>
                     <Text ml='12px' bold small>
-                      Lv1
+                      Lv{info.level}
                     </Text>
                     <Text ml='12px' small>
                       格子:5x5

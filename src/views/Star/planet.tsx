@@ -17,7 +17,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
-
+import { useStore } from 'state/util';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 
@@ -41,7 +41,7 @@ const Planet = () => {
   const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
-
+  const StarList = useStore(p => p.planet.mePlanet);
   const [state, setState] = React.useState({
     page: 1,
   });
@@ -52,7 +52,7 @@ const Planet = () => {
 
   React.useEffect(() => {
     init();
-  });
+  }, []);
 
   return (
     <Layout>
@@ -112,14 +112,21 @@ const Planet = () => {
               <PlanetSearch />
             </Flex>
             <ScrollBox>
-              <LinkItem to='/star'>
+              {StarList.length && (
+                <>
+                  {StarList.map(item => (
+                    <PlanetBox info={item} />
+                  ))}
+                </>
+              )}
+              {/* <LinkItem to='/star'>
                 <PlanetBox level='rare' />
               </LinkItem>
 
               <LinkItem to='/star'>
                 <PlanetBox status='upgrade' level='legend' />
               </LinkItem>
-              <PlanetBox level='rare' />
+              <PlanetBox level='rare' /> */}
             </ScrollBox>
           </BgCard>
         </Flex>

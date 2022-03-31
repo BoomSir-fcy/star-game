@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { planetState } from 'state/types';
 
 import { fetchMePlanetAsync } from './fetchers';
 
-const initialState = {
+export const initialState: planetState = {
   mePlanet: [],
 };
 
@@ -12,7 +13,7 @@ export const planet = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(fetchMePlanetAsync.fulfilled, (state, action) => {
-      // state.mePlanet = action.payload.data;
+      state.mePlanet = action.payload.data.Data;
     });
   },
 });

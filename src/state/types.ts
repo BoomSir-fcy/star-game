@@ -99,11 +99,15 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   AnyAction
 >;
 
+export interface planetState {
+  mePlanet: planetInfo[];
+}
 export interface State {
   userInfo: UserInfoState;
   mysteryBox: MysteryBoxState;
   galaxy: GalaxyState;
   alliance: AllianceState;
+  planet: planetState;
 }
 
 export interface planetInfo {
@@ -114,7 +118,7 @@ export interface planetInfo {
   rarity: number;
   level: number;
   strengthenLevel: number;
-  working: true;
+  working: boolean;
   workTime: number;
   areaX: number;
   areaY: number;
