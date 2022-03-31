@@ -44,7 +44,9 @@ const Attributes: React.FC<AttributesProps> = ({
       <Flex>
         <LabelStyled>
           <LabelText>格子:</LabelText>
-          <AttrText>{`${info?.areaX}x${info?.areaY}`}</AttrText>
+          <AttrText>
+            {info?.areaX ? `${info?.areaX}x${info?.areaY}` : ''}
+          </AttrText>
         </LabelStyled>
         <LabelStyled ml='15px'>
           <LabelText>等级:</LabelText>
