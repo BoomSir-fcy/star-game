@@ -8,7 +8,8 @@ const Container = styled(Flex)`
   position: relative;
   width: 476px;
   height: 476px;
-  border: 1px solid #373c45;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
 `;
 
 const Normal = styled(Flex)<{ row: number }>`
@@ -22,7 +23,8 @@ const Normal = styled(Flex)<{ row: number }>`
   text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
   width: ${({ row }) => row * 158}px;
   height: ${({ row }) => row * 158}px;
-  border: 1px solid #fff;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
   transition: all 0.5s;
   &:nth-child(1) {
     top: 0;
@@ -143,6 +145,7 @@ export const DragCompoents: React.FC<{
 
   React.useEffect(() => {
     if (data.length > 0) {
+      console.log(data);
       getPosition();
     }
   }, [data]);
@@ -158,9 +161,13 @@ export const DragCompoents: React.FC<{
   const getPosition = () => {
     if (dragBox?.current) {
       const doms: any = dragBox?.current.children;
-      const boxWidth = doms[0]?.offsetWidth;
+
+      // for (let i = 0; i < doms.length; i++) {
+      //   console.log(doms[i].dataset?.row);
+      // }
+      const rowIndex = data.findIndex((item: any) => item.row === 2);
+      const boxWidth = doms[rowIndex]?.offsetWidth;
       const screenWidth = dragBox?.current?.offsetWidth;
-      // const cols = Math.round(screenWidth / boxWidth);
       const diffString = String(screenWidth / boxWidth);
       const cols = parseInt(diffString);
       const heightArr = [];
@@ -168,6 +175,7 @@ export const DragCompoents: React.FC<{
       let minBoxHeight = 0;
       let minBoxIndex = 0;
 
+      console.log(rowIndex, cols);
       for (let i = 0; i < doms.length; i++) {
         boxHeight = doms[i].offsetHeight;
         if (i < cols) {
@@ -177,17 +185,14 @@ export const DragCompoents: React.FC<{
           minBoxHeight = Math.min(...heightArr);
           minBoxIndex = getMinBoxIndex(heightArr, minBoxHeight);
 
-          console.log(heightArr, minBoxIndex);
-
           doms[i].style.left = `${minBoxIndex * boxWidth}px`;
           doms[i].style.top = `${minBoxHeight}px`;
           heightArr[minBoxIndex] += boxHeight;
         }
-      }
 
-      console.log(heightArr, minBoxIndex, boxHeight);
+        console.log(heightArr, minBoxIndex, boxHeight);
+      }
     }
-    // return newArr;
   };
 
   const getMinBoxIndex = (arr: any, value: any) => {
@@ -245,11 +250,11 @@ export const DragCompoents: React.FC<{
           {state.data.map((item: any, index: number) => {
             return (
               <Normal
-                key={`${item.index}`}
-                row={item.row}
+                key={`${item?.index}`}
+                row={item?.row}
                 draggable
                 data-id={index}
-                data-row={item.row}
+                data-row={item?.row}
                 onDragStart={dragStart}
                 onDragEnter={dragEnter}
                 onDragOver={dragOver}
@@ -257,7 +262,7 @@ export const DragCompoents: React.FC<{
                 onDragEnd={dragEnd}
                 data-item={JSON.stringify(item)}
               >
-                <img src={item.icon} alt='' />
+                <img src={item?.icon} alt='' />
               </Normal>
             );
           })}

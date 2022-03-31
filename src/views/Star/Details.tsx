@@ -52,8 +52,8 @@ const Upgrade = () => {
     data: [
       {
         index: 1,
-        row: 2,
-        icon: '/images/model/edifice_01.png',
+        row: 1,
+        icon: '/images/model/combat_01.png',
       },
       {
         index: 2,
@@ -62,7 +62,8 @@ const Upgrade = () => {
       },
       {
         index: 3,
-        row: 1,
+        row: 2,
+        icon: '/images/model/edifice_01.png',
       },
       {
         index: 4,
@@ -71,6 +72,7 @@ const Upgrade = () => {
       {
         index: 5,
         row: 1,
+        icon: '/images/model/combat_01.png',
       },
       {
         index: 6,
