@@ -115,7 +115,17 @@ const Planet = () => {
               {StarList.length && (
                 <>
                   {StarList.map(item => (
-                    <PlanetBox info={item} />
+                    <>
+                      {choose ? (
+                        <Box>
+                          <PlanetBox info={item} />
+                        </Box>
+                      ) : (
+                        <LinkItem to='/star'>
+                          <PlanetBox info={item} />
+                        </LinkItem>
+                      )}
+                    </>
                   ))}
                 </>
               )}

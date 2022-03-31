@@ -30,6 +30,40 @@ export const PlanetBox: React.FC<{
   });
   let timer = null as any;
 
+  // ORDINARY: 'ordinary', // 普通
+  // GOOD: 'good', // 良好
+  // RARE: 'rare', // 稀有
+  // EPIC: 'epic', // 史诗
+  // LEGEND: 'legend', // 传说
+  // MYTHOLOGY: 'mythology', // 神话
+  const getLevel = (num: number) => {
+    let str = '';
+    switch (num) {
+      case 1:
+        str = 'ordinary';
+        break;
+      case 2:
+        str = 'good';
+        break;
+      case 3:
+        str = 'rare';
+        break;
+      case 4:
+        str = 'epic';
+        break;
+      case 5:
+        str = 'legend';
+        break;
+      case 6:
+        str = 'mythology';
+        break;
+      default:
+        str = 'ordinary';
+        break;
+    }
+    return str;
+  };
+
   // 倒计时
   const countDown = () => {
     timer = setInterval(() => {
@@ -80,36 +114,38 @@ export const PlanetBox: React.FC<{
                       Lv{info.level}
                     </Text>
                     <Text ml='12px' small>
-                      格子:5x5
+                      格子:{info.areaX}x{info.areaY}
                     </Text>
                   </Flex>
                 </Box>
-                <Flex flex='1' flexDirection='column' alignItems='flex-end'>
-                  <Flex
-                    width='100%'
-                    justifyContent='flex-end'
-                    alignItems='center'
-                  >
-                    <Text shadow='primary' fontSize='24px' mr='15px'>
-                      升级中
+                {info?.update_finish_time > 0 && (
+                  <Flex flex='1' flexDirection='column' alignItems='flex-end'>
+                    <Flex
+                      width='100%'
+                      justifyContent='flex-end'
+                      alignItems='center'
+                    >
+                      <Text shadow='primary' fontSize='24px' mr='15px'>
+                        升级中
+                      </Text>
+                      <Image
+                        src='/images/commons/icon/icon_arrow_right.png'
+                        width={22}
+                        height={27}
+                      />
+                    </Flex>
+                    <Text
+                      mt='2px'
+                      color='textSubtle'
+                      small
+                      style={{
+                        letterSpacing: '2px',
+                      }}
+                    >
+                      {formatTime(state.time)}
                     </Text>
-                    <Image
-                      src='/images/commons/icon/icon_arrow_right.png'
-                      width={22}
-                      height={27}
-                    />
                   </Flex>
-                  <Text
-                    mt='2px'
-                    color='textSubtle'
-                    small
-                    style={{
-                      letterSpacing: '2px',
-                    }}
-                  >
-                    {formatTime(state.time)}
-                  </Text>
-                </Flex>
+                )}
               </>
             ) : (
               <>
@@ -134,7 +170,7 @@ export const PlanetBox: React.FC<{
           </Desc>
           <Flex alignItems='center' height='auto' flex='1'>
             {status === 'upgrade' ? (
-              <PlanetDesc />
+              <PlanetDesc info={info} />
             ) : (
               <>
                 <Image
