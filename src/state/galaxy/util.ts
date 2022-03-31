@@ -1,3 +1,5 @@
+import { BigNumber } from 'bignumber.js';
+
 export const sliceByLevels = (list = [], sliceLen = 10) => {
   const newList = [];
   const len = list.length;
@@ -12,4 +14,11 @@ export const sliceByLevels = (list = [], sliceLen = 10) => {
   }
 
   return newList;
+};
+
+// 星系主收益价格 = 成本价 + （成本价 * 30% / 2）
+export const getGalaxyIncoming = (price: string) => {
+  return new BigNumber(price).plus(
+    new BigNumber(price).times(0.3).dividedBy(2).toNumber(),
+  );
 };

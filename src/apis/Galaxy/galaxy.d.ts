@@ -11,13 +11,13 @@ declare namespace Api {
     interface StarInfo {
       token_id: number;
       number: number; // 星系恒星编号
-      name?: string; // 名称
-      owner?: string; // 拥有者
-      ownerAvatar?: string; // 拥有者头像
-      hold_time?: number; // 占领开始时间
-      protect_timestamp?: number; // 保护结束时间
-      history_hold_number?: number; // 历史占领次数
-      disapth_box?: number; // 恒星收益分配比例
+      name: string; // 名称
+      owner: string; // 拥有者
+      ownerAvatar: string; // 拥有者头像
+      hold_time: number; // 占领开始时间
+      protect_timestamp: number; // 保护结束时间
+      history_hold_number: number; // 历史占领次数
+      disapth_box: number; // 恒星收益分配比例
     }
 
     interface OwnerInfo {

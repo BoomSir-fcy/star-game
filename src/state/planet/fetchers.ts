@@ -9,3 +9,14 @@ export const fetchMePlanetAsync = createAsyncThunk(
     return response;
   },
 );
+
+export const fetchPlanetInfoAsync = createAsyncThunk(
+  'fetch/getPlanetInfo',
+  async (ids: number[] | string[]) => {
+    const response = await Api.PlanetApi.getPlanetInfo(ids);
+    if (Api.isSuccess(response)) {
+      return response.data.Data;
+    }
+    return [];
+  },
+);

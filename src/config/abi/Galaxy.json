@@ -261,6 +261,57 @@
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "getNftView",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "currentPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "miniBuyDuration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastTimestamp",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct IGalaxy.NftView",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "star_",
 				"type": "address"

@@ -1,8 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {} from 'process';
 import { AppThunk, GalaxyState } from 'state/types';
-import { fetchGalaxyList, fetchGalaxyStarList } from './fetchers';
-import { sliceByLevels } from './util';
+import {
+  fetchAuctionRecordList,
+  fetchGalaxyList,
+  fetchGalaxyStarList,
+  fetchGetNftView,
+} from './fetchers';
+import { getGalaxyIncoming, sliceByLevels } from './util';
 
 export const initialState: GalaxyState = {
   galaxyList: [],
@@ -13,6 +18,14 @@ export const initialState: GalaxyState = {
     label: '',
   },
   currentStarPeriod: { id: 0, label: '', levels: [] },
+  galaxyNft: {
+    id: '',
+    lastPrice: '0',
+    currentPrice: '0',
+    miniBuyDuration: '0',
+    lastTimestamp: '0',
+  },
+  auctionRecordList: [],
 };
 
 export const fetchGalaxyListAsync = (): AppThunk => async dispatch => {
@@ -28,6 +41,19 @@ export const fetchGalaxyStarListAsync =
     const list = await fetchGalaxyStarList(galaxyId);
     dispatch(setGalaxyStarList(list));
   };
+export const fetchGetNftViewAsync =
+  (tokenId: number): AppThunk =>
+  async dispatch => {
+    const nft = await fetchGetNftView(tokenId);
+    dispatch(setGalaxyNft(nft));
+  };
+
+export const fetchAuctionRecordListAsync =
+  (galaxyId: number): AppThunk =>
+  async dispatch => {
+    const list = await fetchAuctionRecordList(galaxyId);
+    dispatch(setAuctionRecordList(list));
+  };
 
 export const galaxySlice = createSlice({
   name: 'galaxy',
@@ -39,11 +65,12 @@ export const galaxySlice = createSlice({
     setGalaxyList: (state, action) => {
       const { payload } = action;
       if (payload) {
-        const list = payload?.map((item: any) => {
-          return { ...item, label: item.name };
-        });
-        state.galaxyList = list;
-        state.currentGalaxy = list[0];
+        // const list = payload?.map((item: any) => {
+        //   return { ...item, label: item.name, badge: item.owner };
+        // });
+        state.galaxyList = payload;
+        // state.galaxyList = list;
+        // state.currentGalaxy = list[0];
         state.loading = false;
       }
     },
@@ -75,9 +102,17 @@ export const galaxySlice = createSlice({
       const { payload } = action;
       state.currentGalaxy = payload;
     },
-    setCurrentStar: (state, action) => {
+    setCurrentStarPeriod: (state, action) => {
       const { payload } = action;
       state.currentStarPeriod = payload;
+    },
+    setGalaxyNft: (state, action) => {
+      const { payload } = action;
+      state.galaxyNft = payload;
+    },
+    setAuctionRecordList: (state, action) => {
+      const { payload } = action;
+      state.auctionRecordList = payload;
     },
   },
 });
@@ -88,7 +123,9 @@ export const {
   setGalaxyStarList,
   setLoading,
   setCurrentGalaxy,
-  setCurrentStar,
+  setCurrentStarPeriod,
+  setGalaxyNft,
+  setAuctionRecordList,
 } = galaxySlice.actions;
 
 export default galaxySlice.reducer;
