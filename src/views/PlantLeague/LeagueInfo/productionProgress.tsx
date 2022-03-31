@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Flex, Text, Image, Progress, Button } from 'uikit';
 import styled from 'styled-components';
+import { useStore } from 'state';
 
 const ProgressBox = styled(Box)`
   position: relative;
@@ -23,6 +24,8 @@ const ProgressTextBox = styled(Box)`
 const BtnFlex = styled(Flex)``;
 
 const ProductionProgress = () => {
+  const { alliance } = useStore(p => p.alliance.allianceView);
+
   return (
     <Flex flex='1' flexDirection='column' padding='30px'>
       <Flex mb='20px' justifyContent='center'>

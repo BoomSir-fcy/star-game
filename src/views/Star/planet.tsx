@@ -17,22 +17,31 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
-
+import { useStore } from 'state/util';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 
 const ScrollBox = styled(Flex)`
-  min-height: 200px;
-  max-height: 400px;
+  margin-top: 22px;
+  min-height: 650px;
+  max-height: 650px;
   overflow-y: auto;
-  width: 100%;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: space-between;
+`;
+
+const LinkItem = styled(Link)`
+  display: block;
+  height: auto;
+  margin-bottom: 20px;
 `;
 
 const Planet = () => {
   const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
-
+  const StarList = useStore(p => p.planet.mePlanet);
   const [state, setState] = React.useState({
     page: 1,
   });
@@ -43,7 +52,7 @@ const Planet = () => {
 
   React.useEffect(() => {
     init();
-  });
+  }, []);
 
   return (
     <Layout>
@@ -102,22 +111,33 @@ const Planet = () => {
               <PlanetRaceTabs />
               <PlanetSearch />
             </Flex>
-            <Flex
-              mt='22px'
-              justifyContent='space-between'
-              flexWrap='wrap'
-              style={{
-                overflow: 'auto',
-              }}
-            >
-              <ScrollBox>
-                <Link to='/star'>
-                  <PlanetBox level='rare' />
-                </Link>
-                <PlanetBox status='upgrade' level='legend' />
+            <ScrollBox>
+              {StarList.length && (
+                <>
+                  {StarList.map(item => (
+                    <>
+                      {choose ? (
+                        <Box>
+                          <PlanetBox info={item} />
+                        </Box>
+                      ) : (
+                        <LinkItem to='/star'>
+                          <PlanetBox info={item} />
+                        </LinkItem>
+                      )}
+                    </>
+                  ))}
+                </>
+              )}
+              {/* <LinkItem to='/star'>
                 <PlanetBox level='rare' />
-              </ScrollBox>
-            </Flex>
+              </LinkItem>
+
+              <LinkItem to='/star'>
+                <PlanetBox status='upgrade' level='legend' />
+              </LinkItem>
+              <PlanetBox level='rare' /> */}
+            </ScrollBox>
           </BgCard>
         </Flex>
       </Flex>

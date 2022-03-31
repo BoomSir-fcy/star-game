@@ -5,21 +5,69 @@ import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
 import { GameInfo, GameThing } from './gameModel';
 
 const Container = styled(Flex)`
+  position: relative;
   width: 476px;
   height: 476px;
-  justify-content: center;
-  align-self: auto;
-  flex-wrap: wrap;
   border: 1px solid #373c45;
 `;
 
 const Normal = styled(Flex)<{ row: number }>`
+  cursor: pointer;
+  position: absolute;
   justify-content: center;
   align-items: center;
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 40px;
+  text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
   width: ${({ row }) => row * 158}px;
   height: ${({ row }) => row * 158}px;
-  border: 1px solid #373c45;
+  border: 1px solid #fff;
   transition: all 0.5s;
+  &:nth-child(1) {
+    top: 0;
+    left: 0;
+  }
+
+  &:nth-child(2) {
+    top: 0;
+    left: 158px;
+  }
+
+  &:nth-child(3) {
+    top: 0;
+    left: 316px;
+  }
+
+  &:nth-child(4) {
+    top: 158px;
+    left: 0;
+  }
+
+  &:nth-child(5) {
+    top: 158px;
+    left: 158px;
+  }
+
+  &:nth-child(6) {
+    top: 158px;
+    left: 316px;
+  }
+
+  &:nth-child(7) {
+    top: 316px;
+    left: 0;
+  }
+
+  &:nth-child(8) {
+    top: 316px;
+    left: 158px;
+  }
+
+  &:nth-child(9) {
+    top: 316px;
+    left: 316px;
+  }
 `;
 
 const CardTab = styled(Card)`
@@ -53,7 +101,14 @@ const TabsButton = styled(Button)<{ active?: boolean }>`
     `}
 `;
 
-export const DragCompoents = () => {
+const target = {} as any;
+let dragged = {} as any;
+
+export const DragCompoents: React.FC<{
+  itemData: any;
+  rowCells: number;
+  colCells: number;
+}> = ({ itemData }) => {
   const [state, setState] = React.useState({
     currentTab: 1,
     tabs: [
@@ -66,118 +121,143 @@ export const DragCompoents = () => {
         title: '战斗类',
       },
     ],
-    data: [
-      {
-        index: 1,
-        row: 2,
-        bgColor: 'red',
-      },
-      {
-        index: 2,
-        row: 1,
-        bgColor: 'green',
-      },
-      {
-        index: 3,
-        row: 1,
-        bgColor: 'blue',
-      },
-      {
-        index: 4,
-        row: 1,
-        bgColor: 'yellow',
-      },
-      {
-        index: 5,
-        row: 1,
-        bgColor: 'orange',
-      },
-      {
-        index: 6,
-        row: 1,
-        bgColor: 'grey',
-      },
-    ],
-    target: {} as any,
-    dragged: {} as any,
+    data: [],
   });
-
   const { data } = state;
+  const dragBox = React.useRef<HTMLDivElement>(null);
 
-  const handleData = React.useCallback(
-    (target: any) => {
-      // state.dragged.style.opacity = '1';
-      // state.dragged.style.transform = 'scale(1)';
-      const from = state.dragged?.dataset?.id;
-      const to = target?.dataset?.id;
-      const listData = data;
+  // 计算格子
+  React.useEffect(() => {
+    const items = itemData.filter((item: any) => item.row === 2);
+    let newData: any = [];
+    if (items.length > 0) {
+      newData = itemData.slice(
+        0,
+        itemData.length - (items.length * items.length + items.length + 1),
+      );
+      setState({ ...state, data: newData });
+    } else {
+      setState({ ...state, data: itemData });
+    }
+  }, []);
 
-      console.log(state.dragged, from, to);
-      if (from !== to) {
-        listData.splice(to, 0, listData.splice(from, 1)[0]);
-        setState({
-          ...state,
-          target,
-          data: listData,
-          dragged: target,
-        });
+  React.useEffect(() => {
+    if (data.length > 0) {
+      getPosition();
+    }
+  }, [data]);
+
+  // 计算两个元素的距离
+  const distance = (dom: HTMLDivElement, beforeDom: HTMLDivElement) => {
+    const diffLeft = dom?.offsetLeft - beforeDom?.offsetLeft;
+    const diffTop = dom?.offsetTop - beforeDom?.offsetTop;
+    return Math.sqrt(diffLeft * diffLeft + diffTop * diffTop);
+  };
+
+  // 计算所有格子的距离
+  const getPosition = () => {
+    if (dragBox?.current) {
+      const doms: any = dragBox?.current.children;
+      const boxWidth = doms[0]?.offsetWidth;
+      const screenWidth = dragBox?.current?.offsetWidth;
+      // const cols = Math.round(screenWidth / boxWidth);
+      const diffString = String(screenWidth / boxWidth);
+      const cols = parseInt(diffString);
+      const heightArr = [];
+      let boxHeight = 0;
+      let minBoxHeight = 0;
+      let minBoxIndex = 0;
+
+      for (let i = 0; i < doms.length; i++) {
+        boxHeight = doms[i].offsetHeight;
+        if (i < cols) {
+          heightArr.push(boxHeight);
+          doms[i].style = '';
+        } else {
+          minBoxHeight = Math.min(...heightArr);
+          minBoxIndex = getMinBoxIndex(heightArr, minBoxHeight);
+
+          console.log(heightArr, minBoxIndex);
+
+          doms[i].style.left = `${minBoxIndex * boxWidth}px`;
+          doms[i].style.top = `${minBoxHeight}px`;
+          heightArr[minBoxIndex] += boxHeight;
+        }
       }
-    },
-    [state, data],
-  );
+
+      console.log(heightArr, minBoxIndex, boxHeight);
+    }
+    // return newArr;
+  };
+
+  const getMinBoxIndex = (arr: any, value: any) => {
+    return arr.findIndex((item: any) => item === value) || 0;
+  };
+
+  const handleData = (afterTarget: any) => {
+    dragged.style.opacity = '1';
+    dragged.style.transform = 'scale(1)';
+    const from = dragged?.dataset?.id;
+    const to = afterTarget?.dataset?.id;
+
+    if (from !== to) {
+      const listData = data;
+      // listData.splice(to, 0, listData.splice(from, 1)[0]);
+      [listData[from], listData[to]] = [listData[to], listData[from]];
+      setState({
+        ...state,
+        data: listData,
+      });
+    }
+  };
 
   const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
     console.log('目标元素：', e.target);
-
-    setState({
-      ...state,
-      dragged: e.target,
-    });
+    dragged = e.target;
   };
 
   const dragEnd = () => {
-    state.dragged.style.opacity = '1';
-    state.dragged.style.transform = 'scale(1)';
+    dragged.style.opacity = '1';
   };
 
   const drop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    state.dragged.style.opacity = '1';
-    state.dragged.style.transform = 'scale(1)';
+    dragged.style.opacity = '1';
   };
 
   const dragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    e.stopPropagation();
   };
 
   const dragEnter = (event: any) => {
     event.preventDefault();
-    const targetBox = event.target;
-    console.log('结束', state.target, targetBox);
-    // targetBox.style.opacity = '0.6';
-    // targetBox.style.transform = 'scale(1.1)';
-    handleData(targetBox);
+    if (event.target.tagName !== 'DIV') {
+      return;
+    }
+    handleData(event.target);
   };
 
   return (
     <Box>
       <Flex justifyContent='space-between'>
-        <Container>
+        <Container ref={dragBox}>
           {state.data.map((item: any, index: number) => {
             return (
               <Normal
                 key={`${item.index}`}
                 row={item.row}
-                style={{ background: item.bgColor }}
                 draggable
+                data-id={index}
+                data-row={item.row}
                 onDragStart={dragStart}
-                onDragEnd={dragEnd}
                 onDragEnter={dragEnter}
                 onDragOver={dragOver}
                 onDrop={drop}
+                onDragEnd={dragEnd}
                 data-item={JSON.stringify(item)}
               >
-                {item.index}
+                <img src={item.icon} alt='' />
               </Normal>
             );
           })}
@@ -203,14 +283,10 @@ export const DragCompoents = () => {
               拖动建筑到需要的格子上
             </Text>
           </Flex>
-          <Box ml='40px'>
+          <Flex ml='40px'>
             <GameThing
               onDragStart={event => {
                 console.log(event.target);
-                setState({
-                  ...state,
-                  dragged: event.target,
-                });
               }}
               onDrop={event => {
                 event.preventDefault();
@@ -220,7 +296,19 @@ export const DragCompoents = () => {
               scale='sm'
               text='防空塔'
             />
-          </Box>
+            <GameThing
+              onDragStart={event => {
+                console.log(event.target);
+              }}
+              onDrop={event => {
+                event.preventDefault();
+              }}
+              onDragOver={dragOver}
+              onDragEnter={dragEnter}
+              scale='sm'
+              text='矿石建筑'
+            />
+          </Flex>
         </Flex>
       </BgCard>
     </Box>

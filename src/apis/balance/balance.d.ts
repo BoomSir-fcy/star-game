@@ -1,24 +1,11 @@
 declare namespace Api {
   namespace Balance {
-    interface UserInfo {
-      id: number;
-      nickname: string;
-      address: string;
-      nft: string;
-      avatar: string;
-      firstLoginAt: number;
-      addTime: number;
-      updatedAt: string;
-    }
-
-    interface ParamsSignIn {
-      nonce: string;
-      timestamp: number;
+    interface DrawbalanceSignMessage {
+      nonce: number; // 随机数
+      timestamp: number; // 签名时间
       signature: string;
-    }
-
-    interface SignIn {
-      SSID: 'string';
+      coin: string;
+      amount: string;
     }
   }
 }

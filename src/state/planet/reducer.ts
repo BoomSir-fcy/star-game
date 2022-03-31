@@ -3,7 +3,7 @@ import { PlanetState } from 'state/types';
 
 import { fetchMePlanetAsync, fetchPlanetInfoAsync } from './fetchers';
 
-const initialState: PlanetState = {
+export const initialState: PlanetState = {
   mePlanet: [],
   planetInfo: [],
 };
@@ -14,7 +14,7 @@ export const planet = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(fetchMePlanetAsync.fulfilled, (state, action) => {
-      // state.mePlanet = action.payload.data;
+      state.mePlanet = action.payload.data.Data;
     });
     builder.addCase(fetchPlanetInfoAsync.fulfilled, (state, action) => {
       state.planetInfo = action.payload;
