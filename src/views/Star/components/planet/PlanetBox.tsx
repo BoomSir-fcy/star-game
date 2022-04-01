@@ -4,7 +4,7 @@ import { Card, Flex, Box, Button, Text, Image } from 'uikit';
 import StarCom from 'components/StarCom';
 
 import { Qualities } from 'uikit/theme/types';
-import { QualityColor } from 'uikit/theme/colors';
+import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 
 import { planetInfo } from 'state/types';
 import { PlanetDesc } from './PlanetDesc';
@@ -107,7 +107,7 @@ export const PlanetBox: React.FC<{
                     <Text color={QualityColor[level]} bold small>
                       传说
                     </Text>
-                    <Text ml='12px' color='raceProtoss' bold small>
+                    <Text ml='12px' color={RaceTypeColor[2]} bold small>
                       神族
                     </Text>
                     <Text ml='12px' bold small>
