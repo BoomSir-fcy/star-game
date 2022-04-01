@@ -45,6 +45,7 @@ declare namespace Api {
       hp: number; // hp加成
       product: number; // 产能加成
       build: number; // 建筑成本
+      is_available: boolean;
     }
   }
 }

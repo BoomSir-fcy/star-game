@@ -105,6 +105,7 @@ export interface GalaxyState {
 export interface PlanetState {
   mePlanet: Api.Planet.PlanetInfo[];
   planetInfo: Api.Planet.PlanetInfo[];
+  activePlanet: Api.Planet.PlanetInfo;
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -114,10 +115,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   AnyAction
 >;
 
-export interface planetState {
-  mePlanet: planetInfo[];
-  activePlanet: planetInfo;
-}
 export interface State {
   userInfo: UserInfoState;
   mysteryBox: MysteryBoxState;

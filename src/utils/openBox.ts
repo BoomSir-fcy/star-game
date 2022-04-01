@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 import * as PIXI from 'pixi.js';
 import { Stage, Layer, Group } from '@pixi/layers';
 import {
