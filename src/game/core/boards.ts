@@ -11,9 +11,8 @@ import Chequer from './chequer';
 delete Renderer.__plugins.interaction;
 
 class Boards {
-  
   constructor() {
-    this.init()
+    this.init();
   }
 
   app: Application = new Application({ width: config.WIDTH, height: config.HEIGHT, resolution: config.resolution, antialias: true, backgroundAlpha: 0.5  });

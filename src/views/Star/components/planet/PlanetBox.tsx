@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Card, Flex, Box, Button, Text, Image } from 'uikit';
+import { Card, Flex, Box, Text, Image } from 'uikit';
 import StarCom from 'components/StarCom';
 
 import { Qualities } from 'uikit/theme/types';
-import { QualityColor } from 'uikit/theme/colors';
+import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 
-import { planetInfo } from 'state/types';
 import { PlanetDesc } from './PlanetDesc';
 
 const CardBox = styled(Card)`
@@ -21,7 +20,7 @@ const Desc = styled(Flex)`
 `;
 
 export const PlanetBox: React.FC<{
-  info: planetInfo;
+  info: Api.Planet.PlanetInfo;
   status?: string;
   level?: Qualities;
 }> = ({ status = 'upgrade', level = 1, info }) => {
@@ -107,8 +106,12 @@ export const PlanetBox: React.FC<{
                     <Text color={QualityColor[level]} bold small>
                       传说
                     </Text>
-                    <Text ml='12px' color='raceProtoss' bold small>
-                      神族
+                    <Text ml='12px' color={RaceTypeColor[2]} bold small>
+                      {info?.race === 1
+                        ? '神族'
+                        : info?.race === 2
+                        ? '人族'
+                        : '虫族'}
                     </Text>
                     <Text ml='12px' bold small>
                       Lv{info.level}

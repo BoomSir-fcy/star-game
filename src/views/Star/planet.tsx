@@ -19,12 +19,13 @@ import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
 import { useStore } from 'state/util';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
+import { setActivePlanet } from 'state/planet/actions';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 
 const ScrollBox = styled(Flex)`
   margin-top: 22px;
-  min-height: 650px;
-  max-height: 650px;
+  min-height: 550px;
+  max-height: 550px;
   overflow-y: auto;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -47,12 +48,18 @@ const Planet = () => {
   });
 
   const init = React.useCallback(() => {
-    dispatch(fetchMePlanetAsync({ page: state.page, page_size: 10 }));
-  }, [dispatch, state]);
+    dispatch(
+      fetchMePlanetAsync({
+        page: state.page,
+        page_size: 10,
+        rarity: Number(parsedQs.t),
+      }),
+    );
+  }, [dispatch, state, parsedQs.t]);
 
   React.useEffect(() => {
     init();
-  }, []);
+  }, [parsedQs.t]);
 
   return (
     <Layout>
@@ -66,41 +73,42 @@ const Planet = () => {
             </Flex>
           )}
           <Nav
+            activeId={Number(parsedQs.t)}
             nav={[
               {
-                id: 'all',
+                id: 0,
                 label: '全部',
-                path: `/star/planet?t=all${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=0${choose ? '&choose=1' : ''}`,
               },
               {
-                id: 'normal',
+                id: 1,
                 label: '普通',
-                path: `/star/planet?t=normal${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=1${choose ? '&choose=1' : ''}`,
               },
               {
-                id: 'good',
+                id: 2,
                 label: '良好',
-                path: `/star/planet?t=good${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=2${choose ? '&choose=1' : ''}`,
               },
               {
-                id: 'rare',
+                id: 3,
                 label: '稀有',
-                path: `/star/planet?t=rare${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=3${choose ? '&choose=1' : ''}`,
               },
               {
-                id: 'epic',
+                id: 4,
                 label: '史诗',
-                path: `/star/planet?t=epic${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=4${choose ? '&choose=1' : ''}`,
               },
               {
-                id: 'legendary',
+                id: 5,
                 label: '传说',
-                path: `/star/planet?t=legendary${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=5${choose ? '&choose=1' : ''}`,
               },
               {
-                id: 'mythical',
+                id: 6,
                 label: '神话',
-                path: `/star/planet?t=mythical${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=6${choose ? '&choose=1' : ''}`,
               },
             ]}
           />
@@ -112,23 +120,29 @@ const Planet = () => {
               <PlanetSearch />
             </Flex>
             <ScrollBox>
-              {StarList.length && (
-                <>
-                  {StarList.map(item => (
-                    <>
-                      {choose ? (
-                        <Box>
-                          <PlanetBox info={item} />
-                        </Box>
-                      ) : (
-                        <LinkItem to='/star'>
-                          <PlanetBox info={item} />
-                        </LinkItem>
-                      )}
-                    </>
-                  ))}
-                </>
-              )}
+              {(StarList ?? []).map(item => (
+                <React.Fragment key={`${item.id}_${item.name}`}>
+                  {choose ? (
+                    <Box
+                      onClick={() => {
+                        dispatch(setActivePlanet(item));
+                      }}
+                    >
+                      <PlanetBox info={item} />
+                    </Box>
+                  ) : (
+                    <LinkItem to={`/star?id=${item.id}`}>
+                      <Box
+                        onClick={() => {
+                          dispatch(setActivePlanet(item));
+                        }}
+                      >
+                        <PlanetBox info={item} />
+                      </Box>
+                    </LinkItem>
+                  )}
+                </React.Fragment>
+              ))}
               {/* <LinkItem to='/star'>
                 <PlanetBox level='rare' />
               </LinkItem>

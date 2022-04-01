@@ -1,4 +1,4 @@
-import { Colors, qualities } from './types';
+import { Colors, qualities, RaceType } from './types';
 
 export const baseColors = {
   failure: '#FF3A3A',
@@ -35,6 +35,12 @@ export const QualityColor = {
   [qualities.MYTHOLOGY]: '#FF6F3D',
 };
 
+export const RaceTypeColor = {
+  [RaceType.PROTOSS]: '#DF7DFD',
+  [RaceType.HUMAN]: '#3dcfff',
+  [RaceType.ZERG]: '#DF7DFD',
+};
+
 export const lightColors: Colors = {
   ...baseColors,
   ...additionalColors,
@@ -57,7 +63,7 @@ export const lightColors: Colors = {
   textDanger: '#FF5353',
   raceProtoss: '#DF7DFD',
   raceHuman: '#3dcfff',
-  raceZerg: '#DF7DFD',
+  raceZerg: '#8ac001',
   goldBorder: '#8ac001',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
   gradients: {
@@ -88,7 +94,7 @@ export const darkColors: Colors = {
   textDanger: '#FF5353',
   raceProtoss: '#DF7DFD',
   raceHuman: '#3dcfff',
-  raceZerg: '#DF7DFD',
+  raceZerg: '#8ac001',
   goldBorder: '#EB9C12',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
   gradients: {

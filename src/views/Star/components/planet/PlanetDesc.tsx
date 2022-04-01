@@ -1,19 +1,17 @@
 import React from 'react';
-import { planetInfo } from 'state/types';
-import styled from 'styled-components';
 import { Flex, Box, Text, Image } from 'uikit';
 
 export const PlanetDesc: React.FC<{
-  info: planetInfo;
+  info: Api.Planet.PlanetInfo;
 }> = React.memo(({ info }) => {
   return (
     <Flex width='100%' flexDirection='column'>
       <Flex flex={1} margin='3px 0'>
         <Text color='textSubtle' small>
-          掠夺速度:100
+          掠夺速度:{info?.plunder_speed}
         </Text>
         <Text color='textSubtle' ml='140px' small>
-          建筑数:100
+          建筑数:{info?.build_count}
         </Text>
       </Flex>
       <Flex justifyContent='space-between' flex={1}>
@@ -25,7 +23,7 @@ export const PlanetDesc: React.FC<{
             <Text color='textTips' small>
               矿石
             </Text>
-            <Text small>100</Text>
+            <Text small>{info?.stone}</Text>
           </Flex>
         </Flex>
         <Flex alignItems='center'>
@@ -40,7 +38,7 @@ export const PlanetDesc: React.FC<{
             <Text color='textTips' small>
               人口
             </Text>
-            <Text small>100</Text>
+            <Text small>{info?.population}</Text>
           </Flex>
         </Flex>
         <Flex alignItems='center'>
@@ -55,7 +53,7 @@ export const PlanetDesc: React.FC<{
             <Text color='textTips' small>
               能量
             </Text>
-            <Text small>100</Text>
+            <Text small>{info?.energy}</Text>
           </Flex>
         </Flex>
       </Flex>

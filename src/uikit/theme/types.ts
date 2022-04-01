@@ -66,6 +66,12 @@ export const qualities = {
   MYTHOLOGY: 6, // 神话
 } as const;
 
+export const RaceType = {
+  PROTOSS: 1, // 神族
+  HUMAN: 2, // 人族
+  ZERG: 3, // 虫族
+};
+
 export type Qualities = typeof qualities[keyof typeof qualities];
 
 export type Colors = {
