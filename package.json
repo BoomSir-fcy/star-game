@@ -33,6 +33,7 @@
     "lib-flexible": "^0.3.2",
     "lodash": "^4.17.21",
     "pixi-lights": "^3.0.0",
+    "pixi-projection": "^0.4.4",
     "pixi-spine": "^3.0.13",
     "pixi.js": "^6.3.0",
     "prettier": "^2.5.0",

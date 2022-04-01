@@ -9848,6 +9848,11 @@ pixi-lights@^3.0.0:
   resolved "https://registry.yarnpkg.com/pixi-lights/-/pixi-lights-3.0.0.tgz#d378b8a3b587c5be333ace1418e15279fac7fec4"
   integrity sha512-AfuwAK/yqE/XfSIZNz82diYOzevIWcmLv4WaRgkmSKe0wy4HOW2LaVX+13ZSw4V+o49N+/MKCKOHJKDbhsrSUg==
 
+pixi-projection@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/pixi-projection/-/pixi-projection-0.4.4.tgz#2d39bcba084f63f7fc0460e9520ebb2d44912c71"
+  integrity sha512-oZMlfx7CFjxw4F0jkZXdOtJ5rbnHCQ+EdM6f6++CbzQvYnhB9ULKSobP2ZgrQ4oXag1KRJYwwSMSlz77lU/4wA==
+
 pixi-spine@^3.0.13:
   version "3.0.13"
   resolved "https://registry.yarnpkg.com/pixi-spine/-/pixi-spine-3.0.13.tgz#9d01ccbab6a83d9f71d03922470638e996f424b2"
