@@ -15,31 +15,31 @@ const TestStar: React.FC = () => {
         <Text bold color='good'>
           良好
         </Text>
-        <StarCom variant='ring' quality='good' ml='16px' />
+        <StarCom variant='ring' quality={2} ml='16px' />
       </Box>
       <Box>
         <Text bold color='rare'>
           稀有
         </Text>
-        <StarCom quality='rare' ml='16px' />
+        <StarCom quality={2} ml='16px' />
       </Box>
       <Box>
         <Text bold color='epic'>
           史诗
         </Text>
-        <StarCom quality='epic' ml='16px' />
+        <StarCom quality={2} ml='16px' />
       </Box>
       <Box>
         <Text bold color='legend'>
           传说
         </Text>
-        <StarCom quality='legend' ml='16px' />
+        <StarCom quality={2} ml='16px' />
       </Box>
       <Box>
         <Text bold color='mythology'>
           神话
         </Text>
-        <StarCom quality='mythology' ml='16px' />
+        <StarCom quality={2} ml='16px' />
       </Box>
     </Flex>
   );

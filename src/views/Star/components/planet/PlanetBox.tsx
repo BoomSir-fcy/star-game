@@ -61,13 +61,13 @@ export const PlanetBox: React.FC<{
   return (
     <CardBox>
       <Flex>
-        <StarCom quality={level} />
+        <StarCom quality={2} />
         <Flex ml='29px' flex='1' flexDirection='column'>
           <Desc justifyContent='space-between'>
             {status === 'upgrade' ? (
               <>
                 <Flex alignItems='center'>
-                  <Text color={QualityColor[level]} bold>
+                  <Text color={QualityColor[2]} bold>
                     传说
                   </Text>
                   <Text ml='11px'>Lv1</Text>

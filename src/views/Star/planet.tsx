@@ -85,9 +85,9 @@ const Planet = () => {
                 overflow: 'auto',
               }}
             >
-              <PlanetBox level='rare' />
-              <PlanetBox status='upgrade' level='legend' />
-              <PlanetBox level='rare' />
+              <PlanetBox level={2} />
+              <PlanetBox status='upgrade' level={2} />
+              <PlanetBox level={2} />
             </Flex>
           </BgCard>
         </Flex>

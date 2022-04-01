@@ -58,12 +58,12 @@ export type Gradients = {
 };
 
 export const qualities = {
-  ORDINARY: 'ordinary', // 普通
-  GOOD: 'good', // 良好
-  RARE: 'rare', // 稀有
-  EPIC: 'epic', // 史诗
-  LEGEND: 'legend', // 传说
-  MYTHOLOGY: 'mythology', // 神话
+  ORDINARY: 1, // 普通
+  GOOD: 2, // 良好
+  RARE: 3, // 稀有
+  EPIC: 4, // 史诗
+  LEGEND: 5, // 传说
+  MYTHOLOGY: 6, // 神话
 } as const;
 
 export type Qualities = typeof qualities[keyof typeof qualities];
