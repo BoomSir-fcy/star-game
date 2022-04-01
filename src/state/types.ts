@@ -104,7 +104,7 @@ export interface GalaxyState {
 }
 export interface PlanetState {
   mePlanet: Api.Planet.PlanetInfo[];
-  planetInfo: Api.Planet.PlanetInfo[];
+  planetInfo: { [x: number]: Api.Planet.PlanetInfo };
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<

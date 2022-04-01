@@ -5,7 +5,7 @@ import { fetchMePlanetAsync, fetchPlanetInfoAsync } from './fetchers';
 
 export const initialState: PlanetState = {
   mePlanet: [],
-  planetInfo: [],
+  planetInfo: {},
 };
 
 export const planet = createSlice({
@@ -17,7 +17,12 @@ export const planet = createSlice({
       state.mePlanet = action.payload;
     });
     builder.addCase(fetchPlanetInfoAsync.fulfilled, (state, action) => {
-      state.planetInfo = action.payload;
+      const mapObject: { [x: number]: Api.Planet.PlanetInfo } = {};
+      action.payload.map(item => {
+        mapObject[item.id] = item;
+        return mapObject;
+      });
+      state.planetInfo = mapObject;
     });
   },
 });
