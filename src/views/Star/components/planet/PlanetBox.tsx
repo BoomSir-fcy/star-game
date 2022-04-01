@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Card, Flex, Box, Button, Text, Image } from 'uikit';
+import { Card, Flex, Box, Text, Image } from 'uikit';
 import StarCom from 'components/StarCom';
 
 import { Qualities } from 'uikit/theme/types';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 
-import { planetInfo } from 'state/types';
 import { PlanetDesc } from './PlanetDesc';
 
 const CardBox = styled(Card)`

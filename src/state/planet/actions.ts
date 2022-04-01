@@ -1,6 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { planetInfo } from 'state/types';
 
-export const setActivePlanet = createAction<planetInfo>(
+export const setActivePlanet = createAction<Api.Planet.PlanetInfo>(
   'planet/setActivePlanet',
 );
