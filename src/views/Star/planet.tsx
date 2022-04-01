@@ -112,23 +112,19 @@ const Planet = () => {
               <PlanetSearch />
             </Flex>
             <ScrollBox>
-              {StarList.length && (
+              {(StarList ?? []).map(item => (
                 <>
-                  {StarList.map(item => (
-                    <>
-                      {choose ? (
-                        <Box>
-                          <PlanetBox info={item} />
-                        </Box>
-                      ) : (
-                        <LinkItem to='/star'>
-                          <PlanetBox info={item} />
-                        </LinkItem>
-                      )}
-                    </>
-                  ))}
+                  {choose ? (
+                    <Box>
+                      <PlanetBox info={item} />
+                    </Box>
+                  ) : (
+                    <LinkItem to='/star'>
+                      <PlanetBox info={item} />
+                    </LinkItem>
+                  )}
                 </>
-              )}
+              ))}
               {/* <LinkItem to='/star'>
                 <PlanetBox level='rare' />
               </LinkItem>
