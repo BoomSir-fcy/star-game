@@ -1,13 +1,29 @@
 import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
-import { Box, Flex, BackButton, RefreshButton, Text } from 'uikit';
+import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Box, Flex, BackButton, RefreshButton } from 'uikit';
+
+import useParsedQueryString from 'hooks/useParsedQueryString';
+
 import Nav from 'components/Nav';
 import Layout from 'components/Layout';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { fetchBuildingsListAsync } from 'state/buildling/fetchers';
 import { StarHeader } from './components';
 
 const Star: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const dispatch = useDispatch();
+  const parsedQs = useParsedQueryString();
+  const id = Number(parsedQs.id);
+
+  React.useEffect(() => {
+    if (id) {
+      dispatch(fetchPlanetInfoAsync([id]));
+      dispatch(fetchBuildingsListAsync(1));
+    }
+  }, [id, dispatch]);
   return (
     <Layout>
       <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>

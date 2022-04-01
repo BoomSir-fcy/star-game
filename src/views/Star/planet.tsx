@@ -47,12 +47,18 @@ const Planet = () => {
   });
 
   const init = React.useCallback(() => {
-    dispatch(fetchMePlanetAsync({ page: state.page, page_size: 10 }));
-  }, [dispatch, state]);
+    dispatch(
+      fetchMePlanetAsync({
+        page: state.page,
+        page_size: 10,
+        rarity: Number(parsedQs.t),
+      }),
+    );
+  }, [dispatch, state, parsedQs.t]);
 
   React.useEffect(() => {
     init();
-  }, []);
+  }, [parsedQs.t]);
 
   return (
     <Layout>
@@ -66,39 +72,40 @@ const Planet = () => {
             </Flex>
           )}
           <Nav
+            activeId={Number(parsedQs.t)}
             nav={[
               {
-                id: '0',
+                id: 0,
                 label: '全部',
                 path: `/star/planet?t=0${choose ? '&choose=1' : ''}`,
               },
               {
-                id: '1',
+                id: 1,
                 label: '普通',
                 path: `/star/planet?t=1${choose ? '&choose=1' : ''}`,
               },
               {
-                id: '2',
+                id: 2,
                 label: '良好',
                 path: `/star/planet?t=2${choose ? '&choose=1' : ''}`,
               },
               {
-                id: '3',
+                id: 3,
                 label: '稀有',
                 path: `/star/planet?t=3${choose ? '&choose=1' : ''}`,
               },
               {
-                id: '4',
+                id: 4,
                 label: '史诗',
                 path: `/star/planet?t=4${choose ? '&choose=1' : ''}`,
               },
               {
-                id: '5',
+                id: 5,
                 label: '传说',
                 path: `/star/planet?t=5${choose ? '&choose=1' : ''}`,
               },
               {
-                id: '6',
+                id: 6,
                 label: '神话',
                 path: `/star/planet?t=6${choose ? '&choose=1' : ''}`,
               },
@@ -113,17 +120,17 @@ const Planet = () => {
             </Flex>
             <ScrollBox>
               {(StarList ?? []).map(item => (
-                <>
+                <React.Fragment key={`${item.id}_${item.name}`}>
                   {choose ? (
                     <Box>
                       <PlanetBox info={item} />
                     </Box>
                   ) : (
-                    <LinkItem to='/star'>
+                    <LinkItem to={`/star/?id=${item.id}`}>
                       <PlanetBox info={item} />
                     </LinkItem>
                   )}
-                </>
+                </React.Fragment>
               ))}
               {/* <LinkItem to='/star'>
                 <PlanetBox level='rare' />

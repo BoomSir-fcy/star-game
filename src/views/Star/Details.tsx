@@ -1,11 +1,12 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
+import { useDispatch } from 'react-redux';
+import { Box } from 'uikit';
 
 import { DragCompoents } from './components/dragCompoents';
-// import DragCompoents from './components/dragGridCompoents';
 
 const Upgrade = () => {
+  const dispatch = useDispatch();
+
   const [state, setState] = React.useState({
     box: [
       {
