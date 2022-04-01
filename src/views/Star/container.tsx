@@ -36,6 +36,11 @@ const Star: React.FC<{
               path: '/star/grow',
             },
             {
+              id: 'embattle',
+              label: '战斗布阵',
+              path: '/star/embattle',
+            },
+            {
               id: 'search',
               label: '掠夺信息',
               path: '/star/search',

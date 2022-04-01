@@ -85,7 +85,7 @@ const Upgrade = () => {
         setVisible={() => setVisible(false)}
       >
         <Flex padding='40px'>
-          <StarCom scale='ld' quality='rare' mr='40px' />
+          <StarCom scale='ld' quality={2} mr='40px' />
           <Flex flexDirection='column' justifyContent='space-between'>
             <Text fontSize='22px'>
               升级会持续6小时，期间将无法操作星球，是否继续升级？

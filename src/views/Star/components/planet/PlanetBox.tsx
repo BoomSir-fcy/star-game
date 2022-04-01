@@ -24,7 +24,7 @@ export const PlanetBox: React.FC<{
   info: planetInfo;
   status?: string;
   level?: Qualities;
-}> = ({ status = 'upgrade', level = 'rare', info }) => {
+}> = ({ status = 'upgrade', level = 1, info }) => {
   const [state, setState] = React.useState({
     time: 86970,
   });
@@ -96,7 +96,7 @@ export const PlanetBox: React.FC<{
   return (
     <CardBox>
       <Flex>
-        <StarCom quality={level} />
+        <StarCom quality={2} />
         <Flex ml='29px' flex='1' flexDirection='column'>
           <Desc justifyContent='space-between'>
             {status === 'upgrade' ? (

@@ -5,10 +5,12 @@ import { ButtonProps, ButtonOnRefresh } from './types';
 
 interface RefreshButtonProps extends ButtonProps {
   onRefresh?: ButtonOnRefresh;
+  variant?: 'tertiary' | 'vsRefresh';
 }
 
 const RefreshButton: React.FC<RefreshButtonProps> = ({
   onRefresh,
+  variant = 'tertiary',
   ...props
 }) => {
   const [loading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({
   return (
     <Button
       {...props}
-      variant='tertiary'
+      variant={variant}
       isLoading={loading}
       onClick={handleClick}
     >
