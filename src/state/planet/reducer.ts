@@ -14,7 +14,7 @@ export const planet = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(fetchMePlanetAsync.fulfilled, (state, action) => {
-      state.mePlanet = action.payload.data.Data;
+      state.mePlanet = action.payload;
     });
     builder.addCase(fetchPlanetInfoAsync.fulfilled, (state, action) => {
       state.planetInfo = action.payload;

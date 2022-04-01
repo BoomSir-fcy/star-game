@@ -21,7 +21,7 @@ const Desc = styled(Flex)`
 `;
 
 export const PlanetBox: React.FC<{
-  info: planetInfo;
+  info: Api.Planet.PlanetInfo;
   status?: string;
   level?: Qualities;
 }> = ({ status = 'upgrade', level = 1, info }) => {
