@@ -15,9 +15,13 @@ import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';
 const MysteryBoxFlexStyled = styled(MysteryBoxStyled)`
   width: 320px;
   height: 366px;
-  margin-right: 60px;
+  margin-right: 100px;
+  margin-left: -40px;
 `;
 
+const MysteryBoxBaseNewStyled = styled(MysteryBoxBaseStyled)`
+  bottom: -40px;
+`;
 const MysteryBoxStarStyled = styled(MysteryBoxBoxStyled)`
   background: none;
   top: 0;
@@ -63,16 +67,13 @@ const Upgrade = () => {
               <StarAddBtn />
             </Flex>
           </Flex>
-          <Flex>
+          <Flex alignItems='center'>
             <MysteryBoxFlexStyled>
-              <MysteryBoxBaseStyled
-                bottom='-40px'
-                quality={mysteryBoxQualities.SUPER}
-              >
+              <MysteryBoxBaseNewStyled quality={mysteryBoxQualities.SUPER}>
                 <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
                   <StarCom variant='none' scale='ld' />
                 </MysteryBoxStarStyled>
-              </MysteryBoxBaseStyled>
+              </MysteryBoxBaseNewStyled>
             </MysteryBoxFlexStyled>
             <UpgradeCard mr='33px' />
             <UpgradeCard mr='33px' />

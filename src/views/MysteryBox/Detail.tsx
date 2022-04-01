@@ -33,6 +33,7 @@ const StarLabelStyled = styled(Card)`
   padding: 10px 20px;
   z-index: 3;
 `;
+
 const MysteryBoxDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

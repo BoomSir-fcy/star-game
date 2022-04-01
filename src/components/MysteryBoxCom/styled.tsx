@@ -25,7 +25,7 @@ export const BoxBaseStyled = styled(Box)<QualityProps>`
   background: ${({ quality }) =>
     `url('/images/mystery-box/base-${mysteryConfig[quality]?.srcName}.png')`};
   position: absolute;
-  width: 300px;
+  width: 400px;
   height: 400px;
   bottom: 60px;
   left: 0;
@@ -47,11 +47,12 @@ const move = keyframes`
 `;
 export const BoxBoxStyled = styled(Box)<QualityProps>`
   background: ${({ quality }) =>
-    `url('/images/mystery-box/box-${mysteryConfig[quality]?.srcName}.png')`};
+    `url('/images/mystery-box/box-${mysteryConfig[quality]?.srcName}.png') no-repeat`};
+  background-size: 100%;
   position: absolute;
-  width: 250px;
-  height: 250px;
-  top: 130px;
+  width: calc(306px * 0.8);
+  height: calc(200px * 0.8);
+  top: 158px;
   left: 0;
   right: 0;
   margin: auto;

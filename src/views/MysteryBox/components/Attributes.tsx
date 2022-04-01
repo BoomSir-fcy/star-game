@@ -1,43 +1,17 @@
 import React, { useCallback, useMemo } from 'react';
-// import { Rarity, RarityText } from 'state/planet/type';
 import { Box, Text, Flex, BoxProps } from 'uikit';
+import { QualityColor } from 'uikit/theme/colors';
 import { LabelStyled, LabelText, AttrText } from './styled';
+import { Info } from '../type';
 
 interface AttributesProps extends BoxProps {
-  info: any;
+  info: Info;
 }
 const Attributes: React.FC<AttributesProps> = ({
   info,
   children,
   ...props
 }) => {
-  const getRarity = useCallback((value: number) => {
-    let text = '';
-    switch (value) {
-      case 1:
-        text = 'ordinary'; // 普通
-        break;
-      case 2:
-        text = 'good'; // 良好
-        break;
-      case 3:
-        text = 'rare'; // 稀有
-        break;
-      case 4:
-        text = 'epic'; // 史诗
-        break;
-      case 5:
-        text = 'legend'; // 传说
-        break;
-      case 6:
-        text = 'mythology'; // 神话
-        break;
-      default:
-        text = '';
-        break;
-    }
-    return text;
-  }, []);
   return (
     <Box {...props}>
       <Text mb='10px'>Attributes</Text>
@@ -55,8 +29,8 @@ const Attributes: React.FC<AttributesProps> = ({
         <LabelStyled ml='15px'>
           <LabelText>稀有度:</LabelText>
           {/* TODO: 翻译待完成 */}
-          <AttrText color={getRarity(info?.rarity)}>
-            {getRarity(info?.rarity)}
+          <AttrText color={QualityColor[info.rarity]}>
+            {QualityColor[info.rarity]}
           </AttrText>
         </LabelStyled>
       </Flex>
