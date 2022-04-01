@@ -108,7 +108,11 @@ export const PlanetBox: React.FC<{
                       传说
                     </Text>
                     <Text ml='12px' color='raceProtoss' bold small>
-                      神族
+                      {info?.race === 1
+                        ? '神族'
+                        : info?.race === 2
+                        ? '人族'
+                        : '虫族'}
                     </Text>
                     <Text ml='12px' bold small>
                       Lv{info.level}

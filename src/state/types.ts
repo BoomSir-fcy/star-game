@@ -101,6 +101,7 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 
 export interface planetState {
   mePlanet: planetInfo[];
+  activePlanet: planetInfo;
 }
 export interface State {
   userInfo: UserInfoState;
@@ -132,6 +133,18 @@ export interface planetInfo {
   addTime: number;
   update_finish_time: number;
   strengthen_finish_time: number;
+  build_count: number;
+  energy: number;
+  attack: number;
+  build: number;
+  defense: number;
+  hp: number;
+  product: number;
+  is_available: boolean;
+  plunder_speed: number;
+  population: number;
+  race: number;
+  stone: number;
 }
 export interface allianceInfo {
   id: number;

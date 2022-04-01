@@ -3,11 +3,14 @@ import { Link, Outlet } from 'react-router-dom';
 import { Box, Flex, BackButton, RefreshButton, Text } from 'uikit';
 import Nav from 'components/Nav';
 import Layout from 'components/Layout';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 import { StarHeader } from './components';
 
 const Star: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const parsedQs = useParsedQueryString();
+
   return (
     <Layout>
       <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
@@ -23,22 +26,22 @@ const Star: React.FC<{
             {
               id: 'build',
               label: '星球建造',
-              path: '/star',
+              path: `/star?id=${parsedQs.id}`,
             },
             {
               id: 'upgrade',
               label: '星球升级',
-              path: '/star/upgrade',
+              path: `/star/upgrade?id=${parsedQs.id}`,
             },
             {
               id: 'grow',
               label: '星球培育',
-              path: '/star/grow',
+              path: `/star/grow?id=${parsedQs.id}`,
             },
             {
               id: 'search',
               label: '掠夺信息',
-              path: '/star/search',
+              path: `/star/search?id=${parsedQs.id}`,
             },
           ]}
         />

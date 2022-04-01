@@ -5,5 +5,11 @@ declare namespace Api {
       page: number;
       page_size: number;
     }
+    interface Strengthen {
+      PlanetID: number;
+    }
+    interface StrengthenPost {
+      planet_id: number;
+    }
   }
 }

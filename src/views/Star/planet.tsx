@@ -19,6 +19,7 @@ import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
 import { useStore } from 'state/util';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
+import { setActivePlanet } from 'state/planet/actions';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 
 const ScrollBox = styled(Flex)`
@@ -112,22 +113,34 @@ const Planet = () => {
               <PlanetSearch />
             </Flex>
             <ScrollBox>
-              {StarList.length && (
+              {StarList.length ? (
                 <>
                   {StarList.map(item => (
                     <>
                       {choose ? (
-                        <Box>
+                        <Box
+                          onClick={() => {
+                            dispatch(setActivePlanet(item));
+                          }}
+                        >
                           <PlanetBox info={item} />
                         </Box>
                       ) : (
-                        <LinkItem to='/star'>
-                          <PlanetBox info={item} />
+                        <LinkItem to={`/star?id=${item.id}`}>
+                          <Box
+                            onClick={() => {
+                              dispatch(setActivePlanet(item));
+                            }}
+                          >
+                            <PlanetBox info={item} />
+                          </Box>
                         </LinkItem>
                       )}
                     </>
                   ))}
                 </>
+              ) : (
+                <></>
               )}
               {/* <LinkItem to='/star'>
                 <PlanetBox level='rare' />

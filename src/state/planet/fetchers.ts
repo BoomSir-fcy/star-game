@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Api } from 'apis';
 
-// Async thunks
+// 我的星球列表
 export const fetchMePlanetAsync = createAsyncThunk(
   'fetch/getMePlanet',
   async (params: Api.Planet.PageParams) => {
@@ -9,3 +9,11 @@ export const fetchMePlanetAsync = createAsyncThunk(
     return response;
   },
 );
+
+// export const fetchMyPlanetAsync = createAsyncThunk(
+//   'fetch/getMePlanet',
+//   async (params: Api.Planet.Strengthen) => {
+//     const response = await Api.PlanetApi.getPlanetStrengthen(params);
+//     return response;
+//   },
+// );
