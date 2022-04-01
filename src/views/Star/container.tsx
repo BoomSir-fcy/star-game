@@ -24,6 +24,7 @@ const Star: React.FC<{
       dispatch(fetchBuildingsListAsync(1));
     }
   }, [id, dispatch]);
+
   return (
     <Layout>
       <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
@@ -39,17 +40,17 @@ const Star: React.FC<{
             {
               id: 'build',
               label: '星球建造',
-              path: '/star',
+              path: `/star?id=${parsedQs.id}`,
             },
             {
               id: 'upgrade',
               label: '星球升级',
-              path: '/star/upgrade',
+              path: `/star/upgrade?id=${parsedQs.id}`,
             },
             {
               id: 'grow',
               label: '星球培育',
-              path: '/star/grow',
+              path: `/star/grow?id=${parsedQs.id}`,
             },
             {
               id: 'embattle',
@@ -59,7 +60,7 @@ const Star: React.FC<{
             {
               id: 'search',
               label: '掠夺信息',
-              path: '/star/search',
+              path: `/star/search?id=${parsedQs.id}`,
             },
           ]}
         />

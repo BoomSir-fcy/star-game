@@ -6,7 +6,12 @@ declare namespace Api {
       page: number;
       page_size: number;
     }
-
+    interface Strengthen {
+      PlanetID: number;
+    }
+    interface StrengthenPost {
+      planet_id: number;
+    }
     // 星球信息
     interface PlanetInfo {
       id: number;
@@ -41,6 +46,7 @@ declare namespace Api {
       hp: number; // hp加成
       product: number; // 产能加成
       build: number; // 建筑成本
+      is_available: boolean;
     }
   }
 }

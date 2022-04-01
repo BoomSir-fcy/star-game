@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Card, BgCard, Text, Button, Label } from 'uikit';
+import useParsedQueryString from 'hooks/useParsedQueryString';
+import { Api } from 'apis';
 import {
   MysteryBoxStyled,
   MysteryBoxBaseStyled,
@@ -11,6 +13,8 @@ import ScoringPanel from 'components/ScoringPanel';
 import StarCom from 'components/StarCom';
 import InfoPlane from './components/grow/InfoPlane';
 import Extra from './components/grow/Extra';
+import { StrengthenPlanetInfo } from './components/grow/type';
+import { GrowPop } from './components/grow/growPop';
 
 const MysteryBoxStarStyled = styled(MysteryBoxBoxStyled)`
   background: none;
@@ -21,6 +25,31 @@ const TopBox = styled(Box)`
 `;
 
 const Grow = () => {
+  const parsedQs = useParsedQueryString();
+  const [visible, setVisible] = useState(false);
+  const [nowPlante, setNowPlante] = useState<StrengthenPlanetInfo>();
+  const [estimatePlante, setEstimatePlante] = useState<StrengthenPlanetInfo>();
+  const getPlanetStrengthen = async () => {
+    try {
+      const res = await Api.PlanetApi.getPlanetStrengthen({
+        PlanetID: Number(parsedQs.id),
+      });
+      if (Api.isSuccess(res)) {
+        const { data } = res;
+        setNowPlante(data?.now_planet_info);
+        setEstimatePlante(data?.estimate_planet_info);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (parsedQs.id) {
+      getPlanetStrengthen();
+    }
+  }, [parsedQs.id]);
+
   return (
     <Box>
       <BgCard variant='big' padding='50px 33px'>
@@ -34,19 +63,23 @@ const Grow = () => {
           <Flex>
             <Box>
               <TopBox>
-                <ScoringPanel count={2} />
+                <ScoringPanel count={Number(nowPlante?.strengthenLevel)} />
               </TopBox>
-              <InfoPlane />
+              <InfoPlane
+                nowPlante={nowPlante}
+                estimatePlante={estimatePlante}
+              />
             </Box>
             <Box ml='27px'>
               <TopBox>
-                <Button>开始培育</Button>
+                <Button onClick={() => setVisible(true)}>开始培育</Button>
               </TopBox>
               <Extra />
             </Box>
           </Flex>
         </Flex>
       </BgCard>
+      <GrowPop visible={visible} onClose={() => setVisible(false)} />
     </Box>
   );
 };

@@ -105,6 +105,7 @@ export interface GalaxyState {
 export interface PlanetState {
   mePlanet: Api.Planet.PlanetInfo[];
   planetInfo: { [x: number]: Api.Planet.PlanetInfo };
+  activePlanet: Api.Planet.PlanetInfo;
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -114,9 +115,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   AnyAction
 >;
 
-export interface planetState {
-  mePlanet: planetInfo[];
-}
 export interface State {
   userInfo: UserInfoState;
   mysteryBox: MysteryBoxState;
@@ -147,6 +145,18 @@ export interface planetInfo {
   addTime: number;
   update_finish_time: number;
   strengthen_finish_time: number;
+  build_count: number;
+  energy: number;
+  attack: number;
+  build: number;
+  defense: number;
+  hp: number;
+  product: number;
+  is_available: boolean;
+  plunder_speed: number;
+  population: number;
+  race: number;
+  stone: number;
 }
 export interface allianceInfo {
   id: number;

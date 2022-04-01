@@ -19,6 +19,7 @@ import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
 import { useStore } from 'state/util';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
+import { setActivePlanet } from 'state/planet/actions';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 
 const ScrollBox = styled(Flex)`
@@ -122,12 +123,22 @@ const Planet = () => {
               {(StarList ?? []).map(item => (
                 <React.Fragment key={`${item.id}_${item.name}`}>
                   {choose ? (
-                    <Box>
+                    <Box
+                      onClick={() => {
+                        dispatch(setActivePlanet(item));
+                      }}
+                    >
                       <PlanetBox info={item} />
                     </Box>
                   ) : (
-                    <LinkItem to={`/star/?id=${item.id}`}>
-                      <PlanetBox info={item} />
+                    <LinkItem to={`/star?id=${item.id}`}>
+                      <Box
+                        onClick={() => {
+                          dispatch(setActivePlanet(item));
+                        }}
+                      >
+                        <PlanetBox info={item} />
+                      </Box>
                     </LinkItem>
                   )}
                 </React.Fragment>
