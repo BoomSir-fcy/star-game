@@ -10,7 +10,7 @@ const config = {
   boardsHSize: 8,
 
   BOARDS_ROW_COUNT: 8,
-  BOARDS_COL_COUNT: 2,
+  BOARDS_COL_COUNT: 8,
 
   OFFSET_START_X: 0, // (0, 0) 坐标X轴偏移量
   OFFSET_START_Y: -260, // (0, 0) 坐标Y轴偏移量

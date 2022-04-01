@@ -23,7 +23,7 @@ class Boards {
 
   quad: ObservablePoint<any>[] = [];
 
-  containerSprite: Sprite = new Sprite();
+  containerSprite: Sprite = new Sprite(Texture.from('/assets/p2.jpeg'));
 
   bunny = null;
 
@@ -31,12 +31,12 @@ class Boards {
 
   init() {
 
-    this.containerSprite.width = 200;
-    this.containerSprite.height = 200;
+    // this.containerSprite.width = 200;
+    // this.containerSprite.height = 200;
     this.containerSprite.anchor.set(0.5);
 
     this.containerSprite.position.set(this.app.renderer.screen.width / 2, this.app.renderer.screen.height / 2);
-    this.containerSprite.scale.set(20);
+    // this.containerSprite.scale.set(20);
 
     this.app.stage.addChild(this.containerSprite)
 
