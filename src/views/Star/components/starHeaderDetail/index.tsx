@@ -1,6 +1,9 @@
 import React from 'react';
-import { Button, Text, Flex, Card } from 'uikit';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { Button, Text, Flex, Card } from 'uikit';
+import { useStore } from 'state';
+
 import StarCom from 'components/StarCom';
 
 import { RechargeAssets } from '../Modal';
@@ -22,9 +25,13 @@ const ButtonStyled = styled(Button)`
   padding: 10px;
 `;
 const StarHeader = () => {
+  const dispatch = useDispatch();
+  const planetInfo = useStore(p => p.planet.planetInfo);
   const [state, setState] = React.useState({
     visible: false,
   });
+
+  console.log(planetInfo);
 
   return (
     <Flex flex={1}>

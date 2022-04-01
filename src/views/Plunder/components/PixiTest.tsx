@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 import React, { useEffect, useReducer, useRef } from 'react';
 import { Stage, Sprite, Container, useTick } from '@inlet/react-pixi';
 import { Box } from 'uikit';

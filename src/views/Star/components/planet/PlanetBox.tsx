@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Card, Flex, Box, Button, Text, Image } from 'uikit';
+import { Card, Flex, Box, Text, Image } from 'uikit';
 import StarCom from 'components/StarCom';
 
 import { Qualities } from 'uikit/theme/types';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 
-import { planetInfo } from 'state/types';
 import { PlanetDesc } from './PlanetDesc';
 
 const CardBox = styled(Card)`
@@ -108,7 +107,11 @@ export const PlanetBox: React.FC<{
                       传说
                     </Text>
                     <Text ml='12px' color={RaceTypeColor[2]} bold small>
-                      神族
+                      {info?.race === 1
+                        ? '神族'
+                        : info?.race === 2
+                        ? '人族'
+                        : '虫族'}
                     </Text>
                     <Text ml='12px' bold small>
                       Lv{info.level}

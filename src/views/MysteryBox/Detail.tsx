@@ -43,7 +43,8 @@ const MysteryBoxDetail = () => {
   const { planetInfo } = useStore(p => p.planet);
 
   const info = useMemo(() => {
-    return planetInfo?.length ? planetInfo[0] : ({} as any);
+    // return planetInfo?.length ? planetInfo[0] : ({} as any);
+    return {};
   }, [planetInfo]);
 
   useEffect(() => {
@@ -61,10 +62,10 @@ const MysteryBoxDetail = () => {
           <StarLabelStyled>
             <Flex flexDirection='column' alignItems='center'>
               <Text ellipsis bold>
-                {info?.name}
+                {/* {info?.name} */}
               </Text>
               <Text mt='10px' ellipsis small>
-                Token: {info?.id}
+                {/* Token: {info?.id} */}
               </Text>
             </Flex>
           </StarLabelStyled>

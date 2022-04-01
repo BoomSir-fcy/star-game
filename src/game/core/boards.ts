@@ -1,10 +1,9 @@
+/* eslint-disable no-param-reassign */
 import { Application, Graphics, Texture, Sprite, Point } from 'pixi.js';
 import { Sprite2d, Container2d, TRANSFORM_STEP, AFFINE } from 'pixi-projection';
 // import { Stage, Layer, Group } from '@pixi/layers'
 import config from 'game/config';
 import Board from './board';
-
-/* eslint-disable no-param-reassign */
 
 class Boards {
   constructor() {
