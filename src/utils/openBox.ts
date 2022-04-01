@@ -1,6 +1,12 @@
 import * as PIXI from 'pixi.js';
-import { Stage, Layer, Group } from '@pixi/layers'
-import {diffuseGroup, normalGroup, lightGroup, PointLight, AmbientLight} from 'pixi-lights';
+import { Stage, Layer, Group } from '@pixi/layers';
+import {
+  diffuseGroup,
+  normalGroup,
+  lightGroup,
+  PointLight,
+  AmbientLight,
+} from 'pixi-lights';
 
 const W = 800;
 const H = 600;
@@ -18,7 +24,11 @@ const stage = new Stage();
 app.stage = stage;
 
 // bg is first, its not lighted
-const bg = new PIXI.TilingSprite(PIXI.Texture.from('/assets/p2.jpeg'), WIDTH, HEIGHT);
+const bg = new PIXI.TilingSprite(
+  PIXI.Texture.from('/assets/p2.jpeg'),
+  WIDTH,
+  HEIGHT,
+);
 bg.tint = 0x808080;
 stage.addChild(bg);
 
@@ -39,10 +49,10 @@ stage.addChild(new Layer(lightGroup));
  */
 
 const sortGroup = new Group(0, true);
-sortGroup.on('sort', (sprite) => {
-    // green bunnies go down
-    // eslint-disable-next-line no-param-reassign
-    sprite.zOrder = sprite.y;
+sortGroup.on('sort', sprite => {
+  // green bunnies go down
+  // eslint-disable-next-line no-param-reassign
+  sprite.zOrder = sprite.y;
 });
 // the group will process all of its members children after the sort
 sortGroup.sortPriority = 1;
@@ -59,90 +69,98 @@ const light = new PointLight(0xffffff, 1);
 light.position.set(525, 160);
 stage.addChild(light);
 app.ticker.add(() => {
-    light.position.copyFrom(app.renderer.plugins.interaction.mouse.global);
+  light.position.copyFrom(app.renderer.plugins.interaction.mouse.global);
 });
 
 const lightLoader = new PIXI.Loader();
 lightLoader.baseUrl = '/assets/lights/';
 lightLoader
-    .add('block_diffuse', 'block.png')
-    .add('block_normal', 'blockNormalMap.png')
-    .load(onAssetsLoaded);
+  .add('block_diffuse', 'block.png')
+  .add('block_normal', 'blockNormalMap.png')
+  .load(onAssetsLoaded);
 
 function onAssetsLoaded() {
-    for (let i = 0; i < 8; i += 2) {
-        stage.addChild(createBlock(100 + i * 50, 100 + i * 30));
-    }
-    for (let i = 1; i < 8; i += 2) {
-        stage.addChild(createBlock(100 + i * 50, 100 + i * 30));
-    }
+  for (let i = 0; i < 8; i += 2) {
+    stage.addChild(createBlock(100 + i * 50, 100 + i * 30));
+  }
+  for (let i = 1; i < 8; i += 2) {
+    stage.addChild(createBlock(100 + i * 50, 100 + i * 30));
+  }
 }
 
 function createBlock(x: number, y: number) {
-    const container = new PIXI.Container();
-    // we need to sort them before children go to respective layers
-    container.parentGroup = sortGroup;
-    container.position.set(x, y);
-    const diffuseSprite = new PIXI.Sprite(lightLoader.resources.block_diffuse.texture);
-    diffuseSprite.parentGroup = diffuseGroup;
-    diffuseSprite.anchor.set(0.5);
-    const normalSprite = new PIXI.Sprite(lightLoader.resources.block_normal.texture);
-    normalSprite.parentGroup = normalGroup;
-    normalSprite.anchor.set(0.5);
-    container.addChild(diffuseSprite);
-    container.addChild(normalSprite);
+  const container = new PIXI.Container();
+  // we need to sort them before children go to respective layers
+  container.parentGroup = sortGroup;
+  container.position.set(x, y);
+  const diffuseSprite = new PIXI.Sprite(
+    lightLoader.resources.block_diffuse.texture,
+  );
+  diffuseSprite.parentGroup = diffuseGroup;
+  diffuseSprite.anchor.set(0.5);
+  const normalSprite = new PIXI.Sprite(
+    lightLoader.resources.block_normal.texture,
+  );
+  normalSprite.parentGroup = normalGroup;
+  normalSprite.anchor.set(0.5);
+  container.addChild(diffuseSprite);
+  container.addChild(normalSprite);
 
-    subscribe(container);
+  subscribe(container);
 
-    return container;
+  return container;
 }
 
 // / === DRAG ZONE ===
 function subscribe(obj: PIXI.Container) {
-    // eslint-disable-next-line no-param-reassign
-    obj.interactive = true;
-    obj.on('mousedown', onDragStart)
-        .on('touchstart', onDragStart)
-        .on('mouseup', onDragEnd)
-        .on('mouseupoutside', onDragEnd)
-        .on('touchend', onDragEnd)
-        .on('touchendoutside', onDragEnd)
-        .on('mousemove', onDragMove)
-        .on('touchmove', onDragMove);
+  // eslint-disable-next-line no-param-reassign
+  obj.interactive = true;
+  obj
+    .on('mousedown', onDragStart)
+    .on('touchstart', onDragStart)
+    .on('mouseup', onDragEnd)
+    .on('mouseupoutside', onDragEnd)
+    .on('touchend', onDragEnd)
+    .on('touchendoutside', onDragEnd)
+    .on('mousemove', onDragMove)
+    .on('touchmove', onDragMove);
 }
 
-function onDragStart(this: any, event: { data: { getLocalPosition: (arg0: any) => any; }; }) {
-    if (!this.dragging) {
-        this.data = event.data;
-        this.oldGroup = this.parentGroup;
-        this.parentGroup = dragGroup;
-        this.dragging = true;
+function onDragStart(
+  this: any,
+  event: { data: { getLocalPosition: (arg0: any) => any } },
+) {
+  if (!this.dragging) {
+    this.data = event.data;
+    this.oldGroup = this.parentGroup;
+    this.parentGroup = dragGroup;
+    this.dragging = true;
 
-        this.scale.x *= 1.1;
-        this.scale.y *= 1.1;
-        this.dragPoint = event.data.getLocalPosition(this.parent);
-        this.dragPoint.x -= this.x;
-        this.dragPoint.y -= this.y;
-    }
+    this.scale.x *= 1.1;
+    this.scale.y *= 1.1;
+    this.dragPoint = event.data.getLocalPosition(this.parent);
+    this.dragPoint.x -= this.x;
+    this.dragPoint.y -= this.y;
+  }
 }
 
 function onDragEnd(this: any) {
-    if (this.dragging) {
-        this.dragging = false;
-        this.parentGroup = this.oldGroup;
-        this.scale.x /= 1.1;
-        this.scale.y /= 1.1;
-        // set the interaction data to null
-        this.data = null;
-    }
+  if (this.dragging) {
+    this.dragging = false;
+    this.parentGroup = this.oldGroup;
+    this.scale.x /= 1.1;
+    this.scale.y /= 1.1;
+    // set the interaction data to null
+    this.data = null;
+  }
 }
 
 function onDragMove(this: any) {
-    if (this.dragging) {
-        const newPosition = this.data.getLocalPosition(this.parent);
-        this.x = newPosition.x - this.dragPoint.x;
-        this.y = newPosition.y - this.dragPoint.y;
-    }
+  if (this.dragging) {
+    const newPosition = this.data.getLocalPosition(this.parent);
+    this.x = newPosition.x - this.dragPoint.x;
+    this.y = newPosition.y - this.dragPoint.y;
+  }
 }
 
 export default app;
