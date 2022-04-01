@@ -89,6 +89,7 @@ export const styleVariants = {
   },
   [variants.VS_REFRESH]: {
     background: 'url(/images/commons/btn/s1.png)',
+    backgroundSize: '100% 100%',
     backgroundColor: 'transparent',
     color: 'white',
     border: 'none',
@@ -133,5 +134,16 @@ export const styleVariants = {
     padding: '0',
     fontSize: '28px',
     boxShadow: 'none',
+  },
+  [variants.TRANSPARENT]: {
+    backgroundColor: 'transparent',
+    color: 'white',
+    border: '4px solid #41B7FF',
+    boxShadow: '0px 0px 9px 0px #41B7FF, inset 0px 0px 9px 0px #41B7FF',
+    height: '70px',
+    padding: '0 52px',
+    borderRadius: '20px',
+    overflow: 'hidden',
+    textShadow: textShadows.primary,
   },
 };

@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { planetState } from 'state/types';
 import { setActivePlanet } from './actions';
+import { PlanetState } from 'state/types';
 
-import { fetchMePlanetAsync } from './fetchers';
+import { fetchMePlanetAsync, fetchPlanetInfoAsync } from './fetchers';
 
-export const initialState: planetState = {
+export const initialState: PlanetState = {
   mePlanet: [],
   activePlanet: {
     addTime: 0,
@@ -41,6 +41,7 @@ export const initialState: planetState = {
     race: 0,
     stone: 0,
   },
+  planetInfo: [],
 };
 
 export const planet = createSlice({
@@ -50,14 +51,18 @@ export const planet = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchMePlanetAsync.fulfilled, (state, action) => {
-        state.mePlanet = action.payload.data.Data;
+        // state.mePlanet = action.payload.data.Data;
       })
       .addCase(setActivePlanet, (state, { payload }) => {
         state.activePlanet = payload;
       });
-    // .addCase(fetchMyPlanetAsync.fulfilled, (state, action) => {
-    //   // state.mePlanet = action.payload.data.Data;
-    // })
+
+    builder.addCase(fetchMePlanetAsync.fulfilled, (state, action) => {
+      state.mePlanet = action.payload;
+    });
+    builder.addCase(fetchPlanetInfoAsync.fulfilled, (state, action) => {
+      state.planetInfo = action.payload;
+    });
   },
 });
 

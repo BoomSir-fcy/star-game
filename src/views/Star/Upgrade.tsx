@@ -2,10 +2,26 @@ import React, { useState } from 'react';
 import StarAddBtn from 'components/StarAddBtn';
 import ModalWrapper from 'components/Modal';
 import StarCom from 'components/StarCom';
+import {
+  MysteryBoxBaseStyled,
+  mysteryBoxQualities,
+  MysteryBoxStyled,
+  MysteryBoxBoxStyled,
+} from 'components/MysteryBoxCom';
 import styled from 'styled-components';
 import { Image, Flex, Text, BgCard, Button, Card, Box } from 'uikit';
 import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';
 
+const MysteryBoxFlexStyled = styled(MysteryBoxStyled)`
+  width: 320px;
+  height: 366px;
+  margin-right: 60px;
+`;
+
+const MysteryBoxStarStyled = styled(MysteryBoxBoxStyled)`
+  background: none;
+  top: 0;
+`;
 const StyledCard = styled(Card)`
   width: 448px;
   padding: 50px 20px;
@@ -48,9 +64,16 @@ const Upgrade = () => {
             </Flex>
           </Flex>
           <Flex>
-            <Box width='320px' mr='50px'>
-              <Text>漂浮的星球</Text>
-            </Box>
+            <MysteryBoxFlexStyled>
+              <MysteryBoxBaseStyled
+                bottom='-40px'
+                quality={mysteryBoxQualities.SUPER}
+              >
+                <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
+                  <StarCom variant='none' scale='ld' />
+                </MysteryBoxStarStyled>
+              </MysteryBoxBaseStyled>
+            </MysteryBoxFlexStyled>
             <UpgradeCard mr='33px' />
             <UpgradeCard mr='33px' />
             <StyledCard>
@@ -85,7 +108,7 @@ const Upgrade = () => {
         setVisible={() => setVisible(false)}
       >
         <Flex padding='40px'>
-          <StarCom scale='ld' quality='rare' mr='40px' />
+          <StarCom scale='ld' quality={2} mr='40px' />
           <Flex flexDirection='column' justifyContent='space-between'>
             <Text fontSize='22px'>
               升级会持续6小时，期间将无法操作星球，是否继续升级？

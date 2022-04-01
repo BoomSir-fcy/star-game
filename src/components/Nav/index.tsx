@@ -30,6 +30,15 @@ const ActiveButton = styled(ButtonStyled)`
   background: url('/images/commons/nav/select.png');
 `;
 
+const StarIcon = styled.img`
+  position: absolute;
+  width: 28px;
+  height: 31px;
+  left: 15px;
+  top: 20px;
+  z-index: 3;
+`;
+
 let flag = 0;
 const pushEmptyNav = (nav: NavConfig[]): NavConfig[] => {
   if (nav.length >= 7) return nav;
@@ -68,7 +77,8 @@ const Nav: React.FC<NavProps> = ({
     <StyledNav {...props}>
       <NavList>
         {navList.map((item, index) => (
-          <div key={item.id}>
+          <div key={item.id} style={{ position: 'relative' }}>
+            {item?.badge && <StarIcon src='/images/commons/icon/star.png' />}
             {item.id === active && (
               <ActiveButton variant='custom'>{item.label}</ActiveButton>
             )}

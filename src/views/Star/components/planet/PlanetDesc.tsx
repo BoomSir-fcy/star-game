@@ -1,10 +1,8 @@
 import React from 'react';
-import { planetInfo } from 'state/types';
-import styled from 'styled-components';
 import { Flex, Box, Text, Image } from 'uikit';
 
 export const PlanetDesc: React.FC<{
-  info: planetInfo;
+  info: Api.Planet.PlanetInfo;
 }> = React.memo(({ info }) => {
   return (
     <Flex width='100%' flexDirection='column'>

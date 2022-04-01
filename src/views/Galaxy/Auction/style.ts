@@ -8,6 +8,8 @@ export const LeftFlex = styled(Flex)`
 export const RightFlex = styled(Flex)`
   flex-direction: column;
   flex: 2;
+  max-height: 350px;
+  overflow-y: auto;
 `;
 export const Line = styled(Box)`
   width: 3px;
@@ -25,3 +27,8 @@ export const PriceText = styled(Text).attrs({
   fontSize: '63px',
   bold: true,
 })``;
+
+export const scrollBox = styled(Flex)`
+  max-height: 300px;
+  overflow-y: auto;
+`;

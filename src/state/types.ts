@@ -74,22 +74,37 @@ export interface MysteryBoxState {
 export interface GalaxyInfo extends Api.Galaxy.GalaxyInfo {
   id: number;
   label: string;
+  badge?: boolean;
   starTotal?: number;
   starOwnerTotal?: number;
+  nickname?: string;
 }
 
-interface StarLevelInfo {
+export interface StarLevelInfo {
   id: number; // 恒星等级范围id
   label: string; // // 恒星等级范围名称
   levels: Api.Galaxy.StarInfo[];
 }
 
+export interface GalaxyNft {
+  id: string;
+  lastPrice: string; // 最后一次交易的价格
+  currentPrice: string; // 当前购买需要支付的价格
+  miniBuyDuration: string; // 最小购买的时间间隔
+  lastTimestamp: string; // 最后购买时间
+}
 export interface GalaxyState {
   currentGalaxy: GalaxyInfo;
   currentStarPeriod: StarLevelInfo;
   galaxyList: GalaxyInfo[];
   galaxyStarList: StarLevelInfo[];
+  galaxyNft: GalaxyNft;
   loading: boolean;
+  auctionRecordList: any[];
+}
+export interface PlanetState {
+  mePlanet: Api.Planet.PlanetInfo[];
+  planetInfo: Api.Planet.PlanetInfo[];
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -108,7 +123,7 @@ export interface State {
   mysteryBox: MysteryBoxState;
   galaxy: GalaxyState;
   alliance: AllianceState;
-  planet: planetState;
+  planet: PlanetState;
 }
 
 export interface planetInfo {

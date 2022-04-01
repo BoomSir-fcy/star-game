@@ -4,7 +4,7 @@ import { Card, Flex, Box, Button, Text, Image } from 'uikit';
 import StarCom from 'components/StarCom';
 
 import { Qualities } from 'uikit/theme/types';
-import { QualityColor } from 'uikit/theme/colors';
+import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 
 import { planetInfo } from 'state/types';
 import { PlanetDesc } from './PlanetDesc';
@@ -21,10 +21,10 @@ const Desc = styled(Flex)`
 `;
 
 export const PlanetBox: React.FC<{
-  info: planetInfo;
+  info: Api.Planet.PlanetInfo;
   status?: string;
   level?: Qualities;
-}> = ({ status = 'upgrade', level = 'rare', info }) => {
+}> = ({ status = 'upgrade', level = 1, info }) => {
   const [state, setState] = React.useState({
     time: 86970,
   });
@@ -96,7 +96,7 @@ export const PlanetBox: React.FC<{
   return (
     <CardBox>
       <Flex>
-        <StarCom quality={level} />
+        <StarCom quality={2} />
         <Flex ml='29px' flex='1' flexDirection='column'>
           <Desc justifyContent='space-between'>
             {status === 'upgrade' ? (
@@ -107,7 +107,7 @@ export const PlanetBox: React.FC<{
                     <Text color={QualityColor[level]} bold small>
                       传说
                     </Text>
-                    <Text ml='12px' color='raceProtoss' bold small>
+                    <Text ml='12px' color={RaceTypeColor[2]} bold small>
                       {info?.race === 1
                         ? '神族'
                         : info?.race === 2

@@ -24,4 +24,11 @@ export class GalaxyApi extends Http {
   async plunderStar(galaxyId: number, starId: number) {
     return this.post('galaxy/attck', { nft_id: galaxyId, number: starId });
   }
+
+  // 星系竞拍记录列表
+  async getAuctionLogList(
+    galaxyId: number,
+  ): Promise<Api.Response<{ record: any[] }>> {
+    return this.get(`galaxy/auction-logs/${galaxyId}`);
+  }
 }

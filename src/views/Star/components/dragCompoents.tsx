@@ -8,7 +8,9 @@ const Container = styled(Flex)`
   position: relative;
   width: 476px;
   height: 476px;
-  border: 1px solid #373c45;
+  border: 1px solid #fff;
+  /* border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff; */
 `;
 
 const Normal = styled(Flex)<{ row: number }>`
@@ -23,50 +25,11 @@ const Normal = styled(Flex)<{ row: number }>`
   width: ${({ row }) => row * 158}px;
   height: ${({ row }) => row * 158}px;
   border: 1px solid #fff;
+  /* border-top: 1px solid #fff;
+  border-left: 1px solid #fff; */
   transition: all 0.5s;
-  &:nth-child(1) {
-    top: 0;
-    left: 0;
-  }
-
-  &:nth-child(2) {
-    top: 0;
-    left: 158px;
-  }
-
-  &:nth-child(3) {
-    top: 0;
-    left: 316px;
-  }
-
-  &:nth-child(4) {
-    top: 158px;
-    left: 0;
-  }
-
-  &:nth-child(5) {
-    top: 158px;
-    left: 158px;
-  }
-
-  &:nth-child(6) {
-    top: 158px;
-    left: 316px;
-  }
-
-  &:nth-child(7) {
-    top: 316px;
-    left: 0;
-  }
-
-  &:nth-child(8) {
-    top: 316px;
-    left: 158px;
-  }
-
-  &:nth-child(9) {
-    top: 316px;
-    left: 316px;
+  img {
+    pointer-events: none;
   }
 `;
 
@@ -106,9 +69,9 @@ let dragged = {} as any;
 
 export const DragCompoents: React.FC<{
   itemData: any;
-  rowCells: number;
-  colCells: number;
-}> = ({ itemData }) => {
+  rows: number;
+  cols: number;
+}> = ({ itemData, cols, rows }) => {
   const [state, setState] = React.useState({
     currentTab: 1,
     tabs: [
@@ -145,7 +108,7 @@ export const DragCompoents: React.FC<{
     if (data.length > 0) {
       getPosition();
     }
-  }, [data]);
+  }, [setState, state, data]);
 
   // 计算两个元素的距离
   const distance = (dom: HTMLDivElement, beforeDom: HTMLDivElement) => {
@@ -158,36 +121,121 @@ export const DragCompoents: React.FC<{
   const getPosition = () => {
     if (dragBox?.current) {
       const doms: any = dragBox?.current.children;
-      const boxWidth = doms[0]?.offsetWidth;
-      const screenWidth = dragBox?.current?.offsetWidth;
-      // const cols = Math.round(screenWidth / boxWidth);
-      const diffString = String(screenWidth / boxWidth);
-      const cols = parseInt(diffString);
-      const heightArr = [];
-      let boxHeight = 0;
-      let minBoxHeight = 0;
-      let minBoxIndex = 0;
-
+      const index = data.findIndex((item: any) => item.row === 2);
+      // 判断大方块在什么位置
+      const bigGridRow = parseInt(String(index / cols + 1));
+      const bigGridCol = parseInt(String((index % rows) + 1));
       for (let i = 0; i < doms.length; i++) {
-        boxHeight = doms[i].offsetHeight;
-        if (i < cols) {
-          heightArr.push(boxHeight);
-          doms[i].style = '';
+        let row = parseInt(String(i / cols));
+        let col = parseInt(String(i % rows));
+
+        // console.log(row, col);
+        // console.log(row, col, doms[i], doms[i].previousSibling?.offsetWidth);
+        // const prevWidth = doms[i].previousSibling?.offsetWidth;
+        // if (col === 2 && prevWidth === 316) {
+        //   row += 1;
+        //   col = 0;
+        // }
+        // console.log(doms[i].nextSibling);
+        // console.log(doms[i].nextSibling?.offsetWidth);
+
+        // if (i > index) {
+        //   // 不换行
+        //   if (row + 2 === bigGridRow) {
+        //     row = col - 2;
+        //     col = 2;
+        //   } else if (col + 2 >= bigGridCol && row === 0) {
+        //     row += 1;
+        //     col = 0;
+        //     // console.log(doms[i], row, col);
+        //   } else if (bigGridRow === row && bigGridCol + 1 === col) {
+        //     // console.log(doms[i], row, col);
+        //     row += 1;
+        //     col = 0;
+        //   } else {
+        //     row += 1;
+        //   }
+        // } else if (i === index) {
+        //   row = row >= 2 ? row - 1 : row;
+        //   col = col >= 2 ? col - 1 : col;
+        // } else if (bigGridCol >= col + 2) {
+        //   console.log(232, row, col, doms[i]);
+        //   row = col;
+        //   col = 0;
+        // }
+
+        if (index !== i && bigGridCol > 0 && bigGridRow > 0) {
+          // 当超过最大列数时，换行
+          if (bigGridRow === 2) {
+            if (row === 1 && bigGridCol === 1) {
+              row = col;
+              col = bigGridRow;
+            }
+            if (row + bigGridRow === rows && bigGridCol === cols) {
+              row = col + 1;
+              col = 0;
+            } else if (row + bigGridRow === rows && bigGridCol === col) {
+              row += 1;
+              col = 0;
+            }
+          } else if (row === 0 && col !== 0 && bigGridCol + col < cols) {
+            row = col - 1 > 0 ? col - 1 : col;
+            col = bigGridCol + col;
+          } else if (row === 0 && bigGridCol + col > cols) {
+            row = bigGridRow + row;
+            col = 0;
+          } else if (row === 1 && row + bigGridRow <= rows) {
+            // 当前行+2X2格子不换行
+            row = bigGridRow + row;
+          }
         } else {
-          minBoxHeight = Math.min(...heightArr);
-          minBoxIndex = getMinBoxIndex(heightArr, minBoxHeight);
-
-          console.log(heightArr, minBoxIndex);
-
-          doms[i].style.left = `${minBoxIndex * boxWidth}px`;
-          doms[i].style.top = `${minBoxHeight}px`;
-          heightArr[minBoxIndex] += boxHeight;
+          col = bigGridCol + col > cols ? col - 1 : col;
         }
+
+        doms[i].style.top = `${row * 158}px`;
+        doms[i].style.left = `${col * 158}px`;
       }
 
-      console.log(heightArr, minBoxIndex, boxHeight);
+      // const rowIndex = data.findIndex((item: any) => item.row === 2);
+      // const diffArr: any = data.slice(rowIndex + 1) ?? [];
+      // if (rowIndex > -1) {
+      //   for (let i = 0; i < diffArr.length; i++) {
+      //     const row = parseInt(String(i / cols)) + 2;
+      //     const col = parseInt(String(i % cols));
+      //     const domIndex = diffArr[i]?.index - 1 || 0;
+
+      //     doms[domIndex].style.left = `${col * 158}px`;
+      //     doms[domIndex].style.top = `${row * 158}px`;
+      //   }
+      // }
+
+      // const boxWidth = doms[rowIndex]?.offsetWidth;
+      // const screenWidth = dragBox?.current?.offsetWidth;
+      // const diffString = String(screenWidth / boxWidth);
+      // const cols = parseInt(diffString);
+      // const heightArr = [];
+      // let boxHeight = 0;
+      // let minBoxHeight = 0;
+      // let minBoxIndex = 0;
+
+      // console.log(rowIndex, cols);
+      // for (let i = 0; i < doms.length; i++) {
+      //   boxHeight = doms[i].offsetHeight;
+      //   if (i < cols) {
+      //     heightArr.push(boxHeight);
+      //     doms[i].style = '';
+      //   } else {
+      //     minBoxHeight = Math.min(...heightArr);
+      //     minBoxIndex = getMinBoxIndex(heightArr, minBoxHeight);
+
+      //     doms[i].style.left = `${minBoxIndex * boxWidth}px`;
+      //     doms[i].style.top = `${minBoxHeight}px`;
+      //     heightArr[minBoxIndex] += boxHeight;
+      //   }
+
+      //   console.log(heightArr, minBoxIndex, boxHeight);
+      // }
     }
-    // return newArr;
   };
 
   const getMinBoxIndex = (arr: any, value: any) => {
@@ -202,8 +250,8 @@ export const DragCompoents: React.FC<{
 
     if (from !== to) {
       const listData = data;
-      // listData.splice(to, 0, listData.splice(from, 1)[0]);
-      [listData[from], listData[to]] = [listData[to], listData[from]];
+      listData.splice(to, 0, listData.splice(from, 1)[0]);
+      // [listData[from], listData[to]] = [listData[to], listData[from]];
       setState({
         ...state,
         data: listData,
@@ -232,6 +280,7 @@ export const DragCompoents: React.FC<{
 
   const dragEnter = (event: any) => {
     event.preventDefault();
+    console.log(event.target.tagName);
     if (event.target.tagName !== 'DIV') {
       return;
     }
@@ -245,11 +294,11 @@ export const DragCompoents: React.FC<{
           {state.data.map((item: any, index: number) => {
             return (
               <Normal
-                key={`${item.index}`}
-                row={item.row}
+                key={`${item?.index}`}
+                row={item?.row}
                 draggable
                 data-id={index}
-                data-row={item.row}
+                data-row={item?.row}
                 onDragStart={dragStart}
                 onDragEnter={dragEnter}
                 onDragOver={dragOver}
@@ -257,7 +306,7 @@ export const DragCompoents: React.FC<{
                 onDragEnd={dragEnd}
                 data-item={JSON.stringify(item)}
               >
-                <img src={item.icon} alt='' />
+                <img src={item?.icon} alt='' />
               </Normal>
             );
           })}

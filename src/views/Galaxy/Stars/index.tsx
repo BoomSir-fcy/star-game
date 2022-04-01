@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Flex } from 'uikit';
 import { useDispatch } from 'react-redux';
 import { Layout, Dashboard, Nav, StarAddBtn } from 'components';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useStore } from 'state';
-import { fetchGalaxyStarListAsync, setCurrentStar } from 'state/galaxy/reducer';
+import {
+  fetchGalaxyStarListAsync,
+  setCurrentStarPeriod,
+} from 'state/galaxy/reducer';
 import { useGalaxyStarList } from 'state/galaxy/hooks';
 import { shortenAddress } from 'utils';
 import { StarBox } from './style';
@@ -13,23 +16,25 @@ import { PlunderCard } from './PlunderCard';
 const Stars = () => {
   const dispatch = useDispatch();
   const parseQs = useParsedQueryString();
-  const [activeStar, setActiveStar] = useState<Api.Galaxy.StarInfo>({
-    number: 0,
-    token_id: 0,
-  });
-  const [visible, setVisible] = useState(false);
-
   const galaxyId = Number(parseQs.i);
   useGalaxyStarList(galaxyId);
+  const { galaxyStarList, currentStarPeriod } = useStore(p => p.galaxy);
 
-  const { galaxyStarList, currentGalaxy, currentStarPeriod } = useStore(
-    p => p.galaxy,
-  );
-
-  console.log(currentGalaxy);
-
-  console.log(galaxyStarList);
-  console.log(currentStarPeriod);
+  const [visible, setVisible] = useState(false);
+  const initState = useMemo(() => {
+    return {
+      token_id: 0,
+      number: 0,
+      name: '',
+      owner: '',
+      ownerAvatar: '',
+      hold_time: 0,
+      protect_timestamp: 0,
+      history_hold_number: 0,
+      disapth_box: 0,
+    };
+  }, []);
+  const [activeStar, setActiveStar] = useState<Api.Galaxy.StarInfo>(initState);
 
   return (
     <Layout>
@@ -40,13 +45,14 @@ const Stars = () => {
           mr='24px'
           activeId={currentStarPeriod?.id}
           onChangeNav={info => {
-            console.log(info);
-            dispatch(setCurrentStar(info));
+            dispatch(setCurrentStarPeriod(info));
+            setVisible(false);
+            setActiveStar(initState);
           }}
         />
         <StarBox>
-          {currentStarPeriod.levels &&
-            currentStarPeriod.levels.map((item, index) => (
+          {currentStarPeriod?.levels &&
+            currentStarPeriod?.levels.map((item, index) => (
               <StarAddBtn
                 key={item?.number}
                 className={`star-${index + 1}`}
