@@ -28,13 +28,12 @@ class Board {
 
   bunny: Sprite = new Sprite();
 
-
   init({ src }: BoardOptions) {
     this.src = src;
 
     const texture = Texture.from(src);
 
-    this.bunny = new TilingSprite(texture, 500, 1500);
+    this.bunny = new Sprite(texture);
     this.bunny.anchor.set(0.5);
     this.bunny.x = 0;
     this.bunny.y = 0;

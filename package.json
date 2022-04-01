@@ -7,6 +7,7 @@
     "@faker-js/faker": "^6.0.0",
     "@inlet/react-pixi": "^6.6.6",
     "@pancakeswap/eslint-config-pancake": "^1.2.0",
+    "@pixi/events": "^6.3.0",
     "@pixi/layers": "^1.0.11",
     "@reduxjs/toolkit": "^1.8.0",
     "@testing-library/jest-dom": "^5.11.4",
