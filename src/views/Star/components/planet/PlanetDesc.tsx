@@ -10,10 +10,10 @@ export const PlanetDesc: React.FC<{
     <Flex width='100%' flexDirection='column'>
       <Flex flex={1} margin='3px 0'>
         <Text color='textSubtle' small>
-          掠夺速度:100
+          {/* 掠夺速度:{info?.plunder_speed} */}
         </Text>
         <Text color='textSubtle' ml='140px' small>
-          建筑数:100
+          {/* 建筑数:{info?.build_count} */}
         </Text>
       </Flex>
       <Flex justifyContent='space-between' flex={1}>

@@ -35,6 +35,10 @@ export const QualityColor = {
   [qualities.MYTHOLOGY]: '#FF6F3D',
 };
 
+// export const RaceType = {
+
+// }
+
 export const lightColors: Colors = {
   ...baseColors,
   ...additionalColors,
