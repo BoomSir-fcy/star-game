@@ -1,22 +1,22 @@
 import React from 'react';
+import { planetInfo } from 'state/types';
 import styled from 'styled-components';
 import { Flex, Box, Text, Image } from 'uikit';
 
-export const PlanetDesc: React.FC<any> = React.memo(() => {
+export const PlanetDesc: React.FC<{
+  info: planetInfo;
+}> = React.memo(({ info }) => {
   return (
     <Flex width='100%' flexDirection='column'>
-      <Flex justifyContent='space-between' flex={1} margin='14px 0'>
+      <Flex flex={1} margin='3px 0'>
         <Text color='textSubtle' small>
           掠夺速度:100
         </Text>
-        <Text color='textSubtle' small>
+        <Text color='textSubtle' ml='140px' small>
           建筑数:100
         </Text>
-        <Text color='textSubtle' small>
-          格子:5x5
-        </Text>
       </Flex>
-      <Flex justifyContent='space-between' flex={1} mb='24px'>
+      <Flex justifyContent='space-between' flex={1}>
         <Flex alignItems='center'>
           <Box width={50} height={50} mr='5px'>
             <Image src='/images/commons/icon/ore.png' width={50} height={50} />

@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -15,13 +17,42 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
+import { useStore } from 'state/util';
+import { fetchMePlanetAsync } from 'state/planet/fetchers';
+import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 
-import { PlanetSearch, PlanetBox } from './components';
+const ScrollBox = styled(Flex)`
+  margin-top: 22px;
+  min-height: 650px;
+  max-height: 650px;
+  overflow-y: auto;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: space-between;
+`;
+
+const LinkItem = styled(Link)`
+  display: block;
+  height: auto;
+  margin-bottom: 20px;
+`;
 
 const Planet = () => {
+  const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
-  console.log(choose);
+  const StarList = useStore(p => p.planet.mePlanet);
+  const [state, setState] = React.useState({
+    page: 1,
+  });
+
+  const init = React.useCallback(() => {
+    dispatch(fetchMePlanetAsync({ page: state.page, page_size: 10 }));
+  }, [dispatch, state]);
+
+  React.useEffect(() => {
+    init();
+  }, []);
 
   return (
     <Layout>
@@ -76,19 +107,37 @@ const Planet = () => {
         </Box>
         <Flex ml={choose ? '7px' : '23px'} flex={1}>
           <BgCard variant={choose ? 'full' : 'big'} fringe padding='40px 37px'>
-            <PlanetSearch />
-            <Flex
-              mt='22px'
-              justifyContent='space-between'
-              flexWrap='wrap'
-              style={{
-                overflow: 'auto',
-              }}
-            >
-              <PlanetBox level={2} />
-              <PlanetBox status='upgrade' level={2} />
-              <PlanetBox level={2} />
+            <Flex justifyContent='space-between'>
+              <PlanetRaceTabs />
+              <PlanetSearch />
             </Flex>
+            <ScrollBox>
+              {StarList.length && (
+                <>
+                  {StarList.map(item => (
+                    <>
+                      {choose ? (
+                        <Box>
+                          <PlanetBox info={item} />
+                        </Box>
+                      ) : (
+                        <LinkItem to='/star'>
+                          <PlanetBox info={item} />
+                        </LinkItem>
+                      )}
+                    </>
+                  ))}
+                </>
+              )}
+              {/* <LinkItem to='/star'>
+                <PlanetBox level='rare' />
+              </LinkItem>
+
+              <LinkItem to='/star'>
+                <PlanetBox status='upgrade' level='legend' />
+              </LinkItem>
+              <PlanetBox level='rare' /> */}
+            </ScrollBox>
           </BgCard>
         </Flex>
       </Flex>

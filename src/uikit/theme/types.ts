@@ -93,6 +93,10 @@ export type Colors = {
   textSuccess: string;
   textDanger: string;
 
+  raceProtoss: string;
+  raceHuman: string;
+  raceZerg: string;
+
   goldBorder: string;
   // Gradients
   gradients: Gradients;

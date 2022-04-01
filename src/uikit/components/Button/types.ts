@@ -22,6 +22,7 @@ export const variants = {
   VS_REFRESH: 'vsRefresh',
   BLACK: 'black',
   STOP: 'stop',
+  TRANSPARENT: 'transparent',
 } as const;
 
 export type Scale = typeof scales[keyof typeof scales];

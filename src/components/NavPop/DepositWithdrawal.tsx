@@ -3,12 +3,14 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Button, Input, Flex, Text, Image } from 'uikit';
 import BigNumber from 'bignumber.js';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
 import { useWeb3React } from '@web3-react/core';
 import { UserBalanceView } from 'state/types';
 import { useTokenBalance } from 'hooks/useTokenBalance';
 import { getBalanceAmount } from 'utils/formatBalance';
 import { BIG_TEN } from 'config/constants/bigNumber';
+import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
 import { FetchApproveNum, useRWA } from './hook';
 
 const ShaDowBox = styled(Flex)`
@@ -53,10 +55,11 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
   decimals = 18,
 }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { amount: withdrawalBalance, symbol: Token } = TokenInfo;
   const { balance: BigNumberBalance } = useTokenBalance(TokenInfo?.coinId);
-  const { Recharge, onApprove } = useRWA(TokenInfo?.coinId);
+  const { Recharge, onApprove, drawCallback } = useRWA(TokenInfo?.coinId);
 
   const [approvedNum, setapprovedNum] = useState(0);
   const [val, setVal] = useState('');
@@ -106,8 +109,26 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
       } finally {
         setpending(false);
       }
+    } else {
+      try {
+        await drawCallback(val, TokenInfo?.coinId);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setpending(false);
+      }
     }
-  }, [OperationType, TokenBalance, TokenInfo?.coinId, Token, val, Recharge]);
+    dispatch(fetchUserBalanceAsync());
+  }, [
+    OperationType,
+    TokenBalance,
+    TokenInfo?.coinId,
+    Token,
+    val,
+    drawCallback,
+    Recharge,
+    dispatch,
+  ]);
   // 授权
   const handleApprove = useCallback(async () => {
     setpending(true);

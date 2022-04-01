@@ -22,6 +22,7 @@ import {
   MysteryBoxQualities,
 } from 'components/MysteryBoxCom';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 import { TokenImage } from 'components/TokenImage';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { getDsgAddress } from 'utils/addressHelpers';
@@ -41,6 +42,7 @@ const CardStyled = styled(Card)`
 
 const MysteryBoxState = () => {
   const paramsQs = useParsedQueryString();
+  const navigate = useNavigate();
 
   useFetchBoxView();
   const { priceBNB, seedBlocks, loading } = useStore(p => p.mysteryBox.boxView);
@@ -82,20 +84,40 @@ const MysteryBoxState = () => {
     }
     return [];
   }, [account]);
+
+  // 递归扫描获得星球id
+  const getPlanetId = useCallback(
+    async (blockHash: string) => {
+      const event = await fetchHandle();
+      if (!blockHash || !event.length) return null;
+      const index = event.findIndex(
+        item => item.blockHash?.toLowerCase() === blockHash.toLowerCase(),
+      );
+      if (index === -1) {
+        getPlanetId(blockHash);
+      }
+      const planetId = event[index]?.args?.planetId;
+      return new BigNumber(planetId.toJSON().hex).toNumber();
+    },
+    [fetchHandle],
+  );
+
   const onHandleOpen = useCallback(
     async name => {
       try {
         const res = await handleOpen(quality, name);
-        const event = await fetchHandle();
         console.log(res);
-        console.log(event, 'event');
+        // const event = await fetchHandle();
+        // console.log(event, 'event');
         setBought(false);
         setVisible(false);
+        const planetId = await getPlanetId(res?.blockHash);
+        navigate(`/mystery-box/detail?i=${planetId}`);
       } catch (error) {
         console.error(error);
       }
     },
-    [quality, handleOpen, setBought, fetchHandle],
+    [quality, handleOpen, setBought, navigate, getPlanetId],
   );
 
   useEffect(() => {
@@ -134,19 +156,25 @@ const MysteryBoxState = () => {
               </Flex>
             </CardStyled>
             <CardStyled mt='23px'>
-              <Flex height='100%' alignItems='center'>
-                <Box width={100}>
-                  <TokenImage
-                    width={80}
-                    height={80}
-                    tokenAddress={getDsgAddress()}
-                  />
-                </Box>
-                <Box ml='20px'>
-                  <Text color='textTips'>价值 BNB</Text>
-                  {loading ? <Skeleton height={40} /> : <Text>{price} </Text>}
-                </Box>
-              </Flex>
+              {existBox ? (
+                <Flex height='100%' justifyContent='center' alignItems='center'>
+                  <Text color='textTips'>购买成功，快试试您的手气吧！</Text>
+                </Flex>
+              ) : (
+                <Flex height='100%' alignItems='center'>
+                  <Box width={100}>
+                    <TokenImage
+                      width={80}
+                      height={80}
+                      tokenAddress={getDsgAddress()}
+                    />
+                  </Box>
+                  <Box ml='20px'>
+                    <Text color='textTips'>价值 BNB</Text>
+                    {loading ? <Skeleton height={40} /> : <Text>{price} </Text>}
+                  </Box>
+                </Flex>
+              )}
             </CardStyled>
             <Flex mt='34px' justifyContent='center'>
               {existBox ? (

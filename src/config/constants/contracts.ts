@@ -45,5 +45,9 @@ const contracts = {
     [ChainId.BSC_MAINNET]: '',
     [ChainId.BSC_TESTNET]: '0xb4980C5121dce73BC7E554ffe6ab6262598774CC',
   },
+  BoxToken: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0x2bf6502a30Af3378ACb51F056F47fc5e24aB8961',
+  },
 };
 export default contracts;

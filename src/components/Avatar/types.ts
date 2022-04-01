@@ -1,5 +1,5 @@
-import { BoxProps } from "uikit";
+import { BoxProps } from 'uikit';
 
 export interface AvatarProps extends BoxProps {
-  active?: boolean
+  active?: boolean;
 }

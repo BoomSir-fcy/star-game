@@ -6,28 +6,63 @@ import StarCom from 'components/StarCom';
 import { Qualities } from 'uikit/theme/types';
 import { QualityColor } from 'uikit/theme/colors';
 
+import { planetInfo } from 'state/types';
 import { PlanetDesc } from './PlanetDesc';
 
 const CardBox = styled(Card)`
   width: 760px;
   height: 200px;
-  padding: 18px;
-  margin-bottom: 20px;
+  padding: 16px;
 `;
 
 const Desc = styled(Flex)`
-  padding-bottom: 15px;
+  padding-bottom: 5px;
   border-bottom: 1px solid #424958;
 `;
 
 export const PlanetBox: React.FC<{
+  info: planetInfo;
   status?: string;
-  level: Qualities;
-}> = ({ status, level = 'rare' }) => {
+  level?: Qualities;
+}> = ({ status = 'upgrade', level = 1, info }) => {
   const [state, setState] = React.useState({
     time: 86970,
   });
   let timer = null as any;
+
+  // ORDINARY: 'ordinary', // 普通
+  // GOOD: 'good', // 良好
+  // RARE: 'rare', // 稀有
+  // EPIC: 'epic', // 史诗
+  // LEGEND: 'legend', // 传说
+  // MYTHOLOGY: 'mythology', // 神话
+  const getLevel = (num: number) => {
+    let str = '';
+    switch (num) {
+      case 1:
+        str = 'ordinary';
+        break;
+      case 2:
+        str = 'good';
+        break;
+      case 3:
+        str = 'rare';
+        break;
+      case 4:
+        str = 'epic';
+        break;
+      case 5:
+        str = 'legend';
+        break;
+      case 6:
+        str = 'mythology';
+        break;
+      default:
+        str = 'ordinary';
+        break;
+    }
+    return str;
+  };
 
   // 倒计时
   const countDown = () => {
@@ -66,25 +101,51 @@ export const PlanetBox: React.FC<{
           <Desc justifyContent='space-between'>
             {status === 'upgrade' ? (
               <>
-                <Flex alignItems='center'>
-                  <Text color={QualityColor[2]} bold>
-                    传说
-                  </Text>
-                  <Text ml='11px'>Lv1</Text>
-                </Flex>
-                <Flex flex='1' justifyContent='flex-end' alignItems='center'>
-                  <Text color='textSubtle' fontSize='20px' mr='28px'>
-                    {formatTime(state.time)}
-                  </Text>
-                  <Text shadow='primary' fontSize='24px' mr='27px'>
-                    升级中
-                  </Text>
-                  <Image
-                    src='/images/commons/icon/icon_arrow_right.png'
-                    width={22}
-                    height={27}
-                  />
-                </Flex>
+                <Box>
+                  <Text fontSize='24px'>{info.name}</Text>
+                  <Flex alignItems='center' mt='2px'>
+                    <Text color={QualityColor[level]} bold small>
+                      传说
+                    </Text>
+                    <Text ml='12px' color='raceProtoss' bold small>
+                      神族
+                    </Text>
+                    <Text ml='12px' bold small>
+                      Lv{info.level}
+                    </Text>
+                    <Text ml='12px' small>
+                      格子:{info.areaX}x{info.areaY}
+                    </Text>
+                  </Flex>
+                </Box>
+                {info?.update_finish_time > 0 && (
+                  <Flex flex='1' flexDirection='column' alignItems='flex-end'>
+                    <Flex
+                      width='100%'
+                      justifyContent='flex-end'
+                      alignItems='center'
+                    >
+                      <Text shadow='primary' fontSize='24px' mr='15px'>
+                        升级中
+                      </Text>
+                      <Image
+                        src='/images/commons/icon/icon_arrow_right.png'
+                        width={22}
+                        height={27}
+                      />
+                    </Flex>
+                    <Text
+                      mt='2px'
+                      color='textSubtle'
+                      small
+                      style={{
+                        letterSpacing: '2px',
+                      }}
+                    >
+                      {formatTime(state.time)}
+                    </Text>
+                  </Flex>
+                )}
               </>
             ) : (
               <>
@@ -109,13 +170,13 @@ export const PlanetBox: React.FC<{
           </Desc>
           <Flex alignItems='center' height='auto' flex='1'>
             {status === 'upgrade' ? (
-              <PlanetDesc />
+              <PlanetDesc info={info} />
             ) : (
               <>
                 <Image
                   src='/images/commons/icon/icon-premiumGems.png'
-                  width={60}
-                  height={60}
+                  width={69}
+                  height={78}
                 />
                 <Text>普通、良好、稀有星球</Text>
               </>
