@@ -31,7 +31,7 @@ const StarHeader = () => {
       <CardStyled ml='82px'>
         <Flex padding='20px' justifyContent='space-between'>
           <Flex>
-            <StarCom scale='sm' quality='legend' mr='40px' showUnion />
+            <StarCom scale='sm' quality={2} mr='40px' showUnion />
             <Flex flexDirection='column' justifyContent='space-between'>
               <Flex alignItems='center'>
                 <Text color='legend'>传说</Text>

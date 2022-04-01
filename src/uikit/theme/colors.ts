@@ -1,4 +1,4 @@
-import { Colors, qualities } from './types';
+import { Colors, qualities, RaceType } from './types';
 
 export const baseColors = {
   failure: '#FF3A3A',
@@ -33,6 +33,12 @@ export const QualityColor = {
   [qualities.EPIC]: '#D259EC',
   [qualities.LEGEND]: '#FFB93D',
   [qualities.MYTHOLOGY]: '#FF6F3D',
+};
+
+export const RaceTypeColor = {
+  [RaceType.PROTOSS]: '#DF7DFD',
+  [RaceType.HUMAN]: '#3dcfff',
+  [RaceType.ZERG]: '#DF7DFD',
 };
 
 export const lightColors: Colors = {

@@ -1,21 +1,25 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
+import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
-const CPhomepage_title = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  lineHeight: '40px',
-  padding: '0 20px',
-  color: '#686868',
-};
-const CPhomepage_num = {
-  lineHeight: '190px',
-  fontSize: '50px',
-  color: '#1F1F1F',
-  textAlign: 'center',
-};
+
+const Normal = styled(Flex)`
+  cursor: pointer;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 40px;
+  text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
+  width: 158px;
+  height: 158px;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  transition: all 0.5s;
+`;
 
 export default class DragCompoents extends Component<any, any> {
   constructor(props: any) {
@@ -49,13 +53,13 @@ export default class DragCompoents extends Component<any, any> {
       console.log('--null----');
       this.setState({
         EUlayout: [
-          { i: 'g', x: 0, y: 0, w: 6, h: 10 },
-          { i: 'a', x: 0, y: 0, w: 6, h: 10 },
-          { i: 'b', x: 6, y: 0, w: 6, h: 10 },
-          { i: 'c', x: 0, y: 10, w: 3, h: 10 },
-          { i: 'd', x: 3, y: 10, w: 3, h: 10 },
-          { i: 'e', x: 6, y: 10, w: 3, h: 10 },
-          { i: 'f', x: 9, y: 10, w: 3, h: 10 },
+          { i: 'g', x: 0, y: 0, w: 1, h: 1 },
+          { i: 'a', x: 0, y: 0, w: 2, h: 1 },
+          { i: 'b', x: 6, y: 0, w: 1, h: 1 },
+          { i: 'c', x: 0, y: 1, w: 1, h: 1 },
+          { i: 'd', x: 3, y: 1, w: 1, h: 1 },
+          { i: 'e', x: 6, y: 1, w: 1, h: 1 },
+          { i: 'f', x: 9, y: 1, w: 1, h: 10 },
         ],
       });
     } else {
@@ -86,38 +90,45 @@ export default class DragCompoents extends Component<any, any> {
     console.log(EUlayout);
     return (
       <>
-        <div className='dashboardContent'>
+        <div
+          style={{
+            width: 476,
+            height: 476,
+            borderBottom: '1px solid #FFFF',
+            borderRight: '1px solid #FFFF',
+          }}
+        >
           <ResponsiveGridLayout
             className='layout'
             layouts={{ lg: EUlayout }}
             rowHeight={30}
-            breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-            cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+            breakpoints={{ lg: 476, md: 476, sm: 476, xs: 476, xxs: 0 }}
+            cols={{ lg: 3, md: 3, sm: 3, xs: 3, xxs: 3 }}
             isResizable={false}
             onLayoutChange={this.onLayoutChange}
             margin={[8, 8]}
           >
-            <div className='dragcontent' key='g'>
+            <Normal key='g'>
               <div id='dragcontent_a'>设备分布</div>
-            </div>
-            <div className='dragcontent' key='a'>
+            </Normal>
+            <Normal key='a'>
               <div id='dragcontent_a'>最新事件列表</div>
-            </div>
-            <div className='dragcontent' key='b'>
+            </Normal>
+            <Normal key='b'>
               <div id='dragcontent_a'>事件统计(最近七天)</div>
-            </div>
-            <div className='dragcontent' key='c'>
+            </Normal>
+            <Normal key='c'>
               <div id='dragcontent_a'>可用性指标</div>
-            </div>
-            <div className='dragcontent' key='d'>
+            </Normal>
+            <Normal key='d'>
               <div id='dragcontent_a'>环境指标</div>
-            </div>
-            <div className='dragcontent' key='e'>
+            </Normal>
+            <Normal key='e'>
               <div id='dragcontent_a'>可靠性指标</div>
-            </div>
-            <div className='dragcontent' key='f'>
+            </Normal>
+            <Normal key='f'>
               <div id='dragcontent_a'>负荷指标</div>
-            </div>
+            </Normal>
           </ResponsiveGridLayout>
         </div>
       </>
