@@ -3,6 +3,7 @@ import { BuildlingState } from '../types';
 import { fetchBuildingsListAsync, fetchPlanetBuildingsAsync } from './fetchers';
 
 export const initialState: BuildlingState = {
+  buildings: [], // 所有基础建筑
   selfBuildings: [],
 };
 
@@ -12,23 +13,20 @@ export const buildling = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchBuildingsListAsync.fulfilled, (state, action) => {})
-      .addCase(fetchPlanetBuildingsAsync.fulfilled, (state, action) => {
-        const building = action.payload?.buildings?.map(
-          (item: any) => item.building,
-        );
-        const leftArr: any = [];
-        const rightArr: any = [];
-        const map = (building ?? [])?.reduce((current: any, cur: any) => {
-          // 根据type类型，添加到对应的数组中
-          if (cur.type === 1) {
-            leftArr.push(cur);
-          } else {
-            rightArr.push(cur);
+      .addCase(fetchBuildingsListAsync.fulfilled, (state, action) => {
+        const map = (action.payload ?? []).reduce((current: any, next: any) => {
+          const key = next?.type;
+          if (!current[key]) {
+            // eslint-disable-next-line no-param-reassign
+            current[key] = [];
           }
-          return { ...current, 1: leftArr, 2: rightArr };
+          current[key]?.push(next);
+          return current;
         }, {});
-        state.selfBuildings = map;
+        state.buildings = map;
+      })
+      .addCase(fetchPlanetBuildingsAsync.fulfilled, (state, action) => {
+        // console.log(action.payload);
       });
   },
 });

@@ -8,14 +8,14 @@ import { GameInfo, GameThing } from './gameModel';
 
 const Container = styled(Flex)`
   position: relative;
-  width: 476px;
-  height: 476px;
+  /* width: 476px;
+  height: 476px; */
   border: 1px solid #fff;
   /* border-right: 1px solid #fff;
   border-bottom: 1px solid #fff; */
 `;
 
-const Normal = styled(Flex)<{ row: number }>`
+const Normal = styled(Flex)<{ row: number; col: number }>`
   cursor: pointer;
   position: absolute;
   justify-content: center;
@@ -25,12 +25,16 @@ const Normal = styled(Flex)<{ row: number }>`
   font-size: 40px;
   text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
   width: ${({ row }) => row * 158}px;
-  height: ${({ row }) => row * 158}px;
+  height: ${({ col }) => col * 158}px;
   border: 1px solid #fff;
   /* border-top: 1px solid #fff;
   border-left: 1px solid #fff; */
   transition: all 0.5s;
   img {
+    max-width: 100%;
+    object-fit: cover;
+    height: auto;
+    vertical-align: middle;
     pointer-events: none;
   }
 `;
@@ -86,7 +90,8 @@ export const DragCompoents: React.FC<{
   itemData: any;
   rows: number;
   cols: number;
-}> = ({ itemData, cols, rows }) => {
+  gridSize: number;
+}> = ({ itemData, cols, rows, gridSize }) => {
   const dispatch = useDispatch();
   const [state, setState] = React.useState({
     currentTab: 1,
@@ -104,7 +109,7 @@ export const DragCompoents: React.FC<{
   });
   const { data } = state;
 
-  const selfBuildings = useStore(p => p.buildling.selfBuildings);
+  const buildings = useStore(p => p.buildling.buildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
 
   // 计算格子
@@ -120,7 +125,7 @@ export const DragCompoents: React.FC<{
     } else {
       setState({ ...state, data: itemData });
     }
-  }, []);
+  }, [itemData]);
 
   React.useEffect(() => {
     if (data.length > 0) {
@@ -256,29 +261,45 @@ export const DragCompoents: React.FC<{
     }
   };
 
-  const getMinBoxIndex = (arr: any, value: any) => {
-    return arr.findIndex((item: any) => item === value) || 0;
-  };
-
   const handleData = (afterTarget: any) => {
     dragged.style.opacity = '1';
     dragged.style.transform = 'scale(1)';
+    const listData: any = data;
     const from = dragged?.dataset?.id;
     const to = afterTarget?.dataset?.id;
+    const draggedItem = JSON.parse(dragged?.dataset?.item) || {};
+    const targetItem = JSON.parse(afterTarget?.dataset?.item) || {};
 
-    if (from !== to) {
-      const listData = data;
-      listData.splice(to, 0, listData.splice(from, 1)[0]);
-      // [listData[from], listData[to]] = [listData[to], listData[from]];
-      setState({
-        ...state,
-        data: listData,
+    // 目标格子为空时，拖拽到目标格子
+    if (from === undefined || from === null) {
+      console.log(listData);
+      listData.splice(to, 1, {
+        ...targetItem,
+        ...draggedItem,
+        isbuilding: true,
       });
     }
+
+    console.log(afterTarget);
+    // console.log(from, to);
+    // if (from !== to) {
+    //   const listData = data;
+    //   // @ts-ignore
+    //   listData.splice(targetItem.index, 1, draggedItem);
+    //   console.log(listData);
+
+    //   // data[targetItem.index] = draggedItem;
+    //   // listData.splice(to, 0, listData.splice(from, 1)[0]);
+    //   // [listData[from], listData[to]] = [listData[to], listData[from]];
+
+    // }
+    setState({
+      ...state,
+      data: listData,
+    });
   };
 
   const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    console.log('目标元素：', e.target);
     dragged = e.target;
   };
 
@@ -286,9 +307,13 @@ export const DragCompoents: React.FC<{
     dragged.style.opacity = '1';
   };
 
-  const drop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
+  const drop = (event: any) => {
+    event.preventDefault();
     dragged.style.opacity = '1';
+    if (event.target.tagName !== 'DIV') {
+      return;
+    }
+    handleData(event.target);
   };
 
   const dragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -298,33 +323,36 @@ export const DragCompoents: React.FC<{
 
   const dragEnter = (event: any) => {
     event.preventDefault();
-    console.log(event.target.tagName);
-    if (event.target.tagName !== 'DIV') {
-      return;
-    }
-    handleData(event.target);
   };
+
+  // 创建格子到九宫格中
+  const createGrid = () => {};
 
   return (
     <Box>
       <Flex justifyContent='space-between'>
-        <Container ref={dragBox}>
+        <Container
+          ref={dragBox}
+          width={`${rows * gridSize}px`}
+          height={`${cols * gridSize}px`}
+        >
           {state.data.map((item: any, index: number) => {
             return (
               <Normal
                 key={`${item?.index}`}
-                row={item?.row}
                 draggable
                 data-id={index}
                 data-row={item?.row}
+                data-item={JSON.stringify(item)}
+                row={item?.propterty?.size?.area_x}
+                col={item?.propterty?.size?.area_y}
                 onDragStart={dragStart}
                 onDragEnter={dragEnter}
                 onDragOver={dragOver}
                 onDrop={drop}
                 onDragEnd={dragEnd}
-                data-item={JSON.stringify(item)}
               >
-                <img src={item?.icon} alt='' />
+                <img src={item?.picture} alt='' />
               </Normal>
             );
           })}
@@ -351,19 +379,16 @@ export const DragCompoents: React.FC<{
             </Text>
           </Flex>
           <BuildingsScroll ml='40px'>
-            {(selfBuildings[state?.currentTab] ?? []).map((row: any) => (
+            {(buildings[state?.currentTab] ?? []).map((row: any) => (
               <BuildingsItem key={row.buildings_number}>
                 <GameThing
-                  onDragStart={event => {
-                    console.log(event.target);
-                  }}
-                  onDrop={event => {
-                    event.preventDefault();
-                  }}
+                  onDragStart={dragStart}
+                  onDrop={event => event.preventDefault()}
+                  onDragEnter={event => event.preventDefault()}
                   onDragOver={dragOver}
-                  onDragEnter={dragEnter}
-                  src={row.picture}
                   scale='sm'
+                  itemData={row}
+                  src={row.picture}
                   text={row?.propterty.name_cn}
                 />
               </BuildingsItem>
