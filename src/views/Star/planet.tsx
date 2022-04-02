@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -21,6 +21,7 @@ import { useStore } from 'state/util';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
 import { setActivePlanet } from 'state/planet/actions';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
+import { useJoinAlliance } from './hook';
 
 const ScrollBox = styled(Flex)`
   margin-top: 22px;
@@ -42,24 +43,42 @@ const Planet = () => {
   const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
-  const StarList = useStore(p => p.planet.mePlanet);
   const [state, setState] = React.useState({
     page: 1,
+    token: '',
+    race: 0,
   });
+  const StarList = useStore(p => p.planet.mePlanet);
 
-  const init = React.useCallback(() => {
+  const { SetWorking } = useJoinAlliance();
+
+  const ToSetWorking = useCallback(
+    async (id: number) => {
+      try {
+        await SetWorking(id);
+        console.log('成功');
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [SetWorking],
+  );
+
+  const init = useCallback(() => {
     dispatch(
       fetchMePlanetAsync({
         page: state.page,
         page_size: 10,
-        rarity: Number(parsedQs.t),
+        token: state.token,
+        race: state.race,
+        rarity: Number(parsedQs.t) || 0,
       }),
     );
   }, [dispatch, state, parsedQs.t]);
 
   React.useEffect(() => {
     init();
-  }, [parsedQs.t]);
+  }, [parsedQs.t, state.race, state.token]);
 
   return (
     <Layout>
@@ -116,8 +135,10 @@ const Planet = () => {
         <Flex ml={choose ? '7px' : '23px'} flex={1}>
           <BgCard variant={choose ? 'full' : 'big'} fringe padding='40px 37px'>
             <Flex justifyContent='space-between'>
-              <PlanetRaceTabs />
-              <PlanetSearch />
+              <PlanetRaceTabs current={state.race} />
+              <PlanetSearch
+                onEndCallback={e => setState({ ...state, token: e })}
+              />
             </Flex>
             <ScrollBox>
               {(StarList ?? []).map(item => (
@@ -126,6 +147,7 @@ const Planet = () => {
                     <Box
                       onClick={() => {
                         dispatch(setActivePlanet(item));
+                        ToSetWorking(item.id);
                       }}
                     >
                       <PlanetBox info={item} />

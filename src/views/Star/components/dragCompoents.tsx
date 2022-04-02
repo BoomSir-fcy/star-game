@@ -1,6 +1,8 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
+import { useStore } from 'state';
 
 import { GameInfo, GameThing } from './gameModel';
 
@@ -64,14 +66,28 @@ const TabsButton = styled(Button)<{ active?: boolean }>`
     `}
 `;
 
-const target = {} as any;
-let dragged = {} as any;
+const BuildingsScroll = styled(Flex)`
+  max-width: 100%;
+  overflow-x: auto;
+  ::-webkit-scrollbar {
+    width: 1px;
+  }
+`;
 
+const BuildingsItem = styled(Box)`
+  margin-right: 45px;
+  &::last-child {
+    margin-right: 0;
+  }
+`;
+
+let dragged = {} as any;
 export const DragCompoents: React.FC<{
   itemData: any;
   rows: number;
   cols: number;
 }> = ({ itemData, cols, rows }) => {
+  const dispatch = useDispatch();
   const [state, setState] = React.useState({
     currentTab: 1,
     tabs: [
@@ -87,6 +103,8 @@ export const DragCompoents: React.FC<{
     data: [],
   });
   const { data } = state;
+
+  const selfBuildings = useStore(p => p.buildling.selfBuildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
 
   // 计算格子
@@ -332,32 +350,25 @@ export const DragCompoents: React.FC<{
               拖动建筑到需要的格子上
             </Text>
           </Flex>
-          <Flex ml='40px'>
-            <GameThing
-              onDragStart={event => {
-                console.log(event.target);
-              }}
-              onDrop={event => {
-                event.preventDefault();
-              }}
-              onDragOver={dragOver}
-              onDragEnter={dragEnter}
-              scale='sm'
-              text='防空塔'
-            />
-            <GameThing
-              onDragStart={event => {
-                console.log(event.target);
-              }}
-              onDrop={event => {
-                event.preventDefault();
-              }}
-              onDragOver={dragOver}
-              onDragEnter={dragEnter}
-              scale='sm'
-              text='矿石建筑'
-            />
-          </Flex>
+          <BuildingsScroll ml='40px'>
+            {(selfBuildings[state?.currentTab] ?? []).map((row: any) => (
+              <BuildingsItem key={row.buildings_number}>
+                <GameThing
+                  onDragStart={event => {
+                    console.log(event.target);
+                  }}
+                  onDrop={event => {
+                    event.preventDefault();
+                  }}
+                  onDragOver={dragOver}
+                  onDragEnter={dragEnter}
+                  src={row.picture}
+                  scale='sm'
+                  text={row?.propterty.name_cn}
+                />
+              </BuildingsItem>
+            ))}
+          </BuildingsScroll>
         </Flex>
       </BgCard>
     </Box>

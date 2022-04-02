@@ -109,6 +109,10 @@ export interface PlanetState {
   activeMaterialMap: { [x: number]: Api.Planet.PlanetInfo | null };
 }
 
+export interface BuildlingState {
+  selfBuildings: { [type: number]: Api.Building.Building[] };
+}
+
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   State,
@@ -122,6 +126,7 @@ export interface State {
   galaxy: GalaxyState;
   alliance: AllianceState;
   planet: PlanetState;
+  buildling: BuildlingState;
 }
 
 export interface planetInfo {

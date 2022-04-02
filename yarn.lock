@@ -2055,6 +2055,11 @@
   resolved "https://registry.yarnpkg.com/@pixi/display/-/display-6.3.0.tgz#82781587c928ac49ea24dbc675781e885d3c4a08"
   integrity sha512-Uxc1aLTFzV55d3kOlh/g19RlE2okPXsroi5jfYGCNS0VCdFk0sp6jMNEwk12BwC0KcA5SU7217H4jLy38VCVpA==
 
+"@pixi/events@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@pixi/events/-/events-6.3.0.tgz#56d5de336f9d4debdd1ec85de4c5761aff0cc3de"
+  integrity sha512-Cjg5fHS2jbYTGg+jYMMU2ql0WpVWol/FWRQAde6ELXxNq+R6kz7/HDal2dYH52wu541PR6ZSaAASzB2wrIzZ4g==
+
 "@pixi/extract@6.3.0":
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/@pixi/extract/-/extract-6.3.0.tgz#ee1f4eaa933e98c2c54930bb0c1b3f3935e4b1ad"

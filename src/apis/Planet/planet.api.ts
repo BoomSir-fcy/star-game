@@ -16,8 +16,15 @@ export class PlanetApi extends Http {
     return res;
   }
 
+  // 星球培育
   async StrengthenPlante(params: Api.Planet.StrengthenPost) {
     const res = await this.post('planet/Strengthen', params);
+    return res;
+  }
+
+  // 获取星球强化的结果
+  async StrengthenResult(params: Api.Planet.StrengthenPost) {
+    const res = await this.post('planet/Strengthen_result', params);
     return res;
   }
 
@@ -41,5 +48,11 @@ export class PlanetApi extends Http {
   // 星球是否升级成功
   async getUpgradeSuccess(planet_id: number): Promise<Api.Response<any>> {
     return this.post(`/planet/upgrade_success`, { planet_id });
+  }
+
+  // 获取行星是否能够工作
+  async getPlanetCaWork(params: Api.Planet.StrengthenPost) {
+    const res = await this.get('planet/can_work', params);
+    return res;
   }
 }
