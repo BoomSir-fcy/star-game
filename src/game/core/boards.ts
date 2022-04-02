@@ -71,7 +71,7 @@ class Boards {
   }
 
   onHandleWheel(e: any) {
-    const deltaY = e.deltaY;
+    const { deltaY } = e;
     const down = deltaY > 0;
 
     this.scale = down
