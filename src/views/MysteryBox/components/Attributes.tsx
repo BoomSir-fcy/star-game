@@ -1,17 +1,24 @@
 import React, { useCallback, useMemo } from 'react';
+import { useTranslation } from 'contexts/Localization';
 import { Box, Text, Flex, BoxProps } from 'uikit';
 import { QualityColor } from 'uikit/theme/colors';
+import { Qualities } from 'uikit/theme/types';
 import { LabelStyled, LabelText, AttrText } from './styled';
-import { Info } from '../type';
 
 interface AttributesProps extends BoxProps {
-  info: Info;
+  info: any;
 }
 const Attributes: React.FC<AttributesProps> = ({
   info,
   children,
   ...props
 }) => {
+  const { t } = useTranslation();
+
+  const rarity = useMemo(() => {
+    return info?.rarity as Qualities;
+  }, [info]);
+
   return (
     <Box {...props}>
       <Text mb='10px'>Attributes</Text>
@@ -29,8 +36,8 @@ const Attributes: React.FC<AttributesProps> = ({
         <LabelStyled ml='15px'>
           <LabelText>稀有度:</LabelText>
           {/* TODO: 翻译待完成 */}
-          <AttrText color={QualityColor[info.rarity]}>
-            {QualityColor[info.rarity]}
+          <AttrText color={QualityColor[rarity]}>
+            {rarity ? t(`rarity-${rarity}`) : ''}
           </AttrText>
         </LabelStyled>
       </Flex>

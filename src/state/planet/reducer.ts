@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { PlanetState } from 'state/types';
-import { setActivePlanet } from './actions';
+import { setActiveMaterialMap, setActivePlanet } from './actions';
 
 import { fetchMePlanetAsync, fetchPlanetInfoAsync } from './fetchers';
 
@@ -42,6 +42,7 @@ export const initialState: PlanetState = {
     build: 0, // 建筑成本
     is_available: false,
   },
+  activeMaterialMap: {},
 };
 
 export const planet = createSlice({
@@ -58,11 +59,19 @@ export const planet = createSlice({
       })
       .addCase(fetchPlanetInfoAsync.fulfilled, (state, action) => {
         const mapObject: { [x: number]: Api.Planet.PlanetInfo } = {};
-        action.payload.map(item => {
+        action.payload?.map(item => {
           mapObject[item.id] = item;
           return mapObject;
         });
         state.planetInfo = mapObject;
+      })
+      .addCase(setActiveMaterialMap, (state, { payload }) => {
+        const map = { ...state.activeMaterialMap, ...payload };
+        // 删除value为null的key
+        Object.keys(map).forEach(
+          key => map[Number(key)] === null && delete map[Number(key)],
+        );
+        state.activeMaterialMap = map;
       });
   },
 });

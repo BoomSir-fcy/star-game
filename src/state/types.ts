@@ -106,6 +106,7 @@ export interface PlanetState {
   mePlanet: Api.Planet.PlanetInfo[];
   planetInfo: { [x: number]: Api.Planet.PlanetInfo };
   activePlanet: Api.Planet.PlanetInfo;
+  activeMaterialMap: { [x: number]: Api.Planet.PlanetInfo | null };
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<
