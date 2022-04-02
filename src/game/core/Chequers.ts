@@ -24,9 +24,9 @@ const mapType = {
 } as const;
 
 const stateType = {
-  STATE1: 'state1',
-  STATE2: 'state2',
-  STATE3: 'state3',
+  PREVIEW: 'state1',
+  ACTIVE: 'state2',
+  DISABLE: 'state3',
 } as const;
 
 export type MapType = typeof mapType[keyof typeof mapType];
@@ -72,11 +72,11 @@ class Chequer {
 
    static [mapType.MAP6] = Texture.from('/assets/map/map6.png');
 
-   static [stateType.STATE1] = Texture.from('/assets/map/state1.png');
+   static [stateType.PREVIEW] = Texture.from('/assets/map/state1.png');
 
-   static [stateType.STATE2] = Texture.from('/assets/map/state2.png');
+   static [stateType.ACTIVE] = Texture.from('/assets/map/state2.png');
 
-   static [stateType.STATE3] = Texture.from('/assets/map/state3.png');
+   static [stateType.ACTIVE] = Texture.from('/assets/map/state3.png');
 
 
   textureButtonDown = Texture.from('/assets/map/map1.png');
@@ -85,7 +85,7 @@ class Chequer {
 
   textureButton = Texture.from('/assets/map/map4.png');
 
-  stateSprite = new Sprite(Chequer[stateType.STATE1]);
+  stateSprite = new Sprite(Chequer[stateType.PREVIEW]);
 
   graphics = new Graphics();
 
