@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Card, Flex, Box, Text, Image } from 'uikit';
 import StarCom from 'components/StarCom';
 
-import { Qualities } from 'uikit/theme/types';
+import { Qualities, qualities } from 'uikit/theme/types';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 
 import { PlanetDesc } from './PlanetDesc';
@@ -28,40 +28,6 @@ export const PlanetBox: React.FC<{
     time: 86970,
   });
   let timer = null as any;
-
-  // ORDINARY: 'ordinary', // 普通
-  // GOOD: 'good', // 良好
-  // RARE: 'rare', // 稀有
-  // EPIC: 'epic', // 史诗
-  // LEGEND: 'legend', // 传说
-  // MYTHOLOGY: 'mythology', // 神话
-  const getLevel = (num: number) => {
-    let str = '';
-    switch (num) {
-      case 1:
-        str = 'ordinary';
-        break;
-      case 2:
-        str = 'good';
-        break;
-      case 3:
-        str = 'rare';
-        break;
-      case 4:
-        str = 'epic';
-        break;
-      case 5:
-        str = 'legend';
-        break;
-      case 6:
-        str = 'mythology';
-        break;
-      default:
-        str = 'ordinary';
-        break;
-    }
-    return str;
-  };
 
   // 倒计时
   const countDown = () => {
@@ -95,7 +61,7 @@ export const PlanetBox: React.FC<{
   return (
     <CardBox>
       <Flex>
-        <StarCom quality={2} />
+        <StarCom quality={info?.rarity} />
         <Flex ml='29px' flex='1' flexDirection='column'>
           <Desc justifyContent='space-between'>
             {status === 'upgrade' ? (

@@ -72,6 +72,7 @@ const Level = styled(Text)`
 
 export const GameThing: React.FC<{
   scale: 'ld' | 'lg' | 'md' | 'sm';
+  src?: string;
   text?: string;
   active?: boolean;
   border?: boolean;
@@ -81,6 +82,7 @@ export const GameThing: React.FC<{
   onDragEnter?: (e: React.DragEvent<HTMLDivElement>) => void;
 }> = ({
   scale,
+  src,
   text,
   active,
   border,
@@ -109,7 +111,7 @@ export const GameThing: React.FC<{
           <Image
             width={sizeBox.width}
             height={sizeBox.height}
-            src='/images/model/combat_01.png'
+            src={src || '/images/model/combat_01.png'}
           />
         </Box>
       </Container>
