@@ -4,7 +4,7 @@ import { EventSystem } from '@pixi/events'
 // import { EventSystem } from '@pixi/events';
 // import { Stage, Layer, Group } from '@pixi/layers'
 import config from 'game/config';
-import Chequer from './Chequers';
+import Chequer from './Chequer';
 
 /* eslint-disable no-param-reassign */
 
