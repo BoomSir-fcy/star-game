@@ -8,7 +8,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import Nav from 'components/Nav';
 import Layout from 'components/Layout';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
-import { fetchBuildingsListAsync } from 'state/buildling/fetchers';
+import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { StarHeader } from './components';
 
 const Star: React.FC<{
@@ -21,7 +21,7 @@ const Star: React.FC<{
   React.useEffect(() => {
     if (id) {
       dispatch(fetchPlanetInfoAsync([id]));
-      dispatch(fetchBuildingsListAsync(1));
+      dispatch(fetchPlanetBuildingsAsync(id));
     }
   }, [id, dispatch]);
 
