@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -20,6 +20,7 @@ import Nav from 'components/Nav';
 import { useStore } from 'state/util';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
 import { setActivePlanet } from 'state/planet/actions';
+import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 import { useJoinAlliance } from './hook';
 
@@ -43,25 +44,39 @@ const Planet = () => {
   const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     page: 1,
     token: '',
     race: 0,
   });
-  const StarList = useStore(p => p.planet.mePlanet);
-
+  const [StarList, setStarList] = useState<Api.Planet.PlanetInfo[]>([]);
+  const mePlanet = useStore(p => p.planet.mePlanet);
+  const workingList = useStore(p => p.alliance.workingPlanet);
   const { SetWorking } = useJoinAlliance();
 
   const ToSetWorking = useCallback(
     async (id: number) => {
       try {
-        await SetWorking(id);
-        console.log('成功');
+        let newList = workingList.concat([]);
+        if (newList.indexOf(Number(id)) !== -1) {
+          console.log('已在联盟中');
+          return;
+        }
+        if (Number(choose) !== 1 && newList.indexOf(Number(choose)) === -1) {
+          // 添加星球
+          newList.push(id);
+        } else {
+          // 替换星球
+          const index = newList.indexOf(Number(choose));
+          newList = newList.splice(index, 1, id);
+        }
+        console.log(newList);
+        await SetWorking(id, newList);
       } catch (e) {
         console.log(e);
       }
     },
-    [SetWorking],
+    [SetWorking, workingList, choose],
   );
 
   const init = useCallback(() => {
@@ -74,11 +89,23 @@ const Planet = () => {
         rarity: Number(parsedQs.t) || 0,
       }),
     );
+    dispatch(fetchAllianceViewAsync());
   }, [dispatch, state, parsedQs.t]);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (choose) {
+      const list = mePlanet.filter(item => {
+        return item.id !== Number(choose);
+      });
+      setStarList(list);
+    } else {
+      setStarList(mePlanet);
+    }
+  }, [mePlanet, choose]);
+
+  useEffect(() => {
     init();
-  }, [parsedQs.t, state.race, state.token]);
+  }, [parsedQs.t, choose, state.race, state.token]);
 
   return (
     <Layout>
@@ -97,37 +124,37 @@ const Planet = () => {
               {
                 id: 0,
                 label: '全部',
-                path: `/star/planet?t=0${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=0&choose=${choose || ''}`,
               },
               {
                 id: 1,
                 label: '普通',
-                path: `/star/planet?t=1${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=1&choose=${choose || ''}`,
               },
               {
                 id: 2,
                 label: '良好',
-                path: `/star/planet?t=2${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=2&choose=${choose || ''}`,
               },
               {
                 id: 3,
                 label: '稀有',
-                path: `/star/planet?t=3${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=3&choose=${choose || ''}`,
               },
               {
                 id: 4,
                 label: '史诗',
-                path: `/star/planet?t=4${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=4&choose=${choose || ''}`,
               },
               {
                 id: 5,
                 label: '传说',
-                path: `/star/planet?t=5${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=5&choose=${choose || ''}`,
               },
               {
                 id: 6,
                 label: '神话',
-                path: `/star/planet?t=6${choose ? '&choose=1' : ''}`,
+                path: `/star/planet?t=6&choose=${choose || ''}`,
               },
             ]}
           />

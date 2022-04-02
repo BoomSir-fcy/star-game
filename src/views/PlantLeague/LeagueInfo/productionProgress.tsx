@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Box, Flex, Text, Image, Progress, Button } from 'uikit';
 import styled from 'styled-components';
 import { useStore } from 'state';
+import { fetchAllianceViewAsync } from 'state/alliance/reducer';
+import { useDispatch } from 'react-redux';
 
 const ProgressBox = styled(Box)`
   position: relative;
@@ -24,19 +26,76 @@ const ProgressTextBox = styled(Box)`
 const BtnFlex = styled(Flex)``;
 
 const ProductionProgress = () => {
-  const { alliance } = useStore(p => p.alliance.allianceView);
+  const dispatch = useDispatch();
+  const { end_time, free_time, alliance } = useStore(
+    p => p.alliance.allianceView,
+  );
+  const [state, setState] = useState({
+    time: 0,
+  });
+  let timer = null as any;
+
+  const progressRate = useMemo(() => {
+    const time = (((end_time - state.time) / end_time) * 100).toFixed(2);
+    return Number(time);
+  }, [state]);
+
+  // 倒计时
+  const countDown = () => {
+    if (alliance.working <= 0) {
+      return;
+    }
+    timer = setInterval(() => {
+      const { time } = state;
+      if (time > 0) {
+        setState({
+          ...state,
+          time: time - 1,
+        });
+      } else {
+        clearInterval(timer);
+        dispatch(fetchAllianceViewAsync());
+      }
+    }, 1000);
+  };
+
+  const formatTime = (time: number) => {
+    const hour = Math.floor(time / 3600);
+    const min = Math.floor((time % 3600) / 60);
+    const sec = time % 60;
+    return `${hour}h:${min}m:${sec}s`;
+  };
+
+  useEffect(() => {
+    if (alliance.working <= 0) {
+      setState({
+        time: end_time,
+      });
+      return;
+    }
+    setState({
+      time: free_time,
+    });
+  }, [free_time, alliance]);
+
+  useEffect(() => {
+    countDown();
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [state]);
 
   return (
     <Flex flex='1' flexDirection='column' padding='30px'>
       <Flex mb='20px' justifyContent='center'>
-        <Text fontSize='20px'>资源生产(3h:30:30)</Text>
+        <Text fontSize='20px'>资源生产({formatTime(state.time)})</Text>
       </Flex>
       <ProgressBox mb='56px' ml='15px'>
         <Progress
           color='progressBar'
           variant='flat'
           scale='lg'
-          primaryStep={36}
+          primaryStep={progressRate}
         />
         <ProgressImage
           src='/images/planetary_alliance/progress.png'
@@ -46,7 +105,7 @@ const ProductionProgress = () => {
         <ProgressTextBox>
           <Flex height='100%' justifyContent='center' alignItems='center'>
             <Text fontSize='22px' shadow='primary'>
-              36%
+              {progressRate}%
             </Text>
           </Flex>
         </ProgressTextBox>

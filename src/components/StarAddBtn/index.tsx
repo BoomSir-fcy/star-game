@@ -71,7 +71,7 @@ interface StarAddBtnProps extends BoxProps {
   active?: boolean;
   owner?: string;
   No?: number;
-  Leve?: string;
+  Leve?: string | number;
   url?: string;
   size?: string;
   imgBorder?: boolean;

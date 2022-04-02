@@ -192,9 +192,12 @@ export interface energyInfo {
 }
 export interface AllianceView {
   alliance: allianceInfo;
+  end_time: number;
+  free_time: number;
   order: orderInfo[];
   energy: energyInfo;
 }
 export interface AllianceState {
   allianceView: AllianceView;
+  workingPlanet: number[];
 }
