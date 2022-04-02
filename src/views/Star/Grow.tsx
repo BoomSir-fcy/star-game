@@ -60,8 +60,6 @@ const Grow: React.FC = () => {
         const { data } = res;
         setNowPlante(data?.now_planet_info);
         setEstimatePlante(data?.estimate_planet_info);
-      } else {
-        getPlanetStrengthen();
       }
     } catch (error) {
       console.log(error);
@@ -91,7 +89,7 @@ const Grow: React.FC = () => {
     return `${hour}h:${min}m:${sec}s`;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     countDown();
     return () => {
       if (timer) clearInterval(timer);

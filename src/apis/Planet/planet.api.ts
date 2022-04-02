@@ -34,4 +34,10 @@ export class PlanetApi extends Http {
   ): Promise<Api.Response<{ Data: Api.Planet.PlanetInfo[] }>> {
     return this.get(`/planet/info?token_id=${JSON.stringify(ids)}`);
   }
+
+  // 获取行星是否能够工作
+  async getPlanetCaWork(params: Api.Planet.StrengthenPost) {
+    const res = await this.get('planet/can_work', params);
+    return res;
+  }
 }
