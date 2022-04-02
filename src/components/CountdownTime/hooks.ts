@@ -1,17 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 
-export const useCountdownTime = (endTime: number, startTime?: number) => {
+export const useCountdownTime = (
+  endTime = 0,
+  startTime = 0,
+  timePeriod = 0,
+) => {
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const [diffSecond, setDiffSecond] = useState(0); // 秒
+
   useEffect(() => {
+    // 截止时间
     const startCountdown = async () => {
       let nowTime = dayjs().unix();
       if (startTime) {
         nowTime = startTime;
       }
       setDiffSecond(endTime - nowTime);
-
       if (endTime > nowTime) {
         if (timer.current) {
           clearInterval(timer.current);
@@ -22,15 +27,30 @@ export const useCountdownTime = (endTime: number, startTime?: number) => {
         }, 1000);
       }
     };
-    startCountdown();
-
+    // 时间段(s)
+    const startCountdownPeriod = async () => {
+      setDiffSecond(timePeriod);
+      if (timePeriod) {
+        if (timer.current) {
+          clearInterval(timer.current);
+        }
+        timer.current = setInterval(() => {
+          setDiffSecond(p => p - 1);
+        }, 1000);
+      }
+    };
+    if (endTime) {
+      startCountdown();
+    }
+    if (timePeriod) {
+      startCountdownPeriod();
+    }
     return () => {
       if (timer.current) {
         clearInterval(timer.current);
       }
     };
-  }, [setDiffSecond, endTime, startTime]);
-
+  }, [endTime, startTime]);
   return diffSecond;
 };
 

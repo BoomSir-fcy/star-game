@@ -67,6 +67,21 @@ const StarImage = styled.img<StarAddBtnProps>`
   border: ${({ imgBorder, theme }) =>
     imgBorder ? `2px solid ${theme.colors.goldBorder}` : 'none'};
 `;
+
+const RemoveIcon = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 18px;
+  width: 37px;
+  height: 37px;
+  line-height: 30px;
+  text-align: center;
+  background: ${({ theme }) => theme.colors.backgroundDisabled};
+  border-radius: 50%;
+  color: #fff;
+  font-size: 60px;
+  z-index: 2;
+`;
 interface StarAddBtnProps extends BoxProps {
   active?: boolean;
   owner?: string;
@@ -75,7 +90,9 @@ interface StarAddBtnProps extends BoxProps {
   url?: string;
   size?: string;
   imgBorder?: boolean;
+  showIcon?: boolean;
   callBack?: () => void;
+  onRemove?: () => void;
 }
 
 const StarAddBtn: React.FC<StarAddBtnProps> = ({
@@ -87,7 +104,9 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
   url,
   size = '175px',
   imgBorder,
+  showIcon,
   callBack,
+  onRemove,
   ...props
 }) => {
   const { className, ...restProps } = props;
@@ -103,6 +122,18 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
       size={size}
       {...restProps}
     >
+      {showIcon && url && (
+        <RemoveIcon
+          onClick={e => {
+            e.stopPropagation();
+            if (onRemove) {
+              onRemove();
+            }
+          }}
+        >
+          -
+        </RemoveIcon>
+      )}
       {owner && (
         <OwnerFlex>
           <Text small>{owner}</Text>
