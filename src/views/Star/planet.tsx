@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -21,6 +21,7 @@ import { useStore } from 'state/util';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
 import { setActivePlanet } from 'state/planet/actions';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
+import { useJoinAlliance } from './hook';
 
 const ScrollBox = styled(Flex)`
   margin-top: 22px;
@@ -47,7 +48,21 @@ const Planet = () => {
     page: 1,
   });
 
-  const init = React.useCallback(() => {
+  const { SetWorking } = useJoinAlliance();
+
+  const ToSetWorking = useCallback(
+    async (id: number) => {
+      try {
+        await SetWorking(id);
+        console.log('成功');
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [SetWorking],
+  );
+
+  const init = useCallback(() => {
     dispatch(
       fetchMePlanetAsync({
         page: state.page,
@@ -126,6 +141,7 @@ const Planet = () => {
                     <Box
                       onClick={() => {
                         dispatch(setActivePlanet(item));
+                        ToSetWorking(item.id);
                       }}
                     >
                       <PlanetBox info={item} />

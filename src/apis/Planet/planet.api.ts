@@ -16,8 +16,15 @@ export class PlanetApi extends Http {
     return res;
   }
 
+  // 星球培育
   async StrengthenPlante(params: Api.Planet.StrengthenPost) {
     const res = await this.post('planet/Strengthen', params);
+    return res;
+  }
+
+  // 获取星球强化的结果
+  async StrengthenResult(params: Api.Planet.StrengthenPost) {
+    const res = await this.post('planet/Strengthen_result', params);
     return res;
   }
 
