@@ -37,18 +37,31 @@ const TabsButton = styled(Button)<{ active?: boolean }>`
     `}
 `;
 
-export const PlanetRaceTabs = () => {
+export const PlanetRaceTabs: React.FC<{
+  current?: number;
+}> = ({ current }) => {
+  const raceArr = [
+    {
+      id: 1,
+      label: '神族',
+    },
+    {
+      id: 2,
+      label: '人族',
+    },
+    {
+      id: 3,
+      label: '虫族',
+    },
+  ];
+
   return (
     <Container>
-      <TabsButton scale='sm' variant='text' active>
-        神族
-      </TabsButton>
-      <TabsButton scale='sm' variant='text'>
-        虫族
-      </TabsButton>
-      <TabsButton scale='sm' variant='text'>
-        人族
-      </TabsButton>
+      {raceArr.map(({ id, label }) => (
+        <TabsButton key={id} scale='sm' variant='text' active={current === id}>
+          {label}
+        </TabsButton>
+      ))}
     </Container>
   );
 };

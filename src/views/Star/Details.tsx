@@ -1,12 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { Box } from 'uikit';
 
 import { DragCompoents } from './components/dragCompoents';
 
 const Upgrade = () => {
-  const dispatch = useDispatch();
-
   const [state, setState] = React.useState({
     box: [
       {

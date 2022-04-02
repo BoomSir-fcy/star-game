@@ -42,24 +42,28 @@ const Planet = () => {
   const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
-  const StarList = useStore(p => p.planet.mePlanet);
   const [state, setState] = React.useState({
     page: 1,
+    token: '',
+    race: 0,
   });
+  const StarList = useStore(p => p.planet.mePlanet);
 
   const init = React.useCallback(() => {
     dispatch(
       fetchMePlanetAsync({
         page: state.page,
         page_size: 10,
-        rarity: Number(parsedQs.t),
+        token: state.token,
+        race: state.race,
+        rarity: Number(parsedQs.t) || 0,
       }),
     );
   }, [dispatch, state, parsedQs.t]);
 
   React.useEffect(() => {
     init();
-  }, [parsedQs.t]);
+  }, [parsedQs.t, state.race, state.token]);
 
   return (
     <Layout>
@@ -116,8 +120,10 @@ const Planet = () => {
         <Flex ml={choose ? '7px' : '23px'} flex={1}>
           <BgCard variant={choose ? 'full' : 'big'} fringe padding='40px 37px'>
             <Flex justifyContent='space-between'>
-              <PlanetRaceTabs />
-              <PlanetSearch />
+              <PlanetRaceTabs current={state.race} />
+              <PlanetSearch
+                onEndCallback={e => setState({ ...state, token: e })}
+              />
             </Flex>
             <ScrollBox>
               {(StarList ?? []).map(item => (

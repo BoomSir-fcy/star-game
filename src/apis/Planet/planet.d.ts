@@ -2,6 +2,8 @@ declare namespace Api {
   namespace Planet {
     // 我的星球分页参数
     interface PageParams {
+      race?: number;
+      token?: string;
       rarity?: number;
       page: number;
       page_size: number;
@@ -18,7 +20,7 @@ declare namespace Api {
       name: string; // 星球名
       owner: string; // 当前所有人
       oldOwner: string; // 上一个所有人
-      rarity: number; // 品质1-6
+      rarity: 1 | 2 | 3 | 4 | 5 | 6; // 品质1-6
       level: number; // 等级 从1开始
       strengthenLevel: number; // 强化等级
       working: boolean; // 是否工作 1工作

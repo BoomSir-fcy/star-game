@@ -7,6 +7,7 @@ import mysteryBoxReducer from './mysteryBox/reducer';
 import galaxyReducer from './galaxy/reducer';
 import planetReducer from './planet/reducer';
 import allianceReducer from './alliance/reducer';
+import buildlingReducer from './buildling/reducer';
 import { updateVersion } from './global/actions';
 
 export { useStore } from './util';
@@ -22,6 +23,7 @@ const store = configureStore({
     galaxy: galaxyReducer,
     planet: planetReducer,
     alliance: allianceReducer,
+    buildling: buildlingReducer,
   },
   middleware: getDefaultMiddleware => [
     ...getDefaultMiddleware({ thunk: true }),
