@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Button, Text, Flex, Card } from 'uikit';
 import { useStore } from 'state';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 import StarCom from 'components/StarCom';
 
@@ -26,31 +27,36 @@ const ButtonStyled = styled(Button)`
 `;
 const StarHeader = () => {
   const dispatch = useDispatch();
-  const planetInfo = useStore(p => p.planet.planetInfo);
+  const parsedQs = useParsedQueryString();
+  const id = Number(parsedQs.id);
+  const planetInfo = useStore(p => p.planet.planetInfo[id ?? 0]);
   const [state, setState] = React.useState({
     visible: false,
   });
-
-  console.log(planetInfo);
 
   return (
     <Flex flex={1}>
       <CardStyled ml='82px'>
         <Flex padding='20px' justifyContent='space-between'>
           <Flex>
-            <StarCom scale='sm' quality={2} mr='40px' showUnion />
+            <StarCom
+              scale='sm'
+              quality={planetInfo?.rarity}
+              mr='40px'
+              showUnion
+            />
             <Flex flexDirection='column' justifyContent='space-between'>
               <Flex alignItems='center'>
                 <Text color='legend'>传说</Text>
                 <Text ml='13px' bold>
-                  Lv1
+                  Lv{planetInfo?.level}
                 </Text>
                 <TextStyled ml='52px' small>
-                  0x9866w6d6+x5d6q666s3dsd26fd
+                  {planetInfo?.id}
                 </TextStyled>
               </Flex>
               <Flex>
-                <Flex mr='100px'>
+                <Flex alignItems='center' mr='100px'>
                   <ImageStyled src='/images/commons/icon/ore.png' />
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
@@ -58,7 +64,7 @@ const StarHeader = () => {
                         总产能
                       </TextStyled>
                       <TextStyled ml='20px' small>
-                        0.32/s
+                        {planetInfo?.energyYield}/s
                       </TextStyled>
                     </Flex>
                     <Flex>
@@ -71,7 +77,7 @@ const StarHeader = () => {
                     </Flex>
                   </Flex>
                 </Flex>
-                <Flex mr='100px'>
+                <Flex alignItems='center' mr='100px'>
                   <ImageStyled src='/images/commons/icon/population.png' />
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
@@ -79,12 +85,12 @@ const StarHeader = () => {
                         总产能
                       </TextStyled>
                       <TextStyled ml='20px' small>
-                        0.32/s
+                        {planetInfo?.populationYield}/s
                       </TextStyled>
                     </Flex>
                     <Flex>
                       <TextStyled color='textTips' small>
-                        总矿石
+                        总人工
                       </TextStyled>
                       <TextStyled ml='20px' small>
                         10/100
@@ -92,15 +98,15 @@ const StarHeader = () => {
                     </Flex>
                   </Flex>
                 </Flex>
-                <Flex>
+                <Flex alignItems='center'>
                   <ImageStyled src='/images/commons/icon/energy.png' />
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
                       <TextStyled color='textTips' small>
-                        总产能
+                        总能量
                       </TextStyled>
                       <TextStyled ml='20px' small>
-                        0.32/s
+                        {planetInfo?.energyYield}/s
                       </TextStyled>
                     </Flex>
                     <Flex>
