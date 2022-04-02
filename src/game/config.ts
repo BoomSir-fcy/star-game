@@ -1,5 +1,5 @@
 const config = {
-  WIDTH: 800,
+  WIDTH: 1400,
   HEIGHT: 600,
   resolution: 1,
 
@@ -18,6 +18,13 @@ const config = {
   SCALE_BASE: 0.2,
   MAX_SCALE: 1.5,
   MIN_SCALE: 0.5,
+
+  BLOOD_PER: 100, // 每格血条代表多少血量
+  BLOOD_COLOR: 0X32ff32, // 血条颜色
+  BLOOD_COLOR_ENEMY: 0Xb22323, // 敌方血条颜色
+  BLOOD_COLOR_BACK: 0X000000, // 空血的血条颜色
+  BLOOD_WIDTH: 80,
+
 
 }
 

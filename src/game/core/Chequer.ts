@@ -52,6 +52,10 @@ class Chequer {
 
   static X_RATIO = 0.48;
 
+  axisX = 0;
+  
+  axisY = 0;
+
   src = '';
 
   bunny: Sprite = new Sprite();
@@ -95,6 +99,9 @@ class Chequer {
 
     // const texture = Texture.from(src);
 
+    this.axisX = axisX;
+    this.axisY = axisY;
+
     this.bunny = new Sprite(Chequer[type]);
     this.bunny.anchor.set(0.5);
     this.bunny.width = 100;
@@ -134,21 +141,26 @@ class Chequer {
     // this.graphics.addChild(new Text(`${color}`))
 
     this.graphics.interactive = true;
-    this.graphics
-    .on('pointerdown', () => this.onButtonDown())
-    .on('pointerup', () => this.onButtonUp())
-    .on('pointerupoutside', () => this.onButtonUp())
-    .on('pointerover', (e) => this.onButtonOver(e))
-    .on('pointerout', () => this.onButtonOut());
+    this.graphics.on('pointerdown', () => this.onButtonDown())
+      .on('pointerup', () => this.onButtonUp())
+      .on('pointerupoutside', () => this.onButtonUp())
+      .on('pointerover', (e) => this.onButtonOver(e))
+      .on('pointerout', () => this.onButtonOut());
 
 
     return this.graphics;
   }
 
   getXY(axisX: number, axisY: number) {
+    
+    // 把两个棋盘分成2份
+    let excessOffset = 0;
+    if (axisY >= config.BOARDS_COL_COUNT / 2) {
+      excessOffset = 16
+    }
     return {
-      x: config.OFFSET_START_X + (axisX - axisY) * this.bunny.width * Chequer.X_RATIO,
-      y: config.OFFSET_START_Y + (axisX + axisY) * this.bunny.height * Chequer.Y_RATIO,
+      x: config.OFFSET_START_X - excessOffset + (axisX - axisY) * this.bunny.width * Chequer.X_RATIO,
+      y: config.OFFSET_START_Y + excessOffset + (axisX + axisY) * this.bunny.height * Chequer.Y_RATIO,
     }
 
   }

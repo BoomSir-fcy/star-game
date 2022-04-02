@@ -14,7 +14,7 @@ export class UserApi extends Http {
 
   // 用户登录
   async userSignIn(params: Api.User.ParamsSignIn): Promise<Api.Response<Api.User.SignIn>> {
-    return this.post('user/signin', params)
+    return this.post('user/signin', params, { ignoreSSID: true })
   }
 
   // 用户登出
