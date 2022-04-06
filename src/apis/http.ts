@@ -6,6 +6,7 @@ import dispatchHttpErrorEvent from './httpErrorEvent';
 
 interface AxiosRequestConfigCustom extends AxiosRequestConfig {
   hideHttpError?: boolean
+  ignoreSSID?: boolean // 是否忽略SSID
 }
 
 const baseURL = process.env.REACT_APP_API_HOST;
@@ -42,7 +43,7 @@ export class Http {
     try {
       response = await axios({
         ...configs,
-        headers: SSID ? { ...configs.headers, SSID } : configs.headers,
+        headers: (SSID &&  !configs.ignoreSSID) ? { ...configs.headers, SSID } : configs.headers,
       });
 
       dispatchHttpErrorEvent(response.data);

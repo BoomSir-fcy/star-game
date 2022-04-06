@@ -24,9 +24,9 @@ const mapType = {
 } as const;
 
 const stateType = {
-  STATE1: 'state1',
-  STATE2: 'state2',
-  STATE3: 'state3',
+  PREVIEW: 'state1',
+  ACTIVE: 'state2',
+  DISABLE: 'state3',
 } as const;
 
 export type MapType = typeof mapType[keyof typeof mapType];
@@ -52,6 +52,10 @@ class Chequer {
 
   static X_RATIO = 0.48;
 
+  axisX = 0;
+  
+  axisY = 0;
+
   src = '';
 
   bunny: Sprite = new Sprite();
@@ -72,11 +76,11 @@ class Chequer {
 
    static [mapType.MAP6] = Texture.from('/assets/map/map6.png');
 
-   static [stateType.STATE1] = Texture.from('/assets/map/state1.png');
+   static [stateType.PREVIEW] = Texture.from('/assets/map/state1.png');
 
-   static [stateType.STATE2] = Texture.from('/assets/map/state2.png');
+   static [stateType.ACTIVE] = Texture.from('/assets/map/state2.png');
 
-   static [stateType.STATE3] = Texture.from('/assets/map/state3.png');
+   static [stateType.ACTIVE] = Texture.from('/assets/map/state3.png');
 
 
   textureButtonDown = Texture.from('/assets/map/map1.png');
@@ -85,7 +89,7 @@ class Chequer {
 
   textureButton = Texture.from('/assets/map/map4.png');
 
-  stateSprite = new Sprite(Chequer[stateType.STATE1]);
+  stateSprite = new Sprite(Chequer[stateType.PREVIEW]);
 
   graphics = new Graphics();
 
@@ -94,6 +98,9 @@ class Chequer {
     // this.src = src;
 
     // const texture = Texture.from(src);
+
+    this.axisX = axisX;
+    this.axisY = axisY;
 
     this.bunny = new Sprite(Chequer[type]);
     this.bunny.anchor.set(0.5);
@@ -134,21 +141,26 @@ class Chequer {
     // this.graphics.addChild(new Text(`${color}`))
 
     this.graphics.interactive = true;
-    this.graphics
-    .on('pointerdown', () => this.onButtonDown())
-    .on('pointerup', () => this.onButtonUp())
-    .on('pointerupoutside', () => this.onButtonUp())
-    .on('pointerover', (e) => this.onButtonOver(e))
-    .on('pointerout', () => this.onButtonOut());
+    this.graphics.on('pointerdown', () => this.onButtonDown())
+      .on('pointerup', () => this.onButtonUp())
+      .on('pointerupoutside', () => this.onButtonUp())
+      .on('pointerover', (e) => this.onButtonOver(e))
+      .on('pointerout', () => this.onButtonOut());
 
 
     return this.graphics;
   }
 
   getXY(axisX: number, axisY: number) {
+    
+    // 把两个棋盘分成2份
+    let excessOffset = 0;
+    if (axisY >= config.BOARDS_COL_COUNT / 2) {
+      excessOffset = 16
+    }
     return {
-      x: config.OFFSET_START_X + (axisX - axisY) * this.bunny.width * Chequer.X_RATIO,
-      y: config.OFFSET_START_Y + (axisX + axisY) * this.bunny.height * Chequer.Y_RATIO,
+      x: config.OFFSET_START_X - excessOffset + (axisX - axisY) * this.bunny.width * Chequer.X_RATIO,
+      y: config.OFFSET_START_Y + excessOffset + (axisX + axisY) * this.bunny.height * Chequer.Y_RATIO,
     }
 
   }

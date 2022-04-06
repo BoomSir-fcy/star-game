@@ -62,10 +62,13 @@ const Planet = () => {
           console.log('已在联盟中');
           return;
         }
-        if (Number(choose) !== 1 && newList.indexOf(Number(choose)) === -1) {
+        if (newList.indexOf(Number(choose)) === -1) {
           // 添加星球
           newList.push(id);
-        } else {
+        } else if (
+          Number(choose) !== 1 &&
+          newList.indexOf(Number(choose)) !== -1
+        ) {
           // 替换星球
           const index = newList.indexOf(Number(choose));
           newList = newList.splice(index, 1, id);

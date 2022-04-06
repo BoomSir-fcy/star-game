@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, Text } from 'uikit';
-import Boards from 'game/core/boards';
+import Boards from 'game/core/Boards';
 
 const Embattle = () => {
   const [boards] = useState(new Boards());
