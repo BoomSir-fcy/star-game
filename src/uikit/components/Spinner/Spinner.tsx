@@ -1,22 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { LoadingIcon } from 'uikit';
 import { Box, BoxProps } from '../Box';
 import { Image } from '../Image';
 import { SpinnerProps } from './types';
 
-const Container = styled(Box)`
-  position: relative;
-  margin: 0 auto;
-  position: relative;
-  transform: translate3d(0, 0, 0);
-  object-fit: fill;
-  mix-blend-mode: screen;
-  background: skyblue;
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
-const Spinner: React.FC<SpinnerProps> = ({ size = 500, ...props }) => {
+const Spinner: React.FC<SpinnerProps> = ({ size = 100, ...props }) => {
   return (
     <Container width={size} height={size} {...props}>
-      <Image width={size} height={size} src='/images/commons/loading.gif' />
+      {/* <Image width={size} height={size} src='/images/commons/loading.gif' /> */}
+      <LoadingIcon width={size} color='#41B7FF' />
     </Container>
   );
 };

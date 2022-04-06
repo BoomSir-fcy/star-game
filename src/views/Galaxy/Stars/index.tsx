@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Flex } from 'uikit';
+import { Flex, Spinner } from 'uikit';
 import { useDispatch } from 'react-redux';
 import { Layout, Dashboard, Nav, StarAddBtn } from 'components';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -18,7 +18,9 @@ const Stars = () => {
   const parseQs = useParsedQueryString();
   const galaxyId = Number(parseQs.i);
   useGalaxyStarList(galaxyId);
-  const { galaxyStarList, currentStarPeriod } = useStore(p => p.galaxy);
+  const { galaxyStarList, currentStarPeriod, loading } = useStore(
+    p => p.galaxy,
+  );
 
   const [visible, setVisible] = useState(false);
   const initState = useMemo(() => {
@@ -39,48 +41,52 @@ const Stars = () => {
   return (
     <Layout>
       <Dashboard />
-      <Flex alignItems='center' mt='16px'>
-        <Nav
-          nav={galaxyStarList}
-          mr='24px'
-          activeId={currentStarPeriod?.id}
-          onChangeNav={info => {
-            dispatch(setCurrentStarPeriod(info));
-            setVisible(false);
-            setActiveStar(initState);
-          }}
-        />
-        <StarBox>
-          {currentStarPeriod?.levels &&
-            currentStarPeriod?.levels.map((item, index) => (
-              <StarAddBtn
-                key={item?.number}
-                className={`star-${index + 1}`}
-                active={activeStar.number === item?.number}
-                owner={
-                  item?.owner
-                    ? shortenAddress(item?.owner, 4)
-                    : `Lv ${item?.number}`
-                }
-                url={item?.ownerAvatar}
-                onClick={() => {
-                  setActiveStar(item);
-                  setVisible(true);
+      {loading ? (
+        <Spinner />
+      ) : (
+        <Flex alignItems='center' mt='16px'>
+          <Nav
+            nav={galaxyStarList}
+            mr='24px'
+            activeId={currentStarPeriod?.id}
+            onChangeNav={info => {
+              dispatch(setCurrentStarPeriod(info));
+              setVisible(false);
+              setActiveStar(initState);
+            }}
+          />
+          <StarBox>
+            {currentStarPeriod?.levels &&
+              currentStarPeriod?.levels.map((item, index) => (
+                <StarAddBtn
+                  key={item?.number}
+                  className={`star-${index + 1}`}
+                  active={activeStar.number === item?.number}
+                  owner={
+                    item?.owner
+                      ? shortenAddress(item?.owner, 4)
+                      : `Lv ${item?.number}`
+                  }
+                  url={item?.ownerAvatar}
+                  onClick={() => {
+                    setActiveStar(item);
+                    setVisible(true);
+                  }}
+                />
+              ))}
+
+            {visible && (
+              <PlunderCard
+                info={activeStar}
+                onClose={() => {
+                  dispatch(fetchGalaxyStarListAsync(galaxyId));
+                  setVisible(false);
                 }}
               />
-            ))}
-
-          {visible && (
-            <PlunderCard
-              info={activeStar}
-              onClose={() => {
-                dispatch(fetchGalaxyStarListAsync(galaxyId));
-                setVisible(false);
-              }}
-            />
-          )}
-        </StarBox>
-      </Flex>
+            )}
+          </StarBox>
+        </Flex>
+      )}
     </Layout>
   );
 };

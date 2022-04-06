@@ -66,17 +66,26 @@ const Auction = () => {
     .plus(new BigNumber(galaxyNft.miniBuyDuration))
     .toNumber();
   const diffSeconds = useCountdownTime(cooldownTimestamp, dayjs().unix());
-  console.log(diffSeconds, 'diffSeconds');
   const timePeriod = useMemo(() => {
     return getTimePeriod(diffSeconds);
   }, [diffSeconds]);
 
   const lastPrice = useMemo(() => {
-    return getFullDisplayBalance(new BigNumber(galaxyNft.lastPrice), 18, 6);
+    const price = getFullDisplayBalance(
+      new BigNumber(galaxyNft.lastPrice),
+      18,
+      6,
+    );
+    return Number(price) ? price : 0;
   }, [galaxyNft]);
 
   const currentPrice = useMemo(() => {
-    return getFullDisplayBalance(new BigNumber(galaxyNft.currentPrice), 18, 6);
+    const price = getFullDisplayBalance(
+      new BigNumber(galaxyNft.currentPrice),
+      18,
+      6,
+    );
+    return Number(price) ? price : 0;
   }, [galaxyNft]);
 
   const ownerInfo = useMemo(() => {
@@ -85,7 +94,8 @@ const Auction = () => {
 
   const incomingPrice = useMemo(() => {
     const price = getGalaxyIncoming(galaxyNft.lastPrice);
-    return getFullDisplayBalance(price, 18, 6);
+    const balance = getFullDisplayBalance(price, 18, 6);
+    return Number(balance) ? balance : 0;
   }, [galaxyNft]);
 
   // 竞拍

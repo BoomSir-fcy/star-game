@@ -99,6 +99,7 @@ export interface GalaxyState {
   galaxyList: GalaxyInfo[];
   galaxyStarList: StarLevelInfo[];
   galaxyNft: GalaxyNft;
+  loadingGalaxy: boolean;
   loading: boolean;
   auctionRecordList: any[];
 }
