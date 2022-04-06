@@ -1,6 +1,7 @@
-import { Graphics, Texture, Sprite, TilingSprite, TextStyle, Text, Container } from 'pixi.js';
+import { Graphics, Texture, Sprite, TilingSprite, TextStyle, Text, Container, Point } from 'pixi.js';
 // import { Stage, Layer, Group } from '@pixi/layers'
 import config from 'game/config';
+import { checkPolygonPoint } from './utils';
 
 // const W = 800;
 // const H = 600;
@@ -14,7 +15,7 @@ import config from 'game/config';
 // const stage = new Stage();
 // app.stage = stage;
 
-const mapType = {
+export const mapType = {
   MAP1: 'map1',
   MAP2: 'map2',
   MAP3: 'map3',
@@ -23,10 +24,10 @@ const mapType = {
   MAP6: 'map6',
 } as const;
 
-const stateType = {
-  PREVIEW: 'state1',
-  ACTIVE: 'state2',
-  DISABLE: 'state3',
+export const stateType = {
+  PREVIEW: 1,
+  ACTIVE: 2,
+  DISABLE: 3,
 } as const;
 
 export type MapType = typeof mapType[keyof typeof mapType];
@@ -37,10 +38,17 @@ const getRandomColor = () => {
   return parseInt(Math.floor(Math.random()*16777215).toString(16), 16); 
 }
 
+class MyGraphics extends Graphics {
+  getVertexData () {
+    return this.vertexData;
+  }
+}
+
 interface ChequerOptions {
   axisX: number; // X坐标轴
   axisY: number; // Y坐标轴
-  type?: MapType
+  type?: MapType;
+  state?: StateType;
 }
 class Chequer {
   
@@ -64,23 +72,25 @@ class Chequer {
 
   isOver = false;
 
-   static [mapType.MAP1] = Texture.from('/assets/map/map1.png');
+  state: StateType = stateType.PREVIEW;
 
-   static [mapType.MAP2] = Texture.from('/assets/map/map2.png');
+  static [mapType.MAP1] = Texture.from('/assets/map/map1.png');
 
-   static [mapType.MAP3] = Texture.from('/assets/map/map3.png');
+  static [mapType.MAP2] = Texture.from('/assets/map/map2.png');
 
-   static [mapType.MAP4] = Texture.from('/assets/map/map4.png');
+  static [mapType.MAP3] = Texture.from('/assets/map/map3.png');
 
-   static [mapType.MAP5] = Texture.from('/assets/map/map5.png');
+  static [mapType.MAP4] = Texture.from('/assets/map/map4.png');
 
-   static [mapType.MAP6] = Texture.from('/assets/map/map6.png');
+  static [mapType.MAP5] = Texture.from('/assets/map/map5.png');
 
-   static [stateType.PREVIEW] = Texture.from('/assets/map/state1.png');
+  static [mapType.MAP6] = Texture.from('/assets/map/map6.png');
 
-   static [stateType.ACTIVE] = Texture.from('/assets/map/state2.png');
+  static [stateType.PREVIEW] = Texture.from('/assets/map/state1.png');
 
-   static [stateType.ACTIVE] = Texture.from('/assets/map/state3.png');
+  static [stateType.ACTIVE] = Texture.from('/assets/map/state2.png');
+
+  static [stateType.DISABLE] = Texture.from('/assets/map/state3.png');
 
 
   textureButtonDown = Texture.from('/assets/map/map1.png');
@@ -91,9 +101,11 @@ class Chequer {
 
   stateSprite = new Sprite(Chequer[stateType.PREVIEW]);
 
-  graphics = new Graphics();
+  graphics = new MyGraphics();
 
-  init({ axisX, axisY, type = mapType.MAP1 }: ChequerOptions) {
+  centerPoint = new Point();
+
+  init({ axisX, axisY, type = mapType.MAP1, state = stateType.DISABLE }: ChequerOptions) {
 
     // this.src = src;
 
@@ -112,6 +124,8 @@ class Chequer {
 
     this.bunny.interactive = true;
     this.bunny.buttonMode = true;
+
+    this.setState(state);
 
     this.stateSprite.anchor.set(0.5);
     this.stateSprite.x = 0;
@@ -134,22 +148,18 @@ class Chequer {
     this.graphics.beginFill(color, 0.00001);
     this.graphics.drawPolygon(path);
     this.graphics.endFill();
-    this.graphics.x = this.bunny.x
-    this.graphics.y = this.bunny.y - 60
-    // this.graphics.visible = false;
-    // this.graphics.anchor.set(0.5);
-    // this.graphics.addChild(new Text(`${color}`))
+    const x = this.bunny.x;
+    const y = this.bunny.y - 60;
+    this.graphics.x = x
+    this.graphics.y = y
 
     this.graphics.interactive = true;
-    this.graphics.on('pointerdown', () => this.onButtonDown())
-      .on('pointerup', () => this.onButtonUp())
-      .on('pointerupoutside', () => this.onButtonUp())
-      .on('pointerover', (e) => this.onButtonOver(e))
-      .on('pointerout', () => this.onButtonOut());
-
-
+    
+    this.centerPoint.set(x, y + 30)
+    
     return this.graphics;
   }
+
 
   getXY(axisX: number, axisY: number) {
     
@@ -165,36 +175,28 @@ class Chequer {
 
   }
 
-  onButtonDown() {
-    this.isDown = true;
-    this.bunny.texture = this.textureButtonDown;
-    this.bunny.alpha = 1;
+  setState(state: StateType) {
+    this.state = state;
+    this.stateSprite.texture = Chequer[state]
   }
 
-  onButtonUp() {
-      this.isDown = false;
-      if (this.isOver) {
-          this.bunny.texture = this.textureButtonOver;
-      } else {
-          this.bunny.texture = this.textureButton;
-      }
+  displayState(visible: boolean) {
+    this.stateSprite.visible = visible;
   }
 
-  onButtonOver(event: any) {
-      this.isOver = true;
-      if (this.isDown) {
-          return;
-      }
-      this.stateSprite.visible = true;
-  }
+  // 检测一个点是否在当前格子里
+  checkCollisionPoint(point: Point) {
+    const vertexData = this.graphics.getVertexData();
+    const points = [
+      new Point(vertexData[0], vertexData[1]),
+      new Point(vertexData[2], vertexData[3]),
+      new Point(vertexData[4], vertexData[5]),
+      new Point(vertexData[6], vertexData[7]),
+    ]
 
-  onButtonOut() {
-      this.isOver = false;
-      if (this.isDown) {
-          return;
-      }
-      this.stateSprite.visible = false;
+    const collision = checkPolygonPoint(point, points)
 
+    return collision;
   }
   
 }

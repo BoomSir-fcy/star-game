@@ -4,13 +4,14 @@ import { EventSystem } from '@pixi/events'
 // import { EventSystem } from '@pixi/events';
 // import { Stage, Layer, Group } from '@pixi/layers'
 import config from 'game/config';
-import Chequer from './Chequer';
+import Chequer, { stateType } from './Chequer';
 import Soldier from './Soldier';
 import Select from './Select';
+import createBunny from './Test';
+import { checkPolygonPoint, hitTestPoint } from './utils';
+import AxisPoint from './AxisPoint';
 
-/* eslint-disable no-param-reassign */
 
-delete Renderer.__plugins.interaction;
 
 class Boards {
   constructor() {
@@ -29,9 +30,11 @@ class Boards {
 
   scale = 1;
 
-  private axis: [number, number][][] = [];
+  private axis: AxisPoint[][] = [];
 
   created = false;
+
+  enableDrag = true;
 
   init() {
 
@@ -48,21 +51,21 @@ class Boards {
 
     this.app.stage.hitArea = this.app.renderer.screen;
 
-    if (!('events' in this.app.renderer)) {
-      this.app.renderer.addSystem(EventSystem, 'events');
-    }
+    // if (!('events' in this.app.renderer)) {
+    //   this.app.renderer.addSystem(EventSystem, 'events');
+    // }
 
     this.containerSprite.interactive = true;
     this.app.view.addEventListener('wheel', (e) => { this.onHandleWheel(e) });
 
-    this.renderSelect();
+    // this.renderSelect();
 
-    for(let i = 0; i < 1; i++) {
+    for(let i = 0; i < 5; i++) {
       const x = Math.floor(Math.random() * 8);
       const y = Math.floor(Math.random() * 8);
       const res = Math.floor(Math.random() * 7);
       const soldier = this.createSoldier(x, y, `/assets/soldier/rt_object_0${res + 1}.png`);
-      if (x>y) {
+      if (soldier && x>y) {
         soldier.attacking = true;
         soldier.run()
       }
@@ -94,7 +97,7 @@ class Boards {
     this.chequers = [];
     for(let row = 0; row < config.BOARDS_ROW_COUNT; row ++) {
       for(let col = 0; col < config.BOARDS_COL_COUNT; col ++) {
-        const chequer = new Chequer({ type: 'map1', axisX: row, axisY: col })
+        const chequer = new Chequer({ type: 'map1', axisX: row, axisY: col, state: Math.random() > 0.5 ? stateType.DISABLE : stateType.PREVIEW })
         this.chequers.push(chequer);
       }
     }
@@ -105,7 +108,7 @@ class Boards {
       if (!this.axis[s.axisX]) {
         this.axis[s.axisX] = [];
       }
-      this.axis[s.axisX][s.axisY] = [createGraphic.x, createGraphic.y + 30];
+      this.axis[s.axisX][s.axisY] = new AxisPoint(s.axisX, s.axisY, s);
     });
     
     this.created = true;
@@ -117,22 +120,52 @@ class Boards {
         return this.axis[x][y];
       }
       console.error('Get axis is error, place wite some time of this created');
-      return [0, 0]
+      return null
     } catch (error) {
       console.error('Get axis is error, place wite some time of this created');
-      return [0, 0]
+      return null
     }
 
   }
 
   createSoldier(_x: number, _y: number, src: string) {
-    const [x, y] = this.getAxis(_x, _y)
-    const soldier  = new Soldier({ x, y, textureRes: src});
+    const axis = this.getAxis(_x, _y);
+    if (!axis) return null;
+    const soldier  = new Soldier({ x: axis.x, y: axis.y, chequer: axis.chequer ,textureRes: src});
 
     this.containerSprite.addChild(soldier.container);
-    soldier.renderPh()
+    soldier.renderPh();
+    
+    soldier.container.on('pointerdown', () => {
+      console.log(121212)
+      this.chequers.forEach(item => {
+        item.displayState(true);
+      })
+    }).on('pointerup', (event) => {
+      // console.log(event);
+      // const collection = this.chequers[0].checkCollisionPoint(event.data.global);
+      // console.log(collection);
+      let canDrag = false;
+
+      this.chequers.forEach(item => {
+        const collection = item.checkCollisionPoint(event.data.global);
+        if (collection && item.state === stateType.PREVIEW) {
+          // soldier.container.position.set(item.axisX, item.axisY);
+          // console.log(item)
+          soldier.setPosition(new AxisPoint(item.centerPoint.x, item.centerPoint.y, item));
+          canDrag = true;
+        }
+        item.displayState(false);
+      })
+      if (!canDrag) {
+        soldier.resetPosition();
+      }
+    })
+
     return soldier;
   }
+
+
 
   renderSelect() {
     const select = new Select();
@@ -140,9 +173,13 @@ class Boards {
     select.container.y = this.app.screen.height - 201;
 
     const soldier  = new Soldier({ x: -100, y: -100, textureRes: '/assets/soldier/rt_object_01.png'});
-    const soldier1  = new Soldier({ x: 100, y: 100, textureRes: '/assets/soldier/rt_object_02.png'});
+    const soldier1  = new Soldier({ x: 50, y: 20, textureRes: '/assets/soldier/rt_object_02.png'});
+    const soldier2  = new Soldier({ x: 200, y: 200, textureRes: '/assets/soldier/rt_object_03.png'});
+    const soldier3  = new Soldier({ x: 300, y: 150, textureRes: '/assets/soldier/rt_object_04.png'});
     select.inner.addChild(soldier.container);
     select.inner.addChild(soldier1.container);
+    select.inner.addChild(soldier2.container);
+    select.inner.addChild(soldier3.container);
 
     this.app.stage.addChild(select.container);
   }

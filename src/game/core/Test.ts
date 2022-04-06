@@ -1,20 +1,11 @@
-import { Application, Texture, SCALE_MODES, Sprite } from 'pixi.js'
+import { Texture, SCALE_MODES, Sprite } from 'pixi.js'
 
-const app = new Application({ backgroundColor: 0x1099bb });
-document.body.appendChild(app.view);
 
 // create a texture from an image path
 const texture = Texture.from('/assets/flowerTop.png');
 
 // Scale mode for pixelation
 texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
-
-for (let i = 0; i < 10; i++) {
-    createBunny(
-        Math.floor(Math.random() * app.screen.width),
-        Math.floor(Math.random() * app.screen.height),
-    );
-}
 
 function createBunny(x: number, y: number) {
     // create our little bunny friend..
@@ -55,9 +46,8 @@ function createBunny(x: number, y: number) {
     // move the sprite to its designated position
     bunny.x = x;
     bunny.y = y;
-
-    // add it to the stage
-    app.stage.addChild(bunny);
+    return bunny;
+    
 }
 
 function onDragStart(this: any, event: { data: any; }) {
@@ -84,4 +74,4 @@ function onDragMove(this: any) {
     }
 }
 
-export default app;
+export default createBunny;

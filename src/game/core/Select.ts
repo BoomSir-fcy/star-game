@@ -6,18 +6,18 @@ class Select {
     this.init();
   }
 
-  container = new Sprite(Texture.from('/assets/bg_scene_rotate.jpg'));
+  container = new Container();
 
-  inner = new Sprite(Texture.from('/assets/p2.jpeg'));
+  inner = new Container();
 
   graphics = new Graphics();
 
-  mark = new Graphics();
+  mark =  new Graphics();
 
   init() {
     console.log(this.container);
-    // this.container.width = 400;
-    // this.container.height = 200;
+    this.container.width = 400;
+    this.container.height = 200;
 
     // this.container.x = x;
 
@@ -27,22 +27,28 @@ class Select {
 
     this.container.addChild(this.graphics);
 
-    this.inner.width = this.container.width;
-    this.inner.height = this.container.height;
-
+    this.inner.width = 300;
+    this.inner.height = 150;
     this.container.addChild(this.inner)
 
-    // this.addMark();
+    this.addMark();
+
+
 
   }
 
   addMark() {
-    this.mark.width = this.inner.width;
-    this.mark.height = this.inner.height;
-    this.mark.x = 0;
-    this.mark.y = 0;
+    this.mark.width = 100;
+    this.mark.height = 50;
+    this.mark.x = -50;
+    this.mark.y = -20;
+    
+    this.mark.lineStyle(1, 0xFF0000, 1);
+    this.mark.drawRect(0, 0, 100, 50);
+    this.mark.endFill();
+
     this.container.addChild(this.mark);
-    this.inner.mask = this.mark;
+    // this.inner.mask = this.mark;
   }
 }
 
