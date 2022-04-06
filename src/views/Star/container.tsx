@@ -8,7 +8,10 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import Nav from 'components/Nav';
 import Layout from 'components/Layout';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
-import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
+import {
+  fetchBuildingsListAsync,
+  fetchPlanetBuildingsAsync,
+} from 'state/buildling/fetchers';
 import { StarHeader } from './components';
 
 const Star: React.FC<{
@@ -22,6 +25,7 @@ const Star: React.FC<{
     if (id) {
       dispatch(fetchPlanetInfoAsync([id]));
       dispatch(fetchPlanetBuildingsAsync(id));
+      dispatch(fetchBuildingsListAsync());
     }
   }, [id, dispatch]);
 

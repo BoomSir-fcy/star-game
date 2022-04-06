@@ -16,4 +16,12 @@ export class BuildingApi extends Http {
     const res = await this.get(`planet/buildings/list`, { planet_id });
     return res;
   }
+
+  // 创建建筑
+  async createBuilding(
+    params: Api.Building.CreateBuildingParams,
+  ): Promise<Api.Response<{ data: any }>> {
+    const res = await this.post(`buildings/create`, params);
+    return res;
+  }
 }

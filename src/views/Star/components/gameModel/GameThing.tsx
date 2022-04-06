@@ -64,6 +64,9 @@ const Container = styled(Card)<{ active?: boolean; border?: boolean }>`
     }
     return css``;
   }}
+  div {
+    pointer-events: none;
+  }
 `;
 const Level = styled(Text)`
   position: absolute;
@@ -72,6 +75,7 @@ const Level = styled(Text)`
 
 export const GameThing: React.FC<{
   scale: 'ld' | 'lg' | 'md' | 'sm';
+  itemData?: Api.Building.Building;
   src?: string;
   text?: string;
   active?: boolean;
@@ -82,6 +86,7 @@ export const GameThing: React.FC<{
   onDragEnter?: (e: React.DragEvent<HTMLDivElement>) => void;
 }> = ({
   scale,
+  itemData,
   src,
   text,
   active,
@@ -103,6 +108,7 @@ export const GameThing: React.FC<{
         onDragEnter={onDragEnter}
         active={active}
         border={border}
+        data-item={JSON.stringify(itemData)}
       >
         <Level shadow='primary' style={sizeBox?.text}>
           Lv 1

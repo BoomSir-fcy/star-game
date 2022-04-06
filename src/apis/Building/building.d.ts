@@ -12,6 +12,22 @@ declare namespace Api {
       extra: BuildingExtra;
     }
 
+    interface CreateBuildingParams {
+      planet_id: number | string;
+      build_type: number;
+      building_setting: BuildingSetting;
+    }
+
+    interface BuildingSetting {
+      buildings_id: number;
+      position: Position;
+    }
+
+    interface Position {
+      from: [{ x: number }, { y: number }];
+      to: [{ x: number }, { y: number }];
+    }
+
     interface BuildingExtra {
       charge_energy: number;
       charge_population: number;

@@ -110,7 +110,8 @@ export interface PlanetState {
 }
 
 export interface BuildlingState {
-  selfBuildings: { [type: number]: Api.Building.Building[] };
+  selfBuildings: Api.Building.Building[];
+  buildings: { [type: number]: Api.Building.Building[] };
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<
