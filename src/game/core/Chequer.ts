@@ -148,7 +148,7 @@ class Chequer {
     this.graphics.beginFill(color, 0.00001);
     this.graphics.drawPolygon(path);
     this.graphics.endFill();
-    const x = this.bunny.x;
+    const { x } = this.bunny;
     const y = this.bunny.y - 60;
     this.graphics.x = x
     this.graphics.y = y

@@ -39,10 +39,8 @@ export const useFetchAllowance = () => {
   const dispatch = useDispatch();
   const { account } = useActiveWeb3React();
   
-  console.log(account && infoView.payToken_, 'infoView')
   const fetch = useCallback(() => {
     if (account && infoView.payToken_) {
-      console.log(21121212)
       dispatch(fetchAllowanceAsync({ account, token: infoView.payToken_ }))
     }
   }, [dispatch, infoView.payToken_, account])

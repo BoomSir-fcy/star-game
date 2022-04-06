@@ -4,6 +4,7 @@ import { Box, TweenText, Flex, Input, Label, Button, Text } from 'uikit';
 import { ManAvatar, WoManAvatar } from 'components/Avatar';
 import { Gender } from 'state/types';
 import styled from 'styled-components';
+import { useToast } from 'contexts/ToastsContext';
 
 const chance = new Chance();
 
@@ -24,7 +25,7 @@ const TopBox = styled(Box)`
 `;
 
 export interface ForwardRefRenderProps {
-  getState: () => { name: string; gender: Gender };
+  getState: () => { name: string; gender: Gender; superior: string };
 }
 
 const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
@@ -33,14 +34,17 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
 ) => {
   const [gender, setGender] = useState(Gender.MAN);
   const [name, setName] = useState('');
+  const [superior, setSuperior] = useState('');
+
+  const { toastSuccess, toastError } = useToast();
 
   const randomName = useCallback(() => {
     setName(chance.name());
-  }, [setName]);
+  }, [setName, toastSuccess]);
 
   useImperativeHandle(ref, () => ({
     getState() {
-      return { gender, name };
+      return { gender, name, superior };
     },
   }));
 
@@ -76,6 +80,15 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
             <img alt='' src='/images/login/round.png' />
           </Box>
         </Button>
+      </Label>
+      <Label mt={22} width={603} pr='18px'>
+        <Input
+          value={superior}
+          onChange={event => {
+            setSuperior(event.target.value);
+          }}
+          placeholder='输入邀请人地址（选填）'
+        />
       </Label>
       <Text mt={32} small>
         需要消耗100 DSG创建，系统将通过BNB即时交易等额DSG创建身份
