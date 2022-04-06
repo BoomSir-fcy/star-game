@@ -14,7 +14,8 @@ const ImgCard = styled(Card)`
 export const GrowPop: React.FC<{
   visible: boolean;
   onClose: () => void;
-}> = ({ visible, onClose }) => {
+  callBack: () => void;
+}> = ({ visible, onClose, callBack }) => {
   const parsedQs = useParsedQueryString();
 
   const ToStrengthenPlante = async () => {
@@ -24,6 +25,7 @@ export const GrowPop: React.FC<{
       });
       if (Api.isSuccess(res)) {
         console.log(res);
+        callBack();
       }
     } catch (error) {
       console.log(error);

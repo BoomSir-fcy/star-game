@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { RaceAvatar } from 'components';
 import { Image, Text, Flex, BoxProps } from 'uikit';
+import { RaceTypeColor } from 'uikit/theme/colors';
+import { Races } from 'uikit/theme/types';
+import { useTranslation } from 'contexts/Localization';
 import { RaceCardStyled, LabelText } from './styled';
 
 interface RaceProps extends BoxProps {
   info: any;
 }
 const Race: React.FC<RaceProps> = ({ info, ...props }) => {
+  const { t } = useTranslation();
+  const race = useMemo(() => {
+    return info?.race as Races;
+  }, [info]);
   return (
     <RaceCardStyled mt='13px'>
       <Flex width='100%'>
@@ -16,8 +23,8 @@ const Race: React.FC<RaceProps> = ({ info, ...props }) => {
             <LabelText>星球种族</LabelText>
 
             {/* TODO: 种族类型，相关描述待完成 */}
-            <Text color='#8AC001' ml='17px' fontSize='22px' bold>
-              虫族
+            <Text color={RaceTypeColor[race]} ml='17px' fontSize='22px' bold>
+              {race ? t(`race-${race}`) : ''}
             </Text>
           </Flex>
           <LabelText>种族特色</LabelText>

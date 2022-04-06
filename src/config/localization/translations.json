@@ -1,5 +1,15 @@
 {
-  
+  "******start*****@gww********": "@gww翻译开始",
+  "rarity-1":"Ordinary",
+  "rarity-2":"Good",
+  "rarity-3":"Rare",
+  "rarity-4":"Epic",
+  "rarity-5":"Legend",
+  "rarity-6":"Mythology",
+  "race-1":"Protoss",
+  "race-2":"Human",
+  "race-3":"Zerg",
+  "******end*****@gww********": "@gww翻译结束",
   "Connect Wallet": "Connect Wallet",
   "translationLast": "translationLast",
   "translationEnd": "translationEnd"

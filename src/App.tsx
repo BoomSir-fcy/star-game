@@ -32,6 +32,10 @@ const Stars = lazy(() => import('./views/Galaxy/Stars'));
 const Start = lazy(() => import('./views/Star/Layout'));
 const StartPlanet = lazy(() => import('./views/Star/planet'));
 
+const UpgradeList = React.lazy(
+  () => import('./views/Star/components/upgrade/SelectPlanet'),
+);
+
 function App() {
   useEagerConnect(); // 自动链接钱包
 
@@ -49,6 +53,9 @@ function App() {
             <Route path='/mystery-box' element={<MysteryBox />} />
             <Route path='/mystery-box/detail' element={<MysteryBoxDetail />} />
             <Route path='/mystery-box/state' element={<MysteryBoxState />} />
+
+            {/* 升级星球背包 */}
+            <Route path='/upgrade-list' element={<UpgradeList />} />
 
             {/* 我的星球 */}
             <Route path='/star/planet' element={<StartPlanet />} />

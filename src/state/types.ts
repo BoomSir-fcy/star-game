@@ -106,6 +106,7 @@ export interface PlanetState {
   mePlanet: Api.Planet.PlanetInfo[];
   planetInfo: { [x: number]: Api.Planet.PlanetInfo };
   activePlanet: Api.Planet.PlanetInfo;
+  activeMaterialMap: { [x: number]: Api.Planet.PlanetInfo | null };
 }
 
 export interface BuildlingState {
@@ -193,9 +194,12 @@ export interface energyInfo {
 }
 export interface AllianceView {
   alliance: allianceInfo;
+  end_time: number;
+  free_time: number;
   order: orderInfo[];
   energy: energyInfo;
 }
 export interface AllianceState {
   allianceView: AllianceView;
+  workingPlanet: number[];
 }

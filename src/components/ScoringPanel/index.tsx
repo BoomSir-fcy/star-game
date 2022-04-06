@@ -24,7 +24,7 @@ const ScoringPanel: React.FC<ScoringPanelProps> = ({
       height={60}
     >
       {Array.from(new Array(total)).map((item, index) => {
-        if (index > count)
+        if (index + 1 > count)
           return (
             <Image
               margin='0 7.5px'
