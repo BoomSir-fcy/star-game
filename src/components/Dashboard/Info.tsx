@@ -167,7 +167,13 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
         visible={visible}
         setVisible={setVisible}
       >
-        <DepositWithdrawal TokenInfo={ActiveToken} />
+        <DepositWithdrawal
+          close={() => {
+            setVisible(false);
+            console.log(123123);
+          }}
+          TokenInfo={ActiveToken}
+        />
       </Modal>
     </Box>
   );

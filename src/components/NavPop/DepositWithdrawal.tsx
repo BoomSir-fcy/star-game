@@ -48,11 +48,13 @@ const MyInput = styled(Input)`
 interface DepositWithdrawalProps {
   TokenInfo: UserBalanceView | any;
   decimals?: number;
+  close: () => void;
 }
 
 const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
   TokenInfo,
   decimals = 18,
+  close,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -104,6 +106,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
           isChainToken = true;
         }
         await Recharge(TokenInfo?.coinId, addPrecisionNum, isChainToken);
+        close();
       } catch (error) {
         console.error(error);
       } finally {
@@ -112,6 +115,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
     } else {
       try {
         await drawCallback(val, TokenInfo?.coinId);
+        close();
       } catch (e) {
         console.error(e);
       } finally {
@@ -223,7 +227,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
         </ShaDowBox>
         <InputBox mb='10px'>
           <MyInput
-            disabled={approvedNum === 0}
+            disabled={approvedNum === 0 && OperationType === 1}
             noShadow
             pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
             inputMode='decimal'
@@ -239,6 +243,10 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
             width='270px'
             disabled={pending}
             onClick={() => {
+              if (OperationType === 2) {
+                handSure();
+                return;
+              }
               if (approvedNum > 0) {
                 // 充值、提现
                 handSure();
