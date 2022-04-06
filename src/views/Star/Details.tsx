@@ -60,36 +60,59 @@ const Upgrade = () => {
     data: [] as any[],
   });
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
+  const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
+
+  // console.log(selfBuilding);
 
   React.useEffect(() => {
     if (planet?.areaX > 0 && planet?.areaY > 0) {
-      const data = [];
+      const data: any = [];
       for (let i = 0; i < planet.areaX; i++) {
         for (let j = 0; j < planet.areaY; j++) {
-          data.push({
-            index: i * planet.areaY + j,
-            isbuilding: false,
-            picture: '',
-            propterty: {
-              size: {
-                area_x: 1,
-                area_y: 1,
+          const buildings = selfBuilding?.find(
+            index => index.index === i * planet.areaY + j,
+          );
+          // console.log(buildings);
+          if (buildings) {
+            data.push({
+              ...buildings,
+              ...buildings.building,
+              index: i * planet.areaY + j,
+              isbuilding: true,
+            });
+          } else {
+            data.push({
+              index: i * planet.areaY + j,
+              isbuilding: false,
+              picture: '',
+              propterty: {
+                size: {
+                  area_x: 1,
+                  area_y: 1,
+                },
               },
-            },
-            position: {
-              x: 0,
-              y: 0,
-            },
-          });
+              position: {
+                x: 0,
+                y: 0,
+              },
+            });
+          }
         }
       }
+
       setState({ ...state, data });
     }
-  }, [planet]);
+  }, [planet, selfBuilding]);
 
   return (
     <Box>
-      <DragCompoents rows={3} cols={3} gridSize={158} itemData={state.data} />
+      <DragCompoents
+        planet_id={id}
+        rows={planet?.areaX}
+        cols={planet?.areaY}
+        gridSize={158}
+        itemData={state.data}
+      />
     </Box>
   );
 };

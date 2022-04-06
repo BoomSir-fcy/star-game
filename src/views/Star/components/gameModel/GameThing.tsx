@@ -77,6 +77,7 @@ export const GameThing: React.FC<{
   scale: 'ld' | 'lg' | 'md' | 'sm';
   itemData?: Api.Building.Building;
   src?: string;
+  level?: number;
   text?: string;
   active?: boolean;
   border?: boolean;
@@ -87,6 +88,7 @@ export const GameThing: React.FC<{
 }> = ({
   scale,
   itemData,
+  level,
   src,
   text,
   active,
@@ -111,7 +113,7 @@ export const GameThing: React.FC<{
         data-item={JSON.stringify(itemData)}
       >
         <Level shadow='primary' style={sizeBox?.text}>
-          Lv 1
+          Lv {level}
         </Level>
         <Box width={sizeBox.width} height={sizeBox.height}>
           <Image

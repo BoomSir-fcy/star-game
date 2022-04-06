@@ -10,22 +10,27 @@ declare namespace Api {
       picture: string;
       type: number;
       extra: BuildingExtra;
+      propterty: BuildingPropterty;
+      _id: string | number;
+    }
+
+    interface SelfBuildings {
+      building_type: number;
+      buildings: any[];
+      id: string;
+      planet_id: number;
     }
 
     interface CreateBuildingParams {
       planet_id: number | string;
       build_type: number;
-      building_setting: BuildingSetting;
+      building_setting: BuildingSetting[];
     }
 
     interface BuildingSetting {
       buildings_id: number;
-      position: Position;
-    }
-
-    interface Position {
-      from: [{ x: number }, { y: number }];
-      to: [{ x: number }, { y: number }];
+      position: any;
+      index: number;
     }
 
     interface BuildingExtra {

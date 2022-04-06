@@ -25,7 +25,7 @@ const Star: React.FC<{
     if (id) {
       dispatch(fetchPlanetInfoAsync([id]));
       dispatch(fetchPlanetBuildingsAsync(id));
-      dispatch(fetchBuildingsListAsync());
+      dispatch(fetchBuildingsListAsync(1));
     }
   }, [id, dispatch]);
 
