@@ -37,7 +37,7 @@ const ProductionProgress = () => {
 
   const progressRate = useMemo(() => {
     const time = (((end_time - state.time) / end_time) * 100).toFixed(2);
-    return Number(time);
+    return Number(time) || 0;
   }, [state]);
 
   // 倒计时
