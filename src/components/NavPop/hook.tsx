@@ -40,29 +40,34 @@ export const useRWA = (tokenAddress: string) => {
   // 提现
   const drawCallback = useCallback(
     async (drawAmount: string, drawTokenAddress: string) => {
-      try {
-        const sign = {
-          nonce: random(0xffff_ffff, 0xffff_ffff_ffff),
-          timestamp: Math.floor(new Date().getTime() / 1000),
-          coin: drawTokenAddress,
-          amount: drawAmount,
-        };
-        const res = await signMessage(
-          library,
-          String(account),
-          JSON.stringify(sign),
-        );
-        const params = { ...sign, signature: res };
-        const response = await Api.BalanceApi.withdraw(params);
-        if (Api.isSuccess(response)) {
-          return response;
-          // eslint-disable-next-line
-        } else {
-          return new Error('fail');
+      if (account) {
+        try {
+          const sign = {
+            nonce: `${random(0xffff_ffff, 0xffff_ffff_ffff)}`,
+            timestamp: new Date().getTime(),
+            coin: drawTokenAddress,
+            amount: Number(drawAmount),
+          };
+          const res = await signMessage(library, account, JSON.stringify(sign));
+          const params = { ...sign, signature: res };
+          const response = await Api.BalanceApi.withdraw(params);
+          if (Api.isSuccess(response)) {
+            return response;
+          }
+          return (
+            response || {
+              code: -1,
+            }
+          );
+        } catch (error: any) {
+          return {
+            code: error?.code || -1,
+          };
         }
-      } catch (error) {
-        return new Error(String(error));
       }
+      return {
+        code: -1,
+      };
     },
     [library, account],
   );
