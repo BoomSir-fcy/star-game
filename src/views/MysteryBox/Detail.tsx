@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 import { Card, Text, Flex, BgCard, Label, Button } from 'uikit';
@@ -19,6 +19,12 @@ import Attributes from './components/Attributes';
 import Extra from './components/Extra';
 import Race from './components/Race';
 
+const MysteryBox = styled(MysteryBoxStyled)`
+  width: 435px;
+  height: 583px;
+  margin-left: 60px;
+  margin-right: 80px;
+`;
 const MysteryBoxStarStyled = styled(MysteryBoxBoxStyled)`
   background: none;
 `;
@@ -33,27 +39,36 @@ const StarLabelStyled = styled(Card)`
   padding: 10px 20px;
   z-index: 3;
 `;
+
 const MysteryBoxDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const paramsQs = useParsedQueryString();
   const id = Number(paramsQs.i);
 
-  const { planetInfo } = useStore(p => p.planet);
+  const planetInfo = useStore(p => p.planet.planetInfo);
 
   const info = useMemo(() => {
-    // return planetInfo?.length ? planetInfo[0] : ({} as any);
-    return {};
-  }, [planetInfo]);
+    return planetInfo[id];
+  }, [planetInfo, id]);
+
+  const init = useCallback(() => {
+    if (id) dispatch(fetchPlanetInfoAsync([id]));
+    if (!planetInfo) {
+      setTimeout(() => {
+        dispatch(fetchPlanetInfoAsync([id]));
+      }, 5000);
+    }
+  }, [id, planetInfo]);
 
   useEffect(() => {
-    if (id) dispatch(fetchPlanetInfoAsync([id]));
-  }, [id, dispatch]);
+    init();
+  }, []);
   return (
     <Layout>
       <Dashboard />
       <Flex>
-        <MysteryBoxStyled>
+        <MysteryBox>
           <MysteryBoxBaseStyled quality={mysteryBoxQualities.ORDINARY} />
           <MysteryBoxStarStyled quality={mysteryBoxQualities.ORDINARY}>
             <StarCom variant='none' scale='ld' />
@@ -61,15 +76,15 @@ const MysteryBoxDetail = () => {
           <StarLabelStyled>
             <Flex flexDirection='column' alignItems='center'>
               <Text ellipsis bold>
-                {/* {info?.name} */}
+                {info?.name}
               </Text>
               <Text mt='10px' ellipsis small>
-                {/* Token: {info?.id} */}
+                Token: {info?.id}
               </Text>
             </Flex>
           </StarLabelStyled>
-        </MysteryBoxStyled>
-        <BgCard variant='sFull'>
+        </MysteryBox>
+        <BgCard fringe variant='sFull'>
           <Flex padding='38px 53px' justifyContent='space-between'>
             <Attributes info={info}>
               <Race info={info} />
@@ -80,7 +95,7 @@ const MysteryBoxDetail = () => {
                   variant='transparent'
                   onClick={() => {
                     navigate('/star/planet');
-                    navigate('/star');
+                    navigate(`/star?id=${id}`);
                   }}
                 >
                   管理星球

@@ -3,6 +3,9 @@ import { Box, Flex, Text, Button } from 'uikit';
 import styled from 'styled-components';
 import Modal from 'components/Modal';
 import { useStore } from 'state';
+import { Api } from 'apis';
+import { useDispatch } from 'react-redux';
+import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import StopWorkPop from '../stopWorkPop';
 
 const ShaDowBox = styled(Flex)`
@@ -14,8 +17,24 @@ const ShaDowBox = styled(Flex)`
 `;
 
 const InfoFoot = () => {
+  const dispatch = useDispatch();
+
   const [visible, setVisible] = useState(false);
   const { alliance } = useStore(p => p.alliance.allianceView);
+
+  // 开始/停止工作
+  const StartOrStopWorking = async (work: boolean) => {
+    await Api.AllianceApi[work ? 'AllianceWorking' : 'AllianceStopWork']()
+      .then(res => {
+        if (Api.isSuccess(res)) {
+          console.log('成功');
+          dispatch(fetchAllianceViewAsync());
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   return (
     <ShaDowBox alignItems='center'>
@@ -35,13 +54,19 @@ const InfoFoot = () => {
             setVisible(true);
           } else {
             // 开始工作
+            StartOrStopWorking(true);
           }
         }}
       >
         {alliance.working > 0 ? '停止工作' : '开始工作'}
       </Button>
       <Modal title='停止工作' visible={visible} setVisible={setVisible}>
-        <StopWorkPop />
+        <StopWorkPop
+          callBack={() => {
+            StartOrStopWorking(false);
+            setVisible(false);
+          }}
+        />
       </Modal>
     </ShaDowBox>
   );

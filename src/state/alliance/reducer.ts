@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AllianceState, AppThunk } from 'state/types';
+import { AllianceState, AppThunk, orderInfo } from 'state/types';
 import { fetchMyPlanetAlliance } from './fetchers';
 
 export const initialState: AllianceState = {
@@ -24,7 +24,10 @@ export const initialState: AllianceState = {
       per_stone: 0,
       per_energy: 0,
     },
+    end_time: 0,
+    free_time: 0,
   },
+  workingPlanet: [],
 };
 
 export const fetchAllianceViewAsync = (): AppThunk => async dispatch => {
@@ -43,6 +46,13 @@ export const allianceSlice = createSlice({
           ...state.allianceView,
           ...payload,
         };
+        console.log(payload);
+        const planetList = payload.order || [];
+        const workingPlanet = planetList.map((item: orderInfo) => {
+          return item.planetId;
+        });
+        console.log(workingPlanet);
+        state.workingPlanet = workingPlanet;
       }
     },
   },

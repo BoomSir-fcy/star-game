@@ -4,7 +4,9 @@ import { Box, Flex, Text, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useWeb3React } from '@web3-react/core';
 
-const StopWorkPop = () => {
+const StopWorkPop: React.FC<{
+  callBack: () => void;
+}> = ({ callBack }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
 
@@ -14,7 +16,9 @@ const StopWorkPop = () => {
         停止工作将无法正常生产资源，也不会消耗资源。是否停止工作？
       </Text>
       <Flex justifyContent='center'>
-        <Button width='270px'>确认停止</Button>
+        <Button width='270px' onClick={callBack}>
+          确认停止
+        </Button>
       </Flex>
     </Box>
   );
