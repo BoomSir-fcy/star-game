@@ -81,7 +81,6 @@ export const fetchAllowanceAsync =
   async dispatch => {
     dispatch(setAllowance({ loading: true }));
     const allowance = await fetchAllowance(account, token);
-    console.log(allowance, '=allowance=allowanceallowanceallowance__');
     dispatch(setAllowance({ allowance, loading: false }));
   };
 

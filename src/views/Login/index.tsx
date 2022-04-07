@@ -6,10 +6,11 @@ import React, {
   useState,
 } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { Flex, Text, Button, Image, Box } from 'uikit';
+import { AddressZero } from '@ethersproject/constants';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Modal from 'components/Modal';
+import { Flex, Text, Button, Image, Box } from 'uikit';
 import {
   useFetchInfoView,
   useFetchUserInfo,
@@ -17,6 +18,8 @@ import {
 } from 'state/userInfo/hooks';
 import { useStore } from 'state';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useToast } from 'contexts/ToastsContext';
+import { isAddress } from 'utils';
 import { useConnectWallet } from 'contexts/ConnectWallet';
 import StarGameBox from './components/StarGameBox';
 import Flyer from './components/Flyer';
@@ -33,7 +36,7 @@ const StarGameBoxMove = styled(StarGameBox)<{ move?: boolean }>`
 
 const EnterBoxMove = styled(Box)<{ move?: boolean }>`
   transition: 0.3s;
-  transform: translateY(${({ move }) => (move ? '160px' : '0')});
+  transform: translateY(${({ move }) => (move ? '200px' : '0')});
 `;
 
 const CreateBoxShow = styled(Box)<{ show?: boolean }>`
@@ -48,6 +51,8 @@ const Login = () => {
 
   const { onConnectWallet } = useConnectWallet();
   const { account } = useWeb3React();
+
+  const { toastSuccess, toastError } = useToast();
 
   useFetchUserInfo();
   useFetchInfoView();
@@ -65,8 +70,31 @@ const Login = () => {
   const handleSign = useCallback(async () => {
     if (createRef?.current?.getState) {
       try {
-        const { name } = createRef.current.getState();
+        const { name, superior } = createRef.current.getState();
+
         const state = await handleCheck(name);
+
+        if (state === CheckNickNameState.NULL_NAME) {
+          toastError('请输入您想要的名称');
+          return;
+        }
+        if (
+          state === CheckNickNameState.SHORT_NAME ||
+          state === CheckNickNameState.LONG_NAME
+        ) {
+          toastError('请输入6~30个字符，支持中英文、数字');
+          return;
+        }
+
+        if (superior && !isAddress(superior)) {
+          toastError('无效邀请地址');
+          return;
+        }
+        if (state === CheckNickNameState.BAD_NAME_WITH_CONTRACT) {
+          // FIXME: 这个提示有问题
+          toastError('请输正确的昵称');
+          return;
+        }
 
         if (state === CheckNickNameState.EXACT_NAME) {
           setVisible(true);
@@ -76,18 +104,17 @@ const Login = () => {
         console.error('注册失败');
       }
     }
-  }, [handleCheck, createRef, setVisible]);
+  }, [handleCheck, createRef, setVisible, toastError]);
 
   const onHandleRegister = useCallback(async () => {
     if (createRef?.current?.getState) {
       try {
-        const { name, gender } = createRef.current.getState();
+        const { name, gender, superior } = createRef.current.getState();
         const res = await handleRegister({
           nickname: name,
-          superior: '0x0000000000000000000000000000000000000000',
+          superior: superior || AddressZero,
           gender,
         });
-        console.log(res);
       } catch (error) {
         console.error(error);
         console.error('注册失败');
@@ -129,7 +156,6 @@ const Login = () => {
 
   useEffect(() => {
     if (!userInfoView.loading || !parsedQs.s) {
-      console.log(userInfoView.isActive, 'isActive');
       if (account && !userInfoView.isActive) {
         navigate(`${pathname}?s=${1}`, { replace: true });
       } else {

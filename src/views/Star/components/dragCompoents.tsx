@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
 import { useStore } from 'state';
 
+import { Api } from 'apis';
 import { GameInfo, GameThing } from './gameModel';
 
 const Container = styled(Flex)`
@@ -87,23 +88,25 @@ const BuildingsItem = styled(Box)`
 
 let dragged = {} as any;
 export const DragCompoents: React.FC<{
+  planet_id: number;
   itemData: any;
   rows: number;
   cols: number;
   gridSize: number;
-}> = ({ itemData, cols, rows, gridSize }) => {
+}> = ({ planet_id, itemData, cols, rows, gridSize }) => {
   const dispatch = useDispatch();
   const [state, setState] = React.useState({
     currentTab: 1,
+    currentBuilding: {} as Api.Building.Building,
     tabs: [
       {
         index: 1,
         title: '经营类',
       },
-      {
-        index: 2,
-        title: '战斗类',
-      },
+      // {
+      //   index: 2,
+      //   title: '战斗类',
+      // },
     ],
     data: [],
   });
@@ -261,43 +264,47 @@ export const DragCompoents: React.FC<{
     }
   };
 
-  const handleData = (afterTarget: any) => {
-    dragged.style.opacity = '1';
-    dragged.style.transform = 'scale(1)';
-    const listData: any = data;
-    const from = dragged?.dataset?.id;
-    const to = afterTarget?.dataset?.id;
-    const draggedItem = JSON.parse(dragged?.dataset?.item) || {};
-    const targetItem = JSON.parse(afterTarget?.dataset?.item) || {};
+  // 获取坐标点
+  const getMatrix = (index: number, currentSize = 1) => {
+    const row = Math.floor(index / cols);
+    const col = Math.floor(index % rows);
 
-    // 目标格子为空时，拖拽到目标格子
-    if (from === undefined || from === null) {
-      console.log(listData);
-      listData.splice(to, 1, {
-        ...targetItem,
-        ...draggedItem,
-        isbuilding: true,
-      });
-    }
-
-    console.log(afterTarget);
-    // console.log(from, to);
-    // if (from !== to) {
-    //   const listData = data;
-    //   // @ts-ignore
-    //   listData.splice(targetItem.index, 1, draggedItem);
-    //   console.log(listData);
-
-    //   // data[targetItem.index] = draggedItem;
-    //   // listData.splice(to, 0, listData.splice(from, 1)[0]);
-    //   // [listData[from], listData[to]] = [listData[to], listData[from]];
-
-    // }
-    setState({
-      ...state,
-      data: listData,
-    });
+    return [
+      [{ x: col }, { y: row + currentSize }],
+      [{ x: col + currentSize }, { y: row }],
+    ];
   };
+
+  const handleData = React.useCallback(
+    (afterTarget: any) => {
+      dragged.style.opacity = '1';
+      dragged.style.transform = 'scale(1)';
+      const listData: any = data;
+      const from = dragged?.dataset?.id;
+      const to = afterTarget?.dataset?.id;
+      const draggedItem = JSON.parse(dragged?.dataset?.item) || {};
+      const targetItem = JSON.parse(afterTarget?.dataset?.item) || {};
+
+      // 目标格子为空时，拖拽到目标格子
+      if (from === undefined || from === null) {
+        listData.splice(to, 1, {
+          ...targetItem,
+          ...draggedItem,
+          row: draggedItem?.propterty?.size?.area_x,
+          isbuilding: true,
+        });
+      }
+
+      // 创建格子到九宫格中(to, draggedItem);
+      createGrid(to, draggedItem);
+
+      setState({
+        ...state,
+        data: listData,
+      });
+    },
+    [data],
+  );
 
   const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
     dragged = e.target;
@@ -326,7 +333,31 @@ export const DragCompoents: React.FC<{
   };
 
   // 创建格子到九宫格中
-  const createGrid = () => {};
+  const createGrid = async (index: number, row: Api.Building.Building) => {
+    const [from, to] = getMatrix(index, row?.propterty?.size?.area_x);
+
+    try {
+      const res = await Api.BuildingApi.createBuilding({
+        planet_id,
+        build_type: row.type,
+        building_setting: [
+          {
+            buildings_id: row.buildings_number,
+            position: {
+              from: { x: from[0].x, y: from[1].y },
+              to: { x: to[0].x, y: to[1].y },
+            },
+            index: Number(index),
+          },
+        ],
+      });
+      if (Api.isSuccess(res)) {
+        console.log(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Box>
@@ -351,13 +382,16 @@ export const DragCompoents: React.FC<{
                 onDragOver={dragOver}
                 onDrop={drop}
                 onDragEnd={dragEnd}
+                onClick={() => {
+                  setState({ ...state, currentBuilding: item });
+                }}
               >
                 <img src={item?.picture} alt='' />
               </Normal>
             );
           })}
         </Container>
-        <GameInfo />
+        <GameInfo planet_id={planet_id} itemData={state.currentBuilding} />
       </Flex>
       <BgCard variant='long' mt='12px' padding='40px'>
         <Flex>

@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ResetCSS } from 'uikit';
 import ScaleOrientContent from 'components/ScaleOrientContent';
 import useEagerConnect from 'hooks/useEagerConnect';
-import Providers from './Providers';
+import Toast from 'components/Toast';
+import AccountUpdater from './views/Updater/AccountUpdater';
 
 import {
   TestBgCard,
@@ -42,6 +43,7 @@ function App() {
   return (
     // <BrowserRouter>
     <>
+      {/* <AccountUpdater /> */}
       <ResetCSS />
       <ScaleOrientContent>
         <Suspense fallback='loading...'>
@@ -83,6 +85,7 @@ function App() {
             </Route>
           </Routes>
         </Suspense>
+        <Toast />
       </ScaleOrientContent>
     </>
     // </BrowserRouter>

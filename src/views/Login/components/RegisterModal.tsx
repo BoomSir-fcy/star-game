@@ -14,6 +14,7 @@ import ApproveButton from 'components/ApproveButton';
 import { getUserAgentAddress } from 'utils/addressHelpers';
 import { fetchAllowanceAsync } from 'state/userInfo/reducer';
 import { useDispatch } from 'react-redux';
+import { formatDisplayBalance } from 'utils/formatBalance';
 
 interface RegisterModalProps {
   visible: boolean;
@@ -38,14 +39,12 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
     return new BigNumber(allowance.allowance).isGreaterThanOrEqualTo(price);
   }, [allowance.allowance, price]);
 
-  console.log(allowance);
-
   return (
     <Modal title='确认创建' visible={visible} setVisible={setVisible}>
       <Flex pt='98px' flexDirection='column' alignItems='center'>
         <Image src='/images/commons/dsg-1.png' width={109} height={114} />
         <Text mt='42px' fontSize='24px'>
-          创建身份所需支付100 DSG
+          创建身份所需支付 {formatDisplayBalance(new BigNumber(price), 18)} DSG
         </Text>
         {isApprove ? (
           <Button onClick={onRegister} mt='58px'>
