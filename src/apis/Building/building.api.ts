@@ -20,8 +20,32 @@ export class BuildingApi extends Http {
   // 创建建筑
   async createBuilding(
     params: Api.Building.CreateBuildingParams,
-  ): Promise<Api.Response<{ data: any }>> {
+  ): Promise<Api.Response<{ data: Api.Building.CreateBuildingParams }>> {
     const res = await this.post(`buildings/create`, params);
+    return res;
+  }
+
+  // 预估建筑升级
+  async estimateBuildingUpgrade(
+    planet_id: number,
+    building_id: number | string,
+  ): Promise<Api.Response<{ data: Api.Building.CreateBuildingParams }>> {
+    const res = await this.get(`buildings/upgrade_cost`, {
+      planet_id,
+      building_id,
+    });
+    return res;
+  }
+
+  // 预估建筑升级之后的建筑详情
+  async estimateBuildingUpgradeDetail(
+    planet_id: number,
+    building_id: number | string,
+  ): Promise<Api.Response<{ data: Api.Building.CreateBuildingParams }>> {
+    const res = await this.get(`buildings/upgrade_detail`, {
+      planet_id,
+      building_id,
+    });
     return res;
   }
 }

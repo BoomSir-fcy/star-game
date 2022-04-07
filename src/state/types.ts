@@ -110,7 +110,7 @@ export interface PlanetState {
 }
 
 export interface BuildlingState {
-  selfBuildings: Api.Building.Building[];
+  selfBuildings: Api.Building.SelfBuildings;
   buildings: { [type: number]: Api.Building.Building[] };
 }
 
