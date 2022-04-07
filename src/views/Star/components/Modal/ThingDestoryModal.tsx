@@ -2,12 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Input, Button, Text, Image } from 'uikit';
 import ModalWrapper from 'components/Modal';
+import { Api } from 'apis';
 import { GameThing } from '../gameModel';
 
 export const ThingDestoryModal: React.FC<{
   visible: boolean;
+  onChange: () => void;
   onClose: () => void;
-}> = ({ visible, onClose }) => {
+}> = ({ visible, onChange, onClose }) => {
   return (
     <ModalWrapper title='摧毁建筑' visible={visible} setVisible={onClose}>
       <Box padding='30px 25px'>
@@ -22,7 +24,7 @@ export const ThingDestoryModal: React.FC<{
                 作用：储存星球建筑产出的所有资源
               </Text>
             </Box>
-            <Button>确认摧毁</Button>
+            <Button onClick={onChange}>确认摧毁</Button>
           </Flex>
         </Flex>
       </Box>

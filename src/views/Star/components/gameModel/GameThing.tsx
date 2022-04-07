@@ -81,6 +81,7 @@ export const GameThing: React.FC<{
   text?: string;
   active?: boolean;
   border?: boolean;
+  draggable?: boolean;
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -93,6 +94,7 @@ export const GameThing: React.FC<{
   text,
   active,
   border,
+  draggable,
   onDragStart,
   onDrop,
   onDragOver,
@@ -103,7 +105,7 @@ export const GameThing: React.FC<{
   return (
     <Flex justifyContent='center' flexDirection='column'>
       <Container
-        draggable
+        draggable={draggable}
         onDragStart={onDragStart}
         onDrop={onDrop}
         onDragOver={onDragOver}
@@ -112,16 +114,16 @@ export const GameThing: React.FC<{
         border={border}
         data-item={JSON.stringify(itemData)}
       >
-        <Level shadow='primary' style={sizeBox?.text}>
-          Lv {level}
-        </Level>
-        <Box width={sizeBox.width} height={sizeBox.height}>
-          <Image
-            width={sizeBox.width}
-            height={sizeBox.height}
-            src={src || '/images/model/combat_01.png'}
-          />
-        </Box>
+        {level && (
+          <Level shadow='primary' style={sizeBox?.text}>
+            Lv {level}
+          </Level>
+        )}
+        {src && (
+          <Box width={sizeBox.width} height={sizeBox.height}>
+            <Image width={sizeBox.width} height={sizeBox.height} src={src} />
+          </Box>
+        )}
       </Container>
       {text && (
         <Text mt='10' small textAlign='center'>

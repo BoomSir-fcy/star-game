@@ -21,7 +21,7 @@ const UpgradeItem: React.FC<{
   height: number;
   title: string;
   src: string;
-  value: string;
+  value: string | number;
   extValue: number;
   moreButton?: React.ReactNode;
 }> = ({ width, height, title, src, value, extValue, moreButton }) => {
@@ -54,15 +54,21 @@ const UpgradeItem: React.FC<{
 
 export const ThingUpgradesModal: React.FC<{
   visible: boolean;
+  planet_id: number;
+  itemData: Api.Building.Building;
+  upgrade: any;
+  onChange: (value: any) => void;
   onClose: () => void;
-}> = ({ visible, onClose }) => {
+}> = ({ visible, planet_id, itemData, upgrade, onChange, onClose }) => {
+  // console.log(upgrade, upgrade?.estimate_building_detail?.building);
+
   return (
     <ModalWrapper title='建筑升级' visible={visible} setVisible={onClose}>
       <Box padding='30px 25px'>
         <Flex alignItems='center'>
-          <Text shadow='primary'>矿石建筑</Text>
+          <Text shadow='primary'>{itemData?.propterty?.name_en}</Text>
           <Text ml='27px' small>
-            2x2
+            {`${itemData?.propterty?.size.area_x}x${itemData?.propterty?.size.area_y}`}
           </Text>
         </Flex>
         <Flex flexWrap='wrap' pb='16px'>
@@ -72,9 +78,8 @@ export const ThingUpgradesModal: React.FC<{
               height={50}
               src='/images/commons/star/HP.png'
               title='HP值'
-              value='10/80'
+              value={itemData?.propterty?.hp}
               extValue={-1}
-              moreButton={<ThingaddBlood />}
             />
           </Item>
           <Item>
@@ -83,9 +88,23 @@ export const ThingUpgradesModal: React.FC<{
               height={50}
               src='/images/commons/star/durability.png'
               title='耐久度'
-              value='10/80'
+              value={`${itemData?.propterty?.per_durability}/${itemData?.propterty?.max_durability}`}
               extValue={-1}
-              moreButton={<ThingaddBlood />}
+              moreButton={
+                <>
+                  {itemData?.propterty?.per_durability !==
+                    itemData?.propterty?.max_durability && (
+                    <ThingRepair
+                      itemData={itemData}
+                      planet_id={planet_id}
+                      building_id={itemData._id}
+                      onCallback={() => {
+                        console.log(222);
+                      }}
+                    />
+                  )}
+                </>
+              }
             />
           </Item>
           <Item>
@@ -94,7 +113,7 @@ export const ThingUpgradesModal: React.FC<{
               height={50}
               src='/images/commons/icon/energy.png'
               title='能量消耗'
-              value='10/80'
+              value={`${itemData?.propterty?.per_cost_energy}/h`}
               extValue={-1}
             />
           </Item>
@@ -104,7 +123,7 @@ export const ThingUpgradesModal: React.FC<{
               height={50}
               src='/images/commons/star/defense.png'
               title='防御值'
-              value='10/80'
+              value={itemData?.propterty?.defence}
               extValue={-1}
             />
           </Item>
@@ -114,7 +133,7 @@ export const ThingUpgradesModal: React.FC<{
               height={50}
               src='/images/commons/star/attackValue.png'
               title='攻击值'
-              value='10/80'
+              value={itemData?.propterty?.attack}
               extValue={-1}
             />
           </Item>
@@ -124,7 +143,7 @@ export const ThingUpgradesModal: React.FC<{
               height={50}
               src='/images/commons/icon/population.png'
               title='人口消耗'
-              value='10/80'
+              value={`${itemData?.propterty?.per_cost_population}/h`}
               extValue={-1}
             />
           </Item>
@@ -141,10 +160,12 @@ export const ThingUpgradesModal: React.FC<{
               imgWidth={50}
               imgHeight={50}
               imgSrc='/images/commons/dsg-1.png'
-              number='100'
+              number={upgrade?.quick_upgrade_cost_star}
               unit='DSG'
             />
-            <Button ml='34px'>确认升级</Button>
+            <Button ml='34px' onClick={onChange}>
+              确认升级
+            </Button>
           </Flex>
         </ConfirmBox>
       </Box>

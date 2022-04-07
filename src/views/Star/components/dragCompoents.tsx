@@ -5,7 +5,7 @@ import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
 import { useStore } from 'state';
 
 import { Api } from 'apis';
-import { GameInfo, GameThing } from './gameModel';
+import { GameInfo, GameThing, Building } from './gameModel';
 
 const Container = styled(Flex)`
   position: relative;
@@ -117,7 +117,9 @@ export const DragCompoents: React.FC<{
 
   // 计算格子
   React.useEffect(() => {
-    const items = itemData.filter((item: any) => item.row === 2);
+    const items = itemData.filter(
+      (item: any) => item?.propterty?.size.area_x === 2,
+    );
     let newData: any = [];
     if (items.length > 0) {
       newData = itemData.slice(
@@ -141,6 +143,29 @@ export const DragCompoents: React.FC<{
     const diffLeft = dom?.offsetLeft - beforeDom?.offsetLeft;
     const diffTop = dom?.offsetTop - beforeDom?.offsetTop;
     return Math.sqrt(diffLeft * diffLeft + diffTop * diffTop);
+  };
+
+  // 计算绝对坐标
+  const getAbsolutePosition = (index: number) => {
+    const row = Math.floor(index / cols);
+    const col = Math.floor(index % rows);
+    // 计算相邻的格子坐标
+    const bottomRow = row + 1;
+    const bottomCol = col;
+    // 当前格子右边坐标
+    const rightRow = row;
+    const rightCol = col + 1;
+
+    if (bottomRow > rows - 1 || rightCol > cols - 1) {
+      console.log('已经没有格子了');
+      return [];
+    }
+    // 斜角点坐标
+    const bottomRightRow = bottomRow - row + (rightRow - row) + row;
+    const bottomRightCol = bottomCol - col + (rightCol - col) + col;
+    const bevelIndex = bottomRightRow * rows + bottomRightCol;
+
+    return [Number(index), Number(index) + 1, bevelIndex - 1, bevelIndex];
   };
 
   // 计算所有格子的距离
@@ -285,6 +310,11 @@ export const DragCompoents: React.FC<{
       const draggedItem = JSON.parse(dragged?.dataset?.item) || {};
       const targetItem = JSON.parse(afterTarget?.dataset?.item) || {};
 
+      // 获取当前点的正方形下标
+      const currentSize = getAbsolutePosition(to);
+      if (currentSize.length <= 0) return;
+      console.log(currentSize);
+
       // 目标格子为空时，拖拽到目标格子
       if (from === undefined || from === null) {
         listData.splice(to, 1, {
@@ -296,7 +326,7 @@ export const DragCompoents: React.FC<{
       }
 
       // 创建格子到九宫格中(to, draggedItem);
-      createGrid(to, draggedItem);
+      // createGrid(to, draggedItem);
 
       setState({
         ...state,
@@ -359,6 +389,7 @@ export const DragCompoents: React.FC<{
     }
   };
 
+  // console.log(state.data);
   return (
     <Box>
       <Flex justifyContent='space-between'>
@@ -386,7 +417,12 @@ export const DragCompoents: React.FC<{
                   setState({ ...state, currentBuilding: item });
                 }}
               >
-                <img src={item?.picture} alt='' />
+                <Building
+                  planet_id={planet_id}
+                  level={item?.propterty?.levelEnergy}
+                  src={item?.picture}
+                  itemData={item}
+                />
               </Normal>
             );
           })}
@@ -416,6 +452,7 @@ export const DragCompoents: React.FC<{
             {(buildings[state?.currentTab] ?? []).map((row: any) => (
               <BuildingsItem key={row.buildings_number}>
                 <GameThing
+                  draggable
                   onDragStart={dragStart}
                   onDrop={event => event.preventDefault()}
                   onDragEnter={event => event.preventDefault()}

@@ -1,2 +1,3 @@
 export * from './GameThing';
 export * from './GameInfo';
+export * from './Building';
