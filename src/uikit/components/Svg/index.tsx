@@ -5,6 +5,7 @@ export { default as HelpIcon } from './Icons/Help';
 export { default as OpenNewIcon } from './Icons/OpenNew';
 export { default as WarningIcon } from './Icons/Warning';
 export { default as ProgressBunny } from './Icons/ProgressBunny';
+export * from './Icons/Loading';
 
 export { default as Svg } from './Svg';
 export type { SvgProps } from './types';

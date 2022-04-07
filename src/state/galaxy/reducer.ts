@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {} from 'process';
 import { AppThunk, GalaxyState } from 'state/types';
 import {
   fetchAuctionRecordList,
@@ -12,6 +11,7 @@ import { getGalaxyIncoming, sliceByLevels } from './util';
 export const initialState: GalaxyState = {
   galaxyList: [],
   galaxyStarList: [],
+  loadingGalaxy: false,
   loading: false,
   currentGalaxy: {
     id: 0,
@@ -29,7 +29,7 @@ export const initialState: GalaxyState = {
 };
 
 export const fetchGalaxyListAsync = (): AppThunk => async dispatch => {
-  dispatch(setLoading(true));
+  dispatch(setLoadingGalaxy(true));
   const list = await fetchGalaxyList();
   dispatch(setGalaxyList(list));
 };
@@ -59,6 +59,9 @@ export const galaxySlice = createSlice({
   name: 'galaxy',
   initialState,
   reducers: {
+    setLoadingGalaxy: (state, action) => {
+      state.loadingGalaxy = action.payload;
+    },
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
@@ -71,7 +74,7 @@ export const galaxySlice = createSlice({
         state.galaxyList = payload;
         // state.galaxyList = list;
         // state.currentGalaxy = list[0];
-        state.loading = false;
+        state.loadingGalaxy = false;
       }
     },
     setGalaxyStarList: (state, action) => {
@@ -121,6 +124,7 @@ export const galaxySlice = createSlice({
 export const {
   setGalaxyList,
   setGalaxyStarList,
+  setLoadingGalaxy,
   setLoading,
   setCurrentGalaxy,
   setCurrentStarPeriod,
