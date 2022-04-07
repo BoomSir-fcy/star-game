@@ -5,6 +5,7 @@ import { ManAvatar, WoManAvatar } from 'components/Avatar';
 import { Gender } from 'state/types';
 import styled from 'styled-components';
 import { useToast } from 'contexts/ToastsContext';
+import KingAvatar from 'views/Galaxy/components/KingAvatar';
 
 const chance = new Chance();
 
@@ -54,18 +55,35 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
         <TweenText to='指挥官！请为自己创建一个身份' from='' />
       </TopBox>
       <Flex width='540px' mt='28px' justifyContent='space-between'>
-        <ManAvatar
+        <KingAvatar
+          onClick={() => {
+            return setGender(Gender.MAN);
+          }}
+          width={gender === Gender.MAN ? '241px' : '200px'}
+          height={gender === Gender.MAN ? '236px' : '200px'}
+          sex='man'
+        />
+        <KingAvatar
+          onClick={() => {
+            return setGender(Gender.WOMAN);
+          }}
+          width={gender === Gender.WOMAN ? '241px' : '200px'}
+          height={gender === Gender.WOMAN ? '236px' : '200px'}
+          sex='woman'
+        />
+        {/* <ManAvatar
           onClick={() => {
             return setGender(Gender.MAN);
           }}
           active={gender === Gender.MAN}
         />
+
         <WoManAvatar
           onClick={() => {
             return setGender(Gender.WOMAN);
           }}
           active={gender === Gender.WOMAN}
-        />
+        /> */}
       </Flex>
       <Label mt={22} width={603} pr='18px'>
         <Input

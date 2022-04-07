@@ -3,6 +3,7 @@ export { default as IconButton } from './IconButton';
 export { default as ImageButtton } from './ImageButtton';
 export { default as BackButton } from './BackButton';
 export { default as RefreshButton } from './RefreshButton';
+export * from './CloseButton';
 export type {
   ButtonProps,
   BaseButtonProps,

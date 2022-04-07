@@ -43,7 +43,7 @@ function App() {
   return (
     // <BrowserRouter>
     <>
-      {/* <AccountUpdater /> */}
+      <AccountUpdater />
       <ResetCSS />
       <ScaleOrientContent>
         <Suspense fallback='loading...'>

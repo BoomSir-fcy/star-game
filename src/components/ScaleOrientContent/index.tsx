@@ -1,5 +1,6 @@
 import StarrySky from 'components/StarrySky';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box } from 'uikit';
 import detectOrient from 'utils/detectOrient';
@@ -19,6 +20,7 @@ const Content = styled(Box)<{ scale: number }>`
 
 const ScaleOrientContent: React.FC = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
 
   const [scale, setScale] = useState(1);
   const handleResize = useCallback(() => {
@@ -39,9 +41,10 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       window.removeEventListener('resize', handleResize);
     };
   }, [handleResize]);
+
   return (
     <Box position='relative' id='detect-orient' ref={ref}>
-      <StarrySky />
+      <StarrySky bgType={pathname === '/plant-league' ? 2 : 0} />
       <Content id='scale-content' scale={scale}>
         {children}
       </Content>

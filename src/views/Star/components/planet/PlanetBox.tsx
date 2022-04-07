@@ -6,6 +6,7 @@ import StarCom from 'components/StarCom';
 import { Qualities, qualities } from 'uikit/theme/types';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 
+import { getPlanetRarity } from 'utils/planetRarity';
 import { PlanetDesc } from './PlanetDesc';
 
 const CardBox = styled(Card)`
@@ -69,8 +70,8 @@ export const PlanetBox: React.FC<{
                 <Box>
                   <Text fontSize='24px'>{info.name}</Text>
                   <Flex alignItems='center' mt='2px'>
-                    <Text color={QualityColor[level]} bold small>
-                      传说
+                    <Text color={QualityColor[info?.rarity]} bold small>
+                      {getPlanetRarity(info?.rarity)}
                     </Text>
                     <Text ml='12px' color={RaceTypeColor[2]} bold small>
                       {info?.race === 1

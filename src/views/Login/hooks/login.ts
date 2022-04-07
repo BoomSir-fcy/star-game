@@ -47,7 +47,27 @@ export const useLogin = () => {
     };
   }, [library, account, dispatch]);
 
+  const getPlanetNum = useCallback(async () => {
+    try {
+      const res = await Api.BalanceApi.getUserProduct();
+      if (Api.isSuccess(res)) {
+        return res;
+      }
+      return (
+        res || {
+          code: -1,
+        }
+      );
+    } catch (error: any) {
+      console.error(`fetch fetchUserBalance error: ${error}`);
+      return {
+        code: error?.code || -1,
+      };
+    }
+  }, []);
+
   return {
     handleLogin,
+    getPlanetNum,
   };
 };

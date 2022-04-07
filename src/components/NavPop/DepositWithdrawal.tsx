@@ -11,6 +11,7 @@ import { useTokenBalance } from 'hooks/useTokenBalance';
 import { getBalanceAmount } from 'utils/formatBalance';
 import { BIG_TEN } from 'config/constants/bigNumber';
 import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
+import { useToast } from 'contexts/ToastsContext';
 import { FetchApproveNum, useRWA } from './hook';
 
 const ShaDowBox = styled(Flex)`
@@ -56,6 +57,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
   decimals = 18,
   close,
 }) => {
+  const { toastError, toastSuccess, toastWarning } = useToast();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -82,6 +84,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
     aux.select();
     document.execCommand('copy');
     document.body.removeChild(aux);
+    toastSuccess('复制成功');
   };
 
   // 充值、提取
@@ -106,8 +109,10 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
           isChainToken = true;
         }
         await Recharge(TokenInfo?.coinId, addPrecisionNum, isChainToken);
+        toastSuccess('充值成功');
         close();
       } catch (error) {
+        toastError('充值失败');
         console.error(error);
       } finally {
         setpending(false);
@@ -115,8 +120,10 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
     } else {
       try {
         await drawCallback(val, TokenInfo?.coinId);
+        toastSuccess('提现成功');
         close();
       } catch (e) {
+        toastError('提现失败');
         console.error(e);
       } finally {
         setpending(false);
@@ -138,8 +145,10 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
     setpending(true);
     try {
       await onApprove();
+      toastSuccess('授权成功');
     } catch (e) {
       console.error(e);
+      toastError('授权失败');
     } finally {
       setpending(false);
     }
