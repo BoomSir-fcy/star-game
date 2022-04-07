@@ -65,6 +65,7 @@ export const lightColors: Colors = {
   raceHuman: '#3dcfff',
   raceZerg: '#8ac001',
   goldBorder: '#8ac001',
+  lightBorder: '#f9feff',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
@@ -96,6 +97,7 @@ export const darkColors: Colors = {
   raceHuman: '#3dcfff',
   raceZerg: '#8ac001',
   goldBorder: '#EB9C12',
+  lightBorder: '#f9feff',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',

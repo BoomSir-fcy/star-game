@@ -1,5 +1,5 @@
 import { HTMLAttributes } from "react";
-import { SpaceProps, LayoutProps } from "styled-system";
+import { SpaceProps, LayoutProps, BorderProps, PositionProps } from "styled-system";
 import { Colors } from "../../theme/types";
 
 export interface CardRibbonProps extends SpaceProps, HTMLAttributes<HTMLDivElement> {
@@ -26,4 +26,9 @@ export interface CardProps extends SpaceProps, LayoutProps, HTMLAttributes<HTMLD
   isWarning?: boolean;
   isDisabled?: boolean;
   ribbon?: React.ReactNode;
+}
+
+export interface BorderCardProps extends SpaceProps, LayoutProps, BorderProps, PositionProps, HTMLAttributes<HTMLDivElement> {
+  isActive?: boolean;
+  borderWidth?: number;
 }
