@@ -9,6 +9,7 @@ const BorderCard = styled.div<BorderCardProps>`
     }`};
   box-shadow: ${({ isActive, theme }) =>
     isActive ? theme.shadows.highlight : 'none'};
+  background-color: ${({ theme }) => theme.colors.backgroundCard};
   ${position}
   ${space}
   ${layout}

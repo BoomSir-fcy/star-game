@@ -4,7 +4,7 @@ import PreSoldier from 'game/core/PreSoldier';
 import { Box, BoxProps } from 'uikit';
 
 interface PreviewSoldierProps extends BoxProps {
-  boards: Boards;
+  boards?: Boards;
   src?: string;
 }
 
@@ -25,28 +25,31 @@ const PreviewSoldier: React.FC<PreviewSoldierProps> = ({
 
   const dragStartHandle = useCallback(
     (event: any) => {
-      boards.addDragPreSoldier(event.detail.soldier);
+      boards?.addDragPreSoldier(event.detail.soldier);
     },
     [boards],
   );
 
   const dragEndHandle = useCallback(
     event => {
-      boards.offDragPreSoldier();
+      boards?.offDragPreSoldier();
     },
     [boards],
   );
 
   useEffect(() => {
-    preSoldier.addEventListener('pointerdown', dragStartHandle);
-    preSoldier.addEventListener('pointerup', dragEndHandle);
-    preSoldier.addEventListener('pointerupoutside', dragEndHandle);
-    return () => {
-      preSoldier.removeEventListener('pointerdown', dragStartHandle);
-      preSoldier.removeEventListener('pointerup', dragEndHandle);
-      preSoldier.removeEventListener('pointerupoutside', dragEndHandle);
-    };
-  }, [preSoldier, dragStartHandle, dragEndHandle]);
+    if (boards) {
+      preSoldier.addEventListener('pointerdown', dragStartHandle);
+      preSoldier.addEventListener('pointerup', dragEndHandle);
+      preSoldier.addEventListener('pointerupoutside', dragEndHandle);
+      return () => {
+        preSoldier.removeEventListener('pointerdown', dragStartHandle);
+        preSoldier.removeEventListener('pointerup', dragEndHandle);
+        preSoldier.removeEventListener('pointerupoutside', dragEndHandle);
+      };
+    }
+    return undefined;
+  }, [boards, preSoldier, dragStartHandle, dragEndHandle]);
 
   return <Box width={122} height={122} ref={ref} {...props} />;
 };

@@ -105,6 +105,7 @@ export type Colors = {
   raceHuman: string;
   raceZerg: string;
 
+  border: string;
   goldBorder: string;
   lightBorder: string;
   // Gradients
