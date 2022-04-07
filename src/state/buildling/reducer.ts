@@ -4,7 +4,12 @@ import { fetchBuildingsListAsync, fetchPlanetBuildingsAsync } from './fetchers';
 
 export const initialState: BuildlingState = {
   buildings: [], // 所有基础建筑
-  selfBuildings: [],
+  selfBuildings: {
+    building_type: 0,
+    buildings: [],
+    id: '',
+    planet_id: 0,
+  },
 };
 
 export const buildling = createSlice({
@@ -20,13 +25,15 @@ export const buildling = createSlice({
             // eslint-disable-next-line no-param-reassign
             current[key] = [];
           }
-          current[key]?.push(next);
+          if (next?.propterty?.levelEnergy === 1) {
+            current[key]?.push(next);
+          }
           return current;
         }, {});
         state.buildings = map;
       })
       .addCase(fetchPlanetBuildingsAsync.fulfilled, (state, action) => {
-        // console.log(action.payload);
+        state.selfBuildings = action.payload;
       });
   },
 });
