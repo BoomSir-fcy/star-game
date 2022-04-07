@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Box, Flex, Text, Image, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useWeb3React } from '@web3-react/core';
+import { useToast } from 'contexts/ToastsContext';
 
 const ShaDowBox = styled(Flex)`
   width: 100%;
@@ -15,6 +16,8 @@ const ShaDowBox = styled(Flex)`
 `;
 
 const InvitePop: React.FC = () => {
+  const { toastError, toastSuccess, toastWarning } = useToast();
+
   const { t } = useTranslation();
   const { account } = useWeb3React();
 
@@ -26,6 +29,7 @@ const InvitePop: React.FC = () => {
     aux.select();
     document.execCommand('copy');
     document.body.removeChild(aux);
+    toastSuccess('复制成功');
   };
 
   return (
@@ -60,7 +64,9 @@ const InvitePop: React.FC = () => {
           </Box>
         </Flex>
         <Box>
-          <Button variant='vs'>复制链接</Button>
+          <Button variant='vs' onClick={() => Copy()}>
+            复制链接
+          </Button>
         </Box>
       </ShaDowBox>
     </Box>

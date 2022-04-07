@@ -4,6 +4,7 @@ import { Box, Flex, Button, Text, Card, Image } from 'uikit';
 import ModalWrapper from 'components/Modal';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Api } from 'apis';
+import { useToast } from 'contexts/ToastsContext';
 
 import { TextList } from '../Modal';
 
@@ -17,6 +18,7 @@ export const GrowPop: React.FC<{
   callBack: () => void;
 }> = ({ visible, onClose, callBack }) => {
   const parsedQs = useParsedQueryString();
+  const { toastError, toastSuccess, toastWarning } = useToast();
 
   const ToStrengthenPlante = async () => {
     try {
@@ -24,10 +26,12 @@ export const GrowPop: React.FC<{
         planet_id: Number(parsedQs.id),
       });
       if (Api.isSuccess(res)) {
+        toastSuccess('操作成功');
         console.log(res);
         callBack();
       }
     } catch (error) {
+      toastError('操作失败');
       console.log(error);
     }
   };

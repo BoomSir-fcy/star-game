@@ -6,6 +6,7 @@ import './spiders.css';
 export const backgroundVariants = [
   '/images/commons/sky-bg0.png',
   '/images/commons/sky-bg1.jpg',
+  '/images/commons/sky-bg2.jpg',
 ];
 
 const getBackground = ({ type }: { type: number }) => {

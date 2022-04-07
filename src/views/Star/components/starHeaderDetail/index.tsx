@@ -4,9 +4,8 @@ import { useDispatch } from 'react-redux';
 import { Button, Text, Flex, Card } from 'uikit';
 import { useStore } from 'state';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-
 import StarCom from 'components/StarCom';
-
+import { getPlanetRarity } from 'utils/planetRarity';
 import { RechargeAssets } from '../Modal';
 
 const CardStyled = styled(Card)`
@@ -47,7 +46,9 @@ const StarHeader = () => {
             />
             <Flex flexDirection='column' justifyContent='space-between'>
               <Flex alignItems='center'>
-                <Text color='legend'>传说</Text>
+                <Text color='legend'>
+                  {getPlanetRarity(planetInfo?.rarity)}
+                </Text>
                 <Text ml='13px' bold>
                   Lv{planetInfo?.level}
                 </Text>
