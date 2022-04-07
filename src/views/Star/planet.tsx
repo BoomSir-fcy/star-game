@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -42,6 +42,7 @@ const LinkItem = styled(Link)`
 
 const Planet = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
   const [state, setState] = useState({
@@ -75,6 +76,7 @@ const Planet = () => {
         }
         console.log(newList);
         await SetWorking(id, newList);
+        navigate('/plant-league');
       } catch (e) {
         console.log(e);
       }
@@ -165,7 +167,10 @@ const Planet = () => {
         <Flex ml={choose ? '7px' : '23px'} flex={1}>
           <BgCard variant={choose ? 'full' : 'big'} fringe padding='40px 37px'>
             <Flex justifyContent='space-between'>
-              <PlanetRaceTabs current={state.race} />
+              <PlanetRaceTabs
+                callBack={id => setState({ ...state, race: id })}
+                current={state.race}
+              />
               <PlanetSearch
                 onEndCallback={e => setState({ ...state, token: e })}
               />

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { ThunkAction } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
+import { Qualities } from 'uikit/theme/types';
 
 // 性别
 export enum Gender {
@@ -135,7 +136,7 @@ export interface planetInfo {
   name: string;
   owner: string;
   oldOwner: string;
-  rarity: number;
+  rarity: Qualities;
   level: number;
   strengthenLevel: number;
   working: boolean;

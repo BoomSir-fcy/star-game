@@ -170,7 +170,6 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
         <DepositWithdrawal
           close={() => {
             setVisible(false);
-            console.log(123123);
           }}
           TokenInfo={ActiveToken}
         />

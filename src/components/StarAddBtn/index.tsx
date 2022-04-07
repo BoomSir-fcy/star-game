@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Text, BoxProps, Flex } from 'uikit';
+import { Qualities, qualities } from 'uikit/theme/types';
 
 const StyledStar = styled.div<StarAddBtnProps>`
   position: relative;
@@ -65,7 +66,9 @@ const StarImage = styled.img<StarAddBtnProps>`
   border-radius: 50%;
   z-index: 1;
   border: ${({ imgBorder, theme }) =>
-    imgBorder ? `2px solid ${theme.colors.goldBorder}` : 'none'};
+    imgBorder
+      ? `2px solid ${theme.colors[imgBorder || qualities.ORDINARY]}}`
+      : 'none'};
 `;
 
 const RemoveIcon = styled.div`
@@ -89,7 +92,7 @@ interface StarAddBtnProps extends BoxProps {
   Leve?: string | number;
   url?: string;
   size?: string;
-  imgBorder?: boolean;
+  imgBorder?: Qualities;
   showIcon?: boolean;
   callBack?: () => void;
   onRemove?: () => void;
