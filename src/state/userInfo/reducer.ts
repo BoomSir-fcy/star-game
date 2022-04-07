@@ -7,6 +7,7 @@ import {
   fetchAllowance,
   fetchUserBalance,
   fetchUserInfoByAccount,
+  fetchUserProduct,
 } from './fetchers';
 
 const currentTimestamp = () => new Date().getTime();
@@ -46,6 +47,16 @@ export const initialState: UserInfoState = {
   },
 
   userBalance: [],
+
+  userProduct: {
+    planet_num: 0,
+    stone_product: 0,
+    energy_product: 0,
+    population_product: 0,
+    stone: 0,
+    energy: 0,
+    population: 0,
+  },
 };
 
 export const fetchInfoViewAsync =
@@ -87,6 +98,11 @@ export const fetchAllowanceAsync =
 export const fetchUserBalanceAsync = (): AppThunk => async dispatch => {
   const Balance = await fetchUserBalance();
   dispatch(setBalance(Balance));
+};
+
+export const fetchUserProductAsync = (): AppThunk => async dispatch => {
+  const Product = await fetchUserProduct();
+  dispatch(setProduct(Product));
 };
 
 export const userInfoSlice = createSlice({
@@ -132,6 +148,12 @@ export const userInfoSlice = createSlice({
         state.userBalance = payload;
       }
     },
+    setProduct: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        state.userProduct = payload;
+      }
+    },
   },
 });
 
@@ -142,6 +164,7 @@ export const {
   setUserInfoView,
   setAllowance,
   setBalance,
+  setProduct,
 } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

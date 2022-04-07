@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Flex, Box, Image } from 'uikit';
 import { useDispatch } from 'react-redux';
-import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
+import {
+  fetchUserBalanceAsync,
+  fetchUserProductAsync,
+} from 'state/userInfo/reducer';
 import Avatar from './Avatar';
 import Info from './Info';
 
@@ -18,6 +21,7 @@ const Dashboard: React.FC = ({ children }) => {
 
   useEffect(() => {
     dispatch(fetchUserBalanceAsync());
+    dispatch(fetchUserProductAsync());
   }, [dispatch]);
 
   return (

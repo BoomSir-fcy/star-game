@@ -5,6 +5,7 @@ import { useTranslation } from 'contexts/Localization';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Box, Image, Text, Button } from 'uikit';
+import { useStore } from 'state/util';
 
 const ButtonStyled = styled(Button)`
   background: url('/images/commons/dashboard/a1.png');
@@ -20,6 +21,7 @@ const ButtonStyled = styled(Button)`
 
 const Avatar = () => {
   const { t } = useTranslation();
+  const { userInfo } = useStore(p => p.userInfo);
 
   const [PopTitle, setPopTitle] = useState('');
   const [PopType, setPopType] = useState(0);
@@ -35,10 +37,14 @@ const Avatar = () => {
         }}
       >
         <Box position='absolute' top={20} width='100%'>
-          <Text textAlign='center'>盘哥</Text>
+          <Text textAlign='center'>{userInfo.nickname}</Text>
         </Box>
         <Box position='relative' zIndex={-1} width={224} mt='15px' ml='24px'>
-          <Image src='/images/login/a-man.png' width={286} height={286} />
+          <Image
+            src={userInfo.avatar || '/images/login/a-man.png'}
+            width={286}
+            height={286}
+          />
         </Box>
       </Box>
       <Box position='absolute' bottom='0' left='-4px' width='100%'>
@@ -53,11 +59,7 @@ const Avatar = () => {
         </ButtonStyled>
       </Box>
       <Modal title={PopTitle} visible={visible} setVisible={setVisible}>
-        {PopType === 1 ? (
-          <UserInfo nftImage='/images/login/a-man.png' />
-        ) : (
-          <InvitePop />
-        )}
+        {PopType === 1 ? <UserInfo /> : <InvitePop />}
       </Modal>
     </Box>
   );

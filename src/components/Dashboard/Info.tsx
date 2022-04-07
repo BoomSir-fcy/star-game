@@ -37,6 +37,7 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
   const [ActiveToken, setActiveToken] = useState<UserBalanceView>();
 
   const Balance = useStore(p => p.userInfo.userBalance);
+  const Product = useStore(p => p.userInfo.userProduct);
 
   const DSGblance = useMemo(() => {
     const balance = Balance.filter(item => {
@@ -108,7 +109,7 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
                   <StarCom variant='none' ml='16px' />
                   <Box>
                     <Text textAlign='left'>星球数</Text>
-                    <Text textAlign='left'>1</Text>
+                    <Text textAlign='left'>{Product.planet_num}</Text>
                   </Box>
                 </Flex>
               </ButtonTag1>
@@ -125,8 +126,10 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
                   />
                 </Box>
                 <Box ml='8px'>
-                  <Text textAlign='left'>总产能: 0.32/s</Text>
-                  <Text textAlign='left'>总矿石: 10</Text>
+                  <Text textAlign='left'>
+                    总产能: {Product.stone_product}/s
+                  </Text>
+                  <Text textAlign='left'>总矿石: {Product.stone}</Text>
                 </Box>
               </Flex>
             </ButtonTag2>
@@ -134,20 +137,36 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
               <Flex pl='8px' alignItems='center' width='100%'>
                 <Box width={70}>
                   <Image
-                    src='/images/commons/dashboard/collect.png'
+                    src='/images/commons/dashboard/p.png'
                     width={70}
                     height={70}
                   />
                 </Box>
                 <Box ml='8px'>
-                  <Text textAlign='left'>总产能: 0.32/s</Text>
-                  <Text textAlign='left'>总矿石: 10</Text>
+                  <Text textAlign='left'>
+                    总产能: {Product.population_product}/s
+                  </Text>
+                  <Text textAlign='left'>总人口: {Product.population}</Text>
                 </Box>
               </Flex>
             </ButtonTag2>
             <Link to='/test/card'>
               <ButtonTag2 variant='custom' ml='8px'>
-                公共组件
+                <Flex pl='8px' alignItems='center' width='100%'>
+                  <Box width={70}>
+                    <Image
+                      src='/images/commons/dashboard/item.png'
+                      width={70}
+                      height={70}
+                    />
+                  </Box>
+                  <Box ml='8px'>
+                    <Text textAlign='left'>
+                      总产能: {Product.energy_product}/s
+                    </Text>
+                    <Text textAlign='left'>总能量: {Product.energy}</Text>
+                  </Box>
+                </Flex>
               </ButtonTag2>
             </Link>
           </Box>
