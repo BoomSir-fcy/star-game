@@ -4,6 +4,7 @@ import { Box, Flex, Text, Image } from 'uikit';
 import styled from 'styled-components';
 import { StarAddBtn } from 'components';
 import { useStore } from 'state/util';
+import { qualities } from 'uikit/theme/types';
 
 const GalaxyBg = styled(Box)`
   width: 60%;
@@ -42,7 +43,10 @@ const JoinTheAlliance = () => {
       <Flex mb='-36px' alignItems='center' justifyContent='center'>
         <StarAddBtn
           callBack={() => addStar(allianceList[0]?.planetId)}
-          imgBorder
+          imgBorder={
+            (allianceList && allianceList[0]?.planet.rarity) ||
+            qualities.ORDINARY
+          }
           size='200px'
           url={
             allianceList && allianceList[0]?.planet ? '/images/star/01.jpg' : ''
@@ -54,7 +58,10 @@ const JoinTheAlliance = () => {
       <Flex alignItems='center' justifyContent='space-between'>
         <StarAddBtn
           callBack={() => addStar(allianceList[4]?.planetId)}
-          imgBorder
+          imgBorder={
+            (allianceList && allianceList[4]?.planet.rarity) ||
+            qualities.ORDINARY
+          }
           size='200px'
           url={
             allianceList && allianceList[4]?.planet ? '/images/star/05.jpg' : ''
@@ -64,7 +71,10 @@ const JoinTheAlliance = () => {
         />
         <StarAddBtn
           callBack={() => addStar(allianceList[1]?.planetId)}
-          imgBorder
+          imgBorder={
+            (allianceList && allianceList[1]?.planet.rarity) ||
+            qualities.ORDINARY
+          }
           size='200px'
           url={
             allianceList && allianceList[1]?.planet ? '/images/star/02.jpg' : ''
@@ -76,7 +86,10 @@ const JoinTheAlliance = () => {
       <Flex alignItems='center' justifyContent='center'>
         <StarAddBtn
           callBack={() => addStar(allianceList[3]?.planetId)}
-          imgBorder
+          imgBorder={
+            (allianceList && allianceList[3]?.planet.rarity) ||
+            qualities.ORDINARY
+          }
           size='200px'
           url={
             allianceList && allianceList[3]?.planet ? '/images/star/04.jpg' : ''
@@ -86,7 +99,10 @@ const JoinTheAlliance = () => {
         />
         <StarAddBtn
           callBack={() => addStar(allianceList[2]?.planetId)}
-          imgBorder
+          imgBorder={
+            (allianceList && allianceList[2]?.planet.rarity) ||
+            qualities.ORDINARY
+          }
           size='200px'
           url={
             allianceList && allianceList[2]?.planet ? '/images/star/03.jpg' : ''
