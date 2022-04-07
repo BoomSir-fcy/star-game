@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
@@ -15,42 +15,51 @@ import {
 } from 'state/galaxy/reducer';
 import { shortenAddress } from 'utils';
 import { toast } from 'react-toastify';
+import { StarLevelInfo } from 'state/types';
 import { useWeb3React } from '@web3-react/core';
+import { useTranslation } from 'contexts/Localization';
 import { GalaxyImage } from './components/GalaxyImage';
+import { Rewards } from './Rewards';
 
 const StyledCard = styled(Card)`
   width: 977px;
   height: 476px;
   margin-left: 40px;
-  padding: 56px 67px;
+  padding: 20px 67px;
 `;
 
 const Galaxy = () => {
   useGalaxyList();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { account } = useWeb3React();
   const { galaxyList, currentGalaxy, loadingGalaxy } = useStore(p => p.galaxy);
+  const [navList, setNavList] = useState<StarLevelInfo[]>([]);
 
-  const navList = useMemo(() => {
-    return galaxyList.map((item: any) => {
+  const initList = useCallback(() => {
+    const list = galaxyList.map((item: any) => {
       return {
         ...item,
         label: item.name,
         badge: item.owner?.toLowerCase() === account?.toLowerCase(),
       };
     });
+    setNavList(list);
   }, [galaxyList, account]);
 
   const getStarList = useCallback(() => {
     if (galaxyList[0]?.id) {
-      dispatch(setCurrentGalaxy(galaxyList[0]));
       dispatch(fetchGalaxyStarListAsync(galaxyList[0].id));
     }
   }, [galaxyList, dispatch]);
 
   useEffect(() => {
-    getStarList();
-  }, [getStarList]);
+    initList();
+  }, [initList]);
+
+  // useEffect(() => {
+  //   getStarList();
+  // }, [getStarList]);
 
   return (
     <Layout>
@@ -78,34 +87,39 @@ const Galaxy = () => {
               <StyledCard>
                 <Flex flexDirection='column' justifyContent='space-between'>
                   <Flex flexDirection='column'>
-                    <Text fontSize='24px'>
-                      恒星数： {currentGalaxy?.starTotal}个（已被占领：
-                      {currentGalaxy?.starOwnerTotal}）
+                    {/* <Text fontSize='24px'>
+                      {t('Number of stars: %total% (occupied: %number%)', {
+                        total: currentGalaxy?.starTotal,
+                        number: currentGalaxy?.starOwnerTotal,
+                      })}
+                    </Text> */}
+                    <Text mt='10px' fontSize='24px'>
+                      {t('Galaxy Lord: %name% (can be obtained by auction)', {
+                        name: currentGalaxy?.nickname,
+                      })}
                     </Text>
                     <Text mt='10px' fontSize='24px'>
-                      星系主：
-                      {currentGalaxy?.nickname || '无'}
-                      （可竞拍获得）
+                      {t(
+                        'Galaxy Rewards: 10000 STAR (distributed every 24:00 UTC)',
+                      )}
                     </Text>
                     <Text mt='10px' fontSize='24px'>
-                      星系奖励： 10000 STAR（每UTC 24点派发）
+                      Token: {currentGalaxy?.id}
                     </Text>
-                    <Text mt='10px' fontSize='24px'>
-                      剩余可领取奖励时间(UTC 24)： 10h:10m:10s
-                    </Text>
+                    <Rewards mt='20px' t={t} galaxy_id={currentGalaxy?.id} />
                   </Flex>
-                  <Flex mt='100px' justifyContent='space-between'>
+                  <Flex mt='40px' justifyContent='space-between'>
                     <Button
                       as={Link}
                       to={`/galaxy/auction?i=${currentGalaxy?.id}`}
                     >
-                      星系竞拍
+                      {t('Galaxy Auction')}
                     </Button>
                     <Button
                       as={Link}
                       to={`/galaxy/stars?i=${currentGalaxy?.id}`}
                     >
-                      占领恒星
+                      {t('Occupy the stars')}
                     </Button>
                   </Flex>
                 </Flex>

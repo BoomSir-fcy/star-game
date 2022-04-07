@@ -14,6 +14,7 @@ import { Api } from 'apis';
 import { useStore } from 'state';
 import { useWeb3React } from '@web3-react/core';
 import { ConnectWalletButton } from 'components';
+import { useTranslation } from 'contexts/Localization';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
@@ -47,6 +48,7 @@ export interface UpgradePlanetInfo extends Api.Planet.PlanetInfo {
 
 const Upgrade = () => {
   const { account } = useWeb3React();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const parsedQs = useParsedQueryString();
@@ -176,7 +178,7 @@ const Upgrade = () => {
         />
       ) : (
         <Flex flexDirection='column'>
-          <Flex mb='20px' alignItems='center'>
+          <Flex alignItems='center'>
             <Flex width='320px' mr='50px' alignItems='center'>
               <GradeBox>
                 <Text bold shadow='primary'>
@@ -214,23 +216,39 @@ const Upgrade = () => {
             <StyledCard>
               <Flex flexDirection='column' justifyContent='space-between'>
                 <Flex flexDirection='column'>
-                  <Text small>*升级需献祭添加相同品质、相同等级的星球</Text>
-                  <Text small>*升级需添加成为联盟的星球</Text>
-                  <Text small>*所有建筑等级大于星球等级1级时可升级</Text>
+                  <Text small>
+                    *
+                    {t(
+                      'Upgrade requires sacrifice to add planets of the same quality and level',
+                    )}
+                  </Text>
+                  <Text small>
+                    *
+                    {t(
+                      'To upgrade, you need to add a planet to become an alliance',
+                    )}
+                  </Text>
+                  <Text small>
+                    *
+                    {t(
+                      'All buildings can be upgraded when the level is higher than planet level 1',
+                    )}
+                  </Text>
                 </Flex>
-                <Flex mt='87px' flexDirection='column' alignItems='center'>
+                <Flex mt='40px' flexDirection='column' alignItems='center'>
                   {!upgradeInfo.success && (
                     <Text fontSize='22px' color='failure'>
-                      *能量建筑等级不符合
+                      *{t('Energy building level does not meet')}
                     </Text>
                   )}
                   <Button
                     disabled={!upgradeInfo.success || !usableMaterialIds.length}
                     width='270px'
                     mt='20px'
+                    padding='0'
                     onClick={() => setVisible(true)}
                   >
-                    星球升级
+                    {t('Planet upgrade')}
                   </Button>
                 </Flex>
               </Flex>
@@ -240,22 +258,25 @@ const Upgrade = () => {
       )}
 
       <ModalWrapper
-        title='星球升级'
+        title={t('Planet upgrade')}
         visible={visible}
         setVisible={() => setVisible(false)}
       >
         <Flex padding='40px'>
           <StarCom scale='ld' quality={2} mr='40px' />
-          <Flex flexDirection='column' justifyContent='space-between'>
+          <Flex flex={1} flexDirection='column' justifyContent='space-between'>
             <Text fontSize='22px'>
-              升级会持续6小时，期间将无法操作星球，是否继续升级？
+              {t(
+                'The upgrade will last for 6 hours, during which the planet cannot be operated. Do you want to continue the upgrade?',
+              )}
             </Text>
             {!account ? (
               <ConnectWalletButton scale='ld' width='270px' padding='0 10px' />
             ) : (
               <Button
                 disabled={pending}
-                width='270px'
+                width='300px'
+                padding='0'
                 onClick={async () => {
                   setPending(true);
                   await upgrade(planetId, usableMaterialIds);
@@ -267,7 +288,11 @@ const Upgrade = () => {
                   setVisible(false);
                 }}
               >
-                {pending ? <Dots>确认升级</Dots> : '确认升级'}
+                {pending ? (
+                  <Dots>{t('Confirm upgrade')}</Dots>
+                ) : (
+                  t('Confirm upgrade')
+                )}
               </Button>
             )}
           </Flex>
