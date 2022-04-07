@@ -9,6 +9,7 @@ import { useStore } from 'state';
 import { useGalaxyList } from 'state/galaxy/hooks';
 import { useDispatch } from 'react-redux';
 import {
+  fetchGalaxyListAsync,
   fetchGalaxyStarListAsync,
   setCurrentGalaxy,
 } from 'state/galaxy/reducer';
@@ -53,7 +54,11 @@ const Galaxy = () => {
 
   return (
     <Layout>
-      <Dashboard />
+      <Dashboard
+        onRefresh={async () => {
+          dispatch(fetchGalaxyListAsync());
+        }}
+      />
       {loadingGalaxy ? (
         <Spinner />
       ) : (

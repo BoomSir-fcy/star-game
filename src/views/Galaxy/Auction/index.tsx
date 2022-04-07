@@ -122,7 +122,13 @@ const Auction = () => {
       <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
         <Box>
           <BackButton />
-          <RefreshButton ml='33px' />
+          <RefreshButton
+            ml='33px'
+            onRefresh={async () => {
+              dispatch(fetchGetNftViewAsync(galaxyId));
+              dispatch(fetchAuctionRecordListAsync(galaxyId));
+            }}
+          />
         </Box>
         <BgCard padding='40px 80px' variant='full'>
           <Flex flexDirection='column'>

@@ -40,7 +40,11 @@ const Stars = () => {
 
   return (
     <Layout>
-      <Dashboard />
+      <Dashboard
+        onRefresh={async () => {
+          dispatch(fetchGalaxyStarListAsync(galaxyId));
+        }}
+      />
       {loading ? (
         <Spinner />
       ) : (
