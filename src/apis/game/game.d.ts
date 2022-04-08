@@ -28,7 +28,25 @@ declare namespace Api {
     }
 
     interface UnitListRes {
-      units: UnitInfo[]
+      units: {
+        [id: string]: UnitInfo;
+      }
+    }
+
+    interface UnitPlanetPos {
+      base_unit_id: number;
+      pos: {
+        x: number;
+        y: number;
+      };
+      speed: number;
+    }
+    interface UnitPlanetRes {
+      units: {
+        plaet_id: number;
+        units: UnitPlanetPos[];
+      }
+
     }
 
     interface ParamsUnit {

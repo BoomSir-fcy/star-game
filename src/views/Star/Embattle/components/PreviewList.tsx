@@ -1,21 +1,24 @@
-import Boards from 'game/core/Boards';
+import Game from 'game/core/Game';
 import React, { useMemo, useState } from 'react';
 import { useStore } from 'state';
 import { Box, Text, BgCard, Flex, BorderCard } from 'uikit';
 import PreviewSoldier from './PreviewSoldier';
 
 interface PreviewListProps {
-  boards: Boards;
+  game: Game;
   race?: Api.Game.race;
 }
-const PreviewList: React.FC<PreviewListProps> = ({ boards, race = 1 }) => {
+const PreviewList: React.FC<PreviewListProps> = ({ game, race = 1 }) => {
   const units = useStore(p => p.game.baseUnits);
 
-  console.log(units);
-  const list = useMemo(() => {
-    if (units[race]) return units[race] as unknown as Api.Game.UnitInfo[];
-    return [];
+  const unitMaps = useMemo(() => {
+    if (units[race]) return units[race];
+    return {};
   }, [units, race]);
+
+  const list = useMemo(() => {
+    return Object.values(unitMaps);
+  }, [unitMaps]);
 
   return (
     <BgCard variant='long'>
@@ -35,7 +38,7 @@ const PreviewList: React.FC<PreviewListProps> = ({ boards, race = 1 }) => {
                   LV 1
                 </Text>
                 <PreviewSoldier
-                  boards={boards}
+                  game={game}
                   position='absolute'
                   top='0'
                   left='0'

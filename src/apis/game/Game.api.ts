@@ -3,7 +3,7 @@ import { Http } from '../http';
 
 export class GameApi extends Http {
   // 获取星球战斗建筑
-  async getGamePlanetUnits(planet_id: number): Promise<Api.Response<Api.User.UserInfo>> {
+  async getGamePlanetUnits(planet_id: number): Promise<Api.Response<Api.Game.UnitPlanetRes>> {
     return this.get(`game/planet/units`, { planet_id });
   }
 

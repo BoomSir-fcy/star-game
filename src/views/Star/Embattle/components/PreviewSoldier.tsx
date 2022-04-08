@@ -1,10 +1,10 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import Boards from 'game/core/Boards';
+import Game from 'game/core/Game';
 import PreSoldier from 'game/core/PreSoldier';
 import { Box, BoxProps } from 'uikit';
 
 interface PreviewSoldierProps extends BoxProps {
-  boards?: Boards;
+  game?: Game;
   src?: string;
   sid: number;
 }
@@ -12,7 +12,7 @@ interface PreviewSoldierProps extends BoxProps {
 const PreviewSoldier: React.FC<PreviewSoldierProps> = ({
   src = '/assets/flowerTop.png',
   sid,
-  boards,
+  game,
   ...props
 }) => {
   const [preSoldier] = useState(new PreSoldier(src, sid));
@@ -27,20 +27,20 @@ const PreviewSoldier: React.FC<PreviewSoldierProps> = ({
 
   const dragStartHandle = useCallback(
     (event: any) => {
-      boards?.addDragPreSoldier(event.detail.soldier);
+      game?.addDragPreSoldier(event.detail.soldier);
     },
-    [boards],
+    [game],
   );
 
   const dragEndHandle = useCallback(
     event => {
-      boards?.offDragPreSoldier();
+      game?.offDragPreSoldier();
     },
-    [boards],
+    [game],
   );
 
   useEffect(() => {
-    if (boards) {
+    if (game) {
       preSoldier.addEventListener('pointerdown', dragStartHandle);
       preSoldier.addEventListener('pointerup', dragEndHandle);
       preSoldier.addEventListener('pointerupoutside', dragEndHandle);
@@ -51,7 +51,7 @@ const PreviewSoldier: React.FC<PreviewSoldierProps> = ({
       };
     }
     return undefined;
-  }, [boards, preSoldier, dragStartHandle, dragEndHandle]);
+  }, [game, preSoldier, dragStartHandle, dragEndHandle]);
 
   return <Box width={122} height={122} ref={ref} {...props} />;
 };

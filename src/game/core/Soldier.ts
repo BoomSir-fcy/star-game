@@ -4,11 +4,13 @@ import Chequer, { stateType } from './Chequer'
 import AxisPoint from './AxisPoint';
 // import { onDragEnd, onDragMove, onDragStart } from './utils';
 
-interface SoldierOptions {
+export interface AttrSoldierOptions {
   textureRes: string;
+  id: number;
+}
+export interface SoldierOptions extends AttrSoldierOptions {
   x: number;
   y: number;
-  id: number;
   chequer?: Chequer
   enableDrag?: boolean
 }

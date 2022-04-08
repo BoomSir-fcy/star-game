@@ -2,24 +2,24 @@ import { Api } from 'apis';
 
 export const fetchUnitList = async (
   race: Api.Game.race,
-): Promise<Api.Game.UnitInfo[]> => {
+): Promise<{[id: string]: Api.Game.UnitInfo}> => {
   try {
     const res = await Api.GameApi.getGameUnitList(race);
     if (Api.isSuccess(res)) {
       return res.data.units;
     }
-    return [];
+    return {};
   } catch (error) {
     console.error(`fetch fetchUnitList error: ${error}`);
-    return [];
+    return {};
   }
 };
 
-export const fetchGamePlanetUnits = async (id: number): Promise<any> => {
+export const fetchGamePlanetUnits = async (id: number): Promise<Api.Game.UnitPlanetPos[]> => {
   try {
     const res = await Api.GameApi.getGamePlanetUnits(id);
     if (Api.isSuccess(res)) {
-      // return res.data.units;
+      return res.data.units.units;
     }
     return []
   } catch (error) {

@@ -24,7 +24,10 @@ export const fetchGamePlanetUnitsAsync =
   (id: number): AppThunk =>
   async dispatch => {
     const list = await fetchGamePlanetUnits(id);
-    
+    dispatch(setPlantUnits({
+      id,
+      list,
+    }));
   };
 
 
@@ -40,12 +43,20 @@ export const userInfoSlice = createSlice({
       }
     },
 
+    setPlantUnits: (state, { payload }) => {
+      state.plantUnits = {
+        ...state.plantUnits,
+        [payload.id]: payload.list,
+      }
+    }
+
   },
 });
 
 // Actions
 export const {
   setUnits,
+  setPlantUnits,
 } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

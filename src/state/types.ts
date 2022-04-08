@@ -138,10 +138,12 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 
 export interface GameState {
   baseUnits: {
-    [race: string]: Api.Game.UnitInfo | null;
+    [race: string]: {
+      [id: string]: Api.Game.UnitInfo,
+    };
   },
   plantUnits: {
-    [id: number]: Api.Game.UnitInfo[]
+    [id: number]: Api.Game.UnitPlanetPos[]
   }
 }
 

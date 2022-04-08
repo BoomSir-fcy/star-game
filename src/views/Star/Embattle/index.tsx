@@ -3,17 +3,22 @@ import { Box, Text, Flex } from 'uikit';
 import { Api } from 'apis';
 import { useFetchGamePlanetUnits, useFetchUnitList } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
-import Boards from 'game/core/Boards';
+import { useStore } from 'state';
+import Game from 'game/core/Game';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import PreviewList from './components/PreviewList';
 import Preview from './components/Preview';
 import SortBoard from './components/SortBoard';
 
 const Embattle = () => {
-  const [boards] = useState(new Boards());
+  const [game] = useState(new Game());
 
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.id);
+
+  const plantUnits = useStore(p => p.game.plantUnits);
+
+  console.log(plantUnits, 'plantUnits');
 
   useFetchUnitList();
   useFetchGamePlanetUnits(planetId);
@@ -22,9 +27,9 @@ const Embattle = () => {
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.appendChild(boards.app?.view);
+      ref.current.appendChild(game.view);
     }
-  }, [ref, boards]);
+  }, [ref, game]);
 
   const handleUpdate = useCallback(
     async (soldiers: Soldier[]) => {
@@ -51,10 +56,35 @@ const Embattle = () => {
   );
 
   useEffect(() => {
-    boards.addEventListener('updateSoldierPosition', (event: any) => {
+    game.addEventListener('updateSoldierPosition', (event: any) => {
       handleUpdate(event.detail.soldiers);
     });
-  }, [boards, handleUpdate]);
+  }, [game, handleUpdate]);
+
+  const createSoldiers = useCallback(
+    (poses: Api.Game.UnitPlanetPos[]) => {
+      console.log(12121212);
+      poses.forEach(item => {
+        console.log(444444);
+        game.createSoldier(item.pos.x, item.pos.y, {
+          textureRes: '/assets/flowerTop.png',
+          id: item.base_unit_id,
+        });
+      });
+    },
+    [game],
+  );
+
+  useEffect(() => {
+    console.log(
+      plantUnits[planetId],
+      game.soldiers.length === 0,
+      '=weijqwjeoqwienqwleul ',
+    );
+    if (plantUnits[planetId] && game.soldiers.length === 0) {
+      createSoldiers(plantUnits[planetId]);
+    }
+  }, [plantUnits, planetId, game.soldiers, createSoldiers]);
 
   return (
     <Box position='relative'>
@@ -74,7 +104,7 @@ const Embattle = () => {
         top='490px'
         left='0'
       >
-        <PreviewList boards={boards} />
+        <PreviewList game={game} />
       </Box>
     </Box>
   );
