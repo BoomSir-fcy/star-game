@@ -7,6 +7,7 @@ import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useDispatch } from 'react-redux';
 import { useToast } from 'contexts/ToastsContext';
 import { Api } from 'apis';
+import { useImmer } from 'use-immer';
 
 const ProgressBox = styled(Box)`
   position: relative;
@@ -31,13 +32,15 @@ const BtnFlex = styled(Flex)``;
 const ProductionProgress = () => {
   const dispatch = useDispatch();
   const { toastError, toastSuccess, toastWarning } = useToast();
-  const { end_time, free_time, alliance } = useStore(
+  const { end_time, free_time, alliance, later_extract_time } = useStore(
     p => p.alliance.allianceView,
   );
-  const [state, setState] = useState({
+  const [state, setState] = useImmer({
     time: 0,
+    Extracttime: 0,
   });
   let timer = null as any;
+  let Extracttimer = null as any;
 
   const progressRate = useMemo(() => {
     const time = (((end_time - state.time) / end_time) * 100).toFixed(2);
@@ -57,6 +60,8 @@ const ProductionProgress = () => {
       const res = await Api.AllianceApi.AllianceExtract();
       if (Api.isSuccess(res)) {
         toastSuccess('提取成功');
+      } else {
+        toastError('提取失败');
       }
     } catch (error) {
       toastError('提取失败');
@@ -72,15 +77,30 @@ const ProductionProgress = () => {
     timer = setInterval(() => {
       const { time } = state;
       if (time > 0) {
-        setState({
-          ...state,
-          time: time - 1,
+        setState(p => {
+          p.time = time - 1;
         });
       } else {
         clearInterval(timer);
         dispatch(fetchAllianceViewAsync());
       }
     }, 1000);
+  };
+
+  const ExtractCountDown = () => {
+    if (later_extract_time > 0) {
+      Extracttimer = setInterval(() => {
+        const { Extracttime } = state;
+        if (Extracttime > 0) {
+          setState(p => {
+            p.Extracttime = Extracttime - 1;
+          });
+        } else {
+          clearInterval(Extracttimer);
+          dispatch(fetchAllianceViewAsync());
+        }
+      }, 1000);
+    }
   };
 
   const formatTime = (time: number) => {
@@ -102,20 +122,18 @@ const ProductionProgress = () => {
 
   useEffect(() => {
     if (alliance.working <= 0) {
-      setState({
-        time: end_time,
-      });
+      setState({ time: end_time, Extracttime: later_extract_time });
       return;
     }
-    setState({
-      time: free_time,
-    });
-  }, [free_time, alliance]);
+    setState({ time: free_time, Extracttime: later_extract_time });
+  }, [free_time, alliance, end_time, later_extract_time]);
 
   useEffect(() => {
     countDown();
+    ExtractCountDown();
     return () => {
       if (timer) clearInterval(timer);
+      if (Extracttimer) clearInterval(Extracttimer);
     };
   }, [state]);
 
@@ -146,7 +164,7 @@ const ProductionProgress = () => {
       </ProgressBox>
       <BtnFlex justifyContent='space-between'>
         <Button variant='black' onClick={() => ExtractResources()}>
-          提取资源
+          {later_extract_time > 0 ? formatTime(state.Extracttime) : '提取资源'}
         </Button>
         <Link to='/galaxy'>
           <Button variant='black'>占领恒星</Button>

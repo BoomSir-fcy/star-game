@@ -34,7 +34,7 @@ const JoinTheAlliance = () => {
   const navigate = useNavigate();
   const { order: allianceList } = useStore(p => p.alliance.allianceView);
 
-  const addStar = (id: number) => {
+  const addStar = (id: any) => {
     navigate(`/star/planet?choose=${id || 1}`);
   };
 
@@ -42,7 +42,7 @@ const JoinTheAlliance = () => {
     <Box position='relative' width='40%' padding='0 80px 0 70px'>
       <Flex mb='-36px' alignItems='center' justifyContent='center'>
         <StarAddBtn
-          callBack={() => addStar(allianceList[0]?.planetId)}
+          callBack={() => addStar(allianceList && allianceList[0]?.planetId)}
           imgBorder={
             (allianceList && allianceList[0]?.planet.rarity) ||
             qualities.ORDINARY
@@ -57,7 +57,7 @@ const JoinTheAlliance = () => {
       </Flex>
       <Flex alignItems='center' justifyContent='space-between'>
         <StarAddBtn
-          callBack={() => addStar(allianceList[4]?.planetId)}
+          callBack={() => addStar(allianceList && allianceList[4]?.planetId)}
           imgBorder={
             (allianceList && allianceList[4]?.planet.rarity) ||
             qualities.ORDINARY
@@ -70,7 +70,7 @@ const JoinTheAlliance = () => {
           Leve={(allianceList && allianceList[4]?.planet?.level) || ''}
         />
         <StarAddBtn
-          callBack={() => addStar(allianceList[1]?.planetId)}
+          callBack={() => addStar(allianceList && allianceList[1]?.planetId)}
           imgBorder={
             (allianceList && allianceList[1]?.planet.rarity) ||
             qualities.ORDINARY
@@ -85,7 +85,7 @@ const JoinTheAlliance = () => {
       </Flex>
       <Flex alignItems='center' justifyContent='center'>
         <StarAddBtn
-          callBack={() => addStar(allianceList[3]?.planetId)}
+          callBack={() => addStar(allianceList && allianceList[3]?.planetId)}
           imgBorder={
             (allianceList && allianceList[3]?.planet.rarity) ||
             qualities.ORDINARY
@@ -98,7 +98,7 @@ const JoinTheAlliance = () => {
           Leve={(allianceList && allianceList[3]?.planet?.level) || ''}
         />
         <StarAddBtn
-          callBack={() => addStar(allianceList[2]?.planetId)}
+          callBack={() => addStar(allianceList && allianceList[2]?.planetId)}
           imgBorder={
             (allianceList && allianceList[2]?.planet.rarity) ||
             qualities.ORDINARY

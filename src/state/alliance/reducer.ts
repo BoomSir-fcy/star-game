@@ -26,6 +26,7 @@ export const initialState: AllianceState = {
     },
     end_time: 0,
     free_time: 0,
+    later_extract_time: 0,
   },
   workingPlanet: [],
 };
