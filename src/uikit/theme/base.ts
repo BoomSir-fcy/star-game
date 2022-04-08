@@ -79,6 +79,7 @@ export const shadows = {
   box: 'inset 0px 7px 3px 0px rgba(0, 0, 0, 0.35)',
   nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)',
   primary: 'inset 0px 0px 60px -30px #F9F9F9;',
+  highlight: '0px 0px 10px 2px #41b7ff',
 };
 
 export const textShadows = {

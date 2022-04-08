@@ -97,3 +97,16 @@ export const fetchUserBalance = async () => {
     return null;
   }
 };
+
+export const fetchUserProduct = async () => {
+  try {
+    const res = await Api.BalanceApi.getUserProduct();
+    if (Api.isSuccess(res)) {
+      return res.data.List;
+    }
+    return null;
+  } catch (error) {
+    console.error(`fetch fetchUserBalance error: ${error}`);
+    return null;
+  }
+};

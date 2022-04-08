@@ -44,6 +44,7 @@ export type Shadows = {
   box: string;
   nav: string;
   primary: string;
+  highlight: string;
 };
 
 export type TextShadows = {
@@ -104,7 +105,9 @@ export type Colors = {
   raceHuman: string;
   raceZerg: string;
 
+  border: string;
   goldBorder: string;
+  lightBorder: string;
   // Gradients
   gradients: Gradients;
   progressBar: string;

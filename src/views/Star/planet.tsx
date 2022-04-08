@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -21,6 +21,7 @@ import { useStore } from 'state/util';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
 import { setActivePlanet } from 'state/planet/actions';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
+import { useToast } from 'contexts/ToastsContext';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 import { useJoinAlliance } from './hook';
 
@@ -41,7 +42,9 @@ const LinkItem = styled(Link)`
 `;
 
 const Planet = () => {
+  const { toastError, toastSuccess, toastWarning } = useToast();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
   const [state, setState] = useState({
@@ -59,7 +62,7 @@ const Planet = () => {
       try {
         let newList = workingList.concat([]);
         if (newList.indexOf(Number(id)) !== -1) {
-          console.log('已在联盟中');
+          toastWarning('该星球已在联盟中');
           return;
         }
         if (newList.indexOf(Number(choose)) === -1) {
@@ -75,8 +78,11 @@ const Planet = () => {
         }
         console.log(newList);
         await SetWorking(id, newList);
+        toastSuccess('加入成功');
+        navigate('/plant-league');
       } catch (e) {
         console.log(e);
+        toastError('加入失败');
       }
     },
     [SetWorking, workingList, choose],
@@ -165,7 +171,10 @@ const Planet = () => {
         <Flex ml={choose ? '7px' : '23px'} flex={1}>
           <BgCard variant={choose ? 'full' : 'big'} fringe padding='40px 37px'>
             <Flex justifyContent='space-between'>
-              <PlanetRaceTabs current={state.race} />
+              <PlanetRaceTabs
+                callBack={id => setState({ ...state, race: id })}
+                current={state.race}
+              />
               <PlanetSearch
                 onEndCallback={e => setState({ ...state, token: e })}
               />

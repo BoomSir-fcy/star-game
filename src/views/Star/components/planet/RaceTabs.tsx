@@ -39,8 +39,13 @@ const TabsButton = styled(Button)<{ active?: boolean }>`
 
 export const PlanetRaceTabs: React.FC<{
   current?: number;
-}> = ({ current }) => {
+  callBack: (id: number) => void;
+}> = ({ current, callBack }) => {
   const raceArr = [
+    {
+      id: 0,
+      label: '全部',
+    },
     {
       id: 1,
       label: '神族',
@@ -58,7 +63,13 @@ export const PlanetRaceTabs: React.FC<{
   return (
     <Container>
       {raceArr.map(({ id, label }) => (
-        <TabsButton key={id} scale='sm' variant='text' active={current === id}>
+        <TabsButton
+          key={id}
+          scale='sm'
+          variant='text'
+          active={current === id}
+          onClick={() => callBack(id)}
+        >
           {label}
         </TabsButton>
       ))}

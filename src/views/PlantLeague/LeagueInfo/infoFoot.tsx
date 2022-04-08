@@ -6,6 +6,7 @@ import { useStore } from 'state';
 import { Api } from 'apis';
 import { useDispatch } from 'react-redux';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
+import { useToast } from 'contexts/ToastsContext';
 import StopWorkPop from '../stopWorkPop';
 
 const ShaDowBox = styled(Flex)`
@@ -18,6 +19,7 @@ const ShaDowBox = styled(Flex)`
 
 const InfoFoot = () => {
   const dispatch = useDispatch();
+  const { toastError, toastSuccess } = useToast();
 
   const [visible, setVisible] = useState(false);
   const { alliance } = useStore(p => p.alliance.allianceView);
@@ -27,11 +29,12 @@ const InfoFoot = () => {
     await Api.AllianceApi[work ? 'AllianceWorking' : 'AllianceStopWork']()
       .then(res => {
         if (Api.isSuccess(res)) {
-          console.log('成功');
+          toastSuccess('操作成功');
           dispatch(fetchAllianceViewAsync());
         }
       })
       .catch(err => {
+        toastError('操作失败');
         console.log(err);
       });
   };

@@ -2,9 +2,13 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Flex, Box, Image } from 'uikit';
 import { useDispatch } from 'react-redux';
-import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
+import {
+  fetchUserBalanceAsync,
+  fetchUserProductAsync,
+} from 'state/userInfo/reducer';
 import Avatar from './Avatar';
 import Info from './Info';
+import { ButtonGroupProps } from './ButtonGroup';
 
 const FlexStyled = styled(Flex)`
   background: url('/images/commons/dashboard/b1.png');
@@ -13,18 +17,19 @@ const FlexStyled = styled(Flex)`
   height: 295px;
 `;
 
-const Dashboard: React.FC = ({ children }) => {
+const Dashboard: React.FC<ButtonGroupProps> = ({ onRefresh, children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchUserBalanceAsync());
+    dispatch(fetchUserProductAsync());
   }, [dispatch]);
 
   return (
     <FlexStyled>
       <Avatar />
       <Flex flex={1}>
-        <Info>{children}</Info>
+        <Info onRefresh={onRefresh}>{children}</Info>
       </Flex>
     </FlexStyled>
   );

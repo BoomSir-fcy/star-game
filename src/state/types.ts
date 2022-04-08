@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { ThunkAction } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
+import { Qualities } from 'uikit/theme/types';
 
 // 性别
 export enum Gender {
@@ -39,6 +40,17 @@ export interface UserInfoView {
   superior: string;
   loading?: boolean;
 }
+
+export interface userProductView {
+  planet_num: number;
+  stone_product: number;
+  energy_product: number;
+  population_product: number;
+  stone: number;
+  energy: number;
+  population: number;
+}
+
 export interface UserInfoState {
   userBalance: UserBalanceView[];
   infoView: UserAgentInfoView;
@@ -48,6 +60,7 @@ export interface UserInfoState {
     allowance: string;
     loading: boolean;
   };
+  userProduct: userProductView;
 }
 
 export interface MysteryBoxView {
@@ -99,6 +112,7 @@ export interface GalaxyState {
   galaxyList: GalaxyInfo[];
   galaxyStarList: StarLevelInfo[];
   galaxyNft: GalaxyNft;
+  loadingGalaxy: boolean;
   loading: boolean;
   auctionRecordList: any[];
 }
@@ -135,7 +149,7 @@ export interface planetInfo {
   name: string;
   owner: string;
   oldOwner: string;
-  rarity: number;
+  rarity: Qualities;
   level: number;
   strengthenLevel: number;
   working: boolean;
