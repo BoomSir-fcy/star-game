@@ -98,8 +98,10 @@ const Planet = () => {
         rarity: Number(parsedQs.t) || 0,
       }),
     );
-    dispatch(fetchAllianceViewAsync());
-  }, [dispatch, state, parsedQs.t]);
+    if (choose) {
+      dispatch(fetchAllianceViewAsync());
+    }
+  }, [dispatch, state, parsedQs.t, choose]);
 
   useEffect(() => {
     if (choose) {
@@ -118,7 +120,21 @@ const Planet = () => {
 
   return (
     <Layout>
-      {!choose && <Dashboard />}
+      {!choose && (
+        <Dashboard
+          onRefresh={async () => {
+            dispatch(
+              fetchMePlanetAsync({
+                page: state.page,
+                page_size: 10,
+                token: state.token,
+                race: state.race,
+                rarity: Number(parsedQs.t) || 0,
+              }),
+            );
+          }}
+        />
+      )}
       <Flex width='100%'>
         <Box>
           {choose && (
