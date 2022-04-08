@@ -1,6 +1,18 @@
 import { Http } from '../http';
 
 export class BuildingApi extends Http {
+  // 获取储物罐最大充值金额
+  async getMaxReCharge(
+    planet_id: number,
+  ): Promise<Api.Response<Api.Building.Store>> {
+    return this.get(`buildings/store/max_recharge`, { planet_id });
+  }
+
+  // 储物罐充值
+  async storeReCharge(params: Api.Building.StoreRechargeParams) {
+    return this.post(`buildings/store/recharge`, params);
+  }
+
   // 获取所有建筑
   async getBuildingList(
     type?: 1 | 2,

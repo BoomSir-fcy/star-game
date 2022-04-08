@@ -142,6 +142,7 @@ const StarHeader = () => {
       </CardStyled>
 
       <RechargeAssets
+        planet_id={id}
         visible={state.visible}
         onClose={() => setState({ ...state, visible: false })}
       />

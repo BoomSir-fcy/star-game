@@ -1,6 +1,6 @@
 import { getTimePeriod, useCountdownTime } from 'components';
 import dayjs from 'dayjs';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Card, Text, Flex, Button, CardProps } from 'uikit';
 import { Api } from 'apis';
@@ -23,11 +23,18 @@ export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
   // 当天零点（utc时间）
   const endTimestamp = dayjs().utc(true).endOf('day').unix();
   const startTimestamp = dayjs().utc(true).unix();
-  const diffSeconds = useCountdownTime(endTimestamp, startTimestamp);
-  // const diffSeconds = 0;
+  const diffSeconds = useCountdownTime(0, 0, endTimestamp - startTimestamp);
 
-  const { hours, minutes, seconds } = getTimePeriod(diffSeconds);
   const [claimMax, setClaimMax] = useState(0);
+
+  const { hour, minute, second } = useMemo(() => {
+    const { hours, minutes, seconds } = getTimePeriod(diffSeconds);
+    return {
+      hour: hours,
+      minute: minutes,
+      second: seconds,
+    };
+  }, [diffSeconds]);
 
   const getClaimMax = useCallback(async () => {
     try {
@@ -54,8 +61,8 @@ export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
   }, [galaxy_id]);
 
   useEffect(() => {
-    getClaimMax();
-  }, [getClaimMax]);
+    if (galaxy_id) getClaimMax();
+  }, [getClaimMax, galaxy_id]);
   return (
     <StyledCard {...props}>
       <Flex justifyContent='space-between' alignItems='center'>
@@ -72,7 +79,7 @@ export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
             {t('Remaining available time (UTC 24)')}
           </Text>
           <Text mt='10px' fontSize='28px'>
-            {`${hours}${t('h')}:${minutes}${t('m')}:${seconds}${t('s')}`}
+            {`${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')}`}
           </Text>
         </Flex>
         <Button

@@ -30,13 +30,13 @@ export const useGalaxyList = () => {
 export const useGalaxyStarList = (galaxyId: number) => {
   const dispatch = useDispatch();
   const { account } = useActiveWeb3React();
-  const { galaxyStarList, currentGalaxy } = useGalaxySelector();
+  const { galaxyStarList } = useGalaxySelector();
 
   useEffect(() => {
-    if (account && currentGalaxy?.id !== galaxyId && !galaxyStarList.length) {
+    if (account && !galaxyStarList.length) {
       dispatch(fetchGalaxyStarListAsync(galaxyId));
     }
-  }, [galaxyId, currentGalaxy, account, galaxyStarList, dispatch]);
+  }, [galaxyId, account, galaxyStarList, dispatch]);
 };
 
 export const useGalaxyNft = (tokenId: number) => {

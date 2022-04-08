@@ -81,11 +81,6 @@ export const galaxySlice = createSlice({
       const { payload } = action;
       if (payload) {
         const rsData = payload.data || [];
-        // const galaxy = {
-        //   ...state.currentGalaxy,
-        //   starTotal: rsData.length,
-        //   starOwnerTotal: rsData.filter((v: any) => v.owner).length,
-        // };
         const users: Api.Galaxy.OwnerInfo = payload.users || {};
         const list = rsData.map((item: any) => {
           if (item.owner) {
@@ -93,7 +88,6 @@ export const galaxySlice = createSlice({
           }
           return { ...item, ownerAvatar: '' };
         });
-        // state.currentGalaxy = galaxy;
         state.galaxyStarList = list;
         state.loading = false;
       }
