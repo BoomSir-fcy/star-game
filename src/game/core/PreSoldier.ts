@@ -4,9 +4,9 @@ import config from 'game/config';
 import Soldier from './Soldier';
 
 class PreSoldier extends EventTarget {
-  constructor(src: string, width = 122, height = 122) {
+  constructor(src: string, id: number, width = 122, height = 122) {
     super();
-    this.init(src, width, height);
+    this.init(src, id, width, height);
   }
 
   app: Application = new Application({ resolution: config.resolution, antialias: true, backgroundAlpha: 0  });
@@ -15,13 +15,13 @@ class PreSoldier extends EventTarget {
 
   copySoldier?: Soldier;
 
-  init(src: string, width: number, height: number) {
+  init(src: string, id: number, width: number, height: number) {
 
     this.app.screen.width = width;
 
     this.app.screen.height = height;
 
-    const soldier  = new Soldier({ x: this.app.renderer.screen.width / 2, y: this.app.renderer.screen.height / 2, textureRes: src, enableDrag: false, });
+    const soldier  = new Soldier({ x: this.app.renderer.screen.width / 2, y: this.app.renderer.screen.height / 2, textureRes: src, enableDrag: false, id,});
 
     this.soldier = soldier;
 

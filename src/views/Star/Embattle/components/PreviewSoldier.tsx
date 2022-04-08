@@ -6,14 +6,16 @@ import { Box, BoxProps } from 'uikit';
 interface PreviewSoldierProps extends BoxProps {
   boards?: Boards;
   src?: string;
+  sid: number;
 }
 
 const PreviewSoldier: React.FC<PreviewSoldierProps> = ({
   src = '/assets/flowerTop.png',
+  sid,
   boards,
   ...props
 }) => {
-  const [preSoldier] = useState(new PreSoldier(src));
+  const [preSoldier] = useState(new PreSoldier(src, sid));
 
   const ref = useRef<HTMLDivElement>(null);
 

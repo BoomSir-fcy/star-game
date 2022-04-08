@@ -115,7 +115,7 @@ const Preview: React.FC<PreviewProps> = ({ list, ...props }) => {
         />
       </Flex>
       <Flex>
-        <PreviewSoldier />
+        <PreviewSoldier sid={1} />
         <Flex flexWrap='wrap' justifyContent='space-between'>
           <StatusItem />
           <StatusItem />

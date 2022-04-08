@@ -135,6 +135,16 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   AnyAction
 >;
 
+
+export interface GameState {
+  baseUnits: {
+    [race: string]: Api.Game.UnitInfo | null;
+  },
+  plantUnits: {
+    [id: number]: Api.Game.UnitInfo[]
+  }
+}
+
 export interface State {
   userInfo: UserInfoState;
   mysteryBox: MysteryBoxState;
@@ -142,6 +152,7 @@ export interface State {
   alliance: AllianceState;
   planet: PlanetState;
   buildling: BuildlingState;
+  game: GameState;
 }
 
 export interface planetInfo {
