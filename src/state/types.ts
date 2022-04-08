@@ -125,6 +125,7 @@ export interface PlanetState {
 
 export interface BuildlingState {
   selfBuildings: Api.Building.SelfBuildings;
+  upgradeIds: string[];
   buildings: { [type: number]: Api.Building.Building[] };
 }
 

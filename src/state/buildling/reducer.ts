@@ -4,6 +4,7 @@ import { fetchBuildingsListAsync, fetchPlanetBuildingsAsync } from './fetchers';
 
 export const initialState: BuildlingState = {
   buildings: [], // 所有基础建筑
+  upgradeIds: [],
   selfBuildings: {
     building_type: 0,
     buildings: [],

@@ -3,20 +3,18 @@ import styled, { css } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
 import { useStore } from 'state';
-
 import { Api } from 'apis';
+
+import { useToast } from 'contexts/ToastsContext';
+
 import { GameInfo, GameThing, Building } from './gameModel';
 
 const Container = styled(Flex)`
   position: relative;
-  /* width: 476px;
-  height: 476px; */
   border: 1px solid #fff;
-  /* border-right: 1px solid #fff;
-  border-bottom: 1px solid #fff; */
 `;
 
-const Normal = styled(Flex)<{ row: number; col: number }>`
+const Normal = styled(Flex)<{ pre: boolean }>`
   cursor: pointer;
   position: absolute;
   justify-content: center;
@@ -25,12 +23,9 @@ const Normal = styled(Flex)<{ row: number; col: number }>`
   color: #ffffff;
   font-size: 40px;
   text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
-  width: ${({ row }) => row * 158}px;
-  height: ${({ col }) => col * 158}px;
   border: 1px solid #fff;
-  /* border-top: 1px solid #fff;
-  border-left: 1px solid #fff; */
   transition: all 0.5s;
+  background: ${({ pre }) => (pre ? 'pink' : 'transparent')};
   img {
     max-width: 100%;
     object-fit: cover;
@@ -38,6 +33,18 @@ const Normal = styled(Flex)<{ row: number; col: number }>`
     vertical-align: middle;
     pointer-events: none;
   }
+`;
+
+const BuildingBox = styled(Box)<{ checked: boolean }>`
+  position: absolute;
+  text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
+  z-index: 10;
+  cursor: pointer;
+  ${({ checked }) =>
+    checked &&
+    css`
+      box-shadow: 0px 0px 9px 0px #41b7ff, inset 0px 0px 9px 0px #41b7ff;
+    `}
 `;
 
 const CardTab = styled(Card)`
@@ -86,6 +93,16 @@ const BuildingsItem = styled(Box)`
   }
 `;
 
+const ActionButton = styled(Button)`
+  width: 170px;
+  height: 44px;
+  padding: 0;
+  font-size: 20px;
+  &:first-child {
+    margin-bottom: 10px;
+  }
+`;
+
 let dragged = {} as any;
 export const DragCompoents: React.FC<{
   planet_id: number;
@@ -95,9 +112,10 @@ export const DragCompoents: React.FC<{
   gridSize: number;
 }> = ({ planet_id, itemData, cols, rows, gridSize }) => {
   const dispatch = useDispatch();
+  const { toastSuccess, toastError } = useToast();
   const [state, setState] = React.useState({
     currentTab: 1,
-    currentBuilding: {} as Api.Building.Building,
+    currentBuilding: '',
     tabs: [
       {
         index: 1,
@@ -108,42 +126,26 @@ export const DragCompoents: React.FC<{
       //   title: '战斗类',
       // },
     ],
-    data: [],
+    data: [] as any,
   });
+  const [builds, setBuilds] = React.useState<any[]>([]);
+  const [currentBuild, setCurrentBuild] = React.useState<any>({});
   const { data } = state;
-
   const buildings = useStore(p => p.buildling.buildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
+  const { width, height } = React.useMemo(() => {
+    return {
+      width: gridSize / rows,
+      height: gridSize / cols,
+    };
+  }, [rows, cols]);
 
   // 计算格子
   React.useEffect(() => {
-    const items = itemData.filter(
-      (item: any) => item?.propterty?.size.area_x === 2,
-    );
-    let newData: any = [];
-    if (items.length > 0) {
-      newData = itemData.slice(
-        0,
-        itemData.length - (items.length * items.length + items.length + 1),
-      );
-      setState({ ...state, data: newData });
-    } else {
-      setState({ ...state, data: itemData });
-    }
+    const currBuilds = itemData?.filter((row: any) => row.isbuilding);
+    setState({ ...state, data: itemData });
+    setBuilds(currBuilds);
   }, [itemData]);
-
-  React.useEffect(() => {
-    if (data.length > 0) {
-      getPosition();
-    }
-  }, [setState, state, data]);
-
-  // 计算两个元素的距离
-  const distance = (dom: HTMLDivElement, beforeDom: HTMLDivElement) => {
-    const diffLeft = dom?.offsetLeft - beforeDom?.offsetLeft;
-    const diffTop = dom?.offsetTop - beforeDom?.offsetTop;
-    return Math.sqrt(diffLeft * diffLeft + diffTop * diffTop);
-  };
 
   // 计算绝对坐标
   const getAbsolutePosition = (index: number) => {
@@ -169,125 +171,125 @@ export const DragCompoents: React.FC<{
   };
 
   // 计算所有格子的距离
-  const getPosition = () => {
-    if (dragBox?.current) {
-      const doms: any = dragBox?.current.children;
-      const index = data.findIndex((item: any) => item.row === 2);
-      // 判断大方块在什么位置
-      const bigGridRow = parseInt(String(index / cols + 1));
-      const bigGridCol = parseInt(String((index % rows) + 1));
-      for (let i = 0; i < doms.length; i++) {
-        let row = parseInt(String(i / cols));
-        let col = parseInt(String(i % rows));
+  // const getPosition = () => {
+  //   if (dragBox?.current) {
+  //     const doms: any = dragBox?.current.children;
+  //     const index = data.findIndex((item: any) => item.row === 2);
+  //     // 判断大方块在什么位置
+  //     const bigGridRow = parseInt(String(index / cols + 1));
+  //     const bigGridCol = parseInt(String((index % rows) + 1));
+  //     for (let i = 0; i < doms.length; i++) {
+  //       let row = parseInt(String(i / cols));
+  //       let col = parseInt(String(i % rows));
 
-        // console.log(row, col);
-        // console.log(row, col, doms[i], doms[i].previousSibling?.offsetWidth);
-        // const prevWidth = doms[i].previousSibling?.offsetWidth;
-        // if (col === 2 && prevWidth === 316) {
-        //   row += 1;
-        //   col = 0;
-        // }
-        // console.log(doms[i].nextSibling);
-        // console.log(doms[i].nextSibling?.offsetWidth);
+  //       // console.log(row, col);
+  //       // console.log(row, col, doms[i], doms[i].previousSibling?.offsetWidth);
+  //       // const prevWidth = doms[i].previousSibling?.offsetWidth;
+  //       // if (col === 2 && prevWidth === 316) {
+  //       //   row += 1;
+  //       //   col = 0;
+  //       // }
+  //       // console.log(doms[i].nextSibling);
+  //       // console.log(doms[i].nextSibling?.offsetWidth);
 
-        // if (i > index) {
-        //   // 不换行
-        //   if (row + 2 === bigGridRow) {
-        //     row = col - 2;
-        //     col = 2;
-        //   } else if (col + 2 >= bigGridCol && row === 0) {
-        //     row += 1;
-        //     col = 0;
-        //     // console.log(doms[i], row, col);
-        //   } else if (bigGridRow === row && bigGridCol + 1 === col) {
-        //     // console.log(doms[i], row, col);
-        //     row += 1;
-        //     col = 0;
-        //   } else {
-        //     row += 1;
-        //   }
-        // } else if (i === index) {
-        //   row = row >= 2 ? row - 1 : row;
-        //   col = col >= 2 ? col - 1 : col;
-        // } else if (bigGridCol >= col + 2) {
-        //   console.log(232, row, col, doms[i]);
-        //   row = col;
-        //   col = 0;
-        // }
+  //       // if (i > index) {
+  //       //   // 不换行
+  //       //   if (row + 2 === bigGridRow) {
+  //       //     row = col - 2;
+  //       //     col = 2;
+  //       //   } else if (col + 2 >= bigGridCol && row === 0) {
+  //       //     row += 1;
+  //       //     col = 0;
+  //       //     // console.log(doms[i], row, col);
+  //       //   } else if (bigGridRow === row && bigGridCol + 1 === col) {
+  //       //     // console.log(doms[i], row, col);
+  //       //     row += 1;
+  //       //     col = 0;
+  //       //   } else {
+  //       //     row += 1;
+  //       //   }
+  //       // } else if (i === index) {
+  //       //   row = row >= 2 ? row - 1 : row;
+  //       //   col = col >= 2 ? col - 1 : col;
+  //       // } else if (bigGridCol >= col + 2) {
+  //       //   console.log(232, row, col, doms[i]);
+  //       //   row = col;
+  //       //   col = 0;
+  //       // }
 
-        if (index !== i && bigGridCol > 0 && bigGridRow > 0) {
-          // 当超过最大列数时，换行
-          if (bigGridRow === 2) {
-            if (row === 1 && bigGridCol === 1) {
-              row = col;
-              col = bigGridRow;
-            }
-            if (row + bigGridRow === rows && bigGridCol === cols) {
-              row = col + 1;
-              col = 0;
-            } else if (row + bigGridRow === rows && bigGridCol === col) {
-              row += 1;
-              col = 0;
-            }
-          } else if (row === 0 && col !== 0 && bigGridCol + col < cols) {
-            row = col - 1 > 0 ? col - 1 : col;
-            col = bigGridCol + col;
-          } else if (row === 0 && bigGridCol + col > cols) {
-            row = bigGridRow + row;
-            col = 0;
-          } else if (row === 1 && row + bigGridRow <= rows) {
-            // 当前行+2X2格子不换行
-            row = bigGridRow + row;
-          }
-        } else {
-          col = bigGridCol + col > cols ? col - 1 : col;
-        }
+  //       if (index !== i && bigGridCol > 0 && bigGridRow > 0) {
+  //         // 当超过最大列数时，换行
+  //         if (bigGridRow === 2) {
+  //           if (row === 1 && bigGridCol === 1) {
+  //             row = col;
+  //             col = bigGridRow;
+  //           }
+  //           if (row + bigGridRow === rows && bigGridCol === cols) {
+  //             row = col + 1;
+  //             col = 0;
+  //           } else if (row + bigGridRow === rows && bigGridCol === col) {
+  //             row += 1;
+  //             col = 0;
+  //           }
+  //         } else if (row === 0 && col !== 0 && bigGridCol + col < cols) {
+  //           row = col - 1 > 0 ? col - 1 : col;
+  //           col = bigGridCol + col;
+  //         } else if (row === 0 && bigGridCol + col > cols) {
+  //           row = bigGridRow + row;
+  //           col = 0;
+  //         } else if (row === 1 && row + bigGridRow <= rows) {
+  //           // 当前行+2X2格子不换行
+  //           row = bigGridRow + row;
+  //         }
+  //       } else {
+  //         col = bigGridCol + col > cols ? col - 1 : col;
+  //       }
 
-        doms[i].style.top = `${row * 158}px`;
-        doms[i].style.left = `${col * 158}px`;
-      }
+  //       doms[i].style.top = `${row * (gridSize / rows)}px`;
+  //       doms[i].style.left = `${col * (gridSize / cols)}px`;
+  //     }
 
-      // const rowIndex = data.findIndex((item: any) => item.row === 2);
-      // const diffArr: any = data.slice(rowIndex + 1) ?? [];
-      // if (rowIndex > -1) {
-      //   for (let i = 0; i < diffArr.length; i++) {
-      //     const row = parseInt(String(i / cols)) + 2;
-      //     const col = parseInt(String(i % cols));
-      //     const domIndex = diffArr[i]?.index - 1 || 0;
+  //     // const rowIndex = data.findIndex((item: any) => item.row === 2);
+  //     // const diffArr: any = data.slice(rowIndex + 1) ?? [];
+  //     // if (rowIndex > -1) {
+  //     //   for (let i = 0; i < diffArr.length; i++) {
+  //     //     const row = parseInt(String(i / cols)) + 2;
+  //     //     const col = parseInt(String(i % cols));
+  //     //     const domIndex = diffArr[i]?.index - 1 || 0;
 
-      //     doms[domIndex].style.left = `${col * 158}px`;
-      //     doms[domIndex].style.top = `${row * 158}px`;
-      //   }
-      // }
+  //     //     doms[domIndex].style.left = `${col * 158}px`;
+  //     //     doms[domIndex].style.top = `${row * 158}px`;
+  //     //   }
+  //     // }
 
-      // const boxWidth = doms[rowIndex]?.offsetWidth;
-      // const screenWidth = dragBox?.current?.offsetWidth;
-      // const diffString = String(screenWidth / boxWidth);
-      // const cols = parseInt(diffString);
-      // const heightArr = [];
-      // let boxHeight = 0;
-      // let minBoxHeight = 0;
-      // let minBoxIndex = 0;
+  //     // const boxWidth = doms[rowIndex]?.offsetWidth;
+  //     // const screenWidth = dragBox?.current?.offsetWidth;
+  //     // const diffString = String(screenWidth / boxWidth);
+  //     // const cols = parseInt(diffString);
+  //     // const heightArr = [];
+  //     // let boxHeight = 0;
+  //     // let minBoxHeight = 0;
+  //     // let minBoxIndex = 0;
 
-      // console.log(rowIndex, cols);
-      // for (let i = 0; i < doms.length; i++) {
-      //   boxHeight = doms[i].offsetHeight;
-      //   if (i < cols) {
-      //     heightArr.push(boxHeight);
-      //     doms[i].style = '';
-      //   } else {
-      //     minBoxHeight = Math.min(...heightArr);
-      //     minBoxIndex = getMinBoxIndex(heightArr, minBoxHeight);
+  //     // console.log(rowIndex, cols);
+  //     // for (let i = 0; i < doms.length; i++) {
+  //     //   boxHeight = doms[i].offsetHeight;
+  //     //   if (i < cols) {
+  //     //     heightArr.push(boxHeight);
+  //     //     doms[i].style = '';
+  //     //   } else {
+  //     //     minBoxHeight = Math.min(...heightArr);
+  //     //     minBoxIndex = getMinBoxIndex(heightArr, minBoxHeight);
 
-      //     doms[i].style.left = `${minBoxIndex * boxWidth}px`;
-      //     doms[i].style.top = `${minBoxHeight}px`;
-      //     heightArr[minBoxIndex] += boxHeight;
-      //   }
+  //     //     doms[i].style.left = `${minBoxIndex * boxWidth}px`;
+  //     //     doms[i].style.top = `${minBoxHeight}px`;
+  //     //     heightArr[minBoxIndex] += boxHeight;
+  //     //   }
 
-      //   console.log(heightArr, minBoxIndex, boxHeight);
-      // }
-    }
-  };
+  //     //   console.log(heightArr, minBoxIndex, boxHeight);
+  //     // }
+  //   }
+  // };
 
   // 获取坐标点
   const getMatrix = (index: number, currentSize = 1) => {
@@ -302,36 +304,69 @@ export const DragCompoents: React.FC<{
 
   const handleData = React.useCallback(
     (afterTarget: any) => {
-      dragged.style.opacity = '1';
-      dragged.style.transform = 'scale(1)';
-      const listData: any = data;
       const from = dragged?.dataset?.id;
       const to = afterTarget?.dataset?.id;
       const draggedItem = JSON.parse(dragged?.dataset?.item) || {};
       const targetItem = JSON.parse(afterTarget?.dataset?.item) || {};
+      const area = dragged?.propterty?.size?.area_x;
 
       // 获取当前点的正方形下标
-      const currentSize = getAbsolutePosition(to);
-      if (currentSize.length <= 0) return;
-      console.log(currentSize);
-
-      // 目标格子为空时，拖拽到目标格子
-      if (from === undefined || from === null) {
-        listData.splice(to, 1, {
-          ...targetItem,
-          ...draggedItem,
-          row: draggedItem?.propterty?.size?.area_x,
-          isbuilding: true,
-        });
+      const currentSize = area >= 2 ? getAbsolutePosition(to) : [Number(to)];
+      if (currentSize.length <= 0) {
+        toastError('当前建筑不能放置');
+        return;
       }
-
-      // 创建格子到九宫格中(to, draggedItem);
-      // createGrid(to, draggedItem);
-
-      setState({
-        ...state,
-        data: listData,
+      // 目标格子为空时，拖拽到目标格子
+      // if (from === undefined || from === null) {
+      //   listData.splice(to, 1, {
+      //     ...targetItem,
+      //     ...draggedItem,
+      //     row: draggedItem?.propterty?.size?.area_x,
+      //     isbuilding: true,
+      //   });
+      // }
+      const canSave = currentSize?.every(item => !state.data[item]?.isbuilding);
+      setState(pre => {
+        const next = pre?.data.map((row: any) => {
+          if (!canSave) {
+            return {
+              ...row,
+              pre: false,
+            };
+          }
+          if (row.index === Number(to)) {
+            return {
+              ...row,
+              ...targetItem,
+              ...draggedItem,
+              pre: false,
+              isbuilding: true,
+            };
+          }
+          return { ...row, pre: false };
+        });
+        return { ...pre, data: next };
       });
+
+      if (canSave) {
+        for (let i = state.data.length - 1; i >= 0; i--) {
+          if (i === Number(to)) {
+            setBuilds((prev: any) => {
+              return [
+                ...prev,
+                {
+                  ...state.data[i],
+                  ...targetItem,
+                  ...draggedItem,
+                  pre: false,
+                  isbuilding: true,
+                },
+              ];
+            });
+            return;
+          }
+        }
+      }
     },
     [data],
   );
@@ -346,7 +381,6 @@ export const DragCompoents: React.FC<{
 
   const drop = (event: any) => {
     event.preventDefault();
-    dragged.style.opacity = '1';
     if (event.target.tagName !== 'DIV') {
       return;
     }
@@ -360,26 +394,58 @@ export const DragCompoents: React.FC<{
 
   const dragEnter = (event: any) => {
     event.preventDefault();
+    const draggedTarget = JSON.parse(dragged?.dataset?.item) || {};
+    const index = event.target?.dataset?.id;
+    const area = draggedTarget?.propterty?.size?.area_x;
+    const currentSize =
+      area >= 2 ? getAbsolutePosition(index) : [Number(index)];
+    // 查看所有点位是否被占领
+    const canSave = currentSize?.every(item => !state.data[item]?.isbuilding);
+
+    setState(pre => {
+      const next = pre?.data.map((row: any) => {
+        if (!canSave) {
+          return {
+            ...row,
+            pre: false,
+          };
+        }
+        if (currentSize.includes(row.index)) {
+          if (row.isbuilding) {
+            return { ...row, pre: false };
+          }
+          return {
+            ...row,
+            pre: true,
+          };
+        }
+        return { ...row, pre: false };
+      });
+      return { ...pre, data: next };
+    });
   };
 
   // 创建格子到九宫格中
-  const createGrid = async (index: number, row: Api.Building.Building) => {
-    const [from, to] = getMatrix(index, row?.propterty?.size?.area_x);
+  const createGrid = async () => {
+    const params = builds?.map((item: any) => {
+      const [from, to] = getMatrix(item?.index, item?.propterty?.size?.area_x);
+      return {
+        buildings_id: item.buildings_number,
+        position: {
+          from: { x: from[0].x, y: from[1].y },
+          to: { x: to[0].x, y: to[1].y },
+        },
+        index: item?.index,
+      };
+    });
+
+    console.log(builds);
 
     try {
       const res = await Api.BuildingApi.createBuilding({
         planet_id,
-        build_type: row.type,
-        building_setting: [
-          {
-            buildings_id: row.buildings_number,
-            position: {
-              from: { x: from[0].x, y: from[1].y },
-              to: { x: to[0].x, y: to[1].y },
-            },
-            index: Number(index),
-          },
-        ],
+        build_type: 1,
+        building_setting: params,
       });
       if (Api.isSuccess(res)) {
         console.log(res);
@@ -389,45 +455,69 @@ export const DragCompoents: React.FC<{
     }
   };
 
-  // console.log(state.data);
   return (
     <Box>
       <Flex justifyContent='space-between'>
-        <Container
-          ref={dragBox}
-          width={`${rows * gridSize}px`}
-          height={`${cols * gridSize}px`}
-        >
-          {state.data.map((item: any, index: number) => {
-            return (
-              <Normal
-                key={`${item?.index}`}
-                draggable
-                data-id={index}
-                data-row={item?.row}
-                data-item={JSON.stringify(item)}
-                row={item?.propterty?.size?.area_x}
-                col={item?.propterty?.size?.area_y}
-                onDragStart={dragStart}
-                onDragEnter={dragEnter}
-                onDragOver={dragOver}
-                onDrop={drop}
-                onDragEnd={dragEnd}
-                onClick={() => {
-                  setState({ ...state, currentBuilding: item });
-                }}
-              >
-                <Building
-                  planet_id={planet_id}
-                  level={item?.propterty?.levelEnergy}
-                  src={item?.picture}
-                  itemData={item}
+        <Flex flex='1'>
+          <Container
+            ref={dragBox}
+            width={`${gridSize}px`}
+            height={`${gridSize}px`}
+          >
+            {state.data.map((item: any, index: number) => {
+              return (
+                <Normal
+                  key={`${item?.index}`}
+                  draggable
+                  data-id={index}
+                  data-row={item?.row}
+                  data-item={JSON.stringify(item)}
+                  pre={item?.pre}
+                  width={width}
+                  height={height}
+                  top={item.x * width}
+                  left={item.y * height}
+                  onDragStart={dragStart}
+                  onDragEnter={dragEnter}
+                  onDragOver={dragOver}
+                  onDrop={drop}
+                  onDragEnd={dragEnd}
                 />
-              </Normal>
-            );
-          })}
-        </Container>
-        <GameInfo planet_id={planet_id} itemData={state.currentBuilding} />
+              );
+            })}
+            {builds.map(item => {
+              return (
+                <BuildingBox
+                  key={item.index}
+                  width={item?.propterty?.size?.area_x * width}
+                  height={item?.propterty?.size?.area_y * height}
+                  top={item.x * width}
+                  left={item.y * height}
+                  checked={currentBuild?.building?._id === item?.building?._id}
+                  onClick={() => {
+                    setState({
+                      ...state,
+                      currentBuilding: item?.building?._id,
+                    });
+                    setCurrentBuild(item);
+                  }}
+                >
+                  <Building
+                    planet_id={planet_id}
+                    level={item?.propterty?.levelEnergy}
+                    src={item?.picture}
+                    itemData={item}
+                  />
+                </BuildingBox>
+              );
+            })}
+          </Container>
+          <Flex ml='10px' flexDirection='column'>
+            <ActionButton onClick={createGrid}>保存</ActionButton>
+            <ActionButton variant='danger'>销毁</ActionButton>
+          </Flex>
+        </Flex>
+        <GameInfo planet_id={planet_id} building_id={state.currentBuilding} />
       </Flex>
       <BgCard variant='long' mt='12px' padding='40px'>
         <Flex>

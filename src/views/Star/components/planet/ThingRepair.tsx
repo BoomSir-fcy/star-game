@@ -9,7 +9,7 @@ export const ThingRepair: React.FC<{
   itemData: any;
   planet_id: number;
   building_id: string | number;
-  onCallback: () => void;
+  onCallback: (time?: number) => void;
 }> = ({ itemData, planet_id, building_id, onCallback }) => {
   const { setRepair } = useBuildingRepair();
   const [state, setState] = React.useState({
@@ -21,7 +21,7 @@ export const ThingRepair: React.FC<{
     try {
       const res = await setRepair({ planet_id, building_id });
       if (Api.isSuccess(res)) {
-        onCallback();
+        onCallback(res.data?.end_time);
         setState({ ...state, visible: false });
       }
     } catch (error) {

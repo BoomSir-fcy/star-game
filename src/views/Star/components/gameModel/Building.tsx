@@ -1,7 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { Flex, Box, Text } from 'uikit';
+import { useToast } from 'contexts/ToastsContext';
+import { Api } from 'apis';
 
+import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { ThingRepair } from '../planet/ThingRepair';
 
 import { useBuildingRepair, useBuildingOperate } from './hooks';
@@ -29,8 +33,10 @@ export const Building: React.FC<{
   active?: boolean;
   onClick?: () => void;
 }> = React.memo(({ planet_id, itemData, index, src, level }) => {
+  const dispatch = useDispatch();
   const { setRepairQuick } = useBuildingRepair();
   const { setBuildingQuick } = useBuildingOperate();
+  const { toastSuccess, toastError } = useToast();
   const [state, setState] = React.useState({
     time: 0,
   });
@@ -38,10 +44,8 @@ export const Building: React.FC<{
   let timer = null as any;
 
   React.useEffect(() => {
-    if (status?.count_down) {
-      const { count_down } = status;
-      setState({ ...state, time: count_down });
-    }
+    const { count_down } = status || {};
+    setState({ ...state, time: count_down || 0 });
     return () => {
       clearInterval(timer);
     };
@@ -81,7 +85,12 @@ export const Building: React.FC<{
         planet_id,
         building_id: itemData._id,
       });
-      console.log(res);
+      if (Api.isSuccess(res)) {
+        dispatch(fetchPlanetBuildingsAsync(planet_id));
+        toastSuccess('快速修复修复成功');
+      } else {
+        toastError(res.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +103,12 @@ export const Building: React.FC<{
         planet_id,
         building_id: itemData._id,
       });
-      console.log(res);
+      if (Api.isSuccess(res)) {
+        dispatch(fetchPlanetBuildingsAsync(planet_id));
+        toastSuccess('快速修复修复成功');
+      } else {
+        toastError(res.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -109,25 +123,36 @@ export const Building: React.FC<{
       )}
       {state?.time > 0 && (
         <ToolBar
-          onClick={status?.upgrade_type === 1 ? handleUpgrade : handleRepair}
+          onClick={() => {
+            clearInterval(timer);
+            setState({ ...state, time: 0 });
+            if (status?.upgrade_type === 1) {
+              handleUpgrade();
+            } else {
+              handleRepair();
+            }
+          }}
         >
           <Text small>{formatTime(state.time)}</Text>
         </ToolBar>
       )}
 
       {/* 耐久度修复 */}
-      {itemData?.propterty?.max_durability < 100 && (
-        <ToolBar>
-          <ThingRepair
-            itemData={itemData}
-            planet_id={planet_id}
-            building_id={itemData._id}
-            onCallback={() => {
-              console.log(22);
-            }}
-          />
-        </ToolBar>
-      )}
+      {state?.time <= 0 &&
+        itemData?.propterty?.max_durability !==
+          itemData?.propterty?.per_durability && (
+          <ToolBar>
+            <ThingRepair
+              itemData={itemData}
+              planet_id={planet_id}
+              building_id={itemData._id}
+              onCallback={(evnet?: number) => {
+                // console.log(time);
+                setState({ ...state, time: evnet || 0 });
+              }}
+            />
+          </ToolBar>
+        )}
       <img src={src} alt='' />
     </Flex>
   );

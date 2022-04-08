@@ -7,14 +7,17 @@ import { GameThing } from '../gameModel';
 
 export const ThingDestoryModal: React.FC<{
   visible: boolean;
+  planet_id: number;
+  itemData: Api.Building.Building;
+  upgrade: any;
   onChange: () => void;
   onClose: () => void;
-}> = ({ visible, onChange, onClose }) => {
+}> = ({ visible, planet_id, itemData, upgrade, onChange, onClose }) => {
   return (
     <ModalWrapper title='摧毁建筑' visible={visible} setVisible={onClose}>
       <Box padding='30px 25px'>
         <Flex>
-          <GameThing scale='lg' border />
+          <GameThing src={itemData?.picture} scale='lg' border />
           <Flex ml='23px' justifyContent='space-between' flexDirection='column'>
             <Box>
               <Text shadow='primary' bold>

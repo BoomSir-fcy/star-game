@@ -41,7 +41,7 @@ const UpgradeItem: React.FC<{
           <Text small>{value}</Text>
           <Text
             ml='14px'
-            color={`${extValue > 0 ? 'textSuccess' : 'textDanger'}`}
+            color={`${extValue >= 0 ? 'textSuccess' : 'textDanger'}`}
             small
           >
             {extValue}
@@ -60,7 +60,7 @@ export const ThingUpgradesModal: React.FC<{
   onChange: (value: any) => void;
   onClose: () => void;
 }> = ({ visible, planet_id, itemData, upgrade, onChange, onClose }) => {
-  // console.log(upgrade, upgrade?.estimate_building_detail?.building);
+  const upgradDiff = upgrade?.estimate_building_detail?.building || {};
 
   return (
     <ModalWrapper title='建筑升级' visible={visible} setVisible={onClose}>
@@ -72,16 +72,18 @@ export const ThingUpgradesModal: React.FC<{
           </Text>
         </Flex>
         <Flex flexWrap='wrap' pb='16px'>
-          <Item>
-            <UpgradeItem
-              width={50}
-              height={50}
-              src='/images/commons/star/HP.png'
-              title='HP值'
-              value={itemData?.propterty?.hp}
-              extValue={-1}
-            />
-          </Item>
+          {itemData?.type === 2 && (
+            <Item>
+              <UpgradeItem
+                width={50}
+                height={50}
+                src='/images/commons/star/HP.png'
+                title='HP值'
+                value={itemData?.propterty?.hp}
+                extValue={upgradDiff?.propterty?.hp - itemData?.propterty?.hp}
+              />
+            </Item>
+          )}
           <Item>
             <UpgradeItem
               width={50}
@@ -89,7 +91,10 @@ export const ThingUpgradesModal: React.FC<{
               src='/images/commons/star/durability.png'
               title='耐久度'
               value={`${itemData?.propterty?.per_durability}/${itemData?.propterty?.max_durability}`}
-              extValue={-1}
+              extValue={
+                upgradDiff?.propterty?.per_durability -
+                itemData?.propterty?.per_durability
+              }
               moreButton={
                 <>
                   {itemData?.propterty?.per_durability !==
@@ -114,29 +119,42 @@ export const ThingUpgradesModal: React.FC<{
               src='/images/commons/icon/energy.png'
               title='能量消耗'
               value={`${itemData?.propterty?.per_cost_energy}/h`}
-              extValue={-1}
+              extValue={
+                upgradDiff?.propterty?.per_cost_energy -
+                itemData?.propterty?.per_cost_energy
+              }
             />
           </Item>
-          <Item>
-            <UpgradeItem
-              width={50}
-              height={50}
-              src='/images/commons/star/defense.png'
-              title='防御值'
-              value={itemData?.propterty?.defence}
-              extValue={-1}
-            />
-          </Item>
-          <Item>
-            <UpgradeItem
-              width={50}
-              height={50}
-              src='/images/commons/star/attackValue.png'
-              title='攻击值'
-              value={itemData?.propterty?.attack}
-              extValue={-1}
-            />
-          </Item>
+          {itemData?.type === 2 && (
+            <>
+              <Item>
+                <UpgradeItem
+                  width={50}
+                  height={50}
+                  src='/images/commons/star/defense.png'
+                  title='防御值'
+                  value={itemData?.propterty?.defence}
+                  extValue={
+                    upgradDiff?.propterty?.defence -
+                    itemData?.propterty?.defence
+                  }
+                />
+              </Item>
+
+              <Item>
+                <UpgradeItem
+                  width={50}
+                  height={50}
+                  src='/images/commons/star/attackValue.png'
+                  title='攻击值'
+                  value={itemData?.propterty?.attack}
+                  extValue={
+                    upgradDiff?.propterty?.attack - itemData?.propterty?.attack
+                  }
+                />
+              </Item>
+            </>
+          )}
           <Item>
             <UpgradeItem
               width={50}
@@ -144,7 +162,10 @@ export const ThingUpgradesModal: React.FC<{
               src='/images/commons/icon/population.png'
               title='人口消耗'
               value={`${itemData?.propterty?.per_cost_population}/h`}
-              extValue={-1}
+              extValue={
+                upgradDiff?.propterty?.per_cost_population -
+                itemData?.propterty?.per_cost_population
+              }
             />
           </Item>
         </Flex>

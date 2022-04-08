@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useStore } from 'state';
 import { Box } from 'uikit';
 
@@ -6,63 +6,33 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 
 import { DragCompoents } from './components/dragCompoents';
 
+// const config = {
+//   row: 4, // X
+//   col: 4, // Y
+// };
+
+// const configBoards = (() => {
+//   const board = [];
+//   for (let i = 0; i < config.row; i++) {
+//     for (let j = 0; j < config.col; j++) {
+//       board.push({
+//         x: i,
+//         y: j,
+//         hasObj: j === 2,
+//       });
+//     }
+//   }
+//   return board;
+// })();
+
 const Upgrade = () => {
   const parsedQs = useParsedQueryString();
-  const id = Number(parsedQs.id);
   const [state, setState] = React.useState({
-    // data: [
-    //   {
-    //     index: 1,
-    //     row: 1,
-    //     icon: '/images/model/combat_01.png',
-    //   },
-    //   {
-    //     index: 2,
-    //     row: 1,
-    //     icon: '/images/model/combat_01.png',
-    //   },
-    //   {
-    //     index: 3,
-    //     row: 2,
-    //     icon: '/images/model/edifice_01.png',
-    //   },
-    //   {
-    //     index: 4,
-    //     row: 1,
-    //     icon: '/images/model/combat_01.png',
-    //   },
-    //   {
-    //     index: 5,
-    //     row: 1,
-    //     icon: '/images/model/combat_01.png',
-    //   },
-    //   {
-    //     index: 6,
-    //     row: 1,
-    //     icon: '/images/model/combat_01.png',
-    //   },
-    //   {
-    //     index: 7,
-    //     row: 1,
-    //     icon: '/images/model/combat_01.png',
-    //   },
-    //   {
-    //     index: 8,
-    //     row: 1,
-    //     icon: '/images/model/combat_01.png',
-    //   },
-    //   {
-    //     index: 9,
-    //     row: 1,
-    //     icon: '/images/model/combat_01.png',
-    //   },
-    // ],
     data: [] as any[],
   });
+  const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
-
-  // console.log(selfBuilding);
 
   React.useEffect(() => {
     if (planet?.areaX > 0 && planet?.areaY > 0) {
@@ -72,11 +42,12 @@ const Upgrade = () => {
           const buildings = selfBuilding?.find(
             index => index.index === i * planet.areaY + j,
           );
-          // console.log(buildings);
           if (buildings) {
             data.push({
               ...buildings,
               ...buildings.building,
+              x: i,
+              y: j,
               index: i * planet.areaY + j,
               isbuilding: true,
             });
@@ -91,10 +62,8 @@ const Upgrade = () => {
                   area_y: 1,
                 },
               },
-              position: {
-                x: 0,
-                y: 0,
-              },
+              x: i,
+              y: j,
             });
           }
         }
@@ -104,13 +73,16 @@ const Upgrade = () => {
     }
   }, [planet, selfBuilding]);
 
+  // const [boards] = useState(configBoards);
+
   return (
     <Box>
       <DragCompoents
-        planet_id={id}
+        // boards={boards}
         rows={planet?.areaX}
         cols={planet?.areaY}
-        gridSize={158}
+        planet_id={id}
+        gridSize={476}
         itemData={state.data}
       />
     </Box>

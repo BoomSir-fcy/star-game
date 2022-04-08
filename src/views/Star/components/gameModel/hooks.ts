@@ -66,7 +66,20 @@ export const useBuildingRepair = () => {
     [],
   );
 
-  return { getCose, setRepair, setRepairQuick };
+  // 升级完成
+  const upgradeRepairComplete = React.useCallback(
+    async (params: Api.Building.BuildingsOperateParams) => {
+      try {
+        const res = await Api.BuildingApi.updateRepairBuilding(params);
+        return res;
+      } catch (error: any) {
+        throw new Error(error);
+      }
+    },
+    [],
+  );
+
+  return { getCose, setRepair, setRepairQuick, upgradeRepairComplete };
 };
 
 // 操作建筑物
@@ -96,6 +109,19 @@ export const useBuildingOperate = () => {
     [],
   );
 
+  // 升级完成
+  const upgradBuildingComplete = React.useCallback(
+    async (params: Api.Building.BuildingsOperateParams) => {
+      try {
+        const res = await Api.BuildingApi.finishBuildingUpgrade(params);
+        return res;
+      } catch (error: any) {
+        throw new Error(error);
+      }
+    },
+    [],
+  );
+
   const destory = React.useCallback(
     async (params: {
       planet_id: number;
@@ -112,5 +138,5 @@ export const useBuildingOperate = () => {
     [],
   );
 
-  return { upgrade, setBuildingQuick, destory };
+  return { upgrade, setBuildingQuick, upgradBuildingComplete, destory };
 };
