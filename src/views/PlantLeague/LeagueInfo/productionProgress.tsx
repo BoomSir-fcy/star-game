@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Box, Flex, Text, Image, Progress, Button } from 'uikit';
 import styled from 'styled-components';
 import { useStore } from 'state';
+import { Link } from 'react-router-dom';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useDispatch } from 'react-redux';
+import { useToast } from 'contexts/ToastsContext';
+import { Api } from 'apis';
 
 const ProgressBox = styled(Box)`
   position: relative;
@@ -27,6 +30,7 @@ const BtnFlex = styled(Flex)``;
 
 const ProductionProgress = () => {
   const dispatch = useDispatch();
+  const { toastError, toastSuccess, toastWarning } = useToast();
   const { end_time, free_time, alliance } = useStore(
     p => p.alliance.allianceView,
   );
@@ -39,6 +43,26 @@ const ProductionProgress = () => {
     const time = (((end_time - state.time) / end_time) * 100).toFixed(2);
     return Number(time) || 0;
   }, [state]);
+
+  const ExtractResources = useCallback(async () => {
+    if (alliance.working !== 0) {
+      toastError('停止工作才能提取');
+      return;
+    }
+    if (alliance.laterExtractTime > 0) {
+      toastError('领取冻结中');
+      return;
+    }
+    try {
+      const res = await Api.AllianceApi.AllianceExtract();
+      if (Api.isSuccess(res)) {
+        toastSuccess('提取成功');
+      }
+    } catch (error) {
+      toastError('提取失败');
+    }
+    dispatch(fetchAllianceViewAsync());
+  }, [alliance]);
 
   // 倒计时
   const countDown = () => {
@@ -60,10 +84,20 @@ const ProductionProgress = () => {
   };
 
   const formatTime = (time: number) => {
-    const hour = Math.floor(time / 3600);
-    const min = Math.floor((time % 3600) / 60);
-    const sec = time % 60;
-    return `${hour}h:${min}m:${sec}s`;
+    const hour = Math.floor(time / 3600).toString();
+    let min = Math.floor((time % 3600) / 60).toString();
+    let sec = (time % 60).toString();
+    // if (Number(hour) < 10) {
+    //   hour = `0${hour}`;
+    //   console.log(hour, min, sec);
+    // }
+    if (Number(min) < 10) {
+      min = `0${min}`;
+    }
+    if (Number(sec) < 10) {
+      sec = `0${sec}`;
+    }
+    return `${hour}h:${min}:${sec}`;
   };
 
   useEffect(() => {
@@ -111,8 +145,12 @@ const ProductionProgress = () => {
         </ProgressTextBox>
       </ProgressBox>
       <BtnFlex justifyContent='space-between'>
-        <Button variant='black'>掠夺资源</Button>
-        <Button variant='black'>占领恒星</Button>
+        <Button variant='black' onClick={() => ExtractResources()}>
+          提取资源
+        </Button>
+        <Link to='/galaxy'>
+          <Button variant='black'>占领恒星</Button>
+        </Link>
       </BtnFlex>
     </Flex>
   );

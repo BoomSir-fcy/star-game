@@ -18,4 +18,10 @@ export class AllianceApi extends Http {
     const res = await this.post('alliance/worker/end');
     return res;
   }
+
+  // 行星联盟提取资源
+  async AllianceExtract() {
+    const res = await this.post('buildings/store/extract');
+    return res;
+  }
 }
