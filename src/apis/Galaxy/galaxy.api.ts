@@ -31,4 +31,16 @@ export class GalaxyApi extends Http {
   ): Promise<Api.Response<{ record: any[] }>> {
     return this.get(`galaxy/auction-logs/${galaxyId}`);
   }
+
+  // 获取最大领取数量
+  async getClaimMax(
+    galaxyId: number,
+  ): Promise<Api.Response<{ amount: number }>> {
+    return this.get(`galaxy/claim/max`, { galaxy_id: galaxyId });
+  }
+
+  // 领取奖励
+  async ClaimRewards(galaxyId: number) {
+    return this.post(`galaxy/claim`, { galaxy_id: galaxyId });
+  }
 }

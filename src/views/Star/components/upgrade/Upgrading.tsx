@@ -34,7 +34,7 @@ const MysteryBoxStarStyled = styled(MysteryBoxBoxStyled)`
 
 export const Upgrading: React.FC<{
   timePeriod?: number;
-  info?: Api.Planet.PlanetInfo;
+  info: Api.Planet.PlanetInfo;
   up?: any;
 }> = ({ timePeriod, info, up }) => {
   return (

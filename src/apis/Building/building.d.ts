@@ -12,6 +12,16 @@ declare namespace Api {
       extra: BuildingExtra;
       propterty: BuildingPropterty;
       _id: string | number;
+      status?: {
+        building_id: string | number;
+        count_down: number;
+        upgrade_type: number; // 1-升级 2-恢复耐久
+      };
+    }
+
+    interface BuildingsOperateParams {
+      planet_id: number;
+      building_id: string | number;
     }
 
     interface SelfBuildings {

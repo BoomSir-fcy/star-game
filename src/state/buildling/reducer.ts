@@ -33,7 +33,23 @@ export const buildling = createSlice({
         state.buildings = map;
       })
       .addCase(fetchPlanetBuildingsAsync.fulfilled, (state, action) => {
-        state.selfBuildings = action.payload;
+        const { data, upgradeInfo } = action.payload;
+        const self = data?.buildings?.reduce((current: any, row: any) => {
+          const target = upgradeInfo?.find(
+            (item: any) => item.building_id === row.building?._id,
+          );
+          if (target?.building_id) {
+            current.push({
+              ...row,
+              status: target,
+            });
+          } else {
+            current.push(row);
+          }
+          return current;
+        }, []);
+        data.buildings = self;
+        state.selfBuildings = data;
       });
   },
 });

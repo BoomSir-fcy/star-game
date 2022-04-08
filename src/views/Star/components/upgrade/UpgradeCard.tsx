@@ -1,4 +1,6 @@
+import { useTranslation } from 'contexts/Localization';
 import React from 'react';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { BoxProps, Card, CardProps, Flex, Image, Text } from 'uikit';
 
@@ -6,7 +8,8 @@ const StyledCard = styled(Card)<{ width?: string }>`
   width: ${({ width }) => width || '300px'};
   justify-content: center;
   align-items: center;
-  padding: 56px 35px;
+  /* padding: 56px 35px; */
+  padding: 56px 20px;
 `;
 const ItemFlex = styled(Flex)`
   margin-top: 23px;
@@ -28,7 +31,7 @@ const StyledImage = styled(Image)`
 `;
 
 interface UpgradeCardProps extends CardProps {
-  info?: Api.Planet.PlanetInfo;
+  info: Api.Planet.PlanetInfo;
   width?: string;
   up?: any;
 }
@@ -39,13 +42,14 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
   up,
   ...props
 }) => {
+  const { t } = useTranslation();
   return (
     <StyledCard width={width} {...props}>
       <Flex flexDirection='column'>
         <Text bold fontSize='22px' shadow='primary'>
           {up
-            ? `升级后 Lv${info?.level || ''} 效果`
-            : `当前 Lv${info?.level || ''} 效果`}
+            ? t('Current Lv%value% effect', { value: info?.level || '' })
+            : t('Lv%value% effect after upgrade', { value: info?.level || '' })}
         </Text>
         <ItemFlex>
           <StyledImage
@@ -55,7 +59,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
           />
           <ItemInfoFlex>
             <Text small color='textSubtle'>
-              建筑等级上限
+              {t('Building level cap')}
             </Text>
             <Flex
               width='130px'
@@ -75,7 +79,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
           />
           <ItemInfoFlex>
             <Text small color='textSubtle'>
-              所有建筑HP
+              {t('All buildings HP')}
             </Text>
             <Flex
               width='130px'
@@ -95,7 +99,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
           />
           <ItemInfoFlex>
             <Text small color='textSubtle'>
-              所有建筑防御
+              {t('All building defenses')}
             </Text>
             <Flex
               width='130px'

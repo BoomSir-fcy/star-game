@@ -1,8 +1,12 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { Flex, Box, Card, Text, Image, Button } from 'uikit';
+import { Api } from 'apis';
 
-import { useBuildingUpgrade } from './hooks';
+import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
+
+import { useBuildingUpgrade, useBuildingOperate } from './hooks';
 
 import { ThingaddBlood, GameThing, ThingRepair } from '..';
 import { ThingDestoryModal, ThingUpgradesModal } from '../Modal';
@@ -62,18 +66,60 @@ export const GameInfo: React.FC<{
   itemData: Api.Building.Building;
   planet_id: number;
 }> = React.memo(({ itemData, planet_id }) => {
+  const dispatch = useDispatch();
   const { upgrade } = useBuildingUpgrade();
+  const { destory, upgrade: upgradeBuilding } = useBuildingOperate();
   const [state, setState] = React.useState({
     destoryVisible: false,
     upgradesVisible: false,
+    upgrade: {} as any,
   });
 
   React.useEffect(() => {
-    console.log(itemData);
     if (itemData.type) {
-      upgrade(planet_id, itemData._id);
+      init();
     }
   }, [itemData]);
+
+  const init = async () => {
+    const res = await upgrade(planet_id, itemData._id);
+    setState({ ...state, upgrade: res });
+  };
+
+  // 销毁建筑
+  const destoryBuilding = async () => {
+    try {
+      const res = await destory({
+        planet_id,
+        build_type: itemData.type,
+        building_setting: [itemData._id],
+      });
+      if (Api.isSuccess(res)) {
+        getSelfBuilding();
+        setState({ ...state, destoryVisible: false });
+      }
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 建筑等级提升
+  const upgradeLevelBuilding = async () => {
+    try {
+      const res = await upgradeBuilding({
+        planet_id,
+        building_id: itemData._id,
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSelfBuilding = () => {
+    dispatch(fetchPlanetBuildingsAsync(planet_id));
+  };
 
   return (
     <Container>
@@ -108,7 +154,7 @@ export const GameInfo: React.FC<{
                         <Text color='textSubtle' small>
                           HP值
                         </Text>
-                        <ThingaddBlood />
+                        {/* <ThingaddBlood /> */}
                       </Flex>
                       <Text small>{itemData?.propterty?.hp}</Text>
                     </Box>
@@ -126,10 +172,18 @@ export const GameInfo: React.FC<{
                         <Text color='textSubtle' small>
                           耐久度
                         </Text>
-                        <ThingRepair />
+                        {itemData?.propterty?.per_durability !==
+                          itemData?.propterty?.max_durability && (
+                          <ThingRepair
+                            itemData={itemData}
+                            planet_id={planet_id}
+                            building_id={itemData._id}
+                            onCallback={getSelfBuilding}
+                          />
+                        )}
                       </Flex>
                       <Text small>
-                        {itemData?.propterty?.max_durability}/100
+                        {`${itemData?.propterty?.per_durability}/${itemData?.propterty?.max_durability}`}
                       </Text>
                     </Box>
                   </ItemInfo>
@@ -235,7 +289,7 @@ export const GameInfo: React.FC<{
                   </Text>
                 </Flex>
                 <Text color='textSubtle' small>
-                  升级所需人口：100/1000人
+                  升级所需人口：{state.upgrade?.cost_population}人
                 </Text>
               </Flex>
               <Flex flexDirection='column'>
@@ -259,12 +313,17 @@ export const GameInfo: React.FC<{
       {/* 销毁建筑 */}
       <ThingDestoryModal
         visible={state.destoryVisible}
+        onChange={destoryBuilding}
         onClose={() => setState({ ...state, destoryVisible: false })}
       />
 
       {/* 建筑升级 */}
       <ThingUpgradesModal
         visible={state.upgradesVisible}
+        planet_id={planet_id}
+        itemData={itemData}
+        upgrade={state.upgrade}
+        onChange={upgradeLevelBuilding}
         onClose={() => setState({ ...state, upgradesVisible: false })}
       />
     </Container>

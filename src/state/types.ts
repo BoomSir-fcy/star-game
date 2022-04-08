@@ -87,10 +87,10 @@ export interface MysteryBoxState {
 export interface GalaxyInfo extends Api.Galaxy.GalaxyInfo {
   id: number;
   label: string;
-  badge?: boolean;
-  starTotal?: number;
-  starOwnerTotal?: number;
-  nickname?: string;
+  badge: boolean;
+  starTotal: number;
+  starOwnerTotal: number;
+  nickname: string;
 }
 
 export interface StarLevelInfo {

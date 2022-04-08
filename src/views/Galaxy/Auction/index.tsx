@@ -34,6 +34,7 @@ import { useToast } from 'contexts/ToastsContext';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { useTranslation } from 'contexts/Localization';
 import KingAvatar from '../components/KingAvatar';
 import { LeftFlex, Line, PriceText, RightFlex } from './style';
 import { GalaxyImage } from '../components/GalaxyImage';
@@ -41,12 +42,14 @@ import { GalaxyImage } from '../components/GalaxyImage';
 dayjs.extend(utc);
 
 const AuctionCard = styled(Card)`
-  height: 375px;
-  padding: 30px 55px;
+  /* height: 375px; */
+  height: auto;
+  padding: 20px 55px;
 `;
 
 const Auction = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { account } = useWeb3React();
   const { toastSuccess, toastError } = useToast();
   const parseQs = useParsedQueryString();
@@ -108,10 +111,10 @@ const Auction = () => {
       setTimeout(() => {
         dispatch(fetchAuctionRecordListAsync(galaxyId));
       }, 10000);
-      toastSuccess('竞拍成功');
+      toastSuccess(t('Auction succeeded'));
     } catch (error) {
       console.log(error);
-      toastSuccess('竞拍失败');
+      toastSuccess(t('Auction failed'));
     } finally {
       setPending(false);
     }
@@ -135,15 +138,17 @@ const Auction = () => {
             <Flex>
               <GalaxyImage width={351} height={351} ml='53px' mr='174px' />
               <Flex flexDirection='column'>
-                <Text fontSize='28px'>当前价格</Text>
+                <Text fontSize='28px'>{t('Current price')}</Text>
                 <PriceText>{lastPrice ? `${lastPrice} BNB` : '---'}</PriceText>
 
                 <Flex mt='20px' mb='10px' alignItems='center'>
-                  <Text>当前得主</Text>
+                  <Text>{t('Current winner')}</Text>
                   {account?.toLowerCase() ===
                     ownerInfo?.newOwner?.toLowerCase() && (
                     <Text ml='55px' fontSize='22px' small>
-                      别人竞拍后，你可以获得（≈ {incomingPrice} BNB）
+                      {t('After others bid, you can get (≈ %value% BNB)', {
+                        value: incomingPrice,
+                      })}
                     </Text>
                   )}
                 </Flex>
@@ -156,7 +161,7 @@ const Auction = () => {
                       justifyContent='space-evenly'
                     >
                       <Text>{ownerInfo?.nickname}</Text>
-                      <Text>可获得星系奖励(10000 STAR)</Text>
+                      <Text>{t('Get galaxy rewards (10000 STAR)')}</Text>
                     </Flex>
                   </Flex>
                 ) : (
@@ -168,8 +173,8 @@ const Auction = () => {
               <Flex>
                 <LeftFlex>
                   <Flex justifyContent='space-between'>
-                    <Text fontSize='22px'>竞标价格</Text>
-                    <Text fontSize='22px'>计算方式: 2.5*(1+30%)</Text>
+                    <Text fontSize='22px'>{t('Bid price')}</Text>
+                    <Text fontSize='22px'>{t('Calculation:')} 2.5*(1+30%)</Text>
                   </Flex>
                   <PriceText mt='10px'>
                     {currentPrice ? `${currentPrice} BNB` : '---'}
@@ -189,20 +194,26 @@ const Auction = () => {
                       onClick={handleAuction}
                     >
                       {diffSeconds > 0 ? (
-                        `冷却:${timePeriod.minutes}m${timePeriod.seconds}s`
+                        `${t('Cool down')}${timePeriod.minutes}${t('m')}${
+                          timePeriod.seconds
+                        }${t('s')}`
                       ) : pending ? (
-                        <Dots>立即竞拍</Dots>
+                        <Dots>{t('Bid now')}</Dots>
                       ) : (
-                        '立即竞拍'
+                        t('Bid now')
                       )}
                     </Button>
                   )}
 
                   <Text mt='20px' small>
-                    竞拍成功后，可在每日UTC24点领取该星系的奖励，此奖励由送出
+                    {t(
+                      'After the auction is successful, you can receive the reward of the galaxy at 24:00 UTC every day, which will be sent by',
+                    )}
                   </Text>
                   <Text small>
-                    如果中途被其他人竞拍获得，则只能领取从拥有开始到失去拥有的时间段的奖励
+                    {t(
+                      'If you are auctioned by other people in the middle, you can only receive the reward from the time when you have it to when you lose it.',
+                    )}
                   </Text>
                 </LeftFlex>
                 <Line />
@@ -210,10 +221,14 @@ const Auction = () => {
                   {auctionRecordList?.length
                     ? auctionRecordList.map(item => (
                         <Text key={item.id} small>
-                          UTC {formatUTC(item?.auctionAt, 'HH:mm')}{' '}
-                          {item?.nickname} 以{' '}
-                          {new BigNumber(item?.price).toFixed(6)} BNB
-                          竞拍成功获得该星系
+                          {t(
+                            'UTC %time% %name% won the system at %price% BNB auction',
+                            {
+                              time: formatUTC(item?.auctionAt, 'HH:mm'),
+                              name: item?.nickname,
+                              price: new BigNumber(item?.price).toFixed(6),
+                            },
+                          )}
                         </Text>
                       ))
                     : null}

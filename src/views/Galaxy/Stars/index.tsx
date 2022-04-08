@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Flex, Spinner } from 'uikit';
 import { useDispatch } from 'react-redux';
 import { Layout, Dashboard, Nav, StarAddBtn } from 'components';
@@ -10,11 +10,15 @@ import {
 } from 'state/galaxy/reducer';
 import { useGalaxyStarList } from 'state/galaxy/hooks';
 import { shortenAddress } from 'utils';
+import { sliceByLevels } from 'state/galaxy/util';
+import { useTranslation } from 'contexts/Localization';
+import { StarLevelInfo } from 'state/types';
 import { StarBox } from './style';
 import { PlunderCard } from './PlunderCard';
 
 const Stars = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const parseQs = useParsedQueryString();
   const galaxyId = Number(parseQs.i);
   useGalaxyStarList(galaxyId);
@@ -37,6 +41,18 @@ const Stars = () => {
     };
   }, []);
   const [activeStar, setActiveStar] = useState<Api.Galaxy.StarInfo>(initState);
+  const [navList, setNavList] = useState<StarLevelInfo[]>([]);
+
+  const initList = useCallback(() => {
+    // 截取10个为一组
+    const levelList = sliceByLevels(galaxyStarList, 10, t);
+    setNavList(levelList);
+    dispatch(setCurrentStarPeriod(levelList[0]));
+  }, [galaxyStarList]);
+
+  useEffect(() => {
+    initList();
+  }, [initList]);
 
   return (
     <Layout>
@@ -50,7 +66,7 @@ const Stars = () => {
       ) : (
         <Flex alignItems='center' mt='16px'>
           <Nav
-            nav={galaxyStarList}
+            nav={navList}
             mr='24px'
             activeId={currentStarPeriod?.id}
             onChangeNav={info => {

@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-export const sliceByLevels = (list = [], sliceLen = 10) => {
+export const sliceByLevels = (list: any[], sliceLen = 10, t: any) => {
   const newList = [];
   const len = list.length;
   for (let i = 0; i < len; i += sliceLen) {
@@ -8,7 +8,7 @@ export const sliceByLevels = (list = [], sliceLen = 10) => {
     const endIndex = i + sliceLen > len ? len : i + sliceLen;
     newList.push({
       id: startIndex,
-      label: `恒星:Lv${startIndex}~${endIndex}`,
+      label: `${t('Star')}:Lv${startIndex}~${endIndex}`,
       levels: list.slice(i, endIndex),
     });
   }

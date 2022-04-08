@@ -17,8 +17,8 @@ export const fetchPlanetBuildingsAsync = createAsyncThunk(
   async (planet_id: number | string) => {
     const response = await Api.BuildingApi.getPlanetBuildingList(planet_id);
     if (Api.isSuccess(response)) {
-      return response.data?.data;
+      return response.data;
     }
-    return [];
+    return { data: [], upgradeInfo: [] };
   },
 );
