@@ -1,5 +1,21 @@
 declare namespace Api {
   namespace Building {
+    // 储物罐矿石，人口，能量数据
+    interface Store {
+      max_store: number;
+      max_energy: number;
+      max_population: number;
+      already_stone: number;
+      already_energy: number;
+      already_population: number;
+    }
+    interface StoreRechargeParams {
+      planet_id: number;
+      energy: number;
+      stone: number;
+      population: number;
+    }
+
     // 建筑
     interface Building {
       buildings_number: number;

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Box, Flex, Input, Button, Text, Image } from 'uikit';
+import { Box, Flex, Input, Button, Text, Image, PrimaryInput } from 'uikit';
 import ModalWrapper from 'components/Modal';
+import { Select } from 'components/Select';
+import { Api } from 'apis';
 
 const SelectBox = styled(Flex)`
   height: 65px;
@@ -13,24 +15,97 @@ const SelectBox = styled(Flex)`
   border-radius: ${({ theme }) => theme.radii.card};
 `;
 
-const InputBox = styled(Input)`
-  padding: 23px 34px;
-  height: 65px;
-  border: 2px solid;
-  border-image: linear-gradient(-29deg, #14f1fd, #1caaf4) 2 2;
-  box-shadow: inset 0px 0px 20px 0px #f9f9f99c;
-  border-radius: ${({ theme }) => theme.radii.card};
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  font-size: 20px;
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.textSubtle};
-  }
-`;
+enum StoreType {
+  STONE = 1,
+  POPULATION = 2,
+  ENERGY = 3,
+}
 
 export const RechargeAssets: React.FC<{
+  planet_id: number;
   visible: boolean;
   onClose: () => void;
-}> = ({ visible, onClose }) => {
+}> = ({ planet_id, visible, onClose }) => {
+  const selectOptions = useMemo(() => {
+    return [
+      {
+        value: StoreType.STONE,
+        label: '矿石',
+        icon: (
+          <Image
+            mr='15px'
+            width={50}
+            height={50}
+            src='/images/commons/icon/ore.png'
+            alt=''
+          />
+        ),
+      },
+      {
+        value: StoreType.POPULATION,
+        label: '人口',
+        icon: (
+          <Image
+            mr='15px'
+            width={50}
+            height={50}
+            src='/images/commons/icon/population.png'
+            alt=''
+          />
+        ),
+      },
+      {
+        value: StoreType.ENERGY,
+        label: '能量',
+        icon: (
+          <Image
+            mr='15px'
+            width={50}
+            height={50}
+            src='/images/commons/icon/energy.png'
+            alt=''
+          />
+        ),
+      },
+    ];
+  }, []);
+
+  const [store, setStore] = useState({
+    [StoreType.STONE]: { already: 0, max: 0 },
+    [StoreType.POPULATION]: { already: 0, max: 0 },
+    [StoreType.ENERGY]: { already: 0, max: 0 },
+  });
+  const [selectId, setSelectId] = useState(StoreType.STONE);
+
+  const getStoreData = useCallback(async () => {
+    try {
+      const res = await Api.BuildingApi.getMaxReCharge(planet_id);
+      if (Api.isSuccess(res)) {
+        const info: Api.Building.Store = res.data;
+        setStore({
+          [StoreType.STONE]: {
+            already: info.already_stone,
+            max: info.max_store,
+          },
+          [StoreType.POPULATION]: {
+            already: info.already_population,
+            max: info.max_population,
+          },
+          [StoreType.ENERGY]: {
+            already: info.already_energy,
+            max: info.max_energy,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [planet_id]);
+
+  // 获取储物罐最大充值金额
+  useEffect(() => {
+    if (visible) getStoreData();
+  }, [getStoreData, visible]);
   return (
     <ModalWrapper title='补充资源' visible={visible} setVisible={onClose}>
       <Box padding='30px 25px'>
@@ -38,47 +113,29 @@ export const RechargeAssets: React.FC<{
           <Text small>星球储存罐</Text>
           <Flex alignItems='center'>
             <Text fontSize='30px' bold>
-              10
+              {store[selectId]?.already}
             </Text>
             <Text small color='textSubtle' ml='14px'>
-              /100
+              / {store[selectId]?.max}
             </Text>
           </Flex>
         </Flex>
-        <SelectBox>
-          <Flex flex={1} alignItems='center' justifyContent='space-between'>
-            <Flex alignItems='center' justifyContent='space-between'>
-              <Box width='50px' height='50px'>
-                <Image
-                  width={50}
-                  height={50}
-                  src='/images/commons/icon/ore.png'
-                  alt=''
-                />
-              </Box>
-              <Text color='textSubtle' ml='15px' small>
-                矿石
-              </Text>
-            </Flex>
-            <Box
-              width='22px'
-              height='27px'
-              style={{
-                transform: 'rotate(90deg)',
-              }}
-            >
-              <Image
-                width={22}
-                height={27}
-                src='/images/commons/icon/icon_arrow_right.png'
-                alt=''
-              />
-            </Box>
-          </Flex>
-        </SelectBox>
-        <InputBox placeholder='请输入充值数量' />
+        <Select
+          options={selectOptions}
+          mb='27px'
+          defaultId={selectId}
+          onChange={option => {
+            setSelectId(option.value);
+          }}
+        />
+        <PrimaryInput
+          width='100%'
+          height={65}
+          inputMode='decimal'
+          placeholder='请输入充值数量'
+        />
         <Flex justifyContent='center' mt='29px'>
-          <Button>确认充值</Button>
+          <Button width={270}>确认充值</Button>
         </Flex>
       </Box>
     </ModalWrapper>

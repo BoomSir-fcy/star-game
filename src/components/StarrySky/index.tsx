@@ -34,6 +34,8 @@ const StarrySkyBg = styled(Box)<{ bgType: number }>`
   width: 100%;
   ${({ bgType }) => getBackground({ type: bgType })}
   transform: translate3d(0, 0, 0);
+  transform: translateZ(-1px);
+  overflow: hidden;
 `;
 
 interface StarrySkyProps {

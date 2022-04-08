@@ -50,7 +50,7 @@ export const useCountdownTime = (
         clearInterval(timer.current);
       }
     };
-  }, [endTime, startTime]);
+  }, [endTime, startTime, timePeriod]);
   return diffSecond;
 };
 

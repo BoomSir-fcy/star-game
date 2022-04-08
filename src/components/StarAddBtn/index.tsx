@@ -71,18 +71,18 @@ const StarImage = styled.img<StarAddBtnProps>`
       : 'none'};
 `;
 
-const RemoveIcon = styled.div`
+const RemoveIcon = styled.img`
   position: absolute;
   top: 10px;
   right: 18px;
   width: 37px;
   height: 37px;
-  line-height: 30px;
-  text-align: center;
-  background: ${({ theme }) => theme.colors.backgroundDisabled};
-  border-radius: 50%;
-  color: #fff;
-  font-size: 60px;
+  /* line-height: 30px; */
+  /* text-align: center; */
+  /* background: red; */
+  /* border-radius: 50%; */
+  /* color: red; */
+  /* font-size: 60px; */
   z-index: 2;
 `;
 interface StarAddBtnProps extends BoxProps {
@@ -133,9 +133,9 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
               onRemove();
             }
           }}
-        >
-          -
-        </RemoveIcon>
+          src='/images/commons/icon/remove.png'
+          alt=''
+        />
       )}
       {owner && (
         <OwnerFlex>

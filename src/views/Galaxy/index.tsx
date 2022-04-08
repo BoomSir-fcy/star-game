@@ -47,19 +47,9 @@ const Galaxy = () => {
     setNavList(list);
   }, [galaxyList, account]);
 
-  const getStarList = useCallback(() => {
-    if (galaxyList[0]?.id) {
-      dispatch(fetchGalaxyStarListAsync(galaxyList[0].id));
-    }
-  }, [galaxyList, dispatch]);
-
   useEffect(() => {
     initList();
   }, [initList]);
-
-  // useEffect(() => {
-  //   getStarList();
-  // }, [getStarList]);
 
   return (
     <Layout>
@@ -68,9 +58,7 @@ const Galaxy = () => {
           dispatch(fetchGalaxyListAsync());
         }}
       />
-      {loadingGalaxy ? (
-        <Spinner />
-      ) : (
+      {!loadingGalaxy ? (
         <Flex alignItems='center'>
           <Nav
             nav={navList}
@@ -87,12 +75,6 @@ const Galaxy = () => {
               <StyledCard>
                 <Flex flexDirection='column' justifyContent='space-between'>
                   <Flex flexDirection='column'>
-                    {/* <Text fontSize='24px'>
-                      {t('Number of stars: %total% (occupied: %number%)', {
-                        total: currentGalaxy?.starTotal,
-                        number: currentGalaxy?.starOwnerTotal,
-                      })}
-                    </Text> */}
                     <Text mt='10px' fontSize='24px'>
                       {t('Galaxy Lord: %name% (can be obtained by auction)', {
                         name: currentGalaxy?.nickname,
@@ -127,6 +109,8 @@ const Galaxy = () => {
             </Flex>
           </BgCard>
         </Flex>
+      ) : (
+        <Spinner />
       )}
     </Layout>
   );

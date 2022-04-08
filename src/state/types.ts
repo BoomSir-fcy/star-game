@@ -223,6 +223,7 @@ export interface AllianceView {
   alliance: allianceInfo;
   end_time: number;
   free_time: number;
+  later_extract_time: number;
   order: orderInfo[];
   energy: energyInfo;
 }
