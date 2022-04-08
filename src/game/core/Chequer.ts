@@ -1,6 +1,7 @@
 import { Graphics, Texture, Sprite, TilingSprite, TextStyle, Text, Container, Point } from 'pixi.js';
 // import { Stage, Layer, Group } from '@pixi/layers'
 import config from 'game/config';
+import { BoardPositionSelf } from '../types';
 import { checkPolygonPoint } from './utils';
 
 // const W = 800;
@@ -164,13 +165,17 @@ class Chequer {
   getXY(axisX: number, axisY: number) {
     
     // 把两个棋盘分成2份
-    let excessOffset = 0;
-    if (axisY >= config.BOARDS_COL_COUNT / 2) {
-      excessOffset = 16
+    let excessOffsetA = 0;
+    let excessOffsetB = 0;
+    if (axisY >= config.BOARDS_COL_COUNT / 2 && config.BOARD_POSITION_SELF === BoardPositionSelf.BOTTOM_LEFT) {
+      excessOffsetA = 16;
+    }
+    if (axisX >= config.BOARDS_COL_COUNT / 2 && config.BOARD_POSITION_SELF === BoardPositionSelf.TOP_LEFT) {
+      excessOffsetB = 16;
     }
     return {
-      x: config.OFFSET_START_X - excessOffset + (axisX - axisY) * this.bunny.width * Chequer.X_RATIO,
-      y: config.OFFSET_START_Y + excessOffset + (axisX + axisY) * this.bunny.height * Chequer.Y_RATIO,
+      x: config.OFFSET_START_X - excessOffsetA + excessOffsetB + (axisX - axisY) * this.bunny.width * Chequer.X_RATIO,
+      y: config.OFFSET_START_Y + excessOffsetA + excessOffsetB + (axisX + axisY) * this.bunny.height * Chequer.Y_RATIO,
     }
 
   }

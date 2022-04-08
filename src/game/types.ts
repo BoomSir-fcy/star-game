@@ -15,3 +15,8 @@ export enum BoardState {
   PRE_ACTIVE = '#5EFF93'
 }
 
+export enum BoardPositionSelf {
+  TOP_LEFT,
+  BOTTOM_LEFT,
+}
+

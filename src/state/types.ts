@@ -40,6 +40,17 @@ export interface UserInfoView {
   superior: string;
   loading?: boolean;
 }
+
+export interface userProductView {
+  planet_num: number;
+  stone_product: number;
+  energy_product: number;
+  population_product: number;
+  stone: number;
+  energy: number;
+  population: number;
+}
+
 export interface UserInfoState {
   userBalance: UserBalanceView[];
   infoView: UserAgentInfoView;
@@ -49,6 +60,7 @@ export interface UserInfoState {
     allowance: string;
     loading: boolean;
   };
+  userProduct: userProductView;
 }
 
 export interface MysteryBoxView {

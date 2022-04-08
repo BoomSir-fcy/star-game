@@ -1,3 +1,4 @@
 export { default as Card } from './Card';
 export { default as CardBody } from './CardBody';
-export type { CardProps, CardRibbonProps } from './types';
+export { default as BorderCard } from './BorderCard';
+export type { CardProps, CardRibbonProps, BorderCardProps } from './types';

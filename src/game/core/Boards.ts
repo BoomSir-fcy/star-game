@@ -34,7 +34,11 @@ class Boards {
 
   created = false;
 
-  enableDrag = true;
+  private enableDrag = false;
+
+  private dragPreSoldier?: Soldier;
+
+  private dragPreSoldierEvent?: InteractionEvent;
 
   init() {
 
@@ -57,6 +61,20 @@ class Boards {
 
     this.containerSprite.interactive = true;
     this.app.view.addEventListener('wheel', (e) => { this.onHandleWheel(e) });
+    this.containerSprite.on('pointermove', (e) => {
+      if (this.enableDrag && this.dragPreSoldier && this.dragPreSoldier.container) {
+        // console.log(e, '===')
+        this.dragPreSoldier.container.visible = true;
+        this.dragPreSoldier.onDragMove(e)
+        this.dragPreSoldierEvent = e;
+      }
+    })
+    // this.app.view.addEventListener('mo')
+    // this.app.stage.on('point', (e) => {
+    //   console.log(e, '===')
+    //   // if (this.enableDrag) {
+    //   // }
+    // })
 
     // this.renderSelect();
 
@@ -73,6 +91,38 @@ class Boards {
       // setTimeout(() => {
       //   soldier.stop()
       // }, 2000)
+    }
+
+  }
+
+  setEnableDrag(state: boolean) {
+    this.enableDrag = state;
+  }
+
+  addDragPreSoldier(soldier: Soldier) {
+    this.enableDrag = true;
+    this.dragPreSoldier = soldier.clone({ enableDrag: true });
+    this.dragPreSoldier.setDragging(true);
+    this.dragPreSoldier.container.visible = false;
+    this.app.stage.addChild(this.dragPreSoldier.container);
+    this.onDragStarSoldier()
+
+  }
+
+  offDragPreSoldier() {
+    this.enableDrag = false;
+    if (this.dragPreSoldier && this.dragPreSoldierEvent) {
+      const soldier = this.dragPreSoldier.clone();
+      const res = this.onDragEndSolider(this.dragPreSoldierEvent, soldier);
+      if (res) {
+        this.containerSprite.addChild(soldier.container);
+        soldier.renderPh();
+      }
+      this.dragPreSoldier.setDragging(false);
+      this.dragPreSoldier.container.visible = false;
+      this.app.stage.removeChild(this.dragPreSoldier.container);
+      delete this.dragPreSoldier;
+      delete this.dragPreSoldierEvent
     }
 
   }
@@ -128,6 +178,29 @@ class Boards {
 
   }
 
+  onDragStarSoldier() {
+    this.chequers.forEach(item => {
+      item.displayState(true);
+    })
+  }
+
+  onDragEndSolider(event: InteractionEvent, soldier: Soldier) {
+    let canDrag = false;
+
+    this.chequers.forEach(item => {
+      const collection = item.checkCollisionPoint(event.data.global);
+      if (collection && item.state === stateType.PREVIEW) {
+        soldier.setPosition(new AxisPoint(item.centerPoint.x, item.centerPoint.y, item));
+        canDrag = true;
+      }
+      item.displayState(false);
+    })
+    if (!canDrag) {
+      soldier.resetPosition();
+    }
+    return canDrag;
+  }
+
   createSoldier(_x: number, _y: number, src: string) {
     const axis = this.getAxis(_x, _y);
     if (!axis) return null;
@@ -137,51 +210,12 @@ class Boards {
     soldier.renderPh();
     
     soldier.container.on('pointerdown', () => {
-      console.log(121212)
-      this.chequers.forEach(item => {
-        item.displayState(true);
-      })
+      this.onDragStarSoldier()
     }).on('pointerup', (event) => {
-      // console.log(event);
-      // const collection = this.chequers[0].checkCollisionPoint(event.data.global);
-      // console.log(collection);
-      let canDrag = false;
-
-      this.chequers.forEach(item => {
-        const collection = item.checkCollisionPoint(event.data.global);
-        if (collection && item.state === stateType.PREVIEW) {
-          // soldier.container.position.set(item.axisX, item.axisY);
-          // console.log(item)
-          soldier.setPosition(new AxisPoint(item.centerPoint.x, item.centerPoint.y, item));
-          canDrag = true;
-        }
-        item.displayState(false);
-      })
-      if (!canDrag) {
-        soldier.resetPosition();
-      }
+      this.onDragEndSolider(event, soldier)
     })
 
     return soldier;
-  }
-
-
-
-  renderSelect() {
-    const select = new Select();
-    select.container.x = this.app.screen.width - 401;
-    select.container.y = this.app.screen.height - 201;
-
-    const soldier  = new Soldier({ x: -100, y: -100, textureRes: '/assets/soldier/rt_object_01.png'});
-    const soldier1  = new Soldier({ x: 50, y: 20, textureRes: '/assets/soldier/rt_object_02.png'});
-    const soldier2  = new Soldier({ x: 200, y: 200, textureRes: '/assets/soldier/rt_object_03.png'});
-    const soldier3  = new Soldier({ x: 300, y: 150, textureRes: '/assets/soldier/rt_object_04.png'});
-    select.inner.addChild(soldier.container);
-    select.inner.addChild(soldier1.container);
-    select.inner.addChild(soldier2.container);
-    select.inner.addChild(soldier3.container);
-
-    this.app.stage.addChild(select.container);
   }
 
 }

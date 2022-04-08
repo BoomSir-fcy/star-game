@@ -9,6 +9,7 @@ interface SoldierOptions {
   x: number;
   y: number;
   chequer?: Chequer
+  enableDrag?: boolean
 }
 class Soldier extends Combat {
 
@@ -21,14 +22,19 @@ class Soldier extends Combat {
 
   startPoint = new Point();
 
+  textureRes = '';
+
   chequer?: Chequer;
 
-  init({ textureRes, x, y, chequer }: SoldierOptions) {
+  enableDrag = true;
+
+  init({ textureRes, x, y, chequer, enableDrag = true }: SoldierOptions) {
 
     this.chequer = chequer;
     
     this.chequer?.setState(stateType.DISABLE);
 
+    this.textureRes = textureRes;
     this.displaySprite.texture = Texture.from(textureRes);
     this.displaySprite.anchor.set(0.5);
     this.container.x = x;
@@ -43,17 +49,33 @@ class Soldier extends Combat {
     this.container.buttonMode = true;
     this.container.interactive = true;
 
-    this.container
-      .on('pointerdown', (e) => this.onDragStart(e))
-      .on('pointerup', () => this.onDragEnd())
-      .on('pointerupoutside', () => {
-        this.onDragEnd();
-        this.resetPosition();
-      })
-      .on('pointermove', () => this.onDragMove());
+    this.enableDrag = Boolean(enableDrag);
+
+    if (this.enableDrag) {
+      this.container
+        .on('pointerdown', (e) => this.onDragStart(e))
+        .on('pointerup', () => this.onDragEnd())
+        .on('pointerupoutside', () => {
+          this.onDragEnd();
+          this.resetPosition();
+        })
+        .on('pointermove', () => this.onDragMove());
+    }
+
   }
 
-  private dragData: InteractionData = new InteractionData();
+  clone(option?: Partial<SoldierOptions>) {
+    
+    const newOptions = {
+      ...option,
+      ...this,
+    }
+    const { textureRes, x, y, chequer, enableDrag } = newOptions;
+
+    return new Soldier({textureRes, x, y, chequer, enableDrag})
+  }
+
+  dragData: InteractionData = new InteractionData();
 
   dragging = false;
 
@@ -88,7 +110,12 @@ class Soldier extends Combat {
     this.chequer?.setState(stateType.DISABLE);
   }
 
-  onDragMove() {
+  setDragging(state: boolean) {
+    this.dragging = state;
+  }
+
+  onDragMove(event?: InteractionEvent) {
+    this.dragData = event?.data || this.dragData
     if (this.dragging) {
       const newPosition = this?.dragData?.getLocalPosition(this.container.parent);
       if (newPosition) {

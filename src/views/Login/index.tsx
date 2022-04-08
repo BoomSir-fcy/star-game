@@ -16,11 +16,13 @@ import {
   useFetchUserInfo,
   useFetchAllowance,
 } from 'state/userInfo/hooks';
+import { useDispatch } from 'react-redux';
 import { useStore } from 'state';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useToast } from 'contexts/ToastsContext';
 import { isAddress } from 'utils';
 import { useConnectWallet } from 'contexts/ConnectWallet';
+import { fetchUserProductAsync } from 'state/userInfo/reducer';
 import StarGameBox from './components/StarGameBox';
 import Flyer from './components/Flyer';
 import Create, { ForwardRefRenderProps } from './components/Create';
@@ -48,6 +50,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const parsedQs = useParsedQueryString();
+  const dispatch = useDispatch();
 
   const { onConnectWallet } = useConnectWallet();
   const { account } = useWeb3React();
@@ -62,7 +65,7 @@ const Login = () => {
 
   const { handleCheck } = useCheckName();
   const { handleRegister } = useRegisterWithDsg();
-  const { handleLogin } = useLogin();
+  const { handleLogin, getPlanetNum } = useLogin();
 
   const createRef = useRef<ForwardRefRenderProps>(null);
   const [visible, setVisible] = useState(false);
@@ -135,7 +138,21 @@ const Login = () => {
     if (parsedQs.s === '0') {
       const res = await handleLogin();
       if (res.code === 0) {
-        navigate('/mystery-box');
+        const num = await getPlanetNum();
+        console.log(num);
+
+        if (num.code === 0) {
+          const planetNum = num.data?.List?.planet_num;
+          console.log(planetNum);
+
+          if (planetNum > 0) {
+            navigate('/star/planet');
+          } else {
+            navigate('/mystery-box');
+          }
+        } else {
+          navigate('/mystery-box');
+        }
       }
 
       return;
@@ -152,6 +169,7 @@ const Login = () => {
     handleSign,
     navigate,
     handleLogin,
+    dispatch,
   ]);
 
   useEffect(() => {

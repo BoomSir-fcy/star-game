@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, Text } from 'uikit';
+import { Box, Text, Flex } from 'uikit';
 import Boards from 'game/core/Boards';
+import PreviewList from './components/PreviewList';
+import Preview from './components/Preview';
+import SortBoard from './components/SortBoard';
 
 const Embattle = () => {
   const [boards] = useState(new Boards());
@@ -14,9 +17,25 @@ const Embattle = () => {
   }, [ref, boards]);
 
   return (
-    <Box>
-      <Text>啊啊啊</Text>
+    <Box position='relative'>
       <Box ref={ref} />
+      <Flex
+        style={{ userSelect: 'none' }}
+        position='absolute'
+        top='0'
+        left='824px'
+      >
+        <Preview />
+        <SortBoard ml='8px' />
+      </Flex>
+      <Box
+        style={{ userSelect: 'none' }}
+        position='absolute'
+        top='490px'
+        left='0'
+      >
+        <PreviewList boards={boards} />
+      </Box>
     </Box>
   );
 };

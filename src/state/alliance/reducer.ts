@@ -46,12 +46,10 @@ export const allianceSlice = createSlice({
           ...state.allianceView,
           ...payload,
         };
-        console.log(payload);
         const planetList = payload.order || [];
         const workingPlanet = planetList.map((item: orderInfo) => {
           return item.planetId;
         });
-        console.log(workingPlanet);
         state.workingPlanet = workingPlanet;
       }
     },
