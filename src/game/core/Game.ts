@@ -46,7 +46,7 @@ class Game extends EventTarget {
     soldier.container.on('pointerdown', () => {
       this.onDragStarSoldier()
     }).on('pointerup', (event) => {
-      const res = this.onDragEndSolider(event, soldier)
+      const res = this.onDragEndSoldier(event, soldier)
       if (res) {
         this.dispatchEvent(new CustomEvent('updateSoldierPosition', { detail: { event, soldiers: this.soldiers, } }))
       }
@@ -76,7 +76,7 @@ class Game extends EventTarget {
     this.setEnableDrag(false);
     if (this.dragPreSoldier && this.dragPreSoldierEvent) {
       const soldier = this.dragPreSoldier.clone();
-      const res = this.onDragEndSolider(this.dragPreSoldierEvent, soldier);
+      const res = this.onDragEndSoldier(this.dragPreSoldierEvent, soldier);
       if (res) {
         this.addSoldier(soldier);
         this.dispatchEvent(new CustomEvent('updateSoldierPosition', { detail: { soldiers: this.soldiers, } }))
@@ -98,7 +98,7 @@ class Game extends EventTarget {
   }
 
   
-  onDragEndSolider(event: InteractionEvent, soldier: Soldier) {
+  onDragEndSoldier(event: InteractionEvent, soldier: Soldier) {
     let canDrag = false;
 
     this.boards.chequers.forEach(item => {
@@ -119,7 +119,7 @@ class Game extends EventTarget {
     const axis = this.getAxis(_x, _y);
     console.log(axis, _x, _y)
     if (!axis) return null;
-    const soldier  = new Soldier({ ...option, x: axis.x, y: axis.y, chequer: axis.chequer});
+    const soldier  = new Soldier({ ...option, x: axis.x, y: axis.y, axisPoint: axis});
 
     this.addSoldier(soldier);
     return soldier;
@@ -133,6 +133,10 @@ class Game extends EventTarget {
       return null
     }
 
+  }
+
+  findSoldierByAxis(axis: AxisPoint) {
+    return this.soldiers.find(soldier => soldier.axisPoint === axis);
   }
 
 }

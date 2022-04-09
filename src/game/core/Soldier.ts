@@ -7,11 +7,13 @@ import AxisPoint from './AxisPoint';
 export interface AttrSoldierOptions {
   textureRes: string;
   id: number;
+  hp?: number;
+  isEnemy?: boolean;
 }
 export interface SoldierOptions extends AttrSoldierOptions {
   x: number;
   y: number;
-  chequer?: Chequer
+  axisPoint?: AxisPoint
   enableDrag?: boolean
 }
 class Soldier extends Combat {
@@ -27,19 +29,19 @@ class Soldier extends Combat {
 
   textureRes = '';
 
-  chequer?: Chequer;
-
   enableDrag = true;
 
   id = 0;
 
-  init({ textureRes, x, y, chequer, enableDrag = true, id }: SoldierOptions) {
+  init({ textureRes, x, y, axisPoint, enableDrag = true, id, isEnemy = false, hp = 0 }: SoldierOptions) {
 
     this.id = id;
 
-    this.chequer = chequer;
+    this.isEnemy = isEnemy;
+
+    this.axisPoint = axisPoint;
     
-    this.chequer?.setState(stateType.DISABLE);
+    this.axisPoint?.chequer?.setState(stateType.DISABLE);
 
     this.textureRes = textureRes;
     this.displaySprite.texture = Texture.from(textureRes);
@@ -52,6 +54,11 @@ class Soldier extends Combat {
     this.startPoint.set(x, y);
     
     this.container.addChild(this.displaySprite);
+
+    this.hp = hp;
+    if (hp) {
+      this.renderPh();
+    }
 
     this.container.buttonMode = true;
     this.container.interactive = true;
@@ -77,44 +84,28 @@ class Soldier extends Combat {
       ...this,
       ...option,
     }
-    const { textureRes, x, y, chequer, enableDrag, id } = newOptions;
-
-    return new Soldier({ textureRes, x, y, chequer, enableDrag, id })
+    const { textureRes, x, y, axisPoint, enableDrag, id } = newOptions;
+    
+    return new Soldier({ textureRes, x, y, axisPoint, enableDrag, id })
   }
 
   dragData: InteractionData = new InteractionData();
 
   dragging = false;
 
-  resetPosition() {
-    const { x, y } = this.startPoint;
-
-    this.container.position.set(x, y);
-  }
-
-  setPosition(point: AxisPoint) {
-    this.container.position.set(point.x, point.y);
-    this.startPoint.set(point.x, point.y);
-    this.chequer?.setState(stateType.PREVIEW);
-
-    this.chequer = point.chequer;
-    this.chequer?.setState(stateType.DISABLE);
-
-  }
-
   onDragStart(event: InteractionEvent) {
     this.dragData = event.data;
     this.container.alpha = 0.5;
     this.container.filters = [];
     this.dragging = true;
-    this.chequer?.setState(stateType.ACTIVE);
+    this.axisPoint?.chequer?.setState(stateType.ACTIVE);
   }
 
   onDragEnd() {
     this.container.alpha = 1;
     this.container.filters = [];
     this.dragging = false;
-    this.chequer?.setState(stateType.DISABLE);
+    this.axisPoint?.chequer?.setState(stateType.DISABLE);
   }
 
   setDragging(state: boolean) {

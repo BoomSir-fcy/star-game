@@ -56,4 +56,4 @@ const PreviewSoldier: React.FC<PreviewSoldierProps> = ({
   return <Box width={122} height={122} ref={ref} {...props} />;
 };
 
-export default PreviewSoldier;
+export default React.memo(PreviewSoldier);

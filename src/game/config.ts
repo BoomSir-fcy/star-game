@@ -2,7 +2,7 @@ import { BoardPositionSelf } from './types';
 
 const config = {
   WIDTH: 900,
-  HEIGHT: 720,
+  HEIGHT: 900,
   resolution: 1,
 
   boardWidth: 100,

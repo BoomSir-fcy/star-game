@@ -2,7 +2,8 @@ import useActiveWeb3React from "hooks/useActiveWeb3React"
 import { useCallback, useEffect, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useStore } from "state/util";
-import { fetchUnitListAsync, fetchGamePlanetUnitsAsync } from "./reducer";
+import { fetchGamePK } from "./fetchers";
+import { fetchUnitListAsync, fetchGamePlanetUnitsAsync, fetchGamePKAsync } from "./reducer";
 
 export const useFetchUnitList = () => {
 
@@ -35,3 +36,21 @@ export const useFetchGamePlanetUnits = (id: number) => {
     fetch
   }
 }
+
+export const useFetchGamePK = () => {
+
+  const dispatch = useDispatch();
+  const fetch = useCallback(() => {
+    dispatch(fetchGamePKAsync(1001, 1002))
+  }, [dispatch]);
+
+  useEffect(() => {
+    fetch()
+  }, [fetch])
+
+  return {
+    fetch
+  }
+}
+
+
