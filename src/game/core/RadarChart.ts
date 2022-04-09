@@ -34,6 +34,8 @@ class RadarChart {
 
   canvas = document.createElement('canvas');
 
+  offsetAngle = Math.PI / 2;
+
   init(options: Options) {
 
     const { width, height, data, colorText, colorPolygon, fillColor } = {
@@ -80,8 +82,8 @@ class RadarChart {
           this.ctx.beginPath();  // 开始路径
           const currR = r * (i + 1);
           for(let j = 0; j < this.count; j++) {
-              const x = this.centerX + currR*Math.cos(this.angle*j);
-              const y = this.centerX + currR*Math.sin(this.angle*j);
+              const x = this.centerX + currR*Math.cos(this.angle*j + this.offsetAngle);
+              const y = this.centerX + currR*Math.sin(this.angle*j + this.offsetAngle);
               this.ctx.lineTo(x, y);  
           }
           this.ctx.closePath(); // 闭合路径
@@ -97,8 +99,8 @@ class RadarChart {
       this.ctx.beginPath();
       this.ctx.strokeStyle = this.colorPolygon;
       for( let i = 0; i< this.count; i++){
-        const x = this.centerX + this.radius * Math.cos(this.angle*i);
-        const y = this.centerX + this.radius * Math.sin(this.angle*i);
+        const x = this.centerX + this.radius * Math.cos(this.angle*i + this.offsetAngle);
+        const y = this.centerX + this.radius * Math.sin(this.angle*i + this.offsetAngle);
         this.ctx.moveTo(this.centerX, this.centerX);
         this.ctx.lineTo(x, y);
       }
@@ -114,14 +116,14 @@ class RadarChart {
       this.ctx.font = `14px Microsoft Yahei`;
       this.ctx.fillStyle = this.colorText;
       for(let i = 0; i< this.count; i++){
-        const x = this.centerX + this.radius*Math.cos(this.angle*i);
-        const y = this.centerX + this.radius*Math.sin(this.angle*i);
+        const x = this.centerX + this.radius*Math.cos(this.angle*i + this.offsetAngle);
+        const y = this.centerX + this.radius*Math.sin(this.angle*i + this.offsetAngle);
        // 通过不同的位置，调整文本的显示位置
-        if( this.angle * i >= 0 && this.angle * i <= Math.PI / 2 ){
+        if( this.angle * i + this.offsetAngle >= 0 && this.angle * i + this.offsetAngle <= Math.PI / 2 ){
                 this.ctx.fillText(this.data[i].attr, x, y + fontSize);
-            }else if(this.angle * i > Math.PI / 2 && this.angle * i <= Math.PI){
+            }else if(this.angle * i + this.offsetAngle > Math.PI / 2 && this.angle * i + this.offsetAngle <= Math.PI){
                 this.ctx.fillText(this.data[i].attr, x - this.ctx.measureText(this.data[i].attr).width, y + fontSize);
-            }else if(this.angle * i > Math.PI && this.angle * i <= Math.PI * 3 / 2){
+            }else if(this.angle * i + this.offsetAngle > Math.PI && this.angle * i + this.offsetAngle <= Math.PI * 3 / 2){
                 this.ctx.fillText(this.data[i].attr, x - this.ctx.measureText(this.data[i].attr).width, y);
             }else{
                 this.ctx.fillText(this.data[i].attr, x, y);
@@ -136,8 +138,8 @@ class RadarChart {
       this.ctx.save();
       this.ctx.beginPath();
       for(let i = 0; i< this.count; i++){
-        const x = this.centerX + this.radius*Math.cos(this.angle*i)*this.data[i].value/100;
-        const y = this.centerX + this.radius*Math.sin(this.angle*i)*this.data[i].value/100;
+        const x = this.centerX + this.radius*Math.cos(this.angle*i + this.offsetAngle)*this.data[i].value/100;
+        const y = this.centerX + this.radius*Math.sin(this.angle*i + this.offsetAngle)*this.data[i].value/100;
         this.ctx.lineTo(x, y);
       }
       this.ctx.closePath();

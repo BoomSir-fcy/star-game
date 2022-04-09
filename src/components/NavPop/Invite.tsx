@@ -4,6 +4,7 @@ import { Box, Flex, Text, Image, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useWeb3React } from '@web3-react/core';
 import { useToast } from 'contexts/ToastsContext';
+import { Api } from 'apis';
 
 const ShaDowBox = styled(Flex)`
   width: 100%;
@@ -20,7 +21,10 @@ const InvitePop: React.FC = () => {
 
   const { t } = useTranslation();
   const { account } = useWeb3React();
-
+  const [InviteInfo, setInviteInfo] = useState({
+    invite_user_num: 0,
+    bnb_income: '0',
+  });
   const Copy = () => {
     const aux = document.createElement('input');
     const content = 'https://star.game.box';
@@ -31,6 +35,24 @@ const InvitePop: React.FC = () => {
     document.body.removeChild(aux);
     toastSuccess('复制成功');
   };
+
+  useEffect(() => {
+    const getUserInvite = async () => {
+      try {
+        const res = await Api.UserApi.getInvite();
+        if (Api.isSuccess(res)) {
+          const { invite_user_num, bnb_income } = res.data;
+          setInviteInfo({
+            invite_user_num,
+            bnb_income,
+          });
+        }
+      } catch (error) {
+        toastError('获取信息失败');
+      }
+    };
+    getUserInvite();
+  }, []);
 
   return (
     <Box width='100%' padding='50px 20px'>
@@ -44,13 +66,13 @@ const InvitePop: React.FC = () => {
           <Text mb='10px' color='textSubtle' fontSize='24px'>
             {t('邀请人数')}
           </Text>
-          <Text fontSize='22px'>2</Text>
+          <Text fontSize='22px'>{InviteInfo.invite_user_num}</Text>
         </Box>
         <Box>
           <Text mb='10px' color='textSubtle' fontSize='24px'>
             {t('获得返利')}
           </Text>
-          <Text fontSize='22px'>2 BNB</Text>
+          <Text fontSize='22px'>{InviteInfo.bnb_income || 0} BNB</Text>
         </Box>
       </ShaDowBox>
       <ShaDowBox alignItems='center' justifyContent='space-between'>

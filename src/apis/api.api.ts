@@ -1,13 +1,11 @@
+import { isSuccess } from './util';
 import { UserApi } from './User';
 import { GalaxyApi } from './Galaxy';
 import { BalanceApi } from './balance';
 import { PlanetApi } from './Planet';
 import { AllianceApi } from './alliance';
 import { BuildingApi } from './Building';
-
-const isSuccess = (res: Api.Error) => {
-  return res && res.code === 0;
-};
+import { GameApi } from './game';
 
 export const Api = {
   isSuccess,
@@ -17,4 +15,5 @@ export const Api = {
   PlanetApi: new PlanetApi(),
   AllianceApi: new AllianceApi(),
   BuildingApi: new BuildingApi(),
+  GameApi: new GameApi(),
 };

@@ -59,7 +59,7 @@ const Star: React.FC<{
             {
               id: 'embattle',
               label: '战斗布阵',
-              path: '/star/embattle',
+              path: `/star/embattle?id=${parsedQs.id}`,
             },
             {
               id: 'search',

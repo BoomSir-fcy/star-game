@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Flex, Text, Image } from 'uikit';
 import styled from 'styled-components';
 import { StarAddBtn } from 'components';
 import { useStore } from 'state/util';
 import { qualities } from 'uikit/theme/types';
+import { useToast } from 'contexts/ToastsContext';
+import { useDispatch } from 'react-redux';
+import { fetchAllianceViewAsync } from 'state/alliance/reducer';
+import { useRemoveAlliance } from './hook';
 
 const GalaxyBg = styled(Box)`
   width: 60%;
@@ -31,10 +35,31 @@ const StarStyleImg = styled.img`
 `;
 
 const JoinTheAlliance = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { toastError, toastSuccess, toastWarning } = useToast();
   const { order: allianceList } = useStore(p => p.alliance.allianceView);
+  const workingList = useStore(p => p.alliance.workingPlanet);
+  const { RemoveStar } = useRemoveAlliance();
 
-  const addStar = (id: number) => {
+  const Remove = useCallback(
+    async (id: number) => {
+      try {
+        let newList = workingList.concat([]);
+        const index = newList.indexOf(Number(id));
+        newList = newList.splice(index, 1);
+        await RemoveStar(newList);
+        toastSuccess('移除成功');
+      } catch (e) {
+        console.log(e);
+        toastError('移除失败');
+      }
+      dispatch(fetchAllianceViewAsync());
+    },
+    [RemoveStar, workingList],
+  );
+
+  const addStar = (id: any) => {
     navigate(`/star/planet?choose=${id || 1}`);
   };
 
@@ -42,7 +67,9 @@ const JoinTheAlliance = () => {
     <Box position='relative' width='40%' padding='0 80px 0 70px'>
       <Flex mb='-36px' alignItems='center' justifyContent='center'>
         <StarAddBtn
-          callBack={() => addStar(allianceList[0]?.planetId)}
+          onRemove={() => Remove(allianceList[0]?.planetId)}
+          showIcon
+          callBack={() => addStar(allianceList && allianceList[0]?.planetId)}
           imgBorder={
             (allianceList && allianceList[0]?.planet.rarity) ||
             qualities.ORDINARY
@@ -57,7 +84,9 @@ const JoinTheAlliance = () => {
       </Flex>
       <Flex alignItems='center' justifyContent='space-between'>
         <StarAddBtn
-          callBack={() => addStar(allianceList[4]?.planetId)}
+          onRemove={() => Remove(allianceList[4]?.planetId)}
+          showIcon
+          callBack={() => addStar(allianceList && allianceList[4]?.planetId)}
           imgBorder={
             (allianceList && allianceList[4]?.planet.rarity) ||
             qualities.ORDINARY
@@ -70,7 +99,9 @@ const JoinTheAlliance = () => {
           Leve={(allianceList && allianceList[4]?.planet?.level) || ''}
         />
         <StarAddBtn
-          callBack={() => addStar(allianceList[1]?.planetId)}
+          onRemove={() => Remove(allianceList[1]?.planetId)}
+          showIcon
+          callBack={() => addStar(allianceList && allianceList[1]?.planetId)}
           imgBorder={
             (allianceList && allianceList[1]?.planet.rarity) ||
             qualities.ORDINARY
@@ -85,7 +116,9 @@ const JoinTheAlliance = () => {
       </Flex>
       <Flex alignItems='center' justifyContent='center'>
         <StarAddBtn
-          callBack={() => addStar(allianceList[3]?.planetId)}
+          onRemove={() => Remove(allianceList[3]?.planetId)}
+          showIcon
+          callBack={() => addStar(allianceList && allianceList[3]?.planetId)}
           imgBorder={
             (allianceList && allianceList[3]?.planet.rarity) ||
             qualities.ORDINARY
@@ -98,7 +131,9 @@ const JoinTheAlliance = () => {
           Leve={(allianceList && allianceList[3]?.planet?.level) || ''}
         />
         <StarAddBtn
-          callBack={() => addStar(allianceList[2]?.planetId)}
+          onRemove={() => Remove(allianceList[2]?.planetId)}
+          showIcon
+          callBack={() => addStar(allianceList && allianceList[2]?.planetId)}
           imgBorder={
             (allianceList && allianceList[2]?.planet.rarity) ||
             qualities.ORDINARY

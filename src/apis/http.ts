@@ -3,6 +3,7 @@ import qs from 'qs';
 import { storage } from 'config';
 import eventBus from '../utils/eventBus';
 import dispatchHttpErrorEvent from './httpErrorEvent';
+import { isSuccess } from './util';
 
 interface AxiosRequestConfigCustom extends AxiosRequestConfig {
   hideHttpError?: boolean
@@ -79,7 +80,7 @@ export class Http {
   }
 
   static checkSuccess(res: Api.Error) {
-    return res && res.code === 1;
+    return isSuccess(res);
   }
 }
 

@@ -8,6 +8,7 @@ import galaxyReducer from './galaxy/reducer';
 import planetReducer from './planet/reducer';
 import allianceReducer from './alliance/reducer';
 import buildlingReducer from './buildling/reducer';
+import gameReducer from './game/reducer';
 import { updateVersion } from './global/actions';
 
 export { useStore } from './util';
@@ -24,6 +25,7 @@ const store = configureStore({
     planet: planetReducer,
     alliance: allianceReducer,
     buildling: buildlingReducer,
+    game: gameReducer,
   },
   middleware: getDefaultMiddleware => [
     ...getDefaultMiddleware({ thunk: true }),

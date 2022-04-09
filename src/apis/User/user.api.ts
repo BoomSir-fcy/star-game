@@ -29,4 +29,10 @@ export class UserApi extends Http {
   async userSignOutAll(): Promise<Api.Response<null>> {
     return this.post('user/signout-all');
   }
+
+  // 获取用户邀请信息
+  async getInvite() {
+    const res = await this.get('user/invite');
+    return res;
+  }
 }

@@ -54,7 +54,7 @@ const MysteryBoxDetail = () => {
 
   const init = useCallback(() => {
     if (id) dispatch(fetchPlanetInfoAsync([id]));
-    if (!planetInfo) {
+    if (!Object.keys(planetInfo).length) {
       setTimeout(() => {
         dispatch(fetchPlanetInfoAsync([id]));
       }, 5000);

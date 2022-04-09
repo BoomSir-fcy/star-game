@@ -71,7 +71,6 @@ const SelectPlanet = () => {
                       if (activeMaterialMap[item.id]) {
                         return;
                       }
-                      console.log('点击');
                       dispatch(setActiveMaterialMap({ [item.id]: item }));
                       navigate(-1);
                     }}

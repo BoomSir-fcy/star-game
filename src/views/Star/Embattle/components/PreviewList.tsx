@@ -1,23 +1,31 @@
-import Boards from 'game/core/Boards';
+import Game from 'game/core/Game';
 import React, { useMemo, useState } from 'react';
+import { useStore } from 'state';
 import { Box, Text, BgCard, Flex, BorderCard } from 'uikit';
 import PreviewSoldier from './PreviewSoldier';
 
 interface PreviewListProps {
-  boards: Boards;
+  game: Game;
+  race?: Api.Game.race;
 }
-const PreviewList: React.FC<PreviewListProps> = ({ boards }) => {
-  const list = useMemo(
-    () => Array.from(new Array(2)).map((item, index) => index),
-    [],
-  );
+const PreviewList: React.FC<PreviewListProps> = ({ game, race = 1 }) => {
+  const units = useStore(p => p.game.baseUnits);
+
+  const unitMaps = useMemo(() => {
+    if (units[race]) return units[race];
+    return {};
+  }, [units, race]);
+
+  const list = useMemo(() => {
+    return Object.values(unitMaps);
+  }, [unitMaps]);
 
   return (
     <BgCard variant='long'>
       <Flex flexWrap='wrap' padding='0 28px'>
         {list.map(item => {
           return (
-            <Box key={item} margin='49px 20px 0'>
+            <Box key={item.unique_id} margin='49px 20px 0'>
               <BorderCard
                 isActive
                 width={122}
@@ -30,14 +38,15 @@ const PreviewList: React.FC<PreviewListProps> = ({ boards }) => {
                   LV 1
                 </Text>
                 <PreviewSoldier
-                  boards={boards}
+                  game={game}
                   position='absolute'
                   top='0'
                   left='0'
+                  sid={item.unique_id}
                 />
               </BorderCard>
               <Text mt='8px' textAlign='center' fontSize='20' bold>
-                机甲{item}
+                机甲{item.unique_id}
               </Text>
             </Box>
           );

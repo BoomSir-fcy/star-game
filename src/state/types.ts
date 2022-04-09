@@ -87,10 +87,10 @@ export interface MysteryBoxState {
 export interface GalaxyInfo extends Api.Galaxy.GalaxyInfo {
   id: number;
   label: string;
-  badge?: boolean;
-  starTotal?: number;
-  starOwnerTotal?: number;
-  nickname?: string;
+  badge: boolean;
+  starTotal: number;
+  starOwnerTotal: number;
+  nickname: string;
 }
 
 export interface StarLevelInfo {
@@ -136,6 +136,18 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   AnyAction
 >;
 
+
+export interface GameState {
+  baseUnits: {
+    [race: string]: {
+      [id: string]: Api.Game.UnitInfo,
+    };
+  },
+  plantUnits: {
+    [id: number]: Api.Game.UnitPlanetPos[]
+  }
+}
+
 export interface State {
   userInfo: UserInfoState;
   mysteryBox: MysteryBoxState;
@@ -143,6 +155,7 @@ export interface State {
   alliance: AllianceState;
   planet: PlanetState;
   buildling: BuildlingState;
+  game: GameState;
 }
 
 export interface planetInfo {
@@ -211,6 +224,7 @@ export interface AllianceView {
   alliance: allianceInfo;
   end_time: number;
   free_time: number;
+  later_extract_time: number;
   order: orderInfo[];
   energy: energyInfo;
 }

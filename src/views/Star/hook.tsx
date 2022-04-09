@@ -9,7 +9,7 @@ export const useJoinAlliance = () => {
   const PlanetContract = usePlanetContract();
   const { account } = useActiveWeb3React();
 
-  // 充值
+  // 设置工作的星球
   const SetWorking = useCallback(
     async (planet_id, arr) => {
       try {

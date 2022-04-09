@@ -119,20 +119,26 @@ class Chequer {
     this.bunny.anchor.set(0.5);
     this.bunny.width = 100;
     this.bunny.height = 125;
-    const { x, y } = this.getXY(axisX, axisY)
+    const { x, y, enemy } = this.getXY(axisX, axisY)
     this.bunny.x = x;
     this.bunny.y = y;
 
     this.bunny.interactive = true;
     this.bunny.buttonMode = true;
 
-    this.setState(state);
+    // this.setState(state);
+    this.setState(enemy ? stateType.DISABLE : state);
 
     this.stateSprite.anchor.set(0.5);
     this.stateSprite.x = 0;
     this.stateSprite.y = -23;
     this.bunny.addChild(this.stateSprite)
     this.stateSprite.visible = false;
+    
+    const text = new Text(`X${axisX}, Y${axisY}`, { fill: 0xFFFFFF, fontSize: 16 });
+    text.x = -30;
+    text.y = -28;
+    this.bunny.addChild(text);
 
   }
 
@@ -167,15 +173,19 @@ class Chequer {
     // 把两个棋盘分成2份
     let excessOffsetA = 0;
     let excessOffsetB = 0;
+    let enemy = false;
     if (axisY >= config.BOARDS_COL_COUNT / 2 && config.BOARD_POSITION_SELF === BoardPositionSelf.BOTTOM_LEFT) {
       excessOffsetA = 16;
+      enemy = true;
     }
     if (axisX >= config.BOARDS_COL_COUNT / 2 && config.BOARD_POSITION_SELF === BoardPositionSelf.TOP_LEFT) {
       excessOffsetB = 16;
+      enemy = true;
     }
     return {
       x: config.OFFSET_START_X - excessOffsetA + excessOffsetB + (axisX - axisY) * this.bunny.width * Chequer.X_RATIO,
       y: config.OFFSET_START_Y + excessOffsetA + excessOffsetB + (axisX + axisY) * this.bunny.height * Chequer.Y_RATIO,
+      enemy,
     }
 
   }

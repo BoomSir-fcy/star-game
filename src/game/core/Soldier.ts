@@ -4,8 +4,11 @@ import Chequer, { stateType } from './Chequer'
 import AxisPoint from './AxisPoint';
 // import { onDragEnd, onDragMove, onDragStart } from './utils';
 
-interface SoldierOptions {
+export interface AttrSoldierOptions {
   textureRes: string;
+  id: number;
+}
+export interface SoldierOptions extends AttrSoldierOptions {
   x: number;
   y: number;
   chequer?: Chequer
@@ -28,7 +31,11 @@ class Soldier extends Combat {
 
   enableDrag = true;
 
-  init({ textureRes, x, y, chequer, enableDrag = true }: SoldierOptions) {
+  id = 0;
+
+  init({ textureRes, x, y, chequer, enableDrag = true, id }: SoldierOptions) {
+
+    this.id = id;
 
     this.chequer = chequer;
     
@@ -67,12 +74,12 @@ class Soldier extends Combat {
   clone(option?: Partial<SoldierOptions>) {
     
     const newOptions = {
-      ...option,
       ...this,
+      ...option,
     }
-    const { textureRes, x, y, chequer, enableDrag } = newOptions;
+    const { textureRes, x, y, chequer, enableDrag, id } = newOptions;
 
-    return new Soldier({textureRes, x, y, chequer, enableDrag})
+    return new Soldier({ textureRes, x, y, chequer, enableDrag, id })
   }
 
   dragData: InteractionData = new InteractionData();

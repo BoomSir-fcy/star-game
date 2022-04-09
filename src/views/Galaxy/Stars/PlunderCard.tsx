@@ -1,4 +1,5 @@
 import { Api } from 'apis';
+import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'contexts/ToastsContext';
 import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
@@ -10,26 +11,23 @@ export const PlunderCard: React.FC<{
   info: Api.Galaxy.StarInfo;
   onClose: () => void;
 }> = ({ info, onClose }) => {
+  const { t } = useTranslation();
   const { toastError, toastSuccess } = useToast();
   const [pending, setPending] = useState(false);
   const hasOwner = info.owner;
 
   // 抢夺
   const handlePlunder = useCallback(async () => {
-    if (dayjs().unix() > info.protect_timestamp) {
-      toastError('保护期内不能抢夺');
-      return;
-    }
     try {
       // setPending(true);
       // const res = await Api.GalaxyApi.plunderStar(info.token_id, info.number);
       // if (Api.isSuccess(res)) {
-      //   toastSuccess('抢夺成功');
+      //   toastSuccess(t('Snatch succeeded));
       //   setPending(false);
       //   onClose();
       // }
     } catch (error) {
-      // toastError('抢夺失败');
+      // toastError(t('Snatch failed));
       // setPending(false);
     }
   }, [info, toastError]);
@@ -40,12 +38,12 @@ export const PlunderCard: React.FC<{
       setPending(true);
       const res = await Api.GalaxyApi.holdStar(info.token_id, info.number);
       if (Api.isSuccess(res)) {
-        toastSuccess('占领成功');
+        toastSuccess(t('Occupied succeeded'));
         setPending(false);
         onClose();
       }
     } catch (error) {
-      toastError('占领失败');
+      toastError(t('Occupied failed'));
       setPending(false);
     }
   }, [info, onClose, toastSuccess, toastError]);
@@ -60,13 +58,13 @@ export const PlunderCard: React.FC<{
         <Flex alignItems='flex-end'>
           <Flex flexDirection='column'>
             <Text mb='10px' shadow='tertiary' fontSize='28px' bold>
-              恒星Lv: {info.number}
+              {t('Star')} Lv: {info.number}
             </Text>
             <Text shadow='primary' small bold>
-              产出BOX: {info.disapth_box}
+              {t('Output')} BOX: {info.disapth_box}
             </Text>
             <Text shadow='primary' small bold>
-              被占领次数: {info.history_hold_number}
+              {t('Occupied')}: {info.history_hold_number}
             </Text>
           </Flex>
           {hasOwner ? (
@@ -76,7 +74,11 @@ export const PlunderCard: React.FC<{
               ml='60px'
               onClick={handlePlunder}
             >
-              {pending ? <Dots>抢夺恒星</Dots> : '抢夺恒星'}
+              {pending ? (
+                <Dots>{t('Snatch the stars')}</Dots>
+              ) : (
+                t('Snatch the stars')
+              )}
             </ButtonStyled>
           ) : (
             <ButtonStyled
@@ -85,7 +87,11 @@ export const PlunderCard: React.FC<{
               ml='60px'
               onClick={handleHold}
             >
-              {pending ? <Dots>占领恒星</Dots> : '占领恒星'}
+              {pending ? (
+                <Dots>{t('Occupy the stars')}</Dots>
+              ) : (
+                t('Occupy the stars')
+              )}
             </ButtonStyled>
           )}
         </Flex>

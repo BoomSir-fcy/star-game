@@ -16,6 +16,10 @@ export const initialState: GalaxyState = {
   currentGalaxy: {
     id: 0,
     label: '',
+    badge: false,
+    starTotal: 0,
+    starOwnerTotal: 0,
+    nickname: '',
   },
   currentStarPeriod: { id: 0, label: '', levels: [] },
   galaxyNft: {
@@ -68,12 +72,8 @@ export const galaxySlice = createSlice({
     setGalaxyList: (state, action) => {
       const { payload } = action;
       if (payload) {
-        // const list = payload?.map((item: any) => {
-        //   return { ...item, label: item.name, badge: item.owner };
-        // });
         state.galaxyList = payload;
-        // state.galaxyList = list;
-        // state.currentGalaxy = list[0];
+        state.currentGalaxy = payload[0];
         state.loadingGalaxy = false;
       }
     },
@@ -81,11 +81,6 @@ export const galaxySlice = createSlice({
       const { payload } = action;
       if (payload) {
         const rsData = payload.data || [];
-        const galaxy = {
-          ...state.currentGalaxy,
-          starTotal: rsData.length,
-          starOwnerTotal: rsData.filter((v: any) => v.owner).length,
-        };
         const users: Api.Galaxy.OwnerInfo = payload.users || {};
         const list = rsData.map((item: any) => {
           if (item.owner) {
@@ -93,17 +88,13 @@ export const galaxySlice = createSlice({
           }
           return { ...item, ownerAvatar: '' };
         });
-        // 截取10个为一组
-        const levelList = sliceByLevels(list);
-        state.currentGalaxy = galaxy;
-        state.galaxyStarList = levelList;
-        state.currentStarPeriod = levelList[0];
+        state.galaxyStarList = list;
         state.loading = false;
       }
     },
     setCurrentGalaxy: (state, action) => {
       const { payload } = action;
-      state.currentGalaxy = payload;
+      state.currentGalaxy = { ...state.currentGalaxy, ...payload };
     },
     setCurrentStarPeriod: (state, action) => {
       const { payload } = action;

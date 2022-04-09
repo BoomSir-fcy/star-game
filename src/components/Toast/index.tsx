@@ -6,6 +6,13 @@ import styled from 'styled-components';
 import { CloseButton } from 'uikit';
 
 const StyledContainer = styled(ToastContainer)`
+  &.Toastify__toast-container {
+    z-index: 99999;
+    transform: translateZ(1px);
+    left: auto;
+    right: 20px;
+    top: 20px;
+  }
   .Toastify__toast {
     background: url('/images/commons/modal/toast.png') no-repeat;
     background-size: 100%;
@@ -43,10 +50,6 @@ const ToastComponents: React.FC<ToastContainerProps> = React.memo(() => {
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      style={{
-        zIndex: 99999,
-        transform: 'translateZ(1px)',
-      }}
     />
   );
 });
