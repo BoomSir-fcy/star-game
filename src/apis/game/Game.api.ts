@@ -15,5 +15,8 @@ export class GameApi extends Http {
   async gameUnitSetting(params: Api.Game.ParamsUnitSetting) {
     return this.post('game/unit/setting', params)
   }
+  async gamePK(player1: number, player2: number) {
+    return this.post('game/pk', { player1, player2 })
+  }
 
 }

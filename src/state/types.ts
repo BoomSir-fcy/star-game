@@ -142,10 +142,11 @@ export interface GameState {
     [race: string]: {
       [id: string]: Api.Game.UnitInfo,
     };
-  },
+  };
   plantUnits: {
     [id: number]: Api.Game.UnitPlanetPos[]
-  }
+  };
+  process: any
 }
 
 export interface State {
