@@ -43,6 +43,7 @@ const BuildingBox = styled(Box)<{ checked: boolean }>`
   ${({ checked }) =>
     checked &&
     css`
+      border: 1px solid #000;
       box-shadow: 0px 0px 9px 0px #41b7ff, inset 0px 0px 9px 0px #41b7ff;
     `}
 `;
@@ -360,6 +361,7 @@ export const DragCompoents: React.FC<{
                   ...draggedItem,
                   pre: false,
                   isbuilding: true,
+                  isactive: true,
                 },
               ];
             });
@@ -427,19 +429,23 @@ export const DragCompoents: React.FC<{
 
   // 创建格子到九宫格中
   const createGrid = async () => {
-    const params = builds?.map((item: any) => {
-      const [from, to] = getMatrix(item?.index, item?.propterty?.size?.area_x);
-      return {
-        buildings_id: item.buildings_number,
-        position: {
-          from: { x: from[0].x, y: from[1].y },
-          to: { x: to[0].x, y: to[1].y },
-        },
-        index: item?.index,
-      };
-    });
-
-    console.log(builds);
+    const params = builds?.reduce((current, next, index): any => {
+      if (next?.isactive) {
+        const [from, to] = getMatrix(
+          next?.index,
+          next?.propterty?.size?.area_x,
+        );
+        current.push({
+          buildings_id: next.buildings_number,
+          position: {
+            from: { x: from[0].x, y: from[1].y },
+            to: { x: to[0].x, y: to[1].y },
+          },
+          index: next.index,
+        });
+      }
+      return current;
+    }, []);
 
     try {
       const res = await Api.BuildingApi.createBuilding({
@@ -455,6 +461,12 @@ export const DragCompoents: React.FC<{
     }
   };
 
+  // 销毁建筑
+  const destroyBuilding = async (index: number) => {
+    console.log(currentBuild);
+  };
+
+  console.log('选中', currentBuild);
   return (
     <Box>
       <Flex justifyContent='space-between'>
@@ -493,7 +505,7 @@ export const DragCompoents: React.FC<{
                   height={item?.propterty?.size?.area_y * height}
                   top={item.x * width}
                   left={item.y * height}
-                  checked={currentBuild?.building?._id === item?.building?._id}
+                  checked={currentBuild?.index === item?.index}
                   onClick={() => {
                     setState({
                       ...state,
@@ -514,7 +526,9 @@ export const DragCompoents: React.FC<{
           </Container>
           <Flex ml='10px' flexDirection='column'>
             <ActionButton onClick={createGrid}>保存</ActionButton>
-            <ActionButton variant='danger'>销毁</ActionButton>
+            <ActionButton onClick={destroyBuilding} variant='danger'>
+              销毁
+            </ActionButton>
           </Flex>
         </Flex>
         <GameInfo planet_id={planet_id} building_id={state.currentBuilding} />
