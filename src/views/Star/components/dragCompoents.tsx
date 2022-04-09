@@ -26,7 +26,7 @@ const Normal = styled(Flex)<{ pre: boolean }>`
   text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
   border: 1px solid #fff;
   transition: all 0.5s;
-  background: ${({ pre }) => (pre ? 'pink' : 'transparent')};
+  background: ${({ pre }) => (pre ? 'rgba(0,0,0,0.5)' : 'transparent')};
   img {
     max-width: 100%;
     object-fit: cover;
@@ -315,15 +315,6 @@ export const DragCompoents: React.FC<{
         toastError('当前建筑不能放置');
         return;
       }
-      // 目标格子为空时，拖拽到目标格子
-      // if (from === undefined || from === null) {
-      //   listData.splice(to, 1, {
-      //     ...targetItem,
-      //     ...draggedItem,
-      //     row: draggedItem?.propterty?.size?.area_x,
-      //     isbuilding: true,
-      //   });
-      // }
       const canSave = currentSize?.every(item => !state.data[item]?.isbuilding);
       setState(pre => {
         const next = pre?.data.map((row: any) => {
