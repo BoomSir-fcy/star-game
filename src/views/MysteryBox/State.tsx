@@ -22,7 +22,7 @@ import {
   MysteryBoxQualities,
 } from 'components/MysteryBoxCom';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { TokenImage } from 'components/TokenImage';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { getDsgAddress } from 'utils/addressHelpers';

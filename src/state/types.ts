@@ -127,6 +127,7 @@ export interface BuildlingState {
   selfBuildings: Api.Building.SelfBuildings;
   upgradeIds: string[];
   buildings: { [type: number]: Api.Building.Building[] };
+  destroyBuilding: boolean;
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -136,17 +137,16 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   AnyAction
 >;
 
-
 export interface GameState {
   baseUnits: {
     [race: string]: {
-      [id: string]: Api.Game.UnitInfo,
+      [id: string]: Api.Game.UnitInfo;
     };
   };
   plantUnits: {
-    [id: number]: Api.Game.UnitPlanetPos[]
+    [id: number]: Api.Game.UnitPlanetPos[];
   };
-  process: any
+  process: any;
 }
 
 export interface State {

@@ -36,7 +36,6 @@ const Upgrade = () => {
             data.push({
               index: i * planet.areaY + j,
               isbuilding: false,
-              picture: '',
               propterty: {
                 size: {
                   area_x: 1,

@@ -115,44 +115,50 @@ export const Building: React.FC<{
   };
 
   return (
-    <Flex data-id={index} data-item={JSON.stringify(itemData)}>
+    <Flex>
       {level && (
         <Level shadow='primary' small>
           Lv {level}
         </Level>
       )}
-      {state?.time > 0 && (
-        <ToolBar
-          onClick={() => {
-            clearInterval(timer);
-            setState({ ...state, time: 0 });
-            if (status?.upgrade_type === 1) {
-              handleUpgrade();
-            } else {
-              handleRepair();
-            }
-          }}
-        >
-          <Text small>{formatTime(state.time)}</Text>
-        </ToolBar>
+
+      {!itemData?.isactive && (
+        <>
+          {state?.time > 0 && (
+            <ToolBar
+              onClick={() => {
+                clearInterval(timer);
+                setState({ ...state, time: 0 });
+                if (status?.upgrade_type === 1) {
+                  handleUpgrade();
+                } else {
+                  handleRepair();
+                }
+              }}
+            >
+              <Text small>{formatTime(state.time)}</Text>
+            </ToolBar>
+          )}
+
+          {/* 耐久度修复 */}
+          {state?.time <= 0 &&
+            itemData?.propterty?.max_durability !==
+              itemData?.propterty?.per_durability && (
+              <ToolBar>
+                <ThingRepair
+                  itemData={itemData}
+                  planet_id={planet_id}
+                  building_id={itemData._id}
+                  onCallback={(evnet?: number) => {
+                    // console.log(time);
+                    setState({ ...state, time: evnet || 0 });
+                  }}
+                />
+              </ToolBar>
+            )}
+        </>
       )}
 
-      {/* 耐久度修复 */}
-      {state?.time <= 0 &&
-        itemData?.propterty?.max_durability !==
-          itemData?.propterty?.per_durability && (
-          <ToolBar>
-            <ThingRepair
-              itemData={itemData}
-              planet_id={planet_id}
-              building_id={itemData._id}
-              onCallback={(evnet?: number) => {
-                // console.log(time);
-                setState({ ...state, time: evnet || 0 });
-              }}
-            />
-          </ToolBar>
-        )}
       <img src={src} alt='' />
     </Flex>
   );

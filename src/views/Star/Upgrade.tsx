@@ -16,7 +16,7 @@ import { useWeb3React } from '@web3-react/core';
 import { ConnectWalletButton } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setActiveMaterialMap } from 'state/planet/actions';
 import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';

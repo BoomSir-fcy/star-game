@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Flex, Box, Card, Text, Image, Button } from 'uikit';
 import { useToast } from 'contexts/ToastsContext';
-import { useStore } from 'state';
+import { useStore, storeAction } from 'state';
 import { Api } from 'apis';
 
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
@@ -67,7 +67,8 @@ const ActionButton = styled(Button)`
 export const GameInfo: React.FC<{
   building_id: string;
   planet_id: number;
-}> = React.memo(({ building_id, planet_id }) => {
+  currentBuild: Api.Building.Building;
+}> = React.memo(({ building_id, planet_id, currentBuild }) => {
   const dispatch = useDispatch();
   const { toastSuccess, toastError } = useToast();
   const { upgrade } = useBuildingUpgrade();
@@ -78,12 +79,12 @@ export const GameInfo: React.FC<{
     upgradesVisible: false,
     upgrade: {} as any,
   });
-  const itemData = selfBuilding?.find(
-    (row: any) => row?.building?._id === building_id,
-  );
+  const itemData =
+    selfBuilding?.find((row: any) => row?.building?._id === building_id)
+      ?.building || currentBuild;
 
   React.useEffect(() => {
-    if (itemData?.building?._id) {
+    if (itemData?._id) {
       init();
     }
   }, [itemData]);
@@ -98,13 +99,13 @@ export const GameInfo: React.FC<{
     try {
       const res = await destory({
         planet_id,
-        build_type: itemData?.building?.type,
+        build_type: itemData?.type,
         building_setting: [building_id],
       });
       if (Api.isSuccess(res)) {
         getSelfBuilding();
         toastSuccess('销毁成功');
-        setState({ ...state, destoryVisible: false });
+        dispatch(storeAction.destoryBuildingVisibleModal(false));
       } else {
         toastError(res.message);
       }
@@ -138,23 +139,21 @@ export const GameInfo: React.FC<{
 
   return (
     <Container>
-      {itemData?.building?._id && (
+      {itemData?._id && (
         <>
           <CardContent>
             <Flex>
               <GameThing
-                src={itemData?.building?.picture}
-                level={itemData?.building?.propterty?.levelEnergy}
+                src={itemData?.picture}
+                level={itemData?.propterty?.levelEnergy}
                 scale='md'
                 border
               />
               <Box ml='36px' style={{ flex: 1 }}>
                 <Flex alignItems='flex-end' mb='10px'>
-                  <Text shadow='primary'>
-                    {itemData?.building?.propterty?.name_cn}
-                  </Text>
+                  <Text shadow='primary'>{itemData?.propterty?.name_cn}</Text>
                   <Text ml='27px' small>
-                    {`${itemData?.building?.propterty?.size.area_x}x${itemData?.building?.propterty?.size.area_y}`}
+                    {`${itemData?.propterty?.size.area_x}x${itemData?.propterty?.size.area_y}`}
                   </Text>
                 </Flex>
                 <Flex flex={1} justifyContent='space-between' flexWrap='wrap'>
@@ -173,7 +172,7 @@ export const GameInfo: React.FC<{
                         </Text>
                         {/* <ThingaddBlood /> */}
                       </Flex>
-                      <Text small>{itemData?.building?.propterty?.hp}</Text>
+                      <Text small>{itemData?.propterty?.hp}</Text>
                     </Box>
                   </ItemInfo>
                   <ItemInfo>
@@ -189,8 +188,8 @@ export const GameInfo: React.FC<{
                         <Text color='textSubtle' small>
                           耐久度
                         </Text>
-                        {itemData?.building?.propterty?.per_durability !==
-                          itemData?.building?.propterty?.max_durability && (
+                        {itemData?.propterty?.per_durability !==
+                          itemData?.propterty?.max_durability && (
                           <ThingRepair
                             itemData={itemData}
                             planet_id={planet_id}
@@ -200,7 +199,7 @@ export const GameInfo: React.FC<{
                         )}
                       </Flex>
                       <Text small>
-                        {`${itemData?.building?.propterty?.per_durability}/${itemData?.building?.propterty?.max_durability}`}
+                        {`${itemData?.propterty?.per_durability}/${itemData?.propterty?.max_durability}`}
                       </Text>
                     </Box>
                   </ItemInfo>
@@ -218,9 +217,7 @@ export const GameInfo: React.FC<{
                           防御值
                         </Text>
                       </Flex>
-                      <Text small>
-                        {itemData?.building?.propterty?.defence}
-                      </Text>
+                      <Text small>{itemData?.propterty?.defence}</Text>
                     </Box>
                   </ItemInfo>
                   <ItemInfo>
@@ -237,7 +234,7 @@ export const GameInfo: React.FC<{
                           攻击值
                         </Text>
                       </Flex>
-                      <Text small>{itemData?.building?.propterty?.attack}</Text>
+                      <Text small>{itemData?.propterty?.attack}</Text>
                     </Box>
                   </ItemInfo>
                 </Flex>
@@ -255,7 +252,7 @@ export const GameInfo: React.FC<{
                         能量消耗
                       </Text>
                       <Text small>
-                        {itemData?.building?.propterty?.per_cost_energy}/h
+                        {itemData?.propterty?.per_cost_energy}/h
                       </Text>
                     </Flex>
                   </ItemInfo>
@@ -272,7 +269,7 @@ export const GameInfo: React.FC<{
                         人口消耗
                       </Text>
                       <Text small>
-                        {itemData?.building?.propterty?.per_cost_population}/h
+                        {itemData?.propterty?.per_cost_population}/h
                       </Text>
                     </Flex>
                   </ItemInfo>
@@ -291,12 +288,13 @@ export const GameInfo: React.FC<{
                 height: 138,
               }}
             >
-              {itemData?.building?.propterty?.levelEnergy <
-                state.upgrade?.max_building_level && (
+              {(itemData?.isactive ||
+                itemData?.propterty?.levelEnergy <
+                  state.upgrade?.max_building_level) && (
                 <Flex flexDirection='column'>
                   <Flex alignItems='center'>
                     <Text shadow='primary' fontSize='33px'>
-                      Lv {itemData?.building?.propterty?.levelEnergy}
+                      Lv {itemData?.propterty?.levelEnergy}
                     </Text>
                     <Box width='47px' height='40px' margin='0 44px'>
                       <Image
@@ -306,7 +304,7 @@ export const GameInfo: React.FC<{
                       />
                     </Box>
                     <Text shadow='primary' fontSize='33px'>
-                      Lv {itemData?.building?.propterty?.levelEnergy + 1}
+                      Lv {itemData?.propterty?.levelEnergy + 1}
                     </Text>
                   </Flex>
                   <Text color='textSubtle' small>
@@ -315,9 +313,10 @@ export const GameInfo: React.FC<{
                 </Flex>
               )}
               <Flex flexDirection='column'>
-                {itemData?.building?.propterty?.levelEnergy <
+                {itemData?.propterty?.levelEnergy <
                   state.upgrade?.max_building_level && (
                   <ActionButton
+                    disabled={itemData?.isactive}
                     onClick={() =>
                       setState({ ...state, upgradesVisible: true })
                     }
@@ -326,8 +325,11 @@ export const GameInfo: React.FC<{
                   </ActionButton>
                 )}
                 <ActionButton
+                  disabled={itemData?.isactive}
                   variant='danger'
-                  onClick={() => setState({ ...state, destoryVisible: true })}
+                  onClick={() =>
+                    dispatch(storeAction.destoryBuildingVisibleModal(true))
+                  }
                 >
                   摧毁建筑
                 </ActionButton>
@@ -339,19 +341,18 @@ export const GameInfo: React.FC<{
 
       {/* 销毁建筑 */}
       <ThingDestoryModal
-        visible={state.destoryVisible}
         planet_id={planet_id}
-        itemData={itemData?.building}
+        itemData={itemData}
         upgrade={state.upgrade}
         onChange={destoryBuilding}
-        onClose={() => setState({ ...state, destoryVisible: false })}
+        onClose={() => dispatch(storeAction.destoryBuildingVisibleModal(false))}
       />
 
       {/* 建筑升级 */}
       <ThingUpgradesModal
         visible={state.upgradesVisible}
         planet_id={planet_id}
-        itemData={itemData?.building}
+        itemData={itemData}
         upgrade={state.upgrade}
         onChange={upgradeLevelBuilding}
         onClose={() => setState({ ...state, upgradesVisible: false })}

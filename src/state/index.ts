@@ -11,6 +11,8 @@ import buildlingReducer from './buildling/reducer';
 import gameReducer from './game/reducer';
 import { updateVersion } from './global/actions';
 
+import buildingAction from './buildling/action';
+
 export { useStore } from './util';
 
 const PERSISTED_KEYS: string[] = ['user'];
@@ -42,5 +44,9 @@ store.dispatch(updateVersion());
 export type AppDispatch = typeof store.dispatch;
 export type AppState = ReturnType<typeof store.getState>;
 export const useAppDispatch = () => useDispatch();
+
+export const storeAction = {
+  ...buildingAction,
+};
 
 export default store;

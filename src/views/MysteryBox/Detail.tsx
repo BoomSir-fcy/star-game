@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Card, Text, Flex, BgCard, Label, Button } from 'uikit';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
