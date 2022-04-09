@@ -10089,6 +10089,11 @@ pirates@^4.0.1:
   dependencies:
     node-modules-regexp "^1.0.0"
 
+pixi-dragonbones@^5.7.0-1:
+  version "5.7.0-1"
+  resolved "https://registry.yarnpkg.com/pixi-dragonbones/-/pixi-dragonbones-5.7.0-1.tgz#35b57b4df8a7586ffed7d362e1726ea394b3c1d3"
+  integrity sha512-HakMLod8mDKNItWZ6NMStU7Pj/lxSKNvVCTpmIGCeRnro6Q+IRjjOZi2zIB/WPIEvhB0+iFwQr2R+kyFvkSQeg==
+
 pixi-filters@^4.1.6:
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/pixi-filters/-/pixi-filters-4.1.6.tgz#bdb9b93cc95fe61c2975ee5695860a98320ba416"

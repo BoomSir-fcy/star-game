@@ -170,11 +170,13 @@ export interface RoundInfo {
   move: RoundDescMove
 }
 
+export interface MapBaseUnits {
+  [id: string]: Api.Game.UnitInfo;
+}
+
 export interface GameState {
   baseUnits: {
-    [race: string]: {
-      [id: string]: Api.Game.UnitInfo,
-    };
+    [race: string]: MapBaseUnits;
   };
   plantUnits: {
     [id: number]: Api.Game.UnitPlanetPos[]
@@ -182,9 +184,7 @@ export interface GameState {
   process: any;
   PKInfo: null | {
     init: {
-      base_unit: {
-        [id: string]: Api.Game.UnitInfo;
-      }
+      base_unit: MapBaseUnits;
       blue_units: Api.Game.UnitPlanetPos[];
       red_units: Api.Game.UnitPlanetPos[];
     };
