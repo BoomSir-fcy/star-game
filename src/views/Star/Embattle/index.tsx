@@ -57,7 +57,7 @@ const Embattle = () => {
     soldiers => {
       const newSoldiers = soldiers?.map((soldier: Soldier, index: number) => {
         return {
-          id: `${index}`,
+          id: `${soldier.axisPoint?.chequer.axisX}${soldier.axisPoint?.chequer.axisY}`,
           src: soldier.options?.textureRes,
           soldier,
         };
@@ -139,7 +139,12 @@ const Embattle = () => {
         <Preview game={game} />
         <SortBoard
           sortSoldiers={gameSoldiers}
-          setSortSoldiers={setSortSoldiers}
+          setSortSoldiers={(newItems, update) => {
+            setSortSoldiers(newItems);
+            if (update) {
+              game.setSolders(newItems);
+            }
+          }}
         />
       </Flex>
       <Box

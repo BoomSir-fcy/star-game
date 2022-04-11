@@ -9,18 +9,18 @@ import {
 import Soldier from 'game/core/Soldier';
 import { useStore } from 'state';
 import Game from 'game/core/Game';
-import {
-  RoundInfo,
-  RoundDescMove,
-  RoundDescAttack,
-  MapBaseUnits,
-} from 'state/types';
+import { MapBaseUnits } from 'state/types';
+import { RoundInfo, RoundDescMove, RoundDescAttack } from 'game/types';
 
 const sleep = (handle: any, delay: number) => {
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     setTimeout(() => {
-      handle();
-      res(0);
+      try {
+        handle();
+        res();
+      } catch (error) {
+        rej(error);
+      }
     }, delay);
   });
 };

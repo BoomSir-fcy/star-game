@@ -13,6 +13,7 @@ import { TouchBackend } from 'react-dnd-touch-backend';
 import AsanySortable, { SortableItemProps } from '@asany/sortable';
 import client from 'utils/client';
 import Soldier from 'game/core/Soldier';
+import { ReactSortable } from 'react-sortablejs';
 
 export interface SortSoldier {
   id: string;
@@ -21,7 +22,7 @@ export interface SortSoldier {
 }
 interface SortBoardProps extends BorderCardProps {
   sortSoldiers: SortSoldier[];
-  setSortSoldiers: (soldiers: any) => void;
+  setSortSoldiers: (soldiers: Soldier[], update?: boolean) => void;
 }
 
 const defaultStyle = {
@@ -32,38 +33,55 @@ const defaultStyle = {
   margin: '12px auto 0',
 };
 
-const SortItem = forwardRef((props: SortableItemProps<any>, ref: any) => {
-  const { data, style, drag, className, animated, remove } = props;
-  console.log(data, 'data');
+const SortItem: React.FC<Partial<SortSoldier>> = ({
+  id,
+  src,
+  soldier,
+  ...props
+}) => {
   return (
-    <li
-      className={className}
-      style={{ ...defaultStyle, position: 'relative', ...style }}
-      ref={drag(ref)}
-      {...animated}
+    <BorderCard
+      margin='auto'
+      width='122px'
+      height='122px'
+      isActive
+      position='relative'
     >
-      <BorderCard width='100%' height='100%' isActive>
-        <Box width={122} height={122}>
-          <img
-            alt=''
-            style={{ width: '122px', height: '122px' }}
-            src='/assets/modal/m0-1.png'
-          />
-          <Box width='100%' height='100%' position='absolute' top={0} left={0}>
-            <Text mt='2px' ml='8px'>
-              1
-            </Text>
-          </Box>
+      <Box width={122} height={122}>
+        <img alt='' style={{ width: '122px', height: '122px' }} src={src} />
+        <Box width='100%' height='100%' position='absolute' top={0} left={0}>
+          <Text mt='2px' ml='8px'>
+            {id}
+          </Text>
         </Box>
-      </BorderCard>
-    </li>
+      </Box>
+    </BorderCard>
   );
-});
+};
 
-const SortBoard: React.FC<SortBoardProps> = ({ sortSoldiers, ...props }) => {
-  const handleChange = useCallback((data, event) => {
-    console.log(data, event);
-  }, []);
+const SortBoard: React.FC<SortBoardProps> = ({
+  sortSoldiers,
+  setSortSoldiers,
+  ...props
+}) => {
+  const setState = useCallback(
+    data => {
+      setSortSoldiers(data.map((item: SortSoldier) => item.soldier));
+    },
+    [setSortSoldiers],
+  );
+
+  // const [state, setState] = useState([
+  //   { id: 1, name: 'shrek' },
+  //   { id: 2, name: 'fiona' },
+  // ]);
+
+  const handleUpdate = useCallback(() => {
+    setSortSoldiers(
+      sortSoldiers.map((item: SortSoldier) => item.soldier),
+      true,
+    );
+  }, [sortSoldiers, setSortSoldiers]);
 
   return (
     <BorderCard
@@ -73,20 +91,24 @@ const SortBoard: React.FC<SortBoardProps> = ({ sortSoldiers, ...props }) => {
       height='476px'
       {...props}
     >
-      <Text fontSize='20px' textAlign='center'>
+      <Text margin='20px 0 8px' fontSize='20px' textAlign='center'>
         攻击顺序
       </Text>
-      <DndProvider backend={client.isApp ? TouchBackend : HTML5Backend}>
-        <AsanySortable
-          accept={['sortable-card']}
-          tag='ul'
-          style={{ listStyle: 'none', padding: 0 }}
-          items={sortSoldiers}
-          layout='grid'
-          onChange={handleChange}
-          itemRender={SortItem}
-        />
-      </DndProvider>
+      <Box position='relative'>
+        <ReactSortable
+          onEnd={() => {
+            handleUpdate();
+          }}
+          list={sortSoldiers}
+          setList={setState}
+        >
+          {sortSoldiers.map(item => (
+            <div style={{ marginTop: '16px' }} key={item.id}>
+              <SortItem id={`${item.id}`} src={item.src} />
+            </div>
+          ))}
+        </ReactSortable>
+      </Box>
     </BorderCard>
   );
 };

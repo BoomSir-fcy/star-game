@@ -2,6 +2,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Qualities } from 'uikit/theme/types';
+import { RoundInfo } from 'game/types';
 
 // 性别
 export enum Gender {
@@ -140,33 +141,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 enum DescType {
   MOVE = 1,
   ATTACK = 2,
-}
-
-interface RoundDescMoveAxis {
-  x: number;
-  y: number;
-}
-export interface RoundDescMove {
-  dest: RoundDescMoveAxis[];
-  id: string;
-  starting_point: RoundDescMoveAxis;
-}
-
-export interface RoundDescAttack {
-  receive_df: number;
-  receive_id: string;
-  receive_point: RoundDescMoveAxis;
-  receive_sub_hp: number;
-  sender_attack: number;
-  sender_id: string;
-  sender_point: RoundDescMoveAxis;
-}
-
-export interface RoundInfo {
-  desc_type: number;
-  round: number;
-  attack: RoundDescAttack;
-  move: RoundDescMove;
 }
 
 export interface MapBaseUnits {

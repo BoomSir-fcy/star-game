@@ -86,8 +86,7 @@ class Game extends EventTarget {
         this.activeSoliderFlag = false;
         return;
       }
-      this.activeSolider?.changeState(stateType.DISABLE, false);
-      this.dispatchEvent(getRemoveActiveSoliderEvent());
+      this.removeActiveSolider();
     });
   }
 
@@ -128,14 +127,29 @@ class Game extends EventTarget {
   removeActiveSolider() {
     if (this.activeSolider) {
       this.activeSolider.changeState(stateType.DISABLE, false);
+      this.activeSolider?.changeState(stateType.DISABLE, false);
+      this.dispatchEvent(getRemoveActiveSoliderEvent());
       delete this.activeSolider;
     }
+  }
+
+  setSolders(soldiers: Soldier[]) {
+    const newSoldiers: Soldier[] = [];
+    soldiers.forEach(soldier => {
+      if (this.soldiers.includes(soldier)) {
+        newSoldiers.push(soldier);
+      }
+    });
+    this.soldiers = newSoldiers;
+    this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
   }
 
   removeSoldier(soldier: Soldier) {
     this.soldiers = this.soldiers.filter(item => item !== soldier);
     this.boards.container.removeChild(soldier.container);
+    soldier.changeState(stateType.PREVIEW, false);
     this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
+    this.removeActiveSolider();
   }
 
   setEnableDrag(state: boolean) {

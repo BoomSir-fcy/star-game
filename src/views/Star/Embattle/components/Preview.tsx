@@ -124,6 +124,12 @@ const Preview: React.FC<PreviewProps> = ({ game, ...props }) => {
       ref.current.appendChild(radarChart.canvas);
     }
   }, [ref, radarChart]);
+
+  const removeHandle = useCallback(() => {
+    if (activeSolider) {
+      game.removeSoldier(activeSolider);
+    }
+  }, [activeSolider, game]);
   return (
     <Box
       // width='608px'
@@ -154,11 +160,7 @@ const Preview: React.FC<PreviewProps> = ({ game, ...props }) => {
               LV 1
             </Text>
             <Button
-              onClick={() => {
-                if (activeSolider) {
-                  game.removeSoldier(activeSolider);
-                }
-              }}
+              onClick={removeHandle}
               width={30}
               height={30}
               padding='0'
