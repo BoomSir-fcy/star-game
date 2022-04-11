@@ -6,6 +6,7 @@ import { useStore, storeAction } from 'state';
 import { Api } from 'apis';
 
 import { useToast } from 'contexts/ToastsContext';
+import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 
 import { GameInfo, GameThing, Building } from './gameModel';
@@ -121,6 +122,7 @@ export const DragCompoents: React.FC<{
   gridSize: number;
 }> = ({ planet_id, itemData, cols, rows, gridSize }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
   const [state, setState] = React.useState({
     currentTab: 1,
@@ -128,11 +130,11 @@ export const DragCompoents: React.FC<{
     tabs: [
       {
         index: 1,
-        title: '经营类',
+        title: `${t('planetBuildingTypeBusinessClass')}`,
       },
       // {
       //   index: 2,
-      //   title: '战斗类',
+      //   title: `${t('planetBuildingTypeCombatClass')}`,
       // },
     ],
     data: [] as any,
@@ -312,7 +314,7 @@ export const DragCompoents: React.FC<{
       // 获取当前点的正方形下标
       const currentSize = area >= 2 ? getAbsolutePosition(to) : [Number(to)];
       if (area >= 2 && currentSize.length < 4) {
-        toastError('当前建筑不能放置');
+        toastError(t('planetTipsFail1'));
         return;
       }
       const canSave = currentSize?.every(item => !state.data[item]?.isbuilding);
@@ -461,7 +463,8 @@ export const DragCompoents: React.FC<{
         building_setting: params,
       });
       if (Api.isSuccess(res)) {
-        toastSuccess('保存成功');
+        toastSuccess(t('planetTipsSaveSuccess'));
+        setBuilds([]);
         dispatch(fetchPlanetBuildingsAsync(planet_id));
       } else {
         toastError(res?.message);
@@ -474,7 +477,7 @@ export const DragCompoents: React.FC<{
   // 销毁建筑
   const destroyBuilding = () => {
     if (!currentBuild?._id) {
-      toastError('请选中建筑');
+      toastError(t('planetPleaseSelectbuilding'));
       return;
     }
     if (currentBuild?.isactive) {
@@ -542,9 +545,11 @@ export const DragCompoents: React.FC<{
               })}
             </Container>
             <Flex ml='10px' flexDirection='column'>
-              <ActionButton onClick={createGrid}>保存</ActionButton>
+              <ActionButton onClick={createGrid}>
+                {t('planetSave')}
+              </ActionButton>
               <ActionButton onClick={destroyBuilding} variant='danger'>
-                销毁
+                {t('planetDestroy')}
               </ActionButton>
             </Flex>
           </Flex>
@@ -556,7 +561,7 @@ export const DragCompoents: React.FC<{
         </Flex>
         <BgCard variant='long' mt='12px' padding='40px'>
           <Flex>
-            <Flex flexDirection='column'>
+            <Flex flexDirection='column' width='230px'>
               <CardTab>
                 {(state.tabs ?? []).map(row => (
                   <TabsButton
@@ -572,7 +577,7 @@ export const DragCompoents: React.FC<{
                 ))}
               </CardTab>
               <Text mt='13px' small>
-                拖动建筑到需要的格子上
+                {t('planetDragBuildingDesiredGrid')}
               </Text>
             </Flex>
             <BuildingsScroll ml='40px'>

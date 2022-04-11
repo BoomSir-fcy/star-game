@@ -3,6 +3,8 @@ import { Box, Flex, Button, Text } from 'uikit';
 import ModalWrapper from 'components/Modal';
 import { Api } from 'apis';
 
+import { useTranslation } from 'contexts/Localization';
+
 import { TextList } from './TextList';
 import { GameThing } from '../gameModel';
 
@@ -16,6 +18,7 @@ export const ThingRepairModal: React.FC<{
   onChange: () => void;
   onClose: () => void;
 }> = ({ visible, itemData, onChange, onClose, planet_id, building_id }) => {
+  const { t } = useTranslation();
   const { getCose } = useBuildingRepair();
   const [state, setStae] = React.useState({
     cost_population: '',
@@ -39,7 +42,11 @@ export const ThingRepairModal: React.FC<{
   }, []);
 
   return (
-    <ModalWrapper title='修复耐久' visible={visible} setVisible={onClose}>
+    <ModalWrapper
+      title={t('planetModalTitleRepairDurability')}
+      visible={visible}
+      setVisible={onClose}
+    >
       <Box padding='30px 25px'>
         <Flex>
           <GameThing src={itemData?.picture} scale='lg' border />
@@ -51,7 +58,7 @@ export const ThingRepairModal: React.FC<{
             flexDirection='column'
           >
             <Box width='100%'>
-              <Text small>修复所有耐久需支付</Text>
+              <Text small>{t('planetModalRepairAllDurabilityFee')}</Text>
               <Box mb='15px'>
                 <TextList
                   imgWidth={50}
@@ -66,10 +73,10 @@ export const ThingRepairModal: React.FC<{
                 imgHeight={50}
                 imgSrc='/images/commons/star/durability.png'
                 number={state.cost_population}
-                unit='人口'
+                unit={t('planetPopulation')}
               />
             </Box>
-            <Button onClick={onChange}>确认修复</Button>
+            <Button onClick={onChange}>{t('planetConfirmRepair')}</Button>
           </Flex>
         </Flex>
       </Box>

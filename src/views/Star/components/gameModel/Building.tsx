@@ -87,7 +87,7 @@ export const Building: React.FC<{
       });
       if (Api.isSuccess(res)) {
         dispatch(fetchPlanetBuildingsAsync(planet_id));
-        toastSuccess('快速修复修复成功');
+        toastSuccess('快速修复成功');
       } else {
         toastError(res.message);
       }
@@ -105,7 +105,7 @@ export const Building: React.FC<{
       });
       if (Api.isSuccess(res)) {
         dispatch(fetchPlanetBuildingsAsync(planet_id));
-        toastSuccess('快速修复修复成功');
+        toastSuccess('快速升级成功');
       } else {
         toastError(res.message);
       }
