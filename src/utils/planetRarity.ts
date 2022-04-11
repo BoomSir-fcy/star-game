@@ -2,25 +2,25 @@ export const getPlanetRarity = (rarity: number) => {
   let myRarity = '';
   switch (rarity) {
     case 1:
-      myRarity = '普通';
+      myRarity = 'rarity-1';
       break;
     case 2:
-      myRarity = '良好';
+      myRarity = 'rarity-2';
       break;
     case 3:
-      myRarity = '稀有';
+      myRarity = 'rarity-3';
       break;
     case 4:
-      myRarity = '史诗';
+      myRarity = 'rarity-4';
       break;
     case 5:
-      myRarity = '传说';
+      myRarity = 'rarity-5';
       break;
     case 6:
-      myRarity = '神话';
+      myRarity = 'rarity-6';
       break;
     default:
-      myRarity = '普通';
+      myRarity = 'rarity-1';
       break;
   }
   return myRarity;

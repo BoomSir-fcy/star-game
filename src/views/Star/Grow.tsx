@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Box, Flex, Card, BgCard, Text, Button, Label } from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Api } from 'apis';
+import { useTranslation } from 'contexts/Localization';
 import {
   MysteryBoxStyled,
   MysteryBoxBaseStyled,
@@ -25,6 +26,7 @@ const TopBox = styled(Box)`
 `;
 
 const Grow: React.FC = () => {
+  const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
   const [visible, setVisible] = useState(false);
   const [nowPlante, setNowPlante] = useState<StrengthenPlanetInfo>();
@@ -132,7 +134,9 @@ const Grow: React.FC = () => {
                     }
                   }}
                 >
-                  {state.time > 0 ? formatTime(state.time) : '开始培育'}
+                  {state.time > 0
+                    ? formatTime(state.time)
+                    : t('Start nurturing')}
                 </Button>
               </TopBox>
               <Extra />
