@@ -36,9 +36,11 @@ const RaceFlex = styled(Flex)`
 const RaceImageFlex = styled(Flex)`
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   position: absolute;
   top: -10px;
   left: 65px;
+  bottom: 0;
 `;
 const StarHeader = () => {
   const { t } = useTranslation();
@@ -168,7 +170,7 @@ const StarHeader = () => {
                 fontSize='22px'
                 bold
               >
-                {t(`race-${planetInfo?.race}`)}
+                {planetInfo?.race ? t(`race-${planetInfo?.race}`) : ''}
               </Text>
               <RaceAvatar
                 width='99px'

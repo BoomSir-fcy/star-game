@@ -76,7 +76,12 @@ export const PlanetBox: React.FC<{
                     <Text color={QualityColor[info?.rarity]} bold small>
                       {t(getPlanetRarity(info?.rarity))}
                     </Text>
-                    <Text ml='12px' color={RaceTypeColor[2]} bold small>
+                    <Text
+                      ml='12px'
+                      color={RaceTypeColor[info?.race || 3]}
+                      bold
+                      small
+                    >
                       {info?.race === 1
                         ? t('race-1')
                         : info?.race === 2
