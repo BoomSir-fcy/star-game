@@ -14,15 +14,13 @@ import PreviewList from './components/PreviewList';
 import Preview from './components/Preview';
 import SortBoard from './components/SortBoard';
 
-const Embattle = () => {
-  const [game] = useState(new Game());
+const game = new Game();
 
+const Embattle = () => {
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.id);
 
   const plantUnits = useStore(p => p.game.plantUnits);
-
-  console.log(plantUnits, 'plantUnits');
 
   useFetchGamePK();
   useFetchUnitList();
@@ -34,11 +32,13 @@ const Embattle = () => {
     if (ref.current) {
       ref.current.appendChild(game.view);
     }
-  }, [ref, game]);
+  }, [ref]);
+
+  const [gameSoldiers, setGameSoldiers] = useState<Soldier[]>([]);
+  const [activeSolider, setActiveSolider] = useState<null | Soldier>(null);
 
   const handleUpdate = useCallback(
     async (soldiers: Soldier[]) => {
-      console.log(soldiers);
       const units = soldiers.map((item, index) => {
         return {
           pos: {
@@ -54,42 +54,34 @@ const Embattle = () => {
         units,
         planet_id: planetId,
       });
-
+      setGameSoldiers(game.soldiers);
       console.log(res);
     },
-    [planetId],
+    [planetId, console],
   );
 
   useEffect(() => {
     game.addEventListener('updateSoldierPosition', (event: any) => {
       handleUpdate(event.detail.soldiers);
     });
-  }, [game, handleUpdate]);
+  }, [handleUpdate]);
 
-  const createSoldiers = useCallback(
-    (poses: Api.Game.UnitPlanetPos[]) => {
-      console.log(12121212);
-      poses.forEach(item => {
-        console.log(444444);
-        game.createSoldier(item.pos.x, item.pos.y, {
-          textureRes: '/assets/flowerTop.png',
-          id: item.base_unit_id,
-        });
+  const createSoldiers = useCallback((poses: Api.Game.UnitPlanetPos[]) => {
+    poses.forEach(item => {
+      game.createSoldier(item.pos.x, item.pos.y, {
+        textureRes: '/assets/modal/m0-1.png',
+        id: item.base_unit_id,
       });
-    },
-    [game],
-  );
+    });
+  }, []);
 
   useEffect(() => {
-    console.log(
-      plantUnits[planetId],
-      game.soldiers.length === 0,
-      '=weijqwjeoqwienqwleul ',
-    );
     if (plantUnits[planetId] && game.soldiers.length === 0) {
       createSoldiers(plantUnits[planetId]);
+      setGameSoldiers(game.soldiers);
+      console.log(game);
     }
-  }, [plantUnits, planetId, game.soldiers, createSoldiers]);
+  }, [plantUnits, planetId, createSoldiers, setGameSoldiers]);
 
   return (
     <Box position='relative'>
@@ -100,8 +92,8 @@ const Embattle = () => {
         top='0'
         left='824px'
       >
-        <Preview />
-        <SortBoard ml='8px' />
+        <Preview solider={activeSolider} />
+        <SortBoard soldiers={gameSoldiers} ml='8px' />
       </Flex>
       <Box
         style={{ userSelect: 'none' }}

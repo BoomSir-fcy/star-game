@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import RadarChart from 'game/core/RadarChart';
+import Soldier from 'game/core/Soldier';
 import {
   Box,
   Flex,
@@ -16,7 +17,7 @@ import { Container } from './styled';
 import PreviewSoldier from './PreviewSoldier';
 
 interface PreviewProps extends BorderCardProps {
-  list?: any[];
+  solider: Soldier | null;
 }
 
 const StatusItem = () => {
@@ -39,7 +40,7 @@ const StatusItem = () => {
     </Flex>
   );
 };
-const Preview: React.FC<PreviewProps> = ({ list, ...props }) => {
+const Preview: React.FC<PreviewProps> = ({ solider, ...props }) => {
   const [radarChart] = useState(
     new RadarChart({
       width: 200,
@@ -115,7 +116,7 @@ const Preview: React.FC<PreviewProps> = ({ list, ...props }) => {
         />
       </Flex>
       <Flex>
-        <PreviewSoldier sid={1} />
+        <PreviewSoldier style={{ flexShrink: 0 }} sid={1} />
         <Flex flexWrap='wrap' justifyContent='space-between'>
           <StatusItem />
           <StatusItem />

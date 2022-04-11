@@ -8,6 +8,9 @@ import Boards from './Boards';
 import { stateType } from './Chequer';
 import Soldier, { AttrSoldierOptions } from './Soldier';
 
+interface GameProps {
+  height?: number;
+}
 class Game extends EventTarget {
   constructor() {
     super();
@@ -27,6 +30,8 @@ class Game extends EventTarget {
   private dragPreSoldierEvent?: PIXI.InteractionEvent;
 
   private enableDrag = false;
+
+  activeSolider?: Soldier;
 
   app: any;
 
@@ -81,6 +86,10 @@ class Game extends EventTarget {
             }),
           );
         }
+      })
+      .on('click', e => {
+        this.activeSolider = soldier;
+        soldier.changeState(stateType.ACTIVE, true);
       });
   }
 

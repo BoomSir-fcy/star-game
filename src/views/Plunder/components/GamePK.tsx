@@ -79,7 +79,7 @@ const GamePK: React.FC<GamePKProps> = ({ planetId }) => {
 
   const createSoldiers = useCallback(
     (poses: Api.Game.UnitPlanetPos[], base: MapBaseUnits, isEnemy: boolean) => {
-      poses.forEach(item => {
+      poses?.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
           textureRes: '/assets/flowerTop.png',
           id: item.base_unit_id,
@@ -216,7 +216,7 @@ const GamePK: React.FC<GamePKProps> = ({ planetId }) => {
     if (PKInfo && game.soldiers.length === 0) {
       createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, false);
       createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, true);
-      runHandle(PKInfo.slot[1].data);
+      // runHandle(PKInfo.slot[1].data);
     }
   }, [PKInfo, createSoldiers, runHandle]);
 

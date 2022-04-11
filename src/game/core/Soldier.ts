@@ -7,7 +7,7 @@ import {
   Point,
 } from 'pixi.js';
 import Combat from './Combat';
-import Chequer, { stateType } from './Chequer';
+import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
 // import { onDragEnd, onDragMove, onDragStart } from './utils';
 
@@ -43,18 +43,26 @@ class Soldier extends Combat {
 
   attackId = '';
 
-  init({
-    textureRes,
-    x,
-    y,
-    axisPoint,
-    enableDrag = true,
-    id,
-    isEnemy = false,
-    hp = 0,
-    activePh = 0,
-    attackId = '',
-  }: SoldierOptions) {
+  options?: SoldierOptions;
+
+  init(options: SoldierOptions) {
+    const {
+      textureRes,
+      x,
+      y,
+      axisPoint,
+      enableDrag = true,
+      id,
+      isEnemy = false,
+      hp = 0,
+      activePh = 0,
+      attackId = '',
+    } = options;
+
+    this.options = {
+      ...this.options,
+      ...options,
+    };
     this.id = id;
 
     this.isEnemy = isEnemy;
@@ -68,8 +76,9 @@ class Soldier extends Combat {
     this.displaySprite.anchor.set(0.5);
     this.container.x = x;
     this.container.y = y;
-    this.displaySprite.width = 60;
-    this.displaySprite.height = 60;
+    this.container.scale.set(0.6);
+    // this.displaySprite.width = 100;
+    // this.displaySprite.height = 100;
 
     this.startPoint.set(x, y);
 
@@ -126,10 +135,18 @@ class Soldier extends Combat {
 
   onDragStart(event: InteractionEvent) {
     this.dragData = event.data;
-    this.container.alpha = 0.5;
+    this.container.alpha = 0.9;
     this.container.filters = [];
     this.dragging = true;
-    this.axisPoint?.chequer?.setState(stateType.ACTIVE);
+    // this.axisPoint?.chequer?.setState(stateType.ACTIVE);
+    this.changeState(stateType.ACTIVE);
+  }
+
+  changeState(state: StateType, visible?: boolean) {
+    this.axisPoint?.chequer?.setState(state);
+    if (typeof visible === 'boolean') {
+      this.axisPoint?.chequer?.displayState(visible);
+    }
   }
 
   onDragEnd() {
