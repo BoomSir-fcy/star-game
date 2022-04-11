@@ -11,9 +11,9 @@ declare namespace Api {
     }
     interface StoreRechargeParams {
       planet_id: number;
-      energy: number;
-      stone: number;
-      population: number;
+      energy?: number;
+      stone?: number;
+      population?: number;
     }
 
     // 建筑

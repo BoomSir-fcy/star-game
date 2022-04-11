@@ -25,10 +25,14 @@ const InputStyled = styled(Input)`
 interface PrimaryInputProps
   extends InputProps,
     React.InputHTMLAttributes<HTMLInputElement> {}
-const PrimaryInput: React.FC<PrimaryInputProps> = ({ ...props }) => {
+const PrimaryInput: React.FC<PrimaryInputProps> = ({
+  value,
+  onChange,
+  ...props
+}) => {
   return (
     <Wrapper {...props}>
-      <InputStyled {...props} />
+      <InputStyled value={value} onChange={onChange} {...props} />
     </Wrapper>
   );
 };
