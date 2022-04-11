@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Box, Flex, BgCard, BackButton, RefreshButton } from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import Layout from 'components/Layout';

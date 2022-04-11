@@ -27,7 +27,7 @@ const BgCard: React.FC<BgCardProps> = ({ children, fringe, ...props }) => {
 };
 
 BgCard.defaultProps = {
-  variant: 'medium',
+  variant: variants.MEDIUM,
 };
 
 export default BgCard;

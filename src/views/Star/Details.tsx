@@ -1,29 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { useStore } from 'state';
 import { Box } from 'uikit';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
 
 import { DragCompoents } from './components/dragCompoents';
-
-// const config = {
-//   row: 4, // X
-//   col: 4, // Y
-// };
-
-// const configBoards = (() => {
-//   const board = [];
-//   for (let i = 0; i < config.row; i++) {
-//     for (let j = 0; j < config.col; j++) {
-//       board.push({
-//         x: i,
-//         y: j,
-//         hasObj: j === 2,
-//       });
-//     }
-//   }
-//   return board;
-// })();
 
 const Upgrade = () => {
   const parsedQs = useParsedQueryString();
@@ -40,7 +21,7 @@ const Upgrade = () => {
       for (let i = 0; i < planet.areaX; i++) {
         for (let j = 0; j < planet.areaY; j++) {
           const buildings = selfBuilding?.find(
-            index => index.index === i * planet.areaY + j,
+            (r: any) => r.index === i * planet.areaY + j,
           );
           if (buildings) {
             data.push({
@@ -55,7 +36,6 @@ const Upgrade = () => {
             data.push({
               index: i * planet.areaY + j,
               isbuilding: false,
-              picture: '',
               propterty: {
                 size: {
                   area_x: 1,
@@ -73,12 +53,9 @@ const Upgrade = () => {
     }
   }, [planet, selfBuilding]);
 
-  // const [boards] = useState(configBoards);
-
   return (
     <Box>
       <DragCompoents
-        // boards={boards}
         rows={planet?.areaX}
         cols={planet?.areaY}
         planet_id={id}

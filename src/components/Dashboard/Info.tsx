@@ -32,7 +32,7 @@ interface InfoProps extends ButtonGroupProps {
   onTodo?: () => void;
 }
 
-const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children }) => {
+const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children, onTodo }) => {
   const [visible, setVisible] = useState(false);
   const [ActiveToken, setActiveToken] = useState<UserBalanceView>();
 

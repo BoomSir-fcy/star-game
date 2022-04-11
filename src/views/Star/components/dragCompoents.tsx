@@ -2,10 +2,11 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
-import { useStore } from 'state';
+import { useStore, storeAction } from 'state';
 import { Api } from 'apis';
 
 import { useToast } from 'contexts/ToastsContext';
+import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 
 import { GameInfo, GameThing, Building } from './gameModel';
 
@@ -25,7 +26,7 @@ const Normal = styled(Flex)<{ pre: boolean }>`
   text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
   border: 1px solid #fff;
   transition: all 0.5s;
-  background: ${({ pre }) => (pre ? 'pink' : 'transparent')};
+  background: ${({ pre }) => (pre ? 'rgba(0,0,0,0.5)' : 'transparent')};
   img {
     max-width: 100%;
     object-fit: cover;
@@ -43,8 +44,16 @@ const BuildingBox = styled(Box)<{ checked: boolean }>`
   ${({ checked }) =>
     checked &&
     css`
+      border: 1px solid #000;
       box-shadow: 0px 0px 9px 0px #41b7ff, inset 0px 0px 9px 0px #41b7ff;
     `}
+  img {
+    max-width: 100%;
+    object-fit: cover;
+    height: auto;
+    vertical-align: middle;
+    pointer-events: none;
+  }
 `;
 
 const CardTab = styled(Card)`
@@ -143,8 +152,9 @@ export const DragCompoents: React.FC<{
   // 计算格子
   React.useEffect(() => {
     const currBuilds = itemData?.filter((row: any) => row.isbuilding);
+    const isactive = builds.filter((row: any) => row.isactive);
     setState({ ...state, data: itemData });
-    setBuilds(currBuilds);
+    setBuilds([...currBuilds, ...isactive]);
   }, [itemData]);
 
   // 计算绝对坐标
@@ -291,40 +301,20 @@ export const DragCompoents: React.FC<{
   //   }
   // };
 
-  // 获取坐标点
-  const getMatrix = (index: number, currentSize = 1) => {
-    const row = Math.floor(index / cols);
-    const col = Math.floor(index % rows);
-
-    return [
-      [{ x: col }, { y: row + currentSize }],
-      [{ x: col + currentSize }, { y: row }],
-    ];
-  };
-
   const handleData = React.useCallback(
     (afterTarget: any) => {
-      const from = dragged?.dataset?.id;
-      const to = afterTarget?.dataset?.id;
+      const from = Number(dragged?.dataset?.id);
+      const to = Number(afterTarget?.dataset?.id);
       const draggedItem = JSON.parse(dragged?.dataset?.item) || {};
       const targetItem = JSON.parse(afterTarget?.dataset?.item) || {};
-      const area = dragged?.propterty?.size?.area_x;
+      const area = draggedItem?.propterty?.size?.area_x;
 
       // 获取当前点的正方形下标
       const currentSize = area >= 2 ? getAbsolutePosition(to) : [Number(to)];
-      if (currentSize.length <= 0) {
+      if (area >= 2 && currentSize.length < 4) {
         toastError('当前建筑不能放置');
         return;
       }
-      // 目标格子为空时，拖拽到目标格子
-      // if (from === undefined || from === null) {
-      //   listData.splice(to, 1, {
-      //     ...targetItem,
-      //     ...draggedItem,
-      //     row: draggedItem?.propterty?.size?.area_x,
-      //     isbuilding: true,
-      //   });
-      // }
       const canSave = currentSize?.every(item => !state.data[item]?.isbuilding);
       setState(pre => {
         const next = pre?.data.map((row: any) => {
@@ -360,6 +350,7 @@ export const DragCompoents: React.FC<{
                   ...draggedItem,
                   pre: false,
                   isbuilding: true,
+                  isactive: true,
                 },
               ];
             });
@@ -375,8 +366,15 @@ export const DragCompoents: React.FC<{
     dragged = e.target;
   };
 
-  const dragEnd = () => {
-    dragged.style.opacity = '1';
+  const dragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setState(pre => {
+      const next = pre?.data.map((row: any) => {
+        return { ...row, pre: false };
+      });
+      return { ...pre, data: next };
+    });
   };
 
   const drop = (event: any) => {
@@ -425,21 +423,36 @@ export const DragCompoents: React.FC<{
     });
   };
 
+  // 获取坐标点
+  const getMatrix = (index: number, currentSize = 1) => {
+    const row = Math.floor(index / cols);
+    const col = Math.floor(index % rows);
+
+    return [
+      [{ x: col }, { y: row + currentSize }],
+      [{ x: col + currentSize }, { y: row }],
+    ];
+  };
+
   // 创建格子到九宫格中
   const createGrid = async () => {
-    const params = builds?.map((item: any) => {
-      const [from, to] = getMatrix(item?.index, item?.propterty?.size?.area_x);
-      return {
-        buildings_id: item.buildings_number,
-        position: {
-          from: { x: from[0].x, y: from[1].y },
-          to: { x: to[0].x, y: to[1].y },
-        },
-        index: item?.index,
-      };
-    });
-
-    console.log(builds);
+    const params = builds?.reduce((current, next, index): any => {
+      if (next?.isactive) {
+        const [from, to] = getMatrix(
+          next?.index,
+          next?.propterty?.size?.area_x,
+        );
+        current.push({
+          buildings_id: next.buildings_number,
+          position: {
+            from: { x: from[0].x, y: from[1].y },
+            to: { x: to[0].x, y: to[1].y },
+          },
+          index: next.index,
+        });
+      }
+      return current;
+    }, []);
 
     try {
       const res = await Api.BuildingApi.createBuilding({
@@ -448,115 +461,141 @@ export const DragCompoents: React.FC<{
         building_setting: params,
       });
       if (Api.isSuccess(res)) {
-        console.log(res);
+        toastSuccess('保存成功');
+        dispatch(fetchPlanetBuildingsAsync(planet_id));
+      } else {
+        toastError(res?.message);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
+  // 销毁建筑
+  const destroyBuilding = () => {
+    if (!currentBuild?._id) {
+      toastError('请选中建筑');
+      return;
+    }
+    if (currentBuild?.isactive) {
+      const index = builds.findIndex(r => r.index === currentBuild?.index);
+      builds.splice(index, 1);
+      setBuilds([...builds]);
+      return;
+    }
+    dispatch(storeAction.destoryBuildingVisibleModal(true));
+  };
+
   return (
-    <Box>
-      <Flex justifyContent='space-between'>
-        <Flex flex='1'>
-          <Container
-            ref={dragBox}
-            width={`${gridSize}px`}
-            height={`${gridSize}px`}
-          >
-            {state.data.map((item: any, index: number) => {
-              return (
-                <Normal
-                  key={`${item?.index}`}
-                  draggable
-                  data-id={index}
-                  data-row={item?.row}
-                  data-item={JSON.stringify(item)}
-                  pre={item?.pre}
-                  width={width}
-                  height={height}
-                  top={item.x * width}
-                  left={item.y * height}
-                  onDragStart={dragStart}
-                  onDragEnter={dragEnter}
-                  onDragOver={dragOver}
-                  onDrop={drop}
-                  onDragEnd={dragEnd}
-                />
-              );
-            })}
-            {builds.map(item => {
-              return (
-                <BuildingBox
-                  key={item.index}
-                  width={item?.propterty?.size?.area_x * width}
-                  height={item?.propterty?.size?.area_y * height}
-                  top={item.x * width}
-                  left={item.y * height}
-                  checked={currentBuild?.building?._id === item?.building?._id}
-                  onClick={() => {
-                    setState({
-                      ...state,
-                      currentBuilding: item?.building?._id,
-                    });
-                    setCurrentBuild(item);
-                  }}
-                >
-                  <Building
-                    planet_id={planet_id}
-                    level={item?.propterty?.levelEnergy}
-                    src={item?.picture}
-                    itemData={item}
+    <>
+      <Box>
+        <Flex justifyContent='space-between'>
+          <Flex flex='1'>
+            <Container
+              ref={dragBox}
+              width={`${gridSize}px`}
+              height={`${gridSize}px`}
+            >
+              {state.data.map((item: any, index: number) => {
+                return (
+                  <Normal
+                    key={`${item.index}_${item?._id}`}
+                    draggable={false}
+                    data-id={index}
+                    data-row={item?.row}
+                    data-item={JSON.stringify(item)}
+                    pre={item?.pre}
+                    width={width}
+                    height={height}
+                    top={item.x * width}
+                    left={item.y * height}
+                    onDragStart={dragStart}
+                    onDragEnter={dragEnter}
+                    onDragOver={dragOver}
+                    onDrop={drop}
+                    onDragEnd={dragEnd}
                   />
-                </BuildingBox>
-              );
-            })}
-          </Container>
-          <Flex ml='10px' flexDirection='column'>
-            <ActionButton onClick={createGrid}>保存</ActionButton>
-            <ActionButton variant='danger'>销毁</ActionButton>
+                );
+              })}
+              {builds.map((item, index) => {
+                return (
+                  <BuildingBox
+                    key={`${item.index}_${item?._id}_${index}`}
+                    draggable={false}
+                    data-id={item.index}
+                    data-item={JSON.stringify(item)}
+                    width={item?.propterty?.size?.area_x * width}
+                    height={item?.propterty?.size?.area_y * height}
+                    top={item.x * width}
+                    left={item.y * height}
+                    checked={currentBuild?.index === item?.index}
+                    onClick={() => setCurrentBuild(item)}
+                  >
+                    <Building
+                      planet_id={planet_id}
+                      level={item?.propterty?.levelEnergy}
+                      src={item?.picture}
+                      itemData={item}
+                    />
+                  </BuildingBox>
+                );
+              })}
+            </Container>
+            <Flex ml='10px' flexDirection='column'>
+              <ActionButton onClick={createGrid}>保存</ActionButton>
+              <ActionButton onClick={destroyBuilding} variant='danger'>
+                销毁
+              </ActionButton>
+            </Flex>
           </Flex>
+          <GameInfo
+            planet_id={planet_id}
+            building_id={currentBuild?._id}
+            currentBuild={currentBuild}
+          />
         </Flex>
-        <GameInfo planet_id={planet_id} building_id={state.currentBuilding} />
-      </Flex>
-      <BgCard variant='long' mt='12px' padding='40px'>
-        <Flex>
-          <Flex flexDirection='column'>
-            <CardTab>
-              {(state.tabs ?? []).map(row => (
-                <TabsButton
-                  key={row.index}
-                  onClick={() => setState({ ...state, currentTab: row.index })}
-                  active={row.index === state.currentTab}
-                  variant='text'
-                >
-                  {row.title}
-                </TabsButton>
+        <BgCard variant='long' mt='12px' padding='40px'>
+          <Flex>
+            <Flex flexDirection='column'>
+              <CardTab>
+                {(state.tabs ?? []).map(row => (
+                  <TabsButton
+                    key={row.index}
+                    onClick={() =>
+                      setState({ ...state, currentTab: row.index })
+                    }
+                    active={row.index === state.currentTab}
+                    variant='text'
+                  >
+                    {row.title}
+                  </TabsButton>
+                ))}
+              </CardTab>
+              <Text mt='13px' small>
+                拖动建筑到需要的格子上
+              </Text>
+            </Flex>
+            <BuildingsScroll ml='40px'>
+              {(buildings[state?.currentTab] ?? []).map((row: any) => (
+                <BuildingsItem key={row.buildings_number}>
+                  <GameThing
+                    draggable
+                    onDragStart={dragStart}
+                    onDrop={event => event.preventDefault()}
+                    onDragEnter={event => event.preventDefault()}
+                    onDragOver={dragOver}
+                    onDragEnd={dragEnd}
+                    scale='sm'
+                    itemData={row}
+                    src={row.picture}
+                    text={row?.propterty.name_cn}
+                  />
+                </BuildingsItem>
               ))}
-            </CardTab>
-            <Text mt='13px' small>
-              拖动建筑到需要的格子上
-            </Text>
+            </BuildingsScroll>
           </Flex>
-          <BuildingsScroll ml='40px'>
-            {(buildings[state?.currentTab] ?? []).map((row: any) => (
-              <BuildingsItem key={row.buildings_number}>
-                <GameThing
-                  draggable
-                  onDragStart={dragStart}
-                  onDrop={event => event.preventDefault()}
-                  onDragEnter={event => event.preventDefault()}
-                  onDragOver={dragOver}
-                  scale='sm'
-                  itemData={row}
-                  src={row.picture}
-                  text={row?.propterty.name_cn}
-                />
-              </BuildingsItem>
-            ))}
-          </BuildingsScroll>
-        </Flex>
-      </BgCard>
-    </Box>
+        </BgCard>
+      </Box>
+    </>
   );
 };

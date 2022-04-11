@@ -127,6 +127,7 @@ export interface BuildlingState {
   selfBuildings: Api.Building.SelfBuildings;
   upgradeIds: string[];
   buildings: { [type: number]: Api.Building.Building[] };
+  destroyBuilding: boolean;
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -139,8 +140,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 enum DescType {
   MOVE = 1,
   ATTACK = 2,
-
-
 }
 
 interface RoundDescMoveAxis {
@@ -164,10 +163,10 @@ export interface RoundDescAttack {
 }
 
 export interface RoundInfo {
-  desc_type: number
-  round: number
-  attack: RoundDescAttack
-  move: RoundDescMove
+  desc_type: number;
+  round: number;
+  attack: RoundDescAttack;
+  move: RoundDescMove;
 }
 
 export interface MapBaseUnits {
@@ -179,7 +178,7 @@ export interface GameState {
     [race: string]: MapBaseUnits;
   };
   plantUnits: {
-    [id: number]: Api.Game.UnitPlanetPos[]
+    [id: number]: Api.Game.UnitPlanetPos[];
   };
   process: any;
   PKInfo: null | {
@@ -191,8 +190,8 @@ export interface GameState {
     slot: {
       [round: number]: {
         data: RoundInfo[];
-      }
-    }
+      };
+    };
   };
 }
 

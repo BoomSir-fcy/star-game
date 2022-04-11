@@ -1,18 +1,20 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Box, Flex, Input, Button, Text, Image } from 'uikit';
-import ModalWrapper from 'components/Modal';
+import { Box, Flex, Button, Text, Image } from 'uikit';
+import { useStore } from 'state';
 import { Api } from 'apis';
+
+import ModalWrapper from 'components/Modal';
 import { GameThing } from '../gameModel';
 
 export const ThingDestoryModal: React.FC<{
-  visible: boolean;
   planet_id: number;
   itemData: Api.Building.Building;
   upgrade: any;
   onChange: () => void;
   onClose: () => void;
-}> = ({ visible, planet_id, itemData, upgrade, onChange, onClose }) => {
+}> = ({ planet_id, itemData, upgrade, onChange, onClose }) => {
+  const visible = useStore(p => p.buildling.destroyBuilding);
+
   return (
     <ModalWrapper title='摧毁建筑' visible={visible} setVisible={onClose}>
       <Box padding='30px 25px'>

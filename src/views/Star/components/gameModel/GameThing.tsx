@@ -10,6 +10,8 @@ const scales = {
   SM: 'sm',
 } as const;
 
+export type Scale = typeof scales[keyof typeof scales];
+
 const scaleVariants = {
   [scales.LD]: {
     width: 316,
@@ -74,7 +76,7 @@ const Level = styled(Text)`
 `;
 
 export const GameThing: React.FC<{
-  scale: 'ld' | 'lg' | 'md' | 'sm';
+  scale?: Scale;
   itemData?: Api.Building.Building;
   src?: string;
   level?: number;
@@ -86,8 +88,9 @@ export const GameThing: React.FC<{
   onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragEnter?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDragEnd?: (e: React.DragEvent<HTMLDivElement>) => void;
 }> = ({
-  scale,
+  scale = scales.SM,
   itemData,
   level,
   src,
@@ -99,6 +102,7 @@ export const GameThing: React.FC<{
   onDrop,
   onDragOver,
   onDragEnter,
+  onDragEnd,
 }) => {
   const sizeBox = scaleVariants[scale];
 
@@ -110,6 +114,7 @@ export const GameThing: React.FC<{
         onDrop={onDrop}
         onDragOver={onDragOver}
         onDragEnter={onDragEnter}
+        onDragEnd={onDragEnd}
         active={active}
         border={border}
         data-item={JSON.stringify(itemData)}
