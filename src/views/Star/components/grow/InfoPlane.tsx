@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Card, Flex, Box, Image, Text } from 'uikit';
 import { useStore } from 'state/util';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useTranslation } from 'contexts/Localization';
 import { StrengthenPlanetInfo } from './type';
 
 const TopBox = styled(Flex)`
@@ -33,12 +34,14 @@ const InfoPlane: React.FC<{
   nowPlante: StrengthenPlanetInfo | any;
   estimatePlante: StrengthenPlanetInfo | any;
 }> = ({ nowPlante, estimatePlante }) => {
+  const { t } = useTranslation();
+
   return (
     <Card pt='8px' width={434} height={490}>
       <Flex justifyContent='space-between' alignItems='center'>
         <TopBox1>
           <Text bold fontSize='24px'>
-            强化 +{nowPlante?.strengthenLevel}
+            {t('Strengthen')} +{nowPlante?.strengthenLevel}
           </Text>
         </TopBox1>
         <Box width={82}>
@@ -50,19 +53,23 @@ const InfoPlane: React.FC<{
         </Box>
         <TopBox2>
           <Text bold fontSize='24px'>
-            强化 +{estimatePlante?.strengthenLevel}
+            {t('Strengthen')} +{estimatePlante?.strengthenLevel}
           </Text>
         </TopBox2>
       </Flex>
       <Flex margin='12px 0' alignItems='center' justifyContent='center'>
         <Flex flex={1} justifyContent='center'>
-          <Text fontSize='20px'>掠夺速度 {nowPlante?.plunder_speed}</Text>
+          <Text fontSize='20px'>
+            {t('Plunder speed')} {nowPlante?.plunder_speed}
+          </Text>
         </Flex>
         <Box width={47}>
           <Image width={47} height={40} src='/images/commons/icon/next.png' />
         </Box>
         <Flex flex={1} justifyContent='center'>
-          <Text fontSize='20px'>掠夺速度 {estimatePlante?.plunder_speed}</Text>
+          <Text fontSize='20px'>
+            {t('Plunder speed')} {estimatePlante?.plunder_speed}
+          </Text>
         </Flex>
       </Flex>
       <Flex alignItems='flex-end' justifyContent='center'>
@@ -70,7 +77,7 @@ const InfoPlane: React.FC<{
           <Image width={85} height={85} src='/images/commons/icon/ore.png' />
           <Box>
             <Text color='textTips' fontSize='20px'>
-              矿石产能
+              {t('Ore capacity')}
             </Text>
             <Text fontSize='22px'>{nowPlante?.oreYield}/s</Text>
           </Box>
@@ -80,7 +87,7 @@ const InfoPlane: React.FC<{
         </Box>
         <RightBox>
           <Box>
-            <Text fontSize='20px'>矿石产能</Text>
+            <Text fontSize='20px'>{t('Ore capacity')}</Text>
             <Flex>
               <Image width={33} height={33} src='/images/commons/icon/up.png' />
               <Text fontSize='22px' color='up'>
@@ -99,7 +106,7 @@ const InfoPlane: React.FC<{
           />
           <Box>
             <Text color='textTips' fontSize='20px'>
-              人口产能
+              {t('Population productivity')}
             </Text>
             <Text fontSize='22px'>{nowPlante?.populationYield}/s</Text>
           </Box>
@@ -109,7 +116,7 @@ const InfoPlane: React.FC<{
         </Box>
         <RightBox>
           <Box>
-            <Text fontSize='20px'>人口产能</Text>
+            <Text fontSize='20px'> {t('Population productivity')}</Text>
             <Flex>
               <Image width={33} height={33} src='/images/commons/icon/up.png' />
               <Text fontSize='22px' color='up'>
@@ -124,7 +131,7 @@ const InfoPlane: React.FC<{
           <Image width={85} height={85} src='/images/commons/icon/energy.png' />
           <Box>
             <Text color='textTips' fontSize='20px'>
-              能量产能
+              {t('Energy production')}
             </Text>
             <Text fontSize='22px'>{nowPlante?.energyYield}/s</Text>
           </Box>
@@ -134,7 +141,7 @@ const InfoPlane: React.FC<{
         </Box>
         <RightBox>
           <Box>
-            <Text fontSize='20px'>能量产能</Text>
+            <Text fontSize='20px'> {t('Energy production')}</Text>
             <Flex>
               <Image width={33} height={33} src='/images/commons/icon/up.png' />
               <Text fontSize='22px' color='up'>

@@ -5,6 +5,7 @@ import StarCom from 'components/StarCom';
 
 import { Qualities, qualities } from 'uikit/theme/types';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
+import { useTranslation } from 'contexts/Localization';
 
 import { getPlanetRarity } from 'utils/planetRarity';
 import { PlanetDesc } from './PlanetDesc';
@@ -25,6 +26,8 @@ export const PlanetBox: React.FC<{
   status?: string;
   level?: Qualities;
 }> = ({ status = 'upgrade', level = 1, info }) => {
+  const { t } = useTranslation();
+
   const [state, setState] = React.useState({
     time: 86970,
   });
@@ -71,20 +74,20 @@ export const PlanetBox: React.FC<{
                   <Text fontSize='24px'>{info.name}</Text>
                   <Flex alignItems='center' mt='2px'>
                     <Text color={QualityColor[info?.rarity]} bold small>
-                      {getPlanetRarity(info?.rarity)}
+                      {t(getPlanetRarity(info?.rarity))}
                     </Text>
                     <Text ml='12px' color={RaceTypeColor[2]} bold small>
                       {info?.race === 1
-                        ? '神族'
+                        ? t('race-1')
                         : info?.race === 2
-                        ? '人族'
-                        : '虫族'}
+                        ? t('race-2')
+                        : t('race-3')}
                     </Text>
                     <Text ml='12px' bold small>
                       Lv{info.level}
                     </Text>
                     <Text ml='12px' small>
-                      格子:{info.areaX}x{info.areaY}
+                      {t('Lattice')}:{info.areaX}x{info.areaY}
                     </Text>
                   </Flex>
                 </Box>
@@ -96,7 +99,7 @@ export const PlanetBox: React.FC<{
                       alignItems='center'
                     >
                       <Text shadow='primary' fontSize='24px' mr='15px'>
-                        升级中
+                        {t('During upgrade')}
                       </Text>
                       <Image
                         src='/images/commons/icon/icon_arrow_right.png'
@@ -120,14 +123,14 @@ export const PlanetBox: React.FC<{
             ) : (
               <>
                 <Flex alignItems='center'>
-                  <Text>普通盲盒</Text>
+                  <Text>{t('普通盲盒')}</Text>
                   <Text color='textSubtle' fontSize='24px' ml='24px'>
                     #006295
                   </Text>
                 </Flex>
                 <Flex flex='1' justifyContent='flex-end' alignItems='center'>
                   <Text shadow='primary' fontSize='24px' mr='27px'>
-                    孵化中
+                    {t('孵化中')}
                   </Text>
                   <Image
                     src='/images/commons/icon/icon_arrow_right.png'
@@ -148,7 +151,7 @@ export const PlanetBox: React.FC<{
                   width={69}
                   height={78}
                 />
-                <Text>普通、良好、稀有星球</Text>
+                <Text>{t('普通、良好、稀有星球')}</Text>
               </>
             )}
           </Flex>

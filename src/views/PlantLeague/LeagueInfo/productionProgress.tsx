@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { useToast } from 'contexts/ToastsContext';
 import { Api } from 'apis';
 import { useImmer } from 'use-immer';
+import { useTranslation } from 'contexts/Localization';
 
 const ProgressBox = styled(Box)`
   position: relative;
@@ -30,6 +31,8 @@ const ProgressTextBox = styled(Box)`
 const BtnFlex = styled(Flex)``;
 
 const ProductionProgress = () => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const { toastError, toastSuccess, toastWarning } = useToast();
   const { end_time, free_time, alliance, later_extract_time } = useStore(
@@ -49,22 +52,22 @@ const ProductionProgress = () => {
 
   const ExtractResources = useCallback(async () => {
     if (alliance.working !== 0) {
-      toastError('停止工作才能提取');
+      toastError(t('Stop working to extract'));
       return;
     }
     if (alliance.laterExtractTime > 0) {
-      toastError('领取冻结中');
+      toastError(t('Freezing'));
       return;
     }
     try {
       const res = await Api.AllianceApi.AllianceExtract();
       if (Api.isSuccess(res)) {
-        toastSuccess('提取成功');
+        toastSuccess(t('Extraction succeeded'));
       } else {
-        toastError('提取失败');
+        toastError(t('Extraction failed'));
       }
     } catch (error) {
-      toastError('提取失败');
+      toastError(t('Extraction failed'));
     }
     dispatch(fetchAllianceViewAsync());
   }, [alliance]);
@@ -140,7 +143,9 @@ const ProductionProgress = () => {
   return (
     <Flex flex='1' flexDirection='column' padding='30px'>
       <Flex mb='20px' justifyContent='center'>
-        <Text fontSize='20px'>资源生产({formatTime(state.time)})</Text>
+        <Text fontSize='20px'>
+          {t('Resource production')}({formatTime(state.time)})
+        </Text>
       </Flex>
       <ProgressBox mb='56px' ml='15px'>
         <Progress
@@ -164,10 +169,12 @@ const ProductionProgress = () => {
       </ProgressBox>
       <BtnFlex justifyContent='space-between'>
         <Button variant='black' onClick={() => ExtractResources()}>
-          {later_extract_time > 0 ? formatTime(state.Extracttime) : '提取资源'}
+          {later_extract_time > 0
+            ? formatTime(state.Extracttime)
+            : t('Extract resources')}
         </Button>
         <Link to='/galaxy'>
-          <Button variant='black'>占领恒星</Button>
+          <Button variant='black'>{t('Occupy the stars')}</Button>
         </Link>
       </BtnFlex>
     </Flex>
