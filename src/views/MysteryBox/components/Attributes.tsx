@@ -24,18 +24,20 @@ const Attributes: React.FC<AttributesProps> = ({
       <Text mb='10px'>Attributes</Text>
       <Flex>
         <LabelStyled>
-          <LabelText>格子:</LabelText>
+          <LabelText>{t('Grid')}:</LabelText>
           <AttrText>
             {info?.areaX ? `${info?.areaX}x${info?.areaY}` : ''}
           </AttrText>
         </LabelStyled>
         <LabelStyled ml='15px'>
-          <LabelText>等级:</LabelText>
-          <AttrText>{info?.level}级</AttrText>
+          <LabelText>{t('Grade')}:</LabelText>
+          <AttrText>
+            {info?.level}
+            {t('Level')}
+          </AttrText>
         </LabelStyled>
         <LabelStyled ml='15px'>
-          <LabelText>稀有度:</LabelText>
-          {/* TODO: 翻译待完成 */}
+          <LabelText>{t('Rarity')}:</LabelText>
           <AttrText color={QualityColor[rarity]}>
             {rarity ? t(`rarity-${rarity}`) : ''}
           </AttrText>
@@ -43,25 +45,25 @@ const Attributes: React.FC<AttributesProps> = ({
       </Flex>
       <Flex mt='13px'>
         <LabelStyled>
-          <LabelText>掠夺速度:</LabelText>
+          <LabelText>{t('Plunder speed')}:</LabelText>
           <AttrText>{info?.plunder_speed}</AttrText>
         </LabelStyled>
         <LabelStyled ml='15px'>
-          <LabelText>矿石:</LabelText>
+          <LabelText>{t('Ore')}:</LabelText>
           <AttrText>{info?.stone}</AttrText>
         </LabelStyled>
         <LabelStyled ml='15px'>
-          <LabelText>人口:</LabelText>
+          <LabelText>{t('Population')}:</LabelText>
           <AttrText>{info?.population}</AttrText>
         </LabelStyled>
       </Flex>
       <Flex mt='13px'>
         <LabelStyled>
-          <LabelText>能量:</LabelText>
+          <LabelText>{t('Energy')}:</LabelText>
           <AttrText>{info?.energy}</AttrText>
         </LabelStyled>
         <LabelStyled ml='15px'>
-          <LabelText>建筑数:</LabelText>
+          <LabelText>{t('Buildings')}:</LabelText>
           <AttrText>{info?.build_count}</AttrText>
         </LabelStyled>
       </Flex>

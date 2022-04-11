@@ -23,4 +23,5 @@ export const RaceCardStyled = styled(Card)`
 export const LabelText = styled(Text).attrs({ small: true })``;
 export const AttrText = styled(LabelText)`
   margin-left: 5px;
+  flex: 1;
 `;

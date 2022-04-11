@@ -6,6 +6,7 @@ import { Gender } from 'state/types';
 import styled from 'styled-components';
 import { useToast } from 'contexts/ToastsContext';
 import KingAvatar from 'views/Galaxy/components/KingAvatar';
+import { useTranslation } from 'contexts/Localization';
 
 const chance = new Chance();
 
@@ -33,6 +34,7 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
   p,
   ref,
 ) => {
+  const { t } = useTranslation();
   const [gender, setGender] = useState(Gender.MAN);
   const [name, setName] = useState('');
   const [superior, setSuperior] = useState('');
@@ -52,7 +54,10 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
   return (
     <BoxStyled>
       <TopBox>
-        <TweenText to='指挥官！请为自己创建一个身份' from='' />
+        <TweenText
+          to={t('Commander! Please create an identity for yourself')}
+          from=''
+        />
       </TopBox>
       <Flex width='540px' mt='28px' justifyContent='space-between'>
         <KingAvatar
@@ -91,7 +96,7 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
           onChange={event => {
             setName(event.target.value);
           }}
-          placeholder='输入您想要的名称'
+          placeholder={t('Enter your desired name')}
         />
         <Button variant='text'>
           <Box onClick={randomName} width='37px'>
@@ -105,11 +110,13 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
           onChange={event => {
             setSuperior(event.target.value);
           }}
-          placeholder='输入邀请人地址（选填）'
+          placeholder={t("Enter the inviter's address (optional)")}
         />
       </Label>
       <Text mt={32} small>
-        需要消耗100 DSG创建，系统将通过BNB即时交易等额DSG创建身份
+        {t(
+          'It needs to consume 100 DSG to create, and the system will create an identity through BNB instant transaction of the same amount of DSG',
+        )}
       </Text>
     </BoxStyled>
   );

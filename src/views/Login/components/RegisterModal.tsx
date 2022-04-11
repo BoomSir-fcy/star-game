@@ -15,6 +15,7 @@ import { getUserAgentAddress } from 'utils/addressHelpers';
 import { fetchAllowanceAsync } from 'state/userInfo/reducer';
 import { useDispatch } from 'react-redux';
 import { formatDisplayBalance } from 'utils/formatBalance';
+import { useTranslation } from 'contexts/Localization';
 
 interface RegisterModalProps {
   visible: boolean;
@@ -34,21 +35,27 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
 }) => {
   const { allowance } = useStore(p => p.userInfo);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const isApprove = useMemo(() => {
     return new BigNumber(allowance.allowance).isGreaterThanOrEqualTo(price);
   }, [allowance.allowance, price]);
 
   return (
-    <Modal title='确认创建' visible={visible} setVisible={setVisible}>
+    <Modal
+      title={t('Confirm creation')}
+      visible={visible}
+      setVisible={setVisible}
+    >
       <Flex pt='98px' flexDirection='column' alignItems='center'>
         <Image src='/images/commons/dsg-1.png' width={109} height={114} />
         <Text mt='42px' fontSize='24px'>
-          创建身份所需支付 {formatDisplayBalance(new BigNumber(price), 18)} DSG
+          {t('Payment to create identity')}{' '}
+          {formatDisplayBalance(new BigNumber(price), 18)} DSG
         </Text>
         {isApprove ? (
           <Button onClick={onRegister} mt='58px'>
-            确认支付
+            {t('Confirm payment')}
           </Button>
         ) : (
           <ApproveButton
