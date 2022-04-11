@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Box, Button, Input, Flex, Text, Image } from 'uikit';
+import { Box, Button, PrimaryInput, Flex, Text, Image } from 'uikit';
 import BigNumber from 'bignumber.js';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
@@ -30,20 +30,6 @@ const IconToken = styled(Image)`
 const InputBox = styled(Flex)`
   position: relative;
   align-items: center;
-`;
-const MyInput = styled(Input)`
-  padding: 23px 34px;
-  height: 90px;
-  border: 2px solid;
-  /* border-image: linear-gradient(-29deg, #14f1fd, #1caaf4) 2 2; */
-  border: 1px solid #14f1fd;
-  box-shadow: 0px 0px 9px 0px #41b7ff, inset 0px 0px 9px 0px #41b7ff;
-  border-radius: 10px;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  font-size: 30px;
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.textSubtle};
-  }
 `;
 
 interface DepositWithdrawalProps {
@@ -237,9 +223,10 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
           </Text>
         </ShaDowBox>
         <InputBox mb='10px'>
-          <MyInput
+          <PrimaryInput
+            width='100%'
+            height={90}
             disabled={approvedNum === 0 && OperationType === 1}
-            noShadow
             pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
             inputMode='decimal'
             value={val}
