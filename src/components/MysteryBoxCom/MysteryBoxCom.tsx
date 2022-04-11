@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
 import { Box, Text, Flex } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
 import { qualities, MysteryBoxComProps } from './types';
 import { mysteryConfig } from './config';
 import { BoxStyled, BoxBgStyled, BoxBaseStyled, BoxBoxStyled } from './styled';
 
 const MysteryBoxCom: React.FC<MysteryBoxComProps> = ({ quality, ...props }) => {
+  const { t } = useTranslation();
   const info = useMemo(() => {
     if (mysteryConfig[quality]) {
       return mysteryConfig[quality];
@@ -24,14 +26,16 @@ const MysteryBoxCom: React.FC<MysteryBoxComProps> = ({ quality, ...props }) => {
       >
         <Box width='100%'>
           <Text color='navy' textAlign='center' width='255px'>
-            {info.label}
+            {t(info.label)}
           </Text>
         </Box>
         <Box>
           <Text textAlign='center' fontSize='22px' color='textTips'>
-            有几率获得
+            {t('Chance to get')}
           </Text>
-          <Text mt='8px'>{info.tips}</Text>
+          <Text maxWidth='360px' ellipsis mt='8px'>
+            {t(info.tips)}
+          </Text>
         </Box>
       </Flex>
       <BoxBgStyled quality={quality} />

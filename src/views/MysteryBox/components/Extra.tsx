@@ -1,3 +1,4 @@
+import { useTranslation } from 'contexts/Localization';
 import React from 'react';
 import { Box, Text, Flex, BoxProps } from 'uikit';
 import { ExtraLabelStyled, LabelText, AttrText } from './styled';
@@ -6,28 +7,39 @@ interface ExtraProps extends BoxProps {
   info: any;
 }
 const Extra: React.FC<ExtraProps> = ({ info, children, ...props }) => {
+  const { t } = useTranslation();
   return (
     <Box {...props}>
       <Text mb='10px'>Extra</Text>
       <ExtraLabelStyled>
-        <LabelText>防御加成：</LabelText>
-        <AttrText>所有建筑防御 +{info?.defense}</AttrText>
+        <LabelText>{t('Defense bonus')}：</LabelText>
+        <AttrText>
+          {t('All building defenses')} +{info?.defense}
+        </AttrText>
       </ExtraLabelStyled>
       <ExtraLabelStyled mt='13px'>
-        <LabelText>攻击加成：</LabelText>
-        <AttrText>攻击建筑伤害 +{info?.attack}</AttrText>
+        <LabelText>{t('Attack bonus')}：</LabelText>
+        <AttrText>
+          {t('Attack building damage')} +{info?.attack}
+        </AttrText>
       </ExtraLabelStyled>
       <ExtraLabelStyled mt='13px'>
-        <LabelText>HP加成：</LabelText>
-        <AttrText>所有产能速度 +{info?.hp}</AttrText>
+        <LabelText>{t('HP bonus')}：</LabelText>
+        <AttrText>
+          {t('All buildings HP')} +{info?.hp}
+        </AttrText>
       </ExtraLabelStyled>
       <ExtraLabelStyled mt='13px'>
-        <LabelText>产能加成：</LabelText>
-        <AttrText>所有产能速度 +{info?.product}</AttrText>
+        <LabelText>{t('Capacity bonus')}：</LabelText>
+        <AttrText>
+          {t('All throughput speeds')} +{info?.product}
+        </AttrText>
       </ExtraLabelStyled>
       <ExtraLabelStyled mt='13px'>
-        <LabelText>建筑成本：</LabelText>
-        <AttrText>所有建筑修建费用 +{info?.build}</AttrText>
+        <LabelText>{t('The cost of building')}：</LabelText>
+        <AttrText>
+          {t('All building construction costs')} +{info?.build}
+        </AttrText>
       </ExtraLabelStyled>
       {children}
     </Box>

@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useImperativeHandle } from 'react';
 import { Dots, Button, ButtonProps } from 'uikit';
 import { Gender } from 'state/types';
+import { useTranslation } from 'contexts/Localization';
 import { useApprove } from './hooks';
 
 export interface ForwardRefRenderProps {
@@ -21,6 +22,7 @@ const ApproveButton: React.FC<ApproveButtonProps> = ({
   ...props
 }) => {
   const { onApprove } = useApprove(erc20Token, spender);
+  const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
   const handleApprove = useCallback(async () => {
@@ -37,7 +39,7 @@ const ApproveButton: React.FC<ApproveButtonProps> = ({
 
   return (
     <Button disabled={loading} onClick={handleApprove} {...props}>
-      {loading ? <Dots>授权</Dots> : '授权'}
+      {loading ? <Dots>{t('Authorize')}</Dots> : t('Authorize')}
     </Button>
   );
 };

@@ -18,7 +18,8 @@ import { useTranslation } from 'contexts/Localization';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setActiveMaterialMap } from 'state/planet/actions';
+import { setActiveMaterialMap, setUpgradePlanetId } from 'state/planet/actions';
+import { useToast } from 'contexts/ToastsContext';
 import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';
 import { useUpgrade } from './components/upgrade/hooks';
 
@@ -47,6 +48,7 @@ export interface UpgradePlanetInfo extends Api.Planet.PlanetInfo {
 }
 
 const Upgrade = () => {
+  const { toastError } = useToast();
   const { account } = useWeb3React();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -68,7 +70,15 @@ const Upgrade = () => {
   });
 
   const { upgrade } = useUpgrade();
-  const activeMaterialMap = useStore(p => p.planet.activeMaterialMap);
+  const { activeMaterialMap, upgradePlanetId } = useStore(p => p.planet);
+
+  // 升级星球不一致，清空选择的材料星球
+  useEffect(() => {
+    if (upgradePlanetId !== planetId) {
+      dispatch(setUpgradePlanetId(planetId));
+      dispatch(setActiveMaterialMap(null));
+    }
+  }, []);
 
   // 星球是否升级成功
   const getUpgradeSuccess = useCallback(async () => {
@@ -113,6 +123,8 @@ const Upgrade = () => {
           material_planet_num,
           success,
         });
+      } else {
+        toastError(res.message);
       }
     } catch (error) {
       console.log(error);
@@ -148,7 +160,6 @@ const Upgrade = () => {
           showIcon
           url={activeMaterialMap[id] ? '/images/star/01.jpg' : ''}
           onRemove={() => {
-            console.log(materialKey[i]);
             dispatch(setActiveMaterialMap({ [id]: null }));
           }}
           callBack={() => {
