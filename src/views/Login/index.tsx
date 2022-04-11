@@ -23,6 +23,7 @@ import { useToast } from 'contexts/ToastsContext';
 import { isAddress } from 'utils';
 import { useConnectWallet } from 'contexts/ConnectWallet';
 import { fetchUserProductAsync } from 'state/userInfo/reducer';
+import { useTranslation } from 'contexts/Localization';
 import StarGameBox from './components/StarGameBox';
 import Flyer from './components/Flyer';
 import Create, { ForwardRefRenderProps } from './components/Create';
@@ -51,6 +52,7 @@ const Login = () => {
   const { pathname } = useLocation();
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const { onConnectWallet } = useConnectWallet();
   const { account } = useWeb3React();
@@ -78,24 +80,24 @@ const Login = () => {
         const state = await handleCheck(name);
 
         if (state === CheckNickNameState.NULL_NAME) {
-          toastError('请输入您想要的名称');
+          toastError(t('Enter your desired name'));
           return;
         }
         if (
           state === CheckNickNameState.SHORT_NAME ||
           state === CheckNickNameState.LONG_NAME
         ) {
-          toastError('请输入6~30个字符，支持中英文、数字');
+          toastError(t('6~30 characters (Support English, Chinese, numbers)'));
           return;
         }
 
         if (superior && !isAddress(superior)) {
-          toastError('无效邀请地址');
+          toastError(t('Invalid invitation address'));
           return;
         }
         if (state === CheckNickNameState.BAD_NAME_WITH_CONTRACT) {
           // FIXME: 这个提示有问题
-          toastError('请输正确的昵称');
+          toastError(t('Please enter the correct nickname'));
           return;
         }
 
@@ -104,7 +106,7 @@ const Login = () => {
         }
       } catch (error) {
         console.error(error);
-        console.error('注册失败');
+        console.error(t('Registration failed'));
       }
     }
   }, [handleCheck, createRef, setVisible, toastError]);
@@ -120,7 +122,7 @@ const Login = () => {
         });
       } catch (error) {
         console.error(error);
-        console.error('注册失败');
+        console.error(t('Registration failed'));
       }
     }
   }, [handleRegister, createRef]);

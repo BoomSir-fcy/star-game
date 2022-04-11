@@ -83,7 +83,7 @@ const StarHeader = () => {
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
                       <TextStyled color='textTips' small>
-                        总产能
+                        {t('Total capacity')}
                       </TextStyled>
                       <TextStyled ml='20px' small>
                         {planetInfo?.energyYield}/s
@@ -91,7 +91,7 @@ const StarHeader = () => {
                     </Flex>
                     <Flex>
                       <TextStyled color='textTips' small>
-                        总矿石
+                        {t('Total ore')}
                       </TextStyled>
                       <TextStyled ml='20px' small>
                         {planetInfo?.stone}/{planetInfo?.max_stone}
@@ -104,7 +104,7 @@ const StarHeader = () => {
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
                       <TextStyled color='textTips' small>
-                        总产能
+                        {t('Total capacity')}
                       </TextStyled>
                       <TextStyled ml='20px' small>
                         {planetInfo?.populationYield}/s
@@ -112,7 +112,7 @@ const StarHeader = () => {
                     </Flex>
                     <Flex>
                       <TextStyled color='textTips' small>
-                        总人工
+                        {t('Total population')}
                       </TextStyled>
                       <TextStyled ml='20px' small>
                         {planetInfo?.population}/{planetInfo?.max_population}
@@ -125,7 +125,7 @@ const StarHeader = () => {
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
                       <TextStyled color='textTips' small>
-                        总产能
+                        {t('Total capacity')}
                       </TextStyled>
                       <TextStyled ml='20px' small>
                         {planetInfo?.energyYield}/s
@@ -133,7 +133,7 @@ const StarHeader = () => {
                     </Flex>
                     <Flex>
                       <TextStyled color='textTips' small>
-                        总能量
+                        {t('Total energy')}
                       </TextStyled>
                       <TextStyled ml='20px' small>
                         {planetInfo?.energy}/{planetInfo?.max_energy}

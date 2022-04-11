@@ -30,6 +30,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import { mysteryConfig } from 'components/MysteryBoxCom/config';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
 import { useStore } from 'state';
+import { useTranslation } from 'contexts/Localization';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import OpenModal from './components/OpenModal';
 import { queryMintEvent } from './event';
@@ -47,6 +48,7 @@ const MysteryBoxState = () => {
   useFetchBoxView();
   const { priceBNB, seedBlocks, loading } = useStore(p => p.mysteryBox.boxView);
   const { account } = useWeb3React();
+  const { t } = useTranslation();
 
   const quality = useMemo(() => {
     const q = Number(paramsQs.q) as MysteryBoxQualities;
@@ -158,7 +160,9 @@ const MysteryBoxState = () => {
             <CardStyled mt='23px'>
               {existBox ? (
                 <Flex height='100%' justifyContent='center' alignItems='center'>
-                  <Text color='textTips'>购买成功，快试试您的手气吧！</Text>
+                  <Text color='textTips'>
+                    {t('The purchase is successful, try your luck now!')}
+                  </Text>
                 </Flex>
               ) : (
                 <Flex height='100%' alignItems='center'>
@@ -170,7 +174,7 @@ const MysteryBoxState = () => {
                     />
                   </Box>
                   <Box ml='20px'>
-                    <Text color='textTips'>价值 BNB</Text>
+                    <Text color='textTips'>{t('Value')} BNB</Text>
                     {loading ? <Skeleton height={40} /> : <Text>{price} </Text>}
                   </Box>
                 </Flex>
@@ -184,14 +188,22 @@ const MysteryBoxState = () => {
                     setVisible(true);
                   }}
                 >
-                  {handleLoading ? <Dots>正在打开</Dots> : '打开盲盒'}
+                  {handleLoading ? (
+                    <Dots>{t('Opening')}</Dots>
+                  ) : (
+                    t('Open the blind box')
+                  )}
                 </Button>
               ) : (
                 <Button
                   disabled={handleLoading || loading}
                   onClick={onHandleBuy}
                 >
-                  {handleLoading ? <Dots>购买中</Dots> : '购买盲盒'}
+                  {handleLoading ? (
+                    <Dots>{t('Purchasing')}</Dots>
+                  ) : (
+                    t('Buy blind box')
+                  )}
                 </Button>
               )}
             </Flex>
