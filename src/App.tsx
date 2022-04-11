@@ -26,6 +26,7 @@ const MysteryBoxState = lazy(() => import('./views/MysteryBox/State'));
 const PlantLeague = lazy(() => import('./views/PlantLeague'));
 
 const Plunder = lazy(() => import('./views/Plunder'));
+const PlunderTest = lazy(() => import('./views/Plunder/Test'));
 const Galaxy = lazy(() => import('./views/Galaxy'));
 const Auction = lazy(() => import('./views/Galaxy/Auction'));
 const Stars = lazy(() => import('./views/Galaxy/Stars'));
@@ -74,6 +75,7 @@ function App() {
 
             {/* 掠夺 */}
             <Route path='/plunder' element={<Plunder />} />
+            <Route path='/plunder-test' element={<PlunderTest />} />
 
             <Route path='/test' element={<Test />}>
               <Route path='card' element={<TestCard />} />

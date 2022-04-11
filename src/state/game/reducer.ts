@@ -1,11 +1,12 @@
 import { createReducer, createSlice } from '@reduxjs/toolkit';
 import { AppThunk, GameState } from 'state/types';
-import { fetchGamePlanetUnits, fetchUnitList } from './fetchers';
+import { fetchGamePK, fetchGamePlanetUnits, fetchUnitList } from './fetchers';
 
 export const initialState: GameState = {
   baseUnits: {},
   plantUnits: {},
-  process: {},
+  process: null,
+  PKInfo: null,
 };
 
 export const fetchUnitListAsync =
@@ -31,6 +32,13 @@ export const fetchGamePlanetUnitsAsync =
     );
   };
 
+export const fetchGamePKAsync =
+  (id1: number, id2: number): AppThunk =>
+  async dispatch => {
+    const PKInfo = await fetchGamePK(id1, id2);
+    dispatch(setPKInfo(PKInfo));
+  };
+
 export const userInfoSlice = createSlice({
   name: 'game',
   initialState,
@@ -49,10 +57,14 @@ export const userInfoSlice = createSlice({
         [payload.id]: payload.list,
       };
     },
+
+    setPKInfo: (state, { payload }) => {
+      state.PKInfo = payload;
+    },
   },
 });
 
 // Actions
-export const { setUnits, setPlantUnits } = userInfoSlice.actions;
+export const { setUnits, setPlantUnits, setPKInfo } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

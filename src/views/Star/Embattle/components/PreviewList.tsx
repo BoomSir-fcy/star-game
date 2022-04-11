@@ -56,4 +56,4 @@ const PreviewList: React.FC<PreviewListProps> = ({ game, race = 1 }) => {
   );
 };
 
-export default PreviewList;
+export default React.memo(PreviewList);

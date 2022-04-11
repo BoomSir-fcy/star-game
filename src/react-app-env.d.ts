@@ -14,6 +14,9 @@ interface Window {
     ) => Promise<{ publicKey: string; signature: string }>;
   };
   MSStream?: boolean;
+
+  PIXI: any;
+  dragonBones: any;
 }
 
 declare module 'react-grid-layout';

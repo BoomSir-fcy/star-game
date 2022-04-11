@@ -27,3 +27,17 @@ export const fetchGamePlanetUnits = async (id: number): Promise<Api.Game.UnitPla
     return []
   }
 }
+
+export const fetchGamePK = async (planetId1: number, planetId2: number) => {
+  try {
+    const res = await Api.GameApi.gamePK(planetId1, planetId2);
+    console.log(res)
+    if (Api.isSuccess(res)) {
+      return res.data.data;
+    }
+    return null
+  } catch (error) {
+    console.error(error);
+    return null
+  }
+}
