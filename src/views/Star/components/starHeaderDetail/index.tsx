@@ -1,17 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Button, Text, Flex, Card } from 'uikit';
+import { Button, Text, Flex, Card, Box } from 'uikit';
 import { useStore } from 'state';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import StarCom from 'components/StarCom';
-import { getPlanetRarity } from 'utils/planetRarity';
 import { useTranslation } from 'contexts/Localization';
+import { getPlanetRarity } from 'utils/planetRarity';
+import { RaceTypeColor } from 'uikit/theme/colors';
+import { RaceAvatar } from 'components';
+import { RaceType } from 'uikit/theme/types';
 import { RechargeAssets } from '../Modal';
 
 const CardStyled = styled(Card)`
   width: 1610px;
-  max-height: 140px;
+  /* max-height: 140px; */
+  flex: 1;
 `;
 const TextStyled = styled(Text)`
   width: max-content;
@@ -25,9 +29,22 @@ const ButtonStyled = styled(Button)`
   height: 52px;
   padding: 10px;
 `;
+const RaceFlex = styled(Flex)`
+  flex-direction: column;
+  position: relative;
+`;
+const RaceImageFlex = styled(Flex)`
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  top: -10px;
+  left: 65px;
+  bottom: 0;
+`;
 const StarHeader = () => {
-  const dispatch = useDispatch();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const parsedQs = useParsedQueryString();
   const id = Number(parsedQs.id);
@@ -39,13 +56,14 @@ const StarHeader = () => {
   return (
     <Flex flex={1}>
       <CardStyled ml='82px'>
-        <Flex padding='20px' justifyContent='space-between'>
+        <Flex padding='14px 20px' justifyContent='space-between'>
           <Flex>
             <StarCom
               scale='sm'
               quality={planetInfo?.rarity}
               mr='40px'
               showUnion
+              style={{ flexShrink: 1 }}
             />
             <Flex flexDirection='column' justifyContent='space-between'>
               <Flex alignItems='center'>
@@ -76,7 +94,7 @@ const StarHeader = () => {
                         总矿石
                       </TextStyled>
                       <TextStyled ml='20px' small>
-                        10/100
+                        {planetInfo?.stone}/{planetInfo?.max_stone}
                       </TextStyled>
                     </Flex>
                   </Flex>
@@ -97,7 +115,7 @@ const StarHeader = () => {
                         总人工
                       </TextStyled>
                       <TextStyled ml='20px' small>
-                        10/100
+                        {planetInfo?.population}/{planetInfo?.max_population}
                       </TextStyled>
                     </Flex>
                   </Flex>
@@ -107,7 +125,7 @@ const StarHeader = () => {
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
                       <TextStyled color='textTips' small>
-                        总能量
+                        总产能
                       </TextStyled>
                       <TextStyled ml='20px' small>
                         {planetInfo?.energyYield}/s
@@ -115,10 +133,10 @@ const StarHeader = () => {
                     </Flex>
                     <Flex>
                       <TextStyled color='textTips' small>
-                        总矿石
+                        总能量
                       </TextStyled>
                       <TextStyled ml='20px' small>
-                        10/100
+                        {planetInfo?.energy}/{planetInfo?.max_energy}
                       </TextStyled>
                     </Flex>
                   </Flex>
@@ -132,7 +150,9 @@ const StarHeader = () => {
             alignItems='flex-end'
           >
             <TextStyled fontSize='20px' color='warning'>
-              培育中，该星球暂时没有产能
+              {planetInfo?.status === 2
+                ? t('培育中，该星球暂时没有产能')
+                : null}
             </TextStyled>
             <ButtonStyled
               scale='sm'
@@ -141,6 +161,30 @@ const StarHeader = () => {
               补充资源
             </ButtonStyled>
           </Flex>
+          <RaceFlex>
+            <img alt='' src='/images/commons/star/race-box.png' />
+            <RaceImageFlex>
+              <Text
+                color={RaceTypeColor[planetInfo?.race]}
+                mb='2px'
+                fontSize='22px'
+                bold
+              >
+                {planetInfo?.race ? t(`race-${planetInfo?.race}`) : ''}
+              </Text>
+              <RaceAvatar
+                width='99px'
+                height='99px'
+                race={
+                  planetInfo?.race === RaceType.PROTOSS
+                    ? 'protoss'
+                    : planetInfo?.race === RaceType.HUMAN
+                    ? 'human'
+                    : 'zerg'
+                }
+              />
+            </RaceImageFlex>
+          </RaceFlex>
         </Flex>
       </CardStyled>
 
