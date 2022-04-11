@@ -6,6 +6,7 @@ import { useStore } from 'state';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import StarCom from 'components/StarCom';
 import { getPlanetRarity } from 'utils/planetRarity';
+import { useTranslation } from 'contexts/Localization';
 import { RechargeAssets } from '../Modal';
 
 const CardStyled = styled(Card)`
@@ -26,6 +27,8 @@ const ButtonStyled = styled(Button)`
 `;
 const StarHeader = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   const parsedQs = useParsedQueryString();
   const id = Number(parsedQs.id);
   const planetInfo = useStore(p => p.planet.planetInfo[id ?? 0]);
@@ -47,7 +50,7 @@ const StarHeader = () => {
             <Flex flexDirection='column' justifyContent='space-between'>
               <Flex alignItems='center'>
                 <Text color='legend'>
-                  {getPlanetRarity(planetInfo?.rarity)}
+                  {t(getPlanetRarity(planetInfo?.rarity))}
                 </Text>
                 <Text ml='13px' bold>
                   Lv{planetInfo?.level}

@@ -7,6 +7,7 @@ import { Api } from 'apis';
 import { useDispatch } from 'react-redux';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useToast } from 'contexts/ToastsContext';
+import { useTranslation } from 'contexts/Localization';
 import StopWorkPop from '../stopWorkPop';
 
 const ShaDowBox = styled(Flex)`
@@ -18,6 +19,8 @@ const ShaDowBox = styled(Flex)`
 `;
 
 const InfoFoot = () => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const { toastError, toastSuccess } = useToast();
 
@@ -29,12 +32,12 @@ const InfoFoot = () => {
     await Api.AllianceApi[work ? 'AllianceWorking' : 'AllianceStopWork']()
       .then(res => {
         if (Api.isSuccess(res)) {
-          toastSuccess('操作成功');
+          toastSuccess(t('Successful operation'));
           dispatch(fetchAllianceViewAsync());
         }
       })
       .catch(err => {
-        toastError('操作失败');
+        toastError(t('Operation failed'));
         console.log(err);
       });
   };
@@ -43,11 +46,18 @@ const InfoFoot = () => {
     <ShaDowBox alignItems='center'>
       <Flex flex='1' flexDirection='column' justifyContent='space-between'>
         <Text mb='20px' shadow='primary' fontSize='28px' bold>
-          战斗力 {alliance.power}
+          {t('Combat power')} {alliance.power}
         </Text>
         <Box>
-          <Text fontSize='22px'>*联盟掠夺出战顺序，将按照序号升序掠夺</Text>
-          <Text fontSize='22px'>*超过20%可参与资源掠夺</Text>
+          <Text fontSize='22px'>
+            *
+            {t(
+              'Alliance loot battle order, will be looted in ascending order of serial number',
+            )}
+          </Text>
+          <Text fontSize='22px'>
+            *{t('More than 20% can participate in resource plunder')}
+          </Text>
         </Box>
       </Flex>
       <Button
@@ -61,9 +71,13 @@ const InfoFoot = () => {
           }
         }}
       >
-        {alliance.working > 0 ? '停止工作' : '开始工作'}
+        {alliance.working > 0 ? t('Stop working') : t('Start working')}
       </Button>
-      <Modal title='停止工作' visible={visible} setVisible={setVisible}>
+      <Modal
+        title={t('Stop working')}
+        visible={visible}
+        setVisible={setVisible}
+      >
         <StopWorkPop
           callBack={() => {
             StartOrStopWorking(false);

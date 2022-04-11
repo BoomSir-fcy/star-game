@@ -8,6 +8,7 @@ import { qualities } from 'uikit/theme/types';
 import { useToast } from 'contexts/ToastsContext';
 import { useDispatch } from 'react-redux';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
+import { useTranslation } from 'contexts/Localization';
 import { useRemoveAlliance } from './hook';
 
 const GalaxyBg = styled(Box)`
@@ -35,6 +36,8 @@ const StarStyleImg = styled.img`
 `;
 
 const JoinTheAlliance = () => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toastError, toastSuccess, toastWarning } = useToast();
@@ -49,10 +52,10 @@ const JoinTheAlliance = () => {
         const index = newList.indexOf(Number(id));
         newList = newList.splice(index, 1);
         await RemoveStar(newList);
-        toastSuccess('移除成功');
+        toastSuccess(t('Removed successfully'));
       } catch (e) {
         console.log(e);
-        toastError('移除失败');
+        toastError(t('Removal failed'));
       }
       dispatch(fetchAllianceViewAsync());
     },

@@ -13,11 +13,13 @@ const StopWorkPop: React.FC<{
   return (
     <Box width='100%' padding='100px 0'>
       <Text mb='150px' textAlign='center' fontSize='28px'>
-        停止工作将无法正常生产资源，也不会消耗资源。是否停止工作？
+        {t(
+          'Stopping work will not properly produce resources and will not consume resources. Did it stop working?',
+        )}
       </Text>
       <Flex justifyContent='center'>
         <Button width='270px' onClick={callBack}>
-          确认停止
+          {t('Confirm stop')}
         </Button>
       </Flex>
     </Box>
