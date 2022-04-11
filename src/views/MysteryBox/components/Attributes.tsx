@@ -24,7 +24,7 @@ const Attributes: React.FC<AttributesProps> = ({
       <Text mb='10px'>Attributes</Text>
       <Flex>
         <LabelStyled>
-          <LabelText>{t('Grid')}:</LabelText>
+          <LabelText>{t('Lattice')}:</LabelText>
           <AttrText>
             {info?.areaX ? `${info?.areaX}x${info?.areaY}` : ''}
           </AttrText>
