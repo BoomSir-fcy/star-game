@@ -43,6 +43,7 @@ const RaceImageFlex = styled(Flex)`
 const StarHeader = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
   const parsedQs = useParsedQueryString();
   const id = Number(parsedQs.id);
   const planetInfo = useStore(p => p.planet.planetInfo[id ?? 0]);
@@ -65,7 +66,7 @@ const StarHeader = () => {
             <Flex flexDirection='column' justifyContent='space-between'>
               <Flex alignItems='center'>
                 <Text color='legend'>
-                  {getPlanetRarity(planetInfo?.rarity)}
+                  {t(getPlanetRarity(planetInfo?.rarity))}
                 </Text>
                 <Text ml='13px' bold>
                   Lv{planetInfo?.level}

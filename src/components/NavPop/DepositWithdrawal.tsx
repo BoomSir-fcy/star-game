@@ -84,7 +84,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
     aux.select();
     document.execCommand('copy');
     document.body.removeChild(aux);
-    toastSuccess('复制成功');
+    toastSuccess(t('Copy successfully'));
   };
 
   // 充值、提取
@@ -109,10 +109,10 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
           isChainToken = true;
         }
         await Recharge(TokenInfo?.coinId, addPrecisionNum, isChainToken);
-        toastSuccess('充值成功');
+        toastSuccess(t('Successful recharge'));
         close();
       } catch (error) {
-        toastError('充值失败');
+        toastError(t('Recharge failed'));
         console.error(error);
       } finally {
         setpending(false);
@@ -120,10 +120,10 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
     } else {
       try {
         await drawCallback(val, TokenInfo?.coinId);
-        toastSuccess('提现成功');
+        toastSuccess(t('Withdrawal success'));
         close();
       } catch (e) {
-        toastError('提现失败');
+        toastError(t('Withdrawal failed'));
         console.error(e);
       } finally {
         setpending(false);
@@ -145,10 +145,10 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
     setpending(true);
     try {
       await onApprove();
-      toastSuccess('授权成功');
+      toastSuccess(t('Approve succeeded'));
     } catch (e) {
       console.error(e);
-      toastError('授权失败');
+      toastError(t('Approve Failed'));
     } finally {
       setpending(false);
     }
@@ -196,7 +196,9 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
     <Box width='100%' padding='30px 15px'>
       <Flex flexDirection='column' justifyContent='center'>
         <Text mb='20px' fontSize='24px'>
-          {OperationType === 1 ? t('指挥部资金余额') : t('转出钱包地址')}
+          {OperationType === 1
+            ? t('Headquarters Fund Balance')
+            : t('Transfer out wallet address')}
         </Text>
         <ShaDowBox alignItems='center' justifyContent='space-between'>
           <Flex alignItems='center'>
@@ -231,7 +233,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
             fontSize='24px'
             color='textLink'
           >
-            {OperationType === 1 ? t('转出资金') : t('复制')}
+            {OperationType === 1 ? t('Transfer funds') : t('Copy')}
           </Text>
         </ShaDowBox>
         <InputBox mb='10px'>
@@ -243,7 +245,9 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
             value={val}
             onChange={handleChange}
             placeholder={
-              OperationType === 1 ? t('请输入充值数量') : t('请输入转出数量')
+              OperationType === 1
+                ? t('Please enter the recharge amount')
+                : t('Please enter the transfer amount')
             }
           />
         </InputBox>
@@ -267,9 +271,9 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
           >
             {OperationType === 1
               ? approvedNum > 0
-                ? t('确认充值')
-                : t('授权')
-              : t('确认转出')}
+                ? t('Confirm recharge')
+                : t('Approve')
+              : t('Confirm transfer out')}
           </Button>
         </Flex>
       </Flex>

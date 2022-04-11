@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Flex, Text, Input } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
 
 const SearchContainer = styled(Flex)<{ focus?: boolean }>`
   width: 510px;
@@ -25,6 +26,8 @@ const SearchInput = styled(Input)`
 export const PlanetSearch: React.FC<{
   onEndCallback: (value: string) => void;
 }> = ({ onEndCallback }) => {
+  const { t } = useTranslation();
+
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [state, setState] = React.useState({
     focus: false,
@@ -66,7 +69,7 @@ export const PlanetSearch: React.FC<{
                 value: e.target.value,
               })
             }
-            placeholder='输入星球token搜索'
+            placeholder={t('Enter planet token search')}
           />
         </SearchContainer>
       </Flex>

@@ -137,16 +137,62 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   AnyAction
 >;
 
+enum DescType {
+  MOVE = 1,
+  ATTACK = 2,
+}
+
+interface RoundDescMoveAxis {
+  x: number;
+  y: number;
+}
+export interface RoundDescMove {
+  dest: RoundDescMoveAxis[];
+  id: string;
+  starting_point: RoundDescMoveAxis;
+}
+
+export interface RoundDescAttack {
+  receive_df: number;
+  receive_id: string;
+  receive_point: RoundDescMoveAxis;
+  receive_sub_hp: number;
+  sender_attack: number;
+  sender_id: string;
+  sender_point: RoundDescMoveAxis;
+}
+
+export interface RoundInfo {
+  desc_type: number;
+  round: number;
+  attack: RoundDescAttack;
+  move: RoundDescMove;
+}
+
+export interface MapBaseUnits {
+  [id: string]: Api.Game.UnitInfo;
+}
+
 export interface GameState {
   baseUnits: {
-    [race: string]: {
-      [id: string]: Api.Game.UnitInfo;
-    };
+    [race: string]: MapBaseUnits;
   };
   plantUnits: {
     [id: number]: Api.Game.UnitPlanetPos[];
   };
   process: any;
+  PKInfo: null | {
+    init: {
+      base_unit: MapBaseUnits;
+      blue_units: Api.Game.UnitPlanetPos[];
+      red_units: Api.Game.UnitPlanetPos[];
+    };
+    slot: {
+      [round: number]: {
+        data: RoundInfo[];
+      };
+    };
+  };
 }
 
 export interface State {

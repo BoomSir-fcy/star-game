@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Box, Text, Flex } from 'uikit';
 import { Api } from 'apis';
-import { useFetchGamePlanetUnits, useFetchUnitList } from 'state/game/hooks';
+import {
+  useFetchGamePlanetUnits,
+  useFetchUnitList,
+  useFetchGamePK,
+} from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
 import { useStore } from 'state';
 import Game from 'game/core/Game';
@@ -20,6 +24,7 @@ const Embattle = () => {
 
   console.log(plantUnits, 'plantUnits');
 
+  useFetchGamePK();
   useFetchUnitList();
   useFetchGamePlanetUnits(planetId);
 
@@ -37,8 +42,8 @@ const Embattle = () => {
       const units = soldiers.map((item, index) => {
         return {
           pos: {
-            x: item.chequer?.axisX || 0,
-            y: item.chequer?.axisY || 0,
+            x: item?.axisPoint?.chequer?.axisX || 0,
+            y: item?.axisPoint?.chequer?.axisY || 0,
           },
           speed: index, // 出手顺序
           unit_id: item.id,

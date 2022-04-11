@@ -3,14 +3,16 @@ import { Box, Flex, Text, Image } from 'uikit';
 import styled from 'styled-components';
 import { useStore } from 'state/util';
 import BigNumber from 'bignumber.js';
+import { useTranslation } from 'contexts/Localization';
 
 const Addition = () => {
+  const { t } = useTranslation();
   const { alliance, energy } = useStore(p => p.alliance.allianceView);
   const AdditionList = useMemo(() => {
     const arr = [
       {
         type: 1,
-        name: '总矿石',
+        name: t('Total ore'),
         total: energy.total_stone,
         capacity: energy.per_stone,
         speed: new BigNumber(energy.per_stone)
@@ -19,7 +21,7 @@ const Addition = () => {
       },
       {
         type: 2,
-        name: '总人口',
+        name: t('Total population'),
         total: energy.total_population,
         capacity: energy.per_population,
         speed: new BigNumber(energy.per_population)
@@ -28,7 +30,7 @@ const Addition = () => {
       },
       {
         type: 3,
-        name: '总能量',
+        name: t('Total energy'),
         total: energy.total_energy,
         capacity: energy.per_energy,
         speed: new BigNumber(energy.per_energy)
@@ -64,6 +66,8 @@ interface AdditionInfo {
 const ItemRow: React.FC<{
   info: AdditionInfo;
 }> = ({ info }) => {
+  const { t } = useTranslation();
+
   return (
     <Flex alignItems='flex-end'>
       <Flex flex='1'>
@@ -78,7 +82,9 @@ const ItemRow: React.FC<{
           <Text fontSize='22px'>
             {info.name}:{info.total}
           </Text>
-          <Text fontSize='22px'>总产能:{info.capacity}%</Text>
+          <Text fontSize='22px'>
+            {t('Total capacity')}:{info.capacity}%
+          </Text>
         </Box>
       </Flex>
       <Text fontSize='22px' color='profit'>

@@ -13,7 +13,7 @@ import {
 } from 'uikit';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
-
+import { useTranslation } from 'contexts/Localization';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
@@ -42,6 +42,7 @@ const LinkItem = styled(Link)`
 `;
 
 const Planet = () => {
+  const { t } = useTranslation();
   const { toastError, toastSuccess, toastWarning } = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ const Planet = () => {
       try {
         let newList = workingList.concat([]);
         if (newList.indexOf(Number(id)) !== -1) {
-          toastWarning('该星球已在联盟中');
+          toastWarning(t('The planet is already in the alliance'));
           return;
         }
         if (newList.indexOf(Number(choose)) === -1) {
@@ -78,11 +79,11 @@ const Planet = () => {
         }
         console.log(newList);
         await SetWorking(id, newList);
-        toastSuccess('加入成功');
+        toastSuccess(t('Join successfully'));
         navigate('/plant-league');
       } catch (e) {
         console.log(e);
-        toastError('加入失败');
+        toastError(t('Join failed'));
       }
     },
     [SetWorking, workingList, choose],
@@ -148,37 +149,37 @@ const Planet = () => {
             nav={[
               {
                 id: 0,
-                label: '全部',
+                label: t('All'),
                 path: `/star/planet?t=0&choose=${choose || ''}`,
               },
               {
                 id: 1,
-                label: '普通',
+                label: t('rarity-1'),
                 path: `/star/planet?t=1&choose=${choose || ''}`,
               },
               {
                 id: 2,
-                label: '良好',
+                label: t('rarity-2'),
                 path: `/star/planet?t=2&choose=${choose || ''}`,
               },
               {
                 id: 3,
-                label: '稀有',
+                label: t('rarity-3'),
                 path: `/star/planet?t=3&choose=${choose || ''}`,
               },
               {
                 id: 4,
-                label: '史诗',
+                label: t('rarity-4'),
                 path: `/star/planet?t=4&choose=${choose || ''}`,
               },
               {
                 id: 5,
-                label: '传说',
+                label: t('rarity-5'),
                 path: `/star/planet?t=5&choose=${choose || ''}`,
               },
               {
                 id: 6,
-                label: '神话',
+                label: t('rarity-6'),
                 path: `/star/planet?t=6&choose=${choose || ''}`,
               },
             ]}

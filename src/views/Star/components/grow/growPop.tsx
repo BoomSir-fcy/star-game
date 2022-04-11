@@ -5,6 +5,7 @@ import ModalWrapper from 'components/Modal';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Api } from 'apis';
 import { useToast } from 'contexts/ToastsContext';
+import { useTranslation } from 'contexts/Localization';
 
 import { TextList } from '../Modal';
 
@@ -17,6 +18,7 @@ export const GrowPop: React.FC<{
   onClose: () => void;
   callBack: () => void;
 }> = ({ visible, onClose, callBack }) => {
+  const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
   const { toastError, toastSuccess, toastWarning } = useToast();
 
@@ -26,18 +28,22 @@ export const GrowPop: React.FC<{
         planet_id: Number(parsedQs.id),
       });
       if (Api.isSuccess(res)) {
-        toastSuccess('操作成功');
+        toastSuccess(t('Successful operation'));
         console.log(res);
         callBack();
       }
     } catch (error) {
-      toastError('操作失败');
+      toastError(t('Operation failed'));
       console.log(error);
     }
   };
 
   return (
-    <ModalWrapper title='星球培育 ' visible={visible} setVisible={onClose}>
+    <ModalWrapper
+      title={t('Planet Cultivation')}
+      visible={visible}
+      setVisible={onClose}
+    >
       <Box padding='30px 25px'>
         <Flex>
           <ImgCard width={295} height={295}>
@@ -51,7 +57,7 @@ export const GrowPop: React.FC<{
             flexDirection='column'
           >
             <Box width='100%'>
-              <Text small>星球培育所需支付</Text>
+              <Text small>{t('Payment for Planet Cultivation')}</Text>
               <Box mb='15px'>
                 <TextList
                   imgWidth={50}
@@ -63,7 +69,9 @@ export const GrowPop: React.FC<{
               </Box>
             </Box>
             <Flex width='100%' justifyContent='center'>
-              <Button onClick={() => ToStrengthenPlante()}>确认培育</Button>
+              <Button onClick={() => ToStrengthenPlante()}>
+                {t('Confirm the cultivation')}
+              </Button>
             </Flex>
           </Flex>
         </Flex>

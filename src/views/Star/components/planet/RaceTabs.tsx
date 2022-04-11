@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Flex, Button } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
 
 const Container = styled(Flex)`
   width: 495px;
@@ -41,22 +42,24 @@ export const PlanetRaceTabs: React.FC<{
   current?: number;
   callBack: (id: number) => void;
 }> = ({ current, callBack }) => {
+  const { t } = useTranslation();
+
   const raceArr = [
     {
       id: 0,
-      label: '全部',
+      label: t('All'),
     },
     {
       id: 1,
-      label: '神族',
+      label: t('race-1'),
     },
     {
       id: 2,
-      label: '人族',
+      label: t('race-2'),
     },
     {
       id: 3,
-      label: '虫族',
+      label: t('race-3'),
     },
   ];
 

@@ -1,7 +1,9 @@
-import { Graphics, Sprite, Container } from 'pixi.js';
+import { Graphics, Sprite, Container, Point } from 'pixi.js';
 import config from '../config';
+import AxisPoint from './AxisPoint';
+import Chequer, { stateType } from './Chequer';
 
-class Combat {
+class Combat extends EventTarget {
 
   x = 0;
 
@@ -13,13 +15,13 @@ class Combat {
 
   moving = false;
 
-  attacking = true;
+  attacking = false;
 
   running = false;
 
-  hp = 800; // 总生命值
+  hp = 0; // 总生命值
 
-  activePh = 230; // 当前生命值
+  activePh = 0; // 当前生命值
 
   hpGraphics = new Graphics();
 
@@ -32,23 +34,27 @@ class Combat {
   bloodStartY = -20;
 
   bloodH = 10;
+
+  targetAxisPoint?: AxisPoint;
+
+  startPoint = new Point();
+
+  axisPoint?: AxisPoint;
+
+  speedX = 0;
+
+  speedY = 0;
+
+  moveTime = 500;
+
+  fps = 60;
   
   renderPh() {
-    // 每格表示XXX的血量
-    // 友军的血用绿色表示
-    // 敌军的血用红色表示
 
-    // this.hpGraphics.beginFill(0xFFFFFF);
     this.hpGraphics.lineStyle(1, 0xFFFFFF, 1);
     this.hpGraphics.drawRect( -(config.BLOOD_WIDTH / 2), this.bloodStartY, config.BLOOD_WIDTH, this.bloodH);
     this.hpGraphics.endFill();
 
-    // this.hpGraphics.beginFill(config.BLOOD_COLOR);
-    // this.hpGraphics.lineStyle(10, 0xFF0000, 0.8);
-    // this.hpGraphics.beginFill(0xFF700B, 1);
-    // this.hpGraphics.moveTo(-30, -20);
-    // this.hpGraphics.lineTo(30, -20);
-    // this.hpGraphics.endFill();
     this.container.addChild(this.hpGraphics);
 
     this.drawHp()
@@ -65,22 +71,57 @@ class Combat {
     this.hpGraphics.lineTo( this.activePh / this.hp * (config.BLOOD_WIDTH - 2) + lineStartX, lineY)
   }
 
-  move(x: number, y: number) {
+  /**
+   * 
+   * @param axisPoint 目标坐标
+   * @param moveTime 移动时间(ms)
+   */
+  moveTo(axisPoint: AxisPoint, moveTime?: number) {
+    const t = (moveTime || this.moveTime) / 1000 * 60;
+    
     this.moving = true;
-    this.targetX = x;
-    this.targetY = y;
-
+    this.targetAxisPoint = axisPoint;
+    axisPoint.chequer.setState(stateType.PREVIEW);
+    axisPoint.chequer.displayState(true);
+    if (this.axisPoint) {
+      this.speedX = (axisPoint.x - this.axisPoint.x) / t;
+      this.speedY = (axisPoint.y - this.axisPoint.y) / t;
+    }
   }
 
   handleMove() {
-    if (this.moving) {
-      if (this.targetX !== this.x) {
-        // move x
-      }
-      if (this.targetY !== this.y) {
-        // move y
+    if (this.moving && this.targetAxisPoint) {
+
+      this.container.position.x += this.speedX;
+      this.container.position.y += this.speedY;
+      // this.x += this.speedX;
+      // this.y += this.speedY;
+      if (Math.abs(this.container.position.y - (this.targetAxisPoint.y || 0)) <= 1 && Math.abs(this.container.position.x - (this.targetAxisPoint.x || 0)) <= 1) {
+        this.moving = false;
+        this.speedX = 0;
+        this.speedY = 0;
+        this.setPosition(this.targetAxisPoint);
+        this.dispatchEvent(new Event('moveEnd'));
       }
     }
+  }
+
+  
+  resetPosition() {
+    const { x, y } = this.startPoint;
+
+    this.container.position.set(x, y);
+  }
+
+  setPosition(point: AxisPoint) {
+    this.container.position.set(point.x, point.y);
+    this.startPoint.set(point.x, point.y);
+    this.axisPoint?.chequer?.setState(stateType.PREVIEW);
+
+    this.axisPoint = point;
+    this.axisPoint?.chequer?.setState(stateType.DISABLE);
+    this.axisPoint?.chequer?.displayState(false);
+
   }
 
   attack() {
@@ -95,8 +136,10 @@ class Combat {
   }
 
   run() {
-    this.running = true;
-    this.handleRun()
+    if (!this.running) {
+      this.running = true;
+      this.handleRun()
+    }
   }
 
   stop() {
