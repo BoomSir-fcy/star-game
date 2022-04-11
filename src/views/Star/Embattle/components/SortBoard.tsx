@@ -1,4 +1,10 @@
-import React, { forwardRef, useCallback, useMemo } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import { Box, Text, Image, BorderCard, BorderCardProps } from 'uikit';
 import { DndProvider } from 'react-dnd';
@@ -8,8 +14,14 @@ import AsanySortable, { SortableItemProps } from '@asany/sortable';
 import client from 'utils/client';
 import Soldier from 'game/core/Soldier';
 
+export interface SortSoldier {
+  id: string;
+  src: string | undefined;
+  soldier: Soldier;
+}
 interface SortBoardProps extends BorderCardProps {
-  soldiers?: Soldier[];
+  sortSoldiers: SortSoldier[];
+  setSortSoldiers: (soldiers: any) => void;
 }
 
 const defaultStyle = {
@@ -48,20 +60,10 @@ const SortItem = forwardRef((props: SortableItemProps<any>, ref: any) => {
   );
 });
 
-const SortBoard: React.FC<SortBoardProps> = ({ soldiers, ...props }) => {
+const SortBoard: React.FC<SortBoardProps> = ({ sortSoldiers, ...props }) => {
   const handleChange = useCallback((data, event) => {
     console.log(data, event);
   }, []);
-
-  const items = useMemo(() => {
-    return soldiers?.map(soldier => {
-      return {
-        id: `${soldier.options?.id || 0}`,
-        src: soldier.options?.textureRes,
-        soldier,
-      };
-    });
-  }, [soldiers]);
 
   return (
     <BorderCard
@@ -79,7 +81,7 @@ const SortBoard: React.FC<SortBoardProps> = ({ soldiers, ...props }) => {
           accept={['sortable-card']}
           tag='ul'
           style={{ listStyle: 'none', padding: 0 }}
-          items={items}
+          items={sortSoldiers}
           layout='grid'
           onChange={handleChange}
           itemRender={SortItem}

@@ -12,11 +12,10 @@ export enum BoardState {
   DEFAULT = '#717171',
   DISABLE = '#FF0000',
   ACTIVE = '#65AEE6',
-  PRE_ACTIVE = '#5EFF93'
+  PRE_ACTIVE = '#5EFF93',
 }
 
 export enum BoardPositionSelf {
   TOP_LEFT,
   BOTTOM_LEFT,
 }
-

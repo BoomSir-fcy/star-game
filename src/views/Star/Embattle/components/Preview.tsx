@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import RadarChart from 'game/core/RadarChart';
 import Soldier from 'game/core/Soldier';
+import { eventsType, SoldierCustomEvent } from 'game/core/event';
+import Game from 'game/core/Game';
 import {
   Box,
   Flex,
@@ -12,12 +14,19 @@ import {
   BorderCardProps,
   Divider,
   Card,
+  Button,
 } from 'uikit';
 import { Container } from './styled';
 import PreviewSoldier from './PreviewSoldier';
 
+// transform: translateX(252px);
+const BorderCardStyled = styled(BorderCard)<{ show?: boolean }>`
+  transition: 0.3s all;
+  transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(120%)')};
+`;
+
 interface PreviewProps extends BorderCardProps {
-  solider: Soldier | null;
+  game: Game;
 }
 
 const StatusItem = () => {
@@ -40,7 +49,39 @@ const StatusItem = () => {
     </Flex>
   );
 };
-const Preview: React.FC<PreviewProps> = ({ solider, ...props }) => {
+
+const Preview: React.FC<PreviewProps> = ({ game, ...props }) => {
+  const [activeSolider, setActiveSolider] = useState<null | Soldier>(null);
+
+  const handleAddActiveSoldier = useCallback((event: any) => {
+    const { soldier } = event.detail as { soldier: Soldier };
+    setActiveSolider(soldier);
+  }, []);
+  const handleRemoveActiveSoldier = useCallback(() => {
+    setActiveSolider(null);
+  }, []);
+
+  useEffect(() => {
+    game.addEventListener(
+      eventsType.ADD_ACTIVE_SOLDIER,
+      handleAddActiveSoldier,
+    );
+    game.addEventListener(
+      eventsType.REMOVE_ACTIVE_SOLDIER,
+      handleRemoveActiveSoldier,
+    );
+    return () => {
+      game.removeEventListener(
+        eventsType.ADD_ACTIVE_SOLDIER,
+        handleAddActiveSoldier,
+      );
+      game.addEventListener(
+        eventsType.REMOVE_ACTIVE_SOLDIER,
+        handleRemoveActiveSoldier,
+      );
+    };
+  }, [handleAddActiveSoldier, handleRemoveActiveSoldier, game]);
+
   const [radarChart] = useState(
     new RadarChart({
       width: 200,
@@ -84,57 +125,86 @@ const Preview: React.FC<PreviewProps> = ({ solider, ...props }) => {
     }
   }, [ref, radarChart]);
   return (
-    <BorderCard isActive width='600px' height='476px' {...props}>
-      <Flex
-        mt='22px'
-        padding='0 28px 0 36px'
-        alignItems='center'
-        justifyContent='space-between'
+    <Box
+      // width='608px'
+      // height='476px'
+      pr='8px'
+      position='relative'
+      overflow='hidden'
+      onClick={e => e.stopPropagation()}
+      {...props}
+    >
+      <BorderCardStyled
+        show={!!activeSolider}
+        isActive
+        width='600px'
+        height='476px'
       >
-        <Flex alignItems='center' flex={1}>
-          <Text bold shadow='primary'>
-            机甲1
-          </Text>
-          <Text mt='2px' ml='36px' fontSize='22px'>
-            LV 1
-          </Text>
-          <Image
-            width={30}
-            height={30}
-            src='/images/commons/icon/add_blood.png'
-          />
+        <Flex
+          mt='22px'
+          padding='0 28px 0 36px'
+          alignItems='center'
+          justifyContent='space-between'
+        >
+          <Flex alignItems='center' flex={1}>
+            <Text bold shadow='primary'>
+              机甲1
+            </Text>
+            <Text mt='2px' ml='36px' fontSize='22px'>
+              LV 1
+            </Text>
+            <Button
+              onClick={() => {
+                if (activeSolider) {
+                  game.removeSoldier(activeSolider);
+                }
+              }}
+              width={30}
+              height={30}
+              padding='0'
+              variant='text'
+            >
+              <Image
+                width={30}
+                height={30}
+                src='/images/commons/icon/add_blood.png'
+              />
+            </Button>
+            <Button width={30} height={30} padding='0' variant='text'>
+              <Image
+                width={30}
+                height={30}
+                src='/images/commons/icon/add_blood.png'
+              />
+            </Button>
+          </Flex>
           <Image
             width={30}
             height={30}
             src='/images/commons/icon/add_blood.png'
           />
         </Flex>
-        <Image
-          width={30}
-          height={30}
-          src='/images/commons/icon/add_blood.png'
-        />
-      </Flex>
-      <Flex>
-        <PreviewSoldier style={{ flexShrink: 0 }} sid={1} />
-        <Flex flexWrap='wrap' justifyContent='space-between'>
-          <StatusItem />
-          <StatusItem />
-          <StatusItem />
-          <StatusItem />
+        <Flex>
+          <PreviewSoldier style={{ flexShrink: 0 }} sid={1} />
+          <Flex flexWrap='wrap' justifyContent='space-between'>
+            <StatusItem />
+            <StatusItem />
+            <StatusItem />
+            <StatusItem />
+          </Flex>
         </Flex>
-      </Flex>
-      <Divider margin='8px auto 27px' width={532} />
-      <Flex>
-        <Box ml='22px' ref={ref} width={218} />
-        <Card overflow='auto' width={354} height={217} padding='16px'>
-          <Text fontSize='20' color='textTips'>
-            提高角色最终命中率，同时处于反击状态。每提升1级，
-            最终命中率提高3%，同时每提升1级，反击的为例提高。
-          </Text>
-        </Card>
-      </Flex>
-    </BorderCard>
+        <Divider margin='8px auto 27px' width={532} />
+        <Flex>
+          <Box ml='22px' ref={ref} width={218} />
+          <Card overflow='auto' width={354} height={217} padding='16px'>
+            <Text fontSize='20' color='textTips'>
+              提高角色最终命中率，同时处于反击状态。每提升1级，
+              最终命中率提高3%，同时每提升1级，反击的为例提高。
+            </Text>
+          </Card>
+        </Flex>
+      </BorderCardStyled>
+    </Box>
   );
 };
 

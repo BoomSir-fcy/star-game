@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 import { Box, Text, Flex } from 'uikit';
 import { Api } from 'apis';
 import {
@@ -12,7 +18,7 @@ import Game from 'game/core/Game';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import PreviewList from './components/PreviewList';
 import Preview from './components/Preview';
-import SortBoard from './components/SortBoard';
+import SortBoard, { SortSoldier } from './components/SortBoard';
 
 const game = new Game();
 
@@ -20,10 +26,20 @@ const Embattle = () => {
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.id);
 
+  // const race = Number(parsedQs.race) as Api.Game.race;
+
   const plantUnits = useStore(p => p.game.plantUnits);
 
+  const planetInfo = useStore(p => p.planet.planetInfo);
+
+  const info = useMemo(() => {
+    return planetInfo[planetId];
+  }, [planetInfo, planetId]);
+
+  const race = info?.race as Api.Game.race;
+
   useFetchGamePK();
-  useFetchUnitList();
+  useFetchUnitList(race);
   useFetchGamePlanetUnits(planetId);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -34,11 +50,28 @@ const Embattle = () => {
     }
   }, [ref]);
 
-  const [gameSoldiers, setGameSoldiers] = useState<Soldier[]>([]);
+  const [gameSoldiers, setGameSoldiers] = useState<SortSoldier[]>([]);
   const [activeSolider, setActiveSolider] = useState<null | Soldier>(null);
 
+  const setSortSoldiers = useCallback(
+    soldiers => {
+      const newSoldiers = soldiers?.map((soldier: Soldier, index: number) => {
+        return {
+          id: `${index}`,
+          src: soldier.options?.textureRes,
+          soldier,
+        };
+      });
+      if (newSoldiers) {
+        setGameSoldiers(newSoldiers);
+      }
+    },
+    [setGameSoldiers],
+  );
+
   const handleUpdate = useCallback(
-    async (soldiers: Soldier[]) => {
+    async (event: any) => {
+      const { soldiers } = event.detail as { soldiers: Soldier[] };
       const units = soldiers.map((item, index) => {
         return {
           pos: {
@@ -54,16 +87,27 @@ const Embattle = () => {
         units,
         planet_id: planetId,
       });
-      setGameSoldiers(game.soldiers);
+      setSortSoldiers(game.soldiers);
       console.log(res);
     },
-    [planetId, console],
+    [planetId, setSortSoldiers],
   );
 
+  const listenActiveSoldierChange = useCallback((event: any) => {
+    const { soldier } = event.detail as { soldier: Soldier };
+    setActiveSolider(soldier);
+  }, []);
+
   useEffect(() => {
-    game.addEventListener('updateSoldierPosition', (event: any) => {
-      handleUpdate(event.detail.soldiers);
-    });
+    game.addEventListener('updateSoldierPosition', handleUpdate);
+    game.addEventListener('activeSoldierChange', listenActiveSoldierChange);
+    return () => {
+      game.removeEventListener('updateSoldierPosition', handleUpdate);
+      game.removeEventListener(
+        'activeSoldierChange',
+        listenActiveSoldierChange,
+      );
+    };
   }, [handleUpdate]);
 
   const createSoldiers = useCallback((poses: Api.Game.UnitPlanetPos[]) => {
@@ -78,10 +122,10 @@ const Embattle = () => {
   useEffect(() => {
     if (plantUnits[planetId] && game.soldiers.length === 0) {
       createSoldiers(plantUnits[planetId]);
-      setGameSoldiers(game.soldiers);
+      setSortSoldiers(game.soldiers);
       console.log(game);
     }
-  }, [plantUnits, planetId, createSoldiers, setGameSoldiers]);
+  }, [plantUnits, planetId, createSoldiers, setSortSoldiers]);
 
   return (
     <Box position='relative'>
@@ -92,8 +136,11 @@ const Embattle = () => {
         top='0'
         left='824px'
       >
-        <Preview solider={activeSolider} />
-        <SortBoard soldiers={gameSoldiers} ml='8px' />
+        <Preview game={game} />
+        <SortBoard
+          sortSoldiers={gameSoldiers}
+          setSortSoldiers={setSortSoldiers}
+        />
       </Flex>
       <Box
         style={{ userSelect: 'none' }}
@@ -101,7 +148,7 @@ const Embattle = () => {
         top='490px'
         left='0'
       >
-        <PreviewList game={game} />
+        <PreviewList race={race} game={game} />
       </Box>
     </Box>
   );

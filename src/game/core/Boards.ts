@@ -3,19 +3,35 @@ import config from 'game/config';
 import Chequer, { stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
 
+interface BoardsProps {
+  width?: number;
+  height?: number;
+}
 class Boards extends EventTarget {
-  constructor() {
+  constructor(options?: BoardsProps) {
     super();
+    // this.aaa = 1;
+    const { width, height } = options || {};
+
+    this.width = width || config.WIDTH;
+    this.height = height || config.HEIGHT;
+
+    console.log(this.width, this.height, '===');
+    this.app = new Application({
+      width: this.width,
+      height: this.height,
+      resolution: config.resolution,
+      antialias: true,
+      backgroundAlpha: 0.5,
+    });
     this.init();
   }
 
-  app: Application = new Application({
-    width: config.WIDTH,
-    height: config.HEIGHT,
-    resolution: config.resolution,
-    antialias: true,
-    backgroundAlpha: 0.5,
-  });
+  app: Application;
+
+  width;
+
+  height;
 
   squares: Sprite[] = [];
 

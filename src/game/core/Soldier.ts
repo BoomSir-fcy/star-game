@@ -43,6 +43,8 @@ class Soldier extends Combat {
 
   attackId = '';
 
+  moved = false; // 是否发生移动
+
   options?: SoldierOptions;
 
   init(options: SoldierOptions) {
@@ -158,6 +160,10 @@ class Soldier extends Combat {
 
   setDragging(state: boolean) {
     this.dragging = state;
+  }
+
+  setMoved(moved: boolean) {
+    this.moved = moved;
   }
 
   onDragMove(event?: InteractionEvent) {

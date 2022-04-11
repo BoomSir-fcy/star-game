@@ -7,17 +7,25 @@ import AxisPoint from './AxisPoint';
 import Boards from './Boards';
 import { stateType } from './Chequer';
 import Soldier, { AttrSoldierOptions } from './Soldier';
+import {
+  getAddActiveSoliderEvent,
+  getRemoveActiveSoliderEvent,
+  getUpdateSoldierPosition,
+} from './event';
 
-interface GameProps {
+interface GameOptionsProps {
   height?: number;
+  width?: number;
 }
 class Game extends EventTarget {
-  constructor() {
+  constructor(options?: GameOptionsProps) {
     super();
+    const { width, height } = options || {};
+    this.boards = new Boards({ width, height });
     this.init();
   }
 
-  boards = new Boards();
+  boards;
 
   view = document.createElement('canvas');
 
@@ -32,6 +40,8 @@ class Game extends EventTarget {
   private enableDrag = false;
 
   activeSolider?: Soldier;
+
+  activeSoliderFlag?: boolean; // 表示事件触发源未activeSolider
 
   app: any;
 
@@ -67,35 +77,65 @@ class Game extends EventTarget {
 
     // this.addDragon();
     // this.addSpine();
+    this.addEventListenerOfWindow();
+  }
+
+  addEventListenerOfWindow() {
+    window.addEventListener('click', () => {
+      if (this.activeSoliderFlag) {
+        this.activeSoliderFlag = false;
+        return;
+      }
+      this.activeSolider?.changeState(stateType.DISABLE, false);
+      this.dispatchEvent(getRemoveActiveSoliderEvent());
+    });
   }
 
   addSoldier(soldier: Soldier) {
-    console.log(soldier, '=========soldier');
     this.soldiers.push(soldier);
     this.boards.container.addChild(soldier.container);
     soldier.container
       .on('pointerdown', () => {
         this.onDragStarSoldier();
+        soldier.setMoved(false);
+      })
+      .on('pointermove', () => {
+        soldier.setMoved(true);
       })
       .on('pointerup', event => {
         const res = this.onDragEndSoldier(event, soldier);
         if (res) {
-          this.dispatchEvent(
-            new CustomEvent('updateSoldierPosition', {
-              detail: { event, soldiers: this.soldiers },
-            }),
-          );
+          this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
         }
-      })
-      .on('click', e => {
+        this.activeSoliderFlag = true;
         this.activeSolider = soldier;
         soldier.changeState(stateType.ACTIVE, true);
+        this.dispatchEvent(getAddActiveSoliderEvent(soldier));
+        // this.activeSoliderFlag = true;
+        // if (!soldier.moved) {
+        //   this.activeSolider = soldier;
+        //   soldier.changeState(stateType.ACTIVE, true);
+        // }
+      })
+      .on('click', (e: PIXI.InteractionEvent) => {
+        this.activeSoliderFlag = true;
+        // this.activeSolider = soldier;
+        // soldier.changeState(stateType.ACTIVE, true);
+        // this.dispatchEvent(getAddActiveSoliderEvent(soldier));
       });
+  }
+
+  removeActiveSolider() {
+    if (this.activeSolider) {
+      this.activeSolider.changeState(stateType.DISABLE, false);
+      delete this.activeSolider;
+    }
   }
 
   removeSoldier(soldier: Soldier) {
     this.soldiers = this.soldiers.filter(item => item !== soldier);
     this.boards.container.removeChild(soldier.container);
+    this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
   }
 
   setEnableDrag(state: boolean) {

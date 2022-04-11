@@ -28,14 +28,14 @@ const sleep = (handle: any, delay: number) => {
 interface GamePKProps {
   planetId: number;
 }
-const game = new Game();
+const game = new Game({ width: 900, height: 900 });
 
 const GamePK: React.FC<GamePKProps> = ({ planetId }) => {
   const plantUnits = useStore(p => p.game.plantUnits);
   const PKInfo = useStore(p => p.game.PKInfo);
 
   useFetchGamePK();
-  useFetchUnitList();
+  // useFetchUnitList();
   useFetchGamePlanetUnits(planetId);
 
   const ref = useRef<HTMLDivElement>(null);
