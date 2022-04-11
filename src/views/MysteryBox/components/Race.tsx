@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { RaceAvatar } from 'components';
 import { Image, Text, Flex, BoxProps } from 'uikit';
 import { RaceTypeColor } from 'uikit/theme/colors';
-import { Races } from 'uikit/theme/types';
+import { Races, RaceType } from 'uikit/theme/types';
 import { useTranslation } from 'contexts/Localization';
 import { RaceCardStyled, LabelText } from './styled';
 
@@ -17,7 +17,15 @@ const Race: React.FC<RaceProps> = ({ info, ...props }) => {
   return (
     <RaceCardStyled mt='13px'>
       <Flex width='100%'>
-        <RaceAvatar race='zerg' />
+        <RaceAvatar
+          race={
+            race === RaceType.PROTOSS
+              ? 'protoss'
+              : race === RaceType.HUMAN
+              ? 'human'
+              : 'zerg'
+          }
+        />
         <Flex ml='13px' flexDirection='column'>
           <Flex>
             <LabelText>星球种族</LabelText>

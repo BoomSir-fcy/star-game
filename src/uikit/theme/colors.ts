@@ -37,8 +37,8 @@ export const QualityColor = {
 
 export const RaceTypeColor = {
   [RaceType.PROTOSS]: '#DF7DFD',
-  [RaceType.HUMAN]: '#3dcfff',
-  [RaceType.ZERG]: '#DF7DFD',
+  [RaceType.HUMAN]: '#3DCFFF',
+  [RaceType.ZERG]: '#8AC001',
 };
 
 export const lightColors: Colors = {

@@ -48,7 +48,11 @@ declare namespace Api {
       hp: number; // hp加成
       product: number; // 产能加成
       build: number; // 建筑成本
-      is_available: boolean;
+      is_available: boolean; // 是否处于星球联盟 0不属于 1属于
+      max_stone: number; // 最大储存矿石
+      max_energy: number; // 最大储存能量
+      max_population: number; // 最大储存人口
+      status: number; // 1星球升级 2星球强化 3建筑升级 4建筑恢复耐久
     }
   }
 }
