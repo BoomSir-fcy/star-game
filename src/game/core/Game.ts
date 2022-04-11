@@ -192,7 +192,7 @@ class Game extends EventTarget {
   }
 
   onAssetsLoaded(res: any) {
-    const factory = window.dragonBones.PixiFactory.factory;
+    const { factory } = window.dragonBones.PixiFactory;
 
     factory.parseDragonBonesData(res.skeleton.data);
     factory.parseTextureAtlasData(
