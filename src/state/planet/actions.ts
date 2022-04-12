@@ -6,4 +6,8 @@ export const setActivePlanet = createAction<Api.Planet.PlanetInfo>(
 
 export const setActiveMaterialMap = createAction<{
   [x: number]: Api.Planet.PlanetInfo | null;
-}>('planet/setActiveMaterialMap');
+} | null>('planet/setActiveMaterialMap');
+
+export const setUpgradePlanetId = createAction<number | null>(
+  'planet/setUpgradePlanetId',
+);

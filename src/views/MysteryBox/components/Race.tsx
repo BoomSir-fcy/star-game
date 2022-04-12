@@ -28,17 +28,25 @@ const Race: React.FC<RaceProps> = ({ info, ...props }) => {
         />
         <Flex ml='13px' flexDirection='column'>
           <Flex>
-            <LabelText>星球种族</LabelText>
-
-            {/* TODO: 种族类型，相关描述待完成 */}
+            <LabelText>{t('Planet race')}</LabelText>
             <Text color={RaceTypeColor[race]} ml='17px' fontSize='22px' bold>
               {race ? t(`race-${race}`) : ''}
             </Text>
           </Flex>
-          <LabelText>种族特色</LabelText>
-          <LabelText>1.虫族经营类建筑的采集能力在三大种族中处于中等</LabelText>
-          <LabelText>2.虫族攻击类建筑手最短，但伤害最BT。没有AOE伤害</LabelText>
-          <LabelText>3.虫族攻击建筑占地面积最小</LabelText>
+          <LabelText>{t('Ethnicity')}</LabelText>
+          <LabelText>
+            {t(
+              '1.The collection ability of Zerg management buildings is in the middle among the three major races',
+            )}
+          </LabelText>
+          <LabelText>
+            {t(
+              '2. The Zerg attack class has the shortest hand, but the most damage BT. No AOE damage',
+            )}
+          </LabelText>
+          <LabelText>
+            {t('3. The Zerg attack building occupies the smallest area')}
+          </LabelText>
         </Flex>
       </Flex>
     </RaceCardStyled>

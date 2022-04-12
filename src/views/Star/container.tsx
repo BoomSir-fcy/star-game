@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Box, Flex, BackButton, RefreshButton } from 'uikit';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useTranslation } from 'contexts/Localization';
 
 import Nav from 'components/Nav';
 import Layout from 'components/Layout';
@@ -19,6 +20,7 @@ const Star: React.FC<{
 }> = ({ children }) => {
   const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
+  const { t } = useTranslation();
   const id = Number(parsedQs.id);
 
   React.useEffect(() => {
@@ -43,27 +45,27 @@ const Star: React.FC<{
           nav={[
             {
               id: 'build',
-              label: '星球建造',
+              label: `${t('planetMenuBuilding')}`,
               path: `/star?id=${parsedQs.id}`,
             },
             {
               id: 'upgrade',
-              label: '星球升级',
+              label: `${t('planetMenuUpgrade')}`,
               path: `/star/upgrade?id=${parsedQs.id}`,
             },
             {
               id: 'grow',
-              label: '星球培育',
+              label: `${t('planetMenuGrow')}`,
               path: `/star/grow?id=${parsedQs.id}`,
             },
             {
               id: 'embattle',
-              label: '战斗布阵',
+              label: `${t('planetMenuEmbattle')}`,
               path: `/star/embattle?id=${parsedQs.id}`,
             },
             {
               id: 'search',
-              label: '掠夺信息',
+              label: `${t('planetMenuLooting')}`,
               path: `/star/search?id=${parsedQs.id}`,
             },
           ]}

@@ -32,7 +32,7 @@ const Avatar = () => {
       <Box
         onClick={() => {
           setPopType(1);
-          setPopTitle(t('指挥官'));
+          setPopTitle(t('Commander'));
           setVisible(true);
         }}
       >
@@ -51,11 +51,11 @@ const Avatar = () => {
         <ButtonStyled
           onClick={() => {
             setPopType(2);
-            setPopTitle(t('邀请返利'));
+            setPopTitle(t('Invitation'));
             setVisible(true);
           }}
         >
-          邀请返利
+          {t('Invitation')}
         </ButtonStyled>
       </Box>
       <Modal title={PopTitle} visible={visible} setVisible={setVisible}>

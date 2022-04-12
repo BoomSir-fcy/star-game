@@ -5,9 +5,12 @@ import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import { MysteryBoxCom, mysteryBoxQualities } from 'components/MysteryBoxCom';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
+import { useTranslation } from 'contexts/Localization';
 
 const MysteryBox = () => {
   useFetchBoxView();
+
+  const { t } = useTranslation();
   return (
     <Layout>
       <Dashboard>
@@ -17,7 +20,9 @@ const MysteryBox = () => {
               width='100%'
               textAlign='center'
               fontSize='22px'
-              to='您还没有一个星球，请先获得一个星球开始星球之旅'
+              to={t(
+                "You don't have a planet yet, please get a planet first to start your planetary journey",
+              )}
               shadow='primary'
             />
           </Flex>

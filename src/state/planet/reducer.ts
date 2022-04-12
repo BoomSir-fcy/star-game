@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { PlanetState } from 'state/types';
-import { setActiveMaterialMap, setActivePlanet } from './actions';
+import {
+  setActiveMaterialMap,
+  setActivePlanet,
+  setUpgradePlanetId,
+} from './actions';
 
 import { fetchMePlanetAsync, fetchPlanetInfoAsync } from './fetchers';
 
@@ -8,6 +12,7 @@ export const initialState: PlanetState = {
   mePlanet: [],
   planetInfo: {},
   activeMaterialMap: {},
+  upgradePlanetId: null,
   activePlanet: {} as Api.Planet.PlanetInfo,
 };
 
@@ -32,12 +37,19 @@ export const planet = createSlice({
         state.planetInfo = mapObject;
       })
       .addCase(setActiveMaterialMap, (state, { payload }) => {
-        const map = { ...state.activeMaterialMap, ...payload };
-        // 删除value为null的key
-        Object.keys(map).forEach(
-          key => map[Number(key)] === null && delete map[Number(key)],
-        );
-        state.activeMaterialMap = map;
+        if (payload === null) {
+          state.activeMaterialMap = {};
+        } else {
+          const map = { ...state.activeMaterialMap, ...payload };
+          // 删除value为null的key
+          Object.keys(map).forEach(
+            key => map[Number(key)] === null && delete map[Number(key)],
+          );
+          state.activeMaterialMap = map;
+        }
+      })
+      .addCase(setUpgradePlanetId, (state, { payload }) => {
+        state.upgradePlanetId = payload;
       });
   },
 });

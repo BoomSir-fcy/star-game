@@ -1,19 +1,19 @@
-import { qualities } from './types'
+import { qualities } from './types';
 
 export const mysteryConfig = {
   [qualities.ORDINARY]: {
-    label: '普通',
-    tips: '普通、良好、稀有星球',
+    label: 'Ordinary',
+    tips: 'Common, Good, Rare Planets',
     srcName: 'ordinary',
   },
   [qualities.ADVANCED]: {
-    label: '高级',
-    tips: '良好、稀有、史诗星球',
+    label: 'Advanced',
+    tips: 'Good, Rare, Epic Planets',
     srcName: 'advanced',
   },
   [qualities.SUPER]: {
-    label: '超级',
-    tips: '史诗、传说、神话星球',
+    label: 'Super',
+    tips: 'Epic, Legendary, Mythical Planet',
     srcName: 'super',
   },
-}
+};
