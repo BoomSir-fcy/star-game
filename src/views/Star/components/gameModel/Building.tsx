@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Flex, Box, Text } from 'uikit';
 import { useToast } from 'contexts/ToastsContext';
+import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
@@ -34,6 +35,7 @@ export const Building: React.FC<{
   onClick?: () => void;
 }> = React.memo(({ planet_id, itemData, index, src, level }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { setRepairQuick } = useBuildingRepair();
   const { setBuildingQuick } = useBuildingOperate();
   const { toastSuccess, toastError } = useToast();
@@ -87,7 +89,7 @@ export const Building: React.FC<{
       });
       if (Api.isSuccess(res)) {
         dispatch(fetchPlanetBuildingsAsync(planet_id));
-        toastSuccess('快速修复成功');
+        toastSuccess(t('planetQuickFixSuccessful'));
       } else {
         toastError(res.message);
       }
@@ -105,7 +107,7 @@ export const Building: React.FC<{
       });
       if (Api.isSuccess(res)) {
         dispatch(fetchPlanetBuildingsAsync(planet_id));
-        toastSuccess('快速升级成功');
+        toastSuccess(t('planetQuickUpgradeSuccessfully'));
       } else {
         toastError(res.message);
       }

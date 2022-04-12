@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Input, Button, Text, Image } from 'uikit';
 import ModalWrapper from 'components/Modal';
+import { useTranslation } from 'contexts/Localization';
+
 import { TextList } from './TextList';
 import { ThingaddBlood, GameThing, ThingRepair } from '..';
 
@@ -60,10 +62,15 @@ export const ThingUpgradesModal: React.FC<{
   onChange: (value: any) => void;
   onClose: () => void;
 }> = ({ visible, planet_id, itemData, upgrade, onChange, onClose }) => {
+  const { t } = useTranslation();
   const upgradDiff = upgrade?.estimate_building_detail?.building || {};
 
   return (
-    <ModalWrapper title='建筑升级' visible={visible} setVisible={onClose}>
+    <ModalWrapper
+      title={t('planetModalBuildingUpgrades')}
+      visible={visible}
+      setVisible={onClose}
+    >
       <Box padding='30px 25px'>
         <Flex alignItems='center'>
           <Text shadow='primary'>{itemData?.propterty?.name_en}</Text>
@@ -78,7 +85,7 @@ export const ThingUpgradesModal: React.FC<{
                 width={50}
                 height={50}
                 src='/images/commons/star/HP.png'
-                title='HP值'
+                title={t('planetHPValue')}
                 value={itemData?.propterty?.hp}
                 extValue={upgradDiff?.propterty?.hp - itemData?.propterty?.hp}
               />
@@ -89,7 +96,7 @@ export const ThingUpgradesModal: React.FC<{
               width={50}
               height={50}
               src='/images/commons/star/durability.png'
-              title='耐久度'
+              title={t('planetDurability')}
               value={`${itemData?.propterty?.per_durability}/${itemData?.propterty?.max_durability}`}
               extValue={
                 upgradDiff?.propterty?.per_durability -
@@ -117,7 +124,7 @@ export const ThingUpgradesModal: React.FC<{
               width={50}
               height={50}
               src='/images/commons/icon/energy.png'
-              title='能量消耗'
+              title={t('planetEnergyConsumption')}
               value={`${itemData?.propterty?.per_cost_energy}/h`}
               extValue={
                 upgradDiff?.propterty?.per_cost_energy -
@@ -132,7 +139,7 @@ export const ThingUpgradesModal: React.FC<{
                   width={50}
                   height={50}
                   src='/images/commons/star/defense.png'
-                  title='防御值'
+                  title={t('planetDefenseValue')}
                   value={itemData?.propterty?.defence}
                   extValue={
                     upgradDiff?.propterty?.defence -
@@ -146,7 +153,7 @@ export const ThingUpgradesModal: React.FC<{
                   width={50}
                   height={50}
                   src='/images/commons/star/attackValue.png'
-                  title='攻击值'
+                  title={t('planetAttackValue')}
                   value={itemData?.propterty?.attack}
                   extValue={
                     upgradDiff?.propterty?.attack - itemData?.propterty?.attack
@@ -160,7 +167,7 @@ export const ThingUpgradesModal: React.FC<{
               width={50}
               height={50}
               src='/images/commons/icon/population.png'
-              title='人口消耗'
+              title={t('planetPopulationConsumption')}
               value={`${itemData?.propterty?.per_cost_population}/h`}
               extValue={
                 upgradDiff?.propterty?.per_cost_population -
@@ -170,7 +177,7 @@ export const ThingUpgradesModal: React.FC<{
           </Item>
         </Flex>
         <ConfirmBox>
-          <Text small>建筑升级所需支付</Text>
+          <Text small>{t('planetModalPaymentBuildingUpgrades')}</Text>
           <Flex
             mt='14px'
             flex={1}
@@ -185,7 +192,7 @@ export const ThingUpgradesModal: React.FC<{
               unit='DSG'
             />
             <Button ml='34px' onClick={onChange}>
-              确认升级
+              {t('Confirm upgrade')}
             </Button>
           </Flex>
         </ConfirmBox>

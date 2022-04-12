@@ -161,5 +161,13 @@
   "planetModalRepairAllDurabilityFee": "Repair All Durability Fees",
   "planetPopulation": "Population",
   "planetConfirmRepair": "Confirm Repair",
+  "planetQuickFixSuccessful": "QuickFix Successful",
+  "planetQuickUpgradeSuccessfully": "Quick Upgrade Successfully",
+  "planetModalDestroyBuilding": "Destroy Buildings",
+  "planetDetailsTypeEffect": "Effect:",
+  "planetDetailsType1": "Stores all resources produced by planetary buildings",
+  "planetConfirmDestroy": "Confirm Destroy",
+  "planetModalBuildingUpgrades": "Building Upgrades",
+  "planetModalPaymentBuildingUpgrades": "Payments for building upgrades",
   "******end*****@kksam********": "@kksam翻译结束"
 }

@@ -76,6 +76,8 @@ export const GameInfo: React.FC<{
   const { upgrade } = useBuildingUpgrade();
   const { destory, upgrade: upgradeBuilding } = useBuildingOperate();
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
+  const planetInfo = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
+
   const [state, setState] = React.useState({
     destoryVisible: false,
     upgradesVisible: false,
@@ -84,8 +86,6 @@ export const GameInfo: React.FC<{
   const itemData =
     selfBuilding?.find((row: any) => row?.building?._id === building_id)
       ?.building || currentBuild;
-
-  console.log(itemData);
 
   React.useEffect(() => {
     if (itemData?._id) {
@@ -322,7 +322,10 @@ export const GameInfo: React.FC<{
                 {itemData?.propterty?.levelEnergy <
                   state.upgrade?.max_building_level && (
                   <ActionButton
-                    disabled={itemData?.isactive}
+                    disabled={
+                      itemData?.propterty?.levelEnergy - planetInfo?.level >=
+                        1 || itemData?.isactive
+                    }
                     onClick={() =>
                       setState({ ...state, upgradesVisible: true })
                     }

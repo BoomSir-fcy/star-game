@@ -161,5 +161,13 @@
   "planetModalRepairAllDurabilityFee": "修复所有耐久需支付",
   "planetPopulation": "人口",
   "planetConfirmRepair": "确认修复",
+  "planetQuickFixSuccessful": "快速修复成功",
+  "planetQuickUpgradeSuccessfully": "快速升级成功",
+  "planetModalDestroyBuilding": "摧毁建筑",
+  "planetDetailsTypeEffect": " 作用：",
+  "planetDetailsType1": "储存星球建筑产出的所有资源",
+  "planetConfirmDestroy": "确认摧毁",
+  "planetModalBuildingUpgrades": "建筑升级",
+  "planetModalPaymentBuildingUpgrades": "建筑升级所需支付",
   "******end*****@kksam********": "@kksam翻译结束"
 }
