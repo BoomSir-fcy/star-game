@@ -7,7 +7,7 @@ export const fetchMePlanetAsync = createAsyncThunk(
   async (params: Api.Planet.PageParams) => {
     const response = await Api.PlanetApi.getMePlanet(params);
     if (Api.isSuccess(response)) {
-      return response.data.Data;
+      return response.data.Data || [];
     }
     return [];
   },

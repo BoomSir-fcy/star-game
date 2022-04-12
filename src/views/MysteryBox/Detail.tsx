@@ -15,6 +15,7 @@ import { useStore } from 'state';
 import { useDispatch } from 'react-redux';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { useTranslation } from 'contexts/Localization';
 import Attributes from './components/Attributes';
 import Extra from './components/Extra';
 import Race from './components/Race';
@@ -45,6 +46,7 @@ const MysteryBoxDetail = () => {
   const navigate = useNavigate();
   const paramsQs = useParsedQueryString();
   const id = Number(paramsQs.i);
+  const { t } = useTranslation();
 
   const planetInfo = useStore(p => p.planet.planetInfo);
 
@@ -57,7 +59,7 @@ const MysteryBoxDetail = () => {
     if (!info) {
       setTimeout(() => {
         dispatch(fetchPlanetInfoAsync([id]));
-      }, 5000);
+      }, 10000);
     }
   }, [id, info]);
 
@@ -98,7 +100,7 @@ const MysteryBoxDetail = () => {
                     navigate(`/star?id=${id}`);
                   }}
                 >
-                  管理星球
+                  {t('Manage the planet')}
                 </Button>
               </Flex>
             </Extra>

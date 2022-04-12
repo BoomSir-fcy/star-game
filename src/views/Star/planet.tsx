@@ -53,6 +53,7 @@ const Planet = () => {
     token: '',
     race: 0,
   });
+  const [pending, setpending] = useState(false);
   const [StarList, setStarList] = useState<Api.Planet.PlanetInfo[]>([]);
   const mePlanet = useStore(p => p.planet.mePlanet);
   const workingList = useStore(p => p.alliance.workingPlanet);
@@ -60,6 +61,10 @@ const Planet = () => {
 
   const ToSetWorking = useCallback(
     async (id: number) => {
+      if (pending) {
+        return;
+      }
+      setpending(true);
       try {
         let newList = workingList.concat([]);
         if (newList.indexOf(Number(id)) !== -1) {
@@ -84,9 +89,11 @@ const Planet = () => {
       } catch (e) {
         console.log(e);
         toastError(t('Join failed'));
+      } finally {
+        setpending(false);
       }
     },
-    [SetWorking, workingList, choose],
+    [SetWorking, workingList, choose, pending],
   );
 
   const init = useCallback(() => {
@@ -105,7 +112,7 @@ const Planet = () => {
   }, [dispatch, state, parsedQs.t, choose]);
 
   useEffect(() => {
-    if (choose) {
+    if (choose && mePlanet.length) {
       const list = mePlanet.filter(item => {
         return item.id !== Number(choose);
       });
