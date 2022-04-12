@@ -9,6 +9,7 @@ import StarCom from 'components/StarCom';
 import Modal from 'components/Modal';
 import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
 import { UserBalanceView } from 'state/types';
+import { useTranslation } from 'contexts/Localization';
 import ButtonGroup, { ButtonGroupProps } from './ButtonGroup';
 
 const ButtonLeft = styled(Button)`
@@ -33,6 +34,8 @@ interface InfoProps extends ButtonGroupProps {
 }
 
 const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children, onTodo }) => {
+  const { t } = useTranslation();
+
   const [visible, setVisible] = useState(false);
   const [ActiveToken, setActiveToken] = useState<UserBalanceView>();
 
@@ -108,7 +111,7 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children, onTodo }) => {
                 <Flex alignItems='center' width='100%'>
                   <StarCom variant='none' ml='16px' />
                   <Box>
-                    <Text textAlign='left'>星球数</Text>
+                    <Text textAlign='left'>{t('Planets')}</Text>
                     <Text textAlign='left'>{Product.planet_num}</Text>
                   </Box>
                 </Flex>
@@ -127,9 +130,11 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children, onTodo }) => {
                 </Box>
                 <Box ml='8px'>
                   <Text textAlign='left'>
-                    总产能: {Product.stone_product}/s
+                    {t('Total capacity')}: {Product.stone_product}/s
                   </Text>
-                  <Text textAlign='left'>总矿石: {Product.stone}</Text>
+                  <Text textAlign='left'>
+                    {t('Total ore')}: {Product.stone}
+                  </Text>
                 </Box>
               </Flex>
             </ButtonTag2>
@@ -144,9 +149,11 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children, onTodo }) => {
                 </Box>
                 <Box ml='8px'>
                   <Text textAlign='left'>
-                    总产能: {Product.population_product}/s
+                    {t('Total capacity')}: {Product.population_product}/s
                   </Text>
-                  <Text textAlign='left'>总人口: {Product.population}</Text>
+                  <Text textAlign='left'>
+                    {t('Total population')}: {Product.population}
+                  </Text>
                 </Box>
               </Flex>
             </ButtonTag2>
@@ -162,9 +169,11 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children, onTodo }) => {
                   </Box>
                   <Box ml='8px'>
                     <Text textAlign='left'>
-                      总产能: {Product.energy_product}/s
+                      {t('Total capacity')}: {Product.energy_product}/s
                     </Text>
-                    <Text textAlign='left'>总能量: {Product.energy}</Text>
+                    <Text textAlign='left'>
+                      {t('Total energy')}: {Product.energy}
+                    </Text>
                   </Box>
                 </Flex>
               </ButtonTag2>
