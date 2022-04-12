@@ -29,7 +29,7 @@ const TopBox = styled(Box)`
 const Grow: React.FC = () => {
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
-  const { toastError, toastSuccess, toastWarning } = useToast();
+  const { toastError, toastSuccess, toastWarning, toastInfo } = useToast();
   const [visible, setVisible] = useState(false);
   const [nowPlante, setNowPlante] = useState<StrengthenPlanetInfo>();
   const [estimatePlante, setEstimatePlante] = useState<StrengthenPlanetInfo>();
@@ -38,6 +38,28 @@ const Grow: React.FC = () => {
   });
   let timer = null as any;
 
+  const ToStrengthenSpeedUp = async () => {
+    try {
+      const res = await Api.PlanetApi.StrengthenSpeedUp({
+        planet_id: Number(parsedQs.id),
+      });
+      if (Api.isSuccess(res)) {
+        setState({
+          ...state,
+          time: 0,
+        });
+        if (res?.data?.success) {
+          toastSuccess(t('Nurture success'));
+        } else {
+          toastError(t('Nurture failure'));
+        }
+      }
+    } catch (error) {
+      toastError(t('Fail to accelerate'));
+      console.log(error);
+    }
+  };
+
   const getStrengthenResult = async () => {
     try {
       const res = await Api.PlanetApi.StrengthenResult({
@@ -45,6 +67,13 @@ const Grow: React.FC = () => {
       });
       if (Api.isSuccess(res)) {
         const { data } = res;
+        if (data.strengthen_is_end) {
+          if (data.strengthen_is_success) {
+            toastSuccess(t('Nurture success'));
+          } else {
+            toastInfo(t('Nurture failure'));
+          }
+        }
         setState({
           ...state,
           time: data.strengthen_end_time,
@@ -53,6 +82,7 @@ const Grow: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
+    getPlanetStrengthen();
   };
 
   const getPlanetStrengthen = async () => {
@@ -105,12 +135,11 @@ const Grow: React.FC = () => {
     };
   }, [state]);
 
-  useEffect(() => {
-    if (parsedQs.id) {
-      getPlanetStrengthen();
-      getStrengthenResult();
-    }
-  }, [parsedQs.id]);
+  // useEffect(() => {
+  //   if (parsedQs.id) {
+  //     getStrengthenResult();
+  //   }
+  // }, [parsedQs.id]);
 
   return (
     <Box>
@@ -125,7 +154,7 @@ const Grow: React.FC = () => {
           <Flex>
             <Box>
               <TopBox>
-                <ScoringPanel count={Number(nowPlante?.strengthenLevel)} />
+                <ScoringPanel count={Number(nowPlante?.strengthenLevel) || 0} />
               </TopBox>
               <InfoPlane
                 nowPlante={nowPlante}
@@ -138,6 +167,10 @@ const Grow: React.FC = () => {
                   onClick={() => {
                     if (state.time === 0) {
                       setVisible(true);
+                      return;
+                    }
+                    if (state.time > 0) {
+                      ToStrengthenSpeedUp();
                     }
                   }}
                 >

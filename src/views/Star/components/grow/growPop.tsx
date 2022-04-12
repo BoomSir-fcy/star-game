@@ -29,8 +29,12 @@ export const GrowPop: React.FC<{
       });
       if (Api.isSuccess(res)) {
         toastSuccess(t('Successful operation'));
-        console.log(res);
         callBack();
+        onClose();
+      }
+      if (res.code === 200017) {
+        toastError(t('Planet already has max strengthen level'));
+        onClose();
       }
     } catch (error) {
       toastError(t('Operation failed'));

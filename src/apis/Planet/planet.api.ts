@@ -55,4 +55,10 @@ export class PlanetApi extends Http {
     const res = await this.get('planet/can_work', params);
     return res;
   }
+
+  // 加速星球强化
+  async StrengthenSpeedUp(params: Api.Planet.StrengthenPost) {
+    const res = await this.post('planet/Strengthen_speed_up', params);
+    return res;
+  }
 }
