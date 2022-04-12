@@ -50,8 +50,8 @@ const Stars = () => {
   }, [galaxyStarList]);
 
   useEffect(() => {
-    if (!currentStarPeriod.id) dispatch(setCurrentStarPeriod(navList[0]));
-    if (currentStarPeriod.id)
+    if (!currentStarPeriod?.id) dispatch(setCurrentStarPeriod(navList[0]));
+    if (currentStarPeriod?.id)
       dispatch(
         setCurrentStarPeriod(navList.find(v => v.id === currentStarPeriod.id)),
       );
