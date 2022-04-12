@@ -7,6 +7,7 @@ import { useStore, storeAction } from 'state';
 import { Api } from 'apis';
 
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
+import { useTranslation } from 'contexts/Localization';
 
 import { useBuildingUpgrade, useBuildingOperate } from './hooks';
 
@@ -70,10 +71,13 @@ export const GameInfo: React.FC<{
   currentBuild: Api.Building.Building;
 }> = React.memo(({ building_id, planet_id, currentBuild }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
   const { upgrade } = useBuildingUpgrade();
   const { destory, upgrade: upgradeBuilding } = useBuildingOperate();
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
+  const planetInfo = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
+
   const [state, setState] = React.useState({
     destoryVisible: false,
     upgradesVisible: false,
@@ -104,7 +108,7 @@ export const GameInfo: React.FC<{
       });
       if (Api.isSuccess(res)) {
         getSelfBuilding();
-        toastSuccess('销毁成功');
+        toastSuccess(t('planetDestroyedSuccessfully'));
         dispatch(storeAction.destoryBuildingVisibleModal(false));
       } else {
         toastError(res.message);
@@ -123,7 +127,7 @@ export const GameInfo: React.FC<{
       });
       if (Api.isSuccess(res)) {
         getSelfBuilding();
-        toastSuccess('建筑升级中');
+        toastSuccess(t('planetBuildingBeingUpgraded'));
         setState({ ...state, upgradesVisible: false });
       } else {
         toastError(res.message);
@@ -168,7 +172,7 @@ export const GameInfo: React.FC<{
                     <Box>
                       <Flex alignItems='center'>
                         <Text color='textSubtle' small>
-                          HP值
+                          {t('planetHPValue')}
                         </Text>
                         {/* <ThingaddBlood /> */}
                       </Flex>
@@ -186,7 +190,7 @@ export const GameInfo: React.FC<{
                     <Box>
                       <Flex alignItems='center'>
                         <Text color='textSubtle' small>
-                          耐久度
+                          {t('planetDurability')}
                         </Text>
                         {itemData?.propterty?.per_durability !==
                           itemData?.propterty?.max_durability && (
@@ -214,7 +218,7 @@ export const GameInfo: React.FC<{
                     <Box>
                       <Flex>
                         <Text color='textSubtle' small>
-                          防御值
+                          {t('planetDefenseValue')}
                         </Text>
                       </Flex>
                       <Text small>{itemData?.propterty?.defence}</Text>
@@ -231,7 +235,7 @@ export const GameInfo: React.FC<{
                     <Box>
                       <Flex>
                         <Text color='textSubtle' small>
-                          攻击值
+                          {t('planetAttackValue')}
                         </Text>
                       </Flex>
                       <Text small>{itemData?.propterty?.attack}</Text>
@@ -249,7 +253,7 @@ export const GameInfo: React.FC<{
                     </Box>
                     <Flex flexDirection='column' justifyContent='center'>
                       <Text color='textTips' small>
-                        能量消耗
+                        {t('planetEnergyConsumption')}
                       </Text>
                       <Text small>
                         {itemData?.propterty?.per_cost_energy}/h
@@ -266,7 +270,7 @@ export const GameInfo: React.FC<{
                     </Box>
                     <Flex flexDirection='column' justifyContent='center'>
                       <Text color='textTips' small>
-                        人口消耗
+                        {t('planetPopulationConsumption')}
                       </Text>
                       <Text small>
                         {itemData?.propterty?.per_cost_population}/h
@@ -277,7 +281,7 @@ export const GameInfo: React.FC<{
               </Box>
             </Flex>
             <Text color='textSubtle' small mt='5px'>
-              作用：储存星球建筑产出的所有资源
+              {t('planetResourcesProducedPlanetaryBuildings')}
             </Text>
           </CardContent>
           <CardInfo>
@@ -308,7 +312,9 @@ export const GameInfo: React.FC<{
                     </Text>
                   </Flex>
                   <Text color='textSubtle' small>
-                    升级所需人口：{state.upgrade?.cost_population}人
+                    {t('planetPopulationRequiredUpgrade%value%people', {
+                      value: state.upgrade?.cost_population,
+                    })}
                   </Text>
                 </Flex>
               )}
@@ -316,12 +322,15 @@ export const GameInfo: React.FC<{
                 {itemData?.propterty?.levelEnergy <
                   state.upgrade?.max_building_level && (
                   <ActionButton
-                    disabled={itemData?.isactive}
+                    disabled={
+                      itemData?.propterty?.levelEnergy - planetInfo?.level >=
+                        1 || itemData?.isactive
+                    }
                     onClick={() =>
                       setState({ ...state, upgradesVisible: true })
                     }
                   >
-                    建筑升级
+                    {t('planetBuildingUpgrades')}
                   </ActionButton>
                 )}
                 <ActionButton
@@ -331,7 +340,7 @@ export const GameInfo: React.FC<{
                     dispatch(storeAction.destoryBuildingVisibleModal(true))
                   }
                 >
-                  摧毁建筑
+                  {t('planetDestroyBuilding')}
                 </ActionButton>
               </Flex>
             </Flex>

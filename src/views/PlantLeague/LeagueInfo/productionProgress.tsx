@@ -47,7 +47,8 @@ const ProductionProgress = () => {
 
   const progressRate = useMemo(() => {
     const time = (((end_time - state.time) / end_time) * 100).toFixed(2);
-    return Number(time) || 0;
+
+    return Number(time) > 100 ? 100 : Number(time) || 0;
   }, [state]);
 
   const ExtractResources = useCallback(async () => {
@@ -85,7 +86,9 @@ const ProductionProgress = () => {
         });
       } else {
         clearInterval(timer);
-        dispatch(fetchAllianceViewAsync());
+        if (free_time > 0) {
+          dispatch(fetchAllianceViewAsync());
+        }
       }
     }, 1000);
   };
@@ -100,13 +103,18 @@ const ProductionProgress = () => {
           });
         } else {
           clearInterval(Extracttimer);
-          dispatch(fetchAllianceViewAsync());
+          if (later_extract_time > 0) {
+            dispatch(fetchAllianceViewAsync());
+          }
         }
       }, 1000);
     }
   };
 
   const formatTime = (time: number) => {
+    if (time <= 0) {
+      return '0h:00m:00s';
+    }
     const hour = Math.floor(time / 3600).toString();
     let min = Math.floor((time % 3600) / 60).toString();
     let sec = (time % 60).toString();

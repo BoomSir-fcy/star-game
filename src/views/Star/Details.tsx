@@ -23,7 +23,7 @@ const Upgrade = () => {
           const buildings = selfBuilding?.find(
             (r: any) => r.index === i * planet.areaY + j,
           );
-          if (buildings) {
+          if (buildings?.building?._id) {
             data.push({
               ...buildings,
               ...buildings.building,
@@ -31,6 +31,7 @@ const Upgrade = () => {
               y: j,
               index: i * planet.areaY + j,
               isbuilding: true,
+              isactive: false,
             });
           } else {
             data.push({

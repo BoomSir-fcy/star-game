@@ -112,15 +112,15 @@ const Planet = () => {
   }, [dispatch, state, parsedQs.t, choose]);
 
   useEffect(() => {
-    if (choose) {
+    if (choose && mePlanet.length) {
       const list = mePlanet.filter(item => {
-        return item.id !== Number(choose);
+        return !workingList.includes(item.id);
       });
       setStarList(list);
     } else {
       setStarList(mePlanet);
     }
-  }, [mePlanet, choose]);
+  }, [mePlanet, choose, workingList]);
 
   useEffect(() => {
     init();

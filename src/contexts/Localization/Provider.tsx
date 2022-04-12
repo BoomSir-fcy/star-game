@@ -107,7 +107,7 @@ export const LanguageProvider: React.FC = ({ children }) => {
           const templateKey = new RegExp(`%${dataKey}%`, 'g');
           interpolatedText = interpolatedText.replace(
             templateKey,
-            data[dataKey].toString(),
+            data[dataKey]?.toString(),
           );
         });
 
