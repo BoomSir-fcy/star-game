@@ -97,6 +97,7 @@ const GamePK: React.FC<GamePKProps> = () => {
           id: item.base_unit_id,
           hp: base[item.base_unit_id].hp,
           isEnemy,
+          unique_id: item.base_unit_id,
           // attackId: base[item.base_unit_id].unique_id
         });
       });

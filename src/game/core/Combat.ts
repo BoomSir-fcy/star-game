@@ -1,10 +1,11 @@
-import { RoundDescAttack } from 'game/types';
+import { effectType, EffectType, RoundDescAttack } from 'game/types';
 // import { Graphics, Sprite, Container, Point, Texture } from 'pixi.js';
 import { Container } from '@pixi/display';
 import { Sprite } from '@pixi/sprite';
 import { Texture } from '@pixi/core';
 import { Graphics } from '@pixi/graphics';
 import { Point } from '@pixi/math';
+import { Text } from '@pixi/text';
 import config from '../config';
 import AxisPoint from './AxisPoint';
 import Chequer, { stateType } from './Chequer';
@@ -58,6 +59,8 @@ class Combat extends EventTarget {
 
   attackInfo?: RoundDescAttack;
 
+  attackEffect = new Text('');
+
   bullet = {
     moving: true,
     speedX: 0,
@@ -98,6 +101,22 @@ class Combat extends EventTarget {
       (this.activePh / this.hp) * (config.BLOOD_WIDTH - 2) + lineStartX,
       lineY,
     );
+  }
+
+  drawAttackEffect() {
+    this.attackEffect.visible = false;
+    this.container.addChild(this.attackEffect);
+  }
+
+  updateAttackEffect(type: EffectType) {
+    if (type === effectType.BURN) {
+      this.attackEffect.text = '灼烧';
+    } else if (type === effectType.FREEZE) {
+      this.attackEffect.text = '冰冻';
+    } else if (type === effectType.REPEL) {
+      this.attackEffect.text = '击退';
+    }
+    this.attackEffect.visible = false;
   }
 
   renderBullet() {

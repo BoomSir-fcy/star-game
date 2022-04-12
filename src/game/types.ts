@@ -46,3 +46,12 @@ export interface RoundInfo {
   attack: RoundDescAttack;
   move: RoundDescMove;
 }
+
+export const effectType = {
+  // 作战效果
+  FREEZE: 1, // 冰冻
+  BURN: 2, // 灼烧
+  REPEL: 3,
+};
+
+export type EffectType = typeof effectType[keyof typeof effectType];

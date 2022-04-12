@@ -29,17 +29,8 @@ class Boards extends EventTarget {
     this.width = width || config.WIDTH;
     this.height = height || config.HEIGHT;
 
-    this.app = new Application({
-      width: this.width,
-      height: this.height,
-      resolution: config.resolution,
-      antialias: true,
-      backgroundAlpha: 0.5,
-    });
     this.init();
   }
-
-  app: Application;
 
   width;
 
@@ -62,21 +53,16 @@ class Boards extends EventTarget {
   dragging = false;
 
   init() {
-    this.app.loader = new Loader();
+    this.container.position.set(this.width / 2, this.height / 2);
 
-    this.container.position.set(
-      this.app.renderer.screen.width / 2,
-      this.app.renderer.screen.height / 2,
-    );
-
-    this.app.stage.addChild(this.container);
+    // this.app.stage.addChild(this.container);
 
     this.drawChequers();
 
-    this.app.stage.hitArea = this.app.renderer.screen;
+    // this.app.stage.hitArea = this.app.renderer.screen;
 
     this.container.interactive = true;
-    this.app.view.addEventListener('wheel', e => {
+    this.container.on('wheel', e => {
       this.onHandleWheel(e);
     });
 

@@ -1,6 +1,7 @@
 import { Loader } from '@pixi/loaders';
 import { InteractionEvent, InteractionData } from '@pixi/interaction';
 import { Spine } from 'pixi-spine';
+import { Application } from '@pixi/app';
 
 // import * as PIXI from 'pixi.js';
 import config from '../config';
@@ -23,9 +24,25 @@ class Game extends EventTarget {
   constructor(options?: GameOptionsProps) {
     super();
     const { width, height } = options || {};
+    const _width = width || config.WIDTH;
+    const _height = height || config.HEIGHT;
     this.boards = new Boards({ width, height });
+    this.app = new Application({
+      width: _width,
+      height: _height,
+      resolution: config.resolution,
+      antialias: true,
+      backgroundAlpha: 0.5,
+    });
+    this.app.stage.addChild(this.boards.container);
+    this.app.view.addEventListener(
+      'wheel',
+      this.boards.onHandleWheel.bind(this.boards),
+    );
     this.init();
   }
+
+  app;
 
   boards;
 
@@ -45,10 +62,8 @@ class Game extends EventTarget {
 
   activeSoliderFlag?: boolean; // 表示事件触发源未activeSolider
 
-  app: any;
-
   init() {
-    this.view = this.boards.app.view;
+    this.view = this.app.view;
 
     this.axis = this.boards.axis;
 
@@ -61,6 +76,7 @@ class Game extends EventTarget {
         this.dragPreSoldier.container.visible = true;
         this.dragPreSoldier.onDragMove(e);
         this.dragPreSoldierEvent = e;
+        this.onDragStarSoldier();
       }
     });
     // const app = new PIXI.Application({
@@ -79,6 +95,9 @@ class Game extends EventTarget {
 
     // this.addDragon();
     // this.addSpine();
+    // setTimeout(() => {
+    //   this.app.stop();
+    // }, 2000);
     this.addEventListenerOfWindow();
   }
 
@@ -97,11 +116,16 @@ class Game extends EventTarget {
     this.boards.container.addChild(soldier.container);
     soldier.container
       .on('pointerdown', () => {
-        this.onDragStarSoldier();
+        this.showSameSoliderState(soldier);
         soldier.setMoved(false);
       })
       .on('pointermove', () => {
-        soldier.setMoved(true);
+        if (soldier.dragging) {
+          if (!soldier.moved) {
+            soldier.setMoved(true);
+            this.onDragStarSoldier();
+          }
+        }
       })
       .on('pointerup', event => {
         const res = this.onDragEndSoldier(event, soldier);
@@ -163,12 +187,12 @@ class Game extends EventTarget {
     this.dragPreSoldier = soldier.clone({ enableDrag: true });
     this.dragPreSoldier.setDragging(true);
     this.dragPreSoldier.container.visible = false;
-    this.boards.app.stage.addChild(this.dragPreSoldier.container);
-    this.onDragStarSoldier();
+    this.app.stage.addChild(this.dragPreSoldier.container);
   }
 
   offDragPreSoldier() {
     this.setEnableDrag(false);
+    console.log(this.dragPreSoldier, this.dragPreSoldierEvent);
     if (this.dragPreSoldier && this.dragPreSoldierEvent) {
       const soldier = this.dragPreSoldier.clone();
       const res = this.onDragEndSoldier(this.dragPreSoldierEvent, soldier);
@@ -182,14 +206,27 @@ class Game extends EventTarget {
       }
       this.dragPreSoldier.setDragging(false);
       this.dragPreSoldier.container.visible = false;
-      this.boards.app.stage.removeChild(this.dragPreSoldier.container);
+      this.app.stage.removeChild(this.dragPreSoldier.container);
       delete this.dragPreSoldier;
       delete this.dragPreSoldierEvent;
     }
   }
 
-  onDragStarSoldier() {
+  showSameSoliderState(soldier?: Soldier) {
+    this.soldiers.forEach(item => {
+      if (soldier?.options?.unique_id === item.options?.unique_id) {
+        item.changeState(stateType.ACTIVE, true);
+      }
+    });
+  }
+
+  onDragStarSoldier(soldier?: Soldier) {
     this.boards.chequers.forEach(item => {
+      if (soldier?.axisPoint?.chequer === item) {
+        soldier.changeState(stateType.ACTIVE);
+      } else if (soldier) {
+        soldier.changeState(stateType.DISABLE);
+      }
       item.displayState(true);
     });
   }
@@ -223,6 +260,16 @@ class Game extends EventTarget {
       axisPoint: axis,
     });
 
+    console.log(
+      {
+        ...option,
+        x: axis.x,
+        y: axis.y,
+        axisPoint: axis,
+      },
+      soldier,
+    );
+
     this.addSoldier(soldier);
     return soldier;
   }
@@ -241,7 +288,7 @@ class Game extends EventTarget {
   }
 
   addDragon() {
-    this.boards.app.stop();
+    this.app.stop();
     const loader = Loader.shared;
     loader.reset();
 
@@ -268,13 +315,13 @@ class Game extends EventTarget {
     armatureDisplay.x = 600;
     armatureDisplay.y = 100;
 
-    this.boards.app.stage.addChild(armatureDisplay);
+    this.app.stage.addChild(armatureDisplay);
 
-    this.boards.app.start();
+    this.app.start();
   }
 
   addSpine() {
-    this.boards.app.stop();
+    this.app.stop();
     const loader = Loader.shared;
     loader.reset();
 
@@ -285,18 +332,19 @@ class Game extends EventTarget {
 
   onAssetsLoadedSpine(res: any) {
     const dragon = new Spine(res.yans.spineData);
-    dragon.skeleton.setToSetupPose();
+    // dragon.skeleton.setToSetupPose();
     dragon.update(0);
     dragon.autoUpdate = false;
 
     dragon.position.set(300, 300);
 
-    this.boards.app.stage.addChild(dragon);
-    this.boards.app.start();
+    this.app.stage.addChild(dragon);
+    this.app.start();
     // dragon.state.setAnimation(0, 'play', true);
-    dragon.state.setAnimation(1, 'play', true);
+    console.log(dragon.state);
+    dragon.state.setAnimation(8, 'play', true);
 
-    this.boards.app.ticker.add(() => {
+    this.app.ticker.add(() => {
       // update the spine animation, only needed if dragon.autoupdate is set to false
       dragon.update(0.01666666666667); // HARDCODED FRAMERATE!
     });

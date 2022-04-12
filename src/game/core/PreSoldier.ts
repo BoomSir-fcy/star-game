@@ -31,6 +31,7 @@ class PreSoldier extends EventTarget {
       textureRes: src,
       enableDrag: false,
       id,
+      unique_id: id,
     });
 
     this.soldier = soldier;

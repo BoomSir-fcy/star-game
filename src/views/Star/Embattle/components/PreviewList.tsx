@@ -7,10 +7,14 @@ import PreviewSoldier from './PreviewSoldier';
 
 interface PreviewListProps {
   game: Game;
-
+  activeSoldier: Soldier | null;
   race?: Api.Game.race;
 }
-const PreviewList: React.FC<PreviewListProps> = ({ game, race = 1 }) => {
+const PreviewList: React.FC<PreviewListProps> = ({
+  activeSoldier,
+  game,
+  race = 1,
+}) => {
   const units = useStore(p => p.game.baseUnits);
 
   const unitMaps = useMemo(() => {
@@ -36,14 +40,16 @@ const PreviewList: React.FC<PreviewListProps> = ({ game, race = 1 }) => {
   );
 
   const dragStartHandle = useCallback(
-    (event: React.PointerEvent<HTMLDivElement>, item: any) => {
+    (event: React.PointerEvent<HTMLDivElement>, item: Api.Game.UnitInfo) => {
       event.preventDefault();
       const soldier = new Soldier({
         x: 0,
         y: 0,
-        textureRes: item?.src || '/assets/modal/m0-1.png',
+        textureRes: '/assets/modal/m0-1.png',
         enableDrag: false,
-        id: item?.unique_id,
+        id: item.unique_id,
+        unique_id: item.unique_id,
+        unitInfo: item,
       });
       setMoving(true);
       game?.addDragPreSoldier(soldier);
@@ -63,9 +69,15 @@ const PreviewList: React.FC<PreviewListProps> = ({ game, race = 1 }) => {
       <Flex flexWrap='wrap' padding='0 28px'>
         {list.map(item => {
           return (
-            <Box key={item.unique_id} margin='49px 20px 0'>
+            <Box
+              style={{
+                cursor: 'pointer',
+              }}
+              key={item.unique_id}
+              margin='49px 20px 0'
+            >
               <BorderCard
-                isActive
+                isActive={activeSoldier?.unique_id === item.unique_id}
                 width={122}
                 height={122}
                 borderWidth={2}

@@ -27,61 +27,40 @@ const BorderCardStyled = styled(BorderCard)<{ show?: boolean }>`
 
 interface PreviewProps extends BorderCardProps {
   game: Game;
+  activeSoldier: Soldier | null;
 }
 
-const StatusItem = () => {
+interface StatusItemProps {
+  label: string;
+  value: number;
+  src: string;
+  subSrc?: string;
+}
+const StatusItem: React.FC<StatusItemProps> = ({
+  label,
+  value,
+  src,
+  subSrc,
+}) => {
   return (
     <Flex margin='6px 0' alignItems='center' width='200px'>
-      <Image width={60} height={60} src='/images/commons/star/HP.png' />
+      <Image width={60} height={60} src={src} />
       <Box>
         <Flex>
           <Text fontSize='20px' color='textTips'>
-            HP 值
+            {label}
           </Text>
-          <Image
-            width={30}
-            height={30}
-            src='/images/commons/icon/add_blood.png'
-          />
+          {subSrc && <Image width={30} height={30} src={subSrc} />}
         </Flex>
-        <Text fontSize='22px'>10 / 100</Text>
+        <Text fontSize='22px'>
+          {value} / {value}
+        </Text>
       </Box>
     </Flex>
   );
 };
 
-const Preview: React.FC<PreviewProps> = ({ game, ...props }) => {
-  const [activeSolider, setActiveSolider] = useState<null | Soldier>(null);
-
-  const handleAddActiveSoldier = useCallback((event: any) => {
-    const { soldier } = event.detail as { soldier: Soldier };
-    setActiveSolider(soldier);
-  }, []);
-  const handleRemoveActiveSoldier = useCallback(() => {
-    setActiveSolider(null);
-  }, []);
-
-  useEffect(() => {
-    game.addEventListener(
-      eventsType.ADD_ACTIVE_SOLDIER,
-      handleAddActiveSoldier,
-    );
-    game.addEventListener(
-      eventsType.REMOVE_ACTIVE_SOLDIER,
-      handleRemoveActiveSoldier,
-    );
-    return () => {
-      game.removeEventListener(
-        eventsType.ADD_ACTIVE_SOLDIER,
-        handleAddActiveSoldier,
-      );
-      game.addEventListener(
-        eventsType.REMOVE_ACTIVE_SOLDIER,
-        handleRemoveActiveSoldier,
-      );
-    };
-  }, [handleAddActiveSoldier, handleRemoveActiveSoldier, game]);
-
+const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
   const [radarChart] = useState(
     new RadarChart({
       width: 200,
@@ -126,10 +105,11 @@ const Preview: React.FC<PreviewProps> = ({ game, ...props }) => {
   }, [ref, radarChart]);
 
   const removeHandle = useCallback(() => {
-    if (activeSolider) {
-      game.removeSoldier(activeSolider);
+    if (activeSoldier) {
+      game.removeSoldier(activeSoldier);
     }
-  }, [activeSolider, game]);
+  }, [activeSoldier, game]);
+
   return (
     <Box
       // width='608px'
@@ -141,7 +121,7 @@ const Preview: React.FC<PreviewProps> = ({ game, ...props }) => {
       {...props}
     >
       <BorderCardStyled
-        show={!!activeSolider}
+        show={!!activeSoldier}
         isActive
         width='600px'
         height='476px'
@@ -189,10 +169,26 @@ const Preview: React.FC<PreviewProps> = ({ game, ...props }) => {
         <Flex>
           <PreviewSoldier style={{ flexShrink: 0 }} sid={1} />
           <Flex flexWrap='wrap' justifyContent='space-between'>
-            <StatusItem />
-            <StatusItem />
-            <StatusItem />
-            <StatusItem />
+            <StatusItem
+              label='HP值'
+              value={activeSoldier?.options?.unitInfo?.hp || 0}
+              src='/images/commons/star/HP.png'
+            />
+            <StatusItem
+              label='耐久度'
+              value={activeSoldier?.options?.unitInfo?.hp || 0}
+              src='/images/commons/star/durability.png'
+            />
+            <StatusItem
+              label='防御值'
+              value={activeSoldier?.options?.unitInfo?.df || 0}
+              src='/images/commons/star/defense.png'
+            />
+            <StatusItem
+              label='攻击值'
+              value={activeSoldier?.options?.unitInfo?.ak || 0}
+              src='/images/commons/star/attackValue.png'
+            />
           </Flex>
         </Flex>
         <Divider margin='8px auto 27px' width={532} />

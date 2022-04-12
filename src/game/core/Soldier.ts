@@ -18,10 +18,12 @@ import AxisPoint from './AxisPoint';
 export interface AttrSoldierOptions {
   textureRes: string;
   id: number;
+  unique_id: number;
   hp?: number;
   activePh?: number;
   isEnemy?: boolean;
   attackId?: string;
+  unitInfo?: Api.Game.UnitInfo;
 }
 export interface SoldierOptions extends AttrSoldierOptions {
   x: number;
@@ -45,6 +47,8 @@ class Soldier extends Combat {
 
   id = 0;
 
+  unique_id = 0;
+
   attackId = '';
 
   moved = false; // 是否发生移动
@@ -63,6 +67,7 @@ class Soldier extends Combat {
       hp = 0,
       activePh = 0,
       attackId = '',
+      unique_id,
     } = options;
 
     this.options = {
@@ -70,6 +75,8 @@ class Soldier extends Combat {
       ...options,
     };
     this.id = id;
+
+    this.unique_id = unique_id;
 
     this.isEnemy = isEnemy;
 
@@ -130,9 +137,19 @@ class Soldier extends Combat {
       ...this,
       ...option,
     };
-    const { textureRes, x, y, axisPoint, enableDrag, id } = newOptions;
+    const { textureRes, x, y, axisPoint, enableDrag, id, unique_id } =
+      newOptions;
 
-    return new Soldier({ textureRes, x, y, axisPoint, enableDrag, id });
+    return new Soldier({
+      ...this.options,
+      textureRes,
+      x,
+      y,
+      axisPoint,
+      enableDrag,
+      id,
+      unique_id,
+    });
   }
 
   dragData: InteractionData = new InteractionData();

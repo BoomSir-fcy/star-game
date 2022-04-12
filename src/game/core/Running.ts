@@ -138,19 +138,30 @@ class Running extends EventTarget {
 
   getMoveTracks(moves: RoundDescMove): TrackDetail[] {
     const tracks: TrackDetail[] = moves.dest.map((item, index) => {
-      let { x, y } = moves.starting_point;
+      const { x, y } = moves.starting_point;
+
       if (index !== 0) {
-        x = moves.dest[index - 1].x;
-        y = moves.dest[index - 1].y;
+        this.trackDetails.push({
+          type: handleType.MOVE,
+          currentAxisPoint: {
+            x: moves.dest[index - 1].x,
+            y: moves.dest[index - 1].y,
+          },
+          targetAxisPoint: {
+            x: item.x,
+            y: item.y,
+          },
+        });
+      } else {
+        this.trackDetails.push({
+          type: handleType.MOVE,
+          currentAxisPoint: { x, y },
+          targetAxisPoint: {
+            x: item.x,
+            y: item.y,
+          },
+        });
       }
-      this.trackDetails.push({
-        type: handleType.MOVE,
-        currentAxisPoint: { x, y },
-        targetAxisPoint: {
-          x: item.x,
-          y: item.y,
-        },
-      });
       return {
         type: handleType.MOVE,
         currentAxisPoint: { x, y },

@@ -22,6 +22,7 @@ export interface SortSoldier {
 }
 interface SortBoardProps extends BorderCardProps {
   sortSoldiers: SortSoldier[];
+  activeSoldier: Soldier | null;
   setSortSoldiers: (soldiers: Soldier[], update?: boolean) => void;
 }
 
@@ -33,9 +34,13 @@ const defaultStyle = {
   margin: '12px auto 0',
 };
 
-const SortItem: React.FC<Partial<SortSoldier>> = ({
+interface SortItemProps extends Partial<SortSoldier> {
+  isActive: boolean;
+}
+const SortItem: React.FC<SortItemProps> = ({
   id,
   src,
+  isActive,
   soldier,
   ...props
 }) => {
@@ -44,7 +49,7 @@ const SortItem: React.FC<Partial<SortSoldier>> = ({
       margin='auto'
       width='122px'
       height='122px'
-      isActive
+      isActive={isActive}
       position='relative'
     >
       <Box width={122} height={122}>
@@ -61,6 +66,7 @@ const SortItem: React.FC<Partial<SortSoldier>> = ({
 
 const SortBoard: React.FC<SortBoardProps> = ({
   sortSoldiers,
+  activeSoldier,
   setSortSoldiers,
   ...props
 }) => {
@@ -84,13 +90,7 @@ const SortBoard: React.FC<SortBoardProps> = ({
   }, [sortSoldiers, setSortSoldiers]);
 
   return (
-    <BorderCard
-      overflow='auto'
-      isActive
-      width='183px'
-      height='476px'
-      {...props}
-    >
+    <BorderCard overflow='auto' width='183px' height='476px' {...props}>
       <Text margin='20px 0 8px' fontSize='20px' textAlign='center'>
         攻击顺序
       </Text>
@@ -104,7 +104,11 @@ const SortBoard: React.FC<SortBoardProps> = ({
         >
           {sortSoldiers.map(item => (
             <div style={{ marginTop: '16px' }} key={item.id}>
-              <SortItem id={`${item.id}`} src={item.src} />
+              <SortItem
+                isActive={activeSoldier === item.soldier}
+                id={`${item.id}`}
+                src={item.src}
+              />
             </div>
           ))}
         </ReactSortable>
