@@ -112,7 +112,7 @@ const Planet = () => {
   }, [dispatch, state, parsedQs.t, choose]);
 
   useEffect(() => {
-    if (choose) {
+    if (choose && mePlanet.length) {
       const list = mePlanet.filter(item => {
         return item.id !== Number(choose);
       });
