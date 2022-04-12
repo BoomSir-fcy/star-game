@@ -122,6 +122,7 @@ export interface PlanetState {
   activePlanet: Api.Planet.PlanetInfo;
   activeMaterialMap: { [x: number]: Api.Planet.PlanetInfo | null };
   upgradePlanetId: number | null;
+  activeNavId: string;
 }
 
 export interface BuildlingState {

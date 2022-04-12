@@ -172,17 +172,7 @@ const StarHeader = () => {
               >
                 {planetInfo?.race ? t(`race-${planetInfo?.race}`) : ''}
               </Text>
-              <RaceAvatar
-                width='99px'
-                height='99px'
-                race={
-                  planetInfo?.race === RaceType.PROTOSS
-                    ? 'protoss'
-                    : planetInfo?.race === RaceType.HUMAN
-                    ? 'human'
-                    : 'zerg'
-                }
-              />
+              <RaceAvatar width='99px' height='99px' race={planetInfo?.race} />
             </RaceImageFlex>
           </RaceFlex>
         </Flex>

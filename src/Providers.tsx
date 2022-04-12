@@ -11,6 +11,7 @@ import { RefreshContextProvider } from 'contexts/RefreshContext';
 import { ToastsProvider } from 'contexts/ToastsContext';
 import { ConnectWalletProvider } from 'contexts/ConnectWallet';
 import store from 'state';
+import { VideoProvider } from 'contexts/VideoContext';
 
 const ThemeProviderWrapper: React.FC = props => {
   const isDark = true;
@@ -27,7 +28,9 @@ const Providers: React.FC = ({ children }) => {
               <LanguageProvider>
                 <RefreshContextProvider>
                   <ToastsProvider>
-                    <ConnectWalletProvider>{children}</ConnectWalletProvider>
+                    <ConnectWalletProvider>
+                      <VideoProvider>{children}</VideoProvider>
+                    </ConnectWalletProvider>
                   </ToastsProvider>
                 </RefreshContextProvider>
               </LanguageProvider>

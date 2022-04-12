@@ -13,7 +13,7 @@ export const useUpgrade = () => {
         return receipt.status;
       } catch (error) {
         console.error(error);
-        return false;
+        throw error;
       }
     },
     [contract],

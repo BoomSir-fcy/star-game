@@ -132,8 +132,8 @@ const Upgrade = () => {
   }, [planetId]);
 
   useEffect(() => {
-    getStarUpgradeInfo();
-  }, [getStarUpgradeInfo]);
+    if (upgradeSuccess.upgrade_is_end) getStarUpgradeInfo();
+  }, [upgradeSuccess.upgrade_is_end, getStarUpgradeInfo]);
 
   const upInfo = useMemo(() => {
     return {
@@ -289,14 +289,29 @@ const Upgrade = () => {
                 width='300px'
                 padding='0'
                 onClick={async () => {
-                  setPending(true);
-                  await upgrade(planetId, usableMaterialIds);
-                  getUpgradeSuccess();
-                  setTimeout(() => {
+                  try {
+                    setPending(true);
+                    const isSuccess = await upgrade(
+                      planetId,
+                      usableMaterialIds,
+                    );
                     getUpgradeSuccess();
-                  }, 5000);
-                  setPending(false);
-                  setVisible(false);
+                    setTimeout(() => {
+                      getUpgradeSuccess();
+                    }, 10000);
+                    dispatch(setActiveMaterialMap(null));
+                    toastError(t('Upgrade succeeded'));
+                    setPending(false);
+                    setVisible(false);
+                  } catch (error: any) {
+                    const msg = error?.data?.message;
+                    const errorMsg = msg?.substring(
+                      msg?.indexOf('execution reverted: '),
+                    );
+                    if (errorMsg) toastError(errorMsg);
+                    // toastError(t('Upgrade failed'));
+                    setPending(false);
+                  }
                 }}
               >
                 {pending ? (

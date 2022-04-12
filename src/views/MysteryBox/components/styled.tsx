@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Card, Label, Text } from 'uikit';
+import { Box, Card, Label, Text } from 'uikit';
 
 export const LabelStyled = styled(Label)`
   width: 232px;
@@ -24,4 +24,9 @@ export const LabelText = styled(Text).attrs({ small: true })``;
 export const AttrText = styled(LabelText)`
   margin-left: 5px;
   flex: 1;
+`;
+
+export const ScrollBox = styled(Box)`
+  max-height: 150px;
+  overflow-y: auto;
 `;

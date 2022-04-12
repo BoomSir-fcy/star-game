@@ -68,7 +68,11 @@ const MysteryBoxDetail = () => {
   }, []);
   return (
     <Layout>
-      <Dashboard />
+      <Dashboard
+        onRefresh={async () => {
+          dispatch(fetchPlanetInfoAsync([id]));
+        }}
+      />
       <Flex>
         <MysteryBox>
           <MysteryBoxBaseStyled quality={mysteryBoxQualities.ORDINARY} />

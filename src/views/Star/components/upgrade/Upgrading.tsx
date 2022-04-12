@@ -4,6 +4,7 @@ import { CountdownTime } from 'components';
 import styled from 'styled-components';
 import { Box, Text, Flex, Card } from 'uikit';
 import StarCom from 'components/StarCom';
+import { useTranslation } from 'contexts/Localization';
 import {
   MysteryBoxBaseStyled,
   MysteryBoxStyled,
@@ -37,6 +38,7 @@ export const Upgrading: React.FC<{
   info: Api.Planet.PlanetInfo;
   up?: any;
 }> = ({ timePeriod, info, up }) => {
+  const { t } = useTranslation();
   return (
     <Flex justifyContent='space-around' alignItems='center'>
       <MysteryBoxFlexStyled>
@@ -51,7 +53,7 @@ export const Upgrading: React.FC<{
           <Flex flexDirection='column' justifyContent='space-between'>
             <Flex mb='35px' justifyContent='space-between'>
               <Text fontSize='28px' shadow='primary'>
-                星球升级中
+                {t('The planet is being upgraded')}
               </Text>
               <Text fontSize='24px' color='textTips'>
                 Countdown Time

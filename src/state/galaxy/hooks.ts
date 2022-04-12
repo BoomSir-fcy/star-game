@@ -3,7 +3,6 @@ import { useGalaxyContract } from 'hooks/useContract';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GalaxyState } from 'state/types';
-import { fetchAuction } from './fetchers';
 import {
   fetchGalaxyListAsync,
   fetchGalaxyStarListAsync,
@@ -61,7 +60,7 @@ export const useAuction = () => {
         return receipt.status;
       } catch (error) {
         console.error(error);
-        return false;
+        throw error;
       }
     },
     [contract],

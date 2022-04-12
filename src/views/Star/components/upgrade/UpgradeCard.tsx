@@ -47,7 +47,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
     <StyledCard width={width} {...props}>
       <Flex flexDirection='column'>
         <Text bold fontSize='22px' shadow='primary'>
-          {up
+          {!up
             ? t('Current Lv%value% effect', { value: info?.level || '' })
             : t('Lv%value% effect after upgrade', { value: info?.level || '' })}
         </Text>

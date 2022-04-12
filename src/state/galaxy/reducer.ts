@@ -73,7 +73,6 @@ export const galaxySlice = createSlice({
       const { payload } = action;
       if (payload) {
         state.galaxyList = payload;
-        state.currentGalaxy = payload[0];
         state.loadingGalaxy = false;
       }
     },

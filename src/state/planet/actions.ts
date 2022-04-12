@@ -11,3 +11,4 @@ export const setActiveMaterialMap = createAction<{
 export const setUpgradePlanetId = createAction<number | null>(
   'planet/setUpgradePlanetId',
 );
+export const setActiveNavId = createAction<string>('planet/setActiveNavId');
