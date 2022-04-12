@@ -4,6 +4,7 @@ import { Box, Flex, Card, BgCard, Text, Button, Label } from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
+import { useToast } from 'contexts/ToastsContext';
 import {
   MysteryBoxStyled,
   MysteryBoxBaseStyled,
@@ -28,6 +29,7 @@ const TopBox = styled(Box)`
 const Grow: React.FC = () => {
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
+  const { toastError, toastSuccess, toastWarning } = useToast();
   const [visible, setVisible] = useState(false);
   const [nowPlante, setNowPlante] = useState<StrengthenPlanetInfo>();
   const [estimatePlante, setEstimatePlante] = useState<StrengthenPlanetInfo>();
@@ -62,6 +64,11 @@ const Grow: React.FC = () => {
         const { data } = res;
         setNowPlante(data?.now_planet_info);
         setEstimatePlante(data?.estimate_planet_info);
+      }
+      if (res.code === 200016) {
+        toastWarning(
+          t('Planets in the Planetary Federation cannot be nurtured'),
+        );
       }
     } catch (error) {
       console.log(error);
