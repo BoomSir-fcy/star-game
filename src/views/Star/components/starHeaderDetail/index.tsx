@@ -151,14 +151,16 @@ const StarHeader = () => {
           >
             <TextStyled fontSize='20px' color='warning'>
               {planetInfo?.status === 2
-                ? t('培育中，该星球暂时没有产能')
+                ? t(
+                    'During cultivation, the planet has no production capacity for the time being',
+                  )
                 : null}
             </TextStyled>
             <ButtonStyled
               scale='sm'
               onClick={() => setState({ ...state, visible: true })}
             >
-              补充资源
+              {t('Supplementary resources')}
             </ButtonStyled>
           </Flex>
           <RaceFlex>
