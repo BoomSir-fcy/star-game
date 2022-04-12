@@ -42,11 +42,13 @@ export const useFetchGamePlanetUnits = (id: number) => {
   };
 };
 
-export const useFetchGamePK = () => {
+export const useFetchGamePK = (id0?: number, id1?: number) => {
   const dispatch = useDispatch();
   const fetch = useCallback(() => {
-    dispatch(fetchGamePKAsync(1001, 1002));
-  }, [dispatch]);
+    if (id0 && id1) {
+      dispatch(fetchGamePKAsync(id0, id1));
+    }
+  }, [dispatch, id0, id1]);
 
   useEffect(() => {
     fetch();

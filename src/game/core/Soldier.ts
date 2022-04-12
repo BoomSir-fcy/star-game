@@ -1,11 +1,15 @@
-import {
-  Sprite,
-  Texture,
-  Text,
-  InteractionEvent,
-  InteractionData,
-  Point,
-} from 'pixi.js';
+// import {
+//   Sprite,
+//   Texture,
+//   Text,
+//   InteractionEvent,
+//   InteractionData,
+//   Point,
+// } from 'pixi.js';
+import { Text } from '@pixi/text';
+import { Texture } from '@pixi/core';
+import { InteractionEvent, InteractionData } from '@pixi/interaction';
+import { Point } from '@pixi/math';
 import Combat from './Combat';
 import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
@@ -136,6 +140,7 @@ class Soldier extends Combat {
   dragging = false;
 
   onDragStart(event: InteractionEvent) {
+    event.stopPropagation();
     this.dragData = event.data;
     this.container.alpha = 0.9;
     this.container.filters = [];

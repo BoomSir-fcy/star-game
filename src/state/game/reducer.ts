@@ -10,7 +10,7 @@ export const initialState: GameState = {
 };
 
 export const fetchUnitListAsync =
-  (race: Api.Game.race): AppThunk =>
+  (race: number): AppThunk =>
   async dispatch => {
     const list = await fetchUnitList(race);
     dispatch(

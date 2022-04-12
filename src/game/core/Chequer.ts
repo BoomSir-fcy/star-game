@@ -1,5 +1,9 @@
-import { Graphics, Texture, Sprite, TilingSprite, TextStyle, Text, Container, Point } from 'pixi.js';
-// import { Stage, Layer, Group } from '@pixi/layers'
+// import { Graphics, Texture, Sprite, Text, Point } from 'pixi.js';
+import { Sprite } from '@pixi/sprite';
+import { Text } from '@pixi/text';
+import { Texture } from '@pixi/core';
+import { Graphics } from '@pixi/graphics';
+import { Point } from '@pixi/math';
 import config from 'game/config';
 import { BoardPositionSelf } from '../types';
 import { checkPolygonPoint } from './utils';
@@ -36,11 +40,11 @@ export type MapType = typeof mapType[keyof typeof mapType];
 export type StateType = typeof stateType[keyof typeof stateType];
 
 const getRandomColor = () => {
-  return parseInt(Math.floor(Math.random()*16777215).toString(16), 16); 
-}
+  return parseInt(Math.floor(Math.random() * 16777215).toString(16), 16);
+};
 
 class MyGraphics extends Graphics {
-  getVertexData () {
+  getVertexData() {
     return this.vertexData;
   }
 }
@@ -52,7 +56,6 @@ interface ChequerOptions {
   state?: StateType;
 }
 class Chequer {
-  
   constructor(option: ChequerOptions) {
     this.init(option);
   }
@@ -62,7 +65,7 @@ class Chequer {
   static X_RATIO = 0.48;
 
   axisX = 0;
-  
+
   axisY = 0;
 
   src = '';
@@ -93,7 +96,6 @@ class Chequer {
 
   static [stateType.DISABLE] = Texture.from('/assets/map/state3.png');
 
-
   textureButtonDown = Texture.from('/assets/map/map1.png');
 
   textureButtonOver = Texture.from('/assets/map/map2.png');
@@ -106,8 +108,12 @@ class Chequer {
 
   centerPoint = new Point();
 
-  init({ axisX, axisY, type = mapType.MAP1, state = stateType.DISABLE }: ChequerOptions) {
-
+  init({
+    axisX,
+    axisY,
+    type = mapType.MAP1,
+    state = stateType.DISABLE,
+  }: ChequerOptions) {
     // this.src = src;
 
     // const texture = Texture.from(src);
@@ -119,7 +125,7 @@ class Chequer {
     this.bunny.anchor.set(0.5);
     this.bunny.width = 100;
     this.bunny.height = 125;
-    const { x, y, enemy } = this.getXY(axisX, axisY)
+    const { x, y, enemy } = this.getXY(axisX, axisY);
     this.bunny.x = x;
     this.bunny.y = y;
 
@@ -132,67 +138,84 @@ class Chequer {
     this.stateSprite.anchor.set(0.5);
     this.stateSprite.x = 0;
     this.stateSprite.y = -23;
-    this.bunny.addChild(this.stateSprite)
+    this.bunny.addChild(this.stateSprite);
     this.stateSprite.visible = false;
-    
-    const text = new Text(`X${axisX}, Y${axisY}`, { fill: 0xFFFFFF, fontSize: 16 });
+
+    const text = new Text(`X${axisX}, Y${axisY}`, {
+      fill: 0xffffff,
+      fontSize: 16,
+    });
     text.x = -30;
     text.y = -28;
     this.bunny.addChild(text);
-
   }
 
   // 底色是不规则渲染 所以事件范围也不规则
   // 使用 Graphics 绑定事件 进行hack处理
   createGraphics() {
-    const path =  [
-        0, 0,
-        this.bunny.width * Chequer.X_RATIO , this.bunny.height * Chequer.Y_RATIO ,
-        0 , this.bunny.height * Chequer.Y_RATIO * 2 ,
-        -this.bunny.width * Chequer.X_RATIO, this.bunny.height * Chequer.Y_RATIO,
-    ]
-    const color = getRandomColor()
+    const path = [
+      0,
+      0,
+      this.bunny.width * Chequer.X_RATIO,
+      this.bunny.height * Chequer.Y_RATIO,
+      0,
+      this.bunny.height * Chequer.Y_RATIO * 2,
+      -this.bunny.width * Chequer.X_RATIO,
+      this.bunny.height * Chequer.Y_RATIO,
+    ];
+    const color = getRandomColor();
     this.graphics.beginFill(color, 0.00001);
     this.graphics.drawPolygon(path);
     this.graphics.endFill();
     const { x } = this.bunny;
     const y = this.bunny.y - 60;
-    this.graphics.x = x
-    this.graphics.y = y
+    this.graphics.x = x;
+    this.graphics.y = y;
 
     this.graphics.interactive = true;
-    
-    this.centerPoint.set(x, y + 30)
-    
+
+    this.centerPoint.set(x, y + 30);
+
     return this.graphics;
   }
 
-
   getXY(axisX: number, axisY: number) {
-    
     // 把两个棋盘分成2份
     let excessOffsetA = 0;
     let excessOffsetB = 0;
     let enemy = false;
-    if (axisY >= config.BOARDS_COL_COUNT / 2 && config.BOARD_POSITION_SELF === BoardPositionSelf.BOTTOM_LEFT) {
+    if (
+      axisY >= config.BOARDS_COL_COUNT / 2 &&
+      config.BOARD_POSITION_SELF === BoardPositionSelf.BOTTOM_LEFT
+    ) {
       excessOffsetA = 16;
       enemy = true;
     }
-    if (axisX >= config.BOARDS_COL_COUNT / 2 && config.BOARD_POSITION_SELF === BoardPositionSelf.TOP_LEFT) {
+    if (
+      axisX >= config.BOARDS_COL_COUNT / 2 &&
+      config.BOARD_POSITION_SELF === BoardPositionSelf.TOP_LEFT
+    ) {
       excessOffsetB = 16;
       enemy = true;
     }
     return {
-      x: config.OFFSET_START_X - excessOffsetA + excessOffsetB + (axisX - axisY) * this.bunny.width * Chequer.X_RATIO,
-      y: config.OFFSET_START_Y + excessOffsetA + excessOffsetB + (axisX + axisY) * this.bunny.height * Chequer.Y_RATIO,
+      x:
+        config.OFFSET_START_X -
+        excessOffsetA +
+        excessOffsetB +
+        (axisX - axisY) * this.bunny.width * Chequer.X_RATIO,
+      y:
+        config.OFFSET_START_Y +
+        excessOffsetA +
+        excessOffsetB +
+        (axisX + axisY) * this.bunny.height * Chequer.Y_RATIO,
       enemy,
-    }
-
+    };
   }
 
   setState(state: StateType) {
     this.state = state;
-    this.stateSprite.texture = Chequer[state]
+    this.stateSprite.texture = Chequer[state];
   }
 
   displayState(visible: boolean) {
@@ -207,13 +230,12 @@ class Chequer {
       new Point(vertexData[2], vertexData[3]),
       new Point(vertexData[4], vertexData[5]),
       new Point(vertexData[6], vertexData[7]),
-    ]
+    ];
 
-    const collision = checkPolygonPoint(point, points)
+    const collision = checkPolygonPoint(point, points);
 
     return collision;
   }
-  
 }
 
 export default Chequer;

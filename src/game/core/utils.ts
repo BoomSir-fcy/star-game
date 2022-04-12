@@ -1,13 +1,6 @@
-// import { GlowFilter } from 'pixi-filters';
-
-import { Point, Container, Graphics } from 'pixi.js';
-
-// const outlineFilterRed = new GlowFilter({
-//   outerStrength: 3,
-//   innerStrength: 0,
-//   color: 0x99ff99,
-//   quality: 1,
-// });
+// import { Point, Container, Graphics } from 'pixi.js';
+import { Container } from '@pixi/display';
+import { Point } from '@pixi/math';
 
 export function onDragStart(this: any, event: any) {
   // store a reference to the data
@@ -83,8 +76,6 @@ export function hitTestRectangle(r1: Container, r2: Container) {
 }
 
 export function hitTestPoint(r1: Point, r2: Container) {
-  console.log(r1, r2);
-
   // Define the variables we'll need to calculate
   let hit = false;
 

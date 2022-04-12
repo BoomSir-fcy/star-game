@@ -1,6 +1,8 @@
-import { Dict } from '@pixi/utils';
-import * as PIXI from 'pixi.js';
+import { Loader } from '@pixi/loaders';
+import { InteractionEvent, InteractionData } from '@pixi/interaction';
 import { Spine } from 'pixi-spine';
+
+// import * as PIXI from 'pixi.js';
 import config from '../config';
 import '../libs/pixi-dragonbones';
 import AxisPoint from './AxisPoint';
@@ -35,7 +37,7 @@ class Game extends EventTarget {
 
   private dragPreSoldier?: Soldier;
 
-  private dragPreSoldierEvent?: PIXI.InteractionEvent;
+  private dragPreSoldierEvent?: InteractionEvent;
 
   private enableDrag = false;
 
@@ -116,7 +118,7 @@ class Game extends EventTarget {
         //   soldier.changeState(stateType.ACTIVE, true);
         // }
       })
-      .on('click', (e: PIXI.InteractionEvent) => {
+      .on('click', (e: InteractionEvent) => {
         this.activeSoliderFlag = true;
         // this.activeSolider = soldier;
         // soldier.changeState(stateType.ACTIVE, true);
@@ -192,7 +194,7 @@ class Game extends EventTarget {
     });
   }
 
-  onDragEndSoldier(event: PIXI.InteractionEvent, soldier: Soldier) {
+  onDragEndSoldier(event: InteractionEvent, soldier: Soldier) {
     let canDrag = false;
 
     this.boards.chequers.forEach(item => {
@@ -213,7 +215,6 @@ class Game extends EventTarget {
 
   createSoldier(_x: number, _y: number, option: AttrSoldierOptions) {
     const axis = this.getAxis(_x, _y);
-    console.log(axis, _x, _y);
     if (!axis) return null;
     const soldier = new Soldier({
       ...option,
@@ -241,7 +242,7 @@ class Game extends EventTarget {
 
   addDragon() {
     this.boards.app.stop();
-    const loader = PIXI.Loader.shared;
+    const loader = Loader.shared;
     loader.reset();
 
     loader
@@ -249,7 +250,6 @@ class Game extends EventTarget {
       .add('texture_json', '/assets/stone_movie_clip/tex.json')
       .add('texture_png', '/assets/stone_movie_clip/tex.png')
       .load((_loader, res: any) => {
-        console.log(res, this);
         return this.onAssetsLoaded(res);
       });
   }
@@ -263,8 +263,6 @@ class Game extends EventTarget {
       res.texture_png.texture,
     );
 
-    console.log(factory);
-
     const armatureDisplay = factory.buildArmatureDisplay('yans');
     armatureDisplay.animation.play('play');
     armatureDisplay.x = 600;
@@ -277,11 +275,10 @@ class Game extends EventTarget {
 
   addSpine() {
     this.boards.app.stop();
-    const loader = PIXI.Loader.shared;
+    const loader = Loader.shared;
     loader.reset();
 
     loader.add('yans', '/assets/yans/yans.json').load((_loader, res: any) => {
-      console.log(res, this);
       return this.onAssetsLoadedSpine(res);
     });
   }

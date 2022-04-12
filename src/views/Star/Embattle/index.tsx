@@ -5,7 +5,8 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { Box, Text, Flex } from 'uikit';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, Text, Flex } from 'uikit';
 import { Api } from 'apis';
 import {
   useFetchGamePlanetUnits,
@@ -25,6 +26,8 @@ const game = new Game();
 const Embattle = () => {
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.id);
+
+  const navigate = useNavigate();
 
   // const race = Number(parsedQs.race) as Api.Game.race;
 
@@ -153,6 +156,15 @@ const Embattle = () => {
         top='490px'
         left='0'
       >
+        <Box position='absolute' top='-80px'>
+          <Button
+            onClick={() => navigate(`/plunder-test?pid0=${planetId}`)}
+            padding={0}
+            width='50px'
+          >
+            <Text fontSize='20px'>战斗测试</Text>
+          </Button>
+        </Box>
         <PreviewList race={race} game={game} />
       </Box>
     </Box>

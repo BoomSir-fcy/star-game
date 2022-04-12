@@ -20,24 +20,24 @@ export enum BoardPositionSelf {
   BOTTOM_LEFT,
 }
 
-interface RoundDescMoveAxis {
+export interface RoundDescAxis {
   x: number;
   y: number;
 }
 export interface RoundDescMove {
-  dest: RoundDescMoveAxis[];
+  dest: RoundDescAxis[];
   id: string;
-  starting_point: RoundDescMoveAxis;
+  starting_point: RoundDescAxis;
 }
 
 export interface RoundDescAttack {
   receive_df: number;
   receive_id: string;
-  receive_point: RoundDescMoveAxis;
+  receive_point: RoundDescAxis;
   receive_sub_hp: number;
   sender_attack: number;
   sender_id: string;
-  sender_point: RoundDescMoveAxis;
+  sender_point: RoundDescAxis;
 }
 
 export interface RoundInfo {
