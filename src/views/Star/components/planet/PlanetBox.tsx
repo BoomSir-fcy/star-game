@@ -14,6 +14,7 @@ const CardBox = styled(Card)`
   width: 760px;
   height: 200px;
   padding: 16px;
+  margin-bottom: 20px;
 `;
 
 const Desc = styled(Flex)`
