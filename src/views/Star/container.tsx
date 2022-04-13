@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Box, Flex, BackButton, RefreshButton } from 'uikit';
 
@@ -20,6 +20,7 @@ import { StarHeader } from './components';
 const Star: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const { pathname } = useLocation();
   const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
   const { t } = useTranslation();
@@ -34,15 +35,18 @@ const Star: React.FC<{
     }
   }, [id, dispatch]);
 
+  React.useEffect(() => {
+    dispatch(setActiveNavId('build'));
+    if (pathname.indexOf('/star/upgrade') !== -1) {
+      dispatch(setActiveNavId('upgrade'));
+    }
+  }, []);
+
   return (
     <Layout>
       <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
         <Box>
-          <BackButton
-            onClick={() => {
-              dispatch(setActiveNavId('build'));
-            }}
-          />
+          <BackButton />
           <RefreshButton ml='33px' />
         </Box>
         <StarHeader />

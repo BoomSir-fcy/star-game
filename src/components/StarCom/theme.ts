@@ -19,8 +19,8 @@ export const scaleVariants = {
     rHeight: '114px',
   },
   [scales.SM]: {
-    height: '106px',
-    width: '106px',
+    height: '118px',
+    width: '118px',
     sWidth: '103px',
     sHeight: '104px',
     rWidth: '103px',

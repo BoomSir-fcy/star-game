@@ -78,7 +78,7 @@ const Upgrade = () => {
       dispatch(setUpgradePlanetId(planetId));
       dispatch(setActiveMaterialMap(null));
     }
-  }, []);
+  }, [upgradePlanetId, planetId]);
 
   // 星球是否升级成功
   const getUpgradeSuccess = useCallback(async () => {
@@ -123,13 +123,17 @@ const Upgrade = () => {
           material_planet_num,
           success,
         });
+      } else if (res.code === 200009) {
+        toastError(t('Planet upgrade fail by building level'));
+      } else if (res.code === 300012) {
+        toastError(t('Building is being upgraded not working'));
       } else {
         toastError(res.message);
       }
     } catch (error) {
       console.log(error);
     }
-  }, [planetId]);
+  }, [planetId, t, toastError]);
 
   useEffect(() => {
     if (upgradeSuccess.upgrade_is_end) getStarUpgradeInfo();
@@ -169,7 +173,13 @@ const Upgrade = () => {
       );
     }
     return arr;
-  }, [upgradeInfo.material_planet_num, planetId, activeMaterialMap]);
+  }, [
+    upgradeInfo.material_planet_num,
+    planetId,
+    activeMaterialMap,
+    dispatch,
+    navigate,
+  ]);
 
   const usableMaterialIds = useMemo(() => {
     // const materialIds = [] as number[];
@@ -306,10 +316,10 @@ const Upgrade = () => {
                   } catch (error: any) {
                     const msg = error?.data?.message;
                     const errorMsg = msg?.substring(
-                      msg?.indexOf('execution reverted: '),
+                      msg?.indexOf('execution reverted: ') + 20,
                     );
-                    if (errorMsg) toastError(errorMsg);
-                    // toastError(t('Upgrade failed'));
+                    if (errorMsg)
+                      toastError(t(`There are ${errorMsg} planets`));
                     setPending(false);
                   }
                 }}
@@ -317,7 +327,7 @@ const Upgrade = () => {
                 {pending ? (
                   <Dots>{t('Confirm upgrade')}</Dots>
                 ) : (
-                  t('Confirm upgrade')
+                  <Text fontSize='inherit'>{t('Confirm upgrade')}</Text>
                 )}
               </Button>
             )}

@@ -10,7 +10,7 @@ const Extra: React.FC<ExtraProps> = ({ info, children, ...props }) => {
   const { t } = useTranslation();
   return (
     <Box {...props}>
-      <Text mb='10px'>Extra</Text>
+      <Text mb='10px'>{t('Extra')}</Text>
       <ExtraLabelStyled>
         <LabelText>{t('Defense bonus')}：</LabelText>
         <AttrText>

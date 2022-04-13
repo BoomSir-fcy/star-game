@@ -30,7 +30,7 @@ export const PlunderCard: React.FC<{
       // toastError(t('Snatch failed));
       // setPending(false);
     }
-  }, [info, toastError]);
+  }, []);
 
   // 占领
   const handleHold = useCallback(async () => {
@@ -46,7 +46,7 @@ export const PlunderCard: React.FC<{
       toastError(t('Occupied failed'));
       setPending(false);
     }
-  }, [info, onClose, toastSuccess, toastError]);
+  }, [info, onClose, toastSuccess, toastError, t]);
   return (
     <BgCardStyled variant='small' fringe>
       <Flex flexDirection='column' alignItems='center'>
@@ -77,7 +77,7 @@ export const PlunderCard: React.FC<{
               {pending ? (
                 <Dots>{t('Snatch the stars')}</Dots>
               ) : (
-                t('Snatch the stars')
+                <Text fontSize='inherit'>{t('Snatch the stars')}</Text>
               )}
             </ButtonStyled>
           ) : (
@@ -90,7 +90,7 @@ export const PlunderCard: React.FC<{
               {pending ? (
                 <Dots>{t('Occupy the stars')}</Dots>
               ) : (
-                t('Occupy the stars')
+                <Text fontSize='inherit'>{t('Occupy the stars')}</Text>
               )}
             </ButtonStyled>
           )}

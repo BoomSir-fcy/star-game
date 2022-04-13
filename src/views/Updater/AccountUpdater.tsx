@@ -20,7 +20,7 @@ export default function AccountUpdater() {
   const handleReSetAccount = useCallback(() => {
     localStorage.removeItem(storage.SSID);
     navigate('/', { replace: true });
-  }, [dispatch]);
+  }, [navigate]);
 
   useEffect(() => {
     if (account) {

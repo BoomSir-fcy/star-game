@@ -21,7 +21,7 @@ const Attributes: React.FC<AttributesProps> = ({
 
   return (
     <Box {...props}>
-      <Text mb='10px'>Attributes</Text>
+      <Text mb='10px'>{t('Attributes')}</Text>
       <Flex>
         <LabelStyled>
           <LabelText>{t('Lattice')}:</LabelText>

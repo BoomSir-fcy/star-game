@@ -44,11 +44,11 @@ const SelectPlanet = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [planetId]);
 
   useEffect(() => {
     init();
-  }, []);
+  }, [init]);
 
   return (
     <Layout>

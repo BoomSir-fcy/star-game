@@ -19,6 +19,7 @@ const CardStyled = styled(Card)`
 `;
 const TextStyled = styled(Text)`
   width: max-content;
+  /* max-width: 202px; */
 `;
 const ImageStyled = styled.img`
   width: 50px;
@@ -57,7 +58,7 @@ const StarHeader = () => {
     <Flex flex={1}>
       <CardStyled ml='82px'>
         <Flex padding='14px 20px' justifyContent='space-between'>
-          <Flex>
+          <Flex flex={1}>
             <StarCom
               scale='sm'
               quality={planetInfo?.rarity}
@@ -65,20 +66,33 @@ const StarHeader = () => {
               showUnion
               style={{ flexShrink: 1 }}
             />
-            <Flex flexDirection='column' justifyContent='space-between'>
-              <Flex alignItems='center'>
-                <Text color='legend'>
-                  {t(getPlanetRarity(planetInfo?.rarity))}
-                </Text>
-                <Text ml='13px' bold>
-                  Lv{planetInfo?.level}
-                </Text>
-                <TextStyled ml='52px' small>
-                  {planetInfo?.id}
+            <Flex
+              flex={1}
+              flexDirection='column'
+              justifyContent='space-between'
+            >
+              <Flex justifyContent='space-between' alignItems='center'>
+                <Flex alignItems='center'>
+                  <Text color='legend'>
+                    {t(getPlanetRarity(planetInfo?.rarity))}
+                  </Text>
+                  <Text ml='13px' bold>
+                    Lv{planetInfo?.level}
+                  </Text>
+                  <TextStyled ml='52px' small>
+                    {planetInfo?.id}
+                  </TextStyled>
+                </Flex>
+                <TextStyled ml='10px' fontSize='20px' color='warning'>
+                  {planetInfo?.status === 2
+                    ? t(
+                        'During cultivation, the planet has no production capacity for the time being',
+                      )
+                    : null}
                 </TextStyled>
               </Flex>
-              <Flex>
-                <Flex alignItems='center' mr='100px'>
+              <Flex justifyContent='space-between' alignItems='center'>
+                <Flex alignItems='center'>
                   <ImageStyled src='/images/commons/icon/ore.png' />
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
@@ -99,7 +113,7 @@ const StarHeader = () => {
                     </Flex>
                   </Flex>
                 </Flex>
-                <Flex alignItems='center' mr='100px'>
+                <Flex alignItems='center'>
                   <ImageStyled src='/images/commons/icon/population.png' />
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
@@ -141,29 +155,16 @@ const StarHeader = () => {
                     </Flex>
                   </Flex>
                 </Flex>
+                <ButtonStyled
+                  scale='sm'
+                  onClick={() => setState({ ...state, visible: true })}
+                >
+                  {t('Supplementary resources')}
+                </ButtonStyled>
               </Flex>
             </Flex>
           </Flex>
-          <Flex
-            flexDirection='column'
-            justifyContent='space-between'
-            alignItems='flex-end'
-          >
-            <TextStyled fontSize='20px' color='warning'>
-              {planetInfo?.status === 2
-                ? t(
-                    'During cultivation, the planet has no production capacity for the time being',
-                  )
-                : null}
-            </TextStyled>
-            <ButtonStyled
-              scale='sm'
-              onClick={() => setState({ ...state, visible: true })}
-            >
-              {t('Supplementary resources')}
-            </ButtonStyled>
-          </Flex>
-          <RaceFlex>
+          <RaceFlex ml='10px'>
             <img alt='' src='/images/commons/star/race-box.png' />
             <RaceImageFlex>
               <Text

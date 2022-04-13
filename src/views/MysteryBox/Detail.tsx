@@ -61,7 +61,7 @@ const MysteryBoxDetail = () => {
         dispatch(fetchPlanetInfoAsync([id]));
       }, 10000);
     }
-  }, [id, info]);
+  }, [id, info, dispatch]);
 
   useEffect(() => {
     init();
@@ -85,7 +85,7 @@ const MysteryBoxDetail = () => {
                 {info?.name}
               </Text>
               <Text mt='10px' ellipsis small>
-                Token: {info?.id}
+                <span>Token:</span> {info?.id}
               </Text>
             </Flex>
           </StarLabelStyled>

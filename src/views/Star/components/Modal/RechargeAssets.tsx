@@ -75,7 +75,7 @@ export const RechargeAssets: React.FC<{
         ),
       },
     ];
-  }, []);
+  }, [t]);
 
   const [store, setStore] = useState({
     [StoreType.STONE]: { already: 0, max: 0 },
@@ -137,7 +137,16 @@ export const RechargeAssets: React.FC<{
         setPending(false);
       }
     },
-    [planet_id, selectId, inputValue],
+    [
+      planet_id,
+      selectId,
+      inputValue,
+      dispatch,
+      t,
+      getStoreData,
+      toastError,
+      toastSuccess,
+    ],
   );
 
   useEffect(() => {

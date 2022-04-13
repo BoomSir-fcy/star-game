@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useImperativeHandle } from 'react';
-import { Dots, Button, ButtonProps } from 'uikit';
+import { Dots, Button, ButtonProps, Text } from 'uikit';
 import { Gender } from 'state/types';
 import { useTranslation } from 'contexts/Localization';
 import { useApprove } from './hooks';
@@ -39,7 +39,11 @@ const ApproveButton: React.FC<ApproveButtonProps> = ({
 
   return (
     <Button disabled={loading} onClick={handleApprove} {...props}>
-      {loading ? <Dots>{t('Authorize')}</Dots> : t('Authorize')}
+      {loading ? (
+        <Dots>{t('Authorize')}</Dots>
+      ) : (
+        <Text fontSize='inherit'>{t('Authorize')}</Text>
+      )}
     </Button>
   );
 };
