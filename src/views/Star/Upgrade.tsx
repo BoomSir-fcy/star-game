@@ -127,6 +127,10 @@ const Upgrade = () => {
         toastError(t('Planet upgrade fail by building level'));
       } else if (res.code === 300012) {
         toastError(t('Building is being upgraded not working'));
+      } else if (res.code === 200018) {
+        toastError(
+          t('The planet grid utilization rate reaches 20% to upgrade'),
+        );
       } else {
         toastError(res.message);
       }

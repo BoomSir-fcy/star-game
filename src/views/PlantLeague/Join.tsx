@@ -9,6 +9,8 @@ import { useToast } from 'contexts/ToastsContext';
 import { useDispatch } from 'react-redux';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useTranslation } from 'contexts/Localization';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useConnectWallet } from 'contexts/ConnectWallet';
 import { useRemoveAlliance } from './hook';
 
 const GalaxyBg = styled(Box)`
@@ -37,7 +39,8 @@ const StarStyleImg = styled.img`
 
 const JoinTheAlliance = () => {
   const { t } = useTranslation();
-
+  const { account } = useActiveWeb3React();
+  const { onConnectWallet } = useConnectWallet();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toastError, toastSuccess, toastWarning } = useToast();
@@ -48,9 +51,11 @@ const JoinTheAlliance = () => {
   const Remove = useCallback(
     async (id: number) => {
       try {
-        let newList = workingList.concat([]);
+        const newList = workingList.concat([]);
         const index = newList.indexOf(Number(id));
-        newList = newList.splice(index, 1);
+        newList.splice(index, 1);
+        console.log(workingList, newList);
+
         await RemoveStar(newList);
         toastSuccess(t('Removed successfully'));
       } catch (e) {
@@ -63,6 +68,10 @@ const JoinTheAlliance = () => {
   );
 
   const addStar = (id: any) => {
+    if (!account) {
+      onConnectWallet();
+      return;
+    }
     navigate(`/star/planet?choose=${id || 1}`);
   };
 

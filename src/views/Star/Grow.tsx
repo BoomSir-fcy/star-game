@@ -94,11 +94,12 @@ const Grow: React.FC = () => {
         const { data } = res;
         setNowPlante(data?.now_planet_info);
         setEstimatePlante(data?.estimate_planet_info);
-      }
-      if (res.code === 200016) {
+      } else if (res.code === 200016) {
         toastWarning(
           t('Planets in the Planetary Federation cannot be nurtured'),
         );
+      } else {
+        toastWarning(t('The current planet cannot be cultivated'));
       }
     } catch (error) {
       console.log(error);
@@ -165,6 +166,12 @@ const Grow: React.FC = () => {
               <TopBox>
                 <Button
                   onClick={() => {
+                    if (!nowPlante?.id) {
+                      toastWarning(
+                        t('The current planet cannot be cultivated'),
+                      );
+                      return;
+                    }
                     if (state.time === 0) {
                       setVisible(true);
                       return;
