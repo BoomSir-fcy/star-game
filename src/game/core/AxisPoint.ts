@@ -1,15 +1,14 @@
-import { Point } from "pixi.js";
-import Chequer from "./Chequer";
+import { Point } from '@pixi/math';
+import Chequer from './Chequer';
 
 class AxisPoint extends Point {
-
   chequer = new Chequer({ axisX: 0, axisY: 0 });
 
   axisX = 0;
-  
+
   axisY = 0;
 
-  constructor (x: number, y: number, chequer: Chequer) {
+  constructor(x: number, y: number, chequer: Chequer) {
     super();
 
     this.axisX = x;

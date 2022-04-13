@@ -34,9 +34,7 @@ const Plunder = () => {
           </SpinnerBox>
         )}
         <PeopleCardRight state={state} />
-        <GameBox>
-          <GamePK planetId={1001} />
-        </GameBox>
+        <GameBox>{/* <GamePK planetId={1001} /> */}</GameBox>
 
         {/* <ButtonBox justifyContent='center' alignItems='center'>
           <Button

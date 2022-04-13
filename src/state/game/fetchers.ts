@@ -1,8 +1,8 @@
 import { Api } from 'apis';
 
 export const fetchUnitList = async (
-  race: Api.Game.race,
-): Promise<{[id: string]: Api.Game.UnitInfo}> => {
+  race: number,
+): Promise<{ [id: string]: Api.Game.UnitInfo }> => {
   try {
     const res = await Api.GameApi.getGameUnitList(race);
     if (Api.isSuccess(res)) {
@@ -15,29 +15,31 @@ export const fetchUnitList = async (
   }
 };
 
-export const fetchGamePlanetUnits = async (id: number): Promise<Api.Game.UnitPlanetPos[]> => {
+export const fetchGamePlanetUnits = async (
+  id: number,
+): Promise<Api.Game.UnitPlanetPos[]> => {
   try {
     const res = await Api.GameApi.getGamePlanetUnits(id);
     if (Api.isSuccess(res)) {
       return res.data.units.units;
     }
-    return []
+    return [];
   } catch (error) {
     console.error(error);
-    return []
+    return [];
   }
-}
+};
 
 export const fetchGamePK = async (planetId1: number, planetId2: number) => {
   try {
     const res = await Api.GameApi.gamePK(planetId1, planetId2);
-    console.log(res)
+    console.log(res);
     if (Api.isSuccess(res)) {
       return res.data.data;
     }
-    return null
+    return null;
   } catch (error) {
     console.error(error);
-    return null
+    return null;
   }
-}
+};

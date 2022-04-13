@@ -53,6 +53,7 @@ declare namespace Api {
       max_energy: number; // 最大储存能量
       max_population: number; // 最大储存人口
       status: number; // 1星球升级 2星球强化 3建筑升级 4建筑恢复耐久
+      status_countdown: number; // 倒计时
     }
   }
 }

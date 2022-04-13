@@ -1,21 +1,40 @@
-import { Application, Sprite, Container, Loader } from 'pixi.js';
+// import {
+//   Application,
+//   Sprite,
+//   Container,
+//   Loader,
+//   InteractionData,
+//   InteractionEvent,
+// } from '@pixi/core';
+import { Application } from '@pixi/app';
+import { Sprite } from '@pixi/sprite';
+import { Container } from '@pixi/display';
+import { Loader } from '@pixi/loaders';
+import { InteractionEvent, InteractionData } from '@pixi/interaction';
+
 import config from 'game/config';
 import Chequer, { stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
 
+interface BoardsProps {
+  width?: number;
+  height?: number;
+}
 class Boards extends EventTarget {
-  constructor() {
+  constructor(options?: BoardsProps) {
     super();
+    // this.aaa = 1;
+    const { width, height } = options || {};
+
+    this.width = width || config.WIDTH;
+    this.height = height || config.HEIGHT;
+
     this.init();
   }
 
-  app: Application = new Application({
-    width: config.WIDTH,
-    height: config.HEIGHT,
-    resolution: config.resolution,
-    antialias: true,
-    backgroundAlpha: 0.5,
-  });
+  width;
+
+  height;
 
   squares: Sprite[] = [];
 
@@ -29,24 +48,31 @@ class Boards extends EventTarget {
 
   created = false;
 
+  dragData: InteractionData = new InteractionData();
+
+  dragging = false;
+
   init() {
-    this.app.loader = new Loader();
+    this.container.position.set(this.width / 2, this.height / 2);
 
-    this.container.position.set(
-      this.app.renderer.screen.width / 2,
-      this.app.renderer.screen.height / 2,
-    );
-
-    this.app.stage.addChild(this.container);
+    // this.app.stage.addChild(this.container);
 
     this.drawChequers();
 
-    this.app.stage.hitArea = this.app.renderer.screen;
+    // this.app.stage.hitArea = this.app.renderer.screen;
 
     this.container.interactive = true;
-    this.app.view.addEventListener('wheel', e => {
+    this.container.on('wheel', e => {
       this.onHandleWheel(e);
     });
+
+    this.container
+      .on('pointerdown', e => this.onDragStart(e))
+      .on('pointerup', () => this.onDragEnd())
+      .on('pointerupoutside', () => {
+        this.onDragEnd();
+      })
+      .on('pointermove', () => this.onDragMove());
   }
 
   onHandleWheel(e: any) {
@@ -92,6 +118,28 @@ class Boards extends EventTarget {
     });
 
     this.created = true;
+  }
+
+  onDragStart(event: InteractionEvent) {
+    this.dragData = event.data;
+    this.dragging = true;
+  }
+
+  onDragEnd() {
+    this.dragging = false;
+  }
+
+  onDragMove(event?: InteractionEvent) {
+    this.dragData = event?.data || this.dragData;
+    if (this.dragging) {
+      const newPosition = this?.dragData?.getLocalPosition(
+        this.container.parent,
+      );
+      if (newPosition) {
+        this.container.x = newPosition.x;
+        this.container.y = newPosition.y;
+      }
+    }
   }
 }
 

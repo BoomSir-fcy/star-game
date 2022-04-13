@@ -1,56 +1,60 @@
-import useActiveWeb3React from "hooks/useActiveWeb3React"
-import { useCallback, useEffect, useMemo } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useStore } from "state/util";
-import { fetchGamePK } from "./fetchers";
-import { fetchUnitListAsync, fetchGamePlanetUnitsAsync, fetchGamePKAsync } from "./reducer";
+import Game from 'game/core/Game';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useStore } from 'state/util';
+import { fetchGamePK } from './fetchers';
+import {
+  fetchUnitListAsync,
+  fetchGamePlanetUnitsAsync,
+  fetchGamePKAsync,
+} from './reducer';
 
-export const useFetchUnitList = () => {
-
+export const useFetchUnitList = (race?: Api.Game.race) => {
   const dispatch = useDispatch();
   const fetch = useCallback(() => {
-    dispatch(fetchUnitListAsync(1))
-  }, [dispatch]);
+    if (race) {
+      dispatch(fetchUnitListAsync(race));
+    }
+  }, [dispatch, race]);
 
   useEffect(() => {
-    fetch()
-  }, [fetch])
+    fetch();
+  }, [fetch]);
 
   return {
-    fetch
-  }
-}
+    fetch,
+  };
+};
 
 export const useFetchGamePlanetUnits = (id: number) => {
-
   const dispatch = useDispatch();
   const fetch = useCallback(() => {
-    dispatch(fetchGamePlanetUnitsAsync(id))
+    dispatch(fetchGamePlanetUnitsAsync(id));
   }, [dispatch, id]);
 
   useEffect(() => {
-    fetch()
-  }, [fetch])
+    fetch();
+  }, [fetch]);
 
   return {
-    fetch
-  }
-}
+    fetch,
+  };
+};
 
-export const useFetchGamePK = () => {
-
+export const useFetchGamePK = (id0?: number, id1?: number) => {
   const dispatch = useDispatch();
   const fetch = useCallback(() => {
-    dispatch(fetchGamePKAsync(1001, 1002))
-  }, [dispatch]);
+    if (id0 && id1) {
+      dispatch(fetchGamePKAsync(id0, id1));
+    }
+  }, [dispatch, id0, id1]);
 
   useEffect(() => {
-    fetch()
-  }, [fetch])
+    fetch();
+  }, [fetch]);
 
   return {
-    fetch
-  }
-}
-
-
+    fetch,
+  };
+};

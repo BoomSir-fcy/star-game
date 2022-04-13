@@ -23,13 +23,10 @@ const Desc = styled(Flex)`
 
 export const PlanetBox: React.FC<{
   info: Api.Planet.PlanetInfo;
-  status?: string;
-  level?: Qualities;
-}> = ({ status = 'upgrade', level = 1, info }) => {
+}> = ({ info }) => {
   const { t } = useTranslation();
-
   const [state, setState] = React.useState({
-    time: 86970,
+    time: info?.status_countdown,
   });
   let timer = null as any;
 
@@ -68,65 +65,67 @@ export const PlanetBox: React.FC<{
         <StarCom quality={info?.rarity} />
         <Flex ml='29px' flex='1' flexDirection='column'>
           <Desc justifyContent='space-between'>
-            {status === 'upgrade' ? (
-              <>
-                <Box>
-                  <Text fontSize='24px'>{info.name}</Text>
-                  <Flex alignItems='center' mt='2px'>
-                    <Text color={QualityColor[info?.rarity]} bold small>
-                      {t(getPlanetRarity(info?.rarity))}
-                    </Text>
-                    <Text
-                      ml='12px'
-                      color={RaceTypeColor[info?.race || 3]}
-                      bold
-                      small
-                    >
-                      {info?.race === 1
-                        ? t('race-1')
-                        : info?.race === 2
-                        ? t('race-2')
-                        : t('race-3')}
-                    </Text>
-                    <Text ml='12px' bold small>
-                      Lv{info.level}
-                    </Text>
-                    <Text ml='12px' small>
-                      {t('Lattice')}:{info.areaX}x{info.areaY}
-                    </Text>
-                  </Flex>
-                </Box>
-                {info?.update_finish_time > 0 && (
-                  <Flex flex='1' flexDirection='column' alignItems='flex-end'>
-                    <Flex
-                      width='100%'
-                      justifyContent='flex-end'
-                      alignItems='center'
-                    >
-                      <Text shadow='primary' fontSize='24px' mr='15px'>
-                        {t('During upgrade')}
-                      </Text>
-                      <Image
-                        src='/images/commons/icon/icon_arrow_right.png'
-                        width={22}
-                        height={27}
-                      />
-                    </Flex>
-                    <Text
-                      mt='2px'
-                      color='textSubtle'
-                      small
-                      style={{
-                        letterSpacing: '2px',
-                      }}
-                    >
-                      {formatTime(state.time)}
-                    </Text>
-                  </Flex>
-                )}
-              </>
-            ) : (
-              <>
+            <Box>
+              <Text fontSize='24px'>{info.name}</Text>
+              <Flex alignItems='center' mt='2px'>
+                <Text color={QualityColor[info?.rarity]} bold small>
+                  {t(getPlanetRarity(info?.rarity))}
+                </Text>
+                <Text
+                  ml='12px'
+                  color={RaceTypeColor[info?.race || 3]}
+                  bold
+                  small
+                >
+                  {info?.race === 1
+                    ? t('race-1')
+                    : info?.race === 2
+                    ? t('race-2')
+                    : t('race-3')}
+                </Text>
+                <Text ml='12px' bold small>
+                  Lv{info.level}
+                </Text>
+                <Text ml='12px' small>
+                  {t('Lattice')}:{info.areaX}x{info.areaY}
+                </Text>
+              </Flex>
+            </Box>
+            {info?.status_countdown > 0 && (
+              <Flex flex='1' flexDirection='column' alignItems='flex-end'>
+                <Flex
+                  width='100%'
+                  justifyContent='flex-end'
+                  alignItems='center'
+                >
+                  <Text
+                    shadow='primary'
+                    fontSize='20px'
+                    mr='15px'
+                    ellipsis
+                    style={{ flex: 1, textAlign: 'right' }}
+                  >
+                    {t('During upgrade')}
+                  </Text>
+                  <Image
+                    src='/images/commons/icon/icon_arrow_right.png'
+                    width={22}
+                    height={27}
+                  />
+                </Flex>
+                <Text
+                  mt='2px'
+                  color='textSubtle'
+                  small
+                  style={{
+                    letterSpacing: '2px',
+                  }}
+                >
+                  {formatTime(state.time)}
+                </Text>
+              </Flex>
+            )}
+            {/* <>
                 <Flex alignItems='center'>
                   <Text>{t('普通盲盒')}</Text>
                   <Text color='textSubtle' fontSize='24px' ml='24px'>
@@ -143,22 +142,18 @@ export const PlanetBox: React.FC<{
                     height={27}
                   />
                 </Flex>
-              </>
-            )}
+              </> */}
           </Desc>
           <Flex alignItems='center' height='auto' flex='1'>
-            {status === 'upgrade' ? (
-              <PlanetDesc info={info} />
-            ) : (
-              <>
+            <PlanetDesc info={info} />
+            {/* <>
                 <Image
                   src='/images/commons/icon/icon-premiumGems.png'
                   width={69}
                   height={78}
                 />
                 <Text>{t('普通、良好、稀有星球')}</Text>
-              </>
-            )}
+              </> */}
           </Flex>
         </Flex>
       </Flex>

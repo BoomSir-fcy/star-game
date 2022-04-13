@@ -1,5 +1,12 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Box, Text, Flex } from 'uikit';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, Text, Flex } from 'uikit';
 import { Api } from 'apis';
 import {
   useFetchGamePlanetUnits,
@@ -12,21 +19,38 @@ import Game from 'game/core/Game';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import PreviewList from './components/PreviewList';
 import Preview from './components/Preview';
-import SortBoard from './components/SortBoard';
+import SortBoard, { SortSoldier } from './components/SortBoard';
+import useUpdatePos from './hooks/useUpdatePos';
+import useActiveSoldier from './hooks/useActiveSoldier';
+
+const game = new Game();
 
 const Embattle = () => {
-  const [game] = useState(new Game());
-
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.id);
 
-  const plantUnits = useStore(p => p.game.plantUnits);
+  const navigate = useNavigate();
 
-  console.log(plantUnits, 'plantUnits');
+  // const race = Number(parsedQs.race) as Api.Game.race;
 
   useFetchGamePK();
-  useFetchUnitList();
   useFetchGamePlanetUnits(planetId);
+
+  const plantUnits = useStore(p => p.game.plantUnits);
+  const planetInfo = useStore(p => p.planet.planetInfo);
+  const info = useMemo(() => {
+    return planetInfo[planetId];
+  }, [planetInfo, planetId]);
+
+  const race = info?.race as Api.Game.race;
+  useFetchUnitList(race);
+
+  const baseUnits = useStore(p => p.game.baseUnits);
+
+  const unitMaps = useMemo(() => {
+    if (baseUnits[race]) return baseUnits[race];
+    return null;
+  }, [baseUnits, race]);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -34,62 +58,32 @@ const Embattle = () => {
     if (ref.current) {
       ref.current.appendChild(game.view);
     }
-  }, [ref, game]);
+  }, [ref]);
 
-  const handleUpdate = useCallback(
-    async (soldiers: Soldier[]) => {
-      console.log(soldiers);
-      const units = soldiers.map((item, index) => {
-        return {
-          pos: {
-            x: item?.axisPoint?.chequer?.axisX || 0,
-            y: item?.axisPoint?.chequer?.axisY || 0,
-          },
-          speed: index, // 出手顺序
-          unit_id: item.id,
-        };
-      });
+  const { gameSoldiers, setSortSoldiers } = useUpdatePos(planetId, game);
 
-      const res = await Api.GameApi.gameUnitSetting({
-        units,
-        planet_id: planetId,
-      });
-
-      console.log(res);
-    },
-    [planetId],
-  );
-
-  useEffect(() => {
-    game.addEventListener('updateSoldierPosition', (event: any) => {
-      handleUpdate(event.detail.soldiers);
-    });
-  }, [game, handleUpdate]);
+  const activeSoldier = useActiveSoldier(game);
 
   const createSoldiers = useCallback(
     (poses: Api.Game.UnitPlanetPos[]) => {
-      console.log(12121212);
       poses.forEach(item => {
-        console.log(444444);
         game.createSoldier(item.pos.x, item.pos.y, {
-          textureRes: '/assets/flowerTop.png',
+          textureRes: `/assets/modal/m${0}-1.png`,
           id: item.base_unit_id,
+          unique_id: item.base_unit_id,
+          unitInfo: unitMaps?.[item.base_unit_id],
         });
       });
     },
-    [game],
+    [unitMaps],
   );
 
   useEffect(() => {
-    console.log(
-      plantUnits[planetId],
-      game.soldiers.length === 0,
-      '=weijqwjeoqwienqwleul ',
-    );
-    if (plantUnits[planetId] && game.soldiers.length === 0) {
+    if (plantUnits[planetId] && unitMaps && game.soldiers.length === 0) {
       createSoldiers(plantUnits[planetId]);
+      setSortSoldiers(game.soldiers);
     }
-  }, [plantUnits, planetId, game.soldiers, createSoldiers]);
+  }, [plantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers]);
 
   return (
     <Box position='relative'>
@@ -100,8 +94,17 @@ const Embattle = () => {
         top='0'
         left='824px'
       >
-        <Preview />
-        <SortBoard ml='8px' />
+        <Preview game={game} activeSoldier={activeSoldier} />
+        <SortBoard
+          sortSoldiers={gameSoldiers}
+          activeSoldier={activeSoldier}
+          setSortSoldiers={(newItems, update) => {
+            setSortSoldiers(newItems);
+            if (update) {
+              game.setSolders(newItems);
+            }
+          }}
+        />
       </Flex>
       <Box
         style={{ userSelect: 'none' }}
@@ -109,7 +112,16 @@ const Embattle = () => {
         top='490px'
         left='0'
       >
-        <PreviewList game={game} />
+        <Box position='absolute' top='-80px'>
+          <Button
+            onClick={() => navigate(`/plunder-test?pid0=${planetId}`)}
+            padding={0}
+            width='50px'
+          >
+            <Text fontSize='20px'>战斗测试</Text>
+          </Button>
+        </Box>
+        <PreviewList race={race} game={game} activeSoldier={activeSoldier} />
       </Box>
     </Box>
   );

@@ -12,7 +12,7 @@ export enum BoardState {
   DEFAULT = '#717171',
   DISABLE = '#FF0000',
   ACTIVE = '#65AEE6',
-  PRE_ACTIVE = '#5EFF93'
+  PRE_ACTIVE = '#5EFF93',
 }
 
 export enum BoardPositionSelf {
@@ -20,3 +20,38 @@ export enum BoardPositionSelf {
   BOTTOM_LEFT,
 }
 
+export interface RoundDescAxis {
+  x: number;
+  y: number;
+}
+export interface RoundDescMove {
+  dest: RoundDescAxis[];
+  id: string;
+  starting_point: RoundDescAxis;
+}
+
+export interface RoundDescAttack {
+  receive_df: number;
+  receive_id: string;
+  receive_point: RoundDescAxis;
+  receive_sub_hp: number;
+  sender_attack: number;
+  sender_id: string;
+  sender_point: RoundDescAxis;
+}
+
+export interface RoundInfo {
+  desc_type: number;
+  round: number;
+  attack: RoundDescAttack;
+  move: RoundDescMove;
+}
+
+export const effectType = {
+  // 作战效果
+  FREEZE: 1, // 冰冻
+  BURN: 2, // 灼烧
+  REPEL: 3,
+};
+
+export type EffectType = typeof effectType[keyof typeof effectType];

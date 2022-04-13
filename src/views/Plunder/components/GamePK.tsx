@@ -1,5 +1,11 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Box, Button, Flex } from 'uikit';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
+import { Box, Button, Flex, Text, PrimaryInput } from 'uikit';
 import { Api } from 'apis';
 import {
   useFetchGamePlanetUnits,
@@ -9,82 +15,89 @@ import {
 import Soldier from 'game/core/Soldier';
 import { useStore } from 'state';
 import Game from 'game/core/Game';
-import {
-  RoundInfo,
-  RoundDescMove,
-  RoundDescAttack,
-  MapBaseUnits,
-} from 'state/types';
+import { MapBaseUnits } from 'state/types';
+import { RoundInfo, RoundDescMove, RoundDescAttack } from 'game/types';
+import useParsedQueryString from 'hooks/useParsedQueryString';
+import { fetchUnitListAsync } from 'state/game/reducer';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { useDispatch } from 'react-redux';
+import Running, { RoundsProps } from 'game/core/Running';
+import { useNavigate } from 'react-router-dom';
 
 const sleep = (handle: any, delay: number) => {
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     setTimeout(() => {
-      handle();
-      res(0);
+      try {
+        handle();
+        res();
+      } catch (error) {
+        rej(error);
+      }
     }, delay);
   });
 };
 
 interface GamePKProps {
-  planetId: number;
+  pid0?: number;
+  pid1?: number;
 }
-const game = new Game();
+const game = new Game({ width: 900, height: 600 });
 
-const GamePK: React.FC<GamePKProps> = ({ planetId }) => {
-  const plantUnits = useStore(p => p.game.plantUnits);
+const GamePK: React.FC<GamePKProps> = () => {
   const PKInfo = useStore(p => p.game.PKInfo);
 
-  useFetchGamePK();
-  useFetchUnitList();
-  useFetchGamePlanetUnits(planetId);
+  const navigate = useNavigate();
+
+  const parsedQs = useParsedQueryString();
+  const units = useStore(p => p.game.baseUnits);
+  const dispatch = useDispatch();
+
+  const [pid0, setPid0] = useState((parsedQs.pid0 as string) || '');
+  const [pid1, setPid1] = useState((parsedQs.pid1 as string) || '');
+
+  const planetInfo = useStore(p => p.planet.planetInfo);
+
+  const infoP0 = useMemo(() => {
+    return planetInfo[Number(pid0)];
+  }, [planetInfo, pid0]);
+
+  const infoP1 = useMemo(() => {
+    return planetInfo[Number(pid1)];
+  }, [planetInfo, pid1]);
+
+  useEffect(() => {
+    if (infoP0?.race && infoP1?.race) {
+      dispatch(fetchUnitListAsync(infoP0?.race));
+      dispatch(fetchUnitListAsync(infoP1?.race));
+    }
+  }, [dispatch, infoP0?.race, infoP1?.race]);
+
+  const startHandle = useCallback(() => {
+    if (Number(pid0) && Number(pid1)) {
+      dispatch(fetchPlanetInfoAsync([Number(pid0), Number(pid1)]));
+      navigate(`/plunder-test?pid0=${pid0}&pid1=${pid1}`);
+    }
+  }, [dispatch, pid0, pid1]);
+
+  useFetchGamePK(infoP0?.id, infoP1?.id);
 
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (ref.current) {
-      console.log(1211);
       ref.current.appendChild(game.view);
     }
   }, [ref]);
 
-  const handleUpdate = useCallback(
-    async (soldiers: Soldier[]) => {
-      console.log(soldiers);
-      const units = soldiers.map((item, index) => {
-        return {
-          pos: {
-            x: item.axisPoint?.chequer?.axisX || 0,
-            y: item.axisPoint?.chequer?.axisY || 0,
-          },
-          speed: index, // 出手顺序
-          unit_id: item.id,
-        };
-      });
-
-      const res = await Api.GameApi.gameUnitSetting({
-        units,
-        planet_id: planetId,
-      });
-
-      console.log(res);
-    },
-    [planetId],
-  );
-
-  useEffect(() => {
-    game.addEventListener('updateSoldierPosition', (event: any) => {
-      handleUpdate(event.detail.soldiers);
-    });
-  }, [handleUpdate]);
-
   const createSoldiers = useCallback(
     (poses: Api.Game.UnitPlanetPos[], base: MapBaseUnits, isEnemy: boolean) => {
-      poses.forEach(item => {
+      poses?.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          textureRes: '/assets/flowerTop.png',
+          textureRes: '/assets/modal/m0-1.png',
           id: item.base_unit_id,
           hp: base[item.base_unit_id].hp,
           isEnemy,
+          unique_id: item.base_unit_id,
           // attackId: base[item.base_unit_id].unique_id
         });
       });
@@ -92,148 +105,49 @@ const GamePK: React.FC<GamePKProps> = ({ planetId }) => {
     [],
   );
 
-  const sleepHandle = useCallback(async (pro: any[], i: number) => {
-    sleep(pro[i].handle, pro[i].sleep).then(() => {
-      // sleep(pro[1].handle, pro[1].sleep);
-      if (i < pro.length - 1) {
-        sleepHandle(pro, i + 1);
-      }
-    });
-
-    // pro.forEach(async item => {
-    //   console.log(1);
-    //   await sleep(item.handle, item.sleep);
-    // });
+  const runHandle = useCallback((slot: RoundsProps) => {
+    const running = new Running(game, slot);
+    console.log(running);
   }, []);
-
-  const moveHandle = useCallback((track: RoundDescMove) => {
-    const axis = game.getAxis(track.starting_point.x, track.starting_point.y);
-    if (!axis) return [];
-    const soldier = game.findSoldierByAxis(axis);
-    if (!soldier) return [];
-    const axises = track.dest.map(item => {
-      return game.getAxis(item.x, item.y);
-    });
-    const pro: any[] = [];
-    const t = 500;
-    axises.forEach(item => {
-      if (item) {
-        const handle = () => {
-          soldier.run();
-          soldier.moveTo(item, t);
-        };
-        pro.push({
-          handle,
-          sleep: t,
-        });
-      }
-    });
-
-    // sleepHandle(pro, 0);
-    return pro;
-  }, []);
-
-  const attHandle = useCallback((track: RoundDescAttack) => {
-    const handle = () => {
-      const senderAxis = game.getAxis(
-        track.sender_point.x,
-        track.sender_point.y,
-      );
-      const receiveAxis = game.getAxis(
-        track.receive_point.x,
-        track.receive_point.y,
-      );
-
-      console.log(senderAxis, receiveAxis);
-      console.log(game.soldiers);
-      console.log(track, 'track');
-
-      if (senderAxis && receiveAxis) {
-        const sendSoldier = game.findSoldierByAxis(senderAxis);
-        const receiveSoldier = game.findSoldierByAxis(receiveAxis);
-
-        console.log(sendSoldier, 'sendSoldier');
-        console.log(receiveSoldier, 'receiveSoldier');
-        if (sendSoldier && receiveSoldier) {
-          sendSoldier.run();
-          sendSoldier.attack();
-          receiveSoldier.run();
-        }
-      }
-    };
-    return [
-      {
-        handle,
-        sleep: 3000,
-      },
-    ];
-  }, []);
-
-  const runHandle = useCallback(
-    (info: RoundInfo[]) => {
-      console.log(info, '=info');
-      let pro: any[] = [];
-      info.forEach(item => {
-        // const handle = () => {
-        //   // 移动
-        //   if (item.desc_type === 2) {
-        //     console.log('移动');
-        //     // game.soldiers[0].moveTo();
-        //     moveHandle(item.move);
-        //   }
-        //   // 攻击
-        //   if (item.desc_type === 3) {
-        //     console.log('攻击');
-        //   }
-        // };
-        if (item.desc_type === 2) {
-          console.log('移动');
-          const handles = moveHandle(item.move);
-          pro = [...pro, ...handles];
-        }
-        if (item.desc_type === 3) {
-          console.log('攻击');
-          const handles = attHandle(item.attack);
-          pro = [...pro, ...handles];
-        }
-        // pro.push({
-        //   handle,
-        //   sleep: 1000,
-        // })
-      });
-      sleepHandle(pro, 0);
-      // await sleep(process[round].handle, process[round].sleep);
-
-      // process.forEach(async item => {
-      //   await sleep(item.handle, item.sleep);
-      // });
-    },
-    [sleepHandle],
-  );
 
   useEffect(() => {
     console.log(PKInfo, 'PKInfo');
     if (PKInfo && game.soldiers.length === 0) {
       createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, false);
       createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, true);
-      runHandle(PKInfo.slot[1].data);
+      runHandle(PKInfo.slot);
     }
   }, [PKInfo, createSoldiers, runHandle]);
 
-  console.log(12122121);
-
-  const testHandle = useCallback(() => {
-    const axis = game.getAxis(5, 5);
-    console.log(axis, game.soldiers[0]);
-    if (axis) {
-      game.soldiers[0].run();
-      game.soldiers[0].moveTo(axis);
-    }
-  }, []);
   return (
     <Box position='relative'>
-      {/* <Button onClick={testHandle}>Test</Button> */}
-      <Box ref={ref} />
+      <Flex>
+        <Box mr='80px'>
+          <Box mt='50px'>
+            <Text>当前星球id</Text>
+            <PrimaryInput
+              value={pid0}
+              onChange={e => {
+                setPid0(e.target.value);
+              }}
+            />
+          </Box>
+          <Box mt='50px'>
+            <Text>对手星球id</Text>
+            <PrimaryInput
+              value={pid1}
+              onChange={e => {
+                setPid1(e.target.value);
+              }}
+            />
+          </Box>
+          <Box mt='50px'>
+            <Button onClick={startHandle}>开始匹配</Button>
+            <Button>开始战斗</Button>
+          </Box>
+        </Box>
+        <Box ref={ref} />
+      </Flex>
     </Box>
   );
 };

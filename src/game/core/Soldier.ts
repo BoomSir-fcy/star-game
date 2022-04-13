@@ -1,23 +1,29 @@
-import {
-  Sprite,
-  Texture,
-  Text,
-  InteractionEvent,
-  InteractionData,
-  Point,
-} from 'pixi.js';
+// import {
+//   Sprite,
+//   Texture,
+//   Text,
+//   InteractionEvent,
+//   InteractionData,
+//   Point,
+// } from 'pixi.js';
+import { Text } from '@pixi/text';
+import { Texture } from '@pixi/core';
+import { InteractionEvent, InteractionData } from '@pixi/interaction';
+import { Point } from '@pixi/math';
 import Combat from './Combat';
-import Chequer, { stateType } from './Chequer';
+import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
 // import { onDragEnd, onDragMove, onDragStart } from './utils';
 
 export interface AttrSoldierOptions {
   textureRes: string;
   id: number;
+  unique_id: number;
   hp?: number;
   activePh?: number;
   isEnemy?: boolean;
   attackId?: string;
+  unitInfo?: Api.Game.UnitInfo;
 }
 export interface SoldierOptions extends AttrSoldierOptions {
   x: number;
@@ -41,21 +47,36 @@ class Soldier extends Combat {
 
   id = 0;
 
+  unique_id = 0;
+
   attackId = '';
 
-  init({
-    textureRes,
-    x,
-    y,
-    axisPoint,
-    enableDrag = true,
-    id,
-    isEnemy = false,
-    hp = 0,
-    activePh = 0,
-    attackId = '',
-  }: SoldierOptions) {
+  moved = false; // 是否发生移动
+
+  options?: SoldierOptions;
+
+  init(options: SoldierOptions) {
+    const {
+      textureRes,
+      x,
+      y,
+      axisPoint,
+      enableDrag = true,
+      id,
+      isEnemy = false,
+      hp = 0,
+      activePh = 0,
+      attackId = '',
+      unique_id,
+    } = options;
+
+    this.options = {
+      ...this.options,
+      ...options,
+    };
     this.id = id;
+
+    this.unique_id = unique_id;
 
     this.isEnemy = isEnemy;
 
@@ -68,8 +89,9 @@ class Soldier extends Combat {
     this.displaySprite.anchor.set(0.5);
     this.container.x = x;
     this.container.y = y;
-    this.displaySprite.width = 60;
-    this.displaySprite.height = 60;
+    this.container.scale.set(0.6);
+    // this.displaySprite.width = 100;
+    // this.displaySprite.height = 100;
 
     this.startPoint.set(x, y);
 
@@ -115,9 +137,19 @@ class Soldier extends Combat {
       ...this,
       ...option,
     };
-    const { textureRes, x, y, axisPoint, enableDrag, id } = newOptions;
+    const { textureRes, x, y, axisPoint, enableDrag, id, unique_id } =
+      newOptions;
 
-    return new Soldier({ textureRes, x, y, axisPoint, enableDrag, id });
+    return new Soldier({
+      ...this.options,
+      textureRes,
+      x,
+      y,
+      axisPoint,
+      enableDrag,
+      id,
+      unique_id,
+    });
   }
 
   dragData: InteractionData = new InteractionData();
@@ -125,11 +157,20 @@ class Soldier extends Combat {
   dragging = false;
 
   onDragStart(event: InteractionEvent) {
+    event.stopPropagation();
     this.dragData = event.data;
-    this.container.alpha = 0.5;
+    this.container.alpha = 0.9;
     this.container.filters = [];
     this.dragging = true;
-    this.axisPoint?.chequer?.setState(stateType.ACTIVE);
+    // this.axisPoint?.chequer?.setState(stateType.ACTIVE);
+    this.changeState(stateType.ACTIVE);
+  }
+
+  changeState(state: StateType, visible?: boolean) {
+    this.axisPoint?.chequer?.setState(state);
+    if (typeof visible === 'boolean') {
+      this.axisPoint?.chequer?.displayState(visible);
+    }
   }
 
   onDragEnd() {
@@ -141,6 +182,10 @@ class Soldier extends Combat {
 
   setDragging(state: boolean) {
     this.dragging = state;
+  }
+
+  setMoved(moved: boolean) {
+    this.moved = moved;
   }
 
   onDragMove(event?: InteractionEvent) {

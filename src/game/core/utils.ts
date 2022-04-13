@@ -1,13 +1,6 @@
-// import { GlowFilter } from 'pixi-filters';
-
-import { Point, Container, Graphics } from "pixi.js";
-
-// const outlineFilterRed = new GlowFilter({
-//   outerStrength: 3,
-//   innerStrength: 0,
-//   color: 0x99ff99,
-//   quality: 1,
-// });
+// import { Point, Container, Graphics } from 'pixi.js';
+import { Container } from '@pixi/display';
+import { Point } from '@pixi/math';
 
 export function onDragStart(this: any, event: any) {
   // store a reference to the data
@@ -17,7 +10,6 @@ export function onDragStart(this: any, event: any) {
   this.alpha = 0.5;
   this.dragging = true;
   // this.filters = [outlineFilterRed];
-
 }
 
 export function onDragEnd(this: any) {
@@ -27,19 +19,17 @@ export function onDragEnd(this: any) {
   this.data = null;
 
   // this.filters = [];
-
 }
 
 export function onDragMove(this: any) {
   if (this.dragging) {
-      const newPosition = this?.data?.getLocalPosition(this.parent);
-      this.x = newPosition.x;
-      this.y = newPosition.y;
+    const newPosition = this?.data?.getLocalPosition(this.parent);
+    this.x = newPosition.x;
+    this.y = newPosition.y;
   }
 }
 
 export function hitTestRectangle(r1: Container, r2: Container) {
-
   // Define the variables we'll need to calculate
   let hit = false;
 
@@ -68,19 +58,15 @@ export function hitTestRectangle(r1: Container, r2: Container) {
 
   // Check for a collision on the x axis
   if (Math.abs(vx) < combinedHalfWidths) {
-
     // A collision might be occurring. Check for a collision on the y axis
     if (Math.abs(vy) < combinedHalfHeights) {
-
       // There's definitely a collision happening
       hit = true;
     } else {
-
       // There's no collision on the y axis
       hit = false;
     }
   } else {
-
     // There's no collision on the x axis
     hit = false;
   }
@@ -90,8 +76,6 @@ export function hitTestRectangle(r1: Container, r2: Container) {
 }
 
 export function hitTestPoint(r1: Point, r2: Container) {
-  console.log(r1, r2)
-
   // Define the variables we'll need to calculate
   let hit = false;
 
@@ -120,19 +104,15 @@ export function hitTestPoint(r1: Point, r2: Container) {
 
   // Check for a collision on the x axis
   if (Math.abs(vx) < combinedHalfWidths) {
-
     // A collision might be occurring. Check for a collision on the y axis
     if (Math.abs(vy) < combinedHalfHeights) {
-
       // There's definitely a collision happening
       hit = true;
     } else {
-
       // There's no collision on the y axis
       hit = false;
     }
   } else {
-
     // There's no collision on the x axis
     hit = false;
   }
@@ -147,18 +127,18 @@ export function hitTestPoint(r1: Point, r2: Container) {
  * @param points 多边形的顶点坐标
  * @returns 是否碰撞
  */
-export function checkPolygonPoint(point: Point, points: Point[] ) {
+export function checkPolygonPoint(point: Point, points: Point[]) {
   let collision = false;
   const pointsLen = points.length;
-  const { x: px, y: py } = point
+  const { x: px, y: py } = point;
 
   for (let index = 0; index < pointsLen; index++) {
     const currentPoint = points[index];
-    const next = index === pointsLen-1 ? 0:index+1;
+    const next = index === pointsLen - 1 ? 0 : index + 1;
     const nextPoint = points[next];
-    const {x: cx, y: cy} = currentPoint;
-    const {x: nx,y: ny} = nextPoint;
-    const judgeX = px < (nx-cx)*(py-cy) / (ny-cy)+cx;
+    const { x: cx, y: cy } = currentPoint;
+    const { x: nx, y: ny } = nextPoint;
+    const judgeX = px < ((nx - cx) * (py - cy)) / (ny - cy) + cx;
     const judgeY = (cy >= py && ny < py) || (cy < py && ny >= py);
     if (judgeX && judgeY) {
       collision = !collision;
