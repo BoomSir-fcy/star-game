@@ -65,19 +65,6 @@ export const fetchGetNftView = async (tokenId: number): Promise<GalaxyNft> => {
   }
 };
 
-// 竞拍
-export const fetchAuction = async (tokenId: number) => {
-  try {
-    const contract = getGalaxyContract();
-    const tx = await contract.buy(tokenId);
-    const receipt = await tx.wait();
-    return receipt.status;
-  } catch (error) {
-    console.error(`fetch fetchAuction error: ${error}`);
-    return false;
-  }
-};
-
 // 竞拍记录
 export const fetchAuctionRecordList = async (
   galaxyId: number,

@@ -4,7 +4,8 @@ import { Image, Text, Flex, BoxProps } from 'uikit';
 import { RaceTypeColor } from 'uikit/theme/colors';
 import { Races, RaceType } from 'uikit/theme/types';
 import { useTranslation } from 'contexts/Localization';
-import { RaceCardStyled, LabelText } from './styled';
+import { RaceCardStyled, LabelText, ScrollBox } from './styled';
+import { raceBase } from '../config';
 
 interface RaceProps extends BoxProps {
   info: any;
@@ -17,36 +18,21 @@ const Race: React.FC<RaceProps> = ({ info, ...props }) => {
   return (
     <RaceCardStyled mt='13px'>
       <Flex width='100%'>
-        <RaceAvatar
-          race={
-            race === RaceType.PROTOSS
-              ? 'protoss'
-              : race === RaceType.HUMAN
-              ? 'human'
-              : 'zerg'
-          }
-        />
+        <RaceAvatar race={race} />
         <Flex ml='13px' flexDirection='column'>
           <Flex>
             <LabelText>{t('Planet race')}</LabelText>
             <Text color={RaceTypeColor[race]} ml='17px' fontSize='22px' bold>
-              {race ? t(`race-${race}`) : ''}
+              {race ? t(raceBase[race].label) : ''}
             </Text>
           </Flex>
-          <LabelText>{t('Ethnicity')}</LabelText>
-          <LabelText>
-            {t(
-              '1.The collection ability of Zerg management buildings is in the middle among the three major races',
-            )}
-          </LabelText>
-          <LabelText>
-            {t(
-              '2. The Zerg attack class has the shortest hand, but the most damage BT. No AOE damage',
-            )}
-          </LabelText>
-          <LabelText>
-            {t('3. The Zerg attack building occupies the smallest area')}
-          </LabelText>
+          <ScrollBox>
+            <LabelText>{t('Ethnicity')}</LabelText>
+            <LabelText>{t(raceBase[race].ethnicity)}</LabelText>
+            <LabelText>
+              {t('Features')}: {t(raceBase[race].features)}
+            </LabelText>
+          </ScrollBox>
         </Flex>
       </Flex>
     </RaceCardStyled>

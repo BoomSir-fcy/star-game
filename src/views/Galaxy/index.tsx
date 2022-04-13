@@ -45,6 +45,11 @@ const Galaxy = () => {
       };
     });
     setNavList(list);
+    dispatch(
+      setCurrentGalaxy(
+        currentGalaxy.id ? list.find(v => v.id === currentGalaxy.id) : list[0],
+      ),
+    );
   }, [galaxyList, account]);
 
   useEffect(() => {
@@ -77,7 +82,7 @@ const Galaxy = () => {
                   <Flex flexDirection='column'>
                     <Text mt='10px' fontSize='24px'>
                       {t('Galaxy Lord: %name% (can be obtained by auction)', {
-                        name: currentGalaxy?.nickname,
+                        name: currentGalaxy?.nickname || t('none'),
                       })}
                     </Text>
                     <Text mt='10px' fontSize='24px'>

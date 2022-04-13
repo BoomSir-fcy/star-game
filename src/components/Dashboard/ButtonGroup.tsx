@@ -11,6 +11,7 @@ import {
   ButtonProps,
   Box,
 } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
 
 export interface ButtonGroupProps {
   onRefresh?: ButtonOnRefresh;
@@ -49,20 +50,21 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
 };
 
 const ButtonGroup: React.FC<ButtonGroupProps> = ({ onBack, onRefresh }) => {
+  const { t } = useTranslation();
+
   return (
     <Flex>
       <SecondaryButton href='/plunder' tag='attack'>
-        掠夺资源
+        {t('Plunder resources').toLocaleUpperCase()}
       </SecondaryButton>
-
       <SecondaryButton href='/galaxy' tag='flag'>
-        占领恒星
+        {t('Occupy the stars').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/plant-league' tag='star'>
-        STAR GPOUP
+        {t('STAR GPOUP').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/mystery-box' tag='m-box'>
-        STAR BOX
+        {t('STAR BOX').toLocaleUpperCase()}
       </SecondaryButton>
       {/* <BackButton onBack={onBack} /> */}
       <RefreshButton mr='23px' onRefresh={onRefresh} />

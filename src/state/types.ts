@@ -123,6 +123,7 @@ export interface PlanetState {
   activePlanet: Api.Planet.PlanetInfo;
   activeMaterialMap: { [x: number]: Api.Planet.PlanetInfo | null };
   upgradePlanetId: number | null;
+  activeNavId: string;
 }
 
 export interface BuildlingState {
@@ -253,4 +254,11 @@ export interface AllianceView {
 export interface AllianceState {
   allianceView: AllianceView;
   workingPlanet: number[];
+}
+
+export enum PlanetStatus {
+  Upgrade = 1,
+  Enhancement = 2,
+  BuildingUpgrades = 3,
+  BuildingsDurability = 4,
 }

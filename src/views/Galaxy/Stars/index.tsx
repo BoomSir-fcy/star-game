@@ -47,15 +47,14 @@ const Stars = () => {
     // 截取10个为一组
     const levelList = sliceByLevels(galaxyStarList, 10, t);
     setNavList(levelList);
+    dispatch(
+      setCurrentStarPeriod(
+        currentStarPeriod?.id
+          ? levelList.find(v => v.id === currentStarPeriod.id)
+          : levelList[0],
+      ),
+    );
   }, [galaxyStarList]);
-
-  useEffect(() => {
-    if (!currentStarPeriod.id) dispatch(setCurrentStarPeriod(navList[0]));
-    if (currentStarPeriod.id)
-      dispatch(
-        setCurrentStarPeriod(navList.find(v => v.id === currentStarPeriod.id)),
-      );
-  }, [currentStarPeriod, navList]);
 
   useEffect(() => {
     initList();

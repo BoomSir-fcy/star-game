@@ -37,7 +37,7 @@ export const RechargeAssets: React.FC<{
     return [
       {
         value: StoreType.STONE,
-        label: '矿石',
+        label: t('Ore'),
         icon: (
           <Image
             mr='15px'
@@ -50,7 +50,7 @@ export const RechargeAssets: React.FC<{
       },
       {
         value: StoreType.POPULATION,
-        label: '人口',
+        label: t('Population'),
         icon: (
           <Image
             mr='15px'
@@ -63,7 +63,7 @@ export const RechargeAssets: React.FC<{
       },
       {
         value: StoreType.ENERGY,
-        label: '能量',
+        label: t('Energy'),
         icon: (
           <Image
             mr='15px'
@@ -125,7 +125,7 @@ export const RechargeAssets: React.FC<{
         if (selectId === StoreType.ENERGY) params.energy = val;
         const res = await Api.BuildingApi.storeReCharge(params);
         if (Api.isSuccess(res)) {
-          toastSuccess(t('充值成功'));
+          toastSuccess(t('Successful recharge'));
           setInputValue('');
           getStoreData();
           dispatch(fetchPlanetInfoAsync([planet_id]));
@@ -133,7 +133,7 @@ export const RechargeAssets: React.FC<{
         setPending(false);
       } catch (error) {
         console.log(error);
-        toastError(t('充值失败'));
+        toastError(t('Recharge failed'));
         setPending(false);
       }
     },
@@ -144,10 +144,14 @@ export const RechargeAssets: React.FC<{
     if (visible) getStoreData();
   }, [getStoreData, visible]);
   return (
-    <ModalWrapper title='补充资源' visible={visible} setVisible={onClose}>
+    <ModalWrapper
+      title={t('Supplementary resources')}
+      visible={visible}
+      setVisible={onClose}
+    >
       <Box padding='30px 25px'>
         <Flex justifyContent='space-between'>
-          <Text small>星球储存罐</Text>
+          <Text small>{t('Planetary storage tank')}</Text>
           <Flex alignItems='center'>
             <Text fontSize='30px' bold>
               {store[selectId]?.already}
@@ -171,7 +175,7 @@ export const RechargeAssets: React.FC<{
           width='100%'
           height={65}
           pattern='^[1-9]\d*$'
-          placeholder='请输入充值数量'
+          placeholder={t('Please enter the recharge amount')}
           value={inputValue}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             const val = e.target.value;
@@ -188,7 +192,7 @@ export const RechargeAssets: React.FC<{
         />
         <Flex justifyContent='center' mt='29px'>
           <Button disabled={pending} width={270} onClick={handleCharge}>
-            确认充值
+            {t('Confirm recharge')}
           </Button>
         </Flex>
       </Box>

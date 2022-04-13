@@ -1,4 +1,5 @@
 import StarrySky from 'components/StarrySky';
+import { VideoComponent } from 'components/Video';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -45,6 +46,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   return (
     <Box position='relative' id='detect-orient' ref={ref}>
       <StarrySky bgType={pathname === '/plant-league' ? 2 : 0} />
+      <VideoComponent scale={scale} />
       <Content id='scale-content' scale={scale}>
         {children}
       </Content>

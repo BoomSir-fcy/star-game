@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { PlanetState } from 'state/types';
 import {
   setActiveMaterialMap,
+  setActiveNavId,
   setActivePlanet,
   setUpgradePlanetId,
 } from './actions';
@@ -13,6 +14,7 @@ export const initialState: PlanetState = {
   planetInfo: {},
   activeMaterialMap: {},
   upgradePlanetId: null,
+  activeNavId: 'build',
   activePlanet: {} as Api.Planet.PlanetInfo,
 };
 
@@ -50,6 +52,9 @@ export const planet = createSlice({
       })
       .addCase(setUpgradePlanetId, (state, { payload }) => {
         state.upgradePlanetId = payload;
+      })
+      .addCase(setActiveNavId, (state, { payload }) => {
+        state.activeNavId = payload;
       });
   },
 });

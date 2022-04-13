@@ -151,14 +151,16 @@ const StarHeader = () => {
           >
             <TextStyled fontSize='20px' color='warning'>
               {planetInfo?.status === 2
-                ? t('培育中，该星球暂时没有产能')
+                ? t(
+                    'During cultivation, the planet has no production capacity for the time being',
+                  )
                 : null}
             </TextStyled>
             <ButtonStyled
               scale='sm'
               onClick={() => setState({ ...state, visible: true })}
             >
-              补充资源
+              {t('Supplementary resources')}
             </ButtonStyled>
           </Flex>
           <RaceFlex>
@@ -172,17 +174,7 @@ const StarHeader = () => {
               >
                 {planetInfo?.race ? t(`race-${planetInfo?.race}`) : ''}
               </Text>
-              <RaceAvatar
-                width='99px'
-                height='99px'
-                race={
-                  planetInfo?.race === RaceType.PROTOSS
-                    ? 'protoss'
-                    : planetInfo?.race === RaceType.HUMAN
-                    ? 'human'
-                    : 'zerg'
-                }
-              />
+              <RaceAvatar width='99px' height='99px' race={planetInfo?.race} />
             </RaceImageFlex>
           </RaceFlex>
         </Flex>

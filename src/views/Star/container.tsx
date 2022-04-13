@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Box, Flex, BackButton, RefreshButton } from 'uikit';
@@ -13,6 +13,8 @@ import {
   fetchBuildingsListAsync,
   fetchPlanetBuildingsAsync,
 } from 'state/buildling/fetchers';
+import { setActiveNavId } from 'state/planet/actions';
+import { useStore } from 'state';
 import { StarHeader } from './components';
 
 const Star: React.FC<{
@@ -22,6 +24,7 @@ const Star: React.FC<{
   const parsedQs = useParsedQueryString();
   const { t } = useTranslation();
   const id = Number(parsedQs.id);
+  const { activeNavId } = useStore(p => p.planet);
 
   React.useEffect(() => {
     if (id) {
@@ -35,7 +38,11 @@ const Star: React.FC<{
     <Layout>
       <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
         <Box>
-          <BackButton />
+          <BackButton
+            onClick={() => {
+              dispatch(setActiveNavId('build'));
+            }}
+          />
           <RefreshButton ml='33px' />
         </Box>
         <StarHeader />
@@ -69,6 +76,10 @@ const Star: React.FC<{
               path: `/star/search?id=${parsedQs.id}`,
             },
           ]}
+          activeId={activeNavId}
+          onChangeNav={e => {
+            dispatch(setActiveNavId(e.id as string));
+          }}
         />
         <Flex ml='23px' flex={1}>
           {children}

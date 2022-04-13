@@ -32,8 +32,8 @@ const Attributes: React.FC<AttributesProps> = ({
         <LabelStyled ml='15px'>
           <LabelText>{t('Grade')}:</LabelText>
           <AttrText>
-            {info?.level}
-            {t('Level')}
+            Lv{info?.level}
+            {/* {t('Level')} */}
           </AttrText>
         </LabelStyled>
         <LabelStyled ml='15px'>

@@ -23,6 +23,7 @@ import styled from 'styled-components';
 import { useGalaxyNft, useAuction } from 'state/galaxy/hooks';
 import {
   fetchAuctionRecordListAsync,
+  fetchGalaxyListAsync,
   fetchGetNftViewAsync,
 } from 'state/galaxy/reducer';
 import { getGalaxyIncoming } from 'state/galaxy/util';
@@ -106,6 +107,7 @@ const Auction = () => {
     try {
       setPending(true);
       await onAuction(galaxyId, galaxyNft.currentPrice);
+      dispatch(fetchGalaxyListAsync());
       dispatch(fetchGetNftViewAsync(galaxyId));
       dispatch(fetchAuctionRecordListAsync(galaxyId));
       setTimeout(() => {
@@ -194,7 +196,7 @@ const Auction = () => {
                       onClick={handleAuction}
                     >
                       {diffSeconds > 0 ? (
-                        `${t('Cool down')}${timePeriod.minutes}${t('m')}${
+                        `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
                           timePeriod.seconds
                         }${t('s')}`
                       ) : pending ? (

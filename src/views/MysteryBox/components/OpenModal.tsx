@@ -4,6 +4,7 @@ import { Box, Flex, PrimaryInput, Button, Text, Dots } from 'uikit';
 import ModalWrapper from 'components/Modal';
 import StarCom from 'components/StarCom';
 import { useTranslation } from 'contexts/Localization';
+import { useToast } from 'contexts/ToastsContext';
 
 const OpenModal: React.FC<{
   visible: boolean;
@@ -11,10 +12,15 @@ const OpenModal: React.FC<{
   onOpen: (name: string) => Promise<void>;
 }> = ({ visible, onClose, onOpen }) => {
   const { t } = useTranslation();
+  const { toastError } = useToast();
   const [handleLoading, setHandleLoading] = useState(false);
   const [value, setValue] = useState('');
 
   const onHandleOpen = useCallback(async () => {
+    if (!value || value.length < 5 || value.length > 20) {
+      toastError(t('Limit 5-20 characters'));
+      return;
+    }
     setHandleLoading(true);
     await onOpen(value);
     setHandleLoading(false);
@@ -36,6 +42,7 @@ const OpenModal: React.FC<{
                 width={387}
                 height={65}
                 mt='26px'
+                maxLength={20}
                 value={value}
                 onChange={event => {
                   setValue(event.target.value);
