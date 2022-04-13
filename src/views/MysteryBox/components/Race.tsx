@@ -23,14 +23,14 @@ const Race: React.FC<RaceProps> = ({ info, ...props }) => {
           <Flex>
             <LabelText>{t('Planet race')}</LabelText>
             <Text color={RaceTypeColor[race]} ml='17px' fontSize='22px' bold>
-              {race ? t(raceBase[race].label) : ''}
+              {race ? t(raceBase[race]?.label) : ''}
             </Text>
           </Flex>
           <ScrollBox>
             <LabelText>{t('Ethnicity')}</LabelText>
-            <LabelText>{t(raceBase[race].ethnicity)}</LabelText>
+            <LabelText>{t(raceBase[race]?.ethnicity)}</LabelText>
             <LabelText>
-              {t('Features')}: {t(raceBase[race].features)}
+              {t('Features')}: {t(raceBase[race]?.features)}
             </LabelText>
           </ScrollBox>
         </Flex>
