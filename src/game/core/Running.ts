@@ -226,7 +226,8 @@ class Running extends EventTarget {
     if (!axis) return false;
     const soldier = this.game.findSoldierByAxis(axis);
     if (!soldier) return false;
-    soldier.dispatchEvent(new Event('death'));
+    soldier.showEffectText('阵亡');
+    // soldier.dispatchEvent(new Event('death'));
     return true;
   }
 
