@@ -32,6 +32,10 @@ export const GrowPop: React.FC<{
         callBack();
         onClose();
       }
+      if (res.code === 200007) {
+        toastError(t('The planet is being upgraded and cannot be upgraded'));
+        onClose();
+      }
       if (res.code === 200017) {
         toastError(t('Planet already has max strengthen level'));
         onClose();
