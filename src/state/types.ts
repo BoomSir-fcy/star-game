@@ -280,3 +280,10 @@ export interface AllianceState {
   allianceView: AllianceView;
   workingPlanet: number[];
 }
+
+export enum PlanetStatus {
+  Upgrade = 1,
+  Enhancement = 2,
+  BuildingUpgrades = 3,
+  BuildingsDurability = 4,
+}
