@@ -40,6 +40,15 @@ const Star: React.FC<{
     if (pathname.indexOf('/star/upgrade') !== -1) {
       dispatch(setActiveNavId('upgrade'));
     }
+    if (pathname.indexOf('/star/grow') !== -1) {
+      dispatch(setActiveNavId('grow'));
+    }
+    if (pathname.indexOf('/star/embattle') !== -1) {
+      dispatch(setActiveNavId('embattle'));
+    }
+    if (pathname.indexOf('/star/search') !== -1) {
+      dispatch(setActiveNavId('search'));
+    }
   }, []);
 
   return (
