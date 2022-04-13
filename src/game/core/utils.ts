@@ -1,6 +1,7 @@
 // import { Point, Container, Graphics } from 'pixi.js';
 import { Container } from '@pixi/display';
 import { Point } from '@pixi/math';
+import { EffectType, effectType, Skill } from 'game/types';
 
 export function onDragStart(this: any, event: any) {
   // store a reference to the data
@@ -147,3 +148,55 @@ export function checkPolygonPoint(point: Point, points: Point[]) {
 
   return collision;
 }
+
+// // 1 禁锢， 2冰冻，3灼烧，4定时炸弹， 5护盾
+// enum Skill {
+//   HOLD = 1, // 禁锢
+//   FREEZE = 2, // 冰冻
+//   BURN = 3, // 灼烧
+//   BOMB = 4,
+//   SHIELD = 5,
+// }
+export const getSkillText = (skill?: Skill) => {
+  if (skill === Skill.HOLD) return '禁锢';
+  if (skill === Skill.FREEZE) return '冰冻';
+  if (skill === Skill.BURN) return '灼烧';
+  if (skill === Skill.BOMB) return '炸弹';
+  if (skill === Skill.SHIELD) return '护盾';
+
+  return '';
+};
+
+export const getEffectText = (effect?: EffectType) => {
+  if (effect === effectType.ATTACK) return '攻击';
+  if (effect === effectType.STOP_MOVE) return '禁锢';
+  if (effect === effectType.ICE_END) return '冰冻结束';
+  if (effect === effectType.FIRING) return '灼烧中';
+  if (effect === effectType.BOOM) return '爆炸';
+  if (effect === effectType.ICE_START) return '冰冻';
+  if (effect === effectType.ADD_FIRING) return '灼烧';
+  if (effect === effectType.ADD_BOOM) return '炸弹';
+
+  return '未知';
+};
+
+// INIT: 1, // 初始化棋子
+// MOVE: 2, // 棋子移动
+// ATTACK: 3, // 棋子攻击
+// STOP_MOVE: 4, // 禁锢
+// ICE_START: 5, // 冰冻开始
+// ICE_END: 6, // 冰冻结束
+// ADD_FIRING: 7, // 添加灼烧
+// FIRING: 8, // 正在灼烧
+// ADD_BOOM: 9, // 添加炸弹
+// BOOM: 10, // 炸弹爆炸
+
+export const getSkillKey = (skill?: Skill): 'firing' | 'boom' => {
+  if (skill === Skill.HOLD) return 'firing';
+  if (skill === Skill.FREEZE) return 'firing';
+  if (skill === Skill.BURN) return 'firing';
+  if (skill === Skill.BOMB) return 'boom';
+  if (skill === Skill.SHIELD) return 'firing';
+
+  return 'firing';
+};

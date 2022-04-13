@@ -153,6 +153,10 @@ export interface GameState {
   baseUnits: {
     [race: string]: MapBaseUnits;
   };
+  baseSkill: {
+    boom?: Api.Game.BoomSkill[];
+    firing?: Api.Game.FiringSkill[];
+  };
   plantUnits: {
     [id: number]: Api.Game.UnitPlanetPos[];
   };

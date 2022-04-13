@@ -136,24 +136,24 @@ class Game extends EventTarget {
         this.activeSolider = soldier;
         soldier.changeState(stateType.ACTIVE, true);
         this.dispatchEvent(getAddActiveSoliderEvent(soldier));
-        // this.activeSoliderFlag = true;
-        // if (!soldier.moved) {
-        //   this.activeSolider = soldier;
-        //   soldier.changeState(stateType.ACTIVE, true);
-        // }
       })
       .on('click', (e: InteractionEvent) => {
         this.activeSoliderFlag = true;
-        // this.activeSolider = soldier;
-        // soldier.changeState(stateType.ACTIVE, true);
-        // this.dispatchEvent(getAddActiveSoliderEvent(soldier));
       });
+    soldier.addEventListener('death', () => {
+      this.removeSoldier(soldier);
+    });
+  }
+
+  addActiveSolider(activeSolider: Soldier) {
+    this.activeSolider = activeSolider;
+    this.activeSoliderFlag = true;
+    activeSolider.changeState(stateType.ACTIVE, true);
+    this.dispatchEvent(getAddActiveSoliderEvent(activeSolider));
   }
 
   removeActiveSolider() {
     if (this.activeSolider) {
-      this.activeSolider.changeState(stateType.DISABLE, false);
-      this.activeSolider?.changeState(stateType.DISABLE, false);
       this.dispatchEvent(getRemoveActiveSoliderEvent());
       delete this.activeSolider;
     }

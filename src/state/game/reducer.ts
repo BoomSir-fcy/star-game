@@ -5,6 +5,7 @@ import { fetchGamePK, fetchGamePlanetUnits, fetchUnitList } from './fetchers';
 export const initialState: GameState = {
   baseUnits: {},
   plantUnits: {},
+  baseSkill: {},
   process: null,
   PKInfo: null,
 };
@@ -12,12 +13,15 @@ export const initialState: GameState = {
 export const fetchUnitListAsync =
   (race: number): AppThunk =>
   async dispatch => {
-    const list = await fetchUnitList(race);
-    dispatch(
-      setUnits({
-        [race]: list,
-      }),
-    );
+    const data = await fetchUnitList(race);
+    if (data) {
+      dispatch(
+        setUnits({
+          [race]: data.units,
+        }),
+      );
+      dispatch(setBaseSkill(data.base));
+    }
   };
 
 export const fetchGamePlanetUnitsAsync =
@@ -33,9 +37,9 @@ export const fetchGamePlanetUnitsAsync =
   };
 
 export const fetchGamePKAsync =
-  (id1: number, id2: number): AppThunk =>
+  (id1: number, id2: number, maxRound?: number): AppThunk =>
   async dispatch => {
-    const PKInfo = await fetchGamePK(id1, id2);
+    const PKInfo = await fetchGamePK(id1, id2, maxRound);
     dispatch(setPKInfo(PKInfo));
   };
 
@@ -47,6 +51,13 @@ export const userInfoSlice = createSlice({
       const { payload } = action;
       state.baseUnits = {
         ...state.baseUnits,
+        ...payload,
+      };
+    },
+    setBaseSkill: (state, action) => {
+      const { payload } = action;
+      state.baseSkill = {
+        ...state.baseSkill,
         ...payload,
       };
     },
@@ -65,6 +76,7 @@ export const userInfoSlice = createSlice({
 });
 
 // Actions
-export const { setUnits, setPlantUnits, setPKInfo } = userInfoSlice.actions;
+export const { setUnits, setPlantUnits, setPKInfo, setBaseSkill } =
+  userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

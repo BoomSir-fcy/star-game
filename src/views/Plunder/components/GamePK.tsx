@@ -44,6 +44,7 @@ interface GamePKProps {
 const game = new Game({ width: 900, height: 600 });
 
 const GamePK: React.FC<GamePKProps> = () => {
+  const [running, setRunning] = useState<Running | null>(null);
   const PKInfo = useStore(p => p.game.PKInfo);
 
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   const [pid0, setPid0] = useState((parsedQs.pid0 as string) || '');
   const [pid1, setPid1] = useState((parsedQs.pid1 as string) || '');
+  const [maxRound, setMaxRound] = useState('10');
 
   const planetInfo = useStore(p => p.planet.planetInfo);
 
@@ -75,11 +77,11 @@ const GamePK: React.FC<GamePKProps> = () => {
   const startHandle = useCallback(() => {
     if (Number(pid0) && Number(pid1)) {
       dispatch(fetchPlanetInfoAsync([Number(pid0), Number(pid1)]));
-      navigate(`/plunder-test?pid0=${pid0}&pid1=${pid1}`);
+      navigate(`/plunder-test?pid0=${pid0}&pid1=${pid1}`, { replace: true });
     }
   }, [dispatch, pid0, pid1]);
 
-  useFetchGamePK(infoP0?.id, infoP1?.id);
+  useFetchGamePK(infoP0?.id, infoP1?.id, Number(maxRound));
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -97,6 +99,7 @@ const GamePK: React.FC<GamePKProps> = () => {
           id: item.base_unit_id,
           hp: base[item.base_unit_id].hp,
           isEnemy,
+          enableDrag: false,
           unique_id: item.base_unit_id,
           // attackId: base[item.base_unit_id].unique_id
         });
@@ -105,10 +108,13 @@ const GamePK: React.FC<GamePKProps> = () => {
     [],
   );
 
-  const runHandle = useCallback((slot: RoundsProps) => {
-    const running = new Running(game, slot);
-    console.log(running);
-  }, []);
+  const runHandle = useCallback(
+    (slot: RoundsProps) => {
+      const _running = new Running(game, slot);
+      setRunning(_running);
+    },
+    [setRunning],
+  );
 
   useEffect(() => {
     console.log(PKInfo, 'PKInfo');
@@ -142,11 +148,42 @@ const GamePK: React.FC<GamePKProps> = () => {
             />
           </Box>
           <Box mt='50px'>
+            <Text>回合数</Text>
+            <PrimaryInput
+              value={maxRound}
+              onChange={e => {
+                setMaxRound(e.target.value);
+              }}
+            />
+          </Box>
+          <Box mt='50px'>
             <Button onClick={startHandle}>开始匹配</Button>
-            <Button>开始战斗</Button>
+            {/* <Button>开始战斗</Button> */}
           </Box>
         </Box>
         <Box ref={ref} />
+        {/* <Box ml='50'>
+          <Text>战斗速度</Text>
+          <Text>X {running?.rate}</Text>
+          <Button
+            onClick={() => {
+              if (running?.rate) {
+                running.rate += running.rate > 1 ? -0.2 : -1;
+              }
+            }}
+          >
+            减速
+          </Button>
+          <Button
+            onClick={() => {
+              if (running?.rate) {
+                running.rate += running.rate > 1 ? 1 : 0.2;
+              }
+            }}
+          >
+            加速
+          </Button>
+        </Box> */}
       </Flex>
     </Box>
   );

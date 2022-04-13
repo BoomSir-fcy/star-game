@@ -1,4 +1,4 @@
-import { effectType, EffectType, RoundDescAttack } from 'game/types';
+import { effectType, EffectType, RoundDesc, RoundDescAttack } from 'game/types';
 // import { Graphics, Sprite, Container, Point, Texture } from 'pixi.js';
 import { Container } from '@pixi/display';
 import { Sprite } from '@pixi/sprite';
@@ -32,6 +32,8 @@ class Combat extends EventTarget {
 
   hpGraphics = new Graphics();
 
+  hpText = new Text('', { fill: 0xffffff, fontSize: 32 });
+
   isEnemy = false;
 
   displaySprite = new Sprite();
@@ -40,7 +42,9 @@ class Combat extends EventTarget {
 
   bloodStartY = -20;
 
-  bloodH = 10;
+  bloodH = 20;
+
+  bloodBorderW = 2;
 
   targetAxisPoint?: AxisPoint;
 
@@ -58,34 +62,39 @@ class Combat extends EventTarget {
 
   attackTarget?: Combat;
 
-  attackInfo?: RoundDescAttack;
+  attackInfo?: RoundDesc;
 
-  attackEffect = new Text('');
+  bullet?: Bullet;
 
-  // bullet = new Bullet();
-
-  bullet = {
-    moving: true,
-    speedX: 0,
-    speedY: 0,
-    textureS: Texture.from('/assets/bunny.png'),
-    textureE: Texture.from('/assets/bunny_saturated.png'),
-    sprite: new Sprite(),
-  };
+  attackEffect = new Text('', { fill: 0xffffff, fontSize: 32 });
 
   renderPh() {
     this.container.addChild(this.hpGraphics);
+    this.hpText.position.set(60, -20);
+    this.hpText.zIndex = 2;
+    this.hpGraphics.zIndex = 2;
+    this.container.addChild(this.hpText);
     this.drawHp();
   }
 
+  showEffectText(text: string) {
+    console.log(text);
+    this.attackEffect.text = text;
+    this.attackEffect.visible = true;
+  }
+
+  hideEffectText() {
+    this.attackEffect.visible = false;
+  }
+
   drawHp() {
-    const lineX = this.bloodH - 2;
-    const lineStartX = -(config.BLOOD_WIDTH / 2) + 1;
-    const lineH = lineX / 2 + 1;
+    const lineX = this.bloodH - this.bloodBorderW * 2;
+    const lineStartX = -(config.BLOOD_WIDTH / 2) + this.bloodBorderW;
+    const lineH = lineX / 2 + this.bloodBorderW;
     const lineY = this.bloodStartY + lineH;
     this.hpGraphics.clear();
 
-    this.hpGraphics.lineStyle(1, 0xffffff, 1);
+    this.hpGraphics.lineStyle(this.bloodBorderW, 0xffffff, 1);
     this.hpGraphics.drawRect(
       -(config.BLOOD_WIDTH / 2),
       this.bloodStartY,
@@ -101,34 +110,30 @@ class Combat extends EventTarget {
     );
     this.hpGraphics.moveTo(lineStartX, lineY);
     this.hpGraphics.lineTo(
-      (this.activePh / this.hp) * (config.BLOOD_WIDTH - 2) + lineStartX,
+      (this.activePh / this.hp) * (config.BLOOD_WIDTH - this.bloodBorderW * 2) +
+        lineStartX,
       lineY,
     );
+    this.hpText.text = `${this.activePh}`;
   }
 
   drawAttackEffect() {
-    this.attackEffect.visible = false;
+    this.attackEffect.anchor.set(0.5);
+    this.attackEffect.position.set(0, -50);
+    // this.attackEffect.visible = false;
     this.container.addChild(this.attackEffect);
   }
 
-  updateAttackEffect(type: EffectType) {
-    if (type === effectType.BURN) {
-      this.attackEffect.text = '灼烧';
-    } else if (type === effectType.FREEZE) {
-      this.attackEffect.text = '冰冻';
-    } else if (type === effectType.REPEL) {
-      this.attackEffect.text = '击退';
-    }
-    this.attackEffect.visible = false;
-  }
-
   renderBullet() {
-    try {
-      this.container.parent.getChildIndex(this.bullet.sprite);
-    } catch (error) {
-      this.bullet.sprite.anchor.set(1, 1);
-      this.bullet.sprite.visible = false;
-      this.container.parent.addChild(this.bullet.sprite);
+    if (!this.bullet) {
+      this.drawAttackEffect();
+      this.bullet = new Bullet(this);
+      this.bullet.container.visible = false;
+      this.container.parent.addChild(this.bullet.container);
+      this.bullet.addEventListener('attackEnd', () => {
+        console.log('attackEnd');
+        this.onAttackEnd();
+      });
     }
   }
 
@@ -186,70 +191,24 @@ class Combat extends EventTarget {
     this.axisPoint?.chequer?.displayState(false);
   }
 
-  attack(target: Combat, attackInfo?: RoundDescAttack, time?: number) {
+  attack(
+    target: Combat,
+    effect: EffectType,
+    attackInfo?: RoundDesc,
+    time?: number,
+  ) {
     this.attackTarget = target;
     this.attackInfo = attackInfo;
     this.attacking = true;
-    this.bulletMove(time);
-  }
-
-  bulletMove(moveTime?: number) {
-    if (this.attackTarget) {
-      const t = ((moveTime || this.moveTime) / 1000) * 60;
-      this.renderBullet();
-      this.bullet.sprite.scale.set(1);
-      this.bullet.moving = true;
-      if (this.axisPoint && this.attackTarget?.axisPoint) {
-        this.bullet.sprite.position.set(this.axisPoint?.x, this.axisPoint?.y);
-        this.bullet.sprite.visible = true;
-        this.bullet.speedX =
-          (this.attackTarget?.axisPoint?.x - this.axisPoint?.x) / t;
-        this.bullet.speedY =
-          (this.attackTarget?.axisPoint?.y - this.axisPoint?.y) / t;
-        this.bullet.sprite.texture = this.bullet.textureS;
-      }
+    this.renderBullet();
+    if (this.bullet) {
+      this.bullet.bulletMove(target, effect, time);
     }
   }
 
-  handleBulletMove() {
-    if (this.bullet.moving && this.attackTarget) {
-      this.bullet.sprite.position.x += this.bullet.speedX;
-      this.bullet.sprite.position.y += this.bullet.speedY;
-      // this.x += this.speedX;
-      // this.y += this.speedY;
-      if (
-        Math.abs(
-          this.bullet.sprite.position.y -
-            (this.attackTarget?.axisPoint?.y || 0),
-        ) <= 15 &&
-        Math.abs(
-          this.bullet.sprite.position.x -
-            (this.attackTarget?.axisPoint?.x || 0),
-        ) <= 15
-      ) {
-        this.bullet.sprite.texture = this.bullet.textureE;
-        this.bullet.sprite.scale.x += 0.05;
-        this.bullet.sprite.scale.y += 0.05;
-      }
-
-      if (
-        Math.abs(
-          this.bullet.sprite.position.y -
-            (this.attackTarget?.axisPoint?.y || 0),
-        ) <= 1 &&
-        Math.abs(
-          this.bullet.sprite.position.x -
-            (this.attackTarget?.axisPoint?.x || 0),
-        ) <= 1
-      ) {
-        this.bullet.moving = false;
-        this.bullet.speedX = 0;
-        this.bullet.speedY = 0;
-        this.bullet.sprite.visible = false;
-        this.attackTarget.activePh += this.attackInfo?.receive_sub_hp || 0;
-        this.attackTarget.drawHp();
-        this.attacking = false;
-      }
+  onAttackEnd() {
+    if (this.attackInfo?.receive_id) {
+      // this.attackTarget?.dispatchEvent(new Event('death'));
     }
   }
 
@@ -257,7 +216,9 @@ class Combat extends EventTarget {
     if (this.attacking && this.attackTarget) {
       // 攻击
       // this.displaySprite.rotation += 0.1;
-      this.handleBulletMove();
+      if (this.bullet) {
+        this.bullet.handleBulletMove();
+      }
     }
   }
 

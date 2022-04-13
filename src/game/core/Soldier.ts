@@ -24,12 +24,12 @@ export interface AttrSoldierOptions {
   isEnemy?: boolean;
   attackId?: string;
   unitInfo?: Api.Game.UnitInfo;
+  enableDrag?: boolean;
 }
 export interface SoldierOptions extends AttrSoldierOptions {
   x: number;
   y: number;
   axisPoint?: AxisPoint;
-  enableDrag?: boolean;
 }
 class Soldier extends Combat {
   constructor(options: SoldierOptions) {
@@ -108,21 +108,29 @@ class Soldier extends Combat {
       this.createAttackId();
     }
 
-    this.container.buttonMode = true;
-    this.container.interactive = true;
+    this.container.buttonMode = Boolean(enableDrag);
+    this.container.interactive = Boolean(enableDrag);
 
     this.enableDrag = Boolean(enableDrag);
 
-    if (this.enableDrag) {
-      this.container
-        .on('pointerdown', e => this.onDragStart(e))
-        .on('pointerup', () => this.onDragEnd())
-        .on('pointerupoutside', () => {
-          this.onDragEnd();
-          this.resetPosition();
-        })
-        .on('pointermove', () => this.onDragMove());
-    }
+    this.container
+      .on('pointerdown', e => this.onDragStart(e))
+      .on('pointerup', () => this.onDragEnd())
+      .on('pointerupoutside', () => {
+        this.onDragEnd();
+        this.resetPosition();
+      })
+      .on('pointermove', () => this.onDragMove());
+    // if (this.enableDrag) {
+    //   this.container
+    //     .on('pointerdown', e => this.onDragStart(e))
+    //     .on('pointerup', () => this.onDragEnd())
+    //     .on('pointerupoutside', () => {
+    //       this.onDragEnd();
+    //       this.resetPosition();
+    //     })
+    //     .on('pointermove', () => this.onDragMove());
+    // }
   }
 
   createAttackId() {
