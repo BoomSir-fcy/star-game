@@ -48,9 +48,11 @@ const JoinTheAlliance = () => {
   const Remove = useCallback(
     async (id: number) => {
       try {
-        let newList = workingList.concat([]);
+        const newList = workingList.concat([]);
         const index = newList.indexOf(Number(id));
-        newList = newList.splice(index, 1);
+        newList.splice(index, 1);
+        console.log(workingList, newList);
+
         await RemoveStar(newList);
         toastSuccess(t('Removed successfully'));
       } catch (e) {
