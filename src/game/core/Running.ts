@@ -14,6 +14,7 @@ import {
   RoundDescStopMove,
   RoundDescIceStart,
   RoundDesc,
+  RoundDescRemove,
 } from 'game/types';
 import AxisPoint from './AxisPoint';
 import { stateType } from './Chequer';
@@ -120,6 +121,8 @@ class Running extends EventTarget {
       const t = this.getMoveT();
       const handle = () => this.moveHandle(track, t);
       await Running.sleep(handle, t, true);
+    } else if (track?.type === effectType.REMOVE) {
+      this.removeHandle(track);
     } else if (track?.type) {
       const round = `回合: ${track.id} \n`;
       const effect = `技能: ${getEffectText(track.type)} \n`;
@@ -215,23 +218,23 @@ class Running extends EventTarget {
     return true;
   }
 
+  removeHandle(track: TrackDetail) {
+    const axis = this.game.getAxis(
+      track.currentAxisPoint.x,
+      track.currentAxisPoint.y,
+    );
+    if (!axis) return false;
+    const soldier = this.game.findSoldierByAxis(axis);
+    if (!soldier) return false;
+    soldier.dispatchEvent(new Event('death'));
+    return true;
+  }
+
   static getAttackTracks(
     attacks: RoundDesc,
     desc_type: EffectType,
     id: string,
   ): TrackDetail[] {
-    // this.trackDetails.push({
-    //   type: handleType.ATTACK,
-    //   currentAxisPoint: {
-    //     x: attacks.sender_point.x,
-    //     y: attacks.sender_point.y,
-    //   },
-    //   targetAxisPoint: {
-    //     x: attacks.receive_point.x,
-    //     y: attacks.receive_point.y,
-    //   },
-    //   attackInfo: { ...attacks },
-    // });
     return [
       {
         id,
@@ -245,6 +248,27 @@ class Running extends EventTarget {
           y: attacks.receive_point?.y || attacks.sender_point?.y,
         },
         attackInfo: { ...attacks },
+      },
+    ];
+  }
+
+  static getRemoveTracks(
+    attacks: RoundDescRemove,
+    desc_type: EffectType,
+    id: string,
+  ): TrackDetail[] {
+    return [
+      {
+        id,
+        type: desc_type,
+        currentAxisPoint: {
+          x: attacks.receive_point?.x,
+          y: attacks.receive_point?.y,
+        },
+        targetAxisPoint: {
+          x: attacks.receive_point?.x,
+          y: attacks.receive_point?.y,
+        },
       },
     ];
   }
@@ -369,6 +393,15 @@ class Running extends EventTarget {
           this.trackDetails.push(
             ...Running.getAttackTracks(
               info.stop_move,
+              info.desc_type,
+              `${round}-${_track}`,
+            ),
+          );
+        }
+        if (info.desc_type === effectType.REMOVE) {
+          this.trackDetails.push(
+            ...Running.getRemoveTracks(
+              info.unit_remove,
               info.desc_type,
               `${round}-${_track}`,
             ),

@@ -155,6 +155,10 @@ class Combat extends EventTarget {
     }
   }
 
+  // getTargetPointPos() {
+  //   return
+  // }
+
   handleMove() {
     if (this.moving && this.targetAxisPoint) {
       this.container.position.x += this.speedX;

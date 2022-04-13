@@ -105,6 +105,11 @@ export interface RoundDescIceEnd {
   sender_id: string;
 }
 
+export interface RoundDescRemove {
+  receive_point: RoundDescAxis;
+  receive_id: string;
+}
+
 export type RoundDesc =
   | RoundDescAttack
   | RoundDescBoom
@@ -127,6 +132,7 @@ export interface RoundInfo {
   ice_end: RoundDescIceEnd;
   ice_start: RoundDescIceStart;
   stop_move: RoundDescStopMove;
+  unit_remove: RoundDescRemove;
 }
 
 // DescUnitInit               // 初始化棋子
@@ -155,6 +161,7 @@ export const effectType = {
   FIRING: 8, // 正在灼烧
   ADD_BOOM: 9, // 添加炸弹
   BOOM: 10, // 炸弹爆炸
+  REMOVE: 11, // 移除棋子
 };
 
 // 技能
