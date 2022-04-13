@@ -1,3 +1,4 @@
+import { useWeb3React } from '@web3-react/core';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'contexts/ToastsContext';
@@ -12,6 +13,7 @@ export const PlunderCard: React.FC<{
   onClose: () => void;
 }> = ({ info, onClose }) => {
   const { t } = useTranslation();
+  const { account } = useWeb3React();
   const { toastError, toastSuccess } = useToast();
   const [pending, setPending] = useState(false);
   const hasOwner = info.owner;
@@ -69,7 +71,9 @@ export const PlunderCard: React.FC<{
           </Flex>
           {hasOwner ? (
             <ButtonStyled
-              disabled={pending}
+              disabled={
+                pending || hasOwner?.toLowerCase() === account?.toLowerCase()
+              }
               scale='sm'
               ml='60px'
               onClick={handlePlunder}
