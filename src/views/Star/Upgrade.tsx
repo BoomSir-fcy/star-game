@@ -123,6 +123,10 @@ const Upgrade = () => {
           material_planet_num,
           success,
         });
+      } else if (res.code === 200018) {
+        toastError(
+          t('The planet grid utilization rate reaches 20% to upgrade'),
+        );
       } else {
         toastError(res.message);
       }
