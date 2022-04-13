@@ -178,6 +178,14 @@ class Game extends EventTarget {
     this.removeActiveSolider();
   }
 
+  clearSoldier() {
+    this.soldiers.forEach(item => {
+      item.changeState(stateType.PREVIEW, false);
+      this.boards.container.removeChild(item.container);
+    });
+    this.soldiers = [];
+  }
+
   setEnableDrag(state: boolean) {
     this.enableDrag = state;
   }
@@ -192,7 +200,6 @@ class Game extends EventTarget {
 
   offDragPreSoldier() {
     this.setEnableDrag(false);
-    console.log(this.dragPreSoldier, this.dragPreSoldierEvent);
     if (this.dragPreSoldier && this.dragPreSoldierEvent) {
       const soldier = this.dragPreSoldier.clone();
       const res = this.onDragEndSoldier(this.dragPreSoldierEvent, soldier);
@@ -259,16 +266,6 @@ class Game extends EventTarget {
       y: axis.y,
       axisPoint: axis,
     });
-
-    console.log(
-      {
-        ...option,
-        x: axis.x,
-        y: axis.y,
-        axisPoint: axis,
-      },
-      soldier,
-    );
 
     this.addSoldier(soldier);
     return soldier;
@@ -340,8 +337,6 @@ class Game extends EventTarget {
 
     this.app.stage.addChild(dragon);
     this.app.start();
-    // dragon.state.setAnimation(0, 'play', true);
-    console.log(dragon.state);
     dragon.state.setAnimation(8, 'play', true);
 
     this.app.ticker.add(() => {

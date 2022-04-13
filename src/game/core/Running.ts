@@ -89,38 +89,54 @@ class Running extends EventTarget {
 
   trackDetails: TrackDetail[] = [];
 
+  paused = false;
+
   init() {
     this.getTracks();
     this.runHandle();
   }
 
   play() {
-    console.log(this);
-    console.log('start');
+    this.paused = false;
+    this.runHandle();
   }
 
-  reverse() {
-    console.log(this);
-    console.log('reverse');
+  // reverse() {
+  //   console.log(this);
+  //   console.log('reverse');
+  // }
+
+  reStart() {
+    // this.paused = true;
+    this.trackIndex = 0;
+    this.paused = true;
   }
 
   pause() {
-    console.log(this);
-    console.log('pause');
+    this.paused = true;
   }
 
   stop() {
-    console.log(this);
-    console.log('stop');
+    this.game.app.stop();
+  }
+
+  start() {
+    this.game.app.start();
   }
 
   async runHandle() {
+    if (this.paused) return;
     const track = this.trackDetails[this.trackIndex];
     if (track?.type === effectType.MOVE) {
       this.infoText.text = `回合: ${track.id}`;
       const t = this.getMoveT();
-      const handle = () => this.moveHandle(track, t);
-      await Running.sleep(handle, t, true);
+      const res = this.moveHandle(track, t);
+      if (!res) {
+        console.warn(`移动失效:${track.id}`);
+        this.runningHandle();
+      }
+      // const handle = () => this.moveHandle(track, t);
+      // await Running.sleep(handle, t, true);
     } else if (track?.type === effectType.REMOVE) {
       this.removeHandle(track);
     } else if (track?.type) {
@@ -128,22 +144,30 @@ class Running extends EventTarget {
       const effect = `技能: ${getEffectText(track.type)} \n`;
       const sender = `攻击者: (${track.currentAxisPoint.x}, ${track.currentAxisPoint.y}) \n`;
       const receive = `被攻击者: (${track.targetAxisPoint.x}, ${track.targetAxisPoint.y}) \n`;
-      this.infoText.text = `${round}${effect}${sender}${receive}`;
+      const newHp = `被攻击者血量: (${(track.attackInfo as any)?.now_hp}) \n`;
+      this.infoText.text = `${round}${effect}${sender}${receive}${newHp}`;
       const t = this.getAttackT();
-      const handle = () => this.attackHandle(track, track.type, t);
-      await Running.sleep(handle, t, true);
+      const res = this.attackHandle(track, track.type, t);
+      if (!res) {
+        console.warn(`攻击失效:${track.id}`);
+        this.runningHandle();
+      }
+      // const handle = () => this.attackHandle(track, track.type, t);
+      // await Running.sleep(handle, t, true);
     }
     // if (track?.type === effectType.ATTACK) {
     //   const t = this.getAttackT();
     //   const handle = () => this.attackHandle(track, t);
     //   await Running.sleep(handle, t, true);
     // }
+  }
 
+  runningHandle() {
+    if (this.paused) return;
     if (this.trackIndex < this.trackDetails.length) {
       this.trackIndex += 1;
-      await this.runHandle();
+      this.runHandle();
     } else {
-      console.log('end');
       this.dispatchEvent(new CustomEvent('runEnd'));
     }
   }
@@ -215,6 +239,10 @@ class Running extends EventTarget {
     if (!soldier) return false;
     soldier.run();
     soldier.moveTo(axisPoint, t);
+    soldier.once('moveEnd', () => {
+      this.runningHandle();
+    });
+
     return true;
   }
 
@@ -227,7 +255,8 @@ class Running extends EventTarget {
     const soldier = this.game.findSoldierByAxis(axis);
     if (!soldier) return false;
     soldier.showEffectText('阵亡');
-    // soldier.dispatchEvent(new Event('death'));
+    soldier.dispatchEvent(new Event('death'));
+    this.runningHandle();
     return true;
   }
 
@@ -305,6 +334,9 @@ class Running extends EventTarget {
     sendSoldier.run();
     sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo, t);
     // receiveSoldier.changeState(stateType.DISABLE, true);
+    sendSoldier.once('attackEnd', () => {
+      this.runningHandle();
+    });
     return true;
   }
 

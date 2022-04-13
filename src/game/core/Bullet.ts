@@ -109,12 +109,9 @@ class Bullet extends EventTarget {
     this.speedX = 0;
     this.speedY = 0;
     this.container.visible = false;
-    // console.log(this.attackTarget, 'this.attackTarget');
     if (this.attackTarget) {
       this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
-      this.attackTarget.drawHp();
       this.combat.attacking = false;
-      // console.log(this.effect, 'this.effect');
       // if (this.effect) {
       //   this.attackTarget.showEffectText(getEffectText(this.effect));
       // }

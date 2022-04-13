@@ -32,6 +32,7 @@ export interface RoundDescMove {
 
 export interface RoundDescAttack {
   receive_df: number;
+  now_hp: number;
   receive_id: string;
   receive_point: RoundDescAxis;
   receive_sub_hp: number;

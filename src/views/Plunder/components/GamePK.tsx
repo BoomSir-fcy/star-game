@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { Box, Button, Flex, Text, PrimaryInput } from 'uikit';
+import { Box, Button, Flex, Text, PrimaryInput, ResetCSS } from 'uikit';
 import { Api } from 'apis';
 import {
   useFetchGamePlanetUnits,
@@ -125,6 +125,16 @@ const GamePK: React.FC<GamePKProps> = () => {
     }
   }, [PKInfo, createSoldiers, runHandle]);
 
+  const resetSolider = useCallback(() => {
+    game.clearSoldier();
+
+    if (PKInfo && game.soldiers.length === 0) {
+      createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, false);
+      createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, true);
+      // runHandle(PKInfo.slot);
+    }
+  }, [game, PKInfo]);
+
   return (
     <Box position='relative'>
       <Flex>
@@ -162,7 +172,7 @@ const GamePK: React.FC<GamePKProps> = () => {
           </Box>
         </Box>
         <Box ref={ref} />
-        {/* <Box ml='50'>
+        <Box ml='50'>
           <Text>战斗速度</Text>
           <Text>X {running?.rate}</Text>
           <Button
@@ -183,7 +193,29 @@ const GamePK: React.FC<GamePKProps> = () => {
           >
             加速
           </Button>
-        </Box> */}
+          <Button
+            onClick={() => {
+              running?.pause();
+            }}
+          >
+            暂停
+          </Button>
+          <Button
+            onClick={() => {
+              running?.play();
+            }}
+          >
+            播放
+          </Button>
+          <Button
+            onClick={() => {
+              resetSolider();
+              running?.reStart();
+            }}
+          >
+            重置
+          </Button>
+        </Box>
       </Flex>
     </Box>
   );

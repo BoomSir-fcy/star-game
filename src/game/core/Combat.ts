@@ -56,6 +56,10 @@ class Combat extends EventTarget {
 
   speedY = 0;
 
+  doubleSpeedX = 0;
+
+  doubleSpeedY = 0;
+
   moveTime = 500;
 
   fps = 60;
@@ -70,7 +74,8 @@ class Combat extends EventTarget {
 
   renderPh() {
     this.container.addChild(this.hpGraphics);
-    this.hpText.position.set(60, -20);
+    this.hpText.anchor.set(0.5);
+    this.hpText.position.set(0, 20);
     this.hpText.zIndex = 2;
     this.hpGraphics.zIndex = 2;
     this.container.addChild(this.hpText);
@@ -78,7 +83,6 @@ class Combat extends EventTarget {
   }
 
   showEffectText(text: string) {
-    console.log(text);
     this.attackEffect.text = text;
     this.attackEffect.visible = true;
   }
@@ -87,7 +91,7 @@ class Combat extends EventTarget {
     this.attackEffect.visible = false;
   }
 
-  drawHp() {
+  drawHp(now = '') {
     const lineX = this.bloodH - this.bloodBorderW * 2;
     const lineStartX = -(config.BLOOD_WIDTH / 2) + this.bloodBorderW;
     const lineH = lineX / 2 + this.bloodBorderW;
@@ -114,7 +118,7 @@ class Combat extends EventTarget {
         lineStartX,
       lineY,
     );
-    this.hpText.text = `${this.activePh}`;
+    this.hpText.text = `${this.activePh}/${now}`;
   }
 
   drawAttackEffect() {
@@ -131,7 +135,6 @@ class Combat extends EventTarget {
       this.bullet.container.visible = false;
       this.container.parent.addChild(this.bullet.container);
       this.bullet.addEventListener('attackEnd', () => {
-        console.log('attackEnd');
         this.onAttackEnd();
       });
     }
@@ -152,6 +155,9 @@ class Combat extends EventTarget {
     if (this.axisPoint) {
       this.speedX = (axisPoint.x - this.axisPoint.x) / t;
       this.speedY = (axisPoint.y - this.axisPoint.y) / t;
+
+      this.doubleSpeedX = Math.abs(this.speedX * 2);
+      this.doubleSpeedY = Math.abs(this.speedY * 2);
     }
   }
 
@@ -167,8 +173,9 @@ class Combat extends EventTarget {
       // this.y += this.speedY;
       if (
         Math.abs(this.container.position.y - (this.targetAxisPoint.y || 0)) <=
-          1 &&
-        Math.abs(this.container.position.x - (this.targetAxisPoint.x || 0)) <= 1
+          this.doubleSpeedY &&
+        Math.abs(this.container.position.x - (this.targetAxisPoint.x || 0)) <=
+          this.doubleSpeedX
       ) {
         this.moving = false;
         this.speedX = 0;
@@ -211,7 +218,10 @@ class Combat extends EventTarget {
   }
 
   onAttackEnd() {
-    if (this.attackInfo?.receive_id) {
+    this.dispatchEvent(new Event('attackEnd'));
+    if ((this.attackInfo as any)?.now_hp && this.attackTarget) {
+      this.attackTarget.drawHp(`${(this.attackInfo as any)?.now_hp}`);
+
       // this.attackTarget?.dispatchEvent(new Event('death'));
     }
   }
@@ -243,6 +253,14 @@ class Combat extends EventTarget {
       this.handleAttack();
       requestAnimationFrame(() => this.handleRun());
     }
+  }
+
+  once(event: string, handle: any) {
+    const callback = () => {
+      handle();
+      this.removeEventListener(event, callback);
+    };
+    this.addEventListener(event, callback);
   }
 }
 
