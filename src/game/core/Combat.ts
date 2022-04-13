@@ -9,6 +9,7 @@ import { Text } from '@pixi/text';
 import config from '../config';
 import AxisPoint from './AxisPoint';
 import Chequer, { stateType } from './Chequer';
+import Bullet from './Bullet';
 
 class Combat extends EventTarget {
   x = 0;
@@ -60,6 +61,8 @@ class Combat extends EventTarget {
   attackInfo?: RoundDescAttack;
 
   attackEffect = new Text('');
+
+  // bullet = new Bullet();
 
   bullet = {
     moving: true,
