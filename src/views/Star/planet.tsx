@@ -10,6 +10,7 @@ import {
   Input,
   BackButton,
   RefreshButton,
+  Spinner,
 } from 'uikit';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -39,6 +40,13 @@ const LinkItem = styled(Link)`
   display: block;
   height: auto;
   margin-bottom: 20px;
+`;
+
+const LoadingBox = styled(Box)`
+  position: absolute;
+  left: 56%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const Planet = () => {
@@ -143,7 +151,7 @@ const Planet = () => {
           }}
         />
       )}
-      <Flex width='100%'>
+      <Flex width='100%' position='relative'>
         <Box>
           {choose && (
             <Flex padding='0 20px' mb='60px'>
@@ -239,6 +247,11 @@ const Planet = () => {
             </ScrollBox>
           </BgCard>
         </Flex>
+        {pending && (
+          <LoadingBox>
+            <Spinner size={200} />
+          </LoadingBox>
+        )}
       </Flex>
     </Layout>
   );

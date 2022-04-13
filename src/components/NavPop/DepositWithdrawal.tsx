@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Box, Button, PrimaryInput, Flex, Text, Image } from 'uikit';
+import { Box, Button, PrimaryInput, Flex, Text, Image, Dots } from 'uikit';
 import BigNumber from 'bignumber.js';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
@@ -225,6 +225,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
         </ShaDowBox>
         <InputBox mb='10px'>
           <PrimaryInput
+            style={{ fontSize: '26px' }}
             width='100%'
             height={90}
             disabled={approvedNum === 0 && OperationType === 1}
@@ -260,11 +261,21 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
                 }
               }}
             >
-              {OperationType === 1
-                ? approvedNum > 0
-                  ? t('Confirm recharge')
-                  : t('Approve')
-                : t('Confirm transfer out')}
+              {OperationType === 1 ? (
+                approvedNum > 0 ? (
+                  pending ? (
+                    <Dots>{t('Recharging')}</Dots>
+                  ) : (
+                    t('Confirm recharge')
+                  )
+                ) : pending ? (
+                  <Dots>{t('Approving')}</Dots>
+                ) : (
+                  t('Approve')
+                )
+              ) : (
+                t('Confirm transfer out')
+              )}
             </Button>
           )}
         </Flex>
