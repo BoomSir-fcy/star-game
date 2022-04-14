@@ -1,3 +1,4 @@
+import { useWeb3React } from '@web3-react/core';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'contexts/ToastsContext';
@@ -12,6 +13,7 @@ export const PlunderCard: React.FC<{
   onClose: () => void;
 }> = ({ info, onClose }) => {
   const { t } = useTranslation();
+  const { account } = useWeb3React();
   const { toastError, toastSuccess } = useToast();
   const [pending, setPending] = useState(false);
   const hasOwner = info.owner;
@@ -30,7 +32,7 @@ export const PlunderCard: React.FC<{
       // toastError(t('Snatch failed));
       // setPending(false);
     }
-  }, [info, toastError]);
+  }, []);
 
   // 占领
   const handleHold = useCallback(async () => {
@@ -46,7 +48,7 @@ export const PlunderCard: React.FC<{
       toastError(t('Occupied failed'));
       setPending(false);
     }
-  }, [info, onClose, toastSuccess, toastError]);
+  }, [info, onClose, toastSuccess, toastError, t]);
   return (
     <BgCardStyled variant='small' fringe>
       <Flex flexDirection='column' alignItems='center'>
@@ -69,7 +71,9 @@ export const PlunderCard: React.FC<{
           </Flex>
           {hasOwner ? (
             <ButtonStyled
-              disabled={pending}
+              disabled={
+                pending || hasOwner?.toLowerCase() === account?.toLowerCase()
+              }
               scale='sm'
               ml='60px'
               onClick={handlePlunder}
@@ -77,7 +81,7 @@ export const PlunderCard: React.FC<{
               {pending ? (
                 <Dots>{t('Snatch the stars')}</Dots>
               ) : (
-                t('Snatch the stars')
+                <Text fontSize='inherit'>{t('Snatch the stars')}</Text>
               )}
             </ButtonStyled>
           ) : (
@@ -90,7 +94,7 @@ export const PlunderCard: React.FC<{
               {pending ? (
                 <Dots>{t('Occupy the stars')}</Dots>
               ) : (
-                t('Occupy the stars')
+                <Text fontSize='inherit'>{t('Occupy the stars')}</Text>
               )}
             </ButtonStyled>
           )}

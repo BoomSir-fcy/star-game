@@ -54,7 +54,7 @@ const Stars = () => {
           : levelList[0],
       ),
     );
-  }, [galaxyStarList]);
+  }, [galaxyStarList, currentStarPeriod?.id, t]);
 
   useEffect(() => {
     initList();

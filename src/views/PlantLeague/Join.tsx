@@ -1,6 +1,6 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Flex, Text, Image } from 'uikit';
+import { Box, Flex, Text, Button } from 'uikit';
 import styled from 'styled-components';
 import { StarAddBtn } from 'components';
 import { useStore } from 'state/util';
@@ -9,6 +9,9 @@ import { useToast } from 'contexts/ToastsContext';
 import { useDispatch } from 'react-redux';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useTranslation } from 'contexts/Localization';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useConnectWallet } from 'contexts/ConnectWallet';
+import { orderInfo } from 'state/types';
 import { useRemoveAlliance } from './hook';
 
 const GalaxyBg = styled(Box)`
@@ -37,39 +40,74 @@ const StarStyleImg = styled.img`
 
 const JoinTheAlliance = () => {
   const { t } = useTranslation();
-
+  const { account } = useActiveWeb3React();
+  const { onConnectWallet } = useConnectWallet();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toastError, toastSuccess, toastWarning } = useToast();
-  const { order: allianceList } = useStore(p => p.alliance.allianceView);
+  const { order } = useStore(p => p.alliance.allianceView);
   const workingList = useStore(p => p.alliance.workingPlanet);
+  const [allianceList, setAllianceList] = useState<orderInfo[]>([]);
+  const [newIds, setNewIds] = useState<number[]>([]);
   const { RemoveStar } = useRemoveAlliance();
 
+  // 删除星球
   const Remove = useCallback(
     async (id: number) => {
-      try {
-        let newList = workingList.concat([]);
-        const index = newList.indexOf(Number(id));
-        newList = newList.splice(index, 1);
-        await RemoveStar(newList);
-        toastSuccess(t('Removed successfully'));
-      } catch (e) {
-        console.log(e);
-        toastError(t('Removal failed'));
-      }
-      dispatch(fetchAllianceViewAsync());
+      const list = allianceList.filter(item => {
+        return item.planetId !== id;
+      });
+      setAllianceList(list);
+      const newList = newIds.concat([]);
+      const index = newList.indexOf(Number(id));
+      newList.splice(index, 1);
+      console.log(newList);
+      setNewIds(newList);
     },
-    [RemoveStar, workingList],
+    [allianceList, newIds, setNewIds, setAllianceList],
   );
 
+  // 提交修改
+  const SubmitList = useCallback(async () => {
+    const newIdsStr = newIds.join();
+    const workingListStr = workingList.join();
+    if (newIdsStr === workingListStr) {
+      toastError(t('The alliance has not changed'));
+      return;
+    }
+    try {
+      await RemoveStar(newIds);
+      toastSuccess(t('Removed successfully'));
+    } catch (e) {
+      console.log(e);
+      toastError(t('Removal failed'));
+    }
+    dispatch(fetchAllianceViewAsync());
+  }, [RemoveStar, toastError, toastSuccess, dispatch, t, workingList, newIds]);
+
   const addStar = (id: any) => {
+    if (!account) {
+      onConnectWallet();
+      return;
+    }
     navigate(`/star/planet?choose=${id || 1}`);
   };
+
+  useEffect(() => {
+    setNewIds(workingList);
+  }, [workingList]);
+
+  useEffect(() => {
+    if (order?.length) {
+      setAllianceList(order);
+    }
+  }, [order]);
 
   return (
     <Box position='relative' width='40%' padding='0 80px 0 70px'>
       <Flex mb='-36px' alignItems='center' justifyContent='center'>
         <StarAddBtn
+          name={allianceList && allianceList[0]?.planet?.name}
           onRemove={() => Remove(allianceList[0]?.planetId)}
           showIcon
           callBack={() => addStar(allianceList && allianceList[0]?.planetId)}
@@ -87,6 +125,7 @@ const JoinTheAlliance = () => {
       </Flex>
       <Flex alignItems='center' justifyContent='space-between'>
         <StarAddBtn
+          name={allianceList && allianceList[4]?.planet?.name}
           onRemove={() => Remove(allianceList[4]?.planetId)}
           showIcon
           callBack={() => addStar(allianceList && allianceList[4]?.planetId)}
@@ -101,7 +140,18 @@ const JoinTheAlliance = () => {
           No={5}
           Leve={(allianceList && allianceList[4]?.planet?.level) || ''}
         />
+        <Box marginTop='76px'>
+          <Button
+            width='100px'
+            style={{ fontSize: '24px' }}
+            padding='0'
+            onClick={SubmitList}
+          >
+            {t('Save')}
+          </Button>
+        </Box>
         <StarAddBtn
+          name={allianceList && allianceList[1]?.planet?.name}
           onRemove={() => Remove(allianceList[1]?.planetId)}
           showIcon
           callBack={() => addStar(allianceList && allianceList[1]?.planetId)}
@@ -119,6 +169,7 @@ const JoinTheAlliance = () => {
       </Flex>
       <Flex alignItems='center' justifyContent='center'>
         <StarAddBtn
+          name={allianceList && allianceList[3]?.planet?.name}
           onRemove={() => Remove(allianceList[3]?.planetId)}
           showIcon
           callBack={() => addStar(allianceList && allianceList[3]?.planetId)}
@@ -134,6 +185,7 @@ const JoinTheAlliance = () => {
           Leve={(allianceList && allianceList[3]?.planet?.level) || ''}
         />
         <StarAddBtn
+          name={allianceList && allianceList[2]?.planet?.name}
           onRemove={() => Remove(allianceList[2]?.planetId)}
           showIcon
           callBack={() => addStar(allianceList && allianceList[2]?.planetId)}

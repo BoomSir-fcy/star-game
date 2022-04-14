@@ -116,11 +116,11 @@ const Auction = () => {
       toastSuccess(t('Auction succeeded'));
     } catch (error) {
       console.log(error);
-      toastSuccess(t('Auction failed'));
+      toastError(t('Auction failed'));
     } finally {
       setPending(false);
     }
-  }, [galaxyId, galaxyNft, toastSuccess, onAuction, dispatch]);
+  }, [galaxyId, galaxyNft, toastSuccess, toastError, onAuction, dispatch, t]);
 
   return (
     <Layout>
@@ -202,7 +202,7 @@ const Auction = () => {
                       ) : pending ? (
                         <Dots>{t('Bid now')}</Dots>
                       ) : (
-                        t('Bid now')
+                        <Text fontSize='inherit'>{t('Bid now')}</Text>
                       )}
                     </Button>
                   )}

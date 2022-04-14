@@ -57,7 +57,11 @@ const OpenModal: React.FC<{
               width={270}
               height={70}
             >
-              {handleLoading ? <Dots>{t('Confirming')}</Dots> : t('Confirm')}
+              {handleLoading ? (
+                <Dots>{t('Confirming')}</Dots>
+              ) : (
+                <Text fontSize='inherit'>{t('Confirm')}</Text>
+              )}
             </Button>
           </Flex>
         </Flex>

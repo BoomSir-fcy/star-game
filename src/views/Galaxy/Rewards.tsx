@@ -58,7 +58,7 @@ export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
       console.log(error);
       toastError(t('Claim failed'));
     }
-  }, [galaxy_id]);
+  }, [galaxy_id, toastSuccess, toastError, t, getClaimMax]);
 
   useEffect(() => {
     if (galaxy_id) getClaimMax();

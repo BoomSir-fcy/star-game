@@ -174,7 +174,7 @@ const MysteryBoxState = () => {
                     />
                   </Box>
                   <Box ml='20px'>
-                    <Text color='textTips'>{t('Value')} BNB</Text>
+                    <Text color='textTips'>{t('ValueBNB')} BNB</Text>
                     {loading ? <Skeleton height={40} /> : <Text>{price} </Text>}
                   </Box>
                 </Flex>
@@ -191,7 +191,7 @@ const MysteryBoxState = () => {
                   {handleLoading ? (
                     <Dots>{t('Opening')}</Dots>
                   ) : (
-                    t('Open the blind box')
+                    <Text fontSize='inherit'>{t('Open the blind box')}</Text>
                   )}
                 </Button>
               ) : (
@@ -202,7 +202,7 @@ const MysteryBoxState = () => {
                   {handleLoading ? (
                     <Dots>{t('Purchasing')}</Dots>
                   ) : (
-                    t('Buy blind box')
+                    <Text fontSize='inherit'>{t('Buy blind box')}</Text>
                   )}
                 </Button>
               )}

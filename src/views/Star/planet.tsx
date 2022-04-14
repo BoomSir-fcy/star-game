@@ -10,6 +10,8 @@ import {
   Input,
   BackButton,
   RefreshButton,
+  Spinner,
+  Button,
 } from 'uikit';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -41,6 +43,13 @@ const LinkItem = styled(Link)`
   margin-bottom: 20px;
 `;
 
+const LoadingBox = styled(Box)`
+  position: absolute;
+  left: 56%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 const Planet = () => {
   const { t } = useTranslation();
   const { toastError, toastSuccess, toastWarning } = useToast();
@@ -55,45 +64,63 @@ const Planet = () => {
   });
   const [pending, setpending] = useState(false);
   const [StarList, setStarList] = useState<Api.Planet.PlanetInfo[]>([]);
+  const [ChooseList, setChooseList] = useState<number[]>([]);
   const mePlanet = useStore(p => p.planet.mePlanet);
   const workingList = useStore(p => p.alliance.workingPlanet);
   const { SetWorking } = useJoinAlliance();
 
-  const ToSetWorking = useCallback(
-    async (id: number) => {
-      if (pending) {
+  const ToSetWorking = useCallback(async () => {
+    if (pending) {
+      return;
+    }
+    setpending(true);
+    try {
+      const ChooseListStr = ChooseList.join();
+      const workingListStr = workingList.join();
+      if (ChooseListStr === workingListStr) {
+        toastError(t('The alliance has not changed'));
         return;
       }
-      setpending(true);
-      try {
-        let newList = workingList.concat([]);
-        if (newList.indexOf(Number(id)) !== -1) {
-          toastWarning(t('The planet is already in the alliance'));
+      console.log(ChooseList);
+      await SetWorking(ChooseList);
+      toastSuccess(t('Join successfully'));
+      navigate('/plant-league');
+    } catch (e) {
+      console.log(e);
+      toastError(t('Join failed'));
+    } finally {
+      setpending(false);
+    }
+  }, [
+    t,
+    SetWorking,
+    toastSuccess,
+    toastError,
+    navigate,
+    setpending,
+    ChooseList,
+    workingList,
+    pending,
+  ]);
+
+  const addPlanetToList = useCallback(
+    (id: number) => {
+      const list = ChooseList.concat([]);
+      const index = list.indexOf(id);
+      if (index === -1) {
+        // 选择
+        if (ChooseList.length >= 5) {
+          // 满了
           return;
         }
-        if (newList.indexOf(Number(choose)) === -1) {
-          // 添加星球
-          newList.push(id);
-        } else if (
-          Number(choose) !== 1 &&
-          newList.indexOf(Number(choose)) !== -1
-        ) {
-          // 替换星球
-          const index = newList.indexOf(Number(choose));
-          newList = newList.splice(index, 1, id);
-        }
-        console.log(newList);
-        await SetWorking(id, newList);
-        toastSuccess(t('Join successfully'));
-        navigate('/plant-league');
-      } catch (e) {
-        console.log(e);
-        toastError(t('Join failed'));
-      } finally {
-        setpending(false);
+        list.push(id);
+      } else {
+        // 取消选择
+        list.splice(index, 1);
       }
+      setChooseList(list);
     },
-    [SetWorking, workingList, choose, pending],
+    [ChooseList, setChooseList],
   );
 
   const init = useCallback(() => {
@@ -106,25 +133,32 @@ const Planet = () => {
         rarity: Number(parsedQs.t) || 0,
       }),
     );
-    if (choose) {
-      dispatch(fetchAllianceViewAsync());
-    }
-  }, [dispatch, state, parsedQs.t, choose]);
+  }, [dispatch, state, parsedQs.t]);
 
   useEffect(() => {
-    if (choose && mePlanet.length) {
-      const list = mePlanet.filter(item => {
-        return !workingList.includes(item.id);
-      });
-      setStarList(list);
-    } else {
-      setStarList(mePlanet);
-    }
-  }, [mePlanet, choose, workingList]);
+    // if (choose && mePlanet.length) {
+    //   const list = mePlanet.filter(item => {
+    //     return !workingList.includes(item.id);
+    //   });
+    //   setStarList(list);
+    // } else {
+    // }
+    setStarList(mePlanet);
+  }, [mePlanet]);
+
+  useEffect(() => {
+    setChooseList(workingList);
+  }, [workingList]);
 
   useEffect(() => {
     init();
-  }, [parsedQs.t, choose, state.race, state.token]);
+  }, [parsedQs.t, state.race, state.token]);
+
+  useEffect(() => {
+    if (choose) {
+      dispatch(fetchAllianceViewAsync());
+    }
+  }, [choose]);
 
   return (
     <Layout>
@@ -143,7 +177,7 @@ const Planet = () => {
           }}
         />
       )}
-      <Flex width='100%'>
+      <Flex width='100%' position='relative'>
         <Box>
           {choose && (
             <Flex padding='0 20px' mb='60px'>
@@ -210,10 +244,10 @@ const Planet = () => {
                     <Box
                       onClick={() => {
                         dispatch(setActivePlanet(item));
-                        ToSetWorking(item.id);
+                        addPlanetToList(item.id);
                       }}
                     >
-                      <PlanetBox info={item} />
+                      <PlanetBox choose ChooseList={ChooseList} info={item} />
                     </Box>
                   ) : (
                     <LinkItem to={`/star?id=${item.id}`}>
@@ -228,17 +262,19 @@ const Planet = () => {
                   )}
                 </React.Fragment>
               ))}
-              {/* <LinkItem to='/star'>
-                <PlanetBox level='rare' />
-              </LinkItem>
-
-              <LinkItem to='/star'>
-                <PlanetBox status='upgrade' level='legend' />
-              </LinkItem>
-              <PlanetBox level='rare' /> */}
             </ScrollBox>
+            <Flex justifyContent='center' paddingTop='20px'>
+              <Button variant='vs' onClick={() => ToSetWorking()}>
+                {t('Join in')}
+              </Button>
+            </Flex>
           </BgCard>
         </Flex>
+        {pending && (
+          <LoadingBox>
+            <Spinner size={200} />
+          </LoadingBox>
+        )}
       </Flex>
     </Layout>
   );

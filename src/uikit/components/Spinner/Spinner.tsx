@@ -9,6 +9,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 `;
 const Spinner: React.FC<SpinnerProps> = ({ size = 100, ...props }) => {
   return (
