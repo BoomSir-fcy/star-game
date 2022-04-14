@@ -1,0 +1,48 @@
+
+quxian.png
+size: 128,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+曲线子弹3
+  rotate: false
+  xy: 1, 99
+  size: 50, 47
+  orig: 53, 50
+  offset: 1, 1
+  index: -1
+曲线子弹5
+  rotate: false
+  xy: 52, 1
+  size: 53, 46
+  orig: 53, 50
+  offset: 0, 3
+  index: -1
+曲线子弹2
+  rotate: false
+  xy: 53, 99
+  size: 47, 46
+  orig: 53, 50
+  offset: 3, 1
+  index: -1
+曲线子弹6
+  rotate: false
+  xy: 52, 49
+  size: 49, 48
+  orig: 53, 50
+  offset: 1, 1
+  index: -1
+曲线子弹4
+  rotate: false
+  xy: 53, 147
+  size: 48, 45
+  orig: 53, 50
+  offset: 3, 2
+  index: -1
+曲线子弹1
+  rotate: false
+  xy: 1, 1
+  size: 49, 50
+  orig: 53, 50
+  offset: 0, 0
+  index: -1

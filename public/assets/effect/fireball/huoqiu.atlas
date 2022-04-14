@@ -1,0 +1,118 @@
+
+huoqiu.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+烟雾4
+  rotate: false
+  xy: 360, 599
+  size: 325, 249
+  orig: 325, 249
+  offset: 0, 0
+  index: -1
+烟雾3
+  rotate: false
+  xy: 372, 304
+  size: 303, 215
+  orig: 303, 215
+  offset: 0, 0
+  index: -1
+烟雾6
+  rotate: false
+  xy: 1, 1
+  size: 391, 297
+  orig: 391, 297
+  offset: 0, 0
+  index: -1
+烟雾1
+  rotate: false
+  xy: 767, 1
+  size: 231, 171
+  orig: 231, 171
+  offset: 0, 0
+  index: -1
+烟雾7
+  rotate: false
+  xy: 394, 1
+  size: 371, 301
+  orig: 371, 301
+  offset: 0, 0
+  index: -1
+烟雾2
+  rotate: false
+  xy: 677, 304
+  size: 271, 207
+  orig: 271, 207
+  offset: 0, 0
+  index: -1
+烟雾5
+  rotate: false
+  xy: 1, 599
+  size: 357, 279
+  orig: 357, 279
+  offset: 0, 0
+  index: -1
+烟雾8
+  rotate: false
+  xy: 1, 300
+  size: 369, 297
+  orig: 369, 297
+  offset: 0, 0
+  index: -1
+火球炸5
+  rotate: false
+  xy: 243, 880
+  size: 95, 92
+  orig: 160, 160
+  offset: 34, 34
+  index: -1
+火球炸6
+  rotate: false
+  xy: 136, 880
+  size: 105, 89
+  orig: 160, 160
+  offset: 28, 36
+  index: -1
+火球炸2
+  rotate: false
+  xy: 505, 850
+  size: 75, 88
+  orig: 160, 160
+  offset: 44, 35
+  index: -1
+火球炸4
+  rotate: false
+  xy: 1, 880
+  size: 133, 92
+  orig: 160, 160
+  offset: 13, 34
+  index: -1
+火球炸7
+  rotate: false
+  xy: 767, 174
+  size: 137, 112
+  orig: 160, 160
+  offset: 11, 27
+  index: -1
+火球炸1
+  rotate: false
+  xy: 677, 513
+  size: 65, 56
+  orig: 160, 160
+  offset: 47, 52
+  index: -1
+火球炸8
+  rotate: false
+  xy: 360, 850
+  size: 143, 130
+  orig: 160, 160
+  offset: 9, 23
+  index: -1
+火球炸3
+  rotate: false
+  xy: 906, 174
+  size: 114, 85
+  orig: 160, 160
+  offset: 25, 38
+  index: -1

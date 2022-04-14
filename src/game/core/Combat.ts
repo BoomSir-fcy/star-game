@@ -1,4 +1,10 @@
-import { effectType, EffectType, RoundDesc, RoundDescAttack } from 'game/types';
+import {
+  effectType,
+  EffectType,
+  Orientation,
+  RoundDesc,
+  RoundDescAttack,
+} from 'game/types';
 // import { Graphics, Sprite, Container, Point, Texture } from 'pixi.js';
 import { Container } from '@pixi/display';
 import { Sprite } from '@pixi/sprite';
@@ -11,7 +17,18 @@ import AxisPoint from './AxisPoint';
 import Chequer, { stateType } from './Chequer';
 import Bullet from './Bullet';
 
+export interface CombatOptions {
+  texture0: string;
+  texture1: string;
+}
+
 class Combat extends EventTarget {
+  constructor(options: CombatOptions) {
+    super();
+    this.texture0 = Texture.from(options.texture0);
+    this.texture1 = Texture.from(options.texture1);
+  }
+
   x = 0;
 
   targetX = 0;
@@ -37,6 +54,10 @@ class Combat extends EventTarget {
   isEnemy = false;
 
   displaySprite = new Sprite();
+
+  texture0;
+
+  texture1;
 
   container = new Container();
 
@@ -71,6 +92,8 @@ class Combat extends EventTarget {
   bullet?: Bullet;
 
   attackEffect = new Text('', { fill: 0xffffff, fontSize: 32 });
+
+  orientation = Orientation.TO_RIGHT_DOWN;
 
   renderPh() {
     this.container.addChild(this.hpGraphics);
@@ -152,6 +175,7 @@ class Combat extends EventTarget {
     this.targetAxisPoint = axisPoint;
     axisPoint.chequer.setState(stateType.PREVIEW);
     axisPoint.chequer.displayState(true);
+    this.flipTargetPointOrientation();
     if (this.axisPoint) {
       this.speedX = (axisPoint.x - this.axisPoint.x) / t;
       this.speedY = (axisPoint.y - this.axisPoint.y) / t;
@@ -161,9 +185,28 @@ class Combat extends EventTarget {
     }
   }
 
-  // getTargetPointPos() {
-  //   return
-  // }
+  flipTargetPointOrientation() {
+    if (this.targetAxisPoint && this.axisPoint) {
+      if (this.targetAxisPoint.axisX - this.axisPoint?.axisX > 0) {
+        this.orientation = Orientation.TO_RIGHT_DOWN;
+        this.displaySprite.texture = this.texture0;
+        this.displaySprite.scale.x = Math.abs(this.displaySprite.scale.x);
+      } else if (this.targetAxisPoint.axisX - this.axisPoint?.axisX < 0) {
+        this.orientation = Orientation.TO_LEFT_UP;
+        this.displaySprite.texture = this.texture1;
+        this.displaySprite.scale.x = -Math.abs(this.displaySprite.scale.x);
+      } else if (this.targetAxisPoint.axisY - this.axisPoint?.axisY > 0) {
+        this.orientation = Orientation.TO_LEFT_DOWN;
+        this.displaySprite.texture = this.texture0;
+        this.displaySprite.scale.x = -Math.abs(this.displaySprite.scale.x);
+      } else if (this.targetAxisPoint.axisY - this.axisPoint?.axisY < 0) {
+        this.orientation = Orientation.TO_RIGHT_UP;
+        this.displaySprite.texture = this.texture1;
+        this.displaySprite.scale.x = Math.abs(this.displaySprite.scale.x);
+      }
+    }
+    return this;
+  }
 
   handleMove() {
     if (this.moving && this.targetAxisPoint) {
@@ -211,9 +254,19 @@ class Combat extends EventTarget {
     this.attackTarget = target;
     this.attackInfo = attackInfo;
     this.attacking = true;
+    this.targetAxisPoint = target.axisPoint;
+    this.flipTargetPointOrientation();
+
     this.renderBullet();
     if (this.bullet) {
       this.bullet.bulletMove(target, effect, time);
+    }
+  }
+
+  attackParabola(target: Combat, effect: EffectType) {
+    this.renderBullet();
+    if (this.bullet) {
+      this.bullet.parabolaBullet(target, effect);
     }
   }
 

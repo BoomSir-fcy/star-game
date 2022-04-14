@@ -3,6 +3,24 @@ declare namespace Api {
     type race = 1 | 2 | 3; // 种族 1 神族 2 人族 3虫族
 
     // 1 禁锢， 2冰冻，3灼烧，4定时炸弹， 5护盾
+
+    interface LockMoveEffect {
+      can: boolean;
+    }
+
+    interface FiringEffect {
+      base_value: number;
+      percent: number;
+    }
+    interface BoomEffect {
+      harm: number;
+      round: number;
+    }
+
+    interface IceEffect {
+      charge: number;
+    }
+
     interface UnitInfo {
       unique_id: number; //
       race: race; // 种族
@@ -27,6 +45,12 @@ declare namespace Api {
       unlock_level: 0; // 解锁等级
       skill: number; // 技能
       skill_id: number; //
+      attack_effect?: {
+        lock_move?: LockMoveEffect;
+        firing?: FiringEffect;
+        boom?: BoomEffect;
+        ice?: IceEffect;
+      };
     }
 
     interface BoomSkill {

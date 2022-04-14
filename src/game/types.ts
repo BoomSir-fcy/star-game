@@ -136,6 +136,13 @@ export interface RoundInfo {
   unit_remove: RoundDescRemove;
 }
 
+export enum Orientation {
+  TO_LEFT_DOWN,
+  TO_RIGHT_UP,
+  TO_LEFT_UP,
+  TO_RIGHT_DOWN,
+}
+
 // DescUnitInit               // 初始化棋子
 //  DescUnitMove               // 棋子移动
 //  DescUnitAttack             // 棋子攻击
@@ -173,5 +180,12 @@ export enum Skill {
   BOMB = 4,
   SHIELD = 5,
 }
+
+export const bulletType = {
+  ICE: 'ice', // 冰块
+  ROCK: 'rock', // 岩石
+};
+
+export type BulletType = typeof bulletType[keyof typeof bulletType];
 
 export type EffectType = typeof effectType[keyof typeof effectType];

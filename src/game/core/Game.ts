@@ -244,9 +244,7 @@ class Game extends EventTarget {
     this.boards.chequers.forEach(item => {
       const collection = item.checkCollisionPoint(event.data.global);
       if (collection && item.state === stateType.PREVIEW) {
-        soldier.setPosition(
-          new AxisPoint(item.centerPoint.x, item.centerPoint.y, item),
-        );
+        soldier.setPosition(new AxisPoint(item.axisX, item.axisY, item));
         canDrag = true;
       }
       item.displayState(false);

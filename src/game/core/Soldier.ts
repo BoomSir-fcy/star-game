@@ -33,7 +33,10 @@ export interface SoldierOptions extends AttrSoldierOptions {
 }
 class Soldier extends Combat {
   constructor(options: SoldierOptions) {
-    super();
+    super({
+      texture0: '/assets/modal/m4-1.png',
+      texture1: '/assets/modal/m4-2.png',
+    });
     this.init(options);
   }
 
@@ -84,8 +87,8 @@ class Soldier extends Combat {
 
     this.axisPoint?.chequer?.setState(stateType.DISABLE);
 
-    this.textureRes = textureRes;
-    this.displaySprite.texture = Texture.from(textureRes);
+    // this.textureRes = textureRes;
+    this.displaySprite.texture = this.texture1;
     this.displaySprite.anchor.set(0.5);
     this.container.x = x;
     this.container.y = y;

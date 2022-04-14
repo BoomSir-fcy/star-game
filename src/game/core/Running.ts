@@ -91,6 +91,12 @@ class Running extends EventTarget {
 
   paused = false;
 
+  playCount = -1;
+
+  playing = false;
+
+  playEnd = false;
+
   init() {
     this.getTracks();
     this.runHandle();
@@ -124,8 +130,30 @@ class Running extends EventTarget {
     this.game.app.start();
   }
 
+  setTrackIndex(index: number) {
+    if (index > 0 && index < this.trackDetails.length) {
+      this.trackIndex = index;
+    }
+  }
+
+  setTrackIndexById(id: string) {
+    console.log(this.trackDetails);
+    const index = this.trackDetails.findIndex(item => {
+      console.log(item.id.indexOf(id) === 0, 'item.id.indexOf(id) === 0');
+      return item.id.indexOf(id) === 0;
+    });
+    if (index) {
+      // const index = this.trackDetails.indexOf(track);
+      console.log(index, id, '==index');
+      this.trackIndex = index;
+    } else {
+      console.log(`not find id: ${id} by trackDetails`);
+    }
+  }
+
   async runHandle() {
     if (this.paused) return;
+    this.playing = true;
     const track = this.trackDetails[this.trackIndex];
     if (track?.type === effectType.MOVE) {
       this.infoText.text = `回合: ${track.id}`;
@@ -163,13 +191,30 @@ class Running extends EventTarget {
   }
 
   runningHandle() {
+    this.playing = false;
     if (this.paused) return;
+    if (this.playCount === 0) return;
     if (this.trackIndex < this.trackDetails.length) {
       this.trackIndex += 1;
+      this.playCount -= 1;
       this.runHandle();
     } else {
+      this.playing = false;
       this.dispatchEvent(new CustomEvent('runEnd'));
+      this.playEnd = true;
     }
+  }
+
+  changePlayCount(count: number) {
+    this.playCount = count;
+    if (this.playing) return;
+    if (this.playEnd) {
+      this.trackIndex = 0;
+      this.playEnd = false;
+    }
+    this.paused = false;
+    // if (this.trackIndex)
+    this.runningHandle();
   }
 
   // getActiveTrackList(index: number, track: Track) {

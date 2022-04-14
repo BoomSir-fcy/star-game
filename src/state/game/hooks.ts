@@ -49,7 +49,7 @@ export const useFetchGamePK = (
 ) => {
   const dispatch = useDispatch();
   const fetch = useCallback(() => {
-    if (id0 && id1) {
+    if (id0 && id1 && id0 !== id1) {
       dispatch(fetchGamePKAsync(id0, id1, maxRound));
     }
   }, [dispatch, id0, id1, maxRound]);

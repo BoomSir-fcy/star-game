@@ -1,0 +1,55 @@
+
+duye.png
+size: 256,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+毒气4
+  rotate: false
+  xy: 1, 78
+  size: 77, 70
+  orig: 77, 70
+  offset: 0, 0
+  index: -1
+毒气6
+  rotate: false
+  xy: 99, 1
+  size: 96, 74
+  orig: 96, 74
+  offset: 0, 0
+  index: -1
+毒气7
+  rotate: false
+  xy: 1, 1
+  size: 96, 75
+  orig: 96, 75
+  offset: 0, 0
+  index: -1
+毒气2
+  rotate: false
+  xy: 193, 77
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+毒气1
+  rotate: false
+  xy: 197, 1
+  size: 36, 28
+  orig: 36, 28
+  offset: 0, 0
+  index: -1
+毒气5
+  rotate: false
+  xy: 99, 77
+  size: 92, 77
+  orig: 92, 77
+  offset: 0, 0
+  index: -1
+毒气3
+  rotate: false
+  xy: 1, 150
+  size: 63, 62
+  orig: 63, 62
+  offset: 0, 0
+  index: -1
