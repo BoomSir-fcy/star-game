@@ -5,6 +5,7 @@ import ScaleOrientContent from 'components/ScaleOrientContent';
 import useEagerConnect from 'hooks/useEagerConnect';
 import Toast from 'components/Toast';
 import AccountUpdater from './views/Updater/AccountUpdater';
+import EventBusUpdater from './views/Updater/EventBusUpdater';
 
 import {
   TestBgCard,
@@ -45,6 +46,7 @@ function App() {
     // <BrowserRouter>
     <>
       <AccountUpdater />
+      <EventBusUpdater />
       <ResetCSS />
       <ScaleOrientContent>
         <Suspense fallback='loading...'>

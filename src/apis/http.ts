@@ -6,8 +6,8 @@ import dispatchHttpErrorEvent from './httpErrorEvent';
 import { isSuccess } from './util';
 
 interface AxiosRequestConfigCustom extends AxiosRequestConfig {
-  hideHttpError?: boolean
-  ignoreSSID?: boolean // 是否忽略SSID
+  hideHttpError?: boolean;
+  ignoreSSID?: boolean; // 是否忽略SSID
 }
 
 const baseURL = process.env.REACT_APP_API_HOST;
@@ -44,16 +44,19 @@ export class Http {
     try {
       response = await axios({
         ...configs,
-        headers: (SSID &&  !configs.ignoreSSID) ? { ...configs.headers, SSID } : configs.headers,
+        headers:
+          SSID && !configs.ignoreSSID
+            ? { ...configs.headers, SSID }
+            : configs.headers,
       });
-
+      console.log(response.data);
       dispatchHttpErrorEvent(response.data);
       return response.data;
     } catch (e: any) {
       if (e?.status === 403) {
         eventBus.dispatchEvent(new Event('unauthorized'));
       }
-      return e
+      return e;
     }
   }
 
