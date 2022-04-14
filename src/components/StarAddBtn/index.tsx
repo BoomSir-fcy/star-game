@@ -96,6 +96,7 @@ interface StarAddBtnProps extends BoxProps {
   showIcon?: boolean;
   callBack?: () => void;
   onRemove?: () => void;
+  name?: string;
 }
 
 const StarAddBtn: React.FC<StarAddBtnProps> = ({
@@ -110,6 +111,7 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
   showIcon,
   callBack,
   onRemove,
+  name,
   ...props
 }) => {
   const { className, ...restProps } = props;
@@ -143,16 +145,23 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
         </OwnerFlex>
       )}
       {No && (
-        <NumberFlex>
-          <Text fontSize='20px' shadow='primary'>
-            No.{No}
-          </Text>
-          {Leve && (
+        <>
+          <NumberFlex>
+            <Text fontSize='20px' shadow='primary'>
+              No.{No}
+            </Text>
+            {Leve && (
+              <Text ml='6px' fontSize='20px' shadow='primary'>
+                LV {Leve}
+              </Text>
+            )}
+          </NumberFlex>
+          {name && (
             <Text ml='6px' fontSize='20px' shadow='primary'>
-              LV {Leve}
+              {name}
             </Text>
           )}
-        </NumberFlex>
+        </>
       )}
       {url && <StarImage imgBorder={imgBorder} size={size} src={url} />}
     </StyledStar>

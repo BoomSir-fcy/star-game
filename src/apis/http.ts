@@ -49,7 +49,6 @@ export class Http {
             ? { ...configs.headers, SSID }
             : configs.headers,
       });
-      console.log(response.data);
       dispatchHttpErrorEvent(response.data);
       return response.data;
     } catch (e: any) {

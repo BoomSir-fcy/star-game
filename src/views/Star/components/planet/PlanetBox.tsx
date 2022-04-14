@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Card, Flex, Box, Text, Image } from 'uikit';
 import StarCom from 'components/StarCom';
@@ -22,13 +22,25 @@ const Desc = styled(Flex)`
   border-bottom: 1px solid #424958;
 `;
 
+const ChooseBox = styled(Flex)`
+  background: url('/images/commons/icon/choose.png') no-repeat;
+  background-size: 100% 100%;
+  width: 36px;
+  height: 36px;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const PlanetBox: React.FC<{
+  choose?: boolean;
   info: Api.Planet.PlanetInfo;
-}> = ({ info }) => {
+  ChooseList?: number[];
+}> = ({ info, choose, ChooseList }) => {
   const { t } = useTranslation();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     time: info?.status_countdown,
   });
+  const [ChooseIndex, setChooseIndex] = useState(0);
   let timer = null as any;
 
   // 倒计时
@@ -53,7 +65,14 @@ export const PlanetBox: React.FC<{
     return `${hour}h:${min}m:${sec}s`;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (ChooseList) {
+      const index = ChooseList?.indexOf(info?.id);
+      setChooseIndex(index);
+    }
+  }, [ChooseList]);
+
+  useEffect(() => {
     countDown();
     return () => {
       if (timer) clearInterval(timer);
@@ -125,6 +144,13 @@ export const PlanetBox: React.FC<{
                   {formatTime(state.time)}
                 </Text>
               </Flex>
+            )}
+            {choose && (
+              <ChooseBox>
+                <Text fontSize='22px'>
+                  {ChooseIndex !== -1 ? ChooseIndex + 1 : ''}
+                </Text>
+              </ChooseBox>
             )}
             {/* <>
                 <Flex alignItems='center'>

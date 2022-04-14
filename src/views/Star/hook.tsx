@@ -11,23 +11,26 @@ export const useJoinAlliance = () => {
 
   // 设置工作的星球
   const SetWorking = useCallback(
-    async (planet_id, arr) => {
+    async arr => {
+      // try {
+      //   const res = await Api.PlanetApi.getPlanetCaWork({ planet_id });
+      //   if (Api.isSuccess(res)) {
+      //     console.log(res);
+      //     if (res.data.success) {
+
+      //     }
+      //   }
+      // } catch (error) {
+      //   throw error;
+      // }
+      console.log(arr, '联盟星球');
+
       try {
-        const res = await Api.PlanetApi.getPlanetCaWork({ planet_id });
-        if (Api.isSuccess(res)) {
-          console.log(res);
-          if (res.data.success) {
-            try {
-              const tx = await PlanetContract.setWorking(arr);
-              const receipt = await tx.wait();
-              return receipt.status;
-            } catch (e) {
-              throw e;
-            }
-          }
-        }
-      } catch (error) {
-        throw error;
+        const tx = await PlanetContract.setWorking(arr);
+        const receipt = await tx.wait();
+        return receipt.status;
+      } catch (e) {
+        throw e;
       }
     },
     [PlanetContract, account],
