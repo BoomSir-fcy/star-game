@@ -11,6 +11,7 @@ const httpErrorCodes = (() => {
       codes.push(Number(item.split('http-error-')[1]));
     }
   });
+
   return codes;
 })();
 
