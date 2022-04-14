@@ -48,7 +48,7 @@ export interface UpgradePlanetInfo extends Api.Planet.PlanetInfo {
 }
 
 const Upgrade = () => {
-  const { toastError } = useToast();
+  const { toastSuccess, toastError } = useToast();
   const { account } = useWeb3React();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -123,16 +123,6 @@ const Upgrade = () => {
           material_planet_num,
           success,
         });
-      } else if (res.code === 200009) {
-        toastError(t('Planet upgrade fail by building level'));
-      } else if (res.code === 300012) {
-        toastError(t('Building is being upgraded not working'));
-      } else if (res.code === 200018) {
-        toastError(
-          t('The planet grid utilization rate reaches 20% to upgrade'),
-        );
-      } else {
-        toastError(res.message);
       }
     } catch (error) {
       console.log(error);
@@ -314,7 +304,7 @@ const Upgrade = () => {
                       getUpgradeSuccess();
                     }, 10000);
                     dispatch(setActiveMaterialMap(null));
-                    toastError(t('Upgrade succeeded'));
+                    toastSuccess(t('Upgrade succeeded'));
                     setPending(false);
                     setVisible(false);
                   } catch (error: any) {

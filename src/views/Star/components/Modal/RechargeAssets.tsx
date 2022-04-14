@@ -175,8 +175,6 @@ export const RechargeAssets: React.FC<{
           mb='27px'
           defaultId={selectId}
           onChange={option => {
-            console.log('111111');
-
             setSelectId(option.value);
           }}
         />
