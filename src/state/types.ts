@@ -2,7 +2,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Qualities } from 'uikit/theme/types';
-import { RoundInfo } from 'game/types';
+import { RoundInfo, RoundDescAxis } from 'game/types';
 
 // 性别
 export enum Gender {
@@ -149,9 +149,26 @@ export interface MapBaseUnits {
   [id: string]: Api.Game.UnitInfo;
 }
 
+export interface RoundInitState {
+  boom: boolean;
+  firing: boolean;
+  hp: number;
+  ice: boolean;
+  id: string;
+  max_hp: number;
+  pos: RoundDescAxis;
+  red: boolean;
+  stop_move: boolean;
+  base_id: number;
+}
+
 export interface GameState {
   baseUnits: {
     [race: string]: MapBaseUnits;
+  };
+  baseSkill: {
+    boom?: Api.Game.BoomSkill[];
+    firing?: Api.Game.FiringSkill[];
   };
   plantUnits: {
     [id: number]: Api.Game.UnitPlanetPos[];
@@ -166,6 +183,11 @@ export interface GameState {
     slot: {
       [round: number]: {
         data: RoundInfo[];
+      };
+    };
+    status: {
+      status: {
+        [round: string]: RoundInitState[];
       };
     };
   };

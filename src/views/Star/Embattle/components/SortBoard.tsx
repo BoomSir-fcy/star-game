@@ -90,7 +90,13 @@ const SortBoard: React.FC<SortBoardProps> = ({
   }, [sortSoldiers, setSortSoldiers]);
 
   return (
-    <BorderCard overflow='auto' width='183px' height='476px' {...props}>
+    <BorderCard
+      isActive
+      overflow='auto'
+      width='183px'
+      height='476px'
+      {...props}
+    >
       <Text margin='20px 0 8px' fontSize='20px' textAlign='center'>
         攻击顺序
       </Text>

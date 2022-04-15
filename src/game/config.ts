@@ -1,4 +1,4 @@
-import { BoardPositionSelf } from './types';
+import { BoardPositionSelf, effectType } from './types';
 
 const config = {
   WIDTH: 900,
@@ -27,7 +27,16 @@ const config = {
   BLOOD_COLOR: 0x32ff32, // 血条颜色
   BLOOD_COLOR_ENEMY: 0xb22323, // 敌方血条颜色
   BLOOD_COLOR_BACK: 0x000000, // 空血的血条颜色
-  BLOOD_WIDTH: 80,
+  BLOOD_WIDTH: 100,
+
+  showEffect: [
+    effectType.ADD_BOOM,
+    effectType.ADD_FIRING,
+    effectType.ICE_START,
+    effectType.STOP_MOVE,
+    effectType.FIRING,
+  ],
+  hideEffect: [effectType.BOOM, effectType.ICE_END],
 };
 
 export default config;

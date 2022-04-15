@@ -1,0 +1,41 @@
+
+jix.png
+size: 512,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+火球炸1
+  rotate: false
+  xy: 180, 1
+  size: 169, 166
+  orig: 169, 166
+  offset: 0, 0
+  index: -1
+火球炸5
+  rotate: false
+  xy: 1, 1
+  size: 177, 172
+  orig: 177, 172
+  offset: 0, 0
+  index: -1
+火球炸2
+  rotate: false
+  xy: 180, 169
+  size: 149, 139
+  orig: 149, 139
+  offset: 0, 0
+  index: -1
+火球炸4
+  rotate: false
+  xy: 351, 1
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+火球炸3
+  rotate: false
+  xy: 351, 157
+  size: 157, 146
+  orig: 157, 146
+  offset: 0, 0
+  index: -1

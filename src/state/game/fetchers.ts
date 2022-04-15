@@ -2,16 +2,16 @@ import { Api } from 'apis';
 
 export const fetchUnitList = async (
   race: number,
-): Promise<{ [id: string]: Api.Game.UnitInfo }> => {
+): Promise<Api.Game.UnitListRes | null> => {
   try {
     const res = await Api.GameApi.getGameUnitList(race);
     if (Api.isSuccess(res)) {
-      return res.data.units;
+      return res.data;
     }
-    return {};
+    return null;
   } catch (error) {
     console.error(`fetch fetchUnitList error: ${error}`);
-    return {};
+    return null;
   }
 };
 
@@ -30,9 +30,13 @@ export const fetchGamePlanetUnits = async (
   }
 };
 
-export const fetchGamePK = async (planetId1: number, planetId2: number) => {
+export const fetchGamePK = async (
+  planetId1: number,
+  planetId2: number,
+  maxRound?: number,
+) => {
   try {
-    const res = await Api.GameApi.gamePK(planetId1, planetId2);
+    const res = await Api.GameApi.gamePK(planetId1, planetId2, maxRound);
     console.log(res);
     if (Api.isSuccess(res)) {
       return res.data.data;

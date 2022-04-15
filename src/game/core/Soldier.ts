@@ -24,16 +24,19 @@ export interface AttrSoldierOptions {
   isEnemy?: boolean;
   attackId?: string;
   unitInfo?: Api.Game.UnitInfo;
+  enableDrag?: boolean;
 }
 export interface SoldierOptions extends AttrSoldierOptions {
   x: number;
   y: number;
   axisPoint?: AxisPoint;
-  enableDrag?: boolean;
 }
 class Soldier extends Combat {
   constructor(options: SoldierOptions) {
-    super();
+    super({
+      texture0: '/assets/modal/m4-1.png',
+      texture1: '/assets/modal/m4-2.png',
+    });
     this.init(options);
   }
 
@@ -84,8 +87,8 @@ class Soldier extends Combat {
 
     this.axisPoint?.chequer?.setState(stateType.DISABLE);
 
-    this.textureRes = textureRes;
-    this.displaySprite.texture = Texture.from(textureRes);
+    // this.textureRes = textureRes;
+    this.displaySprite.texture = this.texture1;
     this.displaySprite.anchor.set(0.5);
     this.container.x = x;
     this.container.y = y;
@@ -108,21 +111,29 @@ class Soldier extends Combat {
       this.createAttackId();
     }
 
-    this.container.buttonMode = true;
-    this.container.interactive = true;
+    this.container.buttonMode = Boolean(enableDrag);
+    this.container.interactive = Boolean(enableDrag);
 
     this.enableDrag = Boolean(enableDrag);
 
-    if (this.enableDrag) {
-      this.container
-        .on('pointerdown', e => this.onDragStart(e))
-        .on('pointerup', () => this.onDragEnd())
-        .on('pointerupoutside', () => {
-          this.onDragEnd();
-          this.resetPosition();
-        })
-        .on('pointermove', () => this.onDragMove());
-    }
+    this.container
+      .on('pointerdown', e => this.onDragStart(e))
+      .on('pointerup', () => this.onDragEnd())
+      .on('pointerupoutside', () => {
+        this.onDragEnd();
+        this.resetPosition();
+      })
+      .on('pointermove', () => this.onDragMove());
+    // if (this.enableDrag) {
+    //   this.container
+    //     .on('pointerdown', e => this.onDragStart(e))
+    //     .on('pointerup', () => this.onDragEnd())
+    //     .on('pointerupoutside', () => {
+    //       this.onDragEnd();
+    //       this.resetPosition();
+    //     })
+    //     .on('pointermove', () => this.onDragMove());
+    // }
   }
 
   createAttackId() {

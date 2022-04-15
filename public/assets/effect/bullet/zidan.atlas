@@ -1,0 +1,34 @@
+
+zidan.png
+size: 128,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+子弹1
+  rotate: false
+  xy: 1, 1
+  size: 60, 59
+  orig: 60, 60
+  offset: 0, 1
+  index: -1
+子弹2
+  rotate: false
+  xy: 63, 59
+  size: 60, 56
+  orig: 60, 60
+  offset: 0, 4
+  index: -1
+子弹3
+  rotate: false
+  xy: 63, 1
+  size: 60, 56
+  orig: 60, 60
+  offset: 0, 2
+  index: -1
+子弹4
+  rotate: false
+  xy: 1, 62
+  size: 60, 53
+  orig: 60, 60
+  offset: 0, 2
+  index: -1

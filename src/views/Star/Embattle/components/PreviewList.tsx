@@ -1,3 +1,4 @@
+import { getAddActiveSoliderEvent } from 'game/core/event';
 import Game from 'game/core/Game';
 import Soldier from 'game/core/Soldier';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -83,6 +84,18 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 borderWidth={2}
                 borderRadius='10px'
                 position='relative'
+                onClick={() => {
+                  const soldier = new Soldier({
+                    x: 0,
+                    y: 0,
+                    textureRes: `/assets/modal/m${0}-1.png`,
+                    id: item.unique_id,
+                    unique_id: item.unique_id,
+                    unitInfo: unitMaps?.[item.unique_id],
+                  });
+                  game.addActiveSolider(soldier);
+                  // game.dispatchEvent(getAddActiveSoliderEvent(soldier));
+                }}
               >
                 <Text shadow='primary' fontSize='22' ml='13px' mt='2px' bold>
                   LV 1

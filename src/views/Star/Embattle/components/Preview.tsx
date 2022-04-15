@@ -1,8 +1,16 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 import styled from 'styled-components';
 import RadarChart from 'game/core/RadarChart';
 import Soldier from 'game/core/Soldier';
 import { eventsType, SoldierCustomEvent } from 'game/core/event';
+import { getSkillKey, getSkillText } from 'game/core/utils';
+import { useStore } from 'state';
 import Game from 'game/core/Game';
 import {
   Box,
@@ -104,11 +112,28 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     }
   }, [ref, radarChart]);
 
+  const baseSkill = useStore(p => p.game.baseSkill);
+
   const removeHandle = useCallback(() => {
     if (activeSoldier) {
       game.removeSoldier(activeSoldier);
     }
   }, [activeSoldier, game]);
+
+  const skillValue = useMemo(() => {
+    const key = getSkillKey(activeSoldier?.options?.unitInfo?.skill);
+    if (baseSkill[key]) {
+      const value = baseSkill[key]?.find(
+        item => item.skill_id === activeSoldier?.options?.unitInfo?.skill_id,
+      )?.value;
+      if (value) return `+${value}`;
+    }
+    return '+0';
+  }, [
+    activeSoldier?.options?.unitInfo?.skill,
+    activeSoldier?.options?.unitInfo?.skill_id,
+    baseSkill,
+  ]);
 
   return (
     <Box
@@ -195,7 +220,96 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
         <Flex>
           <Box ml='22px' ref={ref} width={218} />
           <Card overflow='auto' width={354} height={217} padding='16px'>
-            <Text fontSize='20' color='textTips'>
+            <Flex justifyContent='space-between'>
+              <Text fontSize='20' color='textTips'>
+                攻击距离
+              </Text>
+              {activeSoldier?.options?.unitInfo?.ak_range_min ===
+              activeSoldier?.options?.unitInfo?.ak_range_max ? (
+                <Text fontSize='22'>{`${activeSoldier?.options?.unitInfo?.ak_range_min}`}</Text>
+              ) : (
+                <Text fontSize='22'>{`${activeSoldier?.options?.unitInfo?.ak_range_min} ~ ${activeSoldier?.options?.unitInfo?.ak_range_max}`}</Text>
+              )}
+            </Flex>
+            {!!activeSoldier?.options?.unitInfo?.attack_effect && (
+              <Box>
+                {Object.keys(
+                  activeSoldier?.options?.unitInfo?.attack_effect,
+                ).map(item => {
+                  return (
+                    <Flex justifyContent='space-between'>
+                      <Text fontSize='20' color='textTips'>
+                        {item}
+                      </Text>
+                      <Text fontSize='22'>
+                        {JSON.stringify(
+                          (
+                            activeSoldier?.options?.unitInfo
+                              ?.attack_effect as any
+                          )?.[item],
+                        )}
+                      </Text>
+                    </Flex>
+                  );
+                })}
+              </Box>
+            )}
+            {/* <Box>
+                {activeSoldier?.options?.unitInfo?.attack_effect?.boom && (
+                  <Flex justifyContent='space-between'>
+                    <Text fontSize='20' color='textTips'>
+                      炸弹
+                    </Text>
+                    <Text fontSize='22'>
+                      {
+                        activeSoldier?.options?.unitInfo?.attack_effect?.boom
+                          ?.harm
+                      }
+                    </Text>
+                  </Flex>
+                )}
+                {activeSoldier?.options?.unitInfo?.attack_effect?.ice && (
+                  <Flex justifyContent='space-between'>
+                    <Text fontSize='20' color='textTips'>
+                      冰冻
+                    </Text>
+                    <Text fontSize='22'>
+                      {
+                        activeSoldier?.options?.unitInfo?.attack_effect?.ice
+                          ?.charge
+                      }
+                    </Text>
+                  </Flex>
+                )}
+                {activeSoldier?.options?.unitInfo?.attack_effect?.lock_move && (
+                  <Flex justifyContent='space-between'>
+                    <Text fontSize='20' color='textTips'>
+                      禁锢
+                    </Text>
+                    <Text fontSize='22'>0</Text>
+                  </Flex>
+                )}
+                {activeSoldier?.options?.unitInfo?.attack_effect?.firing && (
+                  <Flex justifyContent='space-between'>
+                    <Text fontSize='20' color='textTips'>
+                      燃烧
+                    </Text>
+                    <Text fontSize='22'>
+                      {
+                        activeSoldier?.options?.unitInfo?.attack_effect?.firing
+                          ?.base_value
+                      }
+                    </Text>
+                  </Flex>
+                )}
+                <Flex justifyContent='space-between'>
+                  <Text fontSize='20' color='textTips'>
+                    伤害加成
+                  </Text>
+                  <Text fontSize='22'>{skillValue}</Text>
+                </Flex>
+              </Box> */}
+            <Text mt='16px' fontSize='20' color='textTips'>
               提高角色最终命中率，同时处于反击状态。每提升1级，
               最终命中率提高3%，同时每提升1级，反击的为例提高。
             </Text>

@@ -1,0 +1,126 @@
+{
+  "skeleton": { "hash": " ", "spine": "3.3.07", "name": "yans" },
+  "bones": [
+    { "name": "root" },
+    { "name": "bone", "parent": "root" },
+    { "name": "bone1", "parent": "root" },
+    { "x": 1.5546, "y": 11.8042, "name": "bone2", "parent": "root" }
+  ],
+  "slots": [
+    { "name": "岩石1", "bone": "bone1" },
+    { "name": "烟雾1", "bone": "bone" },
+    { "name": "石爆1", "bone": "bone2" }
+  ],
+  "skins": {
+    "default": {
+      "石爆1": {
+        "石爆1": {
+          "name": "石爆1",
+          "width": 268,
+          "height": 256,
+          "x": 13.91,
+          "y": -24.34
+        },
+        "石爆3": {
+          "name": "石爆3",
+          "width": 281,
+          "height": 271,
+          "x": 7.37,
+          "y": -17.83
+        },
+        "石爆4": {
+          "name": "石爆4",
+          "width": 297,
+          "height": 282,
+          "x": 6.59,
+          "y": -14.41
+        },
+        "石爆2": {
+          "name": "石爆2",
+          "width": 274,
+          "height": 265,
+          "x": 10.87,
+          "y": -20.92
+        }
+      },
+      "岩石1": {
+        "岩石1": { "name": "岩石1", "width": 102, "height": 102 },
+        "岩石11": { "name": "岩石11", "width": 169, "height": 132 },
+        "岩石13": { "name": "岩石13", "width": 148, "height": 91 },
+        "岩石15": { "name": "岩石15", "width": 151, "height": 79 },
+        "岩石2": { "name": "岩石2", "width": 110, "height": 111 },
+        "岩石4": { "name": "岩石4", "width": 144, "height": 115 },
+        "岩石6": { "name": "岩石6", "width": 180, "height": 130 },
+        "岩石8": { "name": "岩石8", "width": 196, "height": 138 },
+        "岩石9": { "name": "岩石9", "width": 161, "height": 138 },
+        "岩石7": { "name": "岩石7", "width": 191, "height": 135 },
+        "岩石5": { "name": "岩石5", "width": 163, "height": 126 },
+        "岩石3": { "name": "岩石3", "width": 113, "height": 111 },
+        "岩石16": { "name": "岩石16", "width": 151, "height": 79 },
+        "岩石14": { "name": "岩石14", "width": 151, "height": 79 },
+        "岩石12": { "name": "岩石12", "width": 143, "height": 123 },
+        "岩石10": { "name": "岩石10", "width": 168, "height": 132 }
+      },
+      "烟雾1": {
+        "烟雾1": { "name": "烟雾1", "width": 231, "height": 171 },
+        "烟雾3": { "name": "烟雾3", "width": 303, "height": 215 },
+        "烟雾5": { "name": "烟雾5", "width": 357, "height": 279 },
+        "烟雾7": { "name": "烟雾7", "width": 371, "height": 301 },
+        "烟雾8": { "name": "烟雾8", "width": 369, "height": 297 },
+        "烟雾6": { "name": "烟雾6", "width": 391, "height": 297 },
+        "烟雾4": { "name": "烟雾4", "width": 325, "height": 249 },
+        "烟雾2": { "name": "烟雾2", "width": 271, "height": 207 }
+      }
+    }
+  },
+  "animations": {
+    "play": {
+      "slots": {
+        "岩石1": {
+          "attachment": [
+            { "time": 0, "name": "岩石1" },
+            { "time": 0.0667, "name": "岩石2" },
+            { "time": 0.1334, "name": "岩石3" },
+            { "time": 0.2001, "name": "岩石4" },
+            { "time": 0.2668, "name": "岩石5" },
+            { "time": 0.3335, "name": "岩石6" },
+            { "time": 0.4002, "name": "岩石7" },
+            { "time": 0.4335, "name": "岩石8" },
+            { "time": 0.5002, "name": "岩石9" },
+            { "time": 0.5669, "name": "岩石10" },
+            { "time": 0.6336, "name": "岩石11" },
+            { "time": 0.7003, "name": "岩石12" },
+            { "time": 0.767, "name": "岩石13" },
+            { "time": 0.8337, "name": "岩石14" },
+            { "time": 0.9004, "name": "岩石15" },
+            { "time": 0.9337, "name": "岩石16" },
+            { "time": 1.0004, "name": "" }
+          ]
+        },
+        "烟雾1": {
+          "attachment": [
+            { "time": 0, "name": "烟雾1" },
+            { "time": 0.1333, "name": "烟雾2" },
+            { "time": 0.2666, "name": "烟雾3" },
+            { "time": 0.3666, "name": "烟雾4" },
+            { "time": 0.4999, "name": "烟雾5" },
+            { "time": 0.6332, "name": "烟雾6" },
+            { "time": 0.7665, "name": "烟雾7" },
+            { "time": 0.8665, "name": "烟雾8" },
+            { "time": 0.9998, "name": "" }
+          ]
+        },
+        "石爆1": {
+          "attachment": [
+            { "time": 0, "name": "" },
+            { "time": 0.0667, "name": "石爆1" },
+            { "time": 0.1334, "name": "石爆2" },
+            { "time": 0.2001, "name": "石爆3" },
+            { "time": 0.2668, "name": "石爆4" },
+            { "time": 0.3335, "name": "" }
+          ]
+        }
+      }
+    }
+  }
+}
