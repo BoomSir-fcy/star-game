@@ -263,11 +263,13 @@ const Planet = () => {
                 </React.Fragment>
               ))}
             </ScrollBox>
-            <Flex justifyContent='center' paddingTop='20px'>
-              <Button variant='vs' onClick={() => ToSetWorking()}>
-                {t('Join in')}
-              </Button>
-            </Flex>
+            {choose && (
+              <Flex justifyContent='center' paddingTop='20px'>
+                <Button variant='vs' onClick={() => ToSetWorking()}>
+                  {t('Join in')}
+                </Button>
+              </Flex>
+            )}
           </BgCard>
         </Flex>
         {pending && (
