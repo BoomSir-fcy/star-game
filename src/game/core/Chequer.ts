@@ -132,8 +132,8 @@ class Chequer {
     this.bunny.interactive = true;
     this.bunny.buttonMode = true;
 
-    this.setState(state);
-    // this.setState(enemy ? stateType.DISABLE : state);
+    // this.setState(state);
+    this.setState(enemy ? stateType.DISABLE : state);
 
     this.stateSprite.anchor.set(0.5);
     this.stateSprite.x = 0;

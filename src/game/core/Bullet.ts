@@ -23,6 +23,7 @@ interface EffectInfo {
   await: boolean;
   spine: null | Spine;
   res: null | Dict<LoaderResource>;
+  sprite: Sprite;
 }
 
 type Effects = {
@@ -68,12 +69,14 @@ class Bullet extends EventTarget {
       await: false,
       spine: null,
       res: null,
+      sprite: new Sprite(),
     },
     rock: {
       loaded: false,
       await: false,
       spine: null,
       res: null,
+      sprite: new Sprite(),
     },
   };
 
@@ -222,7 +225,16 @@ class Bullet extends EventTarget {
     const { spine } = this.effects[name];
     console.log(spine);
     if (spine) {
-      spine.state.setAnimation(5, 'play', true);
+      spine.state.setAnimation(5, 'play', false);
+      spine.state.addListener({
+        end: () => {
+          console.log(21212112);
+        },
+        start: () => {
+          console.log('start');
+        },
+      });
+      // spine.state.
       // this.spineAnimation(spine);
     }
     // if (loaderRes.spineData) {

@@ -184,6 +184,7 @@ class Game extends EventTarget {
       this.boards.container.removeChild(item.container);
     });
     this.soldiers = [];
+    this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
   }
 
   setEnableDrag(state: boolean) {

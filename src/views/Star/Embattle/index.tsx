@@ -113,6 +113,9 @@ const Embattle = () => {
         left='0'
       >
         <Box position='absolute' top='-80px'>
+          <Button onClick={() => game.clearSoldier()} padding={0} width='50px'>
+            <Text fontSize='20px'>清空</Text>
+          </Button>
           <Button
             onClick={() => navigate(`/plunder-test?pid0=${planetId}`)}
             padding={0}
