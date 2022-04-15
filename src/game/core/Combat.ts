@@ -1,4 +1,5 @@
 import {
+  BulletType,
   effectType,
   EffectType,
   Orientation,
@@ -268,6 +269,13 @@ class Combat extends EventTarget {
     this.renderBullet();
     if (this.bullet) {
       this.bullet.parabolaBullet(target, effect);
+    }
+  }
+
+  attackParabolaEffect(target: Combat, effect: BulletType) {
+    this.renderBullet();
+    if (this.bullet) {
+      this.bullet.parabolaBulletEffect(target, effect);
     }
   }
 

@@ -184,6 +184,15 @@ export enum Skill {
 export const bulletType = {
   ICE: 'ice', // 冰块
   ROCK: 'rock', // 岩石
+  BULLET: 'bullet', // 子弹
+  CURVE_BULLET: 'curve_bullet', // 曲线子弹
+  FIREBALL: 'fireball', // 火球
+  MECHANICAL_BULLET: 'mechanical_bullet', // 机械子弹
+  MISSILE: 'missile', // 导弹
+  MISSILE_BOOM: 'missile_boom', // 导弹爆炸
+  STING: 'sting', // 尖刺攻击
+  VENOM: 'venom', // 毒液攻击
+  FIGHT: 'fight', // 肉搏
   DRAGON: 'dragon', // 岩石
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
@@ -192,6 +201,7 @@ export interface EffectItemInfoOfConfig {
   name: BulletType;
   resDir: string;
   spriteRes: string;
+  label?: string;
 }
 
 export interface EffectConfig {

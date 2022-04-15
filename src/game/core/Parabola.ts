@@ -72,7 +72,6 @@ class Parabola extends EventTarget {
     const sx = Math.sqrt(this.speed / (tangent * tangent + 1));
     const stepMoveX = this.rate * sx;
     this.startX += stepMoveX;
-    console.log(this.rate * sx);
 
     const r =
       ((1 - this.endScale * 1) * sx) /
@@ -106,7 +105,6 @@ class Parabola extends EventTarget {
   }
 
   onMoveEnd() {
-    // console.log(this.addEventListener, 'end');
     this.dispatchEvent(new Event('end'));
   }
 }

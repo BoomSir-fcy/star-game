@@ -119,6 +119,22 @@ class Bullet extends EventTarget {
     }
   }
 
+  parabolaBulletEffect(attackTarget: Combat, effect: BulletType) {
+    const { name, resDir, spriteRes } = this.effects[effect];
+    this.attackTarget = attackTarget;
+    if (this.effects[name].loaded) {
+      this.parabolaBulletRun(name);
+    } else {
+      this.loadSpine(name, resDir);
+      this.effects[name].await = true;
+      this.effects[name].sprite.anchor.set(0.5);
+      this.effects[name].sprite.texture = Texture.from(spriteRes);
+      this.effects[name].sprite.visible = false;
+      this.container.addChild(this.effects[name].sprite);
+    }
+    this.container.visible = true;
+  }
+
   parabolaBullet(attackTarget: Combat, effect: EffectType) {
     const { name, resDir, spriteRes } = this.effects.ice;
     this.attackTarget = attackTarget;
@@ -129,23 +145,23 @@ class Bullet extends EventTarget {
       this.effects[name].await = true;
       this.effects[name].sprite.anchor.set(0.5);
       this.effects[name].sprite.texture = Texture.from(spriteRes);
+      this.effects[name].sprite.visible = false;
       this.container.addChild(this.effects[name].sprite);
     }
     this.container.visible = true;
   }
 
   parabolaBulletRun(name: BulletType) {
-    this.effects[name].sprite.visible = true;
     if (this.combat.axisPoint && this.attackTarget?.axisPoint) {
       const parabola = new Parabola(
         this.effects[name].sprite,
         this.combat.axisPoint,
         this.attackTarget.axisPoint,
       );
+      this.effects[name].sprite.visible = true;
       parabola.position().move();
       parabola.addEventListener('end', () => {
         // this.container.visible = false;
-        console.log(this.effects[name].sprite);
         const { x, y } = this.effects[name].sprite;
         this.onAssetsLoadedSpine(name, x, y);
         this.effects[name].sprite.visible = false;
@@ -193,12 +209,6 @@ class Bullet extends EventTarget {
     this.container.visible = false;
     if (this.attackTarget) {
       this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
-      console.log(
-        this.effect,
-        this.combat.attackInfo?.receive_sub_hp || 0,
-        this.combat.attackInfo,
-      );
-      console.log('===================');
       if ((this.combat.attackInfo as any)?.now_hp) {
         this.attackTarget.drawHp(`${(this.combat.attackInfo as any).now_hp}`);
       }
@@ -218,7 +228,6 @@ class Bullet extends EventTarget {
   }
 
   loadSpine(name: BulletType, src: string) {
-    console.log(this.effects[name].loaded, '===');
     if (this.effects[name].loaded) return;
     const loader = Loader.shared;
     // loader.reset();
@@ -227,31 +236,14 @@ class Bullet extends EventTarget {
       this.effects[name].loaded = true;
       this.effects[name].res = res;
       const loaderRes = res[name];
-      console.log(loaderRes.spineData);
       if (loaderRes.spineData) {
         const spine = new Spine(loaderRes.spineData);
         this.container.addChild(spine);
-        console.log(this.container);
         this.effects[name].spine = spine;
-        // spine.anchor.set(0.5);
-        spine.position.set(
-          // this.attackTarget.axisPoint.x,
-          // this.attackTarget.axisPoint.y,
-          0,
-          0,
-        );
-        if (this.attackTarget?.axisPoint) {
-          spine.position.set(
-            // this.attackTarget.axisPoint.x,
-            // this.attackTarget.axisPoint.y,
-            200,
-            200,
-          );
-        }
+        spine.visible = false;
         spine.update(0);
         spine.autoUpdate = false;
         // spine.state = true;
-        console.log(12112);
       }
       if (this.effects[name].await) {
         this.parabolaBulletRun(name);
@@ -263,6 +255,7 @@ class Bullet extends EventTarget {
     this.container.visible = true;
     const { spine } = this.effects[name];
     if (spine) {
+      spine.visible = true;
       spine.position.set(x, y);
       spine.state.setAnimation(0, 'play', false);
       this.effects[name].complete = false;
@@ -282,7 +275,6 @@ class Bullet extends EventTarget {
 
   spineAnimation(spine: Spine, name: BulletType) {
     if (spine && !this.effects[name].complete) {
-      console.log(21121);
       this.container.visible = true;
       spine.update(0.01666666666667);
       requestAnimationFrame(() => this.spineAnimation(spine, name));
