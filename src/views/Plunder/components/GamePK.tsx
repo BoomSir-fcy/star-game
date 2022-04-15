@@ -203,13 +203,15 @@ const GamePK: React.FC<GamePKProps> = () => {
   const sendHandle = useCallback(() => {
     // const [s1, s0] = game.soldiers;
     const [s0, s1] = game.soldiers;
-    s0.attackParabola(s1, 4);
+    if (s0 && s1) {
+      s0.attackParabola(s1, 4);
+    }
   }, []);
 
   const moveHandle = useCallback(() => {
     // const [s1, s0] = game.soldiers;
     const [s0, s1] = game.soldiers;
-    if (s1.axisPoint) {
+    if (s1?.axisPoint && s0) {
       s0.run();
       s0.container.angle += Math.PI;
       s0.moveTo(s1.axisPoint);
@@ -221,7 +223,9 @@ const GamePK: React.FC<GamePKProps> = () => {
     // s0.container.angle += 180;
     // console.log(s0.container);
     // s0.displaySprite.anchor.x = 1;
-    s0.displaySprite.scale.x *= -1;
+    if (s0) {
+      s0.displaySprite.scale.x *= -1;
+    }
   }, []);
 
   return (
