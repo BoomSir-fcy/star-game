@@ -16,6 +16,7 @@ import {
   useFetchUserInfo,
   useFetchAllowance,
 } from 'state/userInfo/hooks';
+import { Api } from 'apis';
 import { useDispatch } from 'react-redux';
 import { useStore } from 'state';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -57,7 +58,8 @@ const Login = () => {
   const { onConnectWallet } = useConnectWallet();
   const { account } = useWeb3React();
 
-  const { toastSuccess, toastError } = useToast();
+  const { toastSuccess, toastWarning, toastError } = useToast();
+  const { fetch } = useFetchUserInfo();
 
   useFetchUserInfo();
   useFetchInfoView();
@@ -71,6 +73,7 @@ const Login = () => {
 
   const createRef = useRef<ForwardRefRenderProps>(null);
   const [visible, setVisible] = useState(false);
+  let timer: any = 0;
 
   const handleSign = useCallback(async () => {
     if (createRef?.current?.getState) {
@@ -120,12 +123,32 @@ const Login = () => {
           superior: superior || AddressZero,
           gender,
         });
+        timer = setInterval(async () => {
+          toastWarning(t('loginSigninSearch'));
+          const result = await Api.UserApi.getCheck({
+            address: String(account),
+          });
+          if (Api.isSuccess(result) && result?.data?.register) {
+            if (timer) clearInterval(timer);
+            fetch();
+            setVisible(false);
+          }
+        }, 6000);
       } catch (error) {
         console.error(error);
-        console.error(t('Registration failed'));
+        toastError(t('Registration failed'));
       }
     }
-  }, [handleRegister, createRef]);
+  }, [
+    handleRegister,
+    toastError,
+    toastWarning,
+    fetch,
+    setVisible,
+    t,
+    createRef,
+    account,
+  ]);
 
   const handleEnter = useCallback(async () => {
     if (!account) {
