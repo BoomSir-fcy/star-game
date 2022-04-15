@@ -257,7 +257,6 @@ const GamePK: React.FC<GamePKProps> = () => {
         <Button onClick={sendHandle}>发射</Button>
         <Button onClick={moveHandle}>移动</Button>
         <Button onClick={dirHandle}>转向</Button>
-        <img src='/assets/effect/wqeqweqwe.png' alt='' />
       </Flex>
       <Flex>
         <Box mr='80px'>

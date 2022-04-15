@@ -35,7 +35,7 @@ const effectConfig: EffectConfig = {
     {
       name: bulletType.MECHANICAL_BULLET,
       resDir: '/assets/effect/mechanical_bullet/jix.json',
-      spriteRes: '/assets/effect/mechanical_bullet/jx.png',
+      spriteRes: '/assets/effect/mechanical_bullet/mechanical_bullet.png',
       label: '机械子弹',
     },
     {
