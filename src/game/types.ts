@@ -184,8 +184,18 @@ export enum Skill {
 export const bulletType = {
   ICE: 'ice', // 冰块
   ROCK: 'rock', // 岩石
+  DRAGON: 'dragon', // 岩石
 };
-
 export type BulletType = typeof bulletType[keyof typeof bulletType];
+
+export interface EffectItemInfoOfConfig {
+  name: BulletType;
+  resDir: string;
+  spriteRes: string;
+}
+
+export interface EffectConfig {
+  effects: EffectItemInfoOfConfig[];
+}
 
 export type EffectType = typeof effectType[keyof typeof effectType];

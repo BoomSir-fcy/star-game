@@ -1,15 +1,18 @@
-import { bulletType } from './types';
+import { bulletType, EffectConfig } from './types';
 
-const effectConfig = {
-  // 冰冻
-  [bulletType.ICE]: {
-    name: bulletType.ICE,
-    resDir: '/assets/effect/ice/bindog.json',
-  },
-  [bulletType.ROCK]: {
-    name: bulletType.ROCK,
-    resDir: '/assets/effect/rock/yans.json',
-  },
+const effectConfig: EffectConfig = {
+  effects: [
+    {
+      name: bulletType.ICE,
+      resDir: '/assets/effect/ice/bindog.json',
+      spriteRes: '/assets/effect/ice/ice.png',
+    },
+    {
+      name: bulletType.ROCK,
+      resDir: '/assets/effect/rock/yans.json',
+      spriteRes: '/assets/effect/rock/rock.png',
+    },
+  ],
 };
 
 export default effectConfig;

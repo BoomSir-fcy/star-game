@@ -7,7 +7,12 @@ import { Text } from '@pixi/text';
 import { Spine } from 'pixi-spine';
 import config from 'game/config';
 import effectConfig from 'game/effectConfig';
-import { BulletType, EffectType, Skill } from 'game/types';
+import {
+  BulletType,
+  EffectItemInfoOfConfig,
+  EffectType,
+  Skill,
+} from 'game/types';
 import type Combat from './Combat';
 import { getEffectText, getSkillText } from './utils';
 import Parabola from './Parabola';
@@ -18,16 +23,35 @@ import Parabola from './Parabola';
  * 子弹类型 [冰块, 岩石, 导弹, 火球, 机械子弹, ]
  */
 
-interface EffectInfo {
+interface EffectInfo extends EffectItemInfoOfConfig {
   loaded: boolean;
   await: boolean;
   spine: null | Spine;
   res: null | Dict<LoaderResource>;
   sprite: Sprite;
+  complete: boolean;
 }
 
 type Effects = {
   [effect in BulletType]: EffectInfo;
+};
+
+const initEffectInfo = ({
+  name,
+  resDir,
+  spriteRes,
+}: EffectItemInfoOfConfig) => {
+  return {
+    loaded: false,
+    await: false,
+    spine: null,
+    res: null,
+    sprite: new Sprite(),
+    complete: false,
+    name,
+    resDir,
+    spriteRes,
+  };
 };
 class Bullet extends EventTarget {
   constructor(combat: Combat) {
@@ -35,6 +59,11 @@ class Bullet extends EventTarget {
     this.combat = combat;
     this.text.anchor.set(0.5);
     this.container.addChild(this.text);
+    const temp: Effects = {};
+    effectConfig.effects.forEach(item => {
+      temp[item.name] = initEffectInfo(item);
+    });
+    this.effects = temp;
   }
 
   combat;
@@ -63,22 +92,7 @@ class Bullet extends EventTarget {
 
   effect?: EffectType;
 
-  effects: Effects = {
-    ice: {
-      loaded: false,
-      await: false,
-      spine: null,
-      res: null,
-      sprite: new Sprite(),
-    },
-    rock: {
-      loaded: false,
-      await: false,
-      spine: null,
-      res: null,
-      sprite: new Sprite(),
-    },
-  };
+  effects: Effects;
 
   bulletMove(attackTarget: Combat, effect: EffectType, moveTime?: number) {
     this.attackTarget = attackTarget;
@@ -106,20 +120,35 @@ class Bullet extends EventTarget {
   }
 
   parabolaBullet(attackTarget: Combat, effect: EffectType) {
-    this.loadSpine(effectConfig.ice.name, effectConfig.ice.resDir);
-    this.effects[effectConfig.ice.name].await = true;
+    const { name, resDir, spriteRes } = this.effects.ice;
+    this.attackTarget = attackTarget;
+    if (this.effects[name].loaded) {
+      this.parabolaBulletRun(name);
+    } else {
+      this.loadSpine(name, resDir);
+      this.effects[name].await = true;
+      this.effects[name].sprite.anchor.set(0.5);
+      this.effects[name].sprite.texture = Texture.from(spriteRes);
+      this.container.addChild(this.effects[name].sprite);
+    }
     this.container.visible = true;
+  }
 
-    this.text.text = getEffectText(effect);
-    if (this.combat.axisPoint && attackTarget?.axisPoint) {
+  parabolaBulletRun(name: BulletType) {
+    this.effects[name].sprite.visible = true;
+    if (this.combat.axisPoint && this.attackTarget?.axisPoint) {
       const parabola = new Parabola(
-        this.text,
+        this.effects[name].sprite,
         this.combat.axisPoint,
-        attackTarget.axisPoint,
+        this.attackTarget.axisPoint,
       );
       parabola.position().move();
       parabola.addEventListener('end', () => {
-        this.container.visible = false;
+        // this.container.visible = false;
+        console.log(this.effects[name].sprite);
+        const { x, y } = this.effects[name].sprite;
+        this.onAssetsLoadedSpine(name, x, y);
+        this.effects[name].sprite.visible = false;
       });
     }
   }
@@ -164,6 +193,16 @@ class Bullet extends EventTarget {
     this.container.visible = false;
     if (this.attackTarget) {
       this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
+      console.log(
+        this.effect,
+        this.combat.attackInfo?.receive_sub_hp || 0,
+        this.combat.attackInfo,
+      );
+      console.log('===================');
+      if ((this.combat.attackInfo as any)?.now_hp) {
+        this.attackTarget.drawHp(`${(this.combat.attackInfo as any).now_hp}`);
+      }
+
       this.combat.attacking = false;
       // if (this.effect) {
       //   this.attackTarget.showEffectText(getEffectText(this.effect));
@@ -182,7 +221,7 @@ class Bullet extends EventTarget {
     console.log(this.effects[name].loaded, '===');
     if (this.effects[name].loaded) return;
     const loader = Loader.shared;
-    loader.reset();
+    // loader.reset();
 
     loader.add(name, src).load((_loader, res: Dict<LoaderResource>) => {
       this.effects[name].loaded = true;
@@ -211,50 +250,42 @@ class Bullet extends EventTarget {
         }
         spine.update(0);
         spine.autoUpdate = false;
+        // spine.state = true;
         console.log(12112);
       }
       if (this.effects[name].await) {
-        this.onAssetsLoadedSpine(name);
+        this.parabolaBulletRun(name);
       }
     });
   }
 
-  onAssetsLoadedSpine(name: BulletType) {
-    console.log(this, name);
+  onAssetsLoadedSpine(name: BulletType, x?: number, y?: number) {
     this.container.visible = true;
     const { spine } = this.effects[name];
-    console.log(spine);
     if (spine) {
-      spine.state.setAnimation(5, 'play', false);
+      spine.position.set(x, y);
+      spine.state.setAnimation(0, 'play', false);
+      this.effects[name].complete = false;
       spine.state.addListener({
-        end: () => {
-          console.log(21212112);
-        },
-        start: () => {
-          console.log('start');
+        complete: entry => {
+          this.onComplete(name);
         },
       });
-      // spine.state.
-      // this.spineAnimation(spine);
+      this.spineAnimation(spine, name);
     }
-    // if (loaderRes.spineData) {
-    //   const dragon = new Spine(loaderRes.spineData);
-    //   dragon.update(0);
-    //   dragon.autoUpdate = false;
-    //   dragon.position.set(300, 300);
-    //   dragon.state.setAnimation(8, 'play', true);
-    //   dragon.update(0.01666666666667); // HARDCODED FRAMERATE!
-    //   console.log(this);
-    // }
   }
 
-  spineAnimation(spine: Spine) {
-    if (spine) {
-      // console.log(121221);
+  onComplete(name: BulletType) {
+    this.effects[name].complete = true;
+    this.dispatchEvent(new Event('complete'));
+  }
+
+  spineAnimation(spine: Spine, name: BulletType) {
+    if (spine && !this.effects[name].complete) {
+      console.log(21121);
       this.container.visible = true;
-      // spine.state.setAnimation(0, 'play', true);
       spine.update(0.01666666666667);
-      requestAnimationFrame(() => this.spineAnimation(spine));
+      requestAnimationFrame(() => this.spineAnimation(spine, name));
     }
   }
 

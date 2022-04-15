@@ -253,6 +253,7 @@ class Combat extends EventTarget {
   ) {
     this.attackTarget = target;
     this.attackInfo = attackInfo;
+    console.log(this.attackInfo, effect);
     this.attacking = true;
     this.targetAxisPoint = target.axisPoint;
     this.flipTargetPointOrientation();
@@ -272,11 +273,11 @@ class Combat extends EventTarget {
 
   onAttackEnd() {
     this.dispatchEvent(new Event('attackEnd'));
-    if ((this.attackInfo as any)?.now_hp && this.attackTarget) {
-      this.attackTarget.drawHp(`${(this.attackInfo as any)?.now_hp}`);
+    // if ((this.attackInfo as any)?.now_hp && this.attackTarget) {
+    //   this.attackTarget.drawHp(`${(this.attackInfo as any)?.now_hp}`);
 
-      // this.attackTarget?.dispatchEvent(new Event('death'));
-    }
+    //   // this.attackTarget?.dispatchEvent(new Event('death'));
+    // }
   }
 
   handleAttack() {

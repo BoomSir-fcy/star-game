@@ -328,15 +328,16 @@ class Game extends EventTarget {
 
   onAssetsLoadedSpine(res: any) {
     const dragon = new Spine(res.yans.spineData);
-    // dragon.skeleton.setToSetupPose();
+    // dragon.state
     dragon.update(0);
     dragon.autoUpdate = false;
 
     dragon.position.set(300, 300);
 
     this.app.stage.addChild(dragon);
+    dragon.state.setAnimation(0, 'play', true);
+
     this.app.start();
-    dragon.state.setAnimation(8, 'play', true);
 
     this.app.ticker.add(() => {
       // update the spine animation, only needed if dragon.autoupdate is set to false

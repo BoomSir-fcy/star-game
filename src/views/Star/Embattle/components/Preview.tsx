@@ -231,6 +231,16 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                 <Text fontSize='22'>{`${activeSoldier?.options?.unitInfo?.ak_range_min} ~ ${activeSoldier?.options?.unitInfo?.ak_range_max}`}</Text>
               )}
             </Flex>
+            <Flex justifyContent='space-between'>
+              <Text fontSize='20' color='textTips'>
+                移动距离
+              </Text>
+              {activeSoldier?.options?.unitInfo?.move_far && (
+                <Text fontSize='22'>
+                  {activeSoldier?.options?.unitInfo?.move_far}
+                </Text>
+              )}
+            </Flex>
             {!!activeSoldier?.options?.unitInfo?.attack_effect && (
               <Box>
                 {Object.keys(

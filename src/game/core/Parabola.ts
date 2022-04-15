@@ -27,9 +27,9 @@ class Parabola extends EventTarget {
 
   scale = 1;
 
-  speed = 10;
+  speed = 50;
 
-  endScale = 2;
+  endScale = 1;
 
   // 转换成相对坐标位置
   coordElement = {
@@ -43,8 +43,11 @@ class Parabola extends EventTarget {
   };
 
   position() {
-    this.coordTarget.x = this.point1.x - this.point0.x;
-    this.coordTarget.y = this.point1.y - this.point0.y;
+    // this.coordTarget.x = this.point1.x - this.point0.x;
+    // this.coordTarget.y = this.point1.y - this.point0.y;
+
+    this.coordTarget.x = this.point1.x - this.point0.x + Math.random(); // 加随机数防止x轴坐标相等
+    this.coordTarget.y = this.point1.y - this.point0.y + Math.random(); // 加随机数防止y轴坐标相等
     // this.coordTarget.x = this.point1.x;
     // this.coordTarget.y = this.point1.y;
     // this.coordElement.x = this.point0.x;
@@ -67,7 +70,9 @@ class Parabola extends EventTarget {
   step() {
     const tangent = 2 * this.curvature * this.startX + this.b;
     const sx = Math.sqrt(this.speed / (tangent * tangent + 1));
-    this.startX += this.rate * sx;
+    const stepMoveX = this.rate * sx;
+    this.startX += stepMoveX;
+    console.log(this.rate * sx);
 
     const r =
       ((1 - this.endScale * 1) * sx) /
@@ -86,14 +91,14 @@ class Parabola extends EventTarget {
     }
     const y = this.curvature * x * x + this.b * x;
 
+    const stepMoveY =
+      this.curvature * stepMoveX * stepMoveX + this.b * stepMoveX;
+
     const realY = y + this.point0.y;
 
     this.display.position.set(realX, realY);
     this.display.scale.set(this.scale);
-    if (
-      Math.abs(x - this.coordTarget.x) < this.speed &&
-      Math.abs(x - this.coordTarget.x) < this.speed
-    ) {
+    if (Math.abs(x - this.coordTarget.x) < Math.abs(stepMoveX)) {
       this.onMoveEnd();
     } else {
       requestAnimationFrame(() => this.step());

@@ -178,6 +178,7 @@ class Running extends EventTarget {
       const res = this.attackHandle(track, track.type, t);
       if (!res) {
         console.warn(`攻击失效:${track.id}`);
+        console.log(track);
         this.runningHandle();
       }
       // const handle = () => this.attackHandle(track, track.type, t);
@@ -279,9 +280,15 @@ class Running extends EventTarget {
       track.targetAxisPoint.x,
       track.targetAxisPoint.y,
     );
-    if (!axis || !axisPoint) return false;
+    if (!axis || !axisPoint) {
+      console.log(`warn: ${track.id}`);
+      return false;
+    }
     const soldier = this.game.findSoldierByAxis(axis);
-    if (!soldier) return false;
+    if (!soldier) {
+      console.log(`warn: ${track.id}`);
+      return false;
+    }
     soldier.run();
     soldier.moveTo(axisPoint, t);
     soldier.once('moveEnd', () => {
@@ -296,9 +303,15 @@ class Running extends EventTarget {
       track.currentAxisPoint.x,
       track.currentAxisPoint.y,
     );
-    if (!axis) return false;
+    if (!axis) {
+      console.log(`warn: ${track.id}`);
+      return false;
+    }
     const soldier = this.game.findSoldierByAxis(axis);
-    if (!soldier) return false;
+    if (!soldier) {
+      console.log(`warn: ${track.id}`);
+      return false;
+    }
     soldier.showEffectText('阵亡');
     soldier.dispatchEvent(new Event('death'));
     this.runningHandle();
@@ -315,12 +328,12 @@ class Running extends EventTarget {
         id,
         type: desc_type,
         currentAxisPoint: {
-          x: attacks.sender_point?.x || attacks.receive_point?.x,
-          y: attacks.sender_point?.y || attacks.receive_point?.y,
+          x: attacks.sender_point?.x ?? attacks.receive_point?.x,
+          y: attacks.sender_point?.y ?? attacks.receive_point?.y,
         },
         targetAxisPoint: {
-          x: attacks.receive_point?.x || attacks.sender_point?.x,
-          y: attacks.receive_point?.y || attacks.sender_point?.y,
+          x: attacks.receive_point?.x ?? attacks.sender_point?.x,
+          y: attacks.receive_point?.y ?? attacks.sender_point?.y,
         },
         attackInfo: { ...attacks },
       },
@@ -374,7 +387,10 @@ class Running extends EventTarget {
 
   attackHandle(attacks: TrackDetail, effect: EffectType, t?: number) {
     const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
-    if (!sendSoldier || !receiveSoldier) return false;
+    if (!sendSoldier || !receiveSoldier) {
+      console.log(`warn: ${attacks.id}`);
+      return false;
+    }
     sendSoldier.renderBullet();
     sendSoldier.run();
     sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo, t);
