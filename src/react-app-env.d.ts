@@ -20,6 +20,7 @@ interface Window {
 }
 
 declare module 'react-grid-layout';
+declare module 'intro.js';
 namespace NodeJS {
   interface ProcessEnv {
     REACT_APP_CHAIN_ID: string;

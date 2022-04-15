@@ -17,7 +17,11 @@ const FlexStyled = styled(Flex)`
   height: 295px;
 `;
 
-const Dashboard: React.FC<ButtonGroupProps> = ({ onRefresh, children }) => {
+const Dashboard: React.FC<ButtonGroupProps> = ({
+  onRefresh,
+  children,
+  className,
+}) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,7 +33,9 @@ const Dashboard: React.FC<ButtonGroupProps> = ({ onRefresh, children }) => {
     <FlexStyled>
       <Avatar />
       <Flex flex={1}>
-        <Info onRefresh={onRefresh}>{children}</Info>
+        <Info onRefresh={onRefresh} className={className}>
+          {children}
+        </Info>
       </Flex>
     </FlexStyled>
   );

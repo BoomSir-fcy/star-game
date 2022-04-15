@@ -23,3 +23,11 @@ export interface StrengthenPlanetInfo {
   plunder_speed: number;
   is_available: boolean;
 }
+
+// 预估消耗类型定义
+export interface StrengthenConsumeType {
+  population_consume: number;
+  speedup_consume: number;
+  stone_consume: number;
+  strengthen_time: number;
+}
