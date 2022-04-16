@@ -199,8 +199,10 @@ export type BulletType = typeof bulletType[keyof typeof bulletType];
 
 export interface EffectItemInfoOfConfig {
   name: BulletType;
-  resDir: string;
-  spriteRes: string;
+  bombSpriteSrc?: string;
+  bombSpineSrc?: string;
+  moveSpineSrc?: string;
+  moveSpriteSrc?: string;
   label?: string;
 }
 

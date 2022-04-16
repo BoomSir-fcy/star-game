@@ -66,8 +66,8 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, [dragEndHandle]);
 
   return (
-    <BgCard variant='long'>
-      <Flex flexWrap='wrap' padding='0 28px'>
+    <BgCard padding='0 28px' variant='long'>
+      <Flex style={{ overflow: 'auto' }} width='100%'>
         {list.map(item => {
           return (
             <Box

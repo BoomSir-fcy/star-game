@@ -275,7 +275,8 @@ class Combat extends EventTarget {
   attackParabolaEffect(target: Combat, effect: BulletType) {
     this.renderBullet();
     if (this.bullet) {
-      this.bullet.parabolaBulletEffect(target, effect);
+      this.bullet.testAttack(effect, target);
+      // this.bullet.test();
     }
   }
 

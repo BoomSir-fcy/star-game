@@ -200,3 +200,11 @@ export const getSkillKey = (skill?: Skill): 'firing' | 'boom' => {
 
   return 'firing';
 };
+
+export const getDistanceBetweenTwoPoints = (point0: Point, point1: Point) => {
+  const { x: x0, y: y0 } = point0;
+  const { x: x1, y: y1 } = point1;
+
+  const distance = Math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2);
+  return distance;
+};

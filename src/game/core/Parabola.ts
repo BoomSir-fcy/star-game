@@ -19,7 +19,7 @@ class Parabola extends EventTarget {
 
   b = 0;
 
-  flagMove = true;
+  moving = false;
 
   startX = 0;
 
@@ -27,7 +27,7 @@ class Parabola extends EventTarget {
 
   scale = 1;
 
-  speed = 50;
+  speed = 60;
 
   endScale = 1;
 
@@ -60,9 +60,9 @@ class Parabola extends EventTarget {
   }
 
   move() {
-    if (!this.flagMove) return this;
+    if (this.moving) return this;
+    this.moving = true;
     this.rate = this.coordTarget.x > 0 ? 1 : -1;
-
     this.step();
     return this;
   }
@@ -90,13 +90,13 @@ class Parabola extends EventTarget {
     }
     const y = this.curvature * x * x + this.b * x;
 
-    const stepMoveY =
-      this.curvature * stepMoveX * stepMoveX + this.b * stepMoveX;
-
     const realY = y + this.point0.y;
 
     this.display.position.set(realX, realY);
     this.display.scale.set(this.scale);
+    // 根据曲线子弹调整角度
+    this.display.rotation = tangent / 2 + (0.5 * this.rate - 0.25) * Math.PI;
+
     if (Math.abs(x - this.coordTarget.x) < Math.abs(stepMoveX)) {
       this.onMoveEnd();
     } else {
@@ -105,6 +105,7 @@ class Parabola extends EventTarget {
   }
 
   onMoveEnd() {
+    this.moving = false;
     this.dispatchEvent(new Event('end'));
   }
 }
