@@ -132,7 +132,7 @@ class Soldier extends Combat {
       this.testButton.drawRect(0, 0, 60, 32);
       this.testButton.endFill();
       const text = new Text('叛变', { fill: 0xffffff });
-      this.testButton.position.set(-50, -60);
+      this.testButton.position.set(-50, 0);
       this.testButton.addChild(text);
       this.container.addChild(this.testButton);
       this.testButton.interactive = true;

@@ -30,85 +30,76 @@ export interface RoundDescMove {
   starting_point: RoundDescAxis;
 }
 
-export interface RoundDescAttack {
-  receive_df: number;
-  now_hp: number;
+interface ReceiveChange {
   receive_id: string;
   receive_point: RoundDescAxis;
-  receive_sub_hp: number;
-  sender_attack: number;
+}
+
+interface SlotBaseInfo {
   sender_id: string;
   sender_point: RoundDescAxis;
+  receive_id: string;
+  receive_point: RoundDescAxis;
+}
+
+export interface RoundDescAttack extends SlotBaseInfo {
+  receive_df: number;
+  now_hp: number;
+  receive_sub_hp: number;
+  sender_attack: number;
 }
 
 // 添加炸弹
-export interface RoundDescAddBoom {
+export interface RoundDescAddBoom extends SlotBaseInfo {
   boom_hp: number;
   long_round: number;
-  receive_id: string;
+  around: ReceiveChange[];
   receive_sub_hp: number;
-  sender_id: string;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
 }
 // 添加灼烧
-export interface RoundDescAddFiring {
+export interface RoundDescAddFiring extends SlotBaseInfo {
   long_round: number;
-  receive_id: string;
+  around: ReceiveChange[];
   receive_sub_hp: number;
-  sender_id: string;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
 }
 // 正在灼烧
-export interface RoundDescFiring {
+export interface RoundDescFiring extends SlotBaseInfo {
   long_round: number;
-  receive_id: string;
-  sender_id: string;
   receive_sub_hp: number;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
 }
 // 禁锢
-export interface RoundDescStopMove {
+export interface RoundDescStopMove extends SlotBaseInfo {
   long_round: number;
-  receive_id: string;
-  sender_id: string;
   receive_sub_hp: number;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
+  around: ReceiveChange[];
 }
 // 炸弹爆炸
-export interface RoundDescBoom {
+export interface RoundDescBoom extends SlotBaseInfo {
   receive_sub_hp: number;
   long_round: number;
-  receive_id: string;
-  sender_id: string;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
 }
 // 冰冻
-export interface RoundDescIceStart {
+export interface RoundDescIceStart extends SlotBaseInfo {
   long_round: number;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
   receive_sub_hp: number;
-  receive_id: string;
-  sender_id: string;
+  around: ReceiveChange[];
 }
 // 冰冻结束
-export interface RoundDescIceEnd {
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
+export interface RoundDescIceEnd extends SlotBaseInfo {
   long_round: number;
   receive_sub_hp: number;
-  receive_id: string;
-  sender_id: string;
+  around: ReceiveChange[];
 }
 
 export interface RoundDescRemove {
   receive_point: RoundDescAxis;
   receive_id: string;
+}
+
+export interface RoundDescBeatMove {
+  move_unit: string;
+  from: RoundDescAxis;
+  dest: RoundDescAxis[];
 }
 
 export type RoundDesc =
@@ -170,6 +161,9 @@ export const effectType = {
   ADD_BOOM: 9, // 添加炸弹
   BOOM: 10, // 炸弹爆炸
   REMOVE: 11, // 移除棋子
+  BEAT: 12, // 击退
+  BEAT_MOVE: 13, // 击退产生位移
+  BEAT_COLLISION: 13, // 击退碰撞伤害
 };
 
 // 技能

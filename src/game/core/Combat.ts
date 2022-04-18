@@ -163,7 +163,7 @@ class Combat extends EventTarget {
     const per = Math.ceil(this.hp / config.BLOOD_PER);
     const perW = (config.BLOOD_WIDTH / this.hp) * config.BLOOD_PER;
     const lineW = per > 30 ? 1 : 2;
-    console.log(per);
+
     for (let i = 1; i < per; i++) {
       this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
       console.log(lineStartX + perW * i, lineStartX);
@@ -186,7 +186,7 @@ class Combat extends EventTarget {
     //     lineStartX,
     //   lineY,
     // );
-    this.hpText.text = `${this.activePh}/${now}`;
+    // this.hpText.text = `${this.activePh}/${now}`;
   }
 
   drawAttackEffect() {
