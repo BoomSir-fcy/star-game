@@ -7,6 +7,8 @@ import { Api } from 'apis';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 
+import { StrengthenConsumeType } from './type';
+
 import { TextList } from '../Modal';
 
 const ImgCard = styled(Card)`
@@ -15,9 +17,10 @@ const ImgCard = styled(Card)`
 
 export const GrowPop: React.FC<{
   visible: boolean;
+  itemData: StrengthenConsumeType;
   onClose: () => void;
   callBack: () => void;
-}> = ({ visible, onClose, callBack }) => {
+}> = ({ visible, itemData, onClose, callBack }) => {
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
   const { toastError, toastSuccess, toastWarning } = useToast();
@@ -71,9 +74,18 @@ export const GrowPop: React.FC<{
                   imgWidth={50}
                   imgHeight={50}
                   imgSrc='/images/commons/dsg-1.png'
-                  number='100'
-                  unit='DSG'
+                  number={itemData.stone_consume.toString()}
+                  unit={t('Ore')}
                 />
+                <Box mt='10px'>
+                  <TextList
+                    imgWidth={50}
+                    imgHeight={50}
+                    imgSrc='/images/commons/dsg-1.png'
+                    number={itemData.population_consume.toString()}
+                    unit={t('Population')}
+                  />
+                </Box>
               </Box>
             </Box>
             <Flex width='100%' justifyContent='center'>

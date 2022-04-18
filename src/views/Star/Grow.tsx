@@ -15,7 +15,10 @@ import ScoringPanel from 'components/ScoringPanel';
 import StarCom from 'components/StarCom';
 import InfoPlane from './components/grow/InfoPlane';
 import Extra from './components/grow/Extra';
-import { StrengthenPlanetInfo } from './components/grow/type';
+import {
+  StrengthenPlanetInfo,
+  StrengthenConsumeType,
+} from './components/grow/type';
 import { GrowPop } from './components/grow/growPop';
 
 const MysteryBoxStarStyled = styled(MysteryBoxBoxStyled)`
@@ -33,6 +36,13 @@ const Grow: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [nowPlante, setNowPlante] = useState<StrengthenPlanetInfo>();
   const [estimatePlante, setEstimatePlante] = useState<StrengthenPlanetInfo>();
+  // 预估强化升级消耗
+  const [estimateCost, setEstimateCost] = useState<StrengthenConsumeType>({
+    population_consume: 0,
+    speedup_consume: 0,
+    stone_consume: 0,
+    strengthen_time: 0,
+  });
   const [state, setState] = React.useState({
     time: 0,
   });
@@ -94,6 +104,7 @@ const Grow: React.FC = () => {
         const { data } = res;
         setNowPlante(data?.now_planet_info);
         setEstimatePlante(data?.estimate_planet_info);
+        setEstimateCost(data);
       } else if (res.code === 200016) {
         toastWarning(
           t('Planets in the Planetary Federation cannot be nurtured'),
@@ -193,6 +204,7 @@ const Grow: React.FC = () => {
       </BgCard>
       <GrowPop
         visible={visible}
+        itemData={estimateCost}
         onClose={() => setVisible(false)}
         callBack={() => getStrengthenResult()}
       />

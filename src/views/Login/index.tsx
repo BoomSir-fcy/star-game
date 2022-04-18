@@ -136,7 +136,7 @@ const Login = () => {
         }, 6000);
       } catch (error) {
         console.error(error);
-        toastError(t('Registration failed'));
+        toastError(t('RegistrationCheckBalance'));
       }
     }
   }, [

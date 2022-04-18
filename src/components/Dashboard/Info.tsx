@@ -31,9 +31,16 @@ const ButtonTag2 = styled(Button)`
 
 interface InfoProps extends ButtonGroupProps {
   onTodo?: () => void;
+  className?: string;
 }
 
-const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children, onTodo }) => {
+const Info: React.FC<InfoProps> = ({
+  onRefresh,
+  onBack,
+  children,
+  onTodo,
+  className,
+}) => {
   const { t } = useTranslation();
 
   const [visible, setVisible] = useState(false);
@@ -107,7 +114,7 @@ const Info: React.FC<InfoProps> = ({ onRefresh, onBack, children, onTodo }) => {
         <Flex ml='16px' pt='32px'>
           <Box>
             <Link to='/star/planet'>
-              <ButtonTag1 variant='custom'>
+              <ButtonTag1 variant='custom' className={className}>
                 <Flex alignItems='center' width='100%'>
                   <StarCom variant='none' ml='16px' />
                   <Box>

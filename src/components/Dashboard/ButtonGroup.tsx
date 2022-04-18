@@ -16,6 +16,7 @@ import { useTranslation } from 'contexts/Localization';
 export interface ButtonGroupProps {
   onRefresh?: ButtonOnRefresh;
   onBack?: ButtonOnBack;
+  className?: string;
 }
 
 interface SecondaryButtonProps extends ButtonProps {
