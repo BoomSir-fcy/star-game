@@ -208,6 +208,8 @@
   "The alliance has not changed": "The alliance has not changed",
   "Join in": "Join in",
   "Save": "Save",
+  "loginSigninSearch": "Querying...",
+  "RegistrationCheckBalance": "Registration failed, please check if the DSG balance is sufficient",
   "******end*****@FCY********": "@FCY翻译结束",
   "Connect Wallet": "Connect Wallet",
   "translationLast": "translationLast",

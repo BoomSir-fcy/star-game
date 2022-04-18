@@ -35,4 +35,10 @@ export class UserApi extends Http {
     const res = await this.get('user/invite');
     return res;
   }
+
+  // 获取用户有没有注册成功
+  async getCheck(params: Api.User.CheckParams) {
+    const res = await this.get('user/check', params);
+    return res;
+  }
 }

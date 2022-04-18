@@ -142,6 +142,7 @@ const JoinTheAlliance = () => {
         />
         <Box marginTop='76px'>
           <Button
+            variant='vsRefresh'
             width='100px'
             style={{ fontSize: '24px' }}
             padding='0'
