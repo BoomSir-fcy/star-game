@@ -78,7 +78,7 @@ const Upgrade = () => {
       dispatch(setUpgradePlanetId(planetId));
       dispatch(setActiveMaterialMap(null));
     }
-  }, [upgradePlanetId, planetId]);
+  }, [upgradePlanetId, planetId, dispatch]);
 
   // 星球是否升级成功
   const getUpgradeSuccess = useCallback(async () => {
@@ -127,7 +127,7 @@ const Upgrade = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [planetId, t, toastError]);
+  }, [planetId]);
 
   useEffect(() => {
     if (upgradeSuccess.upgrade_is_end) getStarUpgradeInfo();

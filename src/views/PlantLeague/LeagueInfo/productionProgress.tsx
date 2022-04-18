@@ -49,7 +49,7 @@ const ProductionProgress = () => {
     const time = (((end_time - state.time) / end_time) * 100).toFixed(2);
 
     return Number(time) > 100 ? 100 : Number(time) || 0;
-  }, [state]);
+  }, [state, end_time]);
 
   const ExtractResources = useCallback(async () => {
     if (alliance.working !== 0) {
@@ -71,7 +71,7 @@ const ProductionProgress = () => {
       toastError(t('Extraction failed'));
     }
     dispatch(fetchAllianceViewAsync());
-  }, [alliance]);
+  }, [alliance, t, dispatch, toastError, toastSuccess]);
 
   // 倒计时
   const countDown = () => {
@@ -137,7 +137,7 @@ const ProductionProgress = () => {
       return;
     }
     setState({ time: free_time, Extracttime: later_extract_time });
-  }, [free_time, alliance, end_time, later_extract_time]);
+  }, [free_time, alliance, end_time, later_extract_time, setState]);
 
   useEffect(() => {
     countDown();
@@ -146,6 +146,7 @@ const ProductionProgress = () => {
       if (timer) clearInterval(timer);
       if (Extracttimer) clearInterval(Extracttimer);
     };
+    // eslint-disable-next-line
   }, [state]);
 
   return (

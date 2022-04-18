@@ -50,7 +50,7 @@ const Galaxy = () => {
         currentGalaxy.id ? list.find(v => v.id === currentGalaxy.id) : list[0],
       ),
     );
-  }, [galaxyList, account, currentGalaxy.id]);
+  }, [dispatch, galaxyList, account, currentGalaxy.id]);
 
   useEffect(() => {
     initList();

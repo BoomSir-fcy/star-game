@@ -118,6 +118,11 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
     }
     dispatch(fetchUserBalanceAsync());
   }, [
+    t,
+    close,
+    toastError,
+    toastSuccess,
+    setpending,
     OperationType,
     TokenBalance,
     TokenInfo?.coinId,
@@ -140,7 +145,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
       setpending(false);
     }
     setLoadApprovedNum(false);
-  }, [onApprove]);
+  }, [onApprove, toastSuccess, t, toastError, setpending]);
 
   // 输入框输入限制
   const handleChange = useCallback(

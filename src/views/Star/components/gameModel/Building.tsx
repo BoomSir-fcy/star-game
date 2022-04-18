@@ -51,12 +51,14 @@ export const Building: React.FC<{
     return () => {
       clearInterval(timer);
     };
-  }, [itemData?.status]);
+    // eslint-disable-next-line
+  }, [status, state]);
 
   React.useEffect(() => {
     if (state.time > 0) {
       countDown();
     }
+    // eslint-disable-next-line
   }, [state.time]);
 
   // 倒计时

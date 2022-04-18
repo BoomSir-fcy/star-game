@@ -179,13 +179,13 @@ const Planet = () => {
 
   useEffect(() => {
     init();
-  }, [parsedQs.t, state.race, state.token]);
+  }, [parsedQs.t, state.race, state.token, init]);
 
   useEffect(() => {
     if (choose) {
       dispatch(fetchAllianceViewAsync());
     }
-  }, [choose]);
+  }, [choose, dispatch]);
 
   // 将步骤关掉
   const onExit = () => {

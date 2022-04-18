@@ -149,7 +149,7 @@ export const DragCompoents: React.FC<{
       width: gridSize / rows,
       height: gridSize / cols,
     };
-  }, [rows, cols]);
+  }, [rows, cols, gridSize]);
 
   // 计算格子
   React.useEffect(() => {
@@ -157,7 +157,7 @@ export const DragCompoents: React.FC<{
     const isactive = builds.filter((row: any) => row.isactive);
     setState({ ...state, data: itemData });
     setBuilds([...currBuilds, ...isactive]);
-  }, [itemData]);
+  }, [itemData, builds, state]);
 
   // 计算绝对坐标
   const getAbsolutePosition = (index: number) => {
@@ -361,7 +361,8 @@ export const DragCompoents: React.FC<{
         }
       }
     },
-    [data],
+    // eslint-disable-next-line
+    [state.data, t, toastError],
   );
 
   const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
