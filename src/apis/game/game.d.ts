@@ -102,6 +102,12 @@ declare namespace Api {
       units: ParamsUnit[];
     }
 
+    interface ParamsUnitSettingTest {
+      tag: string;
+      units1: ParamsUnit[];
+      units2: ParamsUnit[];
+    }
+
     interface SignIn {
       SSID: 'string';
     }

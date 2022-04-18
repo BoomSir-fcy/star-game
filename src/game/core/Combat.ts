@@ -19,15 +19,23 @@ import Chequer, { stateType } from './Chequer';
 import Bullet from './Bullet';
 
 export interface CombatOptions {
-  texture0: string;
-  texture1: string;
+  // texture0: string;
+  // texture1: string;
+  srcId: string;
+  race: number;
 }
 
 class Combat extends EventTarget {
   constructor(options: CombatOptions) {
     super();
-    this.texture0 = Texture.from(options.texture0);
-    this.texture1 = Texture.from(options.texture1);
+    this.race = options.race;
+    this.srcId = options.srcId;
+    this.textureRes = Combat.getSpriteRes(options.race, options.srcId, 2);
+    console.log(this.textureRes);
+    this.texture0 = Texture.from(this.textureRes);
+    this.texture1 = Texture.from(
+      Combat.getSpriteRes(options.race, options.srcId, 2),
+    );
   }
 
   x = 0;
@@ -37,6 +45,12 @@ class Combat extends EventTarget {
   y = 0;
 
   targetY = 0;
+
+  race = 1;
+
+  srcId = '';
+
+  textureRes = '';
 
   moving = false;
 
@@ -64,7 +78,7 @@ class Combat extends EventTarget {
 
   bloodStartY = -20;
 
-  bloodH = 20;
+  bloodH = 10;
 
   bloodBorderW = 2;
 
@@ -102,6 +116,7 @@ class Combat extends EventTarget {
     this.hpText.position.set(0, 20);
     this.hpText.zIndex = 2;
     this.hpGraphics.zIndex = 2;
+    this.hpGraphics.position.set(0, -50);
     this.container.addChild(this.hpText);
     this.drawHp();
   }
@@ -122,26 +137,55 @@ class Combat extends EventTarget {
     const lineY = this.bloodStartY + lineH;
     this.hpGraphics.clear();
 
-    this.hpGraphics.lineStyle(this.bloodBorderW, 0xffffff, 1);
+    // 绘制血条底色
+    this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
     this.hpGraphics.drawRect(
-      -(config.BLOOD_WIDTH / 2),
-      this.bloodStartY,
+      lineStartX,
+      lineY,
       config.BLOOD_WIDTH,
-      this.bloodH,
+      config.BLOOD_HEIGHT,
     );
     this.hpGraphics.endFill();
 
-    this.hpGraphics.lineStyle(
-      lineX,
+    // 绘制当前血量
+    this.hpGraphics.beginFill(
       this.isEnemy ? config.BLOOD_COLOR_ENEMY : config.BLOOD_COLOR,
-      0.8,
     );
-    this.hpGraphics.moveTo(lineStartX, lineY);
-    this.hpGraphics.lineTo(
-      (this.activePh / this.hp) * (config.BLOOD_WIDTH - this.bloodBorderW * 2) +
-        lineStartX,
+    this.hpGraphics.drawRect(
+      lineStartX,
       lineY,
+      (this.activePh / this.hp) * config.BLOOD_WIDTH,
+      config.BLOOD_HEIGHT,
     );
+    this.hpGraphics.endFill();
+
+    // 绘制格子
+    const per = Math.ceil(this.hp / config.BLOOD_PER);
+    const perW = (config.BLOOD_WIDTH / this.hp) * config.BLOOD_PER;
+    const lineW = per > 30 ? 1 : 2;
+    console.log(per);
+    for (let i = 1; i < per; i++) {
+      this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
+      console.log(lineStartX + perW * i, lineStartX);
+      this.hpGraphics.drawRect(
+        lineStartX + perW * i,
+        lineY,
+        lineW,
+        config.BLOOD_HEIGHT,
+      );
+      this.hpGraphics.endFill();
+    }
+
+    // this.hpGraphics.lineStyle(
+    //   lineX,
+    //   this.isEnemy ? config.BLOOD_COLOR_ENEMY : config.BLOOD_COLOR,
+    // );
+    // this.hpGraphics.moveTo(lineStartX, lineY);
+    // this.hpGraphics.lineTo(
+    //   (this.activePh / this.hp) * (config.BLOOD_WIDTH - this.bloodBorderW * 2) +
+    //     lineStartX,
+    //   lineY,
+    // );
     this.hpText.text = `${this.activePh}/${now}`;
   }
 
@@ -324,6 +368,10 @@ class Combat extends EventTarget {
       this.removeEventListener(event, callback);
     };
     this.addEventListener(event, callback);
+  }
+
+  static getSpriteRes(race: number, resId: string, index: number) {
+    return `/assets/modal/${race}/${resId}-${index}.png`;
   }
 }
 

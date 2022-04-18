@@ -19,14 +19,15 @@ import {
 interface GameOptionsProps {
   height?: number;
   width?: number;
+  test?: boolean;
 }
 class Game extends EventTarget {
   constructor(options?: GameOptionsProps) {
     super();
-    const { width, height } = options || {};
+    const { width, height, test } = options || {};
     const _width = width || config.WIDTH;
     const _height = height || config.HEIGHT;
-    this.boards = new Boards({ width, height });
+    this.boards = new Boards({ width, height, test });
     this.app = new Application({
       width: _width,
       height: _height,
@@ -128,9 +129,11 @@ class Game extends EventTarget {
         }
       })
       .on('pointerup', event => {
-        const res = this.onDragEndSoldier(event, soldier);
-        if (res) {
-          this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
+        if (soldier.moved) {
+          const res = this.onDragEndSoldier(event, soldier);
+          if (res) {
+            this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
+          }
         }
         this.activeSoliderFlag = true;
         this.activeSolider = soldier;
@@ -142,6 +145,10 @@ class Game extends EventTarget {
       });
     soldier.addEventListener('death', () => {
       this.removeSoldier(soldier);
+    });
+    soldier.addEventListener('enemyChange', () => {
+      // this.removeSoldier(soldier);
+      this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
     });
   }
 

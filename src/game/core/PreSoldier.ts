@@ -28,7 +28,8 @@ class PreSoldier extends EventTarget {
     const soldier = new Soldier({
       x: this.app.renderer.screen.width / 2,
       y: this.app.renderer.screen.height / 2,
-      textureRes: src,
+      srcId: `${id}`,
+      race: 1,
       enableDrag: false,
       id,
       unique_id: id,

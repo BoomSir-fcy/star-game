@@ -11,6 +11,7 @@ import {
   useFetchGamePlanetUnits,
   useFetchUnitList,
   useFetchGamePK,
+  useFetchGamePKTest,
 } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
 import { useStore } from 'state';
@@ -80,10 +81,13 @@ const GamePK: React.FC<GamePKProps> = () => {
     if (Number(pid0) && Number(pid1)) {
       dispatch(fetchPlanetInfoAsync([Number(pid0), Number(pid1)]));
       navigate(`/plunder-test?pid0=${pid0}&pid1=${pid1}`, { replace: true });
+    } else if (Number(pid0)) {
+      dispatch(fetchPlanetInfoAsync([Number(pid0)]));
     }
   }, [dispatch, pid0, pid1]);
 
   useFetchGamePK(infoP0?.id, infoP1?.id, Number(maxRound));
+  useFetchGamePKTest(infoP0?.id, infoP1?.id, Number(maxRound));
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -97,9 +101,10 @@ const GamePK: React.FC<GamePKProps> = () => {
     (poses: Api.Game.UnitPlanetPos[], base: MapBaseUnits, isEnemy: boolean) => {
       poses?.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          textureRes: '/assets/modal/m0-1.png',
+          srcId: `${item.base_unit_id}`,
+          race: base[item.base_unit_id]?.race || 1,
           id: item.base_unit_id,
-          hp: base[item.base_unit_id].hp,
+          hp: base[item.base_unit_id]?.hp,
           isEnemy,
           enableDrag: false,
           unique_id: item.base_unit_id,
@@ -165,7 +170,8 @@ const GamePK: React.FC<GamePKProps> = () => {
       game.clearSoldier();
       info.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          textureRes: '/assets/modal/m0-1.png',
+          srcId: `${item.base_id}`,
+          race: PKInfo?.init.base_unit[item.base_id].race || 1,
           id: item.base_id,
           hp: PKInfo?.init.base_unit[item.base_id].hp,
           isEnemy: item.red,
@@ -184,21 +190,24 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   const testHandle = useCallback(() => {
     game.createSoldier(0, 7, {
-      textureRes: '/assets/modal/m0-1.png',
+      srcId: '1',
+      race: 1,
+
       id: 1,
       unique_id: 1,
-      hp: 100,
+      hp: 290,
       isEnemy: false,
       enableDrag: true,
     });
-    game.createSoldier(7, 7, {
-      textureRes: '/assets/modal/m0-1.png',
-      id: 1,
-      unique_id: 1,
-      hp: 100,
-      isEnemy: true,
-      enableDrag: true,
-    });
+    // game.createSoldier(7, 7, {
+    //   srcId: '1',
+    //   race: 1,
+    //   id: 1,
+    //   unique_id: 1,
+    //   hp: 300,
+    //   isEnemy: true,
+    //   enableDrag: true,
+    // });
   }, []);
 
   const bulletSelect: OptionProps[] = useMemo(() => {

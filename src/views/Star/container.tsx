@@ -84,6 +84,11 @@ const Star: React.FC<{
               path: `/star/embattle?id=${parsedQs.id}`,
             },
             {
+              id: 'embattle-test',
+              label: `${t('测试摆盘')}`,
+              path: `/star/embattle-test?id=${parsedQs.id}`,
+            },
+            {
               id: 'search',
               label: `${t('planetMenuLooting')}`,
               path: `/star/search?id=${parsedQs.id}`,

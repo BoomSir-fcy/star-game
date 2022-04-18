@@ -46,7 +46,8 @@ const PreviewList: React.FC<PreviewListProps> = ({
       const soldier = new Soldier({
         x: 0,
         y: 0,
-        textureRes: '/assets/modal/m0-1.png',
+        srcId: `${item.unique_id}`,
+        race,
         enableDrag: false,
         id: item.unique_id,
         unique_id: item.unique_id,
@@ -55,7 +56,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
       setMoving(true);
       game?.addDragPreSoldier(soldier);
     },
-    [game],
+    [game, race],
   );
 
   useEffect(() => {
@@ -88,7 +89,8 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   const soldier = new Soldier({
                     x: 0,
                     y: 0,
-                    textureRes: `/assets/modal/m${0}-1.png`,
+                    srcId: `${item.unique_id}`,
+                    race,
                     id: item.unique_id,
                     unique_id: item.unique_id,
                     unitInfo: unitMaps?.[item.unique_id],

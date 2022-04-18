@@ -19,17 +19,18 @@ import AxisPoint from './AxisPoint';
 interface BoardsProps {
   width?: number;
   height?: number;
+  test?: boolean;
 }
 class Boards extends EventTarget {
   constructor(options?: BoardsProps) {
     super();
     // this.aaa = 1;
-    const { width, height } = options || {};
+    const { width, height, test } = options || {};
 
     this.width = width || config.WIDTH;
     this.height = height || config.HEIGHT;
 
-    this.init();
+    this.init({ test });
   }
 
   width;
@@ -52,12 +53,12 @@ class Boards extends EventTarget {
 
   dragging = false;
 
-  init() {
+  init({ test }: { test?: boolean }) {
     this.container.position.set(this.width / 2, this.height / 2);
 
     // this.app.stage.addChild(this.container);
 
-    this.drawChequers();
+    this.drawChequers(test);
 
     // this.app.stage.hitArea = this.app.renderer.screen;
 
@@ -92,7 +93,7 @@ class Boards extends EventTarget {
     e.preventDefault();
   }
 
-  drawChequers() {
+  drawChequers(test?: boolean) {
     this.chequers = [];
     for (let row = 0; row < config.BOARDS_ROW_COUNT; row++) {
       for (let col = 0; col < config.BOARDS_COL_COUNT; col++) {
@@ -101,6 +102,7 @@ class Boards extends EventTarget {
           axisX: row,
           axisY: col,
           state: stateType.PREVIEW,
+          test,
         });
         this.chequers.push(chequer);
       }
