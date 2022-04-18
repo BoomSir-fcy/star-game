@@ -5,13 +5,14 @@ interface SizeApi {
   height?: number;
 }
 interface PositionApi {
-  top: number | string;
-  left: number | string;
+  top?: number | string;
+  left?: number | string;
 }
 interface VideoOptionsApi extends SizeApi, PositionApi {
   src: string;
   loop?: boolean;
   zIndex?: number;
+  center?: boolean;
 }
 interface ContextApi {
   show: boolean;
@@ -32,6 +33,7 @@ const VideoProvider: React.FC = ({ children }) => {
     height: 500,
     top: 0,
     left: 0,
+    center: true,
   });
   const setVideoOptions = useCallback(options => {
     setVideoOptionsState(p => {

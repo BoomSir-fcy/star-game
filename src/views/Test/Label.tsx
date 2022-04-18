@@ -7,9 +7,6 @@ const TestLabel: React.FC = () => {
   React.useEffect(() => {
     setVideoOptions({
       src: '/video/pk-2.mp4',
-      top: '38%',
-      left: '37%',
-      // loop: false,
     });
     if (videoRef.current) {
       console.log(videoRef.current);
