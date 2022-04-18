@@ -37,7 +37,7 @@ const config = {
     effectType.STOP_MOVE,
     effectType.FIRING,
   ],
-  hideEffect: [effectType.BOOM, effectType.ICE_END],
+  hideEffect: [effectType.BOOM, effectType.ICE_END, effectType.STOP_MOVE],
 };
 
 export default config;

@@ -27,7 +27,8 @@ export interface RoundDescAxis {
 export interface RoundDescMove {
   dest: RoundDescAxis[];
   id: string;
-  starting_point: RoundDescAxis;
+  starting_point?: RoundDescAxis;
+  from?: RoundDescAxis;
 }
 
 interface ReceiveChange {
@@ -46,6 +47,7 @@ export interface RoundDescAttack extends SlotBaseInfo {
   receive_df: number;
   now_hp: number;
   receive_sub_hp: number;
+  around: ReceiveChange[];
   sender_attack: number;
 }
 
@@ -65,6 +67,7 @@ export interface RoundDescAddFiring extends SlotBaseInfo {
 // 正在灼烧
 export interface RoundDescFiring extends SlotBaseInfo {
   long_round: number;
+  around: ReceiveChange[];
   receive_sub_hp: number;
 }
 // 禁锢
@@ -76,6 +79,7 @@ export interface RoundDescStopMove extends SlotBaseInfo {
 // 炸弹爆炸
 export interface RoundDescBoom extends SlotBaseInfo {
   receive_sub_hp: number;
+  around: ReceiveChange[];
   long_round: number;
 }
 // 冰冻
@@ -90,6 +94,19 @@ export interface RoundDescIceEnd extends SlotBaseInfo {
   receive_sub_hp: number;
   around: ReceiveChange[];
 }
+// 冰冻结束
+export interface RoundDescBeat extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  detail: RoundInfo[];
+}
+
+// 碰撞
+export interface RoundDescCarshHarm extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
+}
 
 export interface RoundDescRemove {
   receive_point: RoundDescAxis;
@@ -99,7 +116,7 @@ export interface RoundDescRemove {
 export interface RoundDescBeatMove {
   move_unit: string;
   from: RoundDescAxis;
-  dest: RoundDescAxis[];
+  dest: RoundDescAxis;
 }
 
 export type RoundDesc =
@@ -110,7 +127,8 @@ export type RoundDesc =
   | RoundDescFiring
   | RoundDescIceEnd
   | RoundDescStopMove
-  | RoundDescIceStart;
+  | RoundDescIceStart
+  | RoundDescCarshHarm;
 
 export interface RoundInfo {
   desc_type: number;
@@ -125,6 +143,9 @@ export interface RoundInfo {
   ice_start: RoundDescIceStart;
   stop_move: RoundDescStopMove;
   unit_remove: RoundDescRemove;
+  beat: RoundDescBeat;
+  beat_move: RoundDescBeatMove;
+  carsh_harm: RoundDescCarshHarm;
 }
 
 export enum Orientation {
@@ -163,7 +184,7 @@ export const effectType = {
   REMOVE: 11, // 移除棋子
   BEAT: 12, // 击退
   BEAT_MOVE: 13, // 击退产生位移
-  BEAT_COLLISION: 13, // 击退碰撞伤害
+  BEAT_COLLISION: 14, // 击退碰撞伤害
 };
 
 // 技能

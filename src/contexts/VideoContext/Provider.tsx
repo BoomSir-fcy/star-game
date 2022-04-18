@@ -18,7 +18,7 @@ interface ContextApi {
   show: boolean;
   videoOptions: VideoOptionsApi;
   setVideoOptions: (options: VideoOptionsApi) => void;
-  videoRef: any;
+  videoRef: React.RefObject<HTMLVideoElement>;
 }
 const VideoContext = React.createContext({} as ContextApi);
 

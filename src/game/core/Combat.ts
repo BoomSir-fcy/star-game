@@ -31,7 +31,6 @@ class Combat extends EventTarget {
     this.race = options.race;
     this.srcId = options.srcId;
     this.textureRes = Combat.getSpriteRes(options.race, options.srcId, 2);
-    console.log(this.textureRes);
     this.texture0 = Texture.from(this.textureRes);
     this.texture1 = Texture.from(
       Combat.getSpriteRes(options.race, options.srcId, 2),
@@ -166,7 +165,6 @@ class Combat extends EventTarget {
 
     for (let i = 1; i < per; i++) {
       this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
-      console.log(lineStartX + perW * i, lineStartX);
       this.hpGraphics.drawRect(
         lineStartX + perW * i,
         lineY,
@@ -216,6 +214,7 @@ class Combat extends EventTarget {
   moveTo(axisPoint: AxisPoint, moveTime?: number) {
     const t = ((moveTime || this.moveTime) / 1000) * 60;
 
+    console.log(axisPoint);
     this.moving = true;
     this.targetAxisPoint = axisPoint;
     axisPoint.chequer.setState(stateType.PREVIEW);
@@ -265,6 +264,7 @@ class Combat extends EventTarget {
         Math.abs(this.container.position.x - (this.targetAxisPoint.x || 0)) <=
           this.doubleSpeedX
       ) {
+        console.log(this.targetAxisPoint);
         this.moving = false;
         this.speedX = 0;
         this.speedY = 0;
@@ -298,7 +298,6 @@ class Combat extends EventTarget {
   ) {
     this.attackTarget = target;
     this.attackInfo = attackInfo;
-    console.log(this.attackInfo, effect);
     this.attacking = true;
     this.targetAxisPoint = target.axisPoint;
     this.flipTargetPointOrientation();

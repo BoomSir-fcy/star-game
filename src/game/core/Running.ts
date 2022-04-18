@@ -15,6 +15,8 @@ import {
   RoundDescIceStart,
   RoundDesc,
   RoundDescRemove,
+  RoundDescBeat,
+  RoundDescBeatMove,
 } from 'game/types';
 import AxisPoint from './AxisPoint';
 import { stateType } from './Chequer';
@@ -36,8 +38,10 @@ interface TrackDetail {
   type: EffectType;
   currentAxisPoint: RoundDescAxis;
   targetAxisPoint: RoundDescAxis;
+  targetAxisPoints?: RoundDescAxis[];
   attackInfo?: RoundDesc;
   id: string;
+  detail?: TrackDetail[];
 }
 interface Track {
   list: TrackDetail[];
@@ -107,11 +111,6 @@ class Running extends EventTarget {
     this.runHandle();
   }
 
-  // reverse() {
-  //   console.log(this);
-  //   console.log('reverse');
-  // }
-
   reStart() {
     // this.paused = true;
     this.trackIndex = 0;
@@ -137,17 +136,14 @@ class Running extends EventTarget {
   }
 
   setTrackIndexById(id: string) {
-    console.log(this.trackDetails);
     const index = this.trackDetails.findIndex(item => {
-      console.log(item.id.indexOf(id) === 0, 'item.id.indexOf(id) === 0');
       return item.id.indexOf(id) === 0;
     });
     if (index) {
       // const index = this.trackDetails.indexOf(track);
-      console.log(index, id, '==index');
       this.trackIndex = index;
     } else {
-      console.log(`not find id: ${id} by trackDetails`);
+      console.warn(`not find id: ${id} by trackDetails`);
     }
   }
 
@@ -155,19 +151,51 @@ class Running extends EventTarget {
     if (this.paused) return;
     this.playing = true;
     const track = this.trackDetails[this.trackIndex];
+    this.runTrack(track, true);
+  }
+
+  runTrack(track: TrackDetail, running?: boolean) {
     if (track?.type === effectType.MOVE) {
       this.infoText.text = `回合: ${track.id}`;
       const t = this.getMoveT();
       const res = this.moveHandle(track, t);
-      if (!res) {
-        console.warn(`移动失效:${track.id}`);
+      if (running) {
+        res?.once('moveEnd', () => {
+          this.runningHandle();
+        });
+        if (!res) {
+          console.warn(`移动失效:${track.id}`);
+          this.runningHandle();
+        }
+      }
+      return res;
+    }
+    if (track?.type === effectType.BEAT_MOVE) {
+      this.infoText.text = `回合: ${track.id}`;
+      const t = this.getMoveT();
+      const res = this.beatMoveHandle(track, t);
+      if (running) {
+        res?.once('moveEnd', () => {
+          this.runningHandle();
+        });
+        if (!res) {
+          console.warn(`移动失效:${track.id}`);
+          this.runningHandle();
+        }
+      }
+      return res;
+    }
+    if (track?.type === effectType.REMOVE) {
+      const res = this.removeHandle(track);
+      if (running) {
         this.runningHandle();
       }
-      // const handle = () => this.moveHandle(track, t);
-      // await Running.sleep(handle, t, true);
-    } else if (track?.type === effectType.REMOVE) {
-      this.removeHandle(track);
-    } else if (track?.type) {
+      return res;
+    }
+    if (track?.type === effectType.BEAT) {
+      return this.beatHandle(track, track.type);
+    }
+    if (track?.type) {
       const round = `回合: ${track.id} \n`;
       const effect = `技能: ${getEffectText(track.type)} \n`;
       const sender = `攻击者: (${track.currentAxisPoint.x}, ${track.currentAxisPoint.y}) \n`;
@@ -175,24 +203,20 @@ class Running extends EventTarget {
       const newHp = `被攻击者血量: (${(track.attackInfo as any)?.now_hp}) \n`;
       this.infoText.text = `${round}${effect}${sender}${receive}${newHp}`;
       const t = this.getAttackT();
-      const res = this.attackHandle(track, track.type, t);
-      if (!res) {
-        console.warn(`攻击失效:${track.id}`);
-        console.log(track);
-        this.runningHandle();
+      const res = this.attackHandleRunning(track, track.type, t);
+      if (running) {
+        if (!res) {
+          console.warn(`攻击失效:${track.id}`);
+          this.runningHandle();
+        }
       }
-      // const handle = () => this.attackHandle(track, track.type, t);
-      // await Running.sleep(handle, t, true);
+      return res;
     }
-    // if (track?.type === effectType.ATTACK) {
-    //   const t = this.getAttackT();
-    //   const handle = () => this.attackHandle(track, t);
-    //   await Running.sleep(handle, t, true);
-    // }
+    return null;
   }
 
   runningHandle() {
-    this.playing = false;
+    this.playing = true;
     if (this.paused) return;
     if (this.playCount === 0) return;
     if (this.trackIndex < this.trackDetails.length) {
@@ -239,8 +263,8 @@ class Running extends EventTarget {
     const tracks: TrackDetail[] = moves.dest.map((item, index) => {
       // const { x: x0, y: y0 } = moves.starting_point;
       // const { x: x1, y: y1 } = item;
-      const { x, y } =
-        index === 0 ? moves.starting_point : moves.dest[index - 1];
+      const point = moves.starting_point || moves.from;
+      const { x, y } = index === 0 && point ? point : moves.dest[index - 1];
       // this.trackDetails.push({
       //   type: handleType.MOVE,
       //   currentAxisPoint: { x, y },
@@ -263,6 +287,26 @@ class Running extends EventTarget {
     return tracks;
   }
 
+  static getBeatMoveTracks(
+    moves: RoundDescBeatMove,
+    id: string,
+  ): TrackDetail[] {
+    const { x, y } = moves.from;
+    const { x: x1, y: y1 } = moves.dest;
+
+    return [
+      {
+        id: `${id}`,
+        type: effectType.BEAT_MOVE,
+        currentAxisPoint: { x, y },
+        targetAxisPoint: {
+          x: x1,
+          y: y1,
+        },
+      },
+    ];
+  }
+
   getMoveT() {
     return this.moveTimePerChequer / this.rate;
   }
@@ -271,7 +315,7 @@ class Running extends EventTarget {
     return this.attackTime / this.rate;
   }
 
-  moveHandle(track: TrackDetail, t: number) {
+  moveHandle(track: TrackDetail, t: number): Soldier | null {
     const axis = this.game.getAxis(
       track.currentAxisPoint.x,
       track.currentAxisPoint.y,
@@ -281,21 +325,43 @@ class Running extends EventTarget {
       track.targetAxisPoint.y,
     );
     if (!axis || !axisPoint) {
-      console.log(`warn: ${track.id}`);
-      return false;
+      console.warn(`warn: ${track.id}`);
+      return null;
     }
     const soldier = this.game.findSoldierByAxis(axis);
     if (!soldier) {
-      console.log(`warn: ${track.id}`);
-      return false;
+      console.warn(`warn: ${track.id}`);
+      return null;
     }
     soldier.run();
     soldier.moveTo(axisPoint, t);
-    soldier.once('moveEnd', () => {
-      this.runningHandle();
-    });
 
-    return true;
+    return soldier;
+  }
+
+  beatMoveHandle(track: TrackDetail, t: number): Soldier | null {
+    const axis = this.game.getAxis(
+      track.currentAxisPoint.x,
+      track.currentAxisPoint.y,
+    );
+    const axisPoint = this.game.getAxis(
+      track.targetAxisPoint.x,
+      track.targetAxisPoint.y,
+    );
+    if (!axis || !axisPoint) {
+      console.warn(`warn: ${track.id}`);
+      return null;
+    }
+    const soldier = this.game.findSoldierByAxis(axis);
+    if (!soldier) {
+      console.warn(`warn: ${track.id}`);
+      return null;
+    }
+    console.log(track, axisPoint, soldier);
+    soldier.run();
+    soldier.moveTo(axisPoint, t);
+
+    return soldier;
   }
 
   removeHandle(track: TrackDetail) {
@@ -304,18 +370,17 @@ class Running extends EventTarget {
       track.currentAxisPoint.y,
     );
     if (!axis) {
-      console.log(`warn: ${track.id}`);
-      return false;
+      console.warn(`warn: ${track.id}`);
+      return null;
     }
     const soldier = this.game.findSoldierByAxis(axis);
     if (!soldier) {
-      console.log(`warn: ${track.id}`);
-      return false;
+      console.warn(`warn: ${track.id}`);
+      return null;
     }
     soldier.showEffectText('阵亡');
     soldier.dispatchEvent(new Event('death'));
-    this.runningHandle();
-    return true;
+    return soldier;
   }
 
   static getAttackTracks(
@@ -323,6 +388,15 @@ class Running extends EventTarget {
     desc_type: EffectType,
     id: string,
   ): TrackDetail[] {
+    let targetAxisPoints: RoundDescAxis[] = [];
+    if (attacks.around) {
+      targetAxisPoints = attacks.around.map(item => {
+        return {
+          x: item.receive_point?.x ?? attacks.sender_point?.x,
+          y: item.receive_point?.y ?? attacks.sender_point?.y,
+        };
+      });
+    }
     return [
       {
         id,
@@ -335,6 +409,7 @@ class Running extends EventTarget {
           x: attacks.receive_point?.x ?? attacks.sender_point?.x,
           y: attacks.receive_point?.y ?? attacks.sender_point?.y,
         },
+        targetAxisPoints,
         attackInfo: { ...attacks },
       },
     ];
@@ -357,6 +432,30 @@ class Running extends EventTarget {
           x: attacks.receive_point?.x,
           y: attacks.receive_point?.y,
         },
+      },
+    ];
+  }
+
+  static getBeatTracks(
+    attacks: RoundDescBeat,
+    desc_type: EffectType,
+    id: string,
+  ): TrackDetail[] {
+    const detail = Running.getDetails(attacks.detail, 1);
+
+    return [
+      {
+        id,
+        type: desc_type,
+        currentAxisPoint: {
+          x: attacks.receive_point?.x,
+          y: attacks.receive_point?.y,
+        },
+        targetAxisPoint: {
+          x: attacks.receive_point?.x,
+          y: attacks.receive_point?.y,
+        },
+        detail,
       },
     ];
   }
@@ -385,20 +484,67 @@ class Running extends EventTarget {
     };
   }
 
-  attackHandle(attacks: TrackDetail, effect: EffectType, t?: number) {
+  attackHandleRunning(attacks: TrackDetail, effect: EffectType, t?: number) {
+    const sendSoldier = this.attackHandle(attacks, effect, t);
+    sendSoldier?.once('attackEnd', () => {
+      if (attacks.targetAxisPoints) {
+        attacks.targetAxisPoints.forEach(item => {
+          const receiveAxis = this.game.getAxis(item.x, item.y);
+          if (receiveAxis) {
+            const sol = this.game.findSoldierByAxis(receiveAxis);
+            if (sol) {
+              sol.attack(sol, effect, attacks?.attackInfo, 0);
+            }
+          }
+        });
+      }
+      this.runningHandle();
+    });
+    return sendSoldier;
+  }
+
+  attackHandle(
+    attacks: TrackDetail,
+    effect: EffectType,
+    t?: number,
+  ): null | Soldier {
     const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
     if (!sendSoldier || !receiveSoldier) {
-      console.log(`warn: ${attacks.id}`);
-      return false;
+      console.warn(`warn: ${attacks.id}`);
+      return null;
     }
     sendSoldier.renderBullet();
     sendSoldier.run();
     sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo, t);
     // receiveSoldier.changeState(stateType.DISABLE, true);
+
+    return sendSoldier;
+  }
+
+  beatHandle(attacks: TrackDetail, effect: EffectType): Soldier | null {
+    const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
+    if (!sendSoldier || !receiveSoldier) {
+      console.warn(`warn: ${attacks.id}`);
+      return null;
+    }
+    sendSoldier.renderBullet();
+    sendSoldier.run();
+    sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo);
+    // receiveSoldier.changeState(stateType.DISABLE, true);
     sendSoldier.once('attackEnd', () => {
-      this.runningHandle();
+      if (attacks.detail) {
+        attacks.detail.forEach((item, index) => {
+          const sol = this.runTrack(item);
+          // TODO: 产生效果
+          // if (index + 1 === attacks.detail?.length) {
+          //   sol?.once('attackEnd', () => {
+          //     this.runningHandle();
+          //   });
+          // }
+        });
+      }
     });
-    return true;
+    return sendSoldier;
   }
 
   getTracks() {
@@ -409,100 +555,129 @@ class Running extends EventTarget {
         trackId: `${round}`,
         list: [],
       };
-      Object.keys(this.rounds[round].data).forEach(_track => {
-        const track = Number(_track);
-        const info = this.rounds[round].data[track];
-        // 移动
-        if (info.desc_type === effectType.MOVE) {
-          this.trackDetails.push(
-            ...Running.getMoveTracks(info.move, `${round}-${_track}`),
-          );
-        }
-        // 攻击
-        if (info.desc_type === effectType.ATTACK) {
-          this.trackDetails.push(
-            ...Running.getAttackTracks(
-              info.attack,
-              info.desc_type,
-              `${round}-${_track}`,
-            ),
-          );
-        }
-        // 攻击
-        if (info.desc_type === effectType.BOOM) {
-          this.trackDetails.push(
-            ...Running.getAttackTracks(
-              info.boom,
-              info.desc_type,
-              `${round}-${_track}`,
-            ),
-          );
-        }
-        if (info.desc_type === effectType.ADD_BOOM) {
-          this.trackDetails.push(
-            ...Running.getAttackTracks(
-              info.add_boom,
-              info.desc_type,
-              `${round}-${_track}`,
-            ),
-          );
-        }
-        if (info.desc_type === effectType.ADD_FIRING) {
-          this.trackDetails.push(
-            ...Running.getAttackTracks(
-              info.add_firing,
-              info.desc_type,
-              `${round}-${_track}`,
-            ),
-          );
-        }
-        if (info.desc_type === effectType.FIRING) {
-          this.trackDetails.push(
-            ...Running.getAttackTracks(
-              info.firing,
-              info.desc_type,
-              `${round}-${_track}`,
-            ),
-          );
-        }
-        if (info.desc_type === effectType.ICE_END) {
-          this.trackDetails.push(
-            ...Running.getAttackTracks(
-              info.ice_end,
-              info.desc_type,
-              `${round}-${_track}`,
-            ),
-          );
-        }
-        if (info.desc_type === effectType.ICE_START) {
-          this.trackDetails.push(
-            ...Running.getAttackTracks(
-              info.ice_start,
-              info.desc_type,
-              `${round}-${_track}`,
-            ),
-          );
-        }
-        if (info.desc_type === effectType.STOP_MOVE) {
-          this.trackDetails.push(
-            ...Running.getAttackTracks(
-              info.stop_move,
-              info.desc_type,
-              `${round}-${_track}`,
-            ),
-          );
-        }
-        if (info.desc_type === effectType.REMOVE) {
-          this.trackDetails.push(
-            ...Running.getRemoveTracks(
-              info.unit_remove,
-              info.desc_type,
-              `${round}-${_track}`,
-            ),
-          );
-        }
-      });
+      const detail = Running.getDetails(this.rounds[round].data, round);
+      this.trackDetails.push(...detail);
     });
+  }
+
+  static getDetails(roundInfo: RoundInfo[], round: number) {
+    const details: TrackDetail[] = [];
+
+    Object.keys(roundInfo).forEach(_track => {
+      const track = Number(_track);
+      const info = roundInfo[track];
+      // 移动
+      if (info.desc_type === effectType.MOVE) {
+        details.push(...Running.getMoveTracks(info.move, `${round}-${_track}`));
+      }
+      // 攻击
+      if (info.desc_type === effectType.ATTACK) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.attack,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      // 攻击
+      if (info.desc_type === effectType.BOOM) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.boom,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === effectType.ADD_BOOM) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.add_boom,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === effectType.ADD_FIRING) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.add_firing,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === effectType.FIRING) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.firing,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === effectType.ICE_END) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.ice_end,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === effectType.ICE_START) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.ice_start,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === effectType.STOP_MOVE) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.stop_move,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === effectType.REMOVE) {
+        details.push(
+          ...Running.getRemoveTracks(
+            info.unit_remove,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === effectType.BEAT) {
+        details.push(
+          ...Running.getBeatTracks(
+            info.beat,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === effectType.BEAT_MOVE) {
+        details.push(
+          ...Running.getBeatMoveTracks(info.beat_move, `${round}-${_track}`),
+        );
+      }
+      if (info.desc_type === effectType.BEAT_COLLISION) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.carsh_harm,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+    });
+    return details;
   }
 
   /**
