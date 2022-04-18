@@ -65,7 +65,7 @@ const MysteryBoxDetail = () => {
 
   useEffect(() => {
     init();
-  }, []);
+  }, [init]);
   return (
     <Layout>
       <Dashboard

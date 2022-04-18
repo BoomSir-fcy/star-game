@@ -145,6 +145,7 @@ const Grow: React.FC = () => {
     return () => {
       if (timer) clearInterval(timer);
     };
+    // eslint-disable-next-line
   }, [state]);
 
   // useEffect(() => {

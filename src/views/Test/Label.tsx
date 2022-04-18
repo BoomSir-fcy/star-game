@@ -14,7 +14,7 @@ const TestLabel: React.FC = () => {
     if (videoRef.current) {
       console.log(videoRef.current);
     }
-  }, [videoRef]);
+  }, [videoRef, setVideoOptions]);
   return (
     <Box>
       <Label pl='44px' pr='23px' width={592} justifyContent='space-between'>

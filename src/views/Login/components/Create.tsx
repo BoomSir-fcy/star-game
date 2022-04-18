@@ -43,7 +43,7 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
 
   const randomName = useCallback(() => {
     setName(chance.name());
-  }, [setName, toastSuccess]);
+  }, [setName]);
 
   useImperativeHandle(ref, () => ({
     getState() {

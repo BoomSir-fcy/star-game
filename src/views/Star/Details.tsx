@@ -52,7 +52,7 @@ const Upgrade = () => {
 
       setState({ ...state, data });
     }
-  }, [planet, selfBuilding]);
+  }, [planet, state, selfBuilding]);
 
   return (
     <Box>

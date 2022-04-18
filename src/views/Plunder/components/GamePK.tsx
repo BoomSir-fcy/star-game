@@ -80,7 +80,7 @@ const GamePK: React.FC<GamePKProps> = () => {
       dispatch(fetchPlanetInfoAsync([Number(pid0), Number(pid1)]));
       navigate(`/plunder-test?pid0=${pid0}&pid1=${pid1}`, { replace: true });
     }
-  }, [dispatch, pid0, pid1]);
+  }, [dispatch, pid0, pid1, navigate]);
 
   useFetchGamePK(infoP0?.id, infoP1?.id, Number(maxRound));
 
@@ -147,7 +147,7 @@ const GamePK: React.FC<GamePKProps> = () => {
       createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, true);
       // runHandle(PKInfo.slot);
     }
-  }, [game, PKInfo]);
+  }, [PKInfo, createSoldiers]);
 
   const [runningInfo, setRunningInfo] = useState<{
     rate: number;

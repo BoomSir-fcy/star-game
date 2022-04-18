@@ -70,7 +70,7 @@ export const PlanetBox: React.FC<{
       const index = ChooseList?.indexOf(info?.id);
       setChooseIndex(index);
     }
-  }, [ChooseList]);
+  }, [ChooseList, info?.id]);
 
   useEffect(() => {
     countDown();

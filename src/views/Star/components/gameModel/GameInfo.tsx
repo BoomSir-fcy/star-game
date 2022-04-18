@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Flex, Box, Card, Text, Image, Button } from 'uikit';
@@ -87,16 +87,16 @@ export const GameInfo: React.FC<{
     selfBuilding?.find((row: any) => row?.building?._id === building_id)
       ?.building || currentBuild;
 
+  const init = useCallback(async () => {
+    const res = await upgrade(planet_id, building_id);
+    setState({ ...state, upgrade: res });
+  }, [upgrade, planet_id, building_id, state]);
+
   React.useEffect(() => {
     if (itemData?._id) {
       init();
     }
-  }, [itemData]);
-
-  const init = async () => {
-    const res = await upgrade(planet_id, building_id);
-    setState({ ...state, upgrade: res });
-  };
+  }, [itemData, init]);
 
   // 销毁建筑
   const destoryBuilding = async () => {

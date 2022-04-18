@@ -49,7 +49,7 @@ const Star: React.FC<{
     if (pathname.indexOf('/star/search') !== -1) {
       dispatch(setActiveNavId('search'));
     }
-  }, []);
+  }, [dispatch, pathname]);
 
   return (
     <Layout>
