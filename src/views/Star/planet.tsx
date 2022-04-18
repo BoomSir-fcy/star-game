@@ -219,13 +219,13 @@ const Planet = () => {
 
   return (
     <Box id='containerBox'>
-      {/* <Steps
+      <Steps
         enabled={stepsEnabled}
         steps={steps}
         initialStep={0}
         onExit={() => console.log('退出')}
       />
-      <Hints enabled={hintsEnabled} hints={hints} /> */}
+      <Hints enabled={hintsEnabled} hints={hints} />
       <Layout>
         {!choose && (
           <Dashboard
@@ -307,7 +307,7 @@ const Planet = () => {
                   onEndCallback={e => setState({ ...state, token: e })}
                 />
               </Flex>
-              <ScrollBox>
+              <ScrollBox className='planet_list'>
                 {(StarList ?? []).map(item => (
                   <React.Fragment key={`${item.id}_${item.name}`}>
                     {choose ? (

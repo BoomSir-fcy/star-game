@@ -103,25 +103,24 @@ const Upgrade = () => {
   // 星球升级信息
   const getStarUpgradeInfo = useCallback(async () => {
     try {
-      const res = await Api.PlanetApi.getUpgradePlanetInfo(planetId);
-      if (Api.isSuccess(res)) {
-        const {
-          estimate_planet_info,
-          now_planet_info,
-          material_planet_num,
-          success,
-        } = res.data;
+      const [planetCanLevel, planetUpgradeInfo] = await Promise.all([
+        Api.PlanetApi.getUpgradePlanetInfo(planetId),
+        Api.PlanetApi.getPlanetUpgradeInfo(planetId),
+      ]);
+      if (Api.isSuccess(planetUpgradeInfo)) {
+        const { estimate_planet_info, now_planet_info, material_planet_num } =
+          planetUpgradeInfo.data;
         setUpgradeInfo({
           estimate_planet_info: {
             ...estimate_planet_info,
-            build_level: res.data?.estimate_max_building_level,
+            build_level: planetUpgradeInfo.data?.estimate_max_building_level,
           },
           now_planet_info: {
             ...now_planet_info,
-            build_level: res.data?.now_max_building_level,
+            build_level: planetUpgradeInfo.data?.now_max_building_level,
           },
           material_planet_num,
-          success,
+          success: planetCanLevel.code === 0,
         });
       }
     } catch (error) {
@@ -183,6 +182,7 @@ const Upgrade = () => {
     // return materialIds;
     return Object.keys(activeMaterialMap);
   }, [activeMaterialMap]);
+
   return (
     <BgCard variant='big' padding='40px 68px'>
       {!upgradeSuccess.upgrade_is_end ? (
