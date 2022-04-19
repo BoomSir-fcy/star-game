@@ -26,15 +26,21 @@ const useUpdatePos = (planetId: number, game: Game) => {
   const handleUpdate = useCallback(
     async (event: any) => {
       const { soldiers } = event.detail as { soldiers: Soldier[] };
-      const soldiers1 = soldiers.filter(item => !item.isEnemy);
-      const soldiers2 = soldiers.filter(item => item.isEnemy);
+      const temp = soldiers.map((item, index) => {
+        return {
+          ...item,
+          speed: index + 1, // 出手顺序
+        };
+      });
+      const soldiers1 = temp.filter(item => !item.isEnemy);
+      const soldiers2 = temp.filter(item => item.isEnemy);
       const units1 = soldiers1.map((item, index) => {
         return {
           pos: {
             x: item?.axisPoint?.chequer?.axisX || 0,
             y: item?.axisPoint?.chequer?.axisY || 0,
           },
-          speed: index, // 出手顺序
+          speed: item.speed, // 出手顺序
           unit_id: item.id,
         };
       });
@@ -45,7 +51,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
             x: item?.axisPoint?.chequer?.axisX || 0,
             y: item?.axisPoint?.chequer?.axisY || 0,
           },
-          speed: index, // 出手顺序
+          speed: item.speed, // 出手顺序
           unit_id: item.id,
         };
       });

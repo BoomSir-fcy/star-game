@@ -94,7 +94,13 @@ export interface RoundDescIceEnd extends SlotBaseInfo {
   receive_sub_hp: number;
   around: ReceiveChange[];
 }
-// 冰冻结束
+// 移除灼烧
+export interface RoundDescRemoveFiring extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
+}
+// 碰撞AOE
 export interface RoundDescBeat extends SlotBaseInfo {
   long_round: number;
   receive_sub_hp: number;
@@ -146,6 +152,7 @@ export interface RoundInfo {
   beat: RoundDescBeat;
   beat_move: RoundDescBeatMove;
   carsh_harm: RoundDescCarshHarm;
+  remove_firing: RoundDescRemoveFiring;
 }
 
 export enum Orientation {

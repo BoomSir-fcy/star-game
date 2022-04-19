@@ -1,4 +1,5 @@
 import {
+  bulletType,
   BulletType,
   effectType,
   EffectType,
@@ -115,7 +116,7 @@ class Combat extends EventTarget {
     this.hpText.position.set(0, 20);
     this.hpText.zIndex = 2;
     this.hpGraphics.zIndex = 2;
-    this.hpGraphics.position.set(0, -50);
+    this.hpGraphics.position.set(0, -80);
     this.container.addChild(this.hpText);
     this.drawHp();
   }
@@ -322,14 +323,15 @@ class Combat extends EventTarget {
     this.renderBullet();
     if (this.bullet) {
       this.bullet.bulletMove(target, effect, time);
+      // this.bullet.bulletAttack(target);
     }
   }
 
   attackParabola(target: Combat, effect: EffectType) {
     this.renderBullet();
-    if (this.bullet) {
-      this.bullet.parabolaBullet(target, effect);
-    }
+    // if (this.bullet) {
+    //   this.bullet.parabolaBullet(target, effect);
+    // }
   }
 
   attackParabolaEffect(target: Combat, effect: BulletType) {
@@ -387,7 +389,7 @@ class Combat extends EventTarget {
   }
 
   static getSpriteRes(race: number, resId: string, index: number) {
-    return `/assets/modal/${race}/${resId}-${index}.png`;
+    return `/assets/modal/${1}/${resId}-${index}.png`;
   }
 }
 

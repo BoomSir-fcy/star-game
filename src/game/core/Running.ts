@@ -222,6 +222,7 @@ class Running extends EventTarget {
   }
 
   runningHandle() {
+    console.log('runningHandle');
     this.playing = true;
     if (this.paused) return;
     if (this.playCount === 0) return;
@@ -517,6 +518,7 @@ class Running extends EventTarget {
   attackHandleRunning(attacks: TrackDetail, effect: EffectType, t?: number) {
     const sendSoldier = this.attackHandle(attacks, effect, t);
     sendSoldier?.once('attackEnd', () => {
+      console.log(121221219999999999);
       if (attacks.targetAxisPoints) {
         attacks.targetAxisPoints.forEach(item => {
           const receiveAxis = this.game.getAxis(item.x, item.y);
@@ -563,6 +565,8 @@ class Running extends EventTarget {
     sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo);
     // receiveSoldier.changeState(stateType.DISABLE, true);
     sendSoldier.once('attackEnd', () => {
+      console.log(121221219999999999, attacks.detail);
+
       if (attacks.detail) {
         attacks.detail.forEach((item, index) => {
           const sol = this.runTrack(item);
@@ -728,6 +732,15 @@ class Running extends EventTarget {
         details.push(
           ...Running.getAttackTracks(
             info.carsh_harm,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === effectType.REMOVE_FIRING) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.remove_firing,
             info.desc_type,
             `${round}-${_track}`,
           ),

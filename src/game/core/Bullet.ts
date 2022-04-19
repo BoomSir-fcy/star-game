@@ -91,7 +91,7 @@ class Bullet extends EventTarget {
 
   // speed = 1; // 速度
 
-  speed = 8; // 速度
+  speed = 0.1; // 速度
 
   speedX = 0;
 
@@ -117,6 +117,8 @@ class Bullet extends EventTarget {
 
   effects: Effects;
 
+  loader = Loader.shared;
+
   bulletMove(attackTarget: Combat, effect: EffectType, moveTime?: number) {
     this.attackTarget = attackTarget;
     this.effect = effect;
@@ -139,58 +141,6 @@ class Bullet extends EventTarget {
 
         this.text.text = getEffectText(effect);
       }
-    }
-  }
-
-  parabolaBulletEffect(attackTarget: Combat, effect: BulletType) {
-    console.log(this);
-    // const { name, resDir, spriteRes } = this.effects[effect];
-    // this.attackTarget = attackTarget;
-    // if (this.effects[name].loaded) {
-    //   this.parabolaBulletRun(name);
-    // } else {
-    //   this.loadSpine(name, resDir);
-    //   this.effects[name].await = true;
-    //   // this.effects[name].sprite.anchor.set(0.5);
-    //   // this.effects[name].sprite.texture = Texture.from(spriteRes);
-    //   // this.effects[name].sprite.visible = false;
-    //   // this.container.addChild(this.effects[name].sprite);
-    // }
-    // this.container.visible = true;
-  }
-
-  parabolaBullet(attackTarget: Combat, effect: EffectType) {
-    console.log(this);
-    // const { name, resDir, spriteRes } = this.effects.ice;
-    // this.attackTarget = attackTarget;
-    // if (this.effects[name].loaded) {
-    //   this.parabolaBulletRun(name);
-    // } else {
-    //   this.loadSpine(name, resDir);
-    //   this.effects[name].await = true;
-    //   // this.effects[name].sprite.anchor.set(0.5);
-    //   // this.effects[name].sprite.texture = Texture.from(spriteRes);
-    //   // this.effects[name].sprite.visible = false;
-    //   // this.container.addChild(this.effects[name].sprite);
-    // }
-    // this.container.visible = true;
-  }
-
-  parabolaBulletRun(name: BulletType) {
-    if (this.combat.axisPoint && this.attackTarget?.axisPoint) {
-      // const parabola = new Parabola(
-      //   this.effects[name].sprite,
-      //   this.combat.axisPoint,
-      //   this.attackTarget.axisPoint,
-      // );
-      // this.effects[name].sprite.visible = true;
-      // parabola.position().move();
-      // parabola.addEventListener('end', () => {
-      //   // this.container.visible = false;
-      //   const { x, y } = this.effects[name].sprite;
-      //   this.onAssetsLoadedSpine(name, x, y);
-      //   this.effects[name].sprite.visible = false;
-      // });
     }
   }
 
@@ -269,41 +219,36 @@ class Bullet extends EventTarget {
     return new Promise<void>((resolve, rej) => {
       try {
         const { bombSpineSrc, moveSpineSrc } = this.effects[name];
-        const loader = Loader.shared;
 
+        console.log(this.loader);
+        // this.loader.reset();
+        const moveKeyName = `${name}_moveSpineSrc`;
+        const bombKeyName = `${name}_bombSpineSrc`;
+        if (bombSpineSrc && this.loader.resources[bombKeyName]) {
+          this.loadBombSpine(this.loader.resources[bombKeyName], name);
+          console.log(111);
+          resolve();
+          return;
+        }
         if (bombSpineSrc) {
-          loader.add(`${name}_bombSpineSrc`, bombSpineSrc);
+          this.loader.add(bombKeyName, bombSpineSrc);
         }
 
-        if (moveSpineSrc) {
-          loader.add(`${name}_moveSpineSrc`, moveSpineSrc);
+        if (moveSpineSrc && this.loader.resources[moveKeyName]) {
+          this.loadMoveSpine(this.loader.resources[moveKeyName], name);
+          resolve();
+          return;
         }
-        loader.load((_loader, res: Dict<LoaderResource>) => {
+        if (moveSpineSrc) {
+          this.loader.add(moveKeyName, moveSpineSrc);
+        }
+        this.loader.load((_loader, res: Dict<LoaderResource>) => {
           this.effects[name].loaded = true;
           this.effects[name].res = res;
-          const moveLoaderRes = res[`${name}_moveSpineSrc`];
-          if (moveLoaderRes?.spineData) {
-            const spine = new Spine(moveLoaderRes.spineData);
-            this.container.addChild(spine);
-            this.effects[name].moveEffectSpine = spine;
-            spine.visible = false;
-            // spine.update(0);
-            // spine.autoUpdate = false;
-          }
-          const bombLoaderRes = res[`${name}_bombSpineSrc`];
-          if (bombLoaderRes?.spineData) {
-            const spine = new Spine(bombLoaderRes.spineData);
-            this.container.addChild(spine);
-            this.effects[name].bombEffectSpine = spine;
-            spine.visible = false;
-            spine.update(0);
-            spine.autoUpdate = false;
-            spine.state.addListener({
-              complete: () => {
-                this.onBombEnd(name);
-              },
-            });
-          }
+          const moveLoaderRes = res[moveKeyName];
+          this.loadMoveSpine(moveLoaderRes, name);
+          const bombLoaderRes = res[bombKeyName];
+          this.loadBombSpine(bombLoaderRes, name);
           resolve();
         });
       } catch (error) {
@@ -313,21 +258,32 @@ class Bullet extends EventTarget {
     });
   }
 
-  onAssetsLoadedSpine(name: BulletType, x?: number, y?: number) {
-    this.container.visible = true;
-    // const { spine } = this.effects[name];
-    // if (spine) {
-    //   spine.visible = true;
-    //   spine.position.set(x, y);
-    //   spine.state.setAnimation(0, 'play', false);
-    //   this.effects[name].complete = false;
-    //   spine.state.addListener({
-    //     complete: entry => {
-    //       this.onComplete(name);
-    //     },
-    //   });
-    //   this.spineAnimation(spine, name);
-    // }
+  loadMoveSpine(loaderResource: LoaderResource, name: BulletType) {
+    console.log(loaderResource, 'loadMoveSpine');
+    if (loaderResource?.spineData) {
+      const spine = new Spine(loaderResource.spineData);
+      this.container.addChild(spine);
+      this.effects[name].moveEffectSpine = spine;
+      spine.visible = false;
+    }
+  }
+
+  loadBombSpine(loaderResource: LoaderResource, name: BulletType) {
+    console.log(loaderResource, 'loadBombSpine');
+    if (loaderResource?.spineData) {
+      const spine = new Spine(loaderResource.spineData);
+      this.container.addChild(spine);
+      this.effects[name].bombEffectSpine = spine;
+      spine.visible = false;
+      spine.update(0);
+      spine.autoUpdate = false;
+      spine.state.addListener({
+        complete: () => {
+          console.log(121122121, name);
+          this.onBombEnd(name);
+        },
+      });
+    }
   }
 
   onComplete(name: BulletType) {
@@ -356,6 +312,7 @@ class Bullet extends EventTarget {
       this.doubleSpeedX = Math.abs(this.speedX * 2);
       this.doubleSpeedY = Math.abs(this.speedY * 2);
       const display = moveEffectSprite || moveEffectSpine;
+      console.log(display, '==display');
       if (display) {
         display.position.set(
           this.combat.axisPoint?.x,
@@ -365,10 +322,10 @@ class Bullet extends EventTarget {
           display.scale.x,
           display.scale.y,
         );
-        console.log(x, y);
         display.scale.x = x;
         display.scale.y = y;
         display.visible = true;
+        console.log(display === moveEffectSpine);
         if (display === moveEffectSpine) {
           display.state.setAnimation(0, 'play', true);
         }
@@ -386,6 +343,14 @@ class Bullet extends EventTarget {
       const x = display.position.x + this.speedX;
       const y = display.position.y + this.speedY;
       display.position.set(x, y);
+      // console.log(
+      //   Math.abs(y - (this.attackTarget?.axisPoint?.y || 0)),
+      //   this.doubleSpeedY,
+      //   Math.abs(x - (this.attackTarget?.axisPoint?.x || 0)),
+      //   this.doubleSpeedX,
+      // );
+      // console.log(this.attackTarget?.axisPoint?.y);
+
       if (
         Math.abs(y - (this.attackTarget?.axisPoint?.y || 0)) <=
           this.doubleSpeedY &&
@@ -413,16 +378,17 @@ class Bullet extends EventTarget {
     if (moveEffectSprite) {
       moveEffectSprite.visible = false;
     }
+    this.dispatchEvent(new Event('moveEnd'));
     this.attackBomb(name, point);
   }
 
   onMoveStart(name: BulletType, point: Point) {
-    console.time(name);
     this.dispatchEvent(new Event('moveStart'));
   }
 
   attackBomb(name: BulletType, point: Point) {
     const { bombEffectSpine, bombEffectSprite } = this.effects[name];
+    console.log(bombEffectSpine, '==bombEffectSpine');
     if (bombEffectSpine) {
       console.log(point.x, point.y);
       this.effects[name].completeBomb = false;
@@ -437,11 +403,12 @@ class Bullet extends EventTarget {
 
   onBombEnd(name: BulletType) {
     this.effects[name].completeBomb = true;
+    // this.dispatchEvent(new Event('attackEnd'));
+    this.onEnd();
   }
 
   spineAnimation(name: BulletType, spine: Spine) {
     if (spine && !this.effects[name].completeBomb) {
-      spine.update(0.01666666666667);
       requestAnimationFrame(() => this.spineAnimation(name, spine));
     }
   }
@@ -464,10 +431,10 @@ class Bullet extends EventTarget {
         attackTarget.axisPoint,
       );
       this.onMoveStart(name, new Point(display.position.x, display.position.y));
-      parabola.position().move();
       parabola.addEventListener('end', () => {
         this.onMoveEnd(name, new Point(display.position.x, display.position.y));
       });
+      parabola.position().move();
     }
   }
 
@@ -504,7 +471,6 @@ class Bullet extends EventTarget {
   }
 
   flipTargetPointOrientation(x: number, y: number) {
-    console.log(this.attackTarget?.axisPoint, this.combat.axisPoint);
     if (this.attackTarget?.axisPoint && this.combat.axisPoint) {
       const { axisX: x0, axisY: y0 } = this.attackTarget.axisPoint;
       const { axisX: x1, axisY: y1 } = this.combat.axisPoint;
