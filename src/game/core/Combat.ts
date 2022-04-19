@@ -290,6 +290,23 @@ class Combat extends EventTarget {
     this.axisPoint?.chequer?.displayState(false);
   }
 
+  // 碰撞
+  beatCollision(target: Combat, attackInfo?: RoundDesc) {
+    const point = this.axisPoint?.clone();
+    console.log(target.axisPoint, point);
+    if (target.axisPoint) {
+      this.moveTo(target.axisPoint);
+      this.once('moveEnd', () => {
+        if (point) {
+          this.moveTo(point);
+        }
+        this.dispatchEvent(new Event('collisionEnd'));
+      });
+      return;
+    }
+    this.dispatchEvent(new Event('collisionEnd'));
+  }
+
   attack(
     target: Combat,
     effect: EffectType,

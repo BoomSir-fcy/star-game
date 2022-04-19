@@ -185,6 +185,7 @@ export const effectType = {
   BEAT: 12, // 击退
   BEAT_MOVE: 13, // 击退产生位移
   BEAT_COLLISION: 14, // 击退碰撞伤害
+  REMOVE_FIRING: 15, // 击退碰撞伤害DescUnitRemoveFiring
 };
 
 // 技能

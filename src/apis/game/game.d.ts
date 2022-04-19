@@ -74,12 +74,14 @@ declare namespace Api {
       };
     }
 
+    type Pos = {
+      x: number;
+      y: number;
+    };
+
     interface UnitPlanetPos {
       base_unit_id: number;
-      pos: {
-        x: number;
-        y: number;
-      };
+      pos: Pos;
       speed: number;
     }
     interface UnitPlanetRes {
@@ -90,10 +92,7 @@ declare namespace Api {
     }
 
     interface ParamsUnit {
-      pos: {
-        x: number;
-        y: number;
-      };
+      pos: Pos;
       speed: number; // 出手顺序
       unit_id: number;
     }

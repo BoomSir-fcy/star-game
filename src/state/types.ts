@@ -186,6 +186,9 @@ export interface GameState {
       base_unit: MapBaseUnits;
       blue_units: Api.Game.UnitPlanetPos[];
       red_units: Api.Game.UnitPlanetPos[];
+      ids: {
+        [sid: string]: Api.Game.Pos;
+      };
     };
     slot: {
       [round: number]: {

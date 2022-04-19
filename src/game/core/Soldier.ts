@@ -19,6 +19,7 @@ import AxisPoint from './AxisPoint';
 export interface AttrSoldierOptions extends CombatOptions {
   id: number;
   unique_id: number;
+  sid?: string;
   hp?: number;
   activePh?: number;
   isEnemy?: boolean;
@@ -49,6 +50,8 @@ class Soldier extends Combat {
 
   id = 0;
 
+  sid?: string;
+
   unique_id = 0;
 
   attackId = '';
@@ -72,6 +75,7 @@ class Soldier extends Combat {
       attackId = '',
       unique_id,
       test,
+      sid,
     } = options;
 
     this.options = {
@@ -79,6 +83,8 @@ class Soldier extends Combat {
       ...options,
     };
     this.id = id;
+
+    this.sid = sid;
 
     this.unique_id = unique_id;
 

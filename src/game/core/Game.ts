@@ -290,6 +290,10 @@ class Game extends EventTarget {
     return this.soldiers.find(soldier => soldier.axisPoint === axis);
   }
 
+  findSoldierById(sid: string) {
+    return this.soldiers.find(soldier => soldier.sid === sid);
+  }
+
   addDragon() {
     this.app.stop();
     const loader = Loader.shared;

@@ -38,6 +38,8 @@ interface TrackDetail {
   type: EffectType;
   currentAxisPoint: RoundDescAxis;
   targetAxisPoint: RoundDescAxis;
+  receive_id: string;
+  sender_id: string;
   targetAxisPoints?: RoundDescAxis[];
   attackInfo?: RoundDesc;
   id: string;
@@ -195,6 +197,10 @@ class Running extends EventTarget {
     if (track?.type === effectType.BEAT) {
       return this.beatHandle(track, track.type);
     }
+    if (track?.type === effectType.BEAT_COLLISION) {
+      console.log(12121212);
+      return this.beatCollision(track);
+    }
     if (track?.type) {
       const round = `回合: ${track.id} \n`;
       const effect = `技能: ${getEffectText(track.type)} \n`;
@@ -276,6 +282,8 @@ class Running extends EventTarget {
       return {
         id: `${id}-${index}`,
         type: effectType.MOVE,
+        receive_id: moves.id,
+        sender_id: moves.id,
         currentAxisPoint: { x, y },
         targetAxisPoint: {
           x: item.x,
@@ -298,6 +306,8 @@ class Running extends EventTarget {
       {
         id: `${id}`,
         type: effectType.BEAT_MOVE,
+        sender_id: moves.move_unit,
+        receive_id: moves.move_unit,
         currentAxisPoint: { x, y },
         targetAxisPoint: {
           x: x1,
@@ -387,6 +397,7 @@ class Running extends EventTarget {
     attacks: RoundDesc,
     desc_type: EffectType,
     id: string,
+    self?: boolean, // 没有动画效果的攻击(自伤、仅前端概念)
   ): TrackDetail[] {
     let targetAxisPoints: RoundDescAxis[] = [];
     if (attacks.around) {
@@ -397,19 +408,29 @@ class Running extends EventTarget {
         };
       });
     }
+    const currentAxisPoint = {
+      x: self
+        ? attacks.receive_point?.x
+        : attacks.sender_point?.x ?? attacks.receive_point?.x,
+      y: self
+        ? attacks.receive_point?.y
+        : attacks.sender_point?.y ?? attacks.receive_point?.y,
+    };
+    const sender_id = self
+      ? attacks.receive_id
+      : attacks.sender_id ?? attacks.receive_id;
     return [
       {
         id,
         type: desc_type,
-        currentAxisPoint: {
-          x: attacks.sender_point?.x ?? attacks.receive_point?.x,
-          y: attacks.sender_point?.y ?? attacks.receive_point?.y,
-        },
+        currentAxisPoint,
         targetAxisPoint: {
           x: attacks.receive_point?.x ?? attacks.sender_point?.x,
           y: attacks.receive_point?.y ?? attacks.sender_point?.y,
         },
         targetAxisPoints,
+        receive_id: attacks.receive_id ?? attacks.sender_id,
+        sender_id,
         attackInfo: { ...attacks },
       },
     ];
@@ -424,6 +445,8 @@ class Running extends EventTarget {
       {
         id,
         type: desc_type,
+        receive_id: attacks.receive_id,
+        sender_id: attacks.receive_id,
         currentAxisPoint: {
           x: attacks.receive_point?.x,
           y: attacks.receive_point?.y,
@@ -441,22 +464,24 @@ class Running extends EventTarget {
     desc_type: EffectType,
     id: string,
   ): TrackDetail[] {
-    const detail = Running.getDetails(attacks.detail, 1);
+    const detail = Running.getDetails(attacks.detail, 1, true);
 
     return [
       {
         id,
         type: desc_type,
+        receive_id: attacks.receive_id,
+        sender_id: attacks.sender_id,
         currentAxisPoint: {
           x: attacks.receive_point?.x,
           y: attacks.receive_point?.y,
         },
         targetAxisPoint: {
-          x: attacks.receive_point?.x,
-          y: attacks.receive_point?.y,
+          x: attacks.sender_point?.x,
+          y: attacks.sender_point?.y,
         },
-        detail,
       },
+      ...detail,
     ];
   }
 
@@ -474,13 +499,18 @@ class Running extends EventTarget {
         sendSoldier: null,
         receiveSoldier: null,
       };
-
-    const sendSoldier = this.game.findSoldierByAxis(senderAxis);
-    const receiveSoldier = this.game.findSoldierByAxis(receiveAxis);
-    // if (!sendSoldier || !receiveSoldier) return false;
+    if (attacks.sender_id && attacks.receive_id) {
+      const sendSoldier = this.game.findSoldierById(attacks.sender_id);
+      const receiveSoldier = this.game.findSoldierById(attacks.receive_id);
+      // if (!sendSoldier || !receiveSoldier) return false;
+      return {
+        sendSoldier,
+        receiveSoldier,
+      };
+    }
     return {
-      sendSoldier,
-      receiveSoldier,
+      sendSoldier: null,
+      receiveSoldier: null,
     };
   }
 
@@ -527,6 +557,7 @@ class Running extends EventTarget {
       console.warn(`warn: ${attacks.id}`);
       return null;
     }
+    console.log(sendSoldier, receiveSoldier, attacks);
     sendSoldier.renderBullet();
     sendSoldier.run();
     sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo);
@@ -535,14 +566,32 @@ class Running extends EventTarget {
       if (attacks.detail) {
         attacks.detail.forEach((item, index) => {
           const sol = this.runTrack(item);
-          // TODO: 产生效果
-          // if (index + 1 === attacks.detail?.length) {
-          //   sol?.once('attackEnd', () => {
-          //     this.runningHandle();
-          //   });
-          // }
+          if (index + 1 === attacks.detail?.length) {
+            sol?.once('attackEnd', () => {
+              this.runningHandle();
+            });
+          }
         });
+      } else {
+        this.runningHandle();
       }
+    });
+    return sendSoldier;
+  }
+
+  beatCollision(attacks: TrackDetail) {
+    const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
+    console.log(sendSoldier, receiveSoldier, attacks);
+    if (!sendSoldier || !receiveSoldier) {
+      console.warn(`warn: ${attacks.id}`);
+      this.runningHandle();
+
+      return null;
+    }
+    sendSoldier.run();
+    sendSoldier.beatCollision(receiveSoldier);
+    sendSoldier.once('collisionEnd', () => {
+      this.runningHandle();
     });
     return sendSoldier;
   }
@@ -560,7 +609,7 @@ class Running extends EventTarget {
     });
   }
 
-  static getDetails(roundInfo: RoundInfo[], round: number) {
+  static getDetails(roundInfo: RoundInfo[], round: number, self?: boolean) {
     const details: TrackDetail[] = [];
 
     Object.keys(roundInfo).forEach(_track => {
@@ -577,6 +626,7 @@ class Running extends EventTarget {
             info.attack,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
@@ -587,6 +637,7 @@ class Running extends EventTarget {
             info.boom,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
@@ -596,6 +647,7 @@ class Running extends EventTarget {
             info.add_boom,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
@@ -605,6 +657,7 @@ class Running extends EventTarget {
             info.add_firing,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
@@ -614,6 +667,7 @@ class Running extends EventTarget {
             info.firing,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
@@ -623,6 +677,7 @@ class Running extends EventTarget {
             info.ice_end,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
@@ -632,6 +687,7 @@ class Running extends EventTarget {
             info.ice_start,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
@@ -641,6 +697,7 @@ class Running extends EventTarget {
             info.stop_move,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
