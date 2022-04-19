@@ -40,6 +40,12 @@ export class PlanetApi extends Http {
     return this.get(`/planet/can_upgrade`, { planet_id });
   }
 
+  // 获取星球升级的消耗以及升级之后的期望值
+  async getPlanetUpgradeInfo(planet_id: number) {
+    const res = await this.get('/planet/upgrade_info', { planet_id });
+    return res;
+  }
+
   // 升级所需材料星球列表
   async getMaterialList(planet_id: number): Promise<Api.Response<any>> {
     return this.get(`/planet/material_list`, { planet_id });
@@ -50,7 +56,7 @@ export class PlanetApi extends Http {
     return this.post(`/planet/upgrade_success`, { planet_id });
   }
 
-  // 获取行星是否能够工作
+  // 获取星球升级的消耗以及升级之后的期望值
   async getPlanetCaWork(params: Api.Planet.StrengthenPost) {
     const res = await this.get('planet/can_work', params);
     return res;
