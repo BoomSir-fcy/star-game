@@ -58,7 +58,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
       setSortSoldiers(game.soldiers);
       console.log(res);
     },
-    [planetId, setSortSoldiers],
+    [planetId, setSortSoldiers, game.soldiers],
   );
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
     return () => {
       game.removeEventListener('updateSoldierPosition', handleUpdate);
     };
-  }, [handleUpdate]);
+  }, [handleUpdate, game]);
 
   return {
     gameSoldiers,
