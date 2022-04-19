@@ -23,6 +23,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
 
+  const [minHeight, setMinHeight] = useState(900);
   const [scale, setScale] = useState(1);
   const handleResize = useCallback(() => {
     const { width, height } =
@@ -30,6 +31,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
     const maxV = Math.max(width, height);
     const rate = maxV / 1920;
     setScale(rate);
+    setMinHeight(Math.min(width, height));
     if (ref.current) {
       detectOrient(ref.current, false);
     }
@@ -46,7 +48,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   return (
     <Box position='relative' id='detect-orient' ref={ref}>
       <StarrySky bgType={pathname === '/plant-league' ? 2 : 0} />
-      <VideoComponent scale={scale} />
+      <VideoComponent minHeight={minHeight} scale={scale} />
       <Content id='scale-content' scale={scale}>
         {children}
       </Content>
