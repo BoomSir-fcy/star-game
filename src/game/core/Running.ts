@@ -17,6 +17,7 @@ import {
   RoundDescRemove,
   RoundDescBeat,
   RoundDescBeatMove,
+  ReceiveChange,
 } from 'game/types';
 import AxisPoint from './AxisPoint';
 import { stateType } from './Chequer';
@@ -40,7 +41,7 @@ interface TrackDetail {
   targetAxisPoint: RoundDescAxis;
   receive_id: string;
   sender_id: string;
-  targetAxisPoints?: RoundDescAxis[];
+  around?: ReceiveChange[];
   attackInfo?: RoundDesc;
   id: string;
   detail?: TrackDetail[];
@@ -153,6 +154,7 @@ class Running extends EventTarget {
     if (this.paused) return;
     this.playing = true;
     const track = this.trackDetails[this.trackIndex];
+    console.log(track);
     this.runTrack(track, true);
   }
 
@@ -231,6 +233,7 @@ class Running extends EventTarget {
       this.playCount -= 1;
       this.runHandle();
     } else {
+      console.log('end');
       this.playing = false;
       this.dispatchEvent(new CustomEvent('runEnd'));
       this.playEnd = true;
@@ -400,15 +403,6 @@ class Running extends EventTarget {
     id: string,
     self?: boolean, // 没有动画效果的攻击(自伤、仅前端概念)
   ): TrackDetail[] {
-    let targetAxisPoints: RoundDescAxis[] = [];
-    if (attacks.around) {
-      targetAxisPoints = attacks.around.map(item => {
-        return {
-          x: item.receive_point?.x ?? attacks.sender_point?.x,
-          y: item.receive_point?.y ?? attacks.sender_point?.y,
-        };
-      });
-    }
     const currentAxisPoint = {
       x: self
         ? attacks.receive_point?.x
@@ -429,7 +423,7 @@ class Running extends EventTarget {
           x: attacks.receive_point?.x ?? attacks.sender_point?.x,
           y: attacks.receive_point?.y ?? attacks.sender_point?.y,
         },
-        targetAxisPoints,
+        around: attacks.around,
         receive_id: attacks.receive_id ?? attacks.sender_id,
         sender_id,
         attackInfo: { ...attacks },
@@ -517,21 +511,37 @@ class Running extends EventTarget {
 
   attackHandleRunning(attacks: TrackDetail, effect: EffectType, t?: number) {
     const sendSoldier = this.attackHandle(attacks, effect, t);
-    sendSoldier?.once('attackEnd', () => {
-      console.log(121221219999999999);
-      if (attacks.targetAxisPoints) {
-        attacks.targetAxisPoints.forEach(item => {
-          const receiveAxis = this.game.getAxis(item.x, item.y);
+    // console.log(sendSoldier, 'sendSoldier');
+    const endHandle = () => {
+      if (attacks.around) {
+        attacks.around.forEach(item => {
+          // eslint-disable-next-line
+          debugger;
+          const receiveAxis = this.game.getAxis(
+            item.receive_point.x,
+            item.receive_point.y,
+          );
           if (receiveAxis) {
-            const sol = this.game.findSoldierByAxis(receiveAxis);
-            if (sol) {
-              sol.attack(sol, effect, attacks?.attackInfo, 0);
+            const soldier = this.game.findSoldierByAxis(receiveAxis);
+            if (soldier) {
+              console.log(soldier.activePh, item.receive_sub_hp);
+              // sol.attack(sol, effect, attacks?.attackInfo, 0);
+              soldier.setActiveHp(
+                soldier.activePh - (item.receive_sub_hp || 0),
+              );
             }
           }
         });
       }
       this.runningHandle();
-    });
+    };
+    if (sendSoldier?.attacking) {
+      sendSoldier?.once('attackEnd', () => {
+        endHandle();
+      });
+    } else {
+      endHandle();
+    }
     return sendSoldier;
   }
 
@@ -547,7 +557,10 @@ class Running extends EventTarget {
     }
     sendSoldier.renderBullet();
     sendSoldier.run();
+    console.log(3);
     sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo, t);
+    console.log(4);
+
     // receiveSoldier.changeState(stateType.DISABLE, true);
 
     return sendSoldier;
@@ -594,7 +607,9 @@ class Running extends EventTarget {
     }
     sendSoldier.run();
     sendSoldier.beatCollision(receiveSoldier);
+    console.log('================');
     sendSoldier.once('collisionEnd', () => {
+      console.log('collisionEnd');
       this.runningHandle();
     });
     return sendSoldier;

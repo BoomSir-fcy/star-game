@@ -162,34 +162,30 @@ class Bullet extends EventTarget {
     }
   }
 
-  onStart(attackTarget: Combat) {
-    this.attackTarget = attackTarget;
+  onStart() {
     this.combat.container.parent.addChild(this.container);
     this.dispatchEvent(new Event('start'));
   }
 
   onEnd() {
-    // console.log(this.attackTarget, '=this.attackTarget');
-    console.log(this.combat.container.parent);
-    if (
-      this.combat.container.parent &&
-      this.combat.container.parent.children.includes(this.container)
-    ) {
-      this.combat.container.parent.removeChild(this.container);
-    }
-    // if (this.attackTarget) {
-    //   this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
-    //   if ((this.combat.attackInfo as any)?.now_hp) {
-    //     this.attackTarget.drawHp(`${(this.combat.attackInfo as any).now_hp}`);
-    //   }
+    this.moving = false;
+    this.speedX = 0;
+    this.speedY = 0;
+    this.container.visible = false;
+    if (this.attackTarget) {
+      this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
+      if ((this.combat.attackInfo as any)?.now_hp) {
+        this.attackTarget.drawHp(`${(this.combat.attackInfo as any).now_hp}`);
+      }
 
-    //   if (this.effect && config.showEffect.includes(this.effect)) {
-    //     this.attackTarget.showEffectText(getEffectText(this.effect));
-    //   }
-    //   if (this.effect && config.hideEffect.includes(this.effect)) {
-    //     this.attackTarget.hideEffectText();
-    //   }
-    // }
+      this.combat.attacking = false;
+      if (this.effect && config.showEffect.includes(this.effect)) {
+        this.attackTarget.showEffectText(getEffectText(this.effect));
+      }
+      if (this.effect && config.hideEffect.includes(this.effect)) {
+        this.attackTarget.hideEffectText();
+      }
+    }
     this.dispatchEvent(new Event('attackEnd'));
   }
 
@@ -334,6 +330,7 @@ class Bullet extends EventTarget {
   }
 
   onMoveEnd(name: BulletType, point: Point) {
+    console.timeEnd(name);
     this.effects[name].completeMove = true;
     const {
       moveEffectSpine,
@@ -357,7 +354,6 @@ class Bullet extends EventTarget {
 
   attackBomb(name: BulletType, point: Point) {
     const { bombEffectSpine, bombEffectSprite } = this.effects[name];
-    console.log(bombEffectSpine, '====bombEffectSpine');
     if (bombEffectSpine) {
       this.effects[name].completeBomb = false;
       bombEffectSpine.position.set(point.x, point.y);
@@ -370,7 +366,6 @@ class Bullet extends EventTarget {
   }
 
   onBombEnd(name: BulletType) {
-    console.log('onBombEnd');
     this.effects[name].completeBomb = true;
     // this.dispatchEvent(new Event('attackEnd'));
     this.onEnd();
@@ -467,7 +462,6 @@ class Bullet extends EventTarget {
     const text = new Text('', { fill: 0xffffff, fontSize: 22 });
     text.text = getEffectText(effect);
     this.container.addChild(text);
-    console.log(this.combat.axisPoint, attackTarget.axisPoint, effect, '==');
     if (this.combat.axisPoint && attackTarget.axisPoint) {
       text.position.set(this.combat.axisPoint.x, this.combat.axisPoint.y);
       const linearMove = new LinearMove(
@@ -475,11 +469,10 @@ class Bullet extends EventTarget {
         this.combat.axisPoint,
         attackTarget.axisPoint,
       );
+      this.onMoveStart(name, new Point(text.position.x, text.position.y));
       linearMove.addEventListener('end', () => {
-        console.log('---12121');
         this.onMoveEnd(name, new Point(text.position.x, text.position.y));
       });
-      this.onMoveStart(name, new Point(text.position.x, text.position.y));
       linearMove.move();
     }
   }
@@ -492,8 +485,7 @@ class Bullet extends EventTarget {
       bulletType.FIREBALL,
       bulletType.MISSILE,
     ];
-
-    this.onStart(attackTarget);
+    this.onStart();
     if (effect) {
       this.testAttack(name, attackTarget, effect);
       return;

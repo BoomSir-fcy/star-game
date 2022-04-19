@@ -218,15 +218,15 @@ const GamePK: React.FC<GamePKProps> = () => {
       isEnemy: false,
       enableDrag: true,
     });
-    // game.createSoldier(7, 7, {
-    //   srcId: '1',
-    //   race: 1,
-    //   id: 1,
-    //   unique_id: 1,
-    //   hp: 300,
-    //   isEnemy: true,
-    //   enableDrag: true,
-    // });
+    game.createSoldier(7, 7, {
+      srcId: '1',
+      race: 1,
+      id: 1,
+      unique_id: 1,
+      hp: 300,
+      isEnemy: true,
+      enableDrag: true,
+    });
   }, []);
 
   const bulletSelect: OptionProps[] = useMemo(() => {

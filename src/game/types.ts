@@ -31,9 +31,11 @@ export interface RoundDescMove {
   from?: RoundDescAxis;
 }
 
-interface ReceiveChange {
+export interface ReceiveChange {
   receive_id: string;
   receive_point: RoundDescAxis;
+  receive_sub_hp: number;
+  now_hp: number;
 }
 
 interface SlotBaseInfo {

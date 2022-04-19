@@ -162,34 +162,25 @@ class Bullet extends EventTarget {
     }
   }
 
-  onStart(attackTarget: Combat) {
-    this.attackTarget = attackTarget;
-    this.combat.container.parent.addChild(this.container);
-    this.dispatchEvent(new Event('start'));
-  }
-
   onEnd() {
-    // console.log(this.attackTarget, '=this.attackTarget');
-    console.log(this.combat.container.parent);
-    if (
-      this.combat.container.parent &&
-      this.combat.container.parent.children.includes(this.container)
-    ) {
-      this.combat.container.parent.removeChild(this.container);
-    }
-    // if (this.attackTarget) {
-    //   this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
-    //   if ((this.combat.attackInfo as any)?.now_hp) {
-    //     this.attackTarget.drawHp(`${(this.combat.attackInfo as any).now_hp}`);
-    //   }
+    this.moving = false;
+    this.speedX = 0;
+    this.speedY = 0;
+    this.container.visible = false;
+    if (this.attackTarget) {
+      this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
+      if ((this.combat.attackInfo as any)?.now_hp) {
+        this.attackTarget.drawHp(`${(this.combat.attackInfo as any).now_hp}`);
+      }
 
-    //   if (this.effect && config.showEffect.includes(this.effect)) {
-    //     this.attackTarget.showEffectText(getEffectText(this.effect));
-    //   }
-    //   if (this.effect && config.hideEffect.includes(this.effect)) {
-    //     this.attackTarget.hideEffectText();
-    //   }
-    // }
+      this.combat.attacking = false;
+      if (this.effect && config.showEffect.includes(this.effect)) {
+        this.attackTarget.showEffectText(getEffectText(this.effect));
+      }
+      if (this.effect && config.hideEffect.includes(this.effect)) {
+        this.attackTarget.hideEffectText();
+      }
+    }
     this.dispatchEvent(new Event('attackEnd'));
   }
 
@@ -230,10 +221,13 @@ class Bullet extends EventTarget {
       try {
         const { bombSpineSrc, moveSpineSrc } = this.effects[name];
 
+        console.log(this.loader);
+        // this.loader.reset();
         const moveKeyName = `${name}_moveSpineSrc`;
         const bombKeyName = `${name}_bombSpineSrc`;
         if (bombSpineSrc && this.loader.resources[bombKeyName]) {
           this.loadBombSpine(this.loader.resources[bombKeyName], name);
+          console.log(111);
           resolve();
           return;
         }
@@ -266,6 +260,7 @@ class Bullet extends EventTarget {
   }
 
   loadMoveSpine(loaderResource: LoaderResource, name: BulletType) {
+    console.log(loaderResource, 'loadMoveSpine');
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
       this.container.addChild(spine);
@@ -275,6 +270,7 @@ class Bullet extends EventTarget {
   }
 
   loadBombSpine(loaderResource: LoaderResource, name: BulletType) {
+    console.log(loaderResource, 'loadBombSpine');
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
       this.container.addChild(spine);
@@ -284,6 +280,7 @@ class Bullet extends EventTarget {
       spine.autoUpdate = false;
       spine.state.addListener({
         complete: () => {
+          console.log(121122121, name);
           this.onBombEnd(name);
         },
       });
@@ -304,15 +301,11 @@ class Bullet extends EventTarget {
       const display = moveEffectSprite || moveEffectSpine;
       if (display) {
         display.position.set(this.combat.axisPoint.x, this.combat.axisPoint.y);
+        this.container.visible = true;
+        display.visible = true;
         if (display === moveEffectSpine) {
           display.state.setAnimation(0, 'play', true);
         }
-        const { x, y } = this.flipTargetPointOrientation(
-          display.scale.x,
-          display.scale.y,
-        );
-        display.scale.x = x; // Orientation.TO_LEFT_UP;
-        display.scale.y = y; // Orientation.TO_RIGHT_DOWN;
         const linearMove = new LinearMove(
           display,
           this.combat.axisPoint,
@@ -333,7 +326,33 @@ class Bullet extends EventTarget {
     }
   }
 
+  linearMoveTemp(name: BulletType, display: DisplayObject) {
+    if (!this.effects[name].completeMove && display) {
+      const x = display.position.x + this.speedX;
+      const y = display.position.y + this.speedY;
+      display.position.set(x, y);
+      // console.log(
+      //   Math.abs(y - (this.attackTarget?.axisPoint?.y || 0)),
+      //   this.doubleSpeedY,
+      //   Math.abs(x - (this.attackTarget?.axisPoint?.x || 0)),
+      //   this.doubleSpeedX,
+      // );
+      // console.log(this.attackTarget?.axisPoint?.y);
+
+      if (
+        Math.abs(y - (this.attackTarget?.axisPoint?.y || 0)) <=
+          this.doubleSpeedY &&
+        Math.abs(x - (this.attackTarget?.axisPoint?.x || 0)) <=
+          this.doubleSpeedX
+      ) {
+        this.onMoveEnd(name, new Point(display.position.x, display.position.y));
+      }
+      requestAnimationFrame(() => this.linearMoveTemp(name, display));
+    }
+  }
+
   onMoveEnd(name: BulletType, point: Point) {
+    console.timeEnd(name);
     this.effects[name].completeMove = true;
     const {
       moveEffectSpine,
@@ -357,8 +376,9 @@ class Bullet extends EventTarget {
 
   attackBomb(name: BulletType, point: Point) {
     const { bombEffectSpine, bombEffectSprite } = this.effects[name];
-    console.log(bombEffectSpine, '====bombEffectSpine');
+    console.log(bombEffectSpine, '==bombEffectSpine');
     if (bombEffectSpine) {
+      console.log(point.x, point.y);
       this.effects[name].completeBomb = false;
       bombEffectSpine.position.set(point.x, point.y);
       bombEffectSpine.visible = true;
@@ -370,7 +390,6 @@ class Bullet extends EventTarget {
   }
 
   onBombEnd(name: BulletType) {
-    console.log('onBombEnd');
     this.effects[name].completeBomb = true;
     // this.dispatchEvent(new Event('attackEnd'));
     this.onEnd();
@@ -422,6 +441,23 @@ class Bullet extends EventTarget {
     }
   }
 
+  async test() {
+    const { moveEffectSpine } = await this.loadEffect('bullet');
+    if (moveEffectSpine) {
+      this.container.visible = true;
+      moveEffectSpine.visible = true;
+      moveEffectSpine.state.setAnimation(0, 'play', true);
+      const { x, y } = this.flipTargetPointOrientation(
+        moveEffectSpine.scale.x,
+        moveEffectSpine.scale.y,
+      );
+      moveEffectSpine.scale.x = x; // Orientation.TO_LEFT_UP;
+      moveEffectSpine.scale.y = y; // Orientation.TO_RIGHT_DOWN;
+
+      this.spineAnimation('bullet', moveEffectSpine);
+    }
+  }
+
   flipTargetPointOrientation(x: number, y: number) {
     if (this.attackTarget?.axisPoint && this.combat.axisPoint) {
       const { axisX: x0, axisY: y0 } = this.attackTarget.axisPoint;
@@ -463,28 +499,7 @@ class Bullet extends EventTarget {
     this.linearAttack(bulletType.BULLET, attackTarget);
   }
 
-  testAttack(name: BulletType, attackTarget: Combat, effect: EffectType) {
-    const text = new Text('', { fill: 0xffffff, fontSize: 22 });
-    text.text = getEffectText(effect);
-    this.container.addChild(text);
-    console.log(this.combat.axisPoint, attackTarget.axisPoint, effect, '==');
-    if (this.combat.axisPoint && attackTarget.axisPoint) {
-      text.position.set(this.combat.axisPoint.x, this.combat.axisPoint.y);
-      const linearMove = new LinearMove(
-        text,
-        this.combat.axisPoint,
-        attackTarget.axisPoint,
-      );
-      linearMove.addEventListener('end', () => {
-        console.log('---12121');
-        this.onMoveEnd(name, new Point(text.position.x, text.position.y));
-      });
-      this.onMoveStart(name, new Point(text.position.x, text.position.y));
-      linearMove.move();
-    }
-  }
-
-  attack(name: BulletType, attackTarget: Combat, effect?: EffectType) {
+  testAttack(name: BulletType, attackTarget: Combat) {
     const parabolas = [
       bulletType.ICE,
       bulletType.ROCK,
@@ -492,12 +507,6 @@ class Bullet extends EventTarget {
       bulletType.FIREBALL,
       bulletType.MISSILE,
     ];
-
-    this.onStart(attackTarget);
-    if (effect) {
-      this.testAttack(name, attackTarget, effect);
-      return;
-    }
     if (parabolas.includes(name)) {
       this.parabolaAttack(name, attackTarget);
       return;

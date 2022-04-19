@@ -18,6 +18,8 @@ import config from '../config';
 import AxisPoint from './AxisPoint';
 import Chequer, { stateType } from './Chequer';
 import Bullet from './Bullet';
+import LinearMove from './LinearMove';
+import { getEffectText } from './utils';
 
 export interface CombatOptions {
   // texture0: string;
@@ -130,6 +132,11 @@ class Combat extends EventTarget {
     this.attackEffect.visible = false;
   }
 
+  setActiveHp(hp: number) {
+    this.activePh = hp;
+    this.drawHp();
+  }
+
   drawHp(now = '') {
     const lineX = this.bloodH - this.bloodBorderW * 2;
     const lineStartX = -(config.BLOOD_WIDTH / 2) + this.bloodBorderW;
@@ -190,7 +197,7 @@ class Combat extends EventTarget {
 
   drawAttackEffect() {
     this.attackEffect.anchor.set(0.5);
-    this.attackEffect.position.set(0, -50);
+    this.attackEffect.position.set(0, 0);
     // this.attackEffect.visible = false;
     this.container.addChild(this.attackEffect);
   }
@@ -213,20 +220,31 @@ class Combat extends EventTarget {
    * @param moveTime 移动时间(ms)
    */
   moveTo(axisPoint: AxisPoint, moveTime?: number) {
-    const t = ((moveTime || this.moveTime) / 1000) * 60;
+    // const t = ((moveTime || this.moveTime) / 1000) * 60;
 
-    console.log(axisPoint);
-    this.moving = true;
-    this.targetAxisPoint = axisPoint;
-    axisPoint.chequer.setState(stateType.PREVIEW);
-    axisPoint.chequer.displayState(true);
-    this.flipTargetPointOrientation();
+    // this.moving = true;
+    // this.targetAxisPoint = axisPoint;
+    // axisPoint.chequer.setState(stateType.PREVIEW);
+    // axisPoint.chequer.displayState(true);
+    // this.flipTargetPointOrientation();
+    // if (this.axisPoint) {
+    //   this.speedX = (axisPoint.x - this.axisPoint.x) / t;
+    //   this.speedY = (axisPoint.y - this.axisPoint.y) / t;
+
+    //   this.doubleSpeedX = Math.abs(this.speedX * 2);
+    //   this.doubleSpeedY = Math.abs(this.speedY * 2);
+    // }
     if (this.axisPoint) {
-      this.speedX = (axisPoint.x - this.axisPoint.x) / t;
-      this.speedY = (axisPoint.y - this.axisPoint.y) / t;
-
-      this.doubleSpeedX = Math.abs(this.speedX * 2);
-      this.doubleSpeedY = Math.abs(this.speedY * 2);
+      const linearMove = new LinearMove(
+        this.container,
+        this.axisPoint,
+        axisPoint,
+      );
+      linearMove.addEventListener('end', () => {
+        this.setPosition(axisPoint);
+        this.dispatchEvent(new Event('moveEnd'));
+      });
+      linearMove.move();
     }
   }
 
@@ -265,7 +283,6 @@ class Combat extends EventTarget {
         Math.abs(this.container.position.x - (this.targetAxisPoint.x || 0)) <=
           this.doubleSpeedX
       ) {
-        console.log(this.targetAxisPoint);
         this.moving = false;
         this.speedX = 0;
         this.speedY = 0;
@@ -294,10 +311,11 @@ class Combat extends EventTarget {
   // 碰撞
   beatCollision(target: Combat, attackInfo?: RoundDesc) {
     const point = this.axisPoint?.clone();
-    console.log(target.axisPoint, point);
     if (target.axisPoint) {
       this.moveTo(target.axisPoint);
+      console.log('7777777777777777');
       this.once('moveEnd', () => {
+        console.log('moas8777777777777777');
         if (point) {
           this.moveTo(point);
         }
@@ -320,11 +338,35 @@ class Combat extends EventTarget {
     this.targetAxisPoint = target.axisPoint;
     this.flipTargetPointOrientation();
 
-    this.renderBullet();
-    if (this.bullet) {
-      this.bullet.bulletMove(target, effect, time);
-      // this.bullet.bulletAttack(target);
-    }
+    const bullet = new Bullet(this);
+
+    console.log(1);
+
+    bullet.addEventListener('moveEnd', () => {
+      console.log(attackInfo);
+      debugger;
+      this.setActiveHp(target.activePh - (attackInfo?.receive_sub_hp || 0));
+
+      if (config.showEffect.includes(effect)) {
+        target.showEffectText(getEffectText(effect));
+      }
+      if (config.hideEffect.includes(effect)) {
+        target.hideEffectText();
+      }
+    });
+    bullet.addEventListener('attackEnd', () => {
+      console.log('==============');
+      this.onAttackEnd();
+    });
+
+    bullet.attack(bulletType.BULLET, target, effect);
+  }
+
+  attackAk47(target: Combat) {
+    const bullet = new Bullet(this);
+    const { container } = bullet;
+    this.container.parent.addChild(container);
+    bullet.attack(bulletType.BULLET, target);
   }
 
   attackParabola(target: Combat, effect: EffectType) {
@@ -335,15 +377,26 @@ class Combat extends EventTarget {
   }
 
   attackParabolaEffect(target: Combat, effect: BulletType) {
-    this.renderBullet();
-    if (this.bullet) {
-      this.bullet.testAttack(effect, target);
-      // this.bullet.test();
-    }
+    const bullet = new Bullet(this);
+    const { container } = bullet;
+    this.container.parent.addChild(container);
+    bullet.attack(effect, target);
+    bullet.addEventListener('attackEnd', () => {
+      this.onAttackEnd();
+    });
+    // this.renderBullet();
+    // if (this.bullet) {
+    //   // this.bullet.testAttack(effect, target);
+    //   this.attackAk47(target);
+    //   bullet.attack(effect, target);
+
+    //   // this.bullet.test();
+    // }
   }
 
   onAttackEnd() {
     this.dispatchEvent(new Event('attackEnd'));
+    this.attacking = false;
     // if ((this.attackInfo as any)?.now_hp && this.attackTarget) {
     //   this.attackTarget.drawHp(`${(this.attackInfo as any)?.now_hp}`);
 
@@ -356,7 +409,7 @@ class Combat extends EventTarget {
       // 攻击
       // this.displaySprite.rotation += 0.1;
       if (this.bullet) {
-        this.bullet.handleBulletMove();
+        // this.bullet.handleBulletMove();
       }
     }
   }
@@ -374,9 +427,9 @@ class Combat extends EventTarget {
 
   handleRun() {
     if (this.running) {
-      this.handleMove();
-      this.handleAttack();
-      requestAnimationFrame(() => this.handleRun());
+      // this.handleMove();
+      // this.handleAttack();
+      // requestAnimationFrame(() => this.handleRun());
     }
   }
 
