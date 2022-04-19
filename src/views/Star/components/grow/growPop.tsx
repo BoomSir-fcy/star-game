@@ -33,16 +33,16 @@ export const GrowPop: React.FC<{
       if (Api.isSuccess(res)) {
         toastSuccess(t('Successful operation'));
         callBack();
-        onClose();
       }
-      if (res.code === 200007) {
-        toastError(t('The planet is being upgraded and cannot be upgraded'));
-        onClose();
-      }
-      if (res.code === 200017) {
-        toastError(t('Planet already has max strengthen level'));
-        onClose();
-      }
+      onClose();
+      // if (res.code === 200007) {
+      //   toastError(t('The planet is being upgraded and cannot be upgraded'));
+      //   onClose();
+      // }
+      // if (res.code === 200017) {
+      //   toastError(t('Planet already has max strengthen level'));
+      //   onClose();
+      // }
     } catch (error) {
       toastError(t('Operation failed'));
       console.log(error);
@@ -74,7 +74,7 @@ export const GrowPop: React.FC<{
                   imgWidth={50}
                   imgHeight={50}
                   imgSrc='/images/commons/dsg-1.png'
-                  number={itemData.stone_consume.toString()}
+                  number={itemData?.stone_consume?.toString()}
                   unit={t('Ore')}
                 />
                 <Box mt='10px'>
@@ -82,7 +82,7 @@ export const GrowPop: React.FC<{
                     imgWidth={50}
                     imgHeight={50}
                     imgSrc='/images/commons/dsg-1.png'
-                    number={itemData.population_consume.toString()}
+                    number={itemData?.population_consume?.toString()}
                     unit={t('Population')}
                   />
                 </Box>
