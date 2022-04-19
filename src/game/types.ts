@@ -27,88 +27,96 @@ export interface RoundDescAxis {
 export interface RoundDescMove {
   dest: RoundDescAxis[];
   id: string;
-  starting_point: RoundDescAxis;
+  starting_point?: RoundDescAxis;
+  from?: RoundDescAxis;
 }
 
-export interface RoundDescAttack {
-  receive_df: number;
-  now_hp: number;
+interface ReceiveChange {
   receive_id: string;
   receive_point: RoundDescAxis;
-  receive_sub_hp: number;
-  sender_attack: number;
+}
+
+interface SlotBaseInfo {
   sender_id: string;
   sender_point: RoundDescAxis;
+  receive_id: string;
+  receive_point: RoundDescAxis;
+}
+
+export interface RoundDescAttack extends SlotBaseInfo {
+  receive_df: number;
+  now_hp: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
+  sender_attack: number;
 }
 
 // 添加炸弹
-export interface RoundDescAddBoom {
+export interface RoundDescAddBoom extends SlotBaseInfo {
   boom_hp: number;
   long_round: number;
-  receive_id: string;
+  around: ReceiveChange[];
   receive_sub_hp: number;
-  sender_id: string;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
 }
 // 添加灼烧
-export interface RoundDescAddFiring {
+export interface RoundDescAddFiring extends SlotBaseInfo {
   long_round: number;
-  receive_id: string;
+  around: ReceiveChange[];
   receive_sub_hp: number;
-  sender_id: string;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
 }
 // 正在灼烧
-export interface RoundDescFiring {
+export interface RoundDescFiring extends SlotBaseInfo {
   long_round: number;
-  receive_id: string;
-  sender_id: string;
+  around: ReceiveChange[];
   receive_sub_hp: number;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
 }
 // 禁锢
-export interface RoundDescStopMove {
+export interface RoundDescStopMove extends SlotBaseInfo {
   long_round: number;
-  receive_id: string;
-  sender_id: string;
   receive_sub_hp: number;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
+  around: ReceiveChange[];
 }
 // 炸弹爆炸
-export interface RoundDescBoom {
+export interface RoundDescBoom extends SlotBaseInfo {
   receive_sub_hp: number;
+  around: ReceiveChange[];
   long_round: number;
-  receive_id: string;
-  sender_id: string;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
 }
 // 冰冻
-export interface RoundDescIceStart {
+export interface RoundDescIceStart extends SlotBaseInfo {
   long_round: number;
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
   receive_sub_hp: number;
-  receive_id: string;
-  sender_id: string;
+  around: ReceiveChange[];
 }
 // 冰冻结束
-export interface RoundDescIceEnd {
-  sender_point: RoundDescAxis;
-  receive_point: RoundDescAxis;
+export interface RoundDescIceEnd extends SlotBaseInfo {
   long_round: number;
   receive_sub_hp: number;
-  receive_id: string;
-  sender_id: string;
+  around: ReceiveChange[];
+}
+// 冰冻结束
+export interface RoundDescBeat extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  detail: RoundInfo[];
+}
+
+// 碰撞
+export interface RoundDescCarshHarm extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
 }
 
 export interface RoundDescRemove {
   receive_point: RoundDescAxis;
   receive_id: string;
+}
+
+export interface RoundDescBeatMove {
+  move_unit: string;
+  from: RoundDescAxis;
+  dest: RoundDescAxis;
 }
 
 export type RoundDesc =
@@ -119,7 +127,8 @@ export type RoundDesc =
   | RoundDescFiring
   | RoundDescIceEnd
   | RoundDescStopMove
-  | RoundDescIceStart;
+  | RoundDescIceStart
+  | RoundDescCarshHarm;
 
 export interface RoundInfo {
   desc_type: number;
@@ -134,6 +143,9 @@ export interface RoundInfo {
   ice_start: RoundDescIceStart;
   stop_move: RoundDescStopMove;
   unit_remove: RoundDescRemove;
+  beat: RoundDescBeat;
+  beat_move: RoundDescBeatMove;
+  carsh_harm: RoundDescCarshHarm;
 }
 
 export enum Orientation {
@@ -170,6 +182,10 @@ export const effectType = {
   ADD_BOOM: 9, // 添加炸弹
   BOOM: 10, // 炸弹爆炸
   REMOVE: 11, // 移除棋子
+  BEAT: 12, // 击退
+  BEAT_MOVE: 13, // 击退产生位移
+  BEAT_COLLISION: 14, // 击退碰撞伤害
+  REMOVE_FIRING: 15, // 击退碰撞伤害DescUnitRemoveFiring
 };
 
 // 技能
@@ -184,8 +200,30 @@ export enum Skill {
 export const bulletType = {
   ICE: 'ice', // 冰块
   ROCK: 'rock', // 岩石
+  BULLET: 'bullet', // 子弹
+  CURVE_BULLET: 'curve_bullet', // 曲线子弹
+  FIREBALL: 'fireball', // 火球
+  MECHANICAL_BULLET: 'mechanical_bullet', // 机械子弹
+  MISSILE: 'missile', // 导弹
+  MISSILE_BOOM: 'missile_boom', // 导弹爆炸
+  STING: 'sting', // 尖刺攻击
+  VENOM: 'venom', // 毒液攻击
+  FIGHT: 'fight', // 肉搏
+  DRAGON: 'dragon', // 岩石
 };
-
 export type BulletType = typeof bulletType[keyof typeof bulletType];
+
+export interface EffectItemInfoOfConfig {
+  name: BulletType;
+  bombSpriteSrc?: string;
+  bombSpineSrc?: string;
+  moveSpineSrc?: string;
+  moveSpriteSrc?: string;
+  label?: string;
+}
+
+export interface EffectConfig {
+  effects: EffectItemInfoOfConfig[];
+}
 
 export type EffectType = typeof effectType[keyof typeof effectType];

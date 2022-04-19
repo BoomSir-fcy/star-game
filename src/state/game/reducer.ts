@@ -1,10 +1,17 @@
 import { createReducer, createSlice } from '@reduxjs/toolkit';
 import { AppThunk, GameState } from 'state/types';
-import { fetchGamePK, fetchGamePlanetUnits, fetchUnitList } from './fetchers';
+import {
+  fetchGamePK,
+  fetchGamePKTest,
+  fetchGamePlanetUnits,
+  fetchGamePlanetUnitsTest,
+  fetchUnitList,
+} from './fetchers';
 
 export const initialState: GameState = {
   baseUnits: {},
   plantUnits: {},
+  testPlantUnits: {},
   baseSkill: {},
   process: null,
   PKInfo: null,
@@ -36,10 +43,33 @@ export const fetchGamePlanetUnitsAsync =
     );
   };
 
+export const fetchGamePlanetUnitsTestAsync =
+  (id: number): AppThunk =>
+  async dispatch => {
+    const { units1, units2, tag } =
+      (await fetchGamePlanetUnitsTest(`t-${id}`)) || {};
+    if (tag) {
+      dispatch(
+        setPlantUnitsTest({
+          id: tag,
+          units1,
+          units2,
+        }),
+      );
+    }
+  };
+
 export const fetchGamePKAsync =
   (id1: number, id2: number, maxRound?: number): AppThunk =>
   async dispatch => {
     const PKInfo = await fetchGamePK(id1, id2, maxRound);
+    dispatch(setPKInfo(PKInfo));
+  };
+
+export const fetchGamePKTestAsync =
+  (tag: string, maxRound?: number): AppThunk =>
+  async dispatch => {
+    const PKInfo = await fetchGamePKTest(tag, maxRound);
     dispatch(setPKInfo(PKInfo));
   };
 
@@ -69,6 +99,13 @@ export const userInfoSlice = createSlice({
       };
     },
 
+    setPlantUnitsTest: (state, { payload }) => {
+      state.testPlantUnits = {
+        ...state.testPlantUnits,
+        [payload.id]: payload,
+      };
+    },
+
     setPKInfo: (state, { payload }) => {
       state.PKInfo = payload;
     },
@@ -76,7 +113,12 @@ export const userInfoSlice = createSlice({
 });
 
 // Actions
-export const { setUnits, setPlantUnits, setPKInfo, setBaseSkill } =
-  userInfoSlice.actions;
+export const {
+  setUnits,
+  setPlantUnits,
+  setPKInfo,
+  setBaseSkill,
+  setPlantUnitsTest,
+} = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

@@ -25,24 +25,23 @@ const VideoStyled = styled.video<VideoSystes>`
 
 interface VideoComponentProps {
   scale: number;
+  minHeight: number;
 }
 export const VideoComponent: React.FC<VideoComponentProps> = ({
   scale,
+  minHeight,
   ...props
 }) => {
   const { show, videoOptions, videoRef } = useVideo();
 
   const { boxHeight, boxTop } = useMemo(() => {
-    const { width, height } =
-      window.document.documentElement.getBoundingClientRect();
-
-    const _height = 900 * scale;
-    const _top = (height - _height) / 2;
+    const _height = minHeight * scale;
+    const _top = (minHeight - _height) / 2;
     return {
       boxHeight: _height,
       boxTop: _top,
     };
-  }, [scale]);
+  }, [scale, minHeight]);
   return (
     <>
       {show && (

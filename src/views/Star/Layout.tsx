@@ -6,6 +6,7 @@ const Details = React.lazy(() => import('./Details'));
 const Upgrade = React.lazy(() => import('./Upgrade'));
 const Grow = React.lazy(() => import('./Grow'));
 const Embattle = React.lazy(() => import('./Embattle'));
+const EmbattleTest = React.lazy(() => import('./EmbattleTest'));
 
 const StarLayout = () => {
   return (
@@ -15,6 +16,7 @@ const StarLayout = () => {
         <Route path='upgrade' element={<Upgrade />} />
         <Route path='grow' element={<Grow />} />
         <Route path='embattle' element={<Embattle />} />
+        <Route path='embattle-test' element={<EmbattleTest />} />
       </Routes>
     </Container>
   );

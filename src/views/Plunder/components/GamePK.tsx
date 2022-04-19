@@ -11,6 +11,7 @@ import {
   useFetchGamePlanetUnits,
   useFetchUnitList,
   useFetchGamePK,
+  useFetchGamePKTest,
 } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
 import { useStore } from 'state';
@@ -24,6 +25,7 @@ import { useDispatch } from 'react-redux';
 import Running, { RoundsProps } from 'game/core/Running';
 import { useNavigate } from 'react-router-dom';
 import { OptionProps, Select } from 'components/Select';
+import effectConfig from 'game/effectConfig';
 
 const sleep = (handle: any, delay: number) => {
   return new Promise<void>((res, rej) => {
@@ -42,6 +44,9 @@ interface GamePKProps {
   pid0?: number;
   pid1?: number;
 }
+
+type idMap = { [xy: string]: string };
+
 const game = new Game({ width: 900, height: 600 });
 
 const GamePK: React.FC<GamePKProps> = () => {
@@ -79,10 +84,13 @@ const GamePK: React.FC<GamePKProps> = () => {
     if (Number(pid0) && Number(pid1)) {
       dispatch(fetchPlanetInfoAsync([Number(pid0), Number(pid1)]));
       navigate(`/plunder-test?pid0=${pid0}&pid1=${pid1}`, { replace: true });
+    } else if (Number(pid0)) {
+      dispatch(fetchPlanetInfoAsync([Number(pid0)]));
     }
   }, [dispatch, pid0, pid1, navigate]);
 
   useFetchGamePK(infoP0?.id, infoP1?.id, Number(maxRound));
+  useFetchGamePKTest(infoP0?.id, infoP1?.id, Number(maxRound));
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -93,12 +101,19 @@ const GamePK: React.FC<GamePKProps> = () => {
   }, [ref]);
 
   const createSoldiers = useCallback(
-    (poses: Api.Game.UnitPlanetPos[], base: MapBaseUnits, isEnemy: boolean) => {
+    (
+      poses: Api.Game.UnitPlanetPos[],
+      base: MapBaseUnits,
+      ids: idMap,
+      isEnemy: boolean,
+    ) => {
       poses?.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          textureRes: '/assets/modal/m0-1.png',
+          srcId: `${item.base_unit_id}`,
+          race: base[item.base_unit_id]?.race || 1,
           id: item.base_unit_id,
-          hp: base[item.base_unit_id].hp,
+          sid: ids[`${item.pos.x}${item.pos.y}`],
+          hp: base[item.base_unit_id]?.hp,
           isEnemy,
           enableDrag: false,
           unique_id: item.base_unit_id,
@@ -122,8 +137,13 @@ const GamePK: React.FC<GamePKProps> = () => {
   useEffect(() => {
     console.log(PKInfo, 'PKInfo');
     if (PKInfo && game.soldiers.length === 0) {
-      createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, false);
-      createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, true);
+      const ids: idMap = {};
+      Object.keys(PKInfo.init.ids).forEach(id => {
+        const { x, y } = PKInfo.init.ids[id];
+        ids[`${x}${y}`] = id;
+      });
+      createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, ids, false);
+      createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
       runHandle(PKInfo.slot);
       const res: OptionProps[] = [];
       console.log(PKInfo.status.status);
@@ -143,8 +163,13 @@ const GamePK: React.FC<GamePKProps> = () => {
     game.clearSoldier();
 
     if (PKInfo && game.soldiers.length === 0) {
-      createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, false);
-      createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, true);
+      const ids: idMap = {};
+      Object.keys(PKInfo.init.ids).forEach(id => {
+        const { x, y } = PKInfo.init.ids[id];
+        ids[`${x}${y}`] = id;
+      });
+      createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, ids, false);
+      createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
       // runHandle(PKInfo.slot);
     }
   }, [PKInfo, createSoldiers]);
@@ -164,7 +189,8 @@ const GamePK: React.FC<GamePKProps> = () => {
       game.clearSoldier();
       info.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          textureRes: '/assets/modal/m0-1.png',
+          srcId: `${item.base_id}`,
+          race: PKInfo?.init.base_unit[item.base_id].race || 1,
           id: item.base_id,
           hp: PKInfo?.init.base_unit[item.base_id].hp,
           isEnemy: item.red,
@@ -183,30 +209,43 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   const testHandle = useCallback(() => {
     game.createSoldier(0, 7, {
-      textureRes: '/assets/modal/m0-1.png',
+      srcId: '1',
+      race: 1,
+
       id: 1,
       unique_id: 1,
-      hp: 100,
+      hp: 290,
       isEnemy: false,
       enableDrag: true,
     });
-    game.createSoldier(7, 7, {
-      textureRes: '/assets/modal/m0-1.png',
-      id: 1,
-      unique_id: 1,
-      hp: 100,
-      isEnemy: true,
-      enableDrag: true,
-    });
+    // game.createSoldier(7, 7, {
+    //   srcId: '1',
+    //   race: 1,
+    //   id: 1,
+    //   unique_id: 1,
+    //   hp: 300,
+    //   isEnemy: true,
+    //   enableDrag: true,
+    // });
   }, []);
+
+  const bulletSelect: OptionProps[] = useMemo(() => {
+    return effectConfig.effects.map((item, index) => ({
+      value: item.name,
+      label: item.label || item.name,
+      id: index,
+    }));
+  }, []);
+
+  const [activeBullet, setActiveBullet] = useState(bulletSelect[0]);
 
   const sendHandle = useCallback(() => {
     // const [s1, s0] = game.soldiers;
     const [s0, s1] = game.soldiers;
     if (s0 && s1) {
-      s0.attackParabola(s1, 4);
+      s0.attackParabolaEffect(s1, activeBullet.value);
     }
-  }, []);
+  }, [activeBullet]);
 
   const moveHandle = useCallback(() => {
     // const [s1, s0] = game.soldiers;
@@ -230,10 +269,23 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   return (
     <Box position='relative'>
-      <Button onClick={testHandle}>testHandle</Button>
-      <Button onClick={sendHandle}>发射</Button>
-      <Button onClick={moveHandle}>移动</Button>
-      <Button onClick={dirHandle}>转向</Button>
+      <Flex>
+        <Button onClick={testHandle}>testHandle</Button>
+        <Box width={200}>
+          <Select
+            options={bulletSelect}
+            mb='27px'
+            defaultId={0}
+            onChange={option => {
+              // console.log(option);
+              setActiveBullet(option);
+            }}
+          />
+        </Box>
+        <Button onClick={sendHandle}>发射</Button>
+        <Button onClick={moveHandle}>移动</Button>
+        <Button onClick={dirHandle}>转向</Button>
+      </Flex>
       <Flex>
         <Box mr='80px'>
           <Box mt='50px'>

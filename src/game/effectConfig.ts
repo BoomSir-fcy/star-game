@@ -1,15 +1,100 @@
-import { bulletType } from './types';
+import { bulletType, EffectConfig } from './types';
 
-const effectConfig = {
-  // 冰冻
-  [bulletType.ICE]: {
-    name: bulletType.ICE,
-    resDir: '/assets/effect/ice/bindog.json',
-  },
-  [bulletType.ROCK]: {
-    name: bulletType.ROCK,
-    resDir: '/assets/effect/rock/yans.json',
-  },
+const effectConfig: EffectConfig = {
+  effects: [
+    {
+      name: bulletType.ICE,
+      bombSpineSrc: '/assets/effect/ice/bindog.json',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/effect/ice/ice.png',
+      label: '冰冻',
+    },
+    {
+      name: bulletType.ROCK,
+      bombSpineSrc: '/assets/effect/rock/yans.json',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/effect/rock/rock.png',
+      label: '岩石',
+    },
+    {
+      name: bulletType.BULLET,
+      bombSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/effect/bullet/zidan.json',
+      moveSpriteSrc: '',
+      label: '子弹',
+    },
+    {
+      name: bulletType.CURVE_BULLET,
+      bombSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/effect/curve_bullet/quxian.json',
+      moveSpriteSrc: '',
+      label: '曲线子弹',
+    },
+    {
+      name: bulletType.FIREBALL,
+      // resDir: '/assets/effect/fireball/huoqiu.json',
+      // spriteRes: '/assets/effect/fireball/fireball.png',
+      bombSpineSrc: '/assets/effect/fireball/huoqiu.json',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/effect/fireball/fireball.png',
+      label: '火球',
+    },
+    {
+      name: bulletType.MECHANICAL_BULLET,
+      // resDir: '/assets/effect/mechanical_bullet/jix.json',
+      // spriteRes: '/assets/effect/mechanical_bullet/mechanical_bullet.png',
+      bombSpineSrc: '/assets/effect/mechanical_bullet/jix.json',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/effect/mechanical_bullet/mechanical_bullet.png',
+      label: '机械子弹',
+    },
+    {
+      name: bulletType.MISSILE,
+      // resDir: '/assets/effect/missile/head/dangt.json',
+      // spriteRes: '/assets/effect/missile/head/dangt.png',
+      bombSpineSrc: '/assets/effect/missile/bom/daod.json',
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/effect/missile/head/dangt.json',
+      moveSpriteSrc: '',
+      label: '导弹',
+    },
+    {
+      name: bulletType.STING,
+      // resDir: '/assets/effect/sting/jianc.json',
+      // spriteRes: '/assets/effect/sting/jianc.png',
+      bombSpineSrc: '/assets/effect/sting/jianc.json',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '',
+      label: '尖刺攻击',
+    },
+    {
+      name: bulletType.VENOM,
+      // resDir: '/assets/effect/venom/duye.json',
+      // spriteRes: '/assets/effect/venom/venom.png',
+      bombSpineSrc: '/assets/effect/venom/duye.json',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/effect/venom/venom.png',
+      label: '毒液攻击',
+    },
+    {
+      name: bulletType.FIGHT,
+      // resDir: '/assets/effect/fight/jinzhan.json',
+      // spriteRes: '/assets/effect/fight/jinzhan.png',
+      bombSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/effect/fight/jinzhan.json',
+      moveSpriteSrc: '',
+      label: '肉搏',
+    },
+  ],
 };
 
 export default effectConfig;

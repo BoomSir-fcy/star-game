@@ -307,7 +307,7 @@ const Planet = () => {
                   onEndCallback={e => setState({ ...state, token: e })}
                 />
               </Flex>
-              <ScrollBox>
+              <ScrollBox className='planet_list'>
                 {(StarList ?? []).map(item => (
                   <React.Fragment key={`${item.id}_${item.name}`}>
                     {choose ? (

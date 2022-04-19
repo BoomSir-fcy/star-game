@@ -12,7 +12,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
       const newSoldiers = soldiers?.map((soldier: Soldier, index: number) => {
         return {
           id: `${soldier.axisPoint?.chequer.axisX}${soldier.axisPoint?.chequer.axisY}`,
-          src: soldier.options?.textureRes,
+          src: soldier.textureRes,
           soldier,
         };
       });

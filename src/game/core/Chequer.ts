@@ -54,6 +54,7 @@ interface ChequerOptions {
   axisY: number; // Y坐标轴
   type?: MapType;
   state?: StateType;
+  test?: boolean;
 }
 class Chequer {
   constructor(option: ChequerOptions) {
@@ -113,6 +114,7 @@ class Chequer {
     axisY,
     type = mapType.MAP1,
     state = stateType.DISABLE,
+    test,
   }: ChequerOptions) {
     // this.src = src;
 
@@ -132,8 +134,11 @@ class Chequer {
     this.bunny.interactive = true;
     this.bunny.buttonMode = true;
 
-    this.setState(state);
-    // this.setState(enemy ? stateType.DISABLE : state);
+    if (test) {
+      this.setState(state);
+    } else {
+      this.setState(enemy ? stateType.DISABLE : state);
+    }
 
     this.stateSprite.anchor.set(0.5);
     this.stateSprite.x = 0;
@@ -141,13 +146,13 @@ class Chequer {
     this.bunny.addChild(this.stateSprite);
     this.stateSprite.visible = false;
 
-    const text = new Text(`X${axisX}, Y${axisY}`, {
-      fill: 0xffffff,
-      fontSize: 16,
-    });
-    text.x = -30;
-    text.y = -28;
-    this.bunny.addChild(text);
+    // const text = new Text(`X${axisX}, Y${axisY}`, {
+    //   fill: 0xffffff,
+    //   fontSize: 16,
+    // });
+    // text.x = -30;
+    // text.y = -28;
+    // this.bunny.addChild(text);
   }
 
   // 底色是不规则渲染 所以事件范围也不规则

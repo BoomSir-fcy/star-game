@@ -23,4 +23,16 @@ export class GameApi extends Http {
   async gamePK(player1: number, player2: number, max_round?: number) {
     return this.post('game/pk', { player1, player2, max_round });
   }
+
+  async testInit(params: Api.Game.ParamsUnitSettingTest) {
+    return this.post('test/simulatewar/init', params);
+  }
+
+  async testGet(tag: string) {
+    return this.get('test/simulatewar/get', { tag });
+  }
+
+  async testPk(tag: string, max_round?: number) {
+    return this.get('test/simulatewar/pk', { tag, max_round });
+  }
 }

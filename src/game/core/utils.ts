@@ -176,7 +176,7 @@ export const getEffectText = (effect?: EffectType) => {
   if (effect === effectType.ICE_START) return '冰冻';
   if (effect === effectType.ADD_FIRING) return '灼烧';
   if (effect === effectType.ADD_BOOM) return '炸弹';
-
+  console.log(effect, '=');
   return '未知';
 };
 
@@ -199,4 +199,12 @@ export const getSkillKey = (skill?: Skill): 'firing' | 'boom' => {
   if (skill === Skill.SHIELD) return 'firing';
 
   return 'firing';
+};
+
+export const getDistanceBetweenTwoPoints = (point0: Point, point1: Point) => {
+  const { x: x0, y: y0 } = point0;
+  const { x: x1, y: y1 } = point1;
+
+  const distance = Math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2);
+  return distance;
 };

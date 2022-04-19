@@ -54,18 +54,18 @@ const MysteryBoxDetail = () => {
     return planetInfo[id];
   }, [planetInfo, id]);
 
-  const init = useCallback(() => {
+  useEffect(() => {
     if (id) dispatch(fetchPlanetInfoAsync([id]));
+  }, [id, dispatch]);
+
+  useEffect(() => {
     if (!info) {
       setTimeout(() => {
         dispatch(fetchPlanetInfoAsync([id]));
       }, 10000);
     }
-  }, [id, info, dispatch]);
+  }, [info, id, dispatch]);
 
-  useEffect(() => {
-    init();
-  }, [init]);
   return (
     <Layout>
       <Dashboard

@@ -18,6 +18,10 @@ class AxisPoint extends Point {
 
     this.chequer = chequer;
   }
+
+  clone() {
+    return new AxisPoint(this.x, this.y, this.chequer);
+  }
 }
 
 export default AxisPoint;
