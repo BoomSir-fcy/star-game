@@ -26,10 +26,11 @@ const useUpdatePos = (planetId: number, game: Game) => {
   const handleUpdate = useCallback(
     async (event: any) => {
       const { soldiers } = event.detail as { soldiers: Soldier[] };
+      const MAX = 64;
       const temp = soldiers.map((item, index) => {
         return {
           ...item,
-          speed: index + 1, // 出手顺序
+          speed: MAX - index, // 出手顺序
         };
       });
       const soldiers1 = temp.filter(item => !item.isEnemy);

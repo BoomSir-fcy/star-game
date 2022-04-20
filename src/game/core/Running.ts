@@ -176,7 +176,7 @@ class Running extends EventTarget {
     // debugger;
     if (track?.type === descType.MOVE) {
       this.infoText.text = `回合: ${track.id}`;
-      return this.mainMove(track, s => {
+      return this.moveHandle(track, s => {
         callback(s);
       });
     }
@@ -312,24 +312,7 @@ class Running extends EventTarget {
     return this.attackTime / this.rate;
   }
 
-  moveHandle(track: TrackDetail): Soldier | null {
-    const t = this.getMoveT();
-
-    const axisPoint = this.game.getAxis(
-      track.targetAxisPoint.x,
-      track.targetAxisPoint.y,
-    );
-    const soldier = this.game.findSoldierById(track.sender_id);
-    if (!soldier || !axisPoint) {
-      console.warn(`warn: ${track.id}`);
-      return null;
-    }
-    soldier.moveTo(axisPoint, t);
-
-    return soldier;
-  }
-
-  mainMove(track: TrackDetail, callback: (soldier?: Soldier) => void) {
+  moveHandle(track: TrackDetail, callback: (soldier?: Soldier) => void) {
     const t = this.getMoveT();
 
     const axisPoint = this.game.getAxis(
@@ -608,6 +591,11 @@ class Running extends EventTarget {
     sendSoldier.once('collisionEnd', () => {
       callback();
     });
+    console.log(
+      receiveSoldier,
+      sendSoldier,
+      'sendSoldier=sendSoldier=sendSoldiersendSoldiersendSoldier',
+    );
     sendSoldier.beatCollision(receiveSoldier);
     return sendSoldier;
   }
