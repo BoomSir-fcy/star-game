@@ -90,7 +90,7 @@ export const useFetchGamePKTest = (
     if (id0 && !id1) {
       dispatch(fetchGamePKTestAsync(`t-${id0}`, maxRound));
     }
-  }, [dispatch, id0, maxRound]);
+  }, [dispatch, id0, id1, maxRound]);
 
   useEffect(() => {
     fetch();

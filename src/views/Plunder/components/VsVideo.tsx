@@ -38,17 +38,16 @@ const VsVideo: React.FC<BoxProps> = ({ ...props }) => {
       center: true,
       loop: false,
     });
-    console.log(21121);
-    console.log(videoRef.current);
-    if (videoRef.current) {
-      videoRef.current.addEventListener('ended', changeState);
+    const refCurrent = videoRef.current;
+    if (refCurrent) {
+      refCurrent.addEventListener('ended', changeState);
     }
     return () => {
-      if (videoRef.current) {
-        videoRef.current.removeEventListener('ended', changeState);
+      if (refCurrent) {
+        refCurrent.removeEventListener('ended', changeState);
       }
     };
-  }, [videoRef.current, setVideoOptions, changeState]);
+  }, [videoRef, setVideoOptions, changeState]);
 
   return (
     <div>
