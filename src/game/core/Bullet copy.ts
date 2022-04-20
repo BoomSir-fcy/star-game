@@ -221,13 +221,11 @@ class Bullet extends EventTarget {
       try {
         const { bombSpineSrc, moveSpineSrc } = this.effects[name];
 
-        console.log(this.loader);
         // this.loader.reset();
         const moveKeyName = `${name}_moveSpineSrc`;
         const bombKeyName = `${name}_bombSpineSrc`;
         if (bombSpineSrc && this.loader.resources[bombKeyName]) {
           this.loadBombSpine(this.loader.resources[bombKeyName], name);
-          console.log(111);
           resolve();
           return;
         }
@@ -260,7 +258,6 @@ class Bullet extends EventTarget {
   }
 
   loadMoveSpine(loaderResource: LoaderResource, name: BulletType) {
-    console.log(loaderResource, 'loadMoveSpine');
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
       this.container.addChild(spine);
@@ -270,7 +267,6 @@ class Bullet extends EventTarget {
   }
 
   loadBombSpine(loaderResource: LoaderResource, name: BulletType) {
-    console.log(loaderResource, 'loadBombSpine');
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
       this.container.addChild(spine);
@@ -280,7 +276,6 @@ class Bullet extends EventTarget {
       spine.autoUpdate = false;
       spine.state.addListener({
         complete: () => {
-          console.log(121122121, name);
           this.onBombEnd(name);
         },
       });
@@ -331,13 +326,6 @@ class Bullet extends EventTarget {
       const x = display.position.x + this.speedX;
       const y = display.position.y + this.speedY;
       display.position.set(x, y);
-      // console.log(
-      //   Math.abs(y - (this.attackTarget?.axisPoint?.y || 0)),
-      //   this.doubleSpeedY,
-      //   Math.abs(x - (this.attackTarget?.axisPoint?.x || 0)),
-      //   this.doubleSpeedX,
-      // );
-      // console.log(this.attackTarget?.axisPoint?.y);
 
       if (
         Math.abs(y - (this.attackTarget?.axisPoint?.y || 0)) <=
@@ -376,9 +364,7 @@ class Bullet extends EventTarget {
 
   attackBomb(name: BulletType, point: Point) {
     const { bombEffectSpine, bombEffectSprite } = this.effects[name];
-    console.log(bombEffectSpine, '==bombEffectSpine');
     if (bombEffectSpine) {
-      console.log(point.x, point.y);
       this.effects[name].completeBomb = false;
       bombEffectSpine.position.set(point.x, point.y);
       bombEffectSpine.visible = true;
@@ -425,11 +411,6 @@ class Bullet extends EventTarget {
       parabola.position().move();
     }
   }
-
-  // 肉搏攻击 (感觉肉搏就是直线子弹)
-  // fightMove() {
-  //   console.log(this);
-  // }
 
   // 空间魔法攻击 (就是没有弹道能直接对敌方释放技能)
   async spaceAttack(name: BulletType, attackTarget: Combat) {

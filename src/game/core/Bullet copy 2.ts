@@ -402,11 +402,6 @@ class Bullet extends EventTarget {
     }
   }
 
-  // 肉搏攻击 (感觉肉搏就是直线子弹)
-  // fightMove() {
-  //   console.log(this);
-  // }
-
   // 空间魔法攻击 (就是没有弹道能直接对敌方释放技能)
   async spaceAttack(name: BulletType, attackTarget: Combat) {
     this.attackTarget = attackTarget;

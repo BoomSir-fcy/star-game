@@ -40,7 +40,6 @@ export const fetchGamePlanetUnitsTest = async (
   try {
     const res = await Api.GameApi.testGet(tag);
     if (Api.isSuccess(res)) {
-      console.log(res.data);
       return res.data;
     }
     return null;
@@ -57,7 +56,6 @@ export const fetchGamePK = async (
 ) => {
   try {
     const res = await Api.GameApi.gamePK(planetId1, planetId2, maxRound);
-    console.log(res);
     if (Api.isSuccess(res)) {
       return res.data.data;
     }
@@ -71,7 +69,6 @@ export const fetchGamePK = async (
 export const fetchGamePKTest = async (tag: string, maxRound?: number) => {
   try {
     const res = await Api.GameApi.testPk(tag, maxRound);
-    console.log(res);
     if (Api.isSuccess(res)) {
       return res.data.data;
     }

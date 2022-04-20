@@ -154,7 +154,6 @@ class Running extends EventTarget {
     if (this.paused) return;
     this.playing = true;
     const track = this.trackDetails[this.trackIndex];
-    console.log(track);
     this.runTrack(track, true);
   }
 
@@ -200,7 +199,6 @@ class Running extends EventTarget {
       return this.beatHandle(track, track.type);
     }
     if (track?.type === effectType.BEAT_COLLISION) {
-      console.log(12121212);
       return this.beatCollision(track);
     }
     if (track?.type) {
@@ -224,7 +222,6 @@ class Running extends EventTarget {
   }
 
   runningHandle() {
-    console.log('runningHandle');
     this.playing = true;
     if (this.paused) return;
     if (this.playCount === 0) return;
@@ -233,7 +230,6 @@ class Running extends EventTarget {
       this.playCount -= 1;
       this.runHandle();
     } else {
-      console.log('end');
       this.playing = false;
       this.dispatchEvent(new CustomEvent('runEnd'));
       this.playEnd = true;
@@ -371,7 +367,6 @@ class Running extends EventTarget {
       console.warn(`warn: ${track.id}`);
       return null;
     }
-    console.log(track, axisPoint, soldier);
     soldier.run();
     soldier.moveTo(axisPoint, t);
 
@@ -511,7 +506,6 @@ class Running extends EventTarget {
 
   attackHandleRunning(attacks: TrackDetail, effect: EffectType, t?: number) {
     const sendSoldier = this.attackHandle(attacks, effect, t);
-    // console.log(sendSoldier, 'sendSoldier');
     const endHandle = () => {
       if (attacks.around) {
         attacks.around.forEach(item => {
@@ -522,8 +516,6 @@ class Running extends EventTarget {
           if (receiveAxis) {
             const soldier = this.game.findSoldierByAxis(receiveAxis);
             if (soldier) {
-              console.log(soldier.activePh, item.receive_sub_hp);
-              // sol.attack(sol, effect, attacks?.attackInfo, 0);
               soldier.setActiveHp(
                 soldier.activePh - (item.receive_sub_hp || 0),
               );
@@ -555,9 +547,7 @@ class Running extends EventTarget {
     }
     sendSoldier.renderBullet();
     sendSoldier.run();
-    console.log(3);
     sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo, t);
-    console.log(4);
 
     // receiveSoldier.changeState(stateType.DISABLE, true);
 
@@ -570,14 +560,11 @@ class Running extends EventTarget {
       console.warn(`warn: ${attacks.id}`);
       return null;
     }
-    console.log(sendSoldier, receiveSoldier, attacks);
     sendSoldier.renderBullet();
     sendSoldier.run();
     sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo);
     // receiveSoldier.changeState(stateType.DISABLE, true);
     sendSoldier.once('attackEnd', () => {
-      console.log(121221219999999999, attacks.detail);
-
       if (attacks.detail) {
         attacks.detail.forEach((item, index) => {
           const sol = this.runTrack(item);
@@ -596,7 +583,6 @@ class Running extends EventTarget {
 
   beatCollision(attacks: TrackDetail) {
     const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
-    console.log(sendSoldier, receiveSoldier, attacks);
     if (!sendSoldier || !receiveSoldier) {
       console.warn(`warn: ${attacks.id}`);
       this.runningHandle();
@@ -605,9 +591,7 @@ class Running extends EventTarget {
     }
     sendSoldier.run();
     sendSoldier.beatCollision(receiveSoldier);
-    console.log('================');
     sendSoldier.once('collisionEnd', () => {
-      console.log('collisionEnd');
       this.runningHandle();
     });
     return sendSoldier;

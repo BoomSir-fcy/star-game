@@ -169,8 +169,6 @@ class Bullet extends EventTarget {
   }
 
   onEnd() {
-    // console.log(this.attackTarget, '=this.attackTarget');
-    console.log(this.combat.container.parent);
     if (
       this.combat.container.parent &&
       this.combat.container.parent.children.includes(this.container)
@@ -357,7 +355,6 @@ class Bullet extends EventTarget {
 
   attackBomb(name: BulletType, point: Point) {
     const { bombEffectSpine, bombEffectSprite } = this.effects[name];
-    console.log(bombEffectSpine, '====bombEffectSpine');
     if (bombEffectSpine) {
       this.effects[name].completeBomb = false;
       bombEffectSpine.position.set(point.x, point.y);
@@ -370,7 +367,6 @@ class Bullet extends EventTarget {
   }
 
   onBombEnd(name: BulletType) {
-    console.log('onBombEnd');
     this.effects[name].completeBomb = true;
     // this.dispatchEvent(new Event('attackEnd'));
     this.onEnd();
@@ -406,11 +402,6 @@ class Bullet extends EventTarget {
       parabola.position().move();
     }
   }
-
-  // 肉搏攻击 (感觉肉搏就是直线子弹)
-  // fightMove() {
-  //   console.log(this);
-  // }
 
   // 空间魔法攻击 (就是没有弹道能直接对敌方释放技能)
   async spaceAttack(name: BulletType, attackTarget: Combat) {
@@ -467,7 +458,6 @@ class Bullet extends EventTarget {
     const text = new Text('', { fill: 0xffffff, fontSize: 22 });
     text.text = getEffectText(effect);
     this.container.addChild(text);
-    console.log(this.combat.axisPoint, attackTarget.axisPoint, effect, '==');
     if (this.combat.axisPoint && attackTarget.axisPoint) {
       text.position.set(this.combat.axisPoint.x, this.combat.axisPoint.y);
       const linearMove = new LinearMove(
@@ -476,7 +466,6 @@ class Bullet extends EventTarget {
         attackTarget.axisPoint,
       );
       linearMove.addEventListener('end', () => {
-        console.log('---12121');
         this.onMoveEnd(name, new Point(text.position.x, text.position.y));
       });
       this.onMoveStart(name, new Point(text.position.x, text.position.y));

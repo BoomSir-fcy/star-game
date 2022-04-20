@@ -177,7 +177,6 @@ export const getEffectText = (effect?: EffectType) => {
   if (effect === effectType.ADD_FIRING) return '灼烧';
   if (effect === effectType.ADD_BOOM) return '炸弹';
   if (effect === effectType.REMOVE_FIRING) return '灭火';
-  console.log(effect, '=');
   return '未知';
 };
 

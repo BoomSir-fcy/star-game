@@ -313,9 +313,7 @@ class Combat extends EventTarget {
     const point = this.axisPoint?.clone();
     if (target.axisPoint) {
       this.moveTo(target.axisPoint);
-      console.log('7777777777777777');
       this.once('moveEnd', () => {
-        console.log('moas8777777777777777');
         if (point) {
           this.moveTo(point);
         }
@@ -340,8 +338,6 @@ class Combat extends EventTarget {
 
     const bullet = new Bullet(this);
 
-    console.log(1);
-
     bullet.addEventListener('moveEnd', () => {
       this.setActiveHp(target.activePh - (attackInfo?.receive_sub_hp || 0));
 
@@ -353,7 +349,6 @@ class Combat extends EventTarget {
       }
     });
     bullet.addEventListener('attackEnd', () => {
-      console.log('==============');
       this.onAttackEnd();
     });
 

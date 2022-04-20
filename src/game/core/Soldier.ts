@@ -144,7 +144,6 @@ class Soldier extends Combat {
       this.testButton.interactive = true;
       this.testButton.buttonMode = true;
       this.testButton.on('click', () => {
-        console.log(121212);
         this.isEnemy = !this.isEnemy;
         this.drawHp();
         this.dispatchEvent(new Event('enemyChange'));

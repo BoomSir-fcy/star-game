@@ -79,7 +79,6 @@ class LinearMove extends EventTarget {
   }
 
   onMoveEnd() {
-    console.log('onMoveEnd');
     this.moving = false;
     this.dispatchEvent(new Event('end'));
   }
