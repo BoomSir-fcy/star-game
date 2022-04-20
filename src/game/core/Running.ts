@@ -58,6 +58,17 @@ export interface RoundsProps {
   };
 }
 
+/* 
+  1.应该在执行移动/攻击前绑定事件 不然可能触发不到事件
+  2.绑定事件的行为同一个事件可能有不同的处理方法
+  3.几个移动/攻击可能同时发生
+  
+  处理方法
+  1.分别用需要同时发生和不同时发生的方法做处理
+  2.主线程的和次级线程的分开处理
+
+*/
+
 class Running extends EventTarget {
   constructor(game: Game, rounds: RoundsProps) {
     super();
@@ -154,53 +165,41 @@ class Running extends EventTarget {
     if (this.paused) return;
     this.playing = true;
     const track = this.trackDetails[this.trackIndex];
-    this.runTrack(track, true);
+    this.runTrack(track, () => {
+      this.runningHandle();
+    });
   }
 
-  runTrack(track: TrackDetail, running?: boolean) {
-    // debugger;
+  runTrack(track: TrackDetail, callback: (soldier?: Soldier) => void) {
     if (track?.type === effectType.MOVE) {
       this.infoText.text = `回合: ${track.id}`;
-      const t = this.getMoveT();
-      const res = this.moveHandle(track, t);
-      if (running) {
-        res?.once('moveEnd', () => {
-          this.runningHandle();
-        });
-        if (!res) {
-          console.warn(`移动失效:${track.id}`);
-          this.runningHandle();
-        }
-      }
-      return res;
+      return this.mainMove(track, s => {
+        callback(s);
+      });
     }
     if (track?.type === effectType.BEAT_MOVE) {
       this.infoText.text = `回合: ${track.id}`;
-      const t = this.getMoveT();
-      const res = this.beatMoveHandle(track, t);
-      if (running) {
-        res?.once('moveEnd', () => {
-          this.runningHandle();
-        });
-        if (!res) {
-          console.warn(`移动失效:${track.id}`);
-          this.runningHandle();
-        }
-      }
-      return res;
+      return this.beatMoveHandle(track, s => {
+        callback(s);
+      });
     }
     if (track?.type === effectType.REMOVE) {
-      const res = this.removeHandle(track);
-      if (running) {
-        this.runningHandle();
-      }
-      return res;
+      this.infoText.text = `回合: ${track.id}`;
+      return this.removeHandle(track, s => {
+        callback(s);
+      });
     }
     if (track?.type === effectType.BEAT) {
-      return this.beatHandle(track, track.type);
+      this.infoText.text = `回合: ${track.id}`;
+      return this.beatHandle(track, s => {
+        callback(s);
+      });
     }
     if (track?.type === effectType.BEAT_COLLISION) {
-      return this.beatCollision(track);
+      this.infoText.text = `回合: ${track.id}`;
+      return this.beatCollision(track, s => {
+        callback(s);
+      });
     }
     if (track?.type) {
       const round = `回合: ${track.id} \n`;
@@ -209,21 +208,18 @@ class Running extends EventTarget {
       const receive = `被攻击者: (${track.targetAxisPoint.x}, ${track.targetAxisPoint.y}) \n`;
       const newHp = `被攻击者血量: (${(track.attackInfo as any)?.now_hp}) \n`;
       this.infoText.text = `${round}${effect}${sender}${receive}${newHp}`;
-      const t = this.getAttackT();
-      const res = this.attackHandleRunning(track, track.type, t);
-      if (running) {
-        if (!res) {
-          console.warn(`攻击失效:${track.id}`);
-          this.runningHandle();
-        }
-      }
-      return res;
+
+      return this.attackHandleRunning(track, s => {
+        callback(s);
+      });
     }
+    callback();
+
     return null;
   }
 
   runningHandle() {
-    this.playing = true;
+    this.playing = false;
     if (this.paused) return;
     if (this.playCount === 0) return;
     if (this.trackIndex < this.trackDetails.length) {
@@ -231,6 +227,7 @@ class Running extends EventTarget {
       this.playCount -= 1;
       this.runHandle();
     } else {
+      console.log('结束战斗');
       this.playing = false;
       this.dispatchEvent(new CustomEvent('runEnd'));
       this.playEnd = true;
@@ -245,14 +242,8 @@ class Running extends EventTarget {
       this.playEnd = false;
     }
     this.paused = false;
-    // if (this.trackIndex)
     this.runningHandle();
   }
-
-  // getActiveTrackList(index: number, track: Track) {
-  //   if (track) {
-  //   }
-  // }
 
   getAllTracks(tracks?: Track[]) {
     let res: TrackDetail[] = [];
@@ -268,18 +259,8 @@ class Running extends EventTarget {
 
   static getMoveTracks(moves: RoundDescMove, id: string): TrackDetail[] {
     const tracks: TrackDetail[] = moves.dest.map((item, index) => {
-      // const { x: x0, y: y0 } = moves.starting_point;
-      // const { x: x1, y: y1 } = item;
       const point = moves.starting_point || moves.from;
       const { x, y } = index === 0 && point ? point : moves.dest[index - 1];
-      // this.trackDetails.push({
-      //   type: handleType.MOVE,
-      //   currentAxisPoint: { x, y },
-      //   targetAxisPoint: {
-      //     x: item.x,
-      //     y: item.y,
-      //   },
-      // });
       return {
         id: `${id}-${index}`,
         type: effectType.MOVE,
@@ -326,70 +307,78 @@ class Running extends EventTarget {
     return this.attackTime / this.rate;
   }
 
-  moveHandle(track: TrackDetail, t: number): Soldier | null {
-    const axis = this.game.getAxis(
-      track.currentAxisPoint.x,
-      track.currentAxisPoint.y,
-    );
+  moveHandle(track: TrackDetail): Soldier | null {
+    const t = this.getMoveT();
+
     const axisPoint = this.game.getAxis(
       track.targetAxisPoint.x,
       track.targetAxisPoint.y,
     );
-    if (!axis || !axisPoint) {
+    const soldier = this.game.findSoldierById(track.sender_id);
+    if (!soldier || !axisPoint) {
       console.warn(`warn: ${track.id}`);
       return null;
     }
-    const soldier = this.game.findSoldierByAxis(axis);
-    if (!soldier) {
-      console.warn(`warn: ${track.id}`);
-      return null;
-    }
-    soldier.run();
     soldier.moveTo(axisPoint, t);
 
     return soldier;
   }
 
-  beatMoveHandle(track: TrackDetail, t: number): Soldier | null {
-    const axis = this.game.getAxis(
-      track.currentAxisPoint.x,
-      track.currentAxisPoint.y,
-    );
+  mainMove(track: TrackDetail, callback: (soldier?: Soldier) => void) {
+    const t = this.getMoveT();
+
     const axisPoint = this.game.getAxis(
       track.targetAxisPoint.x,
       track.targetAxisPoint.y,
     );
-    if (!axis || !axisPoint) {
+    const soldier = this.game.findSoldierById(track.sender_id);
+    if (!soldier || !axisPoint) {
       console.warn(`warn: ${track.id}`);
+      callback();
       return null;
     }
-    const soldier = this.game.findSoldierByAxis(axis);
-    if (!soldier) {
-      console.warn(`warn: ${track.id}`);
-      return null;
-    }
-    soldier.run();
+    soldier.once('moveEnd', () => {
+      callback(soldier);
+    });
     soldier.moveTo(axisPoint, t);
 
     return soldier;
   }
 
-  removeHandle(track: TrackDetail) {
-    const axis = this.game.getAxis(
-      track.currentAxisPoint.x,
-      track.currentAxisPoint.y,
+  beatMoveHandle(
+    track: TrackDetail,
+    callback: (soldier?: Soldier) => void,
+  ): Soldier | null {
+    const t = this.getMoveT();
+
+    const axisPoint = this.game.getAxis(
+      track.targetAxisPoint.x,
+      track.targetAxisPoint.y,
     );
-    if (!axis) {
+    const soldier = this.game.findSoldierById(track.sender_id);
+    if (!soldier || !axisPoint) {
       console.warn(`warn: ${track.id}`);
+      callback();
       return null;
     }
-    const soldier = this.game.findSoldierByAxis(axis);
+    soldier.once('moveEnd', () => {
+      callback(soldier);
+    });
+    soldier.moveTo(axisPoint, t);
+
+    return soldier;
+  }
+
+  removeHandle(track: TrackDetail, callback: (soldier?: Soldier) => void) {
+    const soldier = this.game.findSoldierById(track.receive_id);
     if (!soldier) {
       console.warn(`warn: ${track.id}`);
+      callback();
       return null;
     }
     soldier.showEffectText('阵亡');
     soldier.dispatchEvent(new Event('death'));
+    callback(soldier);
     return soldier;
   }
 
@@ -505,8 +494,10 @@ class Running extends EventTarget {
     };
   }
 
-  attackHandleRunning(attacks: TrackDetail, effect: EffectType, t?: number) {
-    const sendSoldier = this.attackHandle(attacks, effect, t);
+  attackHandleRunning(
+    attacks: TrackDetail,
+    callback: (soldier?: Soldier) => void,
+  ) {
     const endHandle = () => {
       if (attacks.around) {
         attacks.around.forEach(item => {
@@ -520,81 +511,89 @@ class Running extends EventTarget {
               soldier.setActiveHp(
                 soldier.activePh - (item.receive_sub_hp || 0),
               );
+              soldier.addEffect(attacks.type);
             }
           }
         });
       }
-      this.runningHandle();
     };
-    if (sendSoldier?.attacking) {
-      sendSoldier?.once('attackEnd', () => {
+
+    const sendSoldier = this.attackHandle(attacks, {
+      onBulletMoveEnd: () => {
         endHandle();
-      });
-    } else {
-      endHandle();
-    }
+      },
+      onAttackEnd: () => {
+        callback();
+      },
+    });
+
     return sendSoldier;
   }
 
   attackHandle(
     attacks: TrackDetail,
-    effect: EffectType,
-    t?: number,
+    event: {
+      onBulletMoveEnd?: (soldier?: Soldier) => void;
+      onAttackEnd: (soldier?: Soldier) => void;
+    },
   ): null | Soldier {
     const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
     if (!sendSoldier || !receiveSoldier) {
       console.warn(`warn: ${attacks.id}`);
+      event.onAttackEnd();
       return null;
     }
-    sendSoldier.renderBullet();
-    sendSoldier.run();
-    sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo, t);
-
-    // receiveSoldier.changeState(stateType.DISABLE, true);
+    const t = this.getAttackT();
+    sendSoldier.once('bulletMoveEnd', () => {
+      if (event?.onBulletMoveEnd) {
+        event?.onBulletMoveEnd();
+      }
+    });
+    sendSoldier.once('attackEnd', () => {
+      event.onAttackEnd();
+    });
+    sendSoldier.attack(receiveSoldier, attacks.type, attacks?.attackInfo, t);
 
     return sendSoldier;
   }
 
-  beatHandle(attacks: TrackDetail, effect: EffectType): Soldier | null {
+  beatHandle(
+    attacks: TrackDetail,
+    callback: (soldier?: Soldier) => void,
+  ): Soldier | null {
     const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
     if (!sendSoldier || !receiveSoldier) {
       console.warn(`warn: ${attacks.id}`);
       return null;
     }
-    sendSoldier.renderBullet();
-    sendSoldier.run();
-    sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo);
-    // receiveSoldier.changeState(stateType.DISABLE, true);
+    sendSoldier.attack(receiveSoldier, attacks.type, attacks?.attackInfo);
     sendSoldier.once('attackEnd', () => {
       if (attacks.detail) {
         attacks.detail.forEach((item, index) => {
-          const sol = this.runTrack(item);
-          if (index + 1 === attacks.detail?.length) {
-            sol?.once('attackEnd', () => {
-              this.runningHandle();
-            });
-          }
+          this.runTrack(item, () => {
+            if (index + 1 === attacks.detail?.length) {
+              callback();
+            }
+          });
         });
       } else {
-        this.runningHandle();
+        callback();
       }
     });
     return sendSoldier;
   }
 
-  beatCollision(attacks: TrackDetail) {
+  beatCollision(attacks: TrackDetail, callback: (soldier?: Soldier) => void) {
     const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
     if (!sendSoldier || !receiveSoldier) {
       console.warn(`warn: ${attacks.id}`);
-      this.runningHandle();
-
+      callback();
       return null;
     }
-    sendSoldier.run();
-    sendSoldier.beatCollision(receiveSoldier);
     sendSoldier.once('collisionEnd', () => {
-      this.runningHandle();
+      callback();
     });
+    sendSoldier.beatCollision(receiveSoldier);
     return sendSoldier;
   }
 

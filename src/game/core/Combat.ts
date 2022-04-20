@@ -200,8 +200,9 @@ class Combat extends EventTarget {
 
   drawAttackEffect() {
     this.attackEffect.anchor.set(0.5);
-    this.attackEffect.position.set(0, 0);
-    // this.attackEffect.visible = false;
+    this.attackEffect.position.set(0, -20);
+    this.attackEffect.visible = false;
+    this.attackEffect.zIndex = 100;
     this.container.addChild(this.attackEffect);
   }
 
@@ -342,20 +343,37 @@ class Combat extends EventTarget {
     const bullet = new Bullet(this);
 
     bullet.addEventListener('moveEnd', () => {
-      this.setActiveHp(target.activePh - (attackInfo?.receive_sub_hp || 0));
+      this.onBulletMoveEnd();
+      console.log('moveEnd', attackInfo);
+      // this.setActiveHp(target.activePh - (attackInfo?.receive_sub_hp || 0));
+      // if (attackInfo?.around) {
+      //   attackInfo?.around.forEach(item => {
 
-      if (config.showEffect.includes(effect)) {
-        target.showEffectText(getEffectText(effect));
-      }
-      if (config.hideEffect.includes(effect)) {
-        target.hideEffectText();
-      }
+      //   })
+      // }
+
+      // if (config.showEffect.includes(effect)) {
+      //   target.showEffectText(getEffectText(effect));
+      // }
+      // if (config.hideEffect.includes(effect)) {
+      //   target.hideEffectText();
+      // }
     });
+
     bullet.addEventListener('attackEnd', () => {
       this.onAttackEnd();
     });
 
     bullet.attack(bulletType.BULLET, target, effect);
+  }
+
+  addEffect(effect: EffectType) {
+    if (config.showEffect.includes(effect)) {
+      this.showEffectText(getEffectText(effect));
+    }
+    if (config.hideEffect.includes(effect)) {
+      this.hideEffectText();
+    }
   }
 
   attackAk47(target: Combat) {
@@ -388,6 +406,10 @@ class Combat extends EventTarget {
 
     //   // this.bullet.test();
     // }
+  }
+
+  onBulletMoveEnd() {
+    this.dispatchEvent(new Event('bulletMoveEnd'));
   }
 
   onAttackEnd() {

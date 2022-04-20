@@ -374,6 +374,7 @@ class Bullet extends EventTarget {
 
   spineAnimation(name: BulletType, spine: Spine) {
     if (spine && !this.effects[name].completeBomb) {
+      spine.update(0.016666666666);
       requestAnimationFrame(() => this.spineAnimation(name, spine));
     }
   }
