@@ -144,12 +144,13 @@ export const DragCompoents: React.FC<{
   const { data } = state;
   const buildings = useStore(p => p.buildling.buildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
+
   const { width, height } = React.useMemo(() => {
     return {
       width: gridSize / rows,
       height: gridSize / cols,
     };
-  }, [rows, cols]);
+  }, [rows, cols, gridSize]);
 
   // 计算格子
   React.useEffect(() => {
