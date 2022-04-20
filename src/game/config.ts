@@ -1,4 +1,4 @@
-import { BoardPositionSelf, effectType } from './types';
+import { BoardPositionSelf, descType } from './types';
 
 const config = {
   WIDTH: 900,
@@ -31,17 +31,17 @@ const config = {
   BLOOD_HEIGHT: 10,
 
   showEffect: [
-    effectType.ADD_BOOM,
-    effectType.ADD_FIRING,
-    effectType.ICE_START,
-    effectType.STOP_MOVE,
-    effectType.FIRING,
+    descType.ADD_BOOM,
+    descType.ADD_FIRING,
+    descType.ICE_START,
+    descType.STOP_MOVE,
+    descType.FIRING,
   ],
   hideEffect: [
-    effectType.BOOM,
-    effectType.ICE_END,
-    effectType.STOP_MOVE,
-    effectType.REMOVE_FIRING,
+    descType.BOOM,
+    descType.ICE_END,
+    descType.STOP_MOVE,
+    descType.REMOVE_FIRING,
   ],
 };
 

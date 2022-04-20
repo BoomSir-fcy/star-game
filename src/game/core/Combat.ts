@@ -1,8 +1,8 @@
 import {
   bulletType,
   BulletType,
-  effectType,
-  EffectType,
+  descType,
+  DescType,
   Orientation,
   RoundDesc,
   RoundDescAttack,
@@ -316,13 +316,13 @@ class Combat extends EventTarget {
   beatCollision(target: Combat, attackInfo?: RoundDesc) {
     const point = this.axisPoint?.clone();
     if (target.axisPoint) {
-      this.moveTo(target.axisPoint);
       this.once('moveEnd', () => {
         if (point) {
           this.moveTo(point);
         }
         this.dispatchEvent(new Event('collisionEnd'));
       });
+      this.moveTo(target.axisPoint);
       return;
     }
     this.dispatchEvent(new Event('collisionEnd'));
@@ -330,7 +330,7 @@ class Combat extends EventTarget {
 
   attack(
     target: Combat,
-    effect: EffectType,
+    effect: DescType,
     attackInfo?: RoundDesc,
     time?: number,
   ) {
@@ -367,7 +367,7 @@ class Combat extends EventTarget {
     bullet.attack(bulletType.BULLET, target, effect);
   }
 
-  addEffect(effect: EffectType) {
+  addEffect(effect: DescType) {
     if (config.showEffect.includes(effect)) {
       this.showEffectText(getEffectText(effect));
     }
@@ -383,7 +383,7 @@ class Combat extends EventTarget {
     bullet.attack(bulletType.BULLET, target);
   }
 
-  attackParabola(target: Combat, effect: EffectType) {
+  attackParabola(target: Combat, effect: DescType) {
     this.renderBullet();
     // if (this.bullet) {
     //   this.bullet.parabolaBullet(target, effect);

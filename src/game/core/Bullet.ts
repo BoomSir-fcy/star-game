@@ -11,9 +11,9 @@ import effectConfig from 'game/effectConfig';
 import {
   bulletType,
   BulletType,
-  EffectItemInfoOfConfig,
-  effectType,
-  EffectType,
+  BulletItemInfoOfConfig,
+  descType,
+  DescType,
   Skill,
 } from 'game/types';
 import type Combat from './Combat';
@@ -31,7 +31,7 @@ import LinearMove from './LinearMove';
  * 子弹类型 [冰块, 岩石, 导弹, 火球, 机械子弹, ]
  */
 
-interface EffectInfo extends EffectItemInfoOfConfig {
+interface EffectInfo extends BulletItemInfoOfConfig {
   loaded: boolean;
   await: boolean;
   res: null | Dict<LoaderResource>; // 爆炸资源地址
@@ -54,7 +54,7 @@ const initEffectInfo = ({
   bombSpineSrc,
   moveSpineSrc,
   moveSpriteSrc,
-}: EffectItemInfoOfConfig) => {
+}: BulletItemInfoOfConfig) => {
   return {
     loaded: false,
     await: false,
@@ -80,7 +80,7 @@ class Bullet extends EventTarget {
     this.text.anchor.set(0.5);
     this.container.addChild(this.text);
     const temp: Effects = {};
-    effectConfig.effects.forEach(item => {
+    effectConfig.bullet.forEach(item => {
       temp[item.name] = initEffectInfo(item);
     });
     this.effects = temp;
@@ -114,13 +114,13 @@ class Bullet extends EventTarget {
 
   attackTarget?: Combat;
 
-  effect?: EffectType;
+  effect?: DescType;
 
   effects: Effects;
 
   loader = Loader.shared;
 
-  bulletMove(attackTarget: Combat, effect: EffectType, moveTime?: number) {
+  bulletMove(attackTarget: Combat, effect: DescType, moveTime?: number) {
     this.attackTarget = attackTarget;
     this.effect = effect;
     if (this.attackTarget) {
@@ -169,12 +169,7 @@ class Bullet extends EventTarget {
   }
 
   onEnd() {
-    if (
-      this.combat.container.parent &&
-      this.combat.container.parent.children.includes(this.container)
-    ) {
-      this.combat.container.parent.removeChild(this.container);
-    }
+    this.container.parent.removeChild(this.container);
     // if (this.attackTarget) {
     //   this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
     //   if ((this.combat.attackInfo as any)?.now_hp) {
@@ -455,7 +450,7 @@ class Bullet extends EventTarget {
     this.linearAttack(bulletType.BULLET, attackTarget);
   }
 
-  testAttack(name: BulletType, attackTarget: Combat, effect: EffectType) {
+  testAttack(name: BulletType, attackTarget: Combat, effect: DescType) {
     const text = new Text('', { fill: 0xffffff, fontSize: 22 });
     text.text = getEffectText(effect);
     this.container.addChild(text);
@@ -474,7 +469,7 @@ class Bullet extends EventTarget {
     }
   }
 
-  attack(name: BulletType, attackTarget: Combat, effect?: EffectType) {
+  attack(name: BulletType, attackTarget: Combat, effect?: DescType) {
     const parabolas = [
       bulletType.ICE,
       bulletType.ROCK,
