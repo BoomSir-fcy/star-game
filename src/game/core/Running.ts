@@ -515,8 +515,6 @@ class Running extends EventTarget {
     const endHandle = () => {
       if (attacks.around) {
         attacks.around.forEach(item => {
-          // eslint-disable-next-line
-          debugger;
           const receiveAxis = this.game.getAxis(
             item.receive_point.x,
             item.receive_point.y,

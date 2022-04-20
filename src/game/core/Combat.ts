@@ -343,8 +343,6 @@ class Combat extends EventTarget {
     console.log(1);
 
     bullet.addEventListener('moveEnd', () => {
-      console.log(attackInfo);
-      debugger;
       this.setActiveHp(target.activePh - (attackInfo?.receive_sub_hp || 0));
 
       if (config.showEffect.includes(effect)) {
