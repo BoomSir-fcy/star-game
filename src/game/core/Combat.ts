@@ -370,7 +370,7 @@ class Combat extends EventTarget {
     const bullet = new Bullet(this);
 
     bullet.addEventListener('moveEnd', () => {
-      this.changeEffect(effect, target);
+      // this.changeEffect(effect, target);
       this.onBulletMoveEnd();
     });
 
@@ -429,7 +429,7 @@ class Combat extends EventTarget {
     this.container.parent.addChild(container);
     bullet.attack(effect, target);
     bullet.addEventListener('moveEnd', () => {
-      this.effectBuff.addEffect(EffectType.SHIELD);
+      // this.effectBuff.addEffect(EffectType.SHIELD);
     });
     bullet.addEventListener('attackEnd', () => {
       this.onAttackEnd();

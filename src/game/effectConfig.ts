@@ -22,7 +22,7 @@ const effectConfig: EffectConfig = {
       name: bulletType.BULLET,
       bombSpineSrc: '',
       bombSpriteSrc: '',
-      moveSpineSrc: '/assets/bullet/bullet/zidan.json',
+      moveSpineSrc: '/assets/bullet/ice/bindog.json',
       moveSpriteSrc: '',
       label: '子弹',
     },

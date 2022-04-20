@@ -109,7 +109,7 @@ class Running extends EventTarget {
 
   paused = false;
 
-  playCount = -1;
+  playCount = 1;
 
   playing = false;
 
@@ -448,8 +448,9 @@ class Running extends EventTarget {
           x: attacks.sender_point?.x,
           y: attacks.sender_point?.y,
         },
+        detail,
       },
-      ...detail,
+      // ...detail,
     ];
   }
 
