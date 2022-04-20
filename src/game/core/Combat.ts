@@ -66,7 +66,7 @@ class Combat extends EventTarget {
 
   hpGraphics = new Graphics();
 
-  hpText = new Text('', { fill: 0xffffff, fontSize: 32 });
+  hpText = new Text('', { fill: 0xff0000, fontSize: 32 });
 
   isEnemy = false;
 
@@ -115,10 +115,10 @@ class Combat extends EventTarget {
   renderPh() {
     this.container.addChild(this.hpGraphics);
     this.hpText.anchor.set(0.5);
-    this.hpText.position.set(0, 20);
     this.hpText.zIndex = 2;
     this.hpGraphics.zIndex = 2;
     this.hpGraphics.position.set(0, -80);
+    this.hpText.position.set(0, -110);
     this.container.addChild(this.hpText);
     this.drawHp();
   }
@@ -192,7 +192,10 @@ class Combat extends EventTarget {
     //     lineStartX,
     //   lineY,
     // );
-    // this.hpText.text = `${this.activePh}/${now}`;
+    this.hpText.style.fill = this.isEnemy
+      ? config.BLOOD_COLOR_ENEMY
+      : config.BLOOD_COLOR;
+    this.hpText.text = `${this.activePh}`;
   }
 
   drawAttackEffect() {

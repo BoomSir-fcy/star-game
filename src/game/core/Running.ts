@@ -158,6 +158,7 @@ class Running extends EventTarget {
   }
 
   runTrack(track: TrackDetail, running?: boolean) {
+    debugger;
     if (track?.type === effectType.MOVE) {
       this.infoText.text = `回合: ${track.id}`;
       const t = this.getMoveT();
