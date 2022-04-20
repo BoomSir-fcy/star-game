@@ -19,14 +19,15 @@ import {
 interface GameOptionsProps {
   height?: number;
   width?: number;
+  test?: boolean;
 }
 class Game extends EventTarget {
   constructor(options?: GameOptionsProps) {
     super();
-    const { width, height } = options || {};
+    const { width, height, test } = options || {};
     const _width = width || config.WIDTH;
     const _height = height || config.HEIGHT;
-    this.boards = new Boards({ width, height });
+    this.boards = new Boards({ width, height, test });
     this.app = new Application({
       width: _width,
       height: _height,
@@ -128,9 +129,11 @@ class Game extends EventTarget {
         }
       })
       .on('pointerup', event => {
-        const res = this.onDragEndSoldier(event, soldier);
-        if (res) {
-          this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
+        if (soldier.moved) {
+          const res = this.onDragEndSoldier(event, soldier);
+          if (res) {
+            this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
+          }
         }
         this.activeSoliderFlag = true;
         this.activeSolider = soldier;
@@ -142,6 +145,10 @@ class Game extends EventTarget {
       });
     soldier.addEventListener('death', () => {
       this.removeSoldier(soldier);
+    });
+    soldier.addEventListener('enemyChange', () => {
+      // this.removeSoldier(soldier);
+      this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
     });
   }
 
@@ -184,6 +191,7 @@ class Game extends EventTarget {
       this.boards.container.removeChild(item.container);
     });
     this.soldiers = [];
+    this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
   }
 
   setEnableDrag(state: boolean) {
@@ -282,6 +290,10 @@ class Game extends EventTarget {
     return this.soldiers.find(soldier => soldier.axisPoint === axis);
   }
 
+  findSoldierById(sid: string) {
+    return this.soldiers.find(soldier => soldier.sid === sid);
+  }
+
   addDragon() {
     this.app.stop();
     const loader = Loader.shared;
@@ -327,15 +339,16 @@ class Game extends EventTarget {
 
   onAssetsLoadedSpine(res: any) {
     const dragon = new Spine(res.yans.spineData);
-    // dragon.skeleton.setToSetupPose();
+    // dragon.state
     dragon.update(0);
     dragon.autoUpdate = false;
 
     dragon.position.set(300, 300);
 
     this.app.stage.addChild(dragon);
+    dragon.state.setAnimation(0, 'play', true);
+
     this.app.start();
-    dragon.state.setAnimation(8, 'play', true);
 
     this.app.ticker.add(() => {
       // update the spine animation, only needed if dragon.autoupdate is set to false

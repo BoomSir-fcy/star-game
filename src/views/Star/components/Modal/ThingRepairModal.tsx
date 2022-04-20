@@ -26,20 +26,19 @@ export const ThingRepairModal: React.FC<{
     quick_repair_cost_dsg: '',
   });
 
-  const init = async () => {
-    try {
-      const res = await getCose({ planet_id, building_id });
-      if (Api.isSuccess(res)) {
-        setStae(res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   React.useEffect(() => {
+    const init = async () => {
+      try {
+        const res = await getCose({ planet_id, building_id });
+        if (Api.isSuccess(res)) {
+          setStae(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
     init();
-  }, []);
+  }, [building_id, planet_id, getCose]);
 
   return (
     <ModalWrapper

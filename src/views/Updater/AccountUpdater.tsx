@@ -26,7 +26,7 @@ export default function AccountUpdater() {
     if (account) {
       dispatch(fetchUserInfoByAccountAsync(account));
     }
-  }, [account]);
+  }, [account, dispatch]);
 
   useEffect(() => {
     // 如果钱包地址不一样退出

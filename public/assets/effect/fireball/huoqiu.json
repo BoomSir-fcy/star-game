@@ -1,1 +1,85 @@
-{"skeleton":{"hash":" ","name":"huoqiu"},"bones":[{"name":"root"},{"name":"bone","parent":"root"},{"y":0.4734,"scaleX":1.7383,"scaleY":1.7383,"name":"bone1","parent":"root"}],"slots":[{"name":"烟雾1","bone":"bone"},{"name":"火球炸1","bone":"bone1"}],"skins":{"default":{"火球炸1":{"火球炸1":{"name":"火球炸1","width":65,"height":56,"y":4.66},"火球炸3":{"name":"火球炸3","width":114,"height":85,"y":4.66},"火球炸5":{"name":"火球炸5","width":95,"height":92,"y":4.66},"火球炸7":{"name":"火球炸7","width":137,"height":112,"y":4.66},"火球炸8":{"name":"火球炸8","width":143,"height":130,"y":4.66},"火球炸6":{"name":"火球炸6","width":105,"height":89,"y":4.66},"火球炸4":{"name":"火球炸4","width":133,"height":92,"y":4.66},"火球炸2":{"name":"火球炸2","width":75,"height":88,"y":4.66}},"烟雾1":{"烟雾1":{"name":"烟雾1","width":231,"height":171},"烟雾3":{"name":"烟雾3","width":303,"height":215},"烟雾5":{"name":"烟雾5","width":357,"height":279},"烟雾7":{"name":"烟雾7","width":371,"height":301},"烟雾8":{"name":"烟雾8","width":369,"height":297},"烟雾6":{"name":"烟雾6","width":391,"height":297},"烟雾4":{"name":"烟雾4","width":325,"height":249},"烟雾2":{"name":"烟雾2","width":271,"height":207}}}},"animations":{"play":{"slots":{"烟雾1":{"attachment":[{"time":0,"name":""},{"time":0.0333,"name":"烟雾1"},{"time":0.1666,"name":"烟雾2"},{"time":0.2999,"name":"烟雾3"},{"time":0.3999,"name":"烟雾4"},{"time":0.5332,"name":"烟雾5"},{"time":0.6665,"name":"烟雾6"},{"time":0.7998,"name":"烟雾7"},{"time":0.8998,"name":"烟雾8"},{"time":1.0331,"name":""}]},"火球炸1":{"attachment":[{"time":0,"name":"火球炸1"},{"time":0.1333,"name":"火球炸2"},{"time":0.2333,"name":"火球炸3"},{"time":0.3333,"name":"火球炸4"},{"time":0.4666,"name":"火球炸5"},{"time":0.5666,"name":"火球炸6"},{"time":0.6666,"name":"火球炸7"},{"time":0.7666,"name":"火球炸8"},{"time":0.8666,"name":""}]}}}}}
+{
+  "skeleton": { "hash": " ", "spine": "3.0.0", "name": "huoqiu" },
+  "bones": [
+    { "name": "root" },
+    { "name": "bone", "parent": "root" },
+    {
+      "y": 0.4734,
+      "scaleX": 1.7383,
+      "scaleY": 1.7383,
+      "name": "bone1",
+      "parent": "root"
+    }
+  ],
+  "slots": [
+    { "name": "烟雾1", "bone": "bone" },
+    { "name": "火球炸1", "bone": "bone1" }
+  ],
+  "skins": {
+    "default": {
+      "火球炸1": {
+        "火球炸1": { "name": "火球炸1", "width": 65, "height": 56, "y": 4.66 },
+        "火球炸3": { "name": "火球炸3", "width": 114, "height": 85, "y": 4.66 },
+        "火球炸5": { "name": "火球炸5", "width": 95, "height": 92, "y": 4.66 },
+        "火球炸7": {
+          "name": "火球炸7",
+          "width": 137,
+          "height": 112,
+          "y": 4.66
+        },
+        "火球炸8": {
+          "name": "火球炸8",
+          "width": 143,
+          "height": 130,
+          "y": 4.66
+        },
+        "火球炸6": { "name": "火球炸6", "width": 105, "height": 89, "y": 4.66 },
+        "火球炸4": { "name": "火球炸4", "width": 133, "height": 92, "y": 4.66 },
+        "火球炸2": { "name": "火球炸2", "width": 75, "height": 88, "y": 4.66 }
+      },
+      "烟雾1": {
+        "烟雾1": { "name": "烟雾1", "width": 231, "height": 171 },
+        "烟雾3": { "name": "烟雾3", "width": 303, "height": 215 },
+        "烟雾5": { "name": "烟雾5", "width": 357, "height": 279 },
+        "烟雾7": { "name": "烟雾7", "width": 371, "height": 301 },
+        "烟雾8": { "name": "烟雾8", "width": 369, "height": 297 },
+        "烟雾6": { "name": "烟雾6", "width": 391, "height": 297 },
+        "烟雾4": { "name": "烟雾4", "width": 325, "height": 249 },
+        "烟雾2": { "name": "烟雾2", "width": 271, "height": 207 }
+      }
+    }
+  },
+  "animations": {
+    "play": {
+      "slots": {
+        "烟雾1": {
+          "attachment": [
+            { "time": 0, "name": "" },
+            { "time": 0.0333, "name": "烟雾1" },
+            { "time": 0.1666, "name": "烟雾2" },
+            { "time": 0.2999, "name": "烟雾3" },
+            { "time": 0.3999, "name": "烟雾4" },
+            { "time": 0.5332, "name": "烟雾5" },
+            { "time": 0.6665, "name": "烟雾6" },
+            { "time": 0.7998, "name": "烟雾7" },
+            { "time": 0.8998, "name": "烟雾8" },
+            { "time": 1.0331, "name": "" }
+          ]
+        },
+        "火球炸1": {
+          "attachment": [
+            { "time": 0, "name": "火球炸1" },
+            { "time": 0.1333, "name": "火球炸2" },
+            { "time": 0.2333, "name": "火球炸3" },
+            { "time": 0.3333, "name": "火球炸4" },
+            { "time": 0.4666, "name": "火球炸5" },
+            { "time": 0.5666, "name": "火球炸6" },
+            { "time": 0.6666, "name": "火球炸7" },
+            { "time": 0.7666, "name": "火球炸8" },
+            { "time": 0.8666, "name": "" }
+          ]
+        }
+      }
+    }
+  }
+}

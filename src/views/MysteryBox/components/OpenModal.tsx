@@ -24,7 +24,7 @@ const OpenModal: React.FC<{
     setHandleLoading(true);
     await onOpen(value);
     setHandleLoading(false);
-  }, [onOpen, setHandleLoading, value]);
+  }, [onOpen, setHandleLoading, value, t, toastError]);
 
   return (
     <ModalWrapper

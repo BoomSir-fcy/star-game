@@ -12,7 +12,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
       const newSoldiers = soldiers?.map((soldier: Soldier, index: number) => {
         return {
           id: `${soldier.axisPoint?.chequer.axisX}${soldier.axisPoint?.chequer.axisY}`,
-          src: soldier.options?.textureRes,
+          src: soldier.textureRes,
           soldier,
         };
       });
@@ -44,7 +44,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
       setSortSoldiers(game.soldiers);
       console.log(res);
     },
-    [planetId, setSortSoldiers],
+    [planetId, game.soldiers, setSortSoldiers],
   );
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
     return () => {
       game.removeEventListener('updateSoldierPosition', handleUpdate);
     };
-  }, [handleUpdate]);
+  }, [handleUpdate, game]);
 
   return {
     gameSoldiers,

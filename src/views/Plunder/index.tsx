@@ -36,7 +36,7 @@ const Plunder = () => {
         <PeopleCardRight state={state} />
         <GameBox>{/* <GamePK planetId={1001} /> */}</GameBox>
 
-        {/* <ButtonBox justifyContent='center' alignItems='center'>
+        <ButtonBox justifyContent='center' alignItems='center'>
           <Button
             variant='vs'
             onClick={() => {
@@ -49,7 +49,7 @@ const Plunder = () => {
             开始掠夺
           </Button>
           <RefreshButton variant='vsRefresh' />
-        </ButtonBox> */}
+        </ButtonBox>
       </BoxStyled>
     </Layout>
   );

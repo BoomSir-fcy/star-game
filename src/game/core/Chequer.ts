@@ -54,6 +54,7 @@ interface ChequerOptions {
   axisY: number; // Y坐标轴
   type?: MapType;
   state?: StateType;
+  test?: boolean;
 }
 class Chequer {
   constructor(option: ChequerOptions) {
@@ -113,6 +114,7 @@ class Chequer {
     axisY,
     type = mapType.MAP1,
     state = stateType.DISABLE,
+    test,
   }: ChequerOptions) {
     // this.src = src;
 
@@ -132,8 +134,11 @@ class Chequer {
     this.bunny.interactive = true;
     this.bunny.buttonMode = true;
 
-    this.setState(state);
-    // this.setState(enemy ? stateType.DISABLE : state);
+    if (test) {
+      this.setState(state);
+    } else {
+      this.setState(enemy ? stateType.DISABLE : state);
+    }
 
     this.stateSprite.anchor.set(0.5);
     this.stateSprite.x = 0;
@@ -141,7 +146,7 @@ class Chequer {
     this.bunny.addChild(this.stateSprite);
     this.stateSprite.visible = false;
 
-    const text = new Text(`X${axisX}, Y${axisY}`, {
+    const text = new Text(`x${axisX}, ${axisY}`, {
       fill: 0xffffff,
       fontSize: 16,
     });

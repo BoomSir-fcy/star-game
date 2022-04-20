@@ -1,1 +1,65 @@
-{"skeleton":{"hash":" ","name":"jix"},"bones":[{"name":"root"},{"scaleX":0.7293,"scaleY":0.7293,"name":"bone1","parent":"root"}],"slots":[{"name":"火球炸1","bone":"bone1"}],"skins":{"default":{"火球炸1":{"火球炸1":{"name":"火球炸1","width":169,"height":166,"x":19.85,"y":0.72},"火球炸3":{"name":"火球炸3","width":157,"height":146,"x":7.79,"y":-2.9},"火球炸5":{"name":"火球炸5","width":177,"height":172,"x":-0.72,"y":2.9},"火球炸4":{"name":"火球炸4","width":159,"height":154,"x":7.57,"y":-5.4},"火球炸2":{"name":"火球炸2","width":149,"height":139,"x":13.36,"y":-2.17}}}},"animations":{"play":{"slots":{"火球炸1":{"attachment":[{"time":0,"name":"火球炸1"},{"time":0.1333,"name":"火球炸2"},{"time":0.2666,"name":"火球炸3"},{"time":0.3999,"name":"火球炸4"},{"time":0.5332,"name":"火球炸5"},{"time":0.6665,"name":""}]}}}}}
+{
+  "skeleton": { "hash": " ", "spine": "3.0.0", "name": "jix" },
+  "bones": [
+    { "name": "root" },
+    { "scaleX": 0.7293, "scaleY": 0.7293, "name": "bone1", "parent": "root" }
+  ],
+  "slots": [{ "name": "火球炸1", "bone": "bone1" }],
+  "skins": {
+    "default": {
+      "火球炸1": {
+        "火球炸1": {
+          "name": "火球炸1",
+          "width": 169,
+          "height": 166,
+          "x": 19.85,
+          "y": 0.72
+        },
+        "火球炸3": {
+          "name": "火球炸3",
+          "width": 157,
+          "height": 146,
+          "x": 7.79,
+          "y": -2.9
+        },
+        "火球炸5": {
+          "name": "火球炸5",
+          "width": 177,
+          "height": 172,
+          "x": -0.72,
+          "y": 2.9
+        },
+        "火球炸4": {
+          "name": "火球炸4",
+          "width": 159,
+          "height": 154,
+          "x": 7.57,
+          "y": -5.4
+        },
+        "火球炸2": {
+          "name": "火球炸2",
+          "width": 149,
+          "height": 139,
+          "x": 13.36,
+          "y": -2.17
+        }
+      }
+    }
+  },
+  "animations": {
+    "play": {
+      "slots": {
+        "火球炸1": {
+          "attachment": [
+            { "time": 0, "name": "火球炸1" },
+            { "time": 0.1333, "name": "火球炸2" },
+            { "time": 0.2666, "name": "火球炸3" },
+            { "time": 0.3999, "name": "火球炸4" },
+            { "time": 0.5332, "name": "火球炸5" },
+            { "time": 0.6665, "name": "" }
+          ]
+        }
+      }
+    }
+  }
+}

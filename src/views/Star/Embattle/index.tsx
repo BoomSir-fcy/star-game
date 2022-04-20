@@ -68,14 +68,15 @@ const Embattle = () => {
     (poses: Api.Game.UnitPlanetPos[]) => {
       poses.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          textureRes: `/assets/modal/m${0}-1.png`,
+          srcId: `${item.base_unit_id}`,
+          race,
           id: item.base_unit_id,
           unique_id: item.base_unit_id,
           unitInfo: unitMaps?.[item.base_unit_id],
         });
       });
     },
-    [unitMaps],
+    [unitMaps, race],
   );
 
   useEffect(() => {
@@ -113,6 +114,9 @@ const Embattle = () => {
         left='0'
       >
         <Box position='absolute' top='-80px'>
+          <Button onClick={() => game.clearSoldier()} padding={0} width='50px'>
+            <Text fontSize='20px'>清空</Text>
+          </Button>
           <Button
             onClick={() => navigate(`/plunder-test?pid0=${planetId}`)}
             padding={0}

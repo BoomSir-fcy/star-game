@@ -39,7 +39,7 @@ const Addition = () => {
       },
     ];
     return arr;
-  }, [alliance, energy]);
+  }, [alliance, energy, t]);
 
   return (
     <Flex

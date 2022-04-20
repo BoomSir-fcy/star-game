@@ -1,5 +1,5 @@
 {
-  "skeleton": { "hash": " ", "spine": "3.3.07", "name": "yans" },
+  "skeleton": { "hash": " ", "spine": "3.0.0", "name": "yans" },
   "bones": [
     { "name": "root" },
     { "name": "bone", "parent": "root" },

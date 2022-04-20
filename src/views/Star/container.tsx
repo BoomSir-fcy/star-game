@@ -49,7 +49,7 @@ const Star: React.FC<{
     if (pathname.indexOf('/star/search') !== -1) {
       dispatch(setActiveNavId('search'));
     }
-  }, []);
+  }, [dispatch, pathname]);
 
   return (
     <Layout>
@@ -82,6 +82,11 @@ const Star: React.FC<{
               id: 'embattle',
               label: `${t('planetMenuEmbattle')}`,
               path: `/star/embattle?id=${parsedQs.id}`,
+            },
+            {
+              id: 'embattle-test',
+              label: `${t('测试摆盘')}`,
+              path: `/star/embattle-test?id=${parsedQs.id}`,
             },
             {
               id: 'search',

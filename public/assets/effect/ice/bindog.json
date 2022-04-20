@@ -1,5 +1,5 @@
 {
-  "skeleton": { "hash": " ", "spine": "3.3.07", "name": "bindog" },
+  "skeleton": { "hash": " ", "spine": "3.0.0", "name": "bindog" },
   "bones": [
     { "name": "root" },
     { "name": "冰块", "parent": "root" },

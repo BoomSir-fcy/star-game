@@ -73,7 +73,6 @@ const Login = () => {
 
   const createRef = useRef<ForwardRefRenderProps>(null);
   const [visible, setVisible] = useState(false);
-  let timer: any = 0;
 
   const handleSign = useCallback(async () => {
     if (createRef?.current?.getState) {
@@ -112,9 +111,11 @@ const Login = () => {
         console.error(t('Registration failed'));
       }
     }
-  }, [handleCheck, createRef, setVisible, toastError]);
+  }, [handleCheck, createRef, setVisible, toastError, t]);
 
   const onHandleRegister = useCallback(async () => {
+    let timer: any = 0;
+
     if (createRef?.current?.getState) {
       try {
         const { name, gender, superior } = createRef.current.getState();
@@ -187,6 +188,7 @@ const Login = () => {
     }
     setVisible(false);
   }, [
+    getPlanetNum,
     account,
     onConnectWallet,
     setVisible,
@@ -194,7 +196,6 @@ const Login = () => {
     handleSign,
     navigate,
     handleLogin,
-    dispatch,
   ]);
 
   useEffect(() => {
