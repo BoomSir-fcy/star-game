@@ -179,6 +179,7 @@ export const getEffectText = (effect?: DescType) => {
   if (effect === descType.REMOVE_FIRING) return '灭火';
   if (effect === descType.ADD_SHIELD) return '护盾';
   if (effect === descType.REMOVE_SHIELD) return '减少护盾';
+  if (effect === descType.REMOVE_STOP_MOVE) return '解除禁锢';
   return '未知';
 };
 

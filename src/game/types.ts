@@ -78,6 +78,12 @@ export interface RoundDescStopMove extends SlotBaseInfo {
   receive_sub_hp: number;
   around: ReceiveChange[];
 }
+// 移除禁锢
+export interface RoundDescRemoveStopMove extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
+}
 // 炸弹爆炸
 export interface RoundDescBoom extends SlotBaseInfo {
   receive_sub_hp: number;
@@ -150,7 +156,8 @@ export type RoundDesc =
   | RoundDescIceEnd
   | RoundDescStopMove
   | RoundDescIceStart
-  | RoundDescCarshHarm;
+  | RoundDescCarshHarm
+  | RoundDescRemoveStopMove;
 
 export interface RoundInfo {
   desc_type: number;
@@ -164,6 +171,7 @@ export interface RoundInfo {
   ice_end: RoundDescIceEnd;
   ice_start: RoundDescIceStart;
   stop_move: RoundDescStopMove;
+  remove_stop_move: RoundDescRemoveStopMove;
   unit_remove: RoundDescRemove;
   beat: RoundDescBeat;
   beat_move: RoundDescBeatMove;
