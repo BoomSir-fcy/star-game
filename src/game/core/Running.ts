@@ -807,6 +807,7 @@ class Running extends EventTarget {
             info.sub_shield,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
