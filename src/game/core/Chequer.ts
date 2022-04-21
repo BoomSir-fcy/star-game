@@ -8,18 +8,6 @@ import config from 'game/config';
 import { BoardPositionSelf } from '../types';
 import { checkPolygonPoint } from './utils';
 
-// const W = 800;
-// const H = 600;
-// const resolution = 1;
-// const WIDTH = W / resolution;
-// const HEIGHT = H / resolution;
-
-// const app = new PIXI.Application({ width: WIDTH, height: HEIGHT, resolution });
-// // document.body.appendChild(app.view);
-
-// const stage = new Stage();
-// app.stage = stage;
-
 export const mapType = {
   MAP1: 'map1',
   MAP2: 'map2',
@@ -146,13 +134,13 @@ class Chequer {
     this.bunny.addChild(this.stateSprite);
     this.stateSprite.visible = false;
 
-    // const text = new Text(`X${axisX}, Y${axisY}`, {
-    //   fill: 0xffffff,
-    //   fontSize: 16,
-    // });
-    // text.x = -30;
-    // text.y = -28;
-    // this.bunny.addChild(text);
+    const text = new Text(`x${axisX}, ${axisY}`, {
+      fill: 0xffffff,
+      fontSize: 16,
+    });
+    text.x = -30;
+    text.y = -28;
+    this.bunny.addChild(text);
   }
 
   // 底色是不规则渲染 所以事件范围也不规则

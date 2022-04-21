@@ -275,6 +275,7 @@
   "http-error-200018": "Planet upgrade failed, grid is not occupied",
   "http-error-200019": "Failed to update planetary enhancement results",
   "http-error-200020": "Too few planetary alliances",
+  "http-error-200022": "Planet stone does not meet the enhancement conditions ",
   "http-error-300001": "Invalid building location, inconsistent location and size",
   "http-error-300002": "Only allowed to build buildings registered as 1",
   "http-error-300003": "Could not find building id",

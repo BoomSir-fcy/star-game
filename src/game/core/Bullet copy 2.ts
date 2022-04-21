@@ -48,7 +48,6 @@ type Effects = {
   [effect in BulletType]: EffectInfo;
 };
 
-// 初始化攻击特效
 const initEffectInfo = ({
   name,
   bombSpriteSrc,
@@ -74,9 +73,6 @@ const initEffectInfo = ({
     moveSpriteSrc,
   };
 };
-/**
- * 子弹
- */
 class Bullet extends EventTarget {
   constructor(combat: Combat) {
     super();
@@ -94,7 +90,21 @@ class Bullet extends EventTarget {
 
   moving = true;
 
+  // speed = 1; // 速度
+
   speed = 0.1; // 速度
+
+  speedX = 0;
+
+  speedY = 0;
+
+  doubleSpeedX = 0;
+
+  doubleSpeedY = 0;
+
+  textureS = Texture.from('/assets/bunny.png');
+
+  textureE = Texture.from('/assets/bunny_saturated.png');
 
   sprite = new Sprite();
 
@@ -110,20 +120,75 @@ class Bullet extends EventTarget {
 
   loader = Loader.shared;
 
-  // 生命周期, 开始
-  onStart(attackTarget: Combat) {
+  bulletMove(attackTarget: Combat, effect: DescType, moveTime?: number) {
     this.attackTarget = attackTarget;
+    this.effect = effect;
+    if (this.attackTarget) {
+      const t = ((moveTime || this.combat.moveTime) / 1000) * 60;
+      this.moving = true;
+      if (this.combat.axisPoint && this.attackTarget?.axisPoint) {
+        this.container.position.set(
+          this.combat.axisPoint?.x,
+          this.combat.axisPoint?.y,
+        );
+        this.container.visible = true;
+        this.speedX =
+          (this.attackTarget?.axisPoint?.x - this.combat.axisPoint?.x) / t;
+        this.speedY =
+          (this.attackTarget?.axisPoint?.y - this.combat.axisPoint?.y) / t;
+
+        this.doubleSpeedX = Math.abs(this.speedX * 2);
+        this.doubleSpeedY = Math.abs(this.speedY * 2);
+
+        this.text.text = getEffectText(effect);
+      }
+    }
+  }
+
+  handleBulletMove() {
+    if (this.moving && this.attackTarget) {
+      this.container.position.x += this.speedX;
+      this.container.position.y += this.speedY;
+      if (
+        Math.abs(
+          this.container.position.y - (this.attackTarget?.axisPoint?.y || 0),
+        ) <= this.doubleSpeedX &&
+        Math.abs(
+          this.container.position.x - (this.attackTarget?.axisPoint?.x || 0),
+        ) <= this.doubleSpeedY
+      ) {
+        this.onEnd();
+      }
+    }
+  }
+
+  onStart() {
     this.combat.container.parent.addChild(this.container);
     this.dispatchEvent(new Event('start'));
   }
 
-  // 生命周期, 结束
   onEnd() {
-    this.container.parent.removeChild(this.container);
+    this.moving = false;
+    this.speedX = 0;
+    this.speedY = 0;
+    this.container.visible = false;
+    if (this.attackTarget) {
+      this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
+      if ((this.combat.attackInfo as any)?.now_hp) {
+        this.attackTarget.drawHp(`${(this.combat.attackInfo as any).now_hp}`);
+      }
+
+      this.combat.attacking = false;
+      if (this.effect && config.showEffect.includes(this.effect)) {
+        this.attackTarget.showEffectText(getEffectText(this.effect));
+      }
+      if (this.effect && config.hideEffect.includes(this.effect)) {
+        this.attackTarget.hideEffectText();
+      }
+    }
     this.dispatchEvent(new Event('attackEnd'));
   }
 
-  // 加载特效
   async loadEffect(name: BulletType) {
     return new Promise<EffectInfo>((res, rej) => {
       try {
@@ -136,14 +201,12 @@ class Bullet extends EventTarget {
           const bombEffectSprite = new Sprite(Texture.from(bombSpriteSrc));
           bombEffectSprite.anchor.set(0.5);
           bombEffectSprite.visible = false;
-          bombEffectSprite.scale.set(0.45);
           this.container.addChild(bombEffectSprite);
           this.effects[name].bombEffectSprite = bombEffectSprite;
         }
         if (moveSpriteSrc) {
           const moveEffectSprite = new Sprite(Texture.from(moveSpriteSrc));
           moveEffectSprite.visible = false;
-          moveEffectSprite.scale.set(0.45);
           moveEffectSprite.anchor.set(0.5);
           this.container.addChild(moveEffectSprite);
           this.effects[name].moveEffectSprite = moveEffectSprite;
@@ -165,23 +228,20 @@ class Bullet extends EventTarget {
 
         const moveKeyName = `${name}_moveSpineSrc`;
         const bombKeyName = `${name}_bombSpineSrc`;
-        const tag1 = bombSpineSrc && this.loader.resources[bombKeyName];
-        const tag2 = moveSpineSrc && this.loader.resources[moveKeyName];
-        if (tag1 || tag2) {
-          if (tag1) {
-            this.loadBombSpine(this.loader.resources[bombKeyName], name);
-          }
-          if (tag2) {
-            this.loadMoveSpine(this.loader.resources[moveKeyName], name);
-          }
+        if (bombSpineSrc && this.loader.resources[bombKeyName]) {
+          this.loadBombSpine(this.loader.resources[bombKeyName], name);
           resolve();
           return;
         }
-
         if (bombSpineSrc) {
           this.loader.add(bombKeyName, bombSpineSrc);
         }
 
+        if (moveSpineSrc && this.loader.resources[moveKeyName]) {
+          this.loadMoveSpine(this.loader.resources[moveKeyName], name);
+          resolve();
+          return;
+        }
         if (moveSpineSrc) {
           this.loader.add(moveKeyName, moveSpineSrc);
         }
@@ -201,37 +261,23 @@ class Bullet extends EventTarget {
     });
   }
 
-  /**
-   * @dev 加载移动spine
-   * @param loaderResource 资源
-   * @param name 类型
-   */
   loadMoveSpine(loaderResource: LoaderResource, name: BulletType) {
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
       this.container.addChild(spine);
       this.effects[name].moveEffectSpine = spine;
-      spine.scale.set(0.45);
       spine.visible = false;
-      console.log('=loadMoveSpine=');
     }
   }
 
-  /**
-   * @dev 加载爆炸spine
-   * @param loaderResource 资源
-   * @param name 类型
-   */
   loadBombSpine(loaderResource: LoaderResource, name: BulletType) {
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
       this.container.addChild(spine);
       this.effects[name].bombEffectSpine = spine;
-      spine.scale.set(0.45);
       spine.visible = false;
       spine.update(0);
       spine.autoUpdate = false;
-      console.log('=loadBombSpine=');
       spine.state.addListener({
         complete: () => {
           this.onBombEnd(name);
@@ -240,27 +286,20 @@ class Bullet extends EventTarget {
     }
   }
 
-  // 爆炸spine播放动画完成
   onComplete(name: BulletType) {
     this.effects[name].complete = true;
     this.dispatchEvent(new Event('complete'));
   }
 
-  /**
-   * @dev 直线攻击
-   * @param name 类型
-   * @param attackTarget 攻击目标
-   */
+  // 直线子弹攻击
   async linearAttack(name: BulletType, attackTarget: Combat) {
     this.attackTarget = attackTarget;
     const { moveEffectSpine, moveEffectSprite } = await this.loadEffect(name);
-    console.log('===linearAttack');
 
     if (this.combat.axisPoint && attackTarget.axisPoint) {
       const display = moveEffectSprite || moveEffectSpine;
       if (display) {
         display.position.set(this.combat.axisPoint.x, this.combat.axisPoint.y);
-        display.visible = true;
         if (display === moveEffectSpine) {
           display.state.setAnimation(0, 'play', true);
         }
@@ -290,12 +329,8 @@ class Bullet extends EventTarget {
     }
   }
 
-  /**
-   * @dev 子弹运动结束事件
-   * @param name 类型
-   * @param point 运动结束的终点
-   */
   onMoveEnd(name: BulletType, point: Point) {
+    console.timeEnd(name);
     this.effects[name].completeMove = true;
     const {
       moveEffectSpine,
@@ -313,20 +348,10 @@ class Bullet extends EventTarget {
     this.attackBomb(name, point);
   }
 
-  /**
-   * @dev 子弹运动开始事件
-   * @param name 类型
-   * @param point 运动结束的终点
-   */
   onMoveStart(name: BulletType, point: Point) {
     this.dispatchEvent(new Event('moveStart'));
   }
 
-  /**
-   * @dev 子弹爆炸
-   * @param name 类型
-   * @param point 爆炸的终点
-   */
   attackBomb(name: BulletType, point: Point) {
     const { bombEffectSpine, bombEffectSprite } = this.effects[name];
     if (bombEffectSpine) {
@@ -340,33 +365,19 @@ class Bullet extends EventTarget {
     }
   }
 
-  /**
-   * @dev 子弹运动结束
-   * @param name 类型
-   */
   onBombEnd(name: BulletType) {
     this.effects[name].completeBomb = true;
     // this.dispatchEvent(new Event('attackEnd'));
     this.onEnd();
   }
 
-  /**
-   *
-   * @param name 类型
-   * @param spine 播放spine
-   */
   spineAnimation(name: BulletType, spine: Spine) {
     if (spine && !this.effects[name].completeBomb) {
-      spine.update(0.016666666666);
       requestAnimationFrame(() => this.spineAnimation(name, spine));
     }
   }
 
-  /**
-   * @dev 抛物线攻击
-   * @param name 类型
-   * @param attackTarget 攻击目标
-   */
+  // 曲线子弹攻击
   async parabolaAttack(name: BulletType, attackTarget: Combat) {
     this.attackTarget = attackTarget;
     const { moveEffectSpine, moveEffectSprite } = await this.loadEffect(name);
@@ -401,12 +412,6 @@ class Bullet extends EventTarget {
     }
   }
 
-  /**
-   * @dev 切换子弹方位
-   * @param x 子弹基础缩放x
-   * @param y 子弹基础缩放y
-   * @returns 子弹缩放基数
-   */
   flipTargetPointOrientation(x: number, y: number) {
     if (this.attackTarget?.axisPoint && this.combat.axisPoint) {
       const { axisX: x0, axisY: y0 } = this.attackTarget.axisPoint;
@@ -459,21 +464,14 @@ class Bullet extends EventTarget {
         this.combat.axisPoint,
         attackTarget.axisPoint,
       );
+      this.onMoveStart(name, new Point(text.position.x, text.position.y));
       linearMove.addEventListener('end', () => {
         this.onMoveEnd(name, new Point(text.position.x, text.position.y));
       });
-      this.onMoveStart(name, new Point(text.position.x, text.position.y));
       linearMove.move();
     }
   }
 
-  /**
-   *
-   * @param name 类型
-   * @param attackTarget 攻击目标
-   * @param effect 攻击特效
-   * @returns void
-   */
   attack(name: BulletType, attackTarget: Combat, effect?: DescType) {
     const parabolas = [
       bulletType.ICE,
@@ -482,8 +480,7 @@ class Bullet extends EventTarget {
       bulletType.FIREBALL,
       bulletType.MISSILE,
     ];
-
-    this.onStart(attackTarget);
+    this.onStart();
     if (effect) {
       this.testAttack(name, attackTarget, effect);
       return;

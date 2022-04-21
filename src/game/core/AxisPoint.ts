@@ -1,6 +1,12 @@
 import { Point } from '@pixi/math';
 import Chequer from './Chequer';
 
+/**
+ * 坐标
+ * axisX X轴坐标
+ * axisY Y轴坐标
+ *
+ */
 class AxisPoint extends Point {
   chequer = new Chequer({ axisX: 0, axisY: 0 });
 
@@ -8,11 +14,11 @@ class AxisPoint extends Point {
 
   axisY = 0;
 
-  constructor(x: number, y: number, chequer: Chequer) {
+  constructor(axisX: number, axisY: number, chequer: Chequer) {
     super();
 
-    this.axisX = x;
-    this.axisY = y;
+    this.axisX = axisX;
+    this.axisY = axisY;
 
     this.set(chequer.centerPoint.x, chequer.centerPoint.y);
 
@@ -20,7 +26,7 @@ class AxisPoint extends Point {
   }
 
   clone() {
-    return new AxisPoint(this.x, this.y, this.chequer);
+    return new AxisPoint(this.axisX, this.axisY, this.chequer);
   }
 }
 

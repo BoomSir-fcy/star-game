@@ -76,7 +76,7 @@ const Embattle = () => {
         });
       });
     },
-    [unitMaps],
+    [unitMaps, race],
   );
 
   useEffect(() => {

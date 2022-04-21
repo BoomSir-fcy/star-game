@@ -1,7 +1,16 @@
 import { DisplayObject } from '@pixi/display';
 import AxisPoint from './AxisPoint';
 
+/**
+ * 抛物线运动
+ */
 class Parabola extends EventTarget {
+  /**
+   *
+   * @param display 移动对象
+   * @param point0 起始坐标
+   * @param point1 结束坐标
+   */
   constructor(display: DisplayObject, point0: AxisPoint, point1: AxisPoint) {
     super();
     this.display = display;
@@ -25,11 +34,11 @@ class Parabola extends EventTarget {
 
   rate = 1;
 
-  scale = 1;
+  // scale = 1;
 
   speed = 60;
 
-  endScale = 1;
+  // endScale = 1;
 
   // 转换成相对坐标位置
   coordElement = {
@@ -42,6 +51,7 @@ class Parabola extends EventTarget {
     y: 0,
   };
 
+  // 初始化位置
   position() {
     // this.coordTarget.x = this.point1.x - this.point0.x;
     // this.coordTarget.y = this.point1.y - this.point0.y;
@@ -59,6 +69,7 @@ class Parabola extends EventTarget {
     return this;
   }
 
+  // 开始移动
   move() {
     if (this.moving) return this;
     this.moving = true;
@@ -73,10 +84,10 @@ class Parabola extends EventTarget {
     const stepMoveX = this.rate * sx;
     this.startX += stepMoveX;
 
-    const r =
-      ((1 - this.endScale * 1) * sx) /
-      Math.abs(this.coordElement.x - this.coordTarget.x);
-    this.scale -= r;
+    // const r =
+    //   ((1 - this.endScale * 1) * sx) /
+    //   Math.abs(this.coordElement.x - this.coordTarget.x);
+    // this.scale -= r;
 
     const x = this.startX;
     const realX = x + this.point0.x;
@@ -93,7 +104,7 @@ class Parabola extends EventTarget {
     const realY = y + this.point0.y;
 
     this.display.position.set(realX, realY);
-    this.display.scale.set(this.scale);
+    // this.display.scale.set(this.scale);
     // 根据曲线子弹调整角度
     this.display.rotation = tangent / 2 + (0.5 * this.rate - 0.25) * Math.PI;
 
@@ -104,6 +115,7 @@ class Parabola extends EventTarget {
     }
   }
 
+  // 移动结束周期
   onMoveEnd() {
     this.moving = false;
     this.dispatchEvent(new Event('end'));

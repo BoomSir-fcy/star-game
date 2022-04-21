@@ -4,8 +4,8 @@ import {
   RoundDescMove,
   RoundInfo,
   RoundDescAxis,
-  effectType,
-  EffectType,
+  descType,
+  DescType,
   RoundDescBoom,
   RoundDescAddBoom,
   RoundDescAddFiring,
@@ -17,6 +17,7 @@ import {
   RoundDescRemove,
   RoundDescBeat,
   RoundDescBeatMove,
+  ReceiveChange,
 } from 'game/types';
 import AxisPoint from './AxisPoint';
 import { stateType } from './Chequer';
@@ -35,12 +36,12 @@ type HandleType = typeof handleType[keyof typeof handleType];
 
 // }
 interface TrackDetail {
-  type: EffectType;
+  type: DescType;
   currentAxisPoint: RoundDescAxis;
   targetAxisPoint: RoundDescAxis;
   receive_id: string;
   sender_id: string;
-  targetAxisPoints?: RoundDescAxis[];
+  around?: ReceiveChange[];
   attackInfo?: RoundDesc;
   id: string;
   detail?: TrackDetail[];
@@ -57,6 +58,9 @@ export interface RoundsProps {
   };
 }
 
+/**
+ * 运行核心
+ */
 class Running extends EventTarget {
   constructor(game: Game, rounds: RoundsProps) {
     super();
@@ -105,6 +109,7 @@ class Running extends EventTarget {
 
   init() {
     this.getTracks();
+    console.log(this.trackDetails);
     this.runHandle();
   }
 
@@ -131,12 +136,14 @@ class Running extends EventTarget {
     this.game.app.start();
   }
 
+  // 设置轨道索引
   setTrackIndex(index: number) {
     if (index > 0 && index < this.trackDetails.length) {
       this.trackIndex = index;
     }
   }
 
+  // 设置轨道索引更加id
   setTrackIndexById(id: string) {
     const index = this.trackDetails.findIndex(item => {
       return item.id.indexOf(id) === 0;
@@ -149,57 +156,50 @@ class Running extends EventTarget {
     }
   }
 
+  // 运动
   async runHandle() {
     if (this.paused) return;
     this.playing = true;
     const track = this.trackDetails[this.trackIndex];
-    this.runTrack(track, true);
+    this.runTrack(track, () => {
+      console.log(track);
+      this.runningHandle();
+    });
   }
 
-  runTrack(track: TrackDetail, running?: boolean) {
-    if (track?.type === effectType.MOVE) {
+  // 运行轨道
+  runTrack(track: TrackDetail, callback: (soldier?: Soldier) => void) {
+    // debugger;
+    if (track?.type === descType.MOVE) {
       this.infoText.text = `回合: ${track.id}`;
-      const t = this.getMoveT();
-      const res = this.moveHandle(track, t);
-      if (running) {
-        res?.once('moveEnd', () => {
-          this.runningHandle();
-        });
-        if (!res) {
-          console.warn(`移动失效:${track.id}`);
-          this.runningHandle();
-        }
-      }
-      return res;
+      return this.moveHandle(track, s => {
+        callback(s);
+      });
     }
-    if (track?.type === effectType.BEAT_MOVE) {
+    if (track?.type === descType.BEAT_MOVE) {
       this.infoText.text = `回合: ${track.id}`;
-      const t = this.getMoveT();
-      const res = this.beatMoveHandle(track, t);
-      if (running) {
-        res?.once('moveEnd', () => {
-          this.runningHandle();
-        });
-        if (!res) {
-          console.warn(`移动失效:${track.id}`);
-          this.runningHandle();
-        }
-      }
-      return res;
+      return this.beatMoveHandle(track, s => {
+        callback(s);
+      });
     }
-    if (track?.type === effectType.REMOVE) {
-      const res = this.removeHandle(track);
-      if (running) {
-        this.runningHandle();
-      }
-      return res;
+    if (track?.type === descType.REMOVE) {
+      this.infoText.text = `回合: ${track.id}`;
+      return this.removeHandle(track, s => {
+        callback(s);
+      });
     }
-    if (track?.type === effectType.BEAT) {
-      return this.beatHandle(track, track.type);
+    if (track?.type === descType.BEAT) {
+      this.infoText.text = `回合: ${track.id}`;
+      return this.beatHandle(track, s => {
+        console.log('beatHandle');
+        callback(s);
+      });
     }
-    if (track?.type === effectType.BEAT_COLLISION) {
-      console.log(12121212);
-      return this.beatCollision(track);
+    if (track?.type === descType.BEAT_COLLISION) {
+      this.infoText.text = `回合: ${track.id}`;
+      return this.beatCollision(track, s => {
+        callback(s);
+      });
     }
     if (track?.type) {
       const round = `回合: ${track.id} \n`;
@@ -208,34 +208,34 @@ class Running extends EventTarget {
       const receive = `被攻击者: (${track.targetAxisPoint.x}, ${track.targetAxisPoint.y}) \n`;
       const newHp = `被攻击者血量: (${(track.attackInfo as any)?.now_hp}) \n`;
       this.infoText.text = `${round}${effect}${sender}${receive}${newHp}`;
-      const t = this.getAttackT();
-      const res = this.attackHandleRunning(track, track.type, t);
-      if (running) {
-        if (!res) {
-          console.warn(`攻击失效:${track.id}`);
-          this.runningHandle();
-        }
-      }
-      return res;
+
+      return this.attackHandleRunning(track, s => {
+        callback(s);
+      });
     }
+    callback();
+
     return null;
   }
 
   runningHandle() {
-    this.playing = true;
+    this.playing = false;
     if (this.paused) return;
     if (this.playCount === 0) return;
+    console.log(this.trackIndex, this.trackDetails.length);
     if (this.trackIndex < this.trackDetails.length) {
       this.trackIndex += 1;
       this.playCount -= 1;
       this.runHandle();
     } else {
+      console.log('结束战斗');
       this.playing = false;
       this.dispatchEvent(new CustomEvent('runEnd'));
       this.playEnd = true;
     }
   }
 
+  // 改变播放次数
   changePlayCount(count: number) {
     this.playCount = count;
     if (this.playing) return;
@@ -244,15 +244,10 @@ class Running extends EventTarget {
       this.playEnd = false;
     }
     this.paused = false;
-    // if (this.trackIndex)
     this.runningHandle();
   }
 
-  // getActiveTrackList(index: number, track: Track) {
-  //   if (track) {
-  //   }
-  // }
-
+  // 获取所有播放轨道
   getAllTracks(tracks?: Track[]) {
     let res: TrackDetail[] = [];
     tracks?.forEach(item => {
@@ -265,23 +260,14 @@ class Running extends EventTarget {
     return res;
   }
 
+  // 获取移动轨道详情
   static getMoveTracks(moves: RoundDescMove, id: string): TrackDetail[] {
     const tracks: TrackDetail[] = moves.dest.map((item, index) => {
-      // const { x: x0, y: y0 } = moves.starting_point;
-      // const { x: x1, y: y1 } = item;
       const point = moves.starting_point || moves.from;
       const { x, y } = index === 0 && point ? point : moves.dest[index - 1];
-      // this.trackDetails.push({
-      //   type: handleType.MOVE,
-      //   currentAxisPoint: { x, y },
-      //   targetAxisPoint: {
-      //     x: item.x,
-      //     y: item.y,
-      //   },
-      // });
       return {
         id: `${id}-${index}`,
-        type: effectType.MOVE,
+        type: descType.MOVE,
         receive_id: moves.id,
         sender_id: moves.id,
         currentAxisPoint: { x, y },
@@ -295,6 +281,7 @@ class Running extends EventTarget {
     return tracks;
   }
 
+  // 获取击退轨道详情
   static getBeatMoveTracks(
     moves: RoundDescBeatMove,
     id: string,
@@ -305,7 +292,7 @@ class Running extends EventTarget {
     return [
       {
         id: `${id}`,
-        type: effectType.BEAT_MOVE,
+        type: descType.BEAT_MOVE,
         sender_id: moves.move_unit,
         receive_id: moves.move_unit,
         currentAxisPoint: { x, y },
@@ -325,89 +312,74 @@ class Running extends EventTarget {
     return this.attackTime / this.rate;
   }
 
-  moveHandle(track: TrackDetail, t: number): Soldier | null {
-    const axis = this.game.getAxis(
-      track.currentAxisPoint.x,
-      track.currentAxisPoint.y,
-    );
+  // 移动
+  moveHandle(track: TrackDetail, callback: (soldier?: Soldier) => void) {
+    const t = this.getMoveT();
+
     const axisPoint = this.game.getAxis(
       track.targetAxisPoint.x,
       track.targetAxisPoint.y,
     );
-    if (!axis || !axisPoint) {
+    const soldier = this.game.findSoldierById(track.sender_id);
+    if (!soldier || !axisPoint) {
       console.warn(`warn: ${track.id}`);
+      callback();
       return null;
     }
-    const soldier = this.game.findSoldierByAxis(axis);
-    if (!soldier) {
-      console.warn(`warn: ${track.id}`);
-      return null;
-    }
-    soldier.run();
+    soldier.once('moveEnd', () => {
+      callback(soldier);
+    });
     soldier.moveTo(axisPoint, t);
 
     return soldier;
   }
 
-  beatMoveHandle(track: TrackDetail, t: number): Soldier | null {
-    const axis = this.game.getAxis(
-      track.currentAxisPoint.x,
-      track.currentAxisPoint.y,
-    );
+  // 击退
+  beatMoveHandle(
+    track: TrackDetail,
+    callback: (soldier?: Soldier) => void,
+  ): Soldier | null {
+    const t = this.getMoveT();
+
     const axisPoint = this.game.getAxis(
       track.targetAxisPoint.x,
       track.targetAxisPoint.y,
     );
-    if (!axis || !axisPoint) {
+    const soldier = this.game.findSoldierById(track.sender_id);
+    if (!soldier || !axisPoint) {
       console.warn(`warn: ${track.id}`);
+      callback();
       return null;
     }
-    const soldier = this.game.findSoldierByAxis(axis);
-    if (!soldier) {
-      console.warn(`warn: ${track.id}`);
-      return null;
-    }
-    console.log(track, axisPoint, soldier);
-    soldier.run();
+    soldier.once('moveEnd', () => {
+      callback(soldier);
+    });
     soldier.moveTo(axisPoint, t);
 
     return soldier;
   }
 
-  removeHandle(track: TrackDetail) {
-    const axis = this.game.getAxis(
-      track.currentAxisPoint.x,
-      track.currentAxisPoint.y,
-    );
-    if (!axis) {
-      console.warn(`warn: ${track.id}`);
-      return null;
-    }
-    const soldier = this.game.findSoldierByAxis(axis);
+  // 阵亡
+  removeHandle(track: TrackDetail, callback: (soldier?: Soldier) => void) {
+    const soldier = this.game.findSoldierById(track.receive_id);
     if (!soldier) {
       console.warn(`warn: ${track.id}`);
+      callback();
       return null;
     }
     soldier.showEffectText('阵亡');
     soldier.dispatchEvent(new Event('death'));
+    callback(soldier);
     return soldier;
   }
 
+  // 获取攻击轨道
   static getAttackTracks(
     attacks: RoundDesc,
-    desc_type: EffectType,
+    desc_type: DescType,
     id: string,
     self?: boolean, // 没有动画效果的攻击(自伤、仅前端概念)
   ): TrackDetail[] {
-    let targetAxisPoints: RoundDescAxis[] = [];
-    if (attacks.around) {
-      targetAxisPoints = attacks.around.map(item => {
-        return {
-          x: item.receive_point?.x ?? attacks.sender_point?.x,
-          y: item.receive_point?.y ?? attacks.sender_point?.y,
-        };
-      });
-    }
     const currentAxisPoint = {
       x: self
         ? attacks.receive_point?.x
@@ -428,7 +400,7 @@ class Running extends EventTarget {
           x: attacks.receive_point?.x ?? attacks.sender_point?.x,
           y: attacks.receive_point?.y ?? attacks.sender_point?.y,
         },
-        targetAxisPoints,
+        around: attacks.around,
         receive_id: attacks.receive_id ?? attacks.sender_id,
         sender_id,
         attackInfo: { ...attacks },
@@ -436,9 +408,10 @@ class Running extends EventTarget {
     ];
   }
 
+  // 获取移除轨道
   static getRemoveTracks(
     attacks: RoundDescRemove,
-    desc_type: EffectType,
+    desc_type: DescType,
     id: string,
   ): TrackDetail[] {
     return [
@@ -459,12 +432,13 @@ class Running extends EventTarget {
     ];
   }
 
+  // 获取AOE轨道
   static getBeatTracks(
     attacks: RoundDescBeat,
-    desc_type: EffectType,
+    desc_type: DescType,
     id: string,
   ): TrackDetail[] {
-    const detail = Running.getDetails(attacks.detail, 1, true);
+    const detail = Running.getDetails(attacks.detail, id, true);
 
     return [
       {
@@ -480,12 +454,14 @@ class Running extends EventTarget {
           x: attacks.sender_point?.x,
           y: attacks.sender_point?.y,
         },
+        detail,
       },
-      ...detail,
+      // ...detail,
     ];
   }
 
-  getSoldiers(attacks: TrackDetail) {
+  // 更加轨道详情获取小人
+  getSoldiersByTrack(attacks: TrackDetail) {
     const senderAxis = this.game.getAxis(
       attacks.currentAxisPoint.x,
       attacks.currentAxisPoint.y,
@@ -514,88 +490,147 @@ class Running extends EventTarget {
     };
   }
 
-  attackHandleRunning(attacks: TrackDetail, effect: EffectType, t?: number) {
-    const sendSoldier = this.attackHandle(attacks, effect, t);
-    sendSoldier?.once('attackEnd', () => {
-      if (attacks.targetAxisPoints) {
-        attacks.targetAxisPoints.forEach(item => {
-          const receiveAxis = this.game.getAxis(item.x, item.y);
+  // 攻击
+  attackHandleRunning(
+    attacks: TrackDetail,
+    callback: (soldier?: Soldier, receiveSoldier?: Soldier) => void,
+  ) {
+    const endHandle = (soldier?: Soldier, receiveSoldier?: Soldier) => {
+      if (attacks.around) {
+        attacks.around.forEach(item => {
+          const receiveAxis = this.game.getAxis(
+            item.receive_point.x,
+            item.receive_point.y,
+          );
           if (receiveAxis) {
-            const sol = this.game.findSoldierByAxis(receiveAxis);
-            if (sol) {
-              sol.attack(sol, effect, attacks?.attackInfo, 0);
+            const activeSoldier = this.game.findSoldierByAxis(receiveAxis);
+            if (activeSoldier) {
+              // activeSoldier.setActiveHp(
+              //   activeSoldier.activePh - (item.receive_sub_hp || 0),
+              // );
+              activeSoldier.changeEffect(attacks.type, activeSoldier);
+              if (
+                typeof attacks?.attackInfo?.now_hp === 'number' &&
+                typeof attacks?.attackInfo.now_shield === 'number'
+              ) {
+                activeSoldier.setActiveHpWithShield(
+                  attacks?.attackInfo?.now_hp,
+                  attacks?.attackInfo.now_shield,
+                );
+              }
             }
           }
         });
+      } else if (receiveSoldier) {
+        receiveSoldier.changeEffect(attacks.type, receiveSoldier);
+        if (
+          typeof attacks?.attackInfo?.now_hp === 'number' &&
+          typeof attacks?.attackInfo.now_shield === 'number'
+        ) {
+          receiveSoldier.setActiveHpWithShield(
+            attacks?.attackInfo?.now_hp,
+            attacks?.attackInfo.now_shield,
+          );
+        }
+        // if (attacks?.attackInfo?.receive_sub_hp) {
+        //   receiveSoldier.setActiveHp(
+        //     receiveSoldier.activePh - (attacks.attackInfo.receive_sub_hp || 0),
+        //   );
+        // }
       }
-      this.runningHandle();
+    };
+
+    const sendSoldier = this.attackHandle(attacks, {
+      onBulletMoveEnd: (s0, s1) => {
+        endHandle(s0, s1);
+      },
+      onAttackEnd: () => {
+        callback();
+      },
     });
+
     return sendSoldier;
   }
 
+  // 攻击
   attackHandle(
     attacks: TrackDetail,
-    effect: EffectType,
-    t?: number,
+    event: {
+      onBulletMoveEnd?: (soldier?: Soldier, receiveSoldier?: Soldier) => void;
+      onAttackEnd: (soldier?: Soldier, receiveSoldier?: Soldier) => void;
+    },
   ): null | Soldier {
-    const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
+    const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
     if (!sendSoldier || !receiveSoldier) {
       console.warn(`warn: ${attacks.id}`);
+      event.onAttackEnd();
       return null;
     }
-    sendSoldier.renderBullet();
-    sendSoldier.run();
-    sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo, t);
-    // receiveSoldier.changeState(stateType.DISABLE, true);
-
-    return sendSoldier;
-  }
-
-  beatHandle(attacks: TrackDetail, effect: EffectType): Soldier | null {
-    const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
-    if (!sendSoldier || !receiveSoldier) {
-      console.warn(`warn: ${attacks.id}`);
-      return null;
-    }
-    console.log(sendSoldier, receiveSoldier, attacks);
-    sendSoldier.renderBullet();
-    sendSoldier.run();
-    sendSoldier.attack(receiveSoldier, effect, attacks?.attackInfo);
-    // receiveSoldier.changeState(stateType.DISABLE, true);
-    sendSoldier.once('attackEnd', () => {
-      if (attacks.detail) {
-        attacks.detail.forEach((item, index) => {
-          const sol = this.runTrack(item);
-          if (index + 1 === attacks.detail?.length) {
-            sol?.once('attackEnd', () => {
-              this.runningHandle();
-            });
-          }
-        });
-      } else {
-        this.runningHandle();
+    const t = this.getAttackT();
+    sendSoldier.once('bulletMoveEnd', () => {
+      if (event?.onBulletMoveEnd) {
+        event?.onBulletMoveEnd(sendSoldier, receiveSoldier);
       }
     });
+    sendSoldier.once('attackEnd', () => {
+      event.onAttackEnd(sendSoldier, receiveSoldier);
+    });
+    sendSoldier.attack(receiveSoldier, attacks.type, attacks?.attackInfo, t);
+
     return sendSoldier;
   }
 
-  beatCollision(attacks: TrackDetail) {
-    const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
-    console.log(sendSoldier, receiveSoldier, attacks);
+  // 击退
+  beatHandle(
+    attacks: TrackDetail,
+    callback: (soldier?: Soldier) => void,
+  ): Soldier | null {
+    const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
     if (!sendSoldier || !receiveSoldier) {
       console.warn(`warn: ${attacks.id}`);
-      this.runningHandle();
-
       return null;
     }
-    sendSoldier.run();
-    sendSoldier.beatCollision(receiveSoldier);
-    sendSoldier.once('collisionEnd', () => {
-      this.runningHandle();
+    sendSoldier.once('attackEnd', () => {
+      console.log(attacks.detail, 'attackEnd');
+      if (attacks.detail) {
+        attacks.detail.forEach((item, index) => {
+          this.runTrack(item, () => {
+            if (index + 1 === attacks.detail?.length) {
+              callback();
+            }
+          });
+        });
+      } else {
+        callback();
+      }
     });
+    console.log(sendSoldier, receiveSoldier, 'sendSoldier === receiveSoldier');
+    sendSoldier.attack(receiveSoldier, attacks.type, attacks?.attackInfo);
+
     return sendSoldier;
   }
 
+  // 碰撞
+  beatCollision(attacks: TrackDetail, callback: (soldier?: Soldier) => void) {
+    const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
+    if (!sendSoldier || !receiveSoldier) {
+      console.warn(`warn: ${attacks.id}`);
+      callback();
+      return null;
+    }
+    sendSoldier.once('collisionEnd', () => {
+      callback();
+    });
+    console.log(
+      receiveSoldier,
+      sendSoldier,
+      'sendSoldier=sendSoldier=sendSoldiersendSoldiersendSoldier',
+    );
+    sendSoldier.beatCollision(receiveSoldier);
+    return sendSoldier;
+  }
+
+  // 获取轨道
   getTracks() {
     Object.keys(this.rounds).forEach((_round: string) => {
       const round = Number(_round);
@@ -609,18 +644,23 @@ class Running extends EventTarget {
     });
   }
 
-  static getDetails(roundInfo: RoundInfo[], round: number, self?: boolean) {
+  // 获取轨道详情
+  static getDetails(
+    roundInfo: RoundInfo[],
+    round: string | number,
+    self?: boolean,
+  ) {
     const details: TrackDetail[] = [];
 
     Object.keys(roundInfo).forEach(_track => {
       const track = Number(_track);
       const info = roundInfo[track];
       // 移动
-      if (info.desc_type === effectType.MOVE) {
+      if (info.desc_type === descType.MOVE) {
         details.push(...Running.getMoveTracks(info.move, `${round}-${_track}`));
       }
       // 攻击
-      if (info.desc_type === effectType.ATTACK) {
+      if (info.desc_type === descType.ATTACK) {
         details.push(
           ...Running.getAttackTracks(
             info.attack,
@@ -631,7 +671,7 @@ class Running extends EventTarget {
         );
       }
       // 攻击
-      if (info.desc_type === effectType.BOOM) {
+      if (info.desc_type === descType.BOOM) {
         details.push(
           ...Running.getAttackTracks(
             info.boom,
@@ -641,7 +681,7 @@ class Running extends EventTarget {
           ),
         );
       }
-      if (info.desc_type === effectType.ADD_BOOM) {
+      if (info.desc_type === descType.ADD_BOOM) {
         details.push(
           ...Running.getAttackTracks(
             info.add_boom,
@@ -651,7 +691,7 @@ class Running extends EventTarget {
           ),
         );
       }
-      if (info.desc_type === effectType.ADD_FIRING) {
+      if (info.desc_type === descType.ADD_FIRING) {
         details.push(
           ...Running.getAttackTracks(
             info.add_firing,
@@ -661,7 +701,7 @@ class Running extends EventTarget {
           ),
         );
       }
-      if (info.desc_type === effectType.FIRING) {
+      if (info.desc_type === descType.FIRING) {
         details.push(
           ...Running.getAttackTracks(
             info.firing,
@@ -671,7 +711,7 @@ class Running extends EventTarget {
           ),
         );
       }
-      if (info.desc_type === effectType.ICE_END) {
+      if (info.desc_type === descType.ICE_END) {
         details.push(
           ...Running.getAttackTracks(
             info.ice_end,
@@ -681,7 +721,7 @@ class Running extends EventTarget {
           ),
         );
       }
-      if (info.desc_type === effectType.ICE_START) {
+      if (info.desc_type === descType.ICE_START) {
         details.push(
           ...Running.getAttackTracks(
             info.ice_start,
@@ -691,7 +731,7 @@ class Running extends EventTarget {
           ),
         );
       }
-      if (info.desc_type === effectType.STOP_MOVE) {
+      if (info.desc_type === descType.STOP_MOVE) {
         details.push(
           ...Running.getAttackTracks(
             info.stop_move,
@@ -701,7 +741,7 @@ class Running extends EventTarget {
           ),
         );
       }
-      if (info.desc_type === effectType.REMOVE) {
+      if (info.desc_type === descType.REMOVE) {
         details.push(
           ...Running.getRemoveTracks(
             info.unit_remove,
@@ -710,7 +750,7 @@ class Running extends EventTarget {
           ),
         );
       }
-      if (info.desc_type === effectType.BEAT) {
+      if (info.desc_type === descType.BEAT) {
         details.push(
           ...Running.getBeatTracks(
             info.beat,
@@ -719,15 +759,52 @@ class Running extends EventTarget {
           ),
         );
       }
-      if (info.desc_type === effectType.BEAT_MOVE) {
+      if (info.desc_type === descType.BEAT_MOVE) {
         details.push(
           ...Running.getBeatMoveTracks(info.beat_move, `${round}-${_track}`),
         );
       }
-      if (info.desc_type === effectType.BEAT_COLLISION) {
+      if (info.desc_type === descType.BEAT_COLLISION) {
         details.push(
           ...Running.getAttackTracks(
             info.carsh_harm,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === descType.REMOVE_FIRING) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.remove_firing,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === descType.REMOVE_STOP_MOVE) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.remove_stop_move,
+            info.desc_type,
+            `${round}-${_track}`,
+            self,
+          ),
+        );
+      }
+      if (info.desc_type === descType.ADD_SHIELD) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.add_shield,
+            info.desc_type,
+            `${round}-${_track}`,
+          ),
+        );
+      }
+      if (info.desc_type === descType.REMOVE_SHIELD) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.sub_shield,
             info.desc_type,
             `${round}-${_track}`,
           ),

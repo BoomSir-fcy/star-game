@@ -1,7 +1,7 @@
 // import { Point, Container, Graphics } from 'pixi.js';
 import { Container } from '@pixi/display';
 import { Point } from '@pixi/math';
-import { EffectType, effectType, Skill } from 'game/types';
+import { DescType, descType, Skill } from 'game/types';
 
 export function onDragStart(this: any, event: any) {
   // store a reference to the data
@@ -167,16 +167,19 @@ export const getSkillText = (skill?: Skill) => {
   return '';
 };
 
-export const getEffectText = (effect?: EffectType) => {
-  if (effect === effectType.ATTACK) return '攻击';
-  if (effect === effectType.STOP_MOVE) return '禁锢';
-  if (effect === effectType.ICE_END) return '冰冻结束';
-  if (effect === effectType.FIRING) return '灼烧中';
-  if (effect === effectType.BOOM) return '爆炸';
-  if (effect === effectType.ICE_START) return '冰冻';
-  if (effect === effectType.ADD_FIRING) return '灼烧';
-  if (effect === effectType.ADD_BOOM) return '炸弹';
-  console.log(effect, '=');
+export const getEffectText = (effect?: DescType) => {
+  if (effect === descType.ATTACK) return '攻击';
+  if (effect === descType.STOP_MOVE) return '禁锢';
+  if (effect === descType.ICE_END) return '冰冻结束';
+  if (effect === descType.FIRING) return '灼烧中';
+  if (effect === descType.BOOM) return '爆炸';
+  if (effect === descType.ICE_START) return '冰冻';
+  if (effect === descType.ADD_FIRING) return '灼烧';
+  if (effect === descType.ADD_BOOM) return '炸弹';
+  if (effect === descType.REMOVE_FIRING) return '灭火';
+  if (effect === descType.ADD_SHIELD) return '护盾';
+  if (effect === descType.REMOVE_SHIELD) return '减少护盾';
+  if (effect === descType.REMOVE_STOP_MOVE) return '解除禁锢';
   return '未知';
 };
 
@@ -207,4 +210,66 @@ export const getDistanceBetweenTwoPoints = (point0: Point, point1: Point) => {
 
   const distance = Math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2);
   return distance;
+};
+
+/**
+ * @desc 一阶贝塞尔
+ * @param {number} t 当前百分比
+ * @param {Array} p1 起点坐标
+ * @param {Array} p2 终点坐标
+ */
+export const oneBezier = (t: number, p1: Point, p2: Point) => {
+  const { x: x1, y: y1 } = p1;
+  const { x: x2, y: y2 } = p2;
+  const x = x1 + (x2 - x1) * t;
+  const y = y1 + (y2 - y1) * t;
+  return new Point(x, y);
+};
+
+/**
+ * @desc 二阶贝塞尔
+ * @param {number} t 当前百分比
+ * @param {Array} p1 起点坐标
+ * @param {Array} p2 终点坐标
+ * @param {Array} cp 控制点
+ */
+export const twoBezier = (t: number, p1: Point, p2: Point, cp: Point) => {
+  const { x: x1, y: y1 } = p1;
+  const { x: x2, y: y2 } = p2;
+  const { x: cx, y: cy } = cp;
+  const x = (1 - t) * (1 - t) * x1 + 2 * t * (1 - t) * cx + t * t * x2;
+  const y = (1 - t) * (1 - t) * y1 + 2 * t * (1 - t) * cy + t * t * y2;
+  return new Point(x, y);
+};
+
+/**
+ * @desc 三阶贝塞尔
+ * @param {number} t 当前百分比
+ * @param {Array} p1 起点坐标
+ * @param {Array} p2 终点坐标
+ * @param {Array} cp1 控制点1
+ * @param {Array} cp2 控制点2
+ */
+export const threeBezier = (
+  t: number,
+  p1: Point,
+  p2: Point,
+  cp1: Point,
+  cp2: Point,
+) => {
+  const { x: x1, y: y1 } = p1;
+  const { x: x2, y: y2 } = p2;
+  const { x: cx1, y: cy1 } = cp1;
+  const { x: cx2, y: cy2 } = cp2;
+  const x =
+    x1 * (1 - t) * (1 - t) * (1 - t) +
+    3 * cx1 * t * (1 - t) * (1 - t) +
+    3 * cx2 * t * t * (1 - t) +
+    x2 * t * t * t;
+  const y =
+    y1 * (1 - t) * (1 - t) * (1 - t) +
+    3 * cy1 * t * (1 - t) * (1 - t) +
+    3 * cy2 * t * t * (1 - t) +
+    y2 * t * t * t;
+  return new Point(x, y);
 };

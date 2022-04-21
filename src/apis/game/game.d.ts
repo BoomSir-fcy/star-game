@@ -45,6 +45,7 @@ declare namespace Api {
       unlock_level: 0; // 解锁等级
       skill: number; // 技能
       skill_id: number; //
+      tag: string;
       attack_effect?: {
         lock_move?: LockMoveEffect;
         firing?: FiringEffect;

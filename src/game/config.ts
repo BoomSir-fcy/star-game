@@ -1,4 +1,4 @@
-import { BoardPositionSelf, effectType } from './types';
+import { BoardPositionSelf, descType } from './types';
 
 const config = {
   WIDTH: 900,
@@ -27,21 +27,22 @@ const config = {
   BLOOD_COLOR: 0x32ff32, // 血条颜色
   BLOOD_COLOR_ENEMY: 0xb22323, // 敌方血条颜色
   BLOOD_COLOR_BACK: 0x161920, // 空血的血条颜色
+  BLOOD_COLOR_SHIELD: 0xffffff,
   BLOOD_WIDTH: 100,
   BLOOD_HEIGHT: 10,
 
   showEffect: [
-    effectType.ADD_BOOM,
-    effectType.ADD_FIRING,
-    effectType.ICE_START,
-    effectType.STOP_MOVE,
-    effectType.FIRING,
+    descType.ADD_BOOM,
+    descType.ADD_FIRING,
+    descType.ICE_START,
+    descType.STOP_MOVE,
+    descType.FIRING,
   ],
   hideEffect: [
-    effectType.BOOM,
-    effectType.ICE_END,
-    effectType.STOP_MOVE,
-    effectType.REMOVE_FIRING,
+    descType.BOOM,
+    descType.ICE_END,
+    descType.STOP_MOVE,
+    descType.REMOVE_FIRING,
   ],
 };
 

@@ -1,6 +1,8 @@
 import {
+  bulletType,
   BulletType,
-  effectType,
+  descType,
+  DescType,
   EffectType,
   Orientation,
   RoundDesc,
@@ -17,6 +19,10 @@ import config from '../config';
 import AxisPoint from './AxisPoint';
 import Chequer, { stateType } from './Chequer';
 import Bullet from './Bullet';
+import LinearMove from './LinearMove';
+import { getEffectText } from './utils';
+import EffectBuff from './EffectBuff';
+import { descOfEffect } from '../effectConfig';
 
 export interface CombatOptions {
   // texture0: string;
@@ -25,6 +31,9 @@ export interface CombatOptions {
   race: number;
 }
 
+/**
+ * 士兵
+ */
 class Combat extends EventTarget {
   constructor(options: CombatOptions) {
     super();
@@ -35,15 +44,13 @@ class Combat extends EventTarget {
     this.texture1 = Texture.from(
       Combat.getSpriteRes(options.race, options.srcId, 2),
     );
+
+    this.effectBuff = new EffectBuff(this);
   }
 
   x = 0;
 
-  targetX = 0;
-
   y = 0;
-
-  targetY = 0;
 
   race = 1;
 
@@ -61,9 +68,11 @@ class Combat extends EventTarget {
 
   activePh = 0; // 当前生命值
 
+  shield = 0;
+
   hpGraphics = new Graphics();
 
-  hpText = new Text('', { fill: 0xffffff, fontSize: 32 });
+  hpText = new Text('', { fill: 0xff0000, fontSize: 32 });
 
   isEnemy = false;
 
@@ -75,11 +84,7 @@ class Combat extends EventTarget {
 
   container = new Container();
 
-  bloodStartY = -20;
-
-  bloodH = 10;
-
-  bloodBorderW = 2;
+  bloodStartY = -20; // 血条位置
 
   targetAxisPoint?: AxisPoint;
 
@@ -109,13 +114,15 @@ class Combat extends EventTarget {
 
   orientation = Orientation.TO_RIGHT_DOWN;
 
+  effectBuff;
+
   renderPh() {
     this.container.addChild(this.hpGraphics);
     this.hpText.anchor.set(0.5);
-    this.hpText.position.set(0, 20);
     this.hpText.zIndex = 2;
     this.hpGraphics.zIndex = 2;
-    this.hpGraphics.position.set(0, -50);
+    this.hpGraphics.position.set(0, -80);
+    this.hpText.position.set(0, -110);
     this.container.addChild(this.hpText);
     this.drawHp();
   }
@@ -129,11 +136,29 @@ class Combat extends EventTarget {
     this.attackEffect.visible = false;
   }
 
+  setActiveHp(hp: number) {
+    this.activePh = hp;
+    this.drawHp();
+  }
+
+  setActiveShield(shield: number) {
+    this.shield = shield;
+    this.drawHp();
+  }
+
+  setActiveHpWithShield(hp: number, shield: number) {
+    this.activePh = hp;
+    this.shield = shield;
+    this.drawHp();
+  }
+
   drawHp(now = '') {
-    const lineX = this.bloodH - this.bloodBorderW * 2;
-    const lineStartX = -(config.BLOOD_WIDTH / 2) + this.bloodBorderW;
-    const lineH = lineX / 2 + this.bloodBorderW;
+    const lineX = config.BLOOD_HEIGHT;
+    const lineStartX = -(config.BLOOD_WIDTH / 2);
+    const lineH = lineX / 2;
     const lineY = this.bloodStartY + lineH;
+    const hpAndShield = this.hp + this.shield;
+
     this.hpGraphics.clear();
 
     // 绘制血条底色
@@ -153,14 +178,24 @@ class Combat extends EventTarget {
     this.hpGraphics.drawRect(
       lineStartX,
       lineY,
-      (this.activePh / this.hp) * config.BLOOD_WIDTH,
+      (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+      config.BLOOD_HEIGHT,
+    );
+    this.hpGraphics.endFill();
+
+    // 绘制护盾
+    this.hpGraphics.beginFill(config.BLOOD_COLOR_SHIELD);
+    this.hpGraphics.drawRect(
+      lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+      lineY,
+      (this.shield / hpAndShield) * config.BLOOD_WIDTH,
       config.BLOOD_HEIGHT,
     );
     this.hpGraphics.endFill();
 
     // 绘制格子
-    const per = Math.ceil(this.hp / config.BLOOD_PER);
-    const perW = (config.BLOOD_WIDTH / this.hp) * config.BLOOD_PER;
+    const per = Math.ceil(hpAndShield / config.BLOOD_PER);
+    const perW = (config.BLOOD_WIDTH / hpAndShield) * config.BLOOD_PER;
     const lineW = per > 30 ? 1 : 2;
 
     for (let i = 1; i < per; i++) {
@@ -174,23 +209,17 @@ class Combat extends EventTarget {
       this.hpGraphics.endFill();
     }
 
-    // this.hpGraphics.lineStyle(
-    //   lineX,
-    //   this.isEnemy ? config.BLOOD_COLOR_ENEMY : config.BLOOD_COLOR,
-    // );
-    // this.hpGraphics.moveTo(lineStartX, lineY);
-    // this.hpGraphics.lineTo(
-    //   (this.activePh / this.hp) * (config.BLOOD_WIDTH - this.bloodBorderW * 2) +
-    //     lineStartX,
-    //   lineY,
-    // );
-    // this.hpText.text = `${this.activePh}/${now}`;
+    this.hpText.style.fill = this.isEnemy
+      ? config.BLOOD_COLOR_ENEMY
+      : config.BLOOD_COLOR;
+    this.hpText.text = `${this.activePh}`;
   }
 
   drawAttackEffect() {
     this.attackEffect.anchor.set(0.5);
-    this.attackEffect.position.set(0, -50);
-    // this.attackEffect.visible = false;
+    this.attackEffect.position.set(0, -20);
+    this.attackEffect.visible = false;
+    this.attackEffect.zIndex = 100;
     this.container.addChild(this.attackEffect);
   }
 
@@ -212,23 +241,23 @@ class Combat extends EventTarget {
    * @param moveTime 移动时间(ms)
    */
   moveTo(axisPoint: AxisPoint, moveTime?: number) {
-    const t = ((moveTime || this.moveTime) / 1000) * 60;
-
-    console.log(axisPoint);
-    this.moving = true;
     this.targetAxisPoint = axisPoint;
-    axisPoint.chequer.setState(stateType.PREVIEW);
-    axisPoint.chequer.displayState(true);
-    this.flipTargetPointOrientation();
     if (this.axisPoint) {
-      this.speedX = (axisPoint.x - this.axisPoint.x) / t;
-      this.speedY = (axisPoint.y - this.axisPoint.y) / t;
-
-      this.doubleSpeedX = Math.abs(this.speedX * 2);
-      this.doubleSpeedY = Math.abs(this.speedY * 2);
+      this.flipTargetPointOrientation();
+      const linearMove = new LinearMove(
+        this.container,
+        this.axisPoint,
+        axisPoint,
+      );
+      linearMove.addEventListener('end', () => {
+        this.setPosition(axisPoint);
+        this.dispatchEvent(new Event('moveEnd'));
+      });
+      linearMove.move();
     }
   }
 
+  // 更换方向
   flipTargetPointOrientation() {
     if (this.targetAxisPoint && this.axisPoint) {
       if (this.targetAxisPoint.axisX - this.axisPoint?.axisX > 0) {
@@ -252,34 +281,14 @@ class Combat extends EventTarget {
     return this;
   }
 
-  handleMove() {
-    if (this.moving && this.targetAxisPoint) {
-      this.container.position.x += this.speedX;
-      this.container.position.y += this.speedY;
-      // this.x += this.speedX;
-      // this.y += this.speedY;
-      if (
-        Math.abs(this.container.position.y - (this.targetAxisPoint.y || 0)) <=
-          this.doubleSpeedY &&
-        Math.abs(this.container.position.x - (this.targetAxisPoint.x || 0)) <=
-          this.doubleSpeedX
-      ) {
-        console.log(this.targetAxisPoint);
-        this.moving = false;
-        this.speedX = 0;
-        this.speedY = 0;
-        this.setPosition(this.targetAxisPoint);
-        this.dispatchEvent(new Event('moveEnd'));
-      }
-    }
-  }
-
+  // 重置位置 用于拖动的时候
   resetPosition() {
     const { x, y } = this.startPoint;
 
     this.container.position.set(x, y);
   }
 
+  // 设置位置
   setPosition(point: AxisPoint) {
     this.container.position.set(point.x, point.y);
     this.startPoint.set(point.x, point.y);
@@ -293,23 +302,41 @@ class Combat extends EventTarget {
   // 碰撞
   beatCollision(target: Combat, attackInfo?: RoundDesc) {
     const point = this.axisPoint?.clone();
-    console.log(target.axisPoint, point);
-    if (target.axisPoint) {
-      this.moveTo(target.axisPoint);
-      this.once('moveEnd', () => {
-        if (point) {
-          this.moveTo(point);
+    if (target.axisPoint && this.axisPoint) {
+      const linearMove = new LinearMove(
+        this.container,
+        this.axisPoint,
+        target.axisPoint,
+      );
+      linearMove.addEventListener('end', () => {
+        if (point && target.axisPoint) {
+          const linearMove1 = new LinearMove(
+            this.container,
+            target.axisPoint,
+            point,
+          );
+          linearMove1.addEventListener('end', () => {
+            this.dispatchEvent(new Event('collisionEnd'));
+          });
+          linearMove1.move();
         }
-        this.dispatchEvent(new Event('collisionEnd'));
       });
-      return;
+      linearMove.move();
+    } else {
+      this.dispatchEvent(new Event('collisionEnd'));
     }
-    this.dispatchEvent(new Event('collisionEnd'));
   }
 
+  /**
+   * @dev 攻击
+   * @param target 攻击目标
+   * @param effect 攻击类型
+   * @param attackInfo 攻击详情
+   * @param time
+   */
   attack(
     target: Combat,
-    effect: EffectType,
+    effect: DescType,
     attackInfo?: RoundDesc,
     time?: number,
   ) {
@@ -319,63 +346,63 @@ class Combat extends EventTarget {
     this.targetAxisPoint = target.axisPoint;
     this.flipTargetPointOrientation();
 
-    this.renderBullet();
-    if (this.bullet) {
-      this.bullet.bulletMove(target, effect, time);
-    }
+    const bullet = new Bullet(this);
+
+    bullet.addEventListener('moveEnd', () => {
+      // this.changeEffect(effect, target);
+      this.onBulletMoveEnd();
+    });
+
+    bullet.addEventListener('attackEnd', () => {
+      this.onAttackEnd();
+    });
+
+    bullet.attack(bulletType.BULLET, target, effect);
   }
 
-  attackParabola(target: Combat, effect: EffectType) {
-    this.renderBullet();
-    if (this.bullet) {
-      this.bullet.parabolaBullet(target, effect);
+  /**
+   * @dev 更改特效
+   * @param _effect 攻击类型
+   * @param target 目标士兵
+   */
+  changeEffect(_effect: DescType, target?: Combat) {
+    const soldier = target || this;
+    const { effect, add, remove } = descOfEffect[_effect];
+    if (effect) {
+      if (add) {
+        soldier.effectBuff.addEffect(effect);
+      }
+      if (remove) {
+        soldier.effectBuff.removeEffect(effect);
+      }
     }
   }
 
   attackParabolaEffect(target: Combat, effect: BulletType) {
-    this.renderBullet();
-    if (this.bullet) {
-      this.bullet.testAttack(effect, target);
-      // this.bullet.test();
-    }
+    const bullet = new Bullet(this);
+    const { container } = bullet;
+    this.container.parent.addChild(container);
+    bullet.attack(effect, target);
+    bullet.addEventListener('moveEnd', () => {
+      // this.effectBuff.addEffect(EffectType.SHIELD);
+    });
+    bullet.addEventListener('attackEnd', () => {
+      this.onAttackEnd();
+    });
+  }
+
+  onBulletMoveEnd() {
+    this.dispatchEvent(new Event('bulletMoveEnd'));
   }
 
   onAttackEnd() {
     this.dispatchEvent(new Event('attackEnd'));
+    this.attacking = false;
     // if ((this.attackInfo as any)?.now_hp && this.attackTarget) {
     //   this.attackTarget.drawHp(`${(this.attackInfo as any)?.now_hp}`);
 
     //   // this.attackTarget?.dispatchEvent(new Event('death'));
     // }
-  }
-
-  handleAttack() {
-    if (this.attacking && this.attackTarget) {
-      // 攻击
-      // this.displaySprite.rotation += 0.1;
-      if (this.bullet) {
-        this.bullet.handleBulletMove();
-      }
-    }
-  }
-
-  run() {
-    if (!this.running) {
-      this.running = true;
-      this.handleRun();
-    }
-  }
-
-  stop() {
-    this.running = false;
-  }
-
-  handleRun() {
-    if (this.running) {
-      this.handleMove();
-      this.handleAttack();
-      requestAnimationFrame(() => this.handleRun());
-    }
   }
 
   once(event: string, handle: any) {
@@ -387,7 +414,7 @@ class Combat extends EventTarget {
   }
 
   static getSpriteRes(race: number, resId: string, index: number) {
-    return `/assets/modal/${race}/${resId}-${index}.png`;
+    return `/assets/modal/${1}/${resId}-${index}.png`;
   }
 }
 

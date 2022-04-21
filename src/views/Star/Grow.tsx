@@ -105,13 +105,14 @@ const Grow: React.FC = () => {
         setNowPlante(data?.now_planet_info);
         setEstimatePlante(data?.estimate_planet_info);
         setEstimateCost(data);
-      } else if (res.code === 200016) {
-        toastWarning(
-          t('Planets in the Planetary Federation cannot be nurtured'),
-        );
-      } else {
-        toastWarning(t('The current planet cannot be cultivated'));
       }
+      // else if (res.code === 200016) {
+      //   toastWarning(
+      //     t('Planets in the Planetary Federation cannot be nurtured'),
+      //   );
+      // } else {
+      //   toastWarning(t('The current planet cannot be cultivated'));
+      // }
     } catch (error) {
       console.log(error);
     }

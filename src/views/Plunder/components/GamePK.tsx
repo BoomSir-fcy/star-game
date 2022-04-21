@@ -124,12 +124,26 @@ const GamePK: React.FC<GamePKProps> = () => {
     [],
   );
 
+  const [runningInfo, setRunningInfo] = useState<{
+    rate: number;
+    playCount: string;
+  }>({
+    rate: 1,
+    playCount: '1',
+  });
+
   const runHandle = useCallback(
     (slot: RoundsProps) => {
       const _running = new Running(game, slot);
       setRunning(_running);
+      setRunningInfo(prev => {
+        return {
+          ...prev,
+          playCount: `${_running.playCount}`,
+        };
+      });
     },
-    [setRunning],
+    [setRunning, setRunningInfo],
   );
 
   const [selectOptions, setSelectOptions] = useState<OptionProps[]>([]);
@@ -174,14 +188,6 @@ const GamePK: React.FC<GamePKProps> = () => {
     }
   }, [PKInfo, createSoldiers]);
 
-  const [runningInfo, setRunningInfo] = useState<{
-    rate: number;
-    playCount: string;
-  }>({
-    rate: 1,
-    playCount: '-1',
-  });
-
   const selectHandle = useCallback(
     (info: RoundInitState[], id: string) => {
       running?.pause();
@@ -218,19 +224,19 @@ const GamePK: React.FC<GamePKProps> = () => {
       isEnemy: false,
       enableDrag: true,
     });
-    // game.createSoldier(7, 7, {
-    //   srcId: '1',
-    //   race: 1,
-    //   id: 1,
-    //   unique_id: 1,
-    //   hp: 300,
-    //   isEnemy: true,
-    //   enableDrag: true,
-    // });
+    game.createSoldier(7, 7, {
+      srcId: '1',
+      race: 1,
+      id: 1,
+      unique_id: 1,
+      hp: 300,
+      isEnemy: true,
+      enableDrag: true,
+    });
   }, []);
 
   const bulletSelect: OptionProps[] = useMemo(() => {
-    return effectConfig.effects.map((item, index) => ({
+    return effectConfig.bullet.map((item, index) => ({
       value: item.name,
       label: item.label || item.name,
       id: index,
@@ -251,7 +257,6 @@ const GamePK: React.FC<GamePKProps> = () => {
     // const [s1, s0] = game.soldiers;
     const [s0, s1] = game.soldiers;
     if (s1?.axisPoint && s0) {
-      s0.run();
       s0.container.angle += Math.PI;
       s0.moveTo(s1.axisPoint);
     }

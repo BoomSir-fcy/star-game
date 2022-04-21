@@ -31,15 +31,22 @@ export interface RoundDescMove {
   from?: RoundDescAxis;
 }
 
-interface ReceiveChange {
+export interface ReceiveChange {
   receive_id: string;
   receive_point: RoundDescAxis;
+  receive_sub_hp: number;
+  now_hp: number;
 }
 
 interface SlotBaseInfo {
   sender_id: string;
   sender_point: RoundDescAxis;
   receive_id: string;
+  receive_sub_hp: number;
+  now_hp: number;
+  sub_shield: number;
+  now_shield: number;
+  max_shield: number;
   receive_point: RoundDescAxis;
 }
 
@@ -76,6 +83,12 @@ export interface RoundDescStopMove extends SlotBaseInfo {
   receive_sub_hp: number;
   around: ReceiveChange[];
 }
+// 移除禁锢
+export interface RoundDescRemoveStopMove extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
+}
 // 炸弹爆炸
 export interface RoundDescBoom extends SlotBaseInfo {
   receive_sub_hp: number;
@@ -94,7 +107,13 @@ export interface RoundDescIceEnd extends SlotBaseInfo {
   receive_sub_hp: number;
   around: ReceiveChange[];
 }
-// 冰冻结束
+// 移除灼烧
+export interface RoundDescRemoveFiring extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
+}
+// 碰撞AOE
 export interface RoundDescBeat extends SlotBaseInfo {
   long_round: number;
   receive_sub_hp: number;
@@ -103,6 +122,20 @@ export interface RoundDescBeat extends SlotBaseInfo {
 
 // 碰撞
 export interface RoundDescCarshHarm extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
+}
+
+// 添加护盾
+export interface RoundDescAddShield extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
+}
+
+// 移除护盾护盾
+export interface RoundDescRemoveShield extends SlotBaseInfo {
   long_round: number;
   receive_sub_hp: number;
   around: ReceiveChange[];
@@ -128,7 +161,8 @@ export type RoundDesc =
   | RoundDescIceEnd
   | RoundDescStopMove
   | RoundDescIceStart
-  | RoundDescCarshHarm;
+  | RoundDescCarshHarm
+  | RoundDescRemoveStopMove;
 
 export interface RoundInfo {
   desc_type: number;
@@ -142,10 +176,14 @@ export interface RoundInfo {
   ice_end: RoundDescIceEnd;
   ice_start: RoundDescIceStart;
   stop_move: RoundDescStopMove;
+  remove_stop_move: RoundDescRemoveStopMove;
   unit_remove: RoundDescRemove;
   beat: RoundDescBeat;
   beat_move: RoundDescBeatMove;
   carsh_harm: RoundDescCarshHarm;
+  remove_firing: RoundDescRemoveFiring;
+  add_shield: RoundDescAddShield;
+  sub_shield: RoundDescRemoveShield;
 }
 
 export enum Orientation {
@@ -166,7 +204,7 @@ export enum Orientation {
 //  DescUnitAddBoom            // 添加炸弹
 //  DescUnitBoom               // 炸弹爆炸
 
-export const effectType = {
+export const descType = {
   // 作战效果
   // INIT: 1, // 冰冻
   // BURN: 2, // 灼烧
@@ -185,7 +223,10 @@ export const effectType = {
   BEAT: 12, // 击退
   BEAT_MOVE: 13, // 击退产生位移
   BEAT_COLLISION: 14, // 击退碰撞伤害
-  REMOVE_FIRING: 15, // 击退碰撞伤害DescUnitRemoveFiring
+  REMOVE_FIRING: 15, // 解除灼烧
+  REMOVE_STOP_MOVE: 16, // 解除灼烧
+  ADD_SHIELD: 17, // 击退碰撞伤害DescUnitRemoveFiring
+  REMOVE_SHIELD: 18, // 击退碰撞伤害DescUnitRemoveFiring
 };
 
 // 技能
@@ -213,7 +254,7 @@ export const bulletType = {
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 
-export interface EffectItemInfoOfConfig {
+export interface BulletItemInfoOfConfig {
   name: BulletType;
   bombSpriteSrc?: string;
   bombSpineSrc?: string;
@@ -222,8 +263,26 @@ export interface EffectItemInfoOfConfig {
   label?: string;
 }
 
-export interface EffectConfig {
-  effects: EffectItemInfoOfConfig[];
+// 技能
+export enum EffectType {
+  STOP_MOVE = 'stopMove', // 禁锢
+  ICE = 'ice', // 冰冻
+  FIRING = 'firing', // 灼烧
+  BOMB = 'bomb', // 炸弹
+  SHIELD = 'shield', // 护盾
 }
 
-export type EffectType = typeof effectType[keyof typeof effectType];
+export interface EffectItemInfoOfConfig {
+  type: EffectType;
+  spriteSrc0: string;
+  spriteSrc1?: string;
+}
+
+export interface EffectConfig {
+  bullet: BulletItemInfoOfConfig[];
+  effect: {
+    [key in EffectType]: EffectItemInfoOfConfig;
+  };
+}
+
+export type DescType = typeof descType[keyof typeof descType];
