@@ -474,19 +474,19 @@ class Running extends EventTarget {
 
   // 更加轨道详情获取小人
   getSoldiersByTrack(attacks: TrackDetail) {
-    const senderAxis = this.game.getAxis(
-      attacks.currentAxisPoint.x,
-      attacks.currentAxisPoint.y,
-    );
-    const receiveAxis = this.game.getAxis(
-      attacks.targetAxisPoint.x,
-      attacks.targetAxisPoint.y,
-    );
-    if (!receiveAxis || !senderAxis)
-      return {
-        sendSoldier: null,
-        receiveSoldier: null,
-      };
+    // const senderAxis = this.game.getAxis(
+    //   attacks.currentAxisPoint.x,
+    //   attacks.currentAxisPoint.y,
+    // );
+    // const receiveAxis = this.game.getAxis(
+    //   attacks.targetAxisPoint.x,
+    //   attacks.targetAxisPoint.y,
+    // );
+    // if (!receiveAxis || !senderAxis)
+    //   return {
+    //     sendSoldier: null,
+    //     receiveSoldier: null,
+    //   };
     if (attacks.sender_id && attacks.receive_id) {
       const sendSoldier = this.game.findSoldierById(attacks.sender_id);
       const receiveSoldier = this.game.findSoldierById(attacks.receive_id);
@@ -511,19 +511,13 @@ class Running extends EventTarget {
       if (attacks.around) {
         // 群体效果
         attacks.around.forEach(item => {
-          const receiveAxis = this.game.getAxis(
-            item.receive_point.x,
-            item.receive_point.y,
-          );
-          if (receiveAxis) {
-            const activeSoldier = this.game.findSoldierByAxis(receiveAxis);
-            if (activeSoldier) {
-              activeSoldier.setActiveHp(
-                activeSoldier.activePh - (item.receive_sub_hp || 0),
-              );
-              // 受害者是本人 沒有攻击弹道
-              activeSoldier.changeEffect(attacks.type, activeSoldier);
-            }
+          const activeSoldier = this.game.findSoldierById(item.receive_id);
+          if (activeSoldier) {
+            activeSoldier.setActiveHp(
+              activeSoldier.activePh - (item.receive_sub_hp || 0),
+            );
+            // 受害者是本人 沒有攻击弹道
+            activeSoldier.changeEffect(attacks.type, activeSoldier);
           }
         });
       } else if (receiveSoldier) {

@@ -105,6 +105,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
       ],
     }),
   );
+  const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -135,6 +136,12 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     activeSoldier?.options?.unitInfo?.skill_id,
     baseSkill,
   ]);
+
+  React.useEffect(() => {
+    if (!activeSoldier) {
+      setVisible(false);
+    }
+  }, [activeSoldier]);
 
   return (
     <Box style={{ position: 'relative' }}>
@@ -202,9 +209,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                 boxShadow: '0px 7px 3px 0px rgba(0, 0, 0, 0.35)',
                 cursor: 'pointer',
               }}
-              onClick={() => {
-                console.log(2323);
-              }}
+              onClick={() => setVisible(!visible)}
               sid={1}
             />
             <Flex flexWrap='wrap' justifyContent='space-between'>
@@ -342,7 +347,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
         </BorderCardStyled>
       </Box>
       {/* 种族动画预览 */}
-      <MiniRaceAni />
+      {visible && !!activeSoldier && <MiniRaceAni />}
     </Box>
   );
 };

@@ -12,10 +12,9 @@ const Container = styled(Box)`
   background-color: #161920;
   width: 208px;
   height: 208px;
-  left: -215px;
   top: 0;
   transition: 0.3s all;
-  transform: translateX(0);
+  transform: translateX(-215px);
 `;
 
 // 种族动画预览
@@ -138,6 +137,12 @@ const MiniRaceAni = () => {
       running?.changePlayCount(-1);
     }
   }, [ref]);
+
+  React.useEffect(() => {
+    return () => {
+      game.clearSoldier();
+    };
+  });
 
   return (
     <Container>

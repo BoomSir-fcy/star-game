@@ -99,6 +99,7 @@ const Embattle = () => {
     }
   }, [testPlantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers]);
 
+  console.log('11111', activeSoldier);
   return (
     <Box position='relative'>
       <Box ref={ref} />
