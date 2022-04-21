@@ -764,15 +764,16 @@ class Running extends EventTarget {
           ),
         );
       }
-      // if (info.desc_type === descType.REMOVE_STOP_MOVE) {
-      //   details.push(
-      //     ...Running.getAttackTracks(
-      //       info.remove_firing,
-      //       info.desc_type,
-      //       `${round}-${_track}`,
-      //     ),
-      //   );
-      // }
+      if (info.desc_type === descType.REMOVE_STOP_MOVE) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.remove_stop_move,
+            info.desc_type,
+            `${round}-${_track}`,
+            self,
+          ),
+        );
+      }
       if (info.desc_type === descType.ADD_SHIELD) {
         details.push(
           ...Running.getAttackTracks(
