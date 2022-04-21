@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Box, Flex } from 'uikit';
+import { Box, Flex, Image } from 'uikit';
 import { States } from '../types';
 import PeopleCard from './PeopleCard';
 import VsVideo from './VsVideo';
@@ -23,20 +23,20 @@ export const PeopleCardLeft = styled(PeopleCard)<{ state: States }>`
   transform-origin: top left;
   transform: ${({ state }) =>
     state === States.MATCHED || state === States.MATCHING
-      ? ''
-      : 'scale(0.5) translate(-300px, -20px)'};
+      ? 'scale(1.5) translate(0, 0)'
+      : 'scale(1) translate(-150px, -20px)'};
   /* left: 0;
 top: 0; */
 `;
 
 export const getPeopleRightTransform = ({ state }: StateProps) => {
   if (state === States.MATCHING) {
-    return 'transform: scale(1) translate(800px, 0)';
+    return 'transform: scale(1.5) translate(800px, 0)';
   }
   if (state === States.MATCHED) {
-    return 'transform: scale(1) translate(0, 0)';
+    return 'transform: scale(1.5) translate(0, 0)';
   }
-  return 'transform: scale(0.5) translate(300px, -20px)';
+  return 'transform: scale(1) translate(150px, -20px)';
 };
 
 export const PeopleCardRight = styled(PeopleCard)<{ state: States }>`

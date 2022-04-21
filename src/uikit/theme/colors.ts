@@ -9,6 +9,7 @@ export const baseColors = {
   hp: '#FFAC36',
   up: '#ECA320',
   force: '#F55B5A',
+  forceTips: '#B24C57',
 };
 
 export const additionalColors = {
