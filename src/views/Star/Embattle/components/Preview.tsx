@@ -168,6 +168,13 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
             <Text mt='2px' ml='36px' fontSize='22px'>
               LV 1
             </Text>
+            <Button width={40} height={40} padding='0' variant='text'>
+              <Image
+                width={40}
+                height={40}
+                src='/images/commons/icon/Mecha_upgrade.png'
+              />
+            </Button>
             <Button
               onClick={removeHandle}
               width={40}
@@ -175,13 +182,6 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
               padding='0'
               variant='text'
             >
-              <Image
-                width={40}
-                height={40}
-                src='/images/commons/icon/Mecha_upgrade.png'
-              />
-            </Button>
-            <Button width={40} height={40} padding='0' variant='text'>
               <Image
                 width={40}
                 height={40}
