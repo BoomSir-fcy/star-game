@@ -136,12 +136,14 @@ class Bullet extends EventTarget {
           const bombEffectSprite = new Sprite(Texture.from(bombSpriteSrc));
           bombEffectSprite.anchor.set(0.5);
           bombEffectSprite.visible = false;
+          bombEffectSprite.scale.set(0.45);
           this.container.addChild(bombEffectSprite);
           this.effects[name].bombEffectSprite = bombEffectSprite;
         }
         if (moveSpriteSrc) {
           const moveEffectSprite = new Sprite(Texture.from(moveSpriteSrc));
           moveEffectSprite.visible = false;
+          moveEffectSprite.scale.set(0.45);
           moveEffectSprite.anchor.set(0.5);
           this.container.addChild(moveEffectSprite);
           this.effects[name].moveEffectSprite = moveEffectSprite;
@@ -156,33 +158,34 @@ class Bullet extends EventTarget {
     });
   }
 
-  // 加载spine
   async loadSpine(name: BulletType) {
     return new Promise<void>((resolve, rej) => {
       try {
         const { bombSpineSrc, moveSpineSrc } = this.effects[name];
 
-        // debugger;
         const moveKeyName = `${name}_moveSpineSrc`;
         const bombKeyName = `${name}_bombSpineSrc`;
         const tag1 = bombSpineSrc && this.loader.resources[bombKeyName];
         const tag2 = moveSpineSrc && this.loader.resources[moveKeyName];
-
         if (tag1 || tag2) {
           if (tag1) {
             this.loadBombSpine(this.loader.resources[bombKeyName], name);
           }
           if (tag2) {
-            this.loadMoveSpine(this.loader.resources[bombKeyName], name);
+            this.loadMoveSpine(this.loader.resources[moveKeyName], name);
           }
           resolve();
-          console.log('21221');
           return;
         }
-        const loader = Loader.shared;
-        loader.reset();
-        loader.load((_loader, res: Dict<LoaderResource>) => {
-          console.log(3);
+
+        if (bombSpineSrc) {
+          this.loader.add(bombKeyName, bombSpineSrc);
+        }
+
+        if (moveSpineSrc) {
+          this.loader.add(moveKeyName, moveSpineSrc);
+        }
+        this.loader.load((_loader, res: Dict<LoaderResource>) => {
           this.effects[name].loaded = true;
           this.effects[name].res = res;
           const moveLoaderRes = res[moveKeyName];
@@ -191,17 +194,6 @@ class Bullet extends EventTarget {
           this.loadBombSpine(bombLoaderRes, name);
           resolve();
         });
-        console.log(bombKeyName, bombSpineSrc);
-        console.log(moveKeyName, moveSpineSrc);
-        if (bombSpineSrc) {
-          console.log(1);
-          loader.add(bombKeyName, bombSpineSrc);
-        }
-
-        if (moveSpineSrc) {
-          console.log(2);
-          loader.add(moveKeyName, moveSpineSrc);
-        }
       } catch (error) {
         console.error('loadSpine error');
         rej(error);
@@ -219,6 +211,7 @@ class Bullet extends EventTarget {
       const spine = new Spine(loaderResource.spineData);
       this.container.addChild(spine);
       this.effects[name].moveEffectSpine = spine;
+      spine.scale.set(0.45);
       spine.visible = false;
       console.log('=loadMoveSpine=');
     }
@@ -234,6 +227,7 @@ class Bullet extends EventTarget {
       const spine = new Spine(loaderResource.spineData);
       this.container.addChild(spine);
       this.effects[name].bombEffectSpine = spine;
+      spine.scale.set(0.45);
       spine.visible = false;
       spine.update(0);
       spine.autoUpdate = false;
@@ -260,11 +254,13 @@ class Bullet extends EventTarget {
   async linearAttack(name: BulletType, attackTarget: Combat) {
     this.attackTarget = attackTarget;
     const { moveEffectSpine, moveEffectSprite } = await this.loadEffect(name);
+    console.log('===linearAttack');
 
     if (this.combat.axisPoint && attackTarget.axisPoint) {
       const display = moveEffectSprite || moveEffectSpine;
       if (display) {
         display.position.set(this.combat.axisPoint.x, this.combat.axisPoint.y);
+        display.visible = true;
         if (display === moveEffectSpine) {
           display.state.setAnimation(0, 'play', true);
         }

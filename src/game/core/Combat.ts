@@ -68,6 +68,8 @@ class Combat extends EventTarget {
 
   activePh = 0; // 当前生命值
 
+  shield = 0;
+
   hpGraphics = new Graphics();
 
   hpText = new Text('', { fill: 0xff0000, fontSize: 32 });
@@ -139,11 +141,24 @@ class Combat extends EventTarget {
     this.drawHp();
   }
 
+  setActiveShield(shield: number) {
+    this.shield = shield;
+    this.drawHp();
+  }
+
+  setActiveHpWithShield(hp: number, shield: number) {
+    this.activePh = hp;
+    this.shield = shield;
+    this.drawHp();
+  }
+
   drawHp(now = '') {
     const lineX = config.BLOOD_HEIGHT;
     const lineStartX = -(config.BLOOD_WIDTH / 2);
     const lineH = lineX / 2;
     const lineY = this.bloodStartY + lineH;
+    const hpAndShield = this.hp + this.shield;
+
     this.hpGraphics.clear();
 
     // 绘制血条底色
@@ -163,14 +178,24 @@ class Combat extends EventTarget {
     this.hpGraphics.drawRect(
       lineStartX,
       lineY,
-      (this.activePh / this.hp) * config.BLOOD_WIDTH,
+      (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+      config.BLOOD_HEIGHT,
+    );
+    this.hpGraphics.endFill();
+
+    // 绘制护盾
+    this.hpGraphics.beginFill(config.BLOOD_COLOR_SHIELD);
+    this.hpGraphics.drawRect(
+      lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+      lineY,
+      (this.shield / hpAndShield) * config.BLOOD_WIDTH,
       config.BLOOD_HEIGHT,
     );
     this.hpGraphics.endFill();
 
     // 绘制格子
-    const per = Math.ceil(this.hp / config.BLOOD_PER);
-    const perW = (config.BLOOD_WIDTH / this.hp) * config.BLOOD_PER;
+    const per = Math.ceil(hpAndShield / config.BLOOD_PER);
+    const perW = (config.BLOOD_WIDTH / hpAndShield) * config.BLOOD_PER;
     const lineW = per > 30 ? 1 : 2;
 
     for (let i = 1; i < per; i++) {

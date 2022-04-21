@@ -42,6 +42,11 @@ interface SlotBaseInfo {
   sender_id: string;
   sender_point: RoundDescAxis;
   receive_id: string;
+  receive_sub_hp: number;
+  now_hp: number;
+  sub_shield: number;
+  now_shield: number;
+  max_shield: number;
   receive_point: RoundDescAxis;
 }
 
