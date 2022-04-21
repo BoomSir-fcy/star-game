@@ -58,7 +58,11 @@ const StatusItem: React.FC<StatusItemProps> = ({
           <Text fontSize='20px' color='textTips'>
             {label}
           </Text>
-          {subSrc && <Image width={30} height={30} src={subSrc} />}
+          {subSrc && (
+            <Button width={30} height={30} padding='0' variant='text'>
+              <Image width={30} height={30} src={subSrc} />
+            </Button>
+          )}
         </Flex>
         <Text fontSize='22px'>
           {value} / {value}
@@ -166,26 +170,26 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
             </Text>
             <Button
               onClick={removeHandle}
-              width={30}
-              height={30}
+              width={40}
+              height={40}
               padding='0'
               variant='text'
             >
               <Image
-                width={30}
-                height={30}
+                width={40}
+                height={40}
                 src='/images/commons/icon/Mecha_upgrade.png'
               />
             </Button>
-            <Button width={30} height={30} padding='0' variant='text'>
+            <Button width={40} height={40} padding='0' variant='text'>
               <Image
-                width={30}
-                height={30}
+                width={40}
+                height={40}
                 src='/images/commons/icon/delete.png'
               />
             </Button>
           </Flex>
-          <Image width={30} height={30} src='/images/commons/icon/help.png' />
+          <Image width={40} height={40} src='/images/commons/icon/help.png' />
         </Flex>
         <Flex>
           <PreviewSoldier style={{ flexShrink: 0 }} sid={1} />
@@ -194,11 +198,13 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
               label='HP值'
               value={activeSoldier?.options?.unitInfo?.hp || 0}
               src='/images/commons/star/HP.png'
+              subSrc='/images/commons/icon/add_blood.png'
             />
             <StatusItem
               label='耐久度'
               value={activeSoldier?.options?.unitInfo?.hp || 0}
               src='/images/commons/star/durability.png'
+              subSrc='/images/commons/icon/repair.png'
             />
             <StatusItem
               label='防御值'
