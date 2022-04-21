@@ -113,7 +113,7 @@ class Game extends EventTarget {
       })
       .on('pointermove', event => {
         if (soldier.dragging) {
-          this.onDrageMoveSoldier(event, soldier);
+          this.onDrageMoveSoldier(event);
           if (!soldier.moved) {
             soldier.setMoved(true);
             this.onDragStarSoldier();
@@ -205,6 +205,9 @@ class Game extends EventTarget {
     this.dragPreSoldier.setDragging(true);
     this.dragPreSoldier.container.visible = false;
     this.app.stage.addChild(this.dragPreSoldier.container);
+    this.dragPreSoldier.container.on('pointermove', event => {
+      this.onDrageMoveSoldier(event);
+    });
   }
 
   // 关闭拖拽中的小人
@@ -250,7 +253,8 @@ class Game extends EventTarget {
     });
   }
 
-  onDrageMoveSoldier(event: InteractionEvent, soldier: Soldier) {
+  // 移动小人
+  onDrageMoveSoldier(event: InteractionEvent) {
     this.boards.chequers.forEach(item => {
       const point = new Point(
         event.data.global.x - 10,
