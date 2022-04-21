@@ -21,6 +21,9 @@ interface BoardsProps {
   height?: number;
   test?: boolean;
 }
+/**
+ * 棋盘
+ */
 class Boards extends EventTarget {
   constructor(options?: BoardsProps) {
     super();
@@ -37,30 +40,24 @@ class Boards extends EventTarget {
 
   height;
 
-  squares: Sprite[] = [];
-
-  chequers: Chequer[] = [];
+  chequers: Chequer[] = []; // 棋盘格子
 
   container = new Container();
 
   scale = 1;
 
-  axis: AxisPoint[][] = [];
+  axis: AxisPoint[][] = []; // 坐标轴
 
-  created = false;
+  created = false; //
 
-  dragData: InteractionData = new InteractionData();
+  private dragData: InteractionData = new InteractionData();
 
-  dragging = false;
+  private dragging = false;
 
   init({ test }: { test?: boolean }) {
     this.container.position.set(this.width / 2, this.height / 2);
 
-    // this.app.stage.addChild(this.container);
-
     this.drawChequers(test);
-
-    // this.app.stage.hitArea = this.app.renderer.screen;
 
     this.container.interactive = true;
     this.container.on('wheel', e => {
@@ -76,6 +73,7 @@ class Boards extends EventTarget {
       .on('pointermove', () => this.onDragMove());
   }
 
+  // 滚轮事件 缩放
   onHandleWheel(e: any) {
     const { deltaY } = e;
     const down = deltaY > 0;
@@ -93,6 +91,7 @@ class Boards extends EventTarget {
     e.preventDefault();
   }
 
+  // 绘制棋格
   drawChequers(test?: boolean) {
     this.chequers = [];
     for (let row = 0; row < config.BOARDS_ROW_COUNT; row++) {

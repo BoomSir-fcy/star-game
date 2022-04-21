@@ -48,6 +48,7 @@ type Effects = {
   [effect in BulletType]: EffectInfo;
 };
 
+// 初始化攻击特效
 const initEffectInfo = ({
   name,
   bombSpriteSrc,
@@ -73,6 +74,9 @@ const initEffectInfo = ({
     moveSpriteSrc,
   };
 };
+/**
+ * 子弹
+ */
 class Bullet extends EventTarget {
   constructor(combat: Combat) {
     super();
@@ -90,21 +94,7 @@ class Bullet extends EventTarget {
 
   moving = true;
 
-  // speed = 1; // 速度
-
   speed = 0.1; // 速度
-
-  speedX = 0;
-
-  speedY = 0;
-
-  doubleSpeedX = 0;
-
-  doubleSpeedY = 0;
-
-  textureS = Texture.from('/assets/bunny.png');
-
-  textureE = Texture.from('/assets/bunny_saturated.png');
 
   sprite = new Sprite();
 
@@ -120,72 +110,20 @@ class Bullet extends EventTarget {
 
   loader = Loader.shared;
 
-  bulletMove(attackTarget: Combat, effect: DescType, moveTime?: number) {
-    this.attackTarget = attackTarget;
-    this.effect = effect;
-    if (this.attackTarget) {
-      const t = ((moveTime || this.combat.moveTime) / 1000) * 60;
-      this.moving = true;
-      if (this.combat.axisPoint && this.attackTarget?.axisPoint) {
-        this.container.position.set(
-          this.combat.axisPoint?.x,
-          this.combat.axisPoint?.y,
-        );
-        this.container.visible = true;
-        this.speedX =
-          (this.attackTarget?.axisPoint?.x - this.combat.axisPoint?.x) / t;
-        this.speedY =
-          (this.attackTarget?.axisPoint?.y - this.combat.axisPoint?.y) / t;
-
-        this.doubleSpeedX = Math.abs(this.speedX * 2);
-        this.doubleSpeedY = Math.abs(this.speedY * 2);
-
-        this.text.text = getEffectText(effect);
-      }
-    }
-  }
-
-  handleBulletMove() {
-    if (this.moving && this.attackTarget) {
-      this.container.position.x += this.speedX;
-      this.container.position.y += this.speedY;
-      if (
-        Math.abs(
-          this.container.position.y - (this.attackTarget?.axisPoint?.y || 0),
-        ) <= this.doubleSpeedX &&
-        Math.abs(
-          this.container.position.x - (this.attackTarget?.axisPoint?.x || 0),
-        ) <= this.doubleSpeedY
-      ) {
-        this.onEnd();
-      }
-    }
-  }
-
+  // 生命周期, 开始
   onStart(attackTarget: Combat) {
     this.attackTarget = attackTarget;
     this.combat.container.parent.addChild(this.container);
     this.dispatchEvent(new Event('start'));
   }
 
+  // 生命周期, 结束
   onEnd() {
     this.container.parent.removeChild(this.container);
-    // if (this.attackTarget) {
-    //   this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
-    //   if ((this.combat.attackInfo as any)?.now_hp) {
-    //     this.attackTarget.drawHp(`${(this.combat.attackInfo as any).now_hp}`);
-    //   }
-
-    //   if (this.effect && config.showEffect.includes(this.effect)) {
-    //     this.attackTarget.showEffectText(getEffectText(this.effect));
-    //   }
-    //   if (this.effect && config.hideEffect.includes(this.effect)) {
-    //     this.attackTarget.hideEffectText();
-    //   }
-    // }
     this.dispatchEvent(new Event('attackEnd'));
   }
 
+  // 加载特效
   async loadEffect(name: BulletType) {
     return new Promise<EffectInfo>((res, rej) => {
       try {
@@ -218,6 +156,7 @@ class Bullet extends EventTarget {
     });
   }
 
+  // 加载spine
   async loadSpine(name: BulletType) {
     return new Promise<void>((resolve, rej) => {
       try {
@@ -270,6 +209,11 @@ class Bullet extends EventTarget {
     });
   }
 
+  /**
+   * @dev 加载移动spine
+   * @param loaderResource 资源
+   * @param name 类型
+   */
   loadMoveSpine(loaderResource: LoaderResource, name: BulletType) {
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
@@ -280,6 +224,11 @@ class Bullet extends EventTarget {
     }
   }
 
+  /**
+   * @dev 加载爆炸spine
+   * @param loaderResource 资源
+   * @param name 类型
+   */
   loadBombSpine(loaderResource: LoaderResource, name: BulletType) {
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
@@ -297,12 +246,17 @@ class Bullet extends EventTarget {
     }
   }
 
+  // 爆炸spine播放动画完成
   onComplete(name: BulletType) {
     this.effects[name].complete = true;
     this.dispatchEvent(new Event('complete'));
   }
 
-  // 直线子弹攻击
+  /**
+   * @dev 直线攻击
+   * @param name 类型
+   * @param attackTarget 攻击目标
+   */
   async linearAttack(name: BulletType, attackTarget: Combat) {
     this.attackTarget = attackTarget;
     const { moveEffectSpine, moveEffectSprite } = await this.loadEffect(name);
@@ -340,6 +294,11 @@ class Bullet extends EventTarget {
     }
   }
 
+  /**
+   * @dev 子弹运动结束事件
+   * @param name 类型
+   * @param point 运动结束的终点
+   */
   onMoveEnd(name: BulletType, point: Point) {
     this.effects[name].completeMove = true;
     const {
@@ -358,10 +317,20 @@ class Bullet extends EventTarget {
     this.attackBomb(name, point);
   }
 
+  /**
+   * @dev 子弹运动开始事件
+   * @param name 类型
+   * @param point 运动结束的终点
+   */
   onMoveStart(name: BulletType, point: Point) {
     this.dispatchEvent(new Event('moveStart'));
   }
 
+  /**
+   * @dev 子弹爆炸
+   * @param name 类型
+   * @param point 爆炸的终点
+   */
   attackBomb(name: BulletType, point: Point) {
     const { bombEffectSpine, bombEffectSprite } = this.effects[name];
     if (bombEffectSpine) {
@@ -375,12 +344,21 @@ class Bullet extends EventTarget {
     }
   }
 
+  /**
+   * @dev 子弹运动结束
+   * @param name 类型
+   */
   onBombEnd(name: BulletType) {
     this.effects[name].completeBomb = true;
     // this.dispatchEvent(new Event('attackEnd'));
     this.onEnd();
   }
 
+  /**
+   *
+   * @param name 类型
+   * @param spine 播放spine
+   */
   spineAnimation(name: BulletType, spine: Spine) {
     if (spine && !this.effects[name].completeBomb) {
       spine.update(0.016666666666);
@@ -388,7 +366,11 @@ class Bullet extends EventTarget {
     }
   }
 
-  // 曲线子弹攻击
+  /**
+   * @dev 抛物线攻击
+   * @param name 类型
+   * @param attackTarget 攻击目标
+   */
   async parabolaAttack(name: BulletType, attackTarget: Combat) {
     this.attackTarget = attackTarget;
     const { moveEffectSpine, moveEffectSprite } = await this.loadEffect(name);
@@ -423,6 +405,12 @@ class Bullet extends EventTarget {
     }
   }
 
+  /**
+   * @dev 切换子弹方位
+   * @param x 子弹基础缩放x
+   * @param y 子弹基础缩放y
+   * @returns 子弹缩放基数
+   */
   flipTargetPointOrientation(x: number, y: number) {
     if (this.attackTarget?.axisPoint && this.combat.axisPoint) {
       const { axisX: x0, axisY: y0 } = this.attackTarget.axisPoint;
@@ -483,6 +471,13 @@ class Bullet extends EventTarget {
     }
   }
 
+  /**
+   *
+   * @param name 类型
+   * @param attackTarget 攻击目标
+   * @param effect 攻击特效
+   * @returns void
+   */
   attack(name: BulletType, attackTarget: Combat, effect?: DescType) {
     const parabolas = [
       bulletType.ICE,

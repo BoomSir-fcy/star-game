@@ -9,6 +9,9 @@ interface Options {
   fillColor?: string;
 }
 
+/**
+ * 雷达图
+ */
 class RadarChart {
   constructor(options: Options) {
     this.init(options);
@@ -70,6 +73,7 @@ class RadarChart {
     this.drawRegion(); // 绘制覆盖区域
   }
 
+  // 绘制六边形
   drawPolygon() {
     if (this.ctx) {
       this.ctx.save(); // save the default state
@@ -92,6 +96,7 @@ class RadarChart {
     }
   }
 
+  // 绘制线
   drawLines() {
     if (this.ctx) {
       this.ctx.save();
@@ -112,6 +117,7 @@ class RadarChart {
     }
   }
 
+  // 绘制文字
   drawText() {
     if (this.ctx) {
       this.ctx.save();
@@ -157,6 +163,7 @@ class RadarChart {
     }
   }
 
+  // 绘制覆盖区域(技能系数)
   drawRegion() {
     if (this.ctx) {
       this.ctx.save();

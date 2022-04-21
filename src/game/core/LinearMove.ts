@@ -9,7 +9,14 @@ import {
   twoBezier,
 } from './utils';
 
+// 使用贝塞尔曲线函数移动目标
 class LinearMove extends EventTarget {
+  /**
+   *
+   * @param display 移动对象
+   * @param point0 移动起始点
+   * @param point1 移动终点
+   */
   constructor(display: DisplayObject, point0: AxisPoint, point1: AxisPoint) {
     super();
     this.display = display;
@@ -40,6 +47,7 @@ class LinearMove extends EventTarget {
     y: 0,
   };
 
+  // 开始移动
   move() {
     if (this.moving) return this;
     this.moving = true;
@@ -78,11 +86,13 @@ class LinearMove extends EventTarget {
     }
   }
 
+  // 移动完成生命周期
   onMoveEnd() {
     this.moving = false;
     this.dispatchEvent(new Event('end'));
   }
 
+  // 移动时转向
   static flipTargetPointOrientation(
     currentAxisPoint: AxisPoint,
     targetAxisPoint: AxisPoint,

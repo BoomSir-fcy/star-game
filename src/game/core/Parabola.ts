@@ -1,7 +1,16 @@
 import { DisplayObject } from '@pixi/display';
 import AxisPoint from './AxisPoint';
 
+/**
+ * 抛物线运动
+ */
 class Parabola extends EventTarget {
+  /**
+   *
+   * @param display 移动对象
+   * @param point0 起始坐标
+   * @param point1 结束坐标
+   */
   constructor(display: DisplayObject, point0: AxisPoint, point1: AxisPoint) {
     super();
     this.display = display;
@@ -42,6 +51,7 @@ class Parabola extends EventTarget {
     y: 0,
   };
 
+  // 初始化位置
   position() {
     // this.coordTarget.x = this.point1.x - this.point0.x;
     // this.coordTarget.y = this.point1.y - this.point0.y;
@@ -59,6 +69,7 @@ class Parabola extends EventTarget {
     return this;
   }
 
+  // 开始移动
   move() {
     if (this.moving) return this;
     this.moving = true;
@@ -104,6 +115,7 @@ class Parabola extends EventTarget {
     }
   }
 
+  // 移动结束周期
   onMoveEnd() {
     this.moving = false;
     this.dispatchEvent(new Event('end'));

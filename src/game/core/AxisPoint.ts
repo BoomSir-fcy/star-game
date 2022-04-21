@@ -1,6 +1,12 @@
 import { Point } from '@pixi/math';
 import Chequer from './Chequer';
 
+/**
+ * 坐标
+ * axisX X轴坐标
+ * axisY Y轴坐标
+ *
+ */
 class AxisPoint extends Point {
   chequer = new Chequer({ axisX: 0, axisY: 0 });
 
