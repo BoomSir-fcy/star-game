@@ -174,22 +174,18 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
               <Image
                 width={30}
                 height={30}
-                src='/images/commons/icon/add_blood.png'
+                src='/images/commons/icon/Mecha_upgrade.png'
               />
             </Button>
             <Button width={30} height={30} padding='0' variant='text'>
               <Image
                 width={30}
                 height={30}
-                src='/images/commons/icon/add_blood.png'
+                src='/images/commons/icon/delete.png'
               />
             </Button>
           </Flex>
-          <Image
-            width={30}
-            height={30}
-            src='/images/commons/icon/add_blood.png'
-          />
+          <Image width={30} height={30} src='/images/commons/icon/help.png' />
         </Flex>
         <Flex>
           <PreviewSoldier style={{ flexShrink: 0 }} sid={1} />
