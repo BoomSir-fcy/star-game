@@ -36,6 +36,7 @@ export interface ReceiveChange {
   receive_point: RoundDescAxis;
   receive_sub_hp: number;
   now_hp: number;
+  now_shield: number;
 }
 
 interface SlotBaseInfo {

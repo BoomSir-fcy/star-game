@@ -510,12 +510,12 @@ class Running extends EventTarget {
               // );
               activeSoldier.changeEffect(attacks.type, activeSoldier);
               if (
-                typeof attacks?.attackInfo?.now_hp === 'number' &&
-                typeof attacks?.attackInfo.now_shield === 'number'
+                typeof item.now_hp === 'number' &&
+                typeof item.now_shield === 'number'
               ) {
                 activeSoldier.setActiveHpWithShield(
-                  attacks?.attackInfo?.now_hp,
-                  attacks?.attackInfo.now_shield,
+                  item.now_hp,
+                  item.now_shield,
                 );
               }
             }
@@ -779,6 +779,7 @@ class Running extends EventTarget {
             info.remove_firing,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
