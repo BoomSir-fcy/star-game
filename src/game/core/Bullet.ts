@@ -162,26 +162,27 @@ class Bullet extends EventTarget {
       try {
         const { bombSpineSrc, moveSpineSrc } = this.effects[name];
 
+        // debugger;
         const moveKeyName = `${name}_moveSpineSrc`;
         const bombKeyName = `${name}_bombSpineSrc`;
-        if (bombSpineSrc && this.loader.resources[bombKeyName]) {
-          this.loadBombSpine(this.loader.resources[bombKeyName], name);
-          resolve();
-          return;
-        }
-        if (bombSpineSrc) {
-          this.loader.add(bombKeyName, bombSpineSrc);
-        }
+        const tag1 = bombSpineSrc && this.loader.resources[bombKeyName];
+        const tag2 = moveSpineSrc && this.loader.resources[moveKeyName];
 
-        if (moveSpineSrc && this.loader.resources[moveKeyName]) {
-          this.loadMoveSpine(this.loader.resources[moveKeyName], name);
+        if (tag1 || tag2) {
+          if (tag1) {
+            this.loadBombSpine(this.loader.resources[bombKeyName], name);
+          }
+          if (tag2) {
+            this.loadMoveSpine(this.loader.resources[bombKeyName], name);
+          }
           resolve();
+          console.log('21221');
           return;
         }
-        if (moveSpineSrc) {
-          this.loader.add(moveKeyName, moveSpineSrc);
-        }
-        this.loader.load((_loader, res: Dict<LoaderResource>) => {
+        const loader = Loader.shared;
+        loader.reset();
+        loader.load((_loader, res: Dict<LoaderResource>) => {
+          console.log(3);
           this.effects[name].loaded = true;
           this.effects[name].res = res;
           const moveLoaderRes = res[moveKeyName];
@@ -190,6 +191,17 @@ class Bullet extends EventTarget {
           this.loadBombSpine(bombLoaderRes, name);
           resolve();
         });
+        console.log(bombKeyName, bombSpineSrc);
+        console.log(moveKeyName, moveSpineSrc);
+        if (bombSpineSrc) {
+          console.log(1);
+          loader.add(bombKeyName, bombSpineSrc);
+        }
+
+        if (moveSpineSrc) {
+          console.log(2);
+          loader.add(moveKeyName, moveSpineSrc);
+        }
       } catch (error) {
         console.error('loadSpine error');
         rej(error);
@@ -208,6 +220,7 @@ class Bullet extends EventTarget {
       this.container.addChild(spine);
       this.effects[name].moveEffectSpine = spine;
       spine.visible = false;
+      console.log('=loadMoveSpine=');
     }
   }
 
@@ -224,6 +237,7 @@ class Bullet extends EventTarget {
       spine.visible = false;
       spine.update(0);
       spine.autoUpdate = false;
+      console.log('=loadBombSpine=');
       spine.state.addListener({
         complete: () => {
           this.onBombEnd(name);
