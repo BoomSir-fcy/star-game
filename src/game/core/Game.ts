@@ -2,6 +2,7 @@ import { Loader } from '@pixi/loaders';
 import { InteractionEvent, InteractionData } from '@pixi/interaction';
 import { Spine } from 'pixi-spine';
 import { Application } from '@pixi/app';
+import { Point } from 'pixi.js';
 
 // import * as PIXI from 'pixi.js';
 import config from '../config';
@@ -110,8 +111,9 @@ class Game extends EventTarget {
         this.showSameSoliderState(soldier);
         soldier.setMoved(false);
       })
-      .on('pointermove', () => {
+      .on('pointermove', event => {
         if (soldier.dragging) {
+          this.onDrageMoveSoldier(event, soldier);
           if (!soldier.moved) {
             soldier.setMoved(true);
             this.onDragStarSoldier();
@@ -248,13 +250,32 @@ class Game extends EventTarget {
     });
   }
 
+  onDrageMoveSoldier(event: InteractionEvent, soldier: Soldier) {
+    this.boards.chequers.forEach(item => {
+      const point = new Point(
+        event.data.global.x - 10,
+        event.data.global.y + 5,
+      );
+      const collection = item.checkCollisionPoint(point);
+      if (collection && item.state === stateType.PREVIEW) {
+        item.setState(stateType.PLACE);
+      } else if (!collection && item.state === stateType.PLACE) {
+        item.setState(stateType.PREVIEW);
+      }
+    });
+  }
+
   // 拖拽小人结束生命周期
   onDragEndSoldier(event: InteractionEvent, soldier: Soldier) {
     let canDrag = false;
 
     this.boards.chequers.forEach(item => {
-      const collection = item.checkCollisionPoint(event.data.global);
-      if (collection && item.state === stateType.PREVIEW) {
+      const point = new Point(
+        event.data.global.x - 10,
+        event.data.global.y + 5,
+      );
+      const collection = item.checkCollisionPoint(point);
+      if (collection && item.state === stateType.PLACE) {
         soldier.setPosition(new AxisPoint(item.axisX, item.axisY, item));
         canDrag = true;
       }
