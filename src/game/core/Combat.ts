@@ -3,6 +3,7 @@ import {
   BulletType,
   descType,
   DescType,
+  EffectType,
   Orientation,
   RoundDesc,
   RoundDescAttack,
@@ -20,6 +21,8 @@ import Chequer, { stateType } from './Chequer';
 import Bullet from './Bullet';
 import LinearMove from './LinearMove';
 import { getEffectText } from './utils';
+import EffectBuff from './EffectBuff';
+import { descOfEffect } from '../effectConfig';
 
 export interface CombatOptions {
   // texture0: string;
@@ -28,6 +31,9 @@ export interface CombatOptions {
   race: number;
 }
 
+/**
+ * 士兵
+ */
 class Combat extends EventTarget {
   constructor(options: CombatOptions) {
     super();
@@ -38,15 +44,13 @@ class Combat extends EventTarget {
     this.texture1 = Texture.from(
       Combat.getSpriteRes(options.race, options.srcId, 2),
     );
+
+    this.effectBuff = new EffectBuff(this);
   }
 
   x = 0;
 
-  targetX = 0;
-
   y = 0;
-
-  targetY = 0;
 
   race = 1;
 
@@ -78,11 +82,7 @@ class Combat extends EventTarget {
 
   container = new Container();
 
-  bloodStartY = -20;
-
-  bloodH = 10;
-
-  bloodBorderW = 2;
+  bloodStartY = -20; // 血条位置
 
   targetAxisPoint?: AxisPoint;
 
@@ -112,6 +112,8 @@ class Combat extends EventTarget {
 
   orientation = Orientation.TO_RIGHT_DOWN;
 
+  effectBuff;
+
   renderPh() {
     this.container.addChild(this.hpGraphics);
     this.hpText.anchor.set(0.5);
@@ -138,9 +140,9 @@ class Combat extends EventTarget {
   }
 
   drawHp(now = '') {
-    const lineX = this.bloodH - this.bloodBorderW * 2;
-    const lineStartX = -(config.BLOOD_WIDTH / 2) + this.bloodBorderW;
-    const lineH = lineX / 2 + this.bloodBorderW;
+    const lineX = config.BLOOD_HEIGHT;
+    const lineStartX = -(config.BLOOD_WIDTH / 2);
+    const lineH = lineX / 2;
     const lineY = this.bloodStartY + lineH;
     this.hpGraphics.clear();
 
@@ -182,16 +184,6 @@ class Combat extends EventTarget {
       this.hpGraphics.endFill();
     }
 
-    // this.hpGraphics.lineStyle(
-    //   lineX,
-    //   this.isEnemy ? config.BLOOD_COLOR_ENEMY : config.BLOOD_COLOR,
-    // );
-    // this.hpGraphics.moveTo(lineStartX, lineY);
-    // this.hpGraphics.lineTo(
-    //   (this.activePh / this.hp) * (config.BLOOD_WIDTH - this.bloodBorderW * 2) +
-    //     lineStartX,
-    //   lineY,
-    // );
     this.hpText.style.fill = this.isEnemy
       ? config.BLOOD_COLOR_ENEMY
       : config.BLOOD_COLOR;
@@ -224,21 +216,9 @@ class Combat extends EventTarget {
    * @param moveTime 移动时间(ms)
    */
   moveTo(axisPoint: AxisPoint, moveTime?: number) {
-    // const t = ((moveTime || this.moveTime) / 1000) * 60;
-
-    // this.moving = true;
-    // this.targetAxisPoint = axisPoint;
-    // axisPoint.chequer.setState(stateType.PREVIEW);
-    // axisPoint.chequer.displayState(true);
-    // this.flipTargetPointOrientation();
-    // if (this.axisPoint) {
-    //   this.speedX = (axisPoint.x - this.axisPoint.x) / t;
-    //   this.speedY = (axisPoint.y - this.axisPoint.y) / t;
-
-    //   this.doubleSpeedX = Math.abs(this.speedX * 2);
-    //   this.doubleSpeedY = Math.abs(this.speedY * 2);
-    // }
+    this.targetAxisPoint = axisPoint;
     if (this.axisPoint) {
+      this.flipTargetPointOrientation();
       const linearMove = new LinearMove(
         this.container,
         this.axisPoint,
@@ -252,6 +232,7 @@ class Combat extends EventTarget {
     }
   }
 
+  // 更换方向
   flipTargetPointOrientation() {
     if (this.targetAxisPoint && this.axisPoint) {
       if (this.targetAxisPoint.axisX - this.axisPoint?.axisX > 0) {
@@ -275,33 +256,14 @@ class Combat extends EventTarget {
     return this;
   }
 
-  handleMove() {
-    if (this.moving && this.targetAxisPoint) {
-      this.container.position.x += this.speedX;
-      this.container.position.y += this.speedY;
-      // this.x += this.speedX;
-      // this.y += this.speedY;
-      if (
-        Math.abs(this.container.position.y - (this.targetAxisPoint.y || 0)) <=
-          this.doubleSpeedY &&
-        Math.abs(this.container.position.x - (this.targetAxisPoint.x || 0)) <=
-          this.doubleSpeedX
-      ) {
-        this.moving = false;
-        this.speedX = 0;
-        this.speedY = 0;
-        this.setPosition(this.targetAxisPoint);
-        this.dispatchEvent(new Event('moveEnd'));
-      }
-    }
-  }
-
+  // 重置位置 用于拖动的时候
   resetPosition() {
     const { x, y } = this.startPoint;
 
     this.container.position.set(x, y);
   }
 
+  // 设置位置
   setPosition(point: AxisPoint) {
     this.container.position.set(point.x, point.y);
     this.startPoint.set(point.x, point.y);
@@ -315,19 +277,38 @@ class Combat extends EventTarget {
   // 碰撞
   beatCollision(target: Combat, attackInfo?: RoundDesc) {
     const point = this.axisPoint?.clone();
-    if (target.axisPoint) {
-      this.once('moveEnd', () => {
-        if (point) {
-          this.moveTo(point);
+    if (target.axisPoint && this.axisPoint) {
+      const linearMove = new LinearMove(
+        this.container,
+        this.axisPoint,
+        target.axisPoint,
+      );
+      linearMove.addEventListener('end', () => {
+        if (point && target.axisPoint) {
+          const linearMove1 = new LinearMove(
+            this.container,
+            target.axisPoint,
+            point,
+          );
+          linearMove1.addEventListener('end', () => {
+            this.dispatchEvent(new Event('collisionEnd'));
+          });
+          linearMove1.move();
         }
-        this.dispatchEvent(new Event('collisionEnd'));
       });
-      this.moveTo(target.axisPoint);
-      return;
+      linearMove.move();
+    } else {
+      this.dispatchEvent(new Event('collisionEnd'));
     }
-    this.dispatchEvent(new Event('collisionEnd'));
   }
 
+  /**
+   * @dev 攻击
+   * @param target 攻击目标
+   * @param effect 攻击类型
+   * @param attackInfo 攻击详情
+   * @param time
+   */
   attack(
     target: Combat,
     effect: DescType,
@@ -343,21 +324,8 @@ class Combat extends EventTarget {
     const bullet = new Bullet(this);
 
     bullet.addEventListener('moveEnd', () => {
+      // this.changeEffect(effect, target);
       this.onBulletMoveEnd();
-      console.log('moveEnd', attackInfo);
-      // this.setActiveHp(target.activePh - (attackInfo?.receive_sub_hp || 0));
-      // if (attackInfo?.around) {
-      //   attackInfo?.around.forEach(item => {
-
-      //   })
-      // }
-
-      // if (config.showEffect.includes(effect)) {
-      //   target.showEffectText(getEffectText(effect));
-      // }
-      // if (config.hideEffect.includes(effect)) {
-      //   target.hideEffectText();
-      // }
     });
 
     bullet.addEventListener('attackEnd', () => {
@@ -367,27 +335,22 @@ class Combat extends EventTarget {
     bullet.attack(bulletType.BULLET, target, effect);
   }
 
-  addEffect(effect: DescType) {
-    if (config.showEffect.includes(effect)) {
-      this.showEffectText(getEffectText(effect));
+  /**
+   * @dev 更改特效
+   * @param _effect 攻击类型
+   * @param target 目标士兵
+   */
+  changeEffect(_effect: DescType, target?: Combat) {
+    const soldier = target || this;
+    const { effect, add, remove } = descOfEffect[_effect];
+    if (effect) {
+      if (add) {
+        soldier.effectBuff.addEffect(effect);
+      }
+      if (remove) {
+        soldier.effectBuff.removeEffect(effect);
+      }
     }
-    if (config.hideEffect.includes(effect)) {
-      this.hideEffectText();
-    }
-  }
-
-  attackAk47(target: Combat) {
-    const bullet = new Bullet(this);
-    const { container } = bullet;
-    this.container.parent.addChild(container);
-    bullet.attack(bulletType.BULLET, target);
-  }
-
-  attackParabola(target: Combat, effect: DescType) {
-    this.renderBullet();
-    // if (this.bullet) {
-    //   this.bullet.parabolaBullet(target, effect);
-    // }
   }
 
   attackParabolaEffect(target: Combat, effect: BulletType) {
@@ -395,17 +358,12 @@ class Combat extends EventTarget {
     const { container } = bullet;
     this.container.parent.addChild(container);
     bullet.attack(effect, target);
+    bullet.addEventListener('moveEnd', () => {
+      // this.effectBuff.addEffect(EffectType.SHIELD);
+    });
     bullet.addEventListener('attackEnd', () => {
       this.onAttackEnd();
     });
-    // this.renderBullet();
-    // if (this.bullet) {
-    //   // this.bullet.testAttack(effect, target);
-    //   this.attackAk47(target);
-    //   bullet.attack(effect, target);
-
-    //   // this.bullet.test();
-    // }
   }
 
   onBulletMoveEnd() {
@@ -420,35 +378,6 @@ class Combat extends EventTarget {
 
     //   // this.attackTarget?.dispatchEvent(new Event('death'));
     // }
-  }
-
-  handleAttack() {
-    if (this.attacking && this.attackTarget) {
-      // 攻击
-      // this.displaySprite.rotation += 0.1;
-      if (this.bullet) {
-        // this.bullet.handleBulletMove();
-      }
-    }
-  }
-
-  run() {
-    if (!this.running) {
-      this.running = true;
-      this.handleRun();
-    }
-  }
-
-  stop() {
-    this.running = false;
-  }
-
-  handleRun() {
-    if (this.running) {
-      // this.handleMove();
-      // this.handleAttack();
-      // requestAnimationFrame(() => this.handleRun());
-    }
   }
 
   once(event: string, handle: any) {

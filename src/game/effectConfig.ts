@@ -1,4 +1,4 @@
-import { bulletType, EffectConfig, EffectType } from './types';
+import { bulletType, EffectConfig, EffectType, descType } from './types';
 
 const effectConfig: EffectConfig = {
   bullet: [
@@ -22,7 +22,7 @@ const effectConfig: EffectConfig = {
       name: bulletType.BULLET,
       bombSpineSrc: '',
       bombSpriteSrc: '',
-      moveSpineSrc: '/assets/bullet/bullet/zidan.json',
+      moveSpineSrc: '/assets/bullet/ice/bindog.json',
       moveSpriteSrc: '',
       label: '子弹',
     },
@@ -119,10 +119,103 @@ const effectConfig: EffectConfig = {
     },
     [EffectType.STOP_MOVE]: {
       type: EffectType.STOP_MOVE,
-      spriteSrc0: '/assets/effects/stop-move-top.png',
-      spriteSrc1: '/assets/effects/stop-move-bottom.png',
+      spriteSrc0: '/assets/effects/stop-move-bottom.png',
+      spriteSrc1: '/assets/effects/stop-move-top.png',
     },
   },
 };
 
 export default effectConfig;
+
+export const descOfEffect = {
+  [descType.ADD_BOOM]: {
+    effect: EffectType.BOMB,
+    add: true,
+    remove: false,
+  },
+  [descType.ADD_FIRING]: {
+    effect: EffectType.FIRING,
+    add: true,
+    remove: false,
+  },
+  [descType.ADD_SHIELD]: {
+    effect: EffectType.SHIELD,
+    add: true,
+    remove: false,
+  },
+  [descType.ATTACK]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
+  [descType.BEAT]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
+  [descType.BEAT_COLLISION]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
+  [descType.BEAT_MOVE]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
+  [descType.BOOM]: {
+    effect: EffectType.BOMB,
+    add: false,
+    remove: false,
+  },
+  [descType.FIRING]: {
+    effect: EffectType.FIRING,
+    add: false,
+    remove: false,
+  },
+  [descType.ICE_END]: {
+    effect: EffectType.ICE,
+    add: false,
+    remove: true,
+  },
+  [descType.ICE_START]: {
+    effect: EffectType.ICE,
+    add: true,
+    remove: false,
+  },
+  [descType.INIT]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
+  [descType.MOVE]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
+  [descType.REMOVE]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
+  [descType.REMOVE_FIRING]: {
+    effect: EffectType.FIRING,
+    add: false,
+    remove: true,
+  },
+  [descType.REMOVE_SHIELD]: {
+    effect: EffectType.SHIELD,
+    add: false,
+    remove: true,
+  },
+  [descType.REMOVE_STOP_MOVE]: {
+    effect: EffectType.STOP_MOVE,
+    add: false,
+    remove: true,
+  },
+  [descType.STOP_MOVE]: {
+    effect: EffectType.STOP_MOVE,
+    add: true,
+    remove: false,
+  },
+};
