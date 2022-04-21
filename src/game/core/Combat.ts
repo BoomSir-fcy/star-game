@@ -1,7 +1,8 @@
 import {
   bulletType,
   BulletType,
-  effectType,
+  descType,
+  DescType,
   EffectType,
   Orientation,
   RoundDesc,
@@ -20,6 +21,8 @@ import Chequer, { stateType } from './Chequer';
 import Bullet from './Bullet';
 import LinearMove from './LinearMove';
 import { getEffectText } from './utils';
+import EffectBuff from './EffectBuff';
+import { descOfEffect } from '../effectConfig';
 
 export interface CombatOptions {
   // texture0: string;
@@ -38,6 +41,8 @@ class Combat extends EventTarget {
     this.texture1 = Texture.from(
       Combat.getSpriteRes(options.race, options.srcId, 2),
     );
+
+    this.effectBuff = new EffectBuff(this);
   }
 
   x = 0;
@@ -111,6 +116,8 @@ class Combat extends EventTarget {
   attackEffect = new Text('', { fill: 0xffffff, fontSize: 32 });
 
   orientation = Orientation.TO_RIGHT_DOWN;
+
+  effectBuff;
 
   renderPh() {
     this.container.addChild(this.hpGraphics);
@@ -200,8 +207,9 @@ class Combat extends EventTarget {
 
   drawAttackEffect() {
     this.attackEffect.anchor.set(0.5);
-    this.attackEffect.position.set(0, 0);
-    // this.attackEffect.visible = false;
+    this.attackEffect.position.set(0, -20);
+    this.attackEffect.visible = false;
+    this.attackEffect.zIndex = 100;
     this.container.addChild(this.attackEffect);
   }
 
@@ -314,22 +322,42 @@ class Combat extends EventTarget {
   // 碰撞
   beatCollision(target: Combat, attackInfo?: RoundDesc) {
     const point = this.axisPoint?.clone();
-    if (target.axisPoint) {
-      this.moveTo(target.axisPoint);
-      this.once('moveEnd', () => {
-        if (point) {
-          this.moveTo(point);
+    if (target.axisPoint && this.axisPoint) {
+      const linearMove = new LinearMove(
+        this.container,
+        this.axisPoint,
+        target.axisPoint,
+      );
+      linearMove.addEventListener('end', () => {
+        if (point && target.axisPoint) {
+          const linearMove1 = new LinearMove(
+            this.container,
+            target.axisPoint,
+            point,
+          );
+          linearMove1.addEventListener('end', () => {
+            this.dispatchEvent(new Event('collisionEnd'));
+          });
+          linearMove1.move();
         }
-        this.dispatchEvent(new Event('collisionEnd'));
       });
-      return;
+      linearMove.move();
+      // this.once('moveEnd', () => {
+      //   if (point) {
+      //     this.moveTo(point);
+      //   }
+      //   this.dispatchEvent(new Event('collisionEnd'));
+      // });
+      // this.moveTo(target.axisPoint);
+      // return;
+    } else {
+      this.dispatchEvent(new Event('collisionEnd'));
     }
-    this.dispatchEvent(new Event('collisionEnd'));
   }
 
   attack(
     target: Combat,
-    effect: EffectType,
+    effect: DescType,
     attackInfo?: RoundDesc,
     time?: number,
   ) {
@@ -342,20 +370,43 @@ class Combat extends EventTarget {
     const bullet = new Bullet(this);
 
     bullet.addEventListener('moveEnd', () => {
-      this.setActiveHp(target.activePh - (attackInfo?.receive_sub_hp || 0));
-
-      if (config.showEffect.includes(effect)) {
-        target.showEffectText(getEffectText(effect));
-      }
-      if (config.hideEffect.includes(effect)) {
-        target.hideEffectText();
-      }
+      // this.changeEffect(effect, target);
+      this.onBulletMoveEnd();
     });
+
     bullet.addEventListener('attackEnd', () => {
       this.onAttackEnd();
     });
 
     bullet.attack(bulletType.BULLET, target, effect);
+  }
+
+  changeEffect(_effect: DescType, target?: Combat) {
+    const soldier = target || this;
+    const { effect, add, remove } = descOfEffect[_effect];
+    if (effect) {
+      if (add) {
+        soldier.effectBuff.addEffect(effect);
+      }
+      if (remove) {
+        soldier.effectBuff.removeEffect(effect);
+      }
+    }
+    // if (config.showEffect.includes(effect)) {
+    //   this.showEffectText(getEffectText(effect));
+    // }
+    // if (config.hideEffect.includes(effect)) {
+    //   this.hideEffectText();
+    // }
+  }
+
+  addEffect(effect: DescType) {
+    if (config.showEffect.includes(effect)) {
+      this.showEffectText(getEffectText(effect));
+    }
+    if (config.hideEffect.includes(effect)) {
+      this.hideEffectText();
+    }
   }
 
   attackAk47(target: Combat) {
@@ -365,7 +416,7 @@ class Combat extends EventTarget {
     bullet.attack(bulletType.BULLET, target);
   }
 
-  attackParabola(target: Combat, effect: EffectType) {
+  attackParabola(target: Combat, effect: DescType) {
     this.renderBullet();
     // if (this.bullet) {
     //   this.bullet.parabolaBullet(target, effect);
@@ -377,6 +428,9 @@ class Combat extends EventTarget {
     const { container } = bullet;
     this.container.parent.addChild(container);
     bullet.attack(effect, target);
+    bullet.addEventListener('moveEnd', () => {
+      // this.effectBuff.addEffect(EffectType.SHIELD);
+    });
     bullet.addEventListener('attackEnd', () => {
       this.onAttackEnd();
     });
@@ -388,6 +442,10 @@ class Combat extends EventTarget {
 
     //   // this.bullet.test();
     // }
+  }
+
+  onBulletMoveEnd() {
+    this.dispatchEvent(new Event('bulletMoveEnd'));
   }
 
   onAttackEnd() {

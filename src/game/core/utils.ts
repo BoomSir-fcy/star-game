@@ -1,7 +1,7 @@
 // import { Point, Container, Graphics } from 'pixi.js';
 import { Container } from '@pixi/display';
 import { Point } from '@pixi/math';
-import { EffectType, effectType, Skill } from 'game/types';
+import { DescType, descType, Skill } from 'game/types';
 
 export function onDragStart(this: any, event: any) {
   // store a reference to the data
@@ -167,16 +167,18 @@ export const getSkillText = (skill?: Skill) => {
   return '';
 };
 
-export const getEffectText = (effect?: EffectType) => {
-  if (effect === effectType.ATTACK) return '攻击';
-  if (effect === effectType.STOP_MOVE) return '禁锢';
-  if (effect === effectType.ICE_END) return '冰冻结束';
-  if (effect === effectType.FIRING) return '灼烧中';
-  if (effect === effectType.BOOM) return '爆炸';
-  if (effect === effectType.ICE_START) return '冰冻';
-  if (effect === effectType.ADD_FIRING) return '灼烧';
-  if (effect === effectType.ADD_BOOM) return '炸弹';
-  if (effect === effectType.REMOVE_FIRING) return '灭火';
+export const getEffectText = (effect?: DescType) => {
+  if (effect === descType.ATTACK) return '攻击';
+  if (effect === descType.STOP_MOVE) return '禁锢';
+  if (effect === descType.ICE_END) return '冰冻结束';
+  if (effect === descType.FIRING) return '灼烧中';
+  if (effect === descType.BOOM) return '爆炸';
+  if (effect === descType.ICE_START) return '冰冻';
+  if (effect === descType.ADD_FIRING) return '灼烧';
+  if (effect === descType.ADD_BOOM) return '炸弹';
+  if (effect === descType.REMOVE_FIRING) return '灭火';
+  if (effect === descType.ADD_SHIELD) return '护盾';
+  if (effect === descType.REMOVE_SHIELD) return '减少护盾';
   return '未知';
 };
 

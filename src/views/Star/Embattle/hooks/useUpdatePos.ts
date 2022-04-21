@@ -9,13 +9,15 @@ const useUpdatePos = (planetId: number, game: Game) => {
 
   const setSortSoldiers = useCallback(
     soldiers => {
-      const newSoldiers = soldiers?.map((soldier: Soldier, index: number) => {
-        return {
-          id: `${soldier.axisPoint?.chequer.axisX}${soldier.axisPoint?.chequer.axisY}`,
-          src: soldier.textureRes,
-          soldier,
-        };
-      });
+      const newSoldiers = soldiers
+        .reverse()
+        .map((soldier: Soldier, index: number) => {
+          return {
+            id: `${soldier.axisPoint?.chequer.axisX}${soldier.axisPoint?.chequer.axisY}`,
+            src: soldier.textureRes,
+            soldier,
+          };
+        });
       if (newSoldiers) {
         setGameSoldiers(newSoldiers);
       }

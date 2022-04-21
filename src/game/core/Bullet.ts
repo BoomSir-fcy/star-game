@@ -11,9 +11,9 @@ import effectConfig from 'game/effectConfig';
 import {
   bulletType,
   BulletType,
-  EffectItemInfoOfConfig,
-  effectType,
-  EffectType,
+  BulletItemInfoOfConfig,
+  descType,
+  DescType,
   Skill,
 } from 'game/types';
 import type Combat from './Combat';
@@ -31,7 +31,7 @@ import LinearMove from './LinearMove';
  * 子弹类型 [冰块, 岩石, 导弹, 火球, 机械子弹, ]
  */
 
-interface EffectInfo extends EffectItemInfoOfConfig {
+interface EffectInfo extends BulletItemInfoOfConfig {
   loaded: boolean;
   await: boolean;
   res: null | Dict<LoaderResource>; // 爆炸资源地址
@@ -54,7 +54,7 @@ const initEffectInfo = ({
   bombSpineSrc,
   moveSpineSrc,
   moveSpriteSrc,
-}: EffectItemInfoOfConfig) => {
+}: BulletItemInfoOfConfig) => {
   return {
     loaded: false,
     await: false,
@@ -80,7 +80,7 @@ class Bullet extends EventTarget {
     this.text.anchor.set(0.5);
     this.container.addChild(this.text);
     const temp: Effects = {};
-    effectConfig.effects.forEach(item => {
+    effectConfig.bullet.forEach(item => {
       temp[item.name] = initEffectInfo(item);
     });
     this.effects = temp;
@@ -114,13 +114,13 @@ class Bullet extends EventTarget {
 
   attackTarget?: Combat;
 
-  effect?: EffectType;
+  effect?: DescType;
 
   effects: Effects;
 
   loader = Loader.shared;
 
-  bulletMove(attackTarget: Combat, effect: EffectType, moveTime?: number) {
+  bulletMove(attackTarget: Combat, effect: DescType, moveTime?: number) {
     this.attackTarget = attackTarget;
     this.effect = effect;
     if (this.attackTarget) {
@@ -169,12 +169,7 @@ class Bullet extends EventTarget {
   }
 
   onEnd() {
-    if (
-      this.combat.container.parent &&
-      this.combat.container.parent.children.includes(this.container)
-    ) {
-      this.combat.container.parent.removeChild(this.container);
-    }
+    this.container.parent.removeChild(this.container);
     // if (this.attackTarget) {
     //   this.attackTarget.activePh -= this.combat.attackInfo?.receive_sub_hp || 0;
     //   if ((this.combat.attackInfo as any)?.now_hp) {
@@ -228,26 +223,27 @@ class Bullet extends EventTarget {
       try {
         const { bombSpineSrc, moveSpineSrc } = this.effects[name];
 
+        // debugger;
         const moveKeyName = `${name}_moveSpineSrc`;
         const bombKeyName = `${name}_bombSpineSrc`;
-        if (bombSpineSrc && this.loader.resources[bombKeyName]) {
-          this.loadBombSpine(this.loader.resources[bombKeyName], name);
-          resolve();
-          return;
-        }
-        if (bombSpineSrc) {
-          this.loader.add(bombKeyName, bombSpineSrc);
-        }
+        const tag1 = bombSpineSrc && this.loader.resources[bombKeyName];
+        const tag2 = moveSpineSrc && this.loader.resources[moveKeyName];
 
-        if (moveSpineSrc && this.loader.resources[moveKeyName]) {
-          this.loadMoveSpine(this.loader.resources[moveKeyName], name);
+        if (tag1 || tag2) {
+          if (tag1) {
+            this.loadBombSpine(this.loader.resources[bombKeyName], name);
+          }
+          if (tag2) {
+            this.loadMoveSpine(this.loader.resources[bombKeyName], name);
+          }
           resolve();
+          console.log('21221');
           return;
         }
-        if (moveSpineSrc) {
-          this.loader.add(moveKeyName, moveSpineSrc);
-        }
-        this.loader.load((_loader, res: Dict<LoaderResource>) => {
+        const loader = Loader.shared;
+        loader.reset();
+        loader.load((_loader, res: Dict<LoaderResource>) => {
+          console.log(3);
           this.effects[name].loaded = true;
           this.effects[name].res = res;
           const moveLoaderRes = res[moveKeyName];
@@ -256,6 +252,17 @@ class Bullet extends EventTarget {
           this.loadBombSpine(bombLoaderRes, name);
           resolve();
         });
+        console.log(bombKeyName, bombSpineSrc);
+        console.log(moveKeyName, moveSpineSrc);
+        if (bombSpineSrc) {
+          console.log(1);
+          loader.add(bombKeyName, bombSpineSrc);
+        }
+
+        if (moveSpineSrc) {
+          console.log(2);
+          loader.add(moveKeyName, moveSpineSrc);
+        }
       } catch (error) {
         console.error('loadSpine error');
         rej(error);
@@ -269,6 +276,7 @@ class Bullet extends EventTarget {
       this.container.addChild(spine);
       this.effects[name].moveEffectSpine = spine;
       spine.visible = false;
+      console.log('=loadMoveSpine=');
     }
   }
 
@@ -280,6 +288,7 @@ class Bullet extends EventTarget {
       spine.visible = false;
       spine.update(0);
       spine.autoUpdate = false;
+      console.log('=loadBombSpine=');
       spine.state.addListener({
         complete: () => {
           this.onBombEnd(name);
@@ -374,6 +383,7 @@ class Bullet extends EventTarget {
 
   spineAnimation(name: BulletType, spine: Spine) {
     if (spine && !this.effects[name].completeBomb) {
+      spine.update(0.016666666666);
       requestAnimationFrame(() => this.spineAnimation(name, spine));
     }
   }
@@ -454,7 +464,7 @@ class Bullet extends EventTarget {
     this.linearAttack(bulletType.BULLET, attackTarget);
   }
 
-  testAttack(name: BulletType, attackTarget: Combat, effect: EffectType) {
+  testAttack(name: BulletType, attackTarget: Combat, effect: DescType) {
     const text = new Text('', { fill: 0xffffff, fontSize: 22 });
     text.text = getEffectText(effect);
     this.container.addChild(text);
@@ -473,7 +483,7 @@ class Bullet extends EventTarget {
     }
   }
 
-  attack(name: BulletType, attackTarget: Combat, effect?: EffectType) {
+  attack(name: BulletType, attackTarget: Combat, effect?: DescType) {
     const parabolas = [
       bulletType.ICE,
       bulletType.ROCK,

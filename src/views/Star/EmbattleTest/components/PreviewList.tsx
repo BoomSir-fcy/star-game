@@ -116,7 +116,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 />
               </BorderCard>
               <Text mt='8px' textAlign='center' fontSize='20' bold>
-                机甲{item.unique_id}
+                {item.tag}
               </Text>
             </Box>
           );

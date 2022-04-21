@@ -124,6 +124,8 @@ class Soldier extends Combat {
 
     this.enableDrag = Boolean(enableDrag);
 
+    this.drawAttackEffect();
+
     this.container
       .on('pointerdown', e => this.onDragStart(e))
       .on('pointerup', () => this.onDragEnd())

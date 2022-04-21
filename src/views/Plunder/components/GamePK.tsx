@@ -124,12 +124,26 @@ const GamePK: React.FC<GamePKProps> = () => {
     [],
   );
 
+  const [runningInfo, setRunningInfo] = useState<{
+    rate: number;
+    playCount: string;
+  }>({
+    rate: 1,
+    playCount: '1',
+  });
+
   const runHandle = useCallback(
     (slot: RoundsProps) => {
       const _running = new Running(game, slot);
       setRunning(_running);
+      setRunningInfo(prev => {
+        return {
+          ...prev,
+          playCount: `${_running.playCount}`,
+        };
+      });
     },
-    [setRunning],
+    [setRunning, setRunningInfo],
   );
 
   const [selectOptions, setSelectOptions] = useState<OptionProps[]>([]);
@@ -173,14 +187,6 @@ const GamePK: React.FC<GamePKProps> = () => {
       // runHandle(PKInfo.slot);
     }
   }, [PKInfo, createSoldiers]);
-
-  const [runningInfo, setRunningInfo] = useState<{
-    rate: number;
-    playCount: string;
-  }>({
-    rate: 1,
-    playCount: '-1',
-  });
 
   const selectHandle = useCallback(
     (info: RoundInitState[], id: string) => {
@@ -230,7 +236,7 @@ const GamePK: React.FC<GamePKProps> = () => {
   }, []);
 
   const bulletSelect: OptionProps[] = useMemo(() => {
-    return effectConfig.effects.map((item, index) => ({
+    return effectConfig.bullet.map((item, index) => ({
       value: item.name,
       label: item.label || item.name,
       id: index,
