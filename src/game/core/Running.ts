@@ -62,11 +62,12 @@ export interface RoundsProps {
  * 运行核心
  */
 class Running extends EventTarget {
-  constructor(game: Game, rounds: RoundsProps) {
+  constructor(game: Game, rounds: RoundsProps, loop?: boolean) {
     super();
 
     this.game = game;
     this.rounds = rounds;
+    this.playLoop = loop || false;
     this.game.app.stage.addChild(this.infoText);
     this.infoText.x = 10;
     this.infoText.y = 10;
@@ -107,11 +108,17 @@ class Running extends EventTarget {
 
   playEnd = false;
 
+  playLoop = false;
+
   init() {
     this.getTracks();
-    console.log(this.trackDetails);
+    console.log(this.trackDetails, 123213);
     this.runHandle();
   }
+
+  // start() {
+
+  // }
 
   play() {
     this.paused = false;
@@ -202,13 +209,13 @@ class Running extends EventTarget {
       });
     }
     if (track?.type) {
-      const round = `回合: ${track.id} \n`;
-      const effect = `技能: ${getEffectText(track.type)} \n`;
-      const sender = `攻击者: (${track.currentAxisPoint.x}, ${track.currentAxisPoint.y}) \n`;
-      const receive = `被攻击者: (${track.targetAxisPoint.x}, ${track.targetAxisPoint.y}) \n`;
-      const newHp = `被攻击者血量: (${(track.attackInfo as any)?.now_hp}) \n`;
-      this.infoText.text = `${round}${effect}${sender}${receive}${newHp}`;
-
+      // const round = `回合: ${track.id} \n`;
+      // const effect = `技能: ${getEffectText(track.type)} \n`;
+      // const sender = `攻击者: (${track.currentAxisPoint.x}, ${track.currentAxisPoint.y}) \n`;
+      // const receive = `被攻击者: (${track.targetAxisPoint.x}, ${track.targetAxisPoint.y}) \n`;
+      // const newHp = `被攻击者血量: (${(track.attackInfo as any)?.now_hp}) \n`;
+      // this.infoText.text = `${round}${effect}${sender}${receive}${newHp}`;
+      console.log(`技能: ${getEffectText(track.type)}`);
       return this.attackHandleRunning(track, s => {
         callback(s);
       });
@@ -226,6 +233,11 @@ class Running extends EventTarget {
     if (this.trackIndex < this.trackDetails.length) {
       this.trackIndex += 1;
       this.playCount -= 1;
+      this.runHandle();
+    } else if (this.playLoop) {
+      console.log('循环播放');
+      this.playLoop = false;
+      this.trackIndex = 0;
       this.runHandle();
     } else {
       console.log('结束战斗');
@@ -497,6 +509,7 @@ class Running extends EventTarget {
   ) {
     const endHandle = (soldier?: Soldier, receiveSoldier?: Soldier) => {
       if (attacks.around) {
+        // 群体效果
         attacks.around.forEach(item => {
           const receiveAxis = this.game.getAxis(
             item.receive_point.x,
@@ -508,11 +521,13 @@ class Running extends EventTarget {
               activeSoldier.setActiveHp(
                 activeSoldier.activePh - (item.receive_sub_hp || 0),
               );
+              // 受害者是本人 沒有攻击弹道
               activeSoldier.changeEffect(attacks.type, activeSoldier);
             }
           }
         });
       } else if (receiveSoldier) {
+        // 单体效果
         receiveSoldier.changeEffect(attacks.type, receiveSoldier);
         if (attacks?.attackInfo?.receive_sub_hp) {
           receiveSoldier.setActiveHp(

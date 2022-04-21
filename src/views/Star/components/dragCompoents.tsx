@@ -141,7 +141,6 @@ export const DragCompoents: React.FC<{
   });
   const [builds, setBuilds] = React.useState<any[]>([]);
   const [currentBuild, setCurrentBuild] = React.useState<any>({});
-  const { data } = state;
   const buildings = useStore(p => p.buildling.buildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
 
@@ -501,7 +500,7 @@ export const DragCompoents: React.FC<{
               width={`${gridSize}px`}
               height={`${gridSize}px`}
             >
-              {state.data.map((item: any, index: number) => {
+              {(state?.data ?? []).map((item: any, index: number) => {
                 return (
                   <Normal
                     key={`${item.index}_${item?._id}`}
@@ -522,7 +521,7 @@ export const DragCompoents: React.FC<{
                   />
                 );
               })}
-              {builds.map((item, index) => {
+              {builds?.map((item, index) => {
                 return (
                   <BuildingBox
                     key={`${item.index}_${item?._id}_${index}`}
@@ -583,22 +582,24 @@ export const DragCompoents: React.FC<{
               </Text>
             </Flex>
             <BuildingsScroll ml='40px'>
-              {(buildings[state?.currentTab] ?? []).map((row: any) => (
-                <BuildingsItem key={row.buildings_number}>
-                  <GameThing
-                    draggable
-                    onDragStart={dragStart}
-                    onDrop={event => event.preventDefault()}
-                    onDragEnter={event => event.preventDefault()}
-                    onDragOver={dragOver}
-                    onDragEnd={dragEnd}
-                    scale='sm'
-                    itemData={row}
-                    src={row.picture}
-                    text={row?.propterty.name_cn}
-                  />
-                </BuildingsItem>
-              ))}
+              {(buildings[state?.currentTab] ?? []).map(
+                (row: any, index: number) => (
+                  <BuildingsItem key={`${row.buildings_number}_${index}`}>
+                    <GameThing
+                      draggable
+                      onDragStart={dragStart}
+                      onDrop={event => event.preventDefault()}
+                      onDragEnter={event => event.preventDefault()}
+                      onDragOver={dragOver}
+                      onDragEnd={dragEnd}
+                      scale='sm'
+                      itemData={row}
+                      src={row.picture}
+                      text={row?.propterty.name_cn}
+                    />
+                  </BuildingsItem>
+                ),
+              )}
             </BuildingsScroll>
           </Flex>
         </BgCard>
