@@ -5,6 +5,9 @@ import type Combat from './Combat';
 import { EffectType } from '../types';
 import effectConfig from '../effectConfig';
 
+/**
+ * buff效果 如冰冻 灼烧
+ */
 class EffectBuff extends EventTarget {
   constructor(combat: Combat) {
     super();
@@ -52,8 +55,11 @@ class EffectBuff extends EventTarget {
     load: false,
   };
 
+  /**
+   *
+   * @param type 添加特效
+   */
   addEffect(type: EffectType) {
-    console.log('aaaaaaaaaaaa');
     if (!this.added) {
       this.combat.container.addChild(this.container);
       this.added = true;
@@ -67,6 +73,10 @@ class EffectBuff extends EventTarget {
       }
   }
 
+  /**
+   * @dev 加载特效
+   * @param type
+   */
   loadEffect(type: EffectType) {
     this[type].sprint.texture = Texture.from(
       effectConfig.effect[type].spriteSrc0,
@@ -87,6 +97,10 @@ class EffectBuff extends EventTarget {
     this.addEffect(type);
   }
 
+  /**
+   * 移除特效
+   * @param type
+   */
   removeEffect(type: EffectType) {
     this[type].sprint.visible = false;
     this[type].sprint1.visible = false;

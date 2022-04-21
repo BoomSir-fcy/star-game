@@ -8,18 +8,6 @@ import config from 'game/config';
 import { BoardPositionSelf } from '../types';
 import { checkPolygonPoint } from './utils';
 
-// const W = 800;
-// const H = 600;
-// const resolution = 1;
-// const WIDTH = W / resolution;
-// const HEIGHT = H / resolution;
-
-// const app = new PIXI.Application({ width: WIDTH, height: HEIGHT, resolution });
-// // document.body.appendChild(app.view);
-
-// const stage = new Stage();
-// app.stage = stage;
-
 export const mapType = {
   MAP1: 'map1',
   MAP2: 'map2',

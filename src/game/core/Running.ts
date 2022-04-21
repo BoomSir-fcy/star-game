@@ -58,17 +58,9 @@ export interface RoundsProps {
   };
 }
 
-/* 
-  1.应该在执行移动/攻击前绑定事件 不然可能触发不到事件
-  2.绑定事件的行为同一个事件可能有不同的处理方法
-  3.几个移动/攻击可能同时发生
-  
-  处理方法
-  1.分别用需要同时发生和不同时发生的方法做处理
-  2.主线程的和次级线程的分开处理
-
-*/
-
+/**
+ * 运行核心
+ */
 class Running extends EventTarget {
   constructor(game: Game, rounds: RoundsProps) {
     super();
@@ -144,12 +136,14 @@ class Running extends EventTarget {
     this.game.app.start();
   }
 
+  // 设置轨道索引
   setTrackIndex(index: number) {
     if (index > 0 && index < this.trackDetails.length) {
       this.trackIndex = index;
     }
   }
 
+  // 设置轨道索引更加id
   setTrackIndexById(id: string) {
     const index = this.trackDetails.findIndex(item => {
       return item.id.indexOf(id) === 0;
@@ -162,6 +156,7 @@ class Running extends EventTarget {
     }
   }
 
+  // 运动
   async runHandle() {
     if (this.paused) return;
     this.playing = true;
@@ -172,6 +167,7 @@ class Running extends EventTarget {
     });
   }
 
+  // 运行轨道
   runTrack(track: TrackDetail, callback: (soldier?: Soldier) => void) {
     // debugger;
     if (track?.type === descType.MOVE) {
@@ -239,6 +235,7 @@ class Running extends EventTarget {
     }
   }
 
+  // 改变播放次数
   changePlayCount(count: number) {
     this.playCount = count;
     if (this.playing) return;
@@ -250,6 +247,7 @@ class Running extends EventTarget {
     this.runningHandle();
   }
 
+  // 获取所有播放轨道
   getAllTracks(tracks?: Track[]) {
     let res: TrackDetail[] = [];
     tracks?.forEach(item => {
@@ -262,6 +260,7 @@ class Running extends EventTarget {
     return res;
   }
 
+  // 获取移动轨道详情
   static getMoveTracks(moves: RoundDescMove, id: string): TrackDetail[] {
     const tracks: TrackDetail[] = moves.dest.map((item, index) => {
       const point = moves.starting_point || moves.from;
@@ -282,6 +281,7 @@ class Running extends EventTarget {
     return tracks;
   }
 
+  // 获取击退轨道详情
   static getBeatMoveTracks(
     moves: RoundDescBeatMove,
     id: string,
@@ -312,6 +312,7 @@ class Running extends EventTarget {
     return this.attackTime / this.rate;
   }
 
+  // 移动
   moveHandle(track: TrackDetail, callback: (soldier?: Soldier) => void) {
     const t = this.getMoveT();
 
@@ -333,6 +334,7 @@ class Running extends EventTarget {
     return soldier;
   }
 
+  // 击退
   beatMoveHandle(
     track: TrackDetail,
     callback: (soldier?: Soldier) => void,
@@ -357,6 +359,7 @@ class Running extends EventTarget {
     return soldier;
   }
 
+  // 阵亡
   removeHandle(track: TrackDetail, callback: (soldier?: Soldier) => void) {
     const soldier = this.game.findSoldierById(track.receive_id);
     if (!soldier) {
@@ -370,6 +373,7 @@ class Running extends EventTarget {
     return soldier;
   }
 
+  // 获取攻击轨道
   static getAttackTracks(
     attacks: RoundDesc,
     desc_type: DescType,
@@ -404,6 +408,7 @@ class Running extends EventTarget {
     ];
   }
 
+  // 获取移除轨道
   static getRemoveTracks(
     attacks: RoundDescRemove,
     desc_type: DescType,
@@ -427,6 +432,7 @@ class Running extends EventTarget {
     ];
   }
 
+  // 获取AOE轨道
   static getBeatTracks(
     attacks: RoundDescBeat,
     desc_type: DescType,
@@ -453,7 +459,8 @@ class Running extends EventTarget {
     ];
   }
 
-  getSoldiers(attacks: TrackDetail) {
+  // 更加轨道详情获取小人
+  getSoldiersByTrack(attacks: TrackDetail) {
     const senderAxis = this.game.getAxis(
       attacks.currentAxisPoint.x,
       attacks.currentAxisPoint.y,
@@ -482,6 +489,7 @@ class Running extends EventTarget {
     };
   }
 
+  // 攻击
   attackHandleRunning(
     attacks: TrackDetail,
     callback: (soldier?: Soldier, receiveSoldier?: Soldier) => void,
@@ -499,12 +507,12 @@ class Running extends EventTarget {
               activeSoldier.setActiveHp(
                 activeSoldier.activePh - (item.receive_sub_hp || 0),
               );
-              activeSoldier.addEffect(attacks.type);
+              activeSoldier.changeEffect(attacks.type, activeSoldier);
             }
           }
         });
       } else if (receiveSoldier) {
-        receiveSoldier.addEffect(attacks.type);
+        receiveSoldier.changeEffect(attacks.type, receiveSoldier);
         if (attacks?.attackInfo?.receive_sub_hp) {
           receiveSoldier.setActiveHp(
             receiveSoldier.activePh - (attacks.attackInfo.receive_sub_hp || 0),
@@ -525,6 +533,7 @@ class Running extends EventTarget {
     return sendSoldier;
   }
 
+  // 攻击
   attackHandle(
     attacks: TrackDetail,
     event: {
@@ -532,7 +541,7 @@ class Running extends EventTarget {
       onAttackEnd: (soldier?: Soldier, receiveSoldier?: Soldier) => void;
     },
   ): null | Soldier {
-    const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
+    const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
     if (!sendSoldier || !receiveSoldier) {
       console.warn(`warn: ${attacks.id}`);
       event.onAttackEnd();
@@ -552,11 +561,12 @@ class Running extends EventTarget {
     return sendSoldier;
   }
 
+  // 击退
   beatHandle(
     attacks: TrackDetail,
     callback: (soldier?: Soldier) => void,
   ): Soldier | null {
-    const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
+    const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
     if (!sendSoldier || !receiveSoldier) {
       console.warn(`warn: ${attacks.id}`);
       return null;
@@ -581,8 +591,9 @@ class Running extends EventTarget {
     return sendSoldier;
   }
 
+  // 碰撞
   beatCollision(attacks: TrackDetail, callback: (soldier?: Soldier) => void) {
-    const { sendSoldier, receiveSoldier } = this.getSoldiers(attacks);
+    const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
     if (!sendSoldier || !receiveSoldier) {
       console.warn(`warn: ${attacks.id}`);
       callback();
@@ -600,6 +611,7 @@ class Running extends EventTarget {
     return sendSoldier;
   }
 
+  // 获取轨道
   getTracks() {
     Object.keys(this.rounds).forEach((_round: string) => {
       const round = Number(_round);
@@ -613,6 +625,7 @@ class Running extends EventTarget {
     });
   }
 
+  // 获取轨道详情
   static getDetails(
     roundInfo: RoundInfo[],
     round: string | number,

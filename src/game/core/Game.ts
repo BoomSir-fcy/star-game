@@ -21,6 +21,9 @@ interface GameOptionsProps {
   width?: number;
   test?: boolean;
 }
+/**
+ * 游戏入口
+ */
 class Game extends EventTarget {
   constructor(options?: GameOptionsProps) {
     super();
@@ -35,7 +38,9 @@ class Game extends EventTarget {
       antialias: true,
       backgroundAlpha: 0.5,
     });
+    // 添加棋盘
     this.app.stage.addChild(this.boards.container);
+    // 绑定缩放
     this.app.view.addEventListener(
       'wheel',
       this.boards.onHandleWheel.bind(this.boards),
@@ -51,15 +56,15 @@ class Game extends EventTarget {
 
   private axis: AxisPoint[][] = [];
 
-  soldiers: Soldier[] = [];
+  soldiers: Soldier[] = []; // 小人
 
-  private dragPreSoldier?: Soldier;
+  private dragPreSoldier?: Soldier; // 当前拖动小人
 
-  private dragPreSoldierEvent?: InteractionEvent;
+  private dragPreSoldierEvent?: InteractionEvent; // 当前拖动小人事件数据
 
-  private enableDrag = false;
+  private enableDrag = false; // 是否启用拖动
 
-  activeSolider?: Soldier;
+  activeSolider?: Soldier; // 当前选中小人
 
   activeSoliderFlag?: boolean; // 表示事件触发源未activeSolider
 
@@ -68,6 +73,7 @@ class Game extends EventTarget {
 
     this.axis = this.boards.axis;
 
+    // 绑定拖动事件 从棋盘外拖到棋盘内
     this.boards.container.on('pointermove', e => {
       if (
         this.enableDrag &&
@@ -80,28 +86,11 @@ class Game extends EventTarget {
         this.onDragStarSoldier();
       }
     });
-    // const app = new PIXI.Application({
-    //   width: config.WIDTH,
-    //   height: config.HEIGHT,
-    //   resolution: config.resolution,
-    //   antialias: true,
-    //   backgroundAlpha: 0.5,
-    // });
-    // // document.body.appendChild(app.view);
-    // this.view = app.view;
 
-    // this.app = app;
-
-    // app.stop();
-
-    // this.addDragon();
-    // this.addSpine();
-    // setTimeout(() => {
-    //   this.app.stop();
-    // }, 2000);
     this.addEventListenerOfWindow();
   }
 
+  // 取消选中
   addEventListenerOfWindow() {
     window.addEventListener('click', () => {
       if (this.activeSoliderFlag) {
@@ -112,6 +101,7 @@ class Game extends EventTarget {
     });
   }
 
+  // 添加小人
   addSoldier(soldier: Soldier) {
     this.soldiers.push(soldier);
     this.boards.container.addChild(soldier.container);
@@ -143,15 +133,19 @@ class Game extends EventTarget {
       .on('click', (e: InteractionEvent) => {
         this.activeSoliderFlag = true;
       });
+    // 小人阵亡事件
     soldier.addEventListener('death', () => {
       this.removeSoldier(soldier);
     });
+
+    // 小人叛变事件
     soldier.addEventListener('enemyChange', () => {
       // this.removeSoldier(soldier);
       this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
     });
   }
 
+  // 添加当前选中小人
   addActiveSolider(activeSolider: Soldier) {
     this.activeSolider = activeSolider;
     this.activeSoliderFlag = true;
@@ -159,6 +153,7 @@ class Game extends EventTarget {
     this.dispatchEvent(getAddActiveSoliderEvent(activeSolider));
   }
 
+  // 移除当前选中小人
   removeActiveSolider() {
     if (this.activeSolider) {
       this.dispatchEvent(getRemoveActiveSoliderEvent());
@@ -166,6 +161,7 @@ class Game extends EventTarget {
     }
   }
 
+  // 设置小人们
   setSolders(soldiers: Soldier[]) {
     const newSoldiers: Soldier[] = [];
     soldiers.forEach(soldier => {
@@ -177,6 +173,7 @@ class Game extends EventTarget {
     this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
   }
 
+  // 从棋盘上移除小人
   removeSoldier(soldier: Soldier) {
     this.soldiers = this.soldiers.filter(item => item !== soldier);
     this.boards.container.removeChild(soldier.container);
@@ -185,6 +182,7 @@ class Game extends EventTarget {
     this.removeActiveSolider();
   }
 
+  // 清空所有小人
   clearSoldier() {
     this.soldiers.forEach(item => {
       item.changeState(stateType.PREVIEW, false);
@@ -198,6 +196,7 @@ class Game extends EventTarget {
     this.enableDrag = state;
   }
 
+  // 添加拖拽中的小人
   addDragPreSoldier(soldier: Soldier) {
     this.setEnableDrag(true);
     this.dragPreSoldier = soldier.clone({ enableDrag: true });
@@ -206,6 +205,7 @@ class Game extends EventTarget {
     this.app.stage.addChild(this.dragPreSoldier.container);
   }
 
+  // 关闭拖拽中的小人
   offDragPreSoldier() {
     this.setEnableDrag(false);
     if (this.dragPreSoldier && this.dragPreSoldierEvent) {
@@ -227,6 +227,7 @@ class Game extends EventTarget {
     }
   }
 
+  // 显示相同的小人
   showSameSoliderState(soldier?: Soldier) {
     this.soldiers.forEach(item => {
       if (soldier?.options?.unique_id === item.options?.unique_id) {
@@ -235,6 +236,7 @@ class Game extends EventTarget {
     });
   }
 
+  // 拖拽小人开始生命周期
   onDragStarSoldier(soldier?: Soldier) {
     this.boards.chequers.forEach(item => {
       if (soldier?.axisPoint?.chequer === item) {
@@ -246,6 +248,7 @@ class Game extends EventTarget {
     });
   }
 
+  // 拖拽小人结束生命周期
   onDragEndSoldier(event: InteractionEvent, soldier: Soldier) {
     let canDrag = false;
 
@@ -263,6 +266,13 @@ class Game extends EventTarget {
     return canDrag;
   }
 
+  /**
+   * @dev 创建小人并添加到棋盘
+   * @param _x x轴坐标
+   * @param _y y轴坐标
+   * @param option 参数
+   * @returns 小人
+   */
   createSoldier(_x: number, _y: number, option: AttrSoldierOptions) {
     const axis = this.getAxis(_x, _y);
     if (!axis) return null;
@@ -277,6 +287,12 @@ class Game extends EventTarget {
     return soldier;
   }
 
+  /**
+   * @dev 获取坐标详情
+   * @param x x轴坐标
+   * @param y y轴坐标
+   * @returns
+   */
   getAxis(x: number, y: number) {
     try {
       return this.axis[x][y];
@@ -286,74 +302,22 @@ class Game extends EventTarget {
     }
   }
 
+  /**
+   * @dev 根据坐标获取小人
+   * @param axis
+   * @returns Soldier | null
+   */
   findSoldierByAxis(axis: AxisPoint) {
     return this.soldiers.find(soldier => soldier.axisPoint === axis);
   }
 
+  /**
+   * @dev 根据sid获取小人
+   * @param sid
+   * @returns Soldier | null
+   */
   findSoldierById(sid: string) {
     return this.soldiers.find(soldier => soldier.sid === sid);
-  }
-
-  addDragon() {
-    this.app.stop();
-    const loader = Loader.shared;
-    loader.reset();
-
-    loader
-      .add('skeleton', '/assets/stone_movie_clip/ske.json')
-      .add('texture_json', '/assets/stone_movie_clip/tex.json')
-      .add('texture_png', '/assets/stone_movie_clip/tex.png')
-      .load((_loader, res: any) => {
-        return this.onAssetsLoaded(res);
-      });
-  }
-
-  onAssetsLoaded(res: any) {
-    const { factory } = window.dragonBones.PixiFactory;
-
-    factory.parseDragonBonesData(res.skeleton.data);
-    factory.parseTextureAtlasData(
-      res.texture_json.data,
-      res.texture_png.texture,
-    );
-
-    const armatureDisplay = factory.buildArmatureDisplay('yans');
-    armatureDisplay.animation.play('play');
-    armatureDisplay.x = 600;
-    armatureDisplay.y = 100;
-
-    this.app.stage.addChild(armatureDisplay);
-
-    this.app.start();
-  }
-
-  addSpine() {
-    this.app.stop();
-    const loader = Loader.shared;
-    loader.reset();
-
-    loader.add('yans', '/assets/yans/yans.json').load((_loader, res: any) => {
-      return this.onAssetsLoadedSpine(res);
-    });
-  }
-
-  onAssetsLoadedSpine(res: any) {
-    const dragon = new Spine(res.yans.spineData);
-    // dragon.state
-    dragon.update(0);
-    dragon.autoUpdate = false;
-
-    dragon.position.set(300, 300);
-
-    this.app.stage.addChild(dragon);
-    dragon.state.setAnimation(0, 'play', true);
-
-    this.app.start();
-
-    this.app.ticker.add(() => {
-      // update the spine animation, only needed if dragon.autoupdate is set to false
-      dragon.update(0.01666666666667); // HARDCODED FRAMERATE!
-    });
   }
 }
 
