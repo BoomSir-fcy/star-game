@@ -9,15 +9,13 @@ const useUpdatePos = (planetId: number, game: Game) => {
 
   const setSortSoldiers = useCallback(
     soldiers => {
-      const newSoldiers = soldiers
-        .reverse()
-        .map((soldier: Soldier, index: number) => {
-          return {
-            id: `${soldier.axisPoint?.chequer.axisX}${soldier.axisPoint?.chequer.axisY}`,
-            src: soldier.textureRes,
-            soldier,
-          };
-        });
+      const newSoldiers = soldiers.map((soldier: Soldier, index: number) => {
+        return {
+          id: `${soldier.axisPoint?.chequer.axisX}${soldier.axisPoint?.chequer.axisY}`,
+          src: soldier.textureRes,
+          soldier,
+        };
+      });
       if (newSoldiers) {
         setGameSoldiers(newSoldiers);
       }
@@ -28,13 +26,14 @@ const useUpdatePos = (planetId: number, game: Game) => {
   const handleUpdate = useCallback(
     async (event: any) => {
       const { soldiers } = event.detail as { soldiers: Soldier[] };
+      const MAX = 64;
       const units = soldiers.map((item, index) => {
         return {
           pos: {
             x: item?.axisPoint?.chequer?.axisX || 0,
             y: item?.axisPoint?.chequer?.axisY || 0,
           },
-          speed: index, // 出手顺序
+          speed: MAX - index, // 出手顺序
           unit_id: item.id,
         };
       });

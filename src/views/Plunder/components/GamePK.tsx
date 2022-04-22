@@ -231,6 +231,7 @@ const GamePK: React.FC<GamePKProps> = () => {
       hp: 290,
       isEnemy: false,
       enableDrag: true,
+      shield: 500,
     });
     game.createSoldier(7, 7, {
       srcId: '1',

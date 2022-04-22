@@ -94,6 +94,16 @@ const effectConfig: EffectConfig = {
       moveSpriteSrc: '',
       label: '肉搏',
     },
+    {
+      name: bulletType.BUMP,
+      // resDir: '/assets/bullet/fight/jinzhan.json',
+      // spriteRes: '/assets/bullet/fight/jinzhan.png',
+      bombSpineSrc: '/assets/bullet/yan/yans.json',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '',
+      label: '碰撞',
+    },
   ],
 
   effect: {
@@ -139,8 +149,8 @@ export const descOfEffect = {
     remove: false,
   },
   [descType.ADD_SHIELD]: {
-    effect: EffectType.SHIELD,
-    add: true,
+    effect: null,
+    add: false,
     remove: false,
   },
   [descType.ATTACK]: {
@@ -204,9 +214,9 @@ export const descOfEffect = {
     remove: true,
   },
   [descType.REMOVE_SHIELD]: {
-    effect: EffectType.SHIELD,
+    effect: null,
     add: false,
-    remove: true,
+    remove: false,
   },
   [descType.REMOVE_STOP_MOVE]: {
     effect: EffectType.STOP_MOVE,

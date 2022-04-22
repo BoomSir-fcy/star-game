@@ -252,6 +252,7 @@ export const bulletType = {
   VENOM: 'venom', // 毒液攻击
   FIGHT: 'fight', // 肉搏
   DRAGON: 'dragon', // 岩石
+  BUMP: 'bump', // 碰撞
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 

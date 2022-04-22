@@ -109,7 +109,6 @@ class Running extends EventTarget {
 
   init() {
     this.getTracks();
-    console.log(this.trackDetails);
     this.runHandle();
   }
 
@@ -162,7 +161,6 @@ class Running extends EventTarget {
     this.playing = true;
     const track = this.trackDetails[this.trackIndex];
     this.runTrack(track, () => {
-      console.log(track);
       this.runningHandle();
     });
   }
@@ -191,7 +189,6 @@ class Running extends EventTarget {
     if (track?.type === descType.BEAT) {
       this.infoText.text = `回合: ${track.id}`;
       return this.beatHandle(track, s => {
-        console.log('beatHandle');
         callback(s);
       });
     }
@@ -222,13 +219,12 @@ class Running extends EventTarget {
     this.playing = false;
     if (this.paused) return;
     if (this.playCount === 0) return;
-    console.log(this.trackIndex, this.trackDetails.length);
     if (this.trackIndex < this.trackDetails.length) {
       this.trackIndex += 1;
       this.playCount -= 1;
       this.runHandle();
     } else {
-      console.log('结束战斗');
+      this.infoText.text = `结束战斗`;
       this.playing = false;
       this.dispatchEvent(new CustomEvent('runEnd'));
       this.playEnd = true;
@@ -367,7 +363,6 @@ class Running extends EventTarget {
       callback();
       return null;
     }
-    soldier.showEffectText('阵亡');
     soldier.dispatchEvent(new Event('death'));
     callback(soldier);
     return soldier;
@@ -525,7 +520,7 @@ class Running extends EventTarget {
         receiveSoldier.changeEffect(attacks.type, receiveSoldier);
         if (
           typeof attacks?.attackInfo?.now_hp === 'number' &&
-          typeof attacks?.attackInfo.now_shield === 'number'
+          typeof attacks?.attackInfo?.now_shield === 'number'
         ) {
           receiveSoldier.setActiveHpWithShield(
             attacks?.attackInfo?.now_hp,
@@ -591,7 +586,6 @@ class Running extends EventTarget {
       return null;
     }
     sendSoldier.once('attackEnd', () => {
-      console.log(attacks.detail, 'attackEnd');
       if (attacks.detail) {
         attacks.detail.forEach((item, index) => {
           this.runTrack(item, () => {
@@ -604,7 +598,6 @@ class Running extends EventTarget {
         callback();
       }
     });
-    console.log(sendSoldier, receiveSoldier, 'sendSoldier === receiveSoldier');
     sendSoldier.attack(receiveSoldier, attacks.type, attacks?.attackInfo);
 
     return sendSoldier;
@@ -621,11 +614,6 @@ class Running extends EventTarget {
     sendSoldier.once('collisionEnd', () => {
       callback();
     });
-    console.log(
-      receiveSoldier,
-      sendSoldier,
-      'sendSoldier=sendSoldier=sendSoldiersendSoldiersendSoldier',
-    );
     sendSoldier.beatCollision(receiveSoldier);
     return sendSoldier;
   }

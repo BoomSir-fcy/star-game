@@ -28,8 +28,16 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   const handleResize = useCallback(() => {
     const { width, height } =
       window.document.documentElement.getBoundingClientRect();
+
+    // 宽比高大的时候适用
     const maxV = Math.max(width, height);
     const rate = maxV / 1920;
+
+    // 宽比高小的时候适用
+    // const minV = Math.min(width, height);
+    // const base = minV === width ? 1920 : 900;
+    // const rate = minV / base;
+
     setScale(rate);
     setMinHeight(Math.min(width, height));
     if (ref.current) {
