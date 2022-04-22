@@ -48,7 +48,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   return (
     <Box position='relative' id='detect-orient' ref={ref}>
       <StarrySky bgType={pathname === '/plant-league' ? 2 : 0} />
-      <VideoComponent minHeight={minHeight} scale={scale} />
+      {/* <VideoComponent minHeight={minHeight} scale={scale} /> */}
       <Content id='scale-content' scale={scale}>
         {children}
       </Content>

@@ -52,7 +52,6 @@ module.exports = {
     "@typescript-eslint/no-empty-function": 0,
     "import/no-unresolved": [2, { caseSensitive: false }],
     camelcase: [0, { properties: "never" }],
-    "react-hooks/exhaustive-deps": 2,
     "react/jsx-filename-extension": 0,
     "react/default-props-match-prop-types": 0,
     "react/no-array-index-key": 0,

@@ -7,7 +7,7 @@ import { getBalanceNumber } from 'utils/formatBalance';
 import multicall from 'utils/multicall';
 import erc20Abi from 'config/abi/erc20.json';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
-import { random } from 'lodash';
+import random from 'lodash/random';
 import { signMessage } from 'utils/web3React';
 import { Api } from 'apis';
 

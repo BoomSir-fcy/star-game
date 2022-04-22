@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { kebabCase } from 'lodash';
+import kebabCase from 'lodash/kebabCase';
 import { Flex, Text } from 'uikit';
 
 export const toastTypes = {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
 import './spiders.css';
@@ -43,8 +43,14 @@ interface StarrySkyProps {
 }
 
 const StarrySky: React.FC<StarrySkyProps> = ({ bgType = 0 }) => {
+  console.log(12211212, 'StarrySky');
+
+  const type = useMemo(() => {
+    console.log(33333, 'StarrySky');
+    return bgType;
+  }, [bgType]);
   return (
-    <StarrySkyBg bgType={bgType}>
+    <StarrySkyBg bgType={type}>
       <div className='spiders'>
         <div className='spidersOne' />
         <div className='spidersTwo' />
