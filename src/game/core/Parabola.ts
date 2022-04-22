@@ -105,7 +105,7 @@ class Parabola extends EventTarget {
 
     this.display.position.set(realX, realY);
     // this.display.scale.set(this.scale);
-    // 根据曲线子弹调整角度
+    // 根据切线 调整子弹角度
     this.display.rotation = tangent / 2 + (0.5 * this.rate - 0.25) * Math.PI;
 
     if (Math.abs(x - this.coordTarget.x) < Math.abs(stepMoveX)) {

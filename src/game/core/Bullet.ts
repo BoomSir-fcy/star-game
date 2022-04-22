@@ -213,7 +213,7 @@ class Bullet extends EventTarget {
       this.effects[name].moveEffectSpine = spine;
       spine.scale.set(0.45);
       spine.visible = false;
-      console.log('=loadMoveSpine=');
+      this.effects[name].loaded = true;
     }
   }
 
@@ -231,7 +231,7 @@ class Bullet extends EventTarget {
       spine.visible = false;
       spine.update(0);
       spine.autoUpdate = false;
-      console.log('=loadBombSpine=');
+      this.effects[name].loaded = true;
       spine.state.addListener({
         complete: () => {
           this.onBombEnd(name);
@@ -254,7 +254,6 @@ class Bullet extends EventTarget {
   async linearAttack(name: BulletType, attackTarget: Combat) {
     this.attackTarget = attackTarget;
     const { moveEffectSpine, moveEffectSprite } = await this.loadEffect(name);
-    console.log('===linearAttack');
 
     if (this.combat.axisPoint && attackTarget.axisPoint) {
       const display = moveEffectSprite || moveEffectSpine;
@@ -327,13 +326,19 @@ class Bullet extends EventTarget {
    * @param name 类型
    * @param point 爆炸的终点
    */
-  attackBomb(name: BulletType, point: Point) {
-    const { bombEffectSpine, bombEffectSprite } = this.effects[name];
+  async attackBomb(name: BulletType, point: Point) {
+    const { bombEffectSpine, bombEffectSprite } = await this.loadEffect(name);
     if (bombEffectSpine) {
       this.effects[name].completeBomb = false;
       bombEffectSpine.position.set(point.x, point.y);
       bombEffectSpine.visible = true;
       bombEffectSpine.state.setAnimation(0, 'play', false);
+      const { x, y } = this.flipTargetPointOrientation(
+        bombEffectSpine.scale.x,
+        bombEffectSpine.scale.y,
+      );
+      bombEffectSpine.scale.x = x; // Orientation.TO_LEFT_UP;
+      bombEffectSpine.scale.y = y; // Orientation.TO_RIGHT_DOWN;
       this.spineAnimation(name, bombEffectSpine);
     } else {
       this.onBombEnd(name);
@@ -504,7 +509,7 @@ class Bullet extends EventTarget {
       return;
     }
 
-    const space = [bulletType.STING];
+    const space = [bulletType.STING, bulletType.BUMP];
     if (space.includes(name)) {
       this.spaceAttack(name, attackTarget);
     }

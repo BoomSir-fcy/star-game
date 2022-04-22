@@ -94,6 +94,16 @@ const effectConfig: EffectConfig = {
       moveSpriteSrc: '',
       label: '肉搏',
     },
+    {
+      name: bulletType.BUMP,
+      // resDir: '/assets/bullet/fight/jinzhan.json',
+      // spriteRes: '/assets/bullet/fight/jinzhan.png',
+      bombSpineSrc: '/assets/bullet/yan/yans.json',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '',
+      label: '碰撞',
+    },
   ],
 
   effect: {
