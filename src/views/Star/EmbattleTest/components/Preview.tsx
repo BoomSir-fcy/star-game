@@ -141,8 +141,6 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     setVisible(false);
   }, [activeSoldier]);
 
-  console.log(activeSoldier?.options);
-
   return (
     <Box style={{ position: 'relative' }}>
       <Box
@@ -196,7 +194,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
             </Flex>
             <Image width={40} height={40} src='/images/commons/icon/help.png' />
           </Flex>
-          <Flex>
+          <Flex alignItems='center' padding='0 10px'>
             <PreviewSoldier
               style={{
                 flexShrink: 0,
@@ -233,7 +231,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
               />
             </Flex>
           </Flex>
-          <Divider margin='8px auto 27px' width={532} />
+          <Divider margin='8px auto 27px' width={565} />
           <Flex>
             <Box ml='22px' ref={ref} width={218} />
             <Card overflow='auto' width={354} height={217} padding='16px'>

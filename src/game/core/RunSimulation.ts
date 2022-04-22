@@ -13,11 +13,7 @@ import {
 } from 'game/types';
 import Game from './Game';
 import Soldier from './Soldier';
-import { getEffectText } from './utils';
 
-// interface AttackDetail {
-
-// }
 interface TrackDetail {
   type: DescType;
   currentAxisPoint: RoundDescAxis;
@@ -44,7 +40,7 @@ export interface RoundsProps {
 /**
  * 运行核心
  */
-class Running extends EventTarget {
+class RunSimulation extends EventTarget {
   constructor(game: Game, rounds: RoundsProps) {
     super();
     this.game = game;
@@ -60,7 +56,7 @@ class Running extends EventTarget {
 
   moveTimePerChequer = 500; // 移动一格所占的时间
 
-  attackTime = 1000; // 每次攻击所占的时间
+  attackTime = 500; // 每次攻击所占的时间
 
   trackId = ''; // 表示当前正在执行的进程 [一级, 二级进程, 三级进程]
 
@@ -80,32 +76,22 @@ class Running extends EventTarget {
 
   playCount = 1;
 
-  playing = false;
-
   playEnd = false;
-
-  playLoop = false;
 
   init() {
     this.getTracks();
+    this.game.createSoldier(4, 5, {
+      srcId: '2',
+      race: 2,
+      id: 1,
+      unique_id: 3,
+      hp: 100,
+      isEnemy: false,
+      enableDrag: false,
+      sid: 'aaaa',
+    });
+    this.generateStakes();
     this.runHandle();
-  }
-
-  play() {
-    this.paused = false;
-    this.runHandle();
-  }
-
-  pause() {
-    this.paused = true;
-  }
-
-  stop() {
-    this.game.app.stop();
-  }
-
-  start() {
-    this.game.app.start();
   }
 
   // 设置轨道索引
@@ -128,13 +114,24 @@ class Running extends EventTarget {
     }
   }
 
+  // 生成木桩
+  generateStakes() {
+    this.game.createSoldier(4, 4, {
+      srcId: '1',
+      race: 1,
+      id: 1,
+      unique_id: 1,
+      hp: 100,
+      isEnemy: true,
+      enableDrag: false,
+      sid: 'kkkk',
+    });
+  }
+
   // 运动
   async runHandle() {
-    if (this.paused) return;
-    this.playing = true;
     const track = this.trackDetails[this.trackIndex];
     this.runTrack(track, () => {
-      console.log(track);
       this.runningHandle();
     });
   }
@@ -142,33 +139,22 @@ class Running extends EventTarget {
   // 运行轨道
   runTrack(track: TrackDetail, callback: (soldier?: Soldier) => void) {
     if (track?.type) {
-      console.log(`技能: ${getEffectText(track.type)}`);
       return this.attackHandleRunning(track, s => {
         callback(s);
       });
     }
     callback();
-
     return null;
   }
 
   runningHandle() {
-    this.playing = false;
-    if (this.paused) return;
     if (this.playCount === 0) return;
-    console.log(this.trackIndex, this.trackDetails.length);
     if (this.trackIndex < this.trackDetails.length) {
       this.trackIndex += 1;
       this.playCount -= 1;
       this.runHandle();
-    } else if (this.playLoop) {
-      console.log('循环播放');
-      this.playLoop = false;
-      this.trackIndex = 0;
-      this.runHandle();
     } else {
       console.log('结束战斗');
-      this.playing = false;
       this.dispatchEvent(new CustomEvent('runEnd'));
       this.playEnd = true;
     }
@@ -177,7 +163,6 @@ class Running extends EventTarget {
   // 改变播放次数
   changePlayCount(count: number) {
     this.playCount = count;
-    if (this.playing) return;
     if (this.playEnd) {
       this.trackIndex = 0;
       this.playEnd = false;
@@ -227,7 +212,6 @@ class Running extends EventTarget {
   ): TrackDetail[] {
     const { x, y } = moves.from;
     const { x: x1, y: y1 } = moves.dest;
-
     return [
       {
         id: `${id}`,
@@ -316,7 +300,7 @@ class Running extends EventTarget {
     desc_type: DescType,
     id: string,
   ): TrackDetail[] {
-    const detail = Running.getDetails(attacks.detail, id, true);
+    const detail = RunSimulation.getDetails(attacks.detail, id, true);
 
     return [
       {
@@ -465,11 +449,6 @@ class Running extends EventTarget {
     sendSoldier.once('collisionEnd', () => {
       callback();
     });
-    console.log(
-      receiveSoldier,
-      sendSoldier,
-      'sendSoldier=sendSoldier=sendSoldiersendSoldiersendSoldier',
-    );
     sendSoldier.beatCollision(receiveSoldier);
     return sendSoldier;
   }
@@ -483,7 +462,7 @@ class Running extends EventTarget {
         trackId: `${round}`,
         list: [],
       };
-      const detail = Running.getDetails(this.rounds[round].data, round);
+      const detail = RunSimulation.getDetails(this.rounds[round].data, round);
       this.trackDetails.push(...detail);
     });
   }
@@ -495,18 +474,13 @@ class Running extends EventTarget {
     self?: boolean,
   ) {
     const details: TrackDetail[] = [];
-
     Object.keys(roundInfo).forEach(_track => {
       const track = Number(_track);
       const info = roundInfo[track];
-      // 移动
-      if (info.desc_type === descType.MOVE) {
-        details.push(...Running.getMoveTracks(info.move, `${round}-${_track}`));
-      }
       // 攻击
       if (info.desc_type === descType.ATTACK) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.attack,
             info.desc_type,
             `${round}-${_track}`,
@@ -517,7 +491,7 @@ class Running extends EventTarget {
       // 攻击
       if (info.desc_type === descType.BOOM) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.boom,
             info.desc_type,
             `${round}-${_track}`,
@@ -527,7 +501,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.ADD_BOOM) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.add_boom,
             info.desc_type,
             `${round}-${_track}`,
@@ -537,7 +511,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.ADD_FIRING) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.add_firing,
             info.desc_type,
             `${round}-${_track}`,
@@ -547,7 +521,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.FIRING) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.firing,
             info.desc_type,
             `${round}-${_track}`,
@@ -557,7 +531,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.ICE_END) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.ice_end,
             info.desc_type,
             `${round}-${_track}`,
@@ -567,7 +541,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.ICE_START) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.ice_start,
             info.desc_type,
             `${round}-${_track}`,
@@ -577,7 +551,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.STOP_MOVE) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.stop_move,
             info.desc_type,
             `${round}-${_track}`,
@@ -587,7 +561,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.REMOVE) {
         details.push(
-          ...Running.getRemoveTracks(
+          ...RunSimulation.getRemoveTracks(
             info.unit_remove,
             info.desc_type,
             `${round}-${_track}`,
@@ -596,7 +570,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.BEAT) {
         details.push(
-          ...Running.getBeatTracks(
+          ...RunSimulation.getBeatTracks(
             info.beat,
             info.desc_type,
             `${round}-${_track}`,
@@ -605,12 +579,15 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.BEAT_MOVE) {
         details.push(
-          ...Running.getBeatMoveTracks(info.beat_move, `${round}-${_track}`),
+          ...RunSimulation.getBeatMoveTracks(
+            info.beat_move,
+            `${round}-${_track}`,
+          ),
         );
       }
       if (info.desc_type === descType.BEAT_COLLISION) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.carsh_harm,
             info.desc_type,
             `${round}-${_track}`,
@@ -619,7 +596,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.REMOVE_FIRING) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.remove_firing,
             info.desc_type,
             `${round}-${_track}`,
@@ -628,7 +605,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.REMOVE_STOP_MOVE) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.remove_stop_move,
             info.desc_type,
             `${round}-${_track}`,
@@ -638,7 +615,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.ADD_SHIELD) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.add_shield,
             info.desc_type,
             `${round}-${_track}`,
@@ -647,7 +624,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.REMOVE_SHIELD) {
         details.push(
-          ...Running.getAttackTracks(
+          ...RunSimulation.getAttackTracks(
             info.sub_shield,
             info.desc_type,
             `${round}-${_track}`,
@@ -684,4 +661,4 @@ class Running extends EventTarget {
   }
 }
 
-export default Running;
+export default RunSimulation;

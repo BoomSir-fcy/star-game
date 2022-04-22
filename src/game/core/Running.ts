@@ -206,13 +206,12 @@ class Running extends EventTarget {
       });
     }
     if (track?.type) {
-      // const round = `回合: ${track.id} \n`;
-      // const effect = `技能: ${getEffectText(track.type)} \n`;
-      // const sender = `攻击者: (${track.currentAxisPoint.x}, ${track.currentAxisPoint.y}) \n`;
-      // const receive = `被攻击者: (${track.targetAxisPoint.x}, ${track.targetAxisPoint.y}) \n`;
-      // const newHp = `被攻击者血量: (${(track.attackInfo as any)?.now_hp}) \n`;
-      // this.infoText.text = `${round}${effect}${sender}${receive}${newHp}`;
-      console.log(`技能: ${getEffectText(track.type)}`);
+      const round = `回合: ${track.id} \n`;
+      const effect = `技能: ${getEffectText(track.type)} \n`;
+      const sender = `攻击者: (${track.currentAxisPoint.x}, ${track.currentAxisPoint.y}) \n`;
+      const receive = `被攻击者: (${track.targetAxisPoint.x}, ${track.targetAxisPoint.y}) \n`;
+      const newHp = `被攻击者血量: (${(track.attackInfo as any)?.now_hp}) \n`;
+      this.infoText.text = `${round}${effect}${sender}${receive}${newHp}`;
       return this.attackHandleRunning(track, s => {
         callback(s);
       });

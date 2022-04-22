@@ -23,109 +23,64 @@ const game = new Game({
   test: true,
   enableDrag: false,
 });
-const running = new RunSimulation(game, {
-  1: {
-    data: [
-      // @ts-ignore
-      {
-        round: 1,
-        desc_type: 2,
-        move: {
-          id: 'aaaa',
-          starting_point: {
-            x: 2,
-            y: 3,
-          },
-          dest: [
-            {
-              x: 5,
-              y: 5,
-            },
-            {
-              x: 5,
-              y: 4,
-            },
-          ],
-        },
-      },
-    ],
-  },
-  2: {
-    data: [
-      // @ts-ignore
-      {
-        round: 1,
-        desc_type: 7,
-        add_firing: {
-          sender_id: 'aaaa',
-          receive_id: 'kkkk',
-          sender_point: {
-            x: 4,
-            y: 5,
-          },
-          receive_point: {
-            x: 5,
-            y: 4,
-          },
-          firing_hp: 40,
-          around: [
-            // @ts-ignore
-            {
-              receive_id: 'kkkk',
-              receive_point: {
-                x: 5,
-                y: 4,
-              },
-            },
-          ],
-        },
-      },
-      {
-        round: 1,
-        desc_type: 8,
-        firing: {
-          sender_id: 'kkkk',
-          receive_id: 'kkkk',
-          long_round: 1,
-          receive_sub_hp: 40,
-          receive_point: {
-            x: 5,
-            y: 4,
-          },
-          // @ts-ignore
-          now_hp: 960,
-        },
-      },
-    ],
-  },
-});
 const MiniRaceAni = () => {
   const ref = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (ref.current) {
       ref.current.appendChild(game.view);
-      game.createSoldier(4, 5, {
-        srcId: '2',
-        race: 2,
-        id: 1,
-        unique_id: 3,
-        hp: 100,
-        isEnemy: false,
-        enableDrag: false,
-        sid: 'aaaa',
+      const run = new RunSimulation(game, {
+        1: {
+          data: [
+            // @ts-ignore
+            {
+              round: 1,
+              desc_type: 7,
+              add_firing: {
+                sender_id: 'aaaa',
+                receive_id: 'kkkk',
+                sender_point: {
+                  x: 4,
+                  y: 5,
+                },
+                receive_point: {
+                  x: 5,
+                  y: 4,
+                },
+                firing_hp: 40,
+                around: [
+                  // @ts-ignore
+                  {
+                    receive_id: 'kkkk',
+                    receive_point: {
+                      x: 5,
+                      y: 4,
+                    },
+                  },
+                ],
+              },
+            },
+            {
+              round: 1,
+              desc_type: 8,
+              // @ts-ignore
+              firing: {
+                sender_id: 'kkkk',
+                receive_id: 'kkkk',
+                long_round: 1,
+                receive_sub_hp: 30,
+                receive_point: {
+                  x: 5,
+                  y: 4,
+                },
+                // @ts-ignore
+                now_hp: 960,
+              },
+            },
+          ],
+        },
       });
-      game.createSoldier(4, 4, {
-        srcId: '1',
-        race: 1,
-        id: 1,
-        unique_id: 1,
-        hp: 100,
-        isEnemy: true,
-        enableDrag: false,
-        sid: 'kkkk',
-      });
-      running?.changePlayCount(-1);
+      console.log(run);
     }
   }, [ref]);
 

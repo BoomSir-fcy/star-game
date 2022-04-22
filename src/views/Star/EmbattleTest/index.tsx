@@ -99,7 +99,6 @@ const Embattle = () => {
     }
   }, [testPlantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers]);
 
-  console.log('11111', activeSoldier);
   return (
     <Box position='relative'>
       <Box ref={ref} />
@@ -127,7 +126,7 @@ const Embattle = () => {
         top='490px'
         left='0'
       >
-        <Box position='absolute' top='-80px'>
+        <Flex alignItems='center' position='absolute' top='-80px'>
           <Button onClick={() => game.clearSoldier()} padding={0} width='50px'>
             <Text fontSize='20px'>清空</Text>
           </Button>
@@ -138,7 +137,16 @@ const Embattle = () => {
           >
             <Text fontSize='20px'>战斗测试</Text>
           </Button>
-        </Box>
+          <Button
+            padding={0}
+            width='50px'
+            onClick={() => {
+              console.log(gameSoldiers);
+            }}
+          >
+            <Text fontSize='20px'>动画模拟</Text>
+          </Button>
+        </Flex>
         <PreviewList race={race} game={game} activeSoldier={activeSoldier} />
       </Box>
     </Box>
