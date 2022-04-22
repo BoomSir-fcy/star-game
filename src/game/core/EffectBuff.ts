@@ -1,6 +1,8 @@
 import { Sprite } from '@pixi/sprite';
 import { Texture } from '@pixi/core';
 import { Container } from '@pixi/display';
+import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
+import { AnimatedSprite } from '@pixi/sprite-animated';
 import type Combat from './Combat';
 import { EffectType } from '../types';
 import effectConfig from '../effectConfig';
@@ -35,7 +37,10 @@ class EffectBuff extends EventTarget {
   };
 
   [EffectType.FIRING] = {
-    sprint: new Sprite(),
+    sprint: new AnimatedSprite([
+      Texture.from(effectConfig.effect.firing.spriteSrc0),
+      Texture.from(effectConfig.effect.firing.spriteSrc1 as string),
+    ]),
     sprint1: new Sprite(),
     scale: 0.7,
     load: false,
@@ -55,6 +60,16 @@ class EffectBuff extends EventTarget {
     load: false,
   };
 
+  [EffectType.VENOM] = {
+    sprint: new AnimatedSprite([
+      Texture.from(effectConfig.effect.venom.spriteSrc0),
+      Texture.from(effectConfig.effect.venom.spriteSrc1 as string),
+    ]),
+    sprint1: new Sprite(),
+    scale: 0.7,
+    load: false,
+  };
+
   /**
    *
    * @param type 添加特效
@@ -63,6 +78,14 @@ class EffectBuff extends EventTarget {
     if (!this.added) {
       this.combat.container.addChild(this.container);
       this.added = true;
+    }
+    if (type === EffectType.FIRING) {
+      this.addFiringEffect(type);
+      return;
+    }
+    if (type === EffectType.VENOM) {
+      this.addVenomEffect(type);
+      return;
     }
     if (this.combat.container)
       if (this[type].load) {
@@ -102,8 +125,63 @@ class EffectBuff extends EventTarget {
    * @param type
    */
   removeEffect(type: EffectType) {
+    if (type === EffectType.VENOM || type === EffectType.FIRING) {
+      this.removeAnimateEffect(type);
+      return;
+    }
     this[type].sprint.visible = false;
     this[type].sprint1.visible = false;
+  }
+
+  /**
+   * 添加火焰特效
+   */
+  addFiringEffect(type: EffectType) {
+    const sprite = this[type].sprint as AnimatedSprite;
+    sprite.anchor.set(0.5);
+    sprite.zIndex = 2;
+    sprite.position.set(0, -30);
+    this.addAnimateEffect(type, 0.05);
+
+    this.combat.displaySprite.filters = [new ColorOverlayFilter(0xff0000, 0.3)];
+    this[type].load = true;
+  }
+
+  /**
+   * 添加毒液特效
+   */
+  addVenomEffect(type: EffectType) {
+    const sprite = this[type].sprint as AnimatedSprite;
+    sprite.anchor.set(0.5);
+    sprite.zIndex = 2;
+    sprite.position.set(0, -150);
+    this.addAnimateEffect(type, 0.2);
+
+    this.combat.displaySprite.filters = [new ColorOverlayFilter(0x00ff00, 0.3)];
+    this[type].load = true;
+  }
+
+  /**
+   * 添加动画特效
+   * @param type
+   * @param speed
+   */
+  addAnimateEffect(type: EffectType, speed: number) {
+    const sprite = this[type].sprint as AnimatedSprite;
+    sprite.animationSpeed = speed;
+    sprite.play();
+    sprite.onLoop = () => {
+      sprite.play();
+    };
+    this.combat.container.addChild(sprite);
+    sprite.visible = true;
+  }
+
+  removeAnimateEffect(type: EffectType) {
+    const sprite = this[type].sprint as AnimatedSprite;
+    sprite.stop();
+    this.combat.displaySprite.filters = null;
+    sprite.visible = false;
   }
 }
 
