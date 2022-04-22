@@ -27,6 +27,7 @@ const config = {
   BLOOD_COLOR: 0x32ff32, // 血条颜色
   BLOOD_COLOR_ENEMY: 0xb22323, // 敌方血条颜色
   BLOOD_COLOR_BACK: 0x161920, // 空血的血条颜色
+  BLOOD_COLOR_SHIELD: 0xffffff,
   BLOOD_WIDTH: 100,
   BLOOD_HEIGHT: 10,
 

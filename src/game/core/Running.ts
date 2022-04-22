@@ -101,7 +101,7 @@ class Running extends EventTarget {
 
   paused = false;
 
-  playCount = 1;
+  playCount = -1;
 
   playing = false;
 
@@ -505,20 +505,38 @@ class Running extends EventTarget {
           if (receiveAxis) {
             const activeSoldier = this.game.findSoldierByAxis(receiveAxis);
             if (activeSoldier) {
-              activeSoldier.setActiveHp(
-                activeSoldier.activePh - (item.receive_sub_hp || 0),
-              );
+              // activeSoldier.setActiveHp(
+              //   activeSoldier.activePh - (item.receive_sub_hp || 0),
+              // );
               activeSoldier.changeEffect(attacks.type, activeSoldier);
+              if (
+                typeof item.now_hp === 'number' &&
+                typeof item.now_shield === 'number'
+              ) {
+                activeSoldier.setActiveHpWithShield(
+                  item.now_hp,
+                  item.now_shield,
+                );
+              }
             }
           }
         });
       } else if (receiveSoldier) {
         receiveSoldier.changeEffect(attacks.type, receiveSoldier);
-        if (attacks?.attackInfo?.receive_sub_hp) {
-          receiveSoldier.setActiveHp(
-            receiveSoldier.activePh - (attacks.attackInfo.receive_sub_hp || 0),
+        if (
+          typeof attacks?.attackInfo?.now_hp === 'number' &&
+          typeof attacks?.attackInfo.now_shield === 'number'
+        ) {
+          receiveSoldier.setActiveHpWithShield(
+            attacks?.attackInfo?.now_hp,
+            attacks?.attackInfo.now_shield,
           );
         }
+        // if (attacks?.attackInfo?.receive_sub_hp) {
+        //   receiveSoldier.setActiveHp(
+        //     receiveSoldier.activePh - (attacks.attackInfo.receive_sub_hp || 0),
+        //   );
+        // }
       }
     };
 
@@ -761,6 +779,7 @@ class Running extends EventTarget {
             info.remove_firing,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
@@ -789,6 +808,7 @@ class Running extends EventTarget {
             info.sub_shield,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }

@@ -46,6 +46,9 @@ const Star: React.FC<{
     if (pathname.indexOf('/star/embattle') !== -1) {
       dispatch(setActiveNavId('embattle'));
     }
+    if (pathname.indexOf('/star/embattle-test') !== -1) {
+      dispatch(setActiveNavId('embattle-test'));
+    }
     if (pathname.indexOf('/star/search') !== -1) {
       dispatch(setActiveNavId('search'));
     }

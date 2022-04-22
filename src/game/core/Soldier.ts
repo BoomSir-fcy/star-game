@@ -21,6 +21,7 @@ export interface AttrSoldierOptions extends CombatOptions {
   unique_id: number;
   sid?: string;
   hp?: number;
+  shield?: number;
   activePh?: number;
   isEnemy?: boolean;
   attackId?: string;
@@ -71,6 +72,7 @@ class Soldier extends Combat {
       id,
       isEnemy = false,
       hp = 0,
+      shield = 0,
       activePh = 0,
       attackId = '',
       unique_id,
@@ -108,6 +110,7 @@ class Soldier extends Combat {
 
     this.container.addChild(this.displaySprite);
 
+    this.shield = shield;
     this.hp = hp;
     this.activePh = activePh || hp;
     if (hp) {
