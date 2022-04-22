@@ -138,10 +138,10 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
   ]);
 
   React.useEffect(() => {
-    if (!activeSoldier) {
-      setVisible(false);
-    }
+    setVisible(false);
   }, [activeSoldier]);
+
+  console.log(activeSoldier?.options);
 
   return (
     <Box style={{ position: 'relative' }}>
@@ -168,39 +168,35 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
           >
             <Flex alignItems='center' flex={1}>
               <Text bold shadow='primary'>
-                机甲1
+                {activeSoldier?.options?.unitInfo?.tag}
               </Text>
               <Text mt='2px' ml='36px' fontSize='22px'>
                 LV 1
               </Text>
+              <Button width={40} height={40} padding='0' variant='text'>
+                <Image
+                  width={40}
+                  height={40}
+                  src='/images/commons/icon/Mecha_upgrade.png'
+                />
+              </Button>
               <Button
                 onClick={removeHandle}
-                width={30}
-                height={30}
+                width={40}
+                height={40}
                 padding='0'
                 variant='text'
               >
                 <Image
-                  width={30}
-                  height={30}
-                  src='/images/commons/icon/add_blood.png'
-                />
-              </Button>
-              <Button width={30} height={30} padding='0' variant='text'>
-                <Image
-                  width={30}
-                  height={30}
-                  src='/images/commons/icon/add_blood.png'
+                  width={40}
+                  height={40}
+                  src='/images/commons/icon/delete.png'
                 />
               </Button>
             </Flex>
-            <Image
-              width={30}
-              height={30}
-              src='/images/commons/icon/add_blood.png'
-            />
+            <Image width={40} height={40} src='/images/commons/icon/help.png' />
           </Flex>
-          <Flex padding='0 10px' alignItems='center'>
+          <Flex>
             <PreviewSoldier
               style={{
                 flexShrink: 0,
@@ -217,11 +213,13 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                 label='HP值'
                 value={activeSoldier?.options?.unitInfo?.hp || 0}
                 src='/images/commons/star/HP.png'
+                subSrc='/images/commons/icon/add_blood.png'
               />
               <StatusItem
                 label='耐久度'
                 value={activeSoldier?.options?.unitInfo?.hp || 0}
                 src='/images/commons/star/durability.png'
+                subSrc='/images/commons/icon/repair.png'
               />
               <StatusItem
                 label='防御值'
@@ -235,7 +233,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
               />
             </Flex>
           </Flex>
-          <Divider margin='8px auto 10px' width='100%' />
+          <Divider margin='8px auto 27px' width={532} />
           <Flex>
             <Box ml='22px' ref={ref} width={218} />
             <Card overflow='auto' width={354} height={217} padding='16px'>

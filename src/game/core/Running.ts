@@ -102,7 +102,7 @@ class Running extends EventTarget {
 
   paused = false;
 
-  playCount = 1;
+  playCount = -1;
 
   playing = false;
 
@@ -112,7 +112,6 @@ class Running extends EventTarget {
 
   init() {
     this.getTracks();
-    console.log(this.trackDetails, 123213);
     this.runHandle();
   }
 
@@ -169,7 +168,6 @@ class Running extends EventTarget {
     this.playing = true;
     const track = this.trackDetails[this.trackIndex];
     this.runTrack(track, () => {
-      console.log(track);
       this.runningHandle();
     });
   }
@@ -198,7 +196,6 @@ class Running extends EventTarget {
     if (track?.type === descType.BEAT) {
       this.infoText.text = `回合: ${track.id}`;
       return this.beatHandle(track, s => {
-        console.log('beatHandle');
         callback(s);
       });
     }
@@ -229,7 +226,6 @@ class Running extends EventTarget {
     this.playing = false;
     if (this.paused) return;
     if (this.playCount === 0) return;
-    console.log(this.trackIndex, this.trackDetails.length);
     if (this.trackIndex < this.trackDetails.length) {
       this.trackIndex += 1;
       this.playCount -= 1;
@@ -240,7 +236,7 @@ class Running extends EventTarget {
       this.trackIndex = 0;
       this.runHandle();
     } else {
-      console.log('结束战斗');
+      this.infoText.text = `结束战斗`;
       this.playing = false;
       this.dispatchEvent(new CustomEvent('runEnd'));
       this.playEnd = true;
@@ -379,7 +375,6 @@ class Running extends EventTarget {
       callback();
       return null;
     }
-    soldier.showEffectText('阵亡');
     soldier.dispatchEvent(new Event('death'));
     callback(soldier);
     return soldier;
@@ -511,23 +506,46 @@ class Running extends EventTarget {
       if (attacks.around) {
         // 群体效果
         attacks.around.forEach(item => {
-          const activeSoldier = this.game.findSoldierById(item.receive_id);
-          if (activeSoldier) {
-            activeSoldier.setActiveHp(
-              activeSoldier.activePh - (item.receive_sub_hp || 0),
-            );
-            // 受害者是本人 沒有攻击弹道
-            activeSoldier.changeEffect(attacks.type, activeSoldier);
+          const receiveAxis = this.game.getAxis(
+            item.receive_point.x,
+            item.receive_point.y,
+          );
+          if (receiveAxis) {
+            const activeSoldier = this.game.findSoldierByAxis(receiveAxis);
+            if (activeSoldier) {
+              // activeSoldier.setActiveHp(
+              //   activeSoldier.activePh - (item.receive_sub_hp || 0),
+              // );
+              activeSoldier.changeEffect(attacks.type, activeSoldier);
+              if (
+                typeof item.now_hp === 'number' &&
+                typeof item.now_shield === 'number'
+              ) {
+                activeSoldier.setActiveHpWithShield(
+                  item.now_hp,
+                  item.now_shield,
+                );
+              }
+            }
           }
         });
       } else if (receiveSoldier) {
         // 单体效果
         receiveSoldier.changeEffect(attacks.type, receiveSoldier);
-        if (attacks?.attackInfo?.receive_sub_hp) {
-          receiveSoldier.setActiveHp(
-            receiveSoldier.activePh - (attacks.attackInfo.receive_sub_hp || 0),
+        if (
+          typeof attacks?.attackInfo?.now_hp === 'number' &&
+          typeof attacks?.attackInfo?.now_shield === 'number'
+        ) {
+          receiveSoldier.setActiveHpWithShield(
+            attacks?.attackInfo?.now_hp,
+            attacks?.attackInfo.now_shield,
           );
         }
+        // if (attacks?.attackInfo?.receive_sub_hp) {
+        //   receiveSoldier.setActiveHp(
+        //     receiveSoldier.activePh - (attacks.attackInfo.receive_sub_hp || 0),
+        //   );
+        // }
       }
     };
 
@@ -582,7 +600,6 @@ class Running extends EventTarget {
       return null;
     }
     sendSoldier.once('attackEnd', () => {
-      console.log(attacks.detail, 'attackEnd');
       if (attacks.detail) {
         attacks.detail.forEach((item, index) => {
           this.runTrack(item, () => {
@@ -595,7 +612,6 @@ class Running extends EventTarget {
         callback();
       }
     });
-    console.log(sendSoldier, receiveSoldier, 'sendSoldier === receiveSoldier');
     sendSoldier.attack(receiveSoldier, attacks.type, attacks?.attackInfo);
 
     return sendSoldier;
@@ -612,11 +628,6 @@ class Running extends EventTarget {
     sendSoldier.once('collisionEnd', () => {
       callback();
     });
-    console.log(
-      receiveSoldier,
-      sendSoldier,
-      'sendSoldier=sendSoldier=sendSoldiersendSoldiersendSoldier',
-    );
     sendSoldier.beatCollision(receiveSoldier);
     return sendSoldier;
   }
@@ -770,6 +781,7 @@ class Running extends EventTarget {
             info.remove_firing,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }
@@ -798,6 +810,7 @@ class Running extends EventTarget {
             info.sub_shield,
             info.desc_type,
             `${round}-${_track}`,
+            self,
           ),
         );
       }

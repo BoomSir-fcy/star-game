@@ -79,6 +79,8 @@ const MysteryBoxState = () => {
 
   const { handleOpen } = useOpenMysteryBox();
   const [visible, setVisible] = useState(false);
+  const [openedBox, setOpenedBox] = useState(false);
+
   const fetchHandle = useCallback(async () => {
     if (account) {
       const event = await queryMintEvent(account);
@@ -111,10 +113,14 @@ const MysteryBoxState = () => {
         console.log(res);
         // const event = await fetchHandle();
         // console.log(event, 'event');
-        setBought(false);
-        setVisible(false);
         const planetId = await getPlanetId(res?.blockHash);
-        navigate(`/mystery-box/detail?i=${planetId}`);
+        // 盲盒打开特效视频
+        setOpenedBox(true);
+        setBought(false);
+        setTimeout(() => {
+          setVisible(false);
+          navigate(`/mystery-box/detail?i=${planetId}`);
+        }, 3000);
       } catch (error) {
         console.error(error);
       }
@@ -212,8 +218,11 @@ const MysteryBoxState = () => {
       </BgCard>
       <OpenModal
         visible={visible}
+        openedBox={openedBox}
+        quality={quality}
         onClose={() => {
           setVisible(false);
+          setOpenedBox(false);
         }}
         onOpen={onHandleOpen}
       />

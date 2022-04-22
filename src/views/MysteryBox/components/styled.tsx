@@ -1,5 +1,9 @@
+import {
+  MysteryBoxStyled,
+  MysteryBoxBoxStyled,
+} from 'components/MysteryBoxCom';
 import styled from 'styled-components';
-import { Box, Card, Label, Text } from 'uikit';
+import { Box, Card, Label, Text, Flex } from 'uikit';
 
 export const LabelStyled = styled(Label)`
   width: 232px;
@@ -29,4 +33,17 @@ export const AttrText = styled(LabelText)`
 export const ScrollBox = styled(Box)`
   max-height: 150px;
   overflow-y: auto;
+`;
+
+export const MysteryBoxStaticStyled = styled(MysteryBoxStyled)`
+  width: 293px;
+  height: 293px;
+`;
+export const MysteryBoxBoxStaticStyled = styled(MysteryBoxBoxStyled)`
+  top: 0;
+  bottom: 0;
+`;
+export const VideoBox = styled(Flex)`
+  justify-content: center;
+  align-items: center;
 `;

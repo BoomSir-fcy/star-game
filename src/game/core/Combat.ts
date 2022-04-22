@@ -68,6 +68,8 @@ class Combat extends EventTarget {
 
   activePh = 0; // 当前生命值
 
+  shield = 0;
+
   hpGraphics = new Graphics();
 
   hpText = new Text('', { fill: 0xff0000, fontSize: 32 });
@@ -90,25 +92,11 @@ class Combat extends EventTarget {
 
   axisPoint?: AxisPoint;
 
-  speedX = 0;
-
-  speedY = 0;
-
-  doubleSpeedX = 0;
-
-  doubleSpeedY = 0;
-
-  moveTime = 500;
-
-  fps = 60;
-
   attackTarget?: Combat;
 
   attackInfo?: RoundDesc;
 
   bullet?: Bullet;
-
-  attackEffect = new Text('', { fill: 0xffffff, fontSize: 32 });
 
   orientation = Orientation.TO_RIGHT_DOWN;
 
@@ -125,17 +113,19 @@ class Combat extends EventTarget {
     this.drawHp();
   }
 
-  showEffectText(text: string) {
-    this.attackEffect.text = text;
-    this.attackEffect.visible = true;
-  }
-
-  hideEffectText() {
-    this.attackEffect.visible = false;
-  }
-
   setActiveHp(hp: number) {
     this.activePh = hp;
+    this.drawHp();
+  }
+
+  setActiveShield(shield: number) {
+    this.shield = shield;
+    this.drawHp();
+  }
+
+  setActiveHpWithShield(hp: number, shield: number) {
+    this.activePh = hp;
+    this.shield = shield;
     this.drawHp();
   }
 
@@ -144,6 +134,8 @@ class Combat extends EventTarget {
     const lineStartX = -(config.BLOOD_WIDTH / 2);
     const lineH = lineX / 2;
     const lineY = this.bloodStartY + lineH;
+    const hpAndShield = this.hp + this.shield;
+
     this.hpGraphics.clear();
 
     // 绘制血条底色
@@ -163,14 +155,24 @@ class Combat extends EventTarget {
     this.hpGraphics.drawRect(
       lineStartX,
       lineY,
-      (this.activePh / this.hp) * config.BLOOD_WIDTH,
+      (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
       config.BLOOD_HEIGHT,
     );
     this.hpGraphics.endFill();
 
-    // 绘制格子
-    const per = Math.ceil(this.hp / config.BLOOD_PER);
-    const perW = (config.BLOOD_WIDTH / this.hp) * config.BLOOD_PER;
+    // 绘制护盾
+    this.hpGraphics.beginFill(config.BLOOD_COLOR_SHIELD);
+    this.hpGraphics.drawRect(
+      lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+      lineY,
+      (this.shield / hpAndShield) * config.BLOOD_WIDTH,
+      config.BLOOD_HEIGHT,
+    );
+    this.hpGraphics.endFill();
+
+    // 绘制血条格子
+    const per = Math.ceil(hpAndShield / config.BLOOD_PER);
+    const perW = (config.BLOOD_WIDTH / hpAndShield) * config.BLOOD_PER;
     const lineW = per > 30 ? 1 : 2;
 
     for (let i = 1; i < per; i++) {
@@ -188,26 +190,6 @@ class Combat extends EventTarget {
       ? config.BLOOD_COLOR_ENEMY
       : config.BLOOD_COLOR;
     this.hpText.text = `${this.activePh}`;
-  }
-
-  drawAttackEffect() {
-    this.attackEffect.anchor.set(0.5);
-    this.attackEffect.position.set(0, -20);
-    this.attackEffect.visible = false;
-    this.attackEffect.zIndex = 100;
-    this.container.addChild(this.attackEffect);
-  }
-
-  renderBullet() {
-    if (!this.bullet) {
-      this.drawAttackEffect();
-      this.bullet = new Bullet(this);
-      this.bullet.container.visible = false;
-      this.container.parent.addChild(this.bullet.container);
-      this.bullet.addEventListener('attackEnd', () => {
-        this.onAttackEnd();
-      });
-    }
   }
 
   /**
@@ -290,6 +272,8 @@ class Combat extends EventTarget {
             target.axisPoint,
             point,
           );
+          const bullet = new Bullet(this);
+          bullet.attack(bulletType.BUMP, target);
           linearMove1.addEventListener('end', () => {
             this.dispatchEvent(new Event('collisionEnd'));
           });
@@ -332,7 +316,27 @@ class Combat extends EventTarget {
       this.onAttackEnd();
     });
 
-    bullet.attack(bulletType.BULLET, target, effect);
+    if (effect === descType.ADD_BOOM) {
+      bullet.attack(bulletType.FIREBALL, target);
+    } else if (effect === descType.ADD_FIRING) {
+      bullet.attack(bulletType.FIREBALL, target);
+    } else if (effect === descType.ATTACK) {
+      bullet.attack(bulletType.BULLET, target);
+    } else if (effect === descType.ADD_SHIELD) {
+      bullet.attack(bulletType.ROCK, target);
+    } else if (effect === descType.BEAT) {
+      bullet.attack(bulletType.ROCK, target);
+    } else if (effect === descType.BOOM) {
+      bullet.attack(bulletType.BUMP, target);
+    } else if (effect === descType.FIRING) {
+      bullet.attack(bulletType.FIREBALL, target);
+    } else if (effect === descType.ICE_END) {
+      bullet.attack(bulletType.FIREBALL, target);
+    } else if (effect === descType.ICE_START) {
+      bullet.attack(bulletType.ICE, target);
+    } else {
+      bullet.attack(bulletType.ICE, target, effect);
+    }
   }
 
   /**
@@ -373,11 +377,6 @@ class Combat extends EventTarget {
   onAttackEnd() {
     this.dispatchEvent(new Event('attackEnd'));
     this.attacking = false;
-    // if ((this.attackInfo as any)?.now_hp && this.attackTarget) {
-    //   this.attackTarget.drawHp(`${(this.attackInfo as any)?.now_hp}`);
-
-    //   // this.attackTarget?.dispatchEvent(new Event('death'));
-    // }
   }
 
   once(event: string, handle: any) {

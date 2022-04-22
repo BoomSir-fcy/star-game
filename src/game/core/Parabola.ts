@@ -34,11 +34,11 @@ class Parabola extends EventTarget {
 
   rate = 1;
 
-  scale = 1;
+  // scale = 1;
 
   speed = 60;
 
-  endScale = 1;
+  // endScale = 1;
 
   // 转换成相对坐标位置
   coordElement = {
@@ -84,10 +84,10 @@ class Parabola extends EventTarget {
     const stepMoveX = this.rate * sx;
     this.startX += stepMoveX;
 
-    const r =
-      ((1 - this.endScale * 1) * sx) /
-      Math.abs(this.coordElement.x - this.coordTarget.x);
-    this.scale -= r;
+    // const r =
+    //   ((1 - this.endScale * 1) * sx) /
+    //   Math.abs(this.coordElement.x - this.coordTarget.x);
+    // this.scale -= r;
 
     const x = this.startX;
     const realX = x + this.point0.x;
@@ -104,8 +104,8 @@ class Parabola extends EventTarget {
     const realY = y + this.point0.y;
 
     this.display.position.set(realX, realY);
-    this.display.scale.set(this.scale);
-    // 根据曲线子弹调整角度
+    // this.display.scale.set(this.scale);
+    // 根据切线 调整子弹角度
     this.display.rotation = tangent / 2 + (0.5 * this.rate - 0.25) * Math.PI;
 
     if (Math.abs(x - this.coordTarget.x) < Math.abs(stepMoveX)) {
