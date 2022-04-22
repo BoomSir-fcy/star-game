@@ -503,6 +503,8 @@ class Bullet extends EventTarget {
       bulletType.MECHANICAL_BULLET,
       bulletType.VENOM,
       bulletType.FIGHT,
+      bulletType.STOP_MOVE,
+      bulletType.SHIELD,
     ];
     if (linear.includes(name)) {
       this.linearAttack(name, attackTarget);
