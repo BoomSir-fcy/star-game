@@ -35,4 +35,9 @@ export class GameApi extends Http {
   async testPk(tag: string, max_round?: number) {
     return this.get('test/simulatewar/pk', { tag, max_round });
   }
+
+  // 获取地形
+  async Gameterrain() {
+    return this.get('game/war/terrain');
+  }
 }

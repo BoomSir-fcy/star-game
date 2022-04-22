@@ -111,5 +111,28 @@ declare namespace Api {
     interface SignIn {
       SSID: 'string';
     }
+
+    interface TerrainInfo {
+      tag: string;
+      terrain_type: MapType;
+      terrain_type_name_en: string;
+      terrain_type_name_cn: string;
+      terrain_areas: [
+        {
+          x: number;
+          y: number;
+        },
+      ];
+      terrain_buff_type: number;
+      terrain_buff_type_name_en: string;
+      terrain_buff_type_name_cn: string;
+      terrain_buff_base_value: number;
+      terrain_buff_value_percent: number;
+    }
+    interface TerrainList {
+      map_id: number;
+      map_name: string;
+      terrains: TerrainInfo[];
+    }
   }
 }

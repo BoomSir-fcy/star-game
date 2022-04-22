@@ -31,6 +31,7 @@ class Game extends EventTarget {
     const { width, height, test } = options || {};
     const _width = width || config.WIDTH;
     const _height = height || config.HEIGHT;
+    this.test = test;
     this.boards = new Boards({ width, height, test });
     this.app = new Application({
       width: _width,
@@ -48,6 +49,8 @@ class Game extends EventTarget {
     );
     this.init();
   }
+
+  test?: boolean;
 
   app;
 
@@ -89,6 +92,10 @@ class Game extends EventTarget {
     });
 
     this.addEventListenerOfWindow();
+  }
+
+  creatTerrain(TerrainInfo: Api.Game.TerrainInfo[]) {
+    this.boards.drawChequers(this.test, TerrainInfo);
   }
 
   // 取消选中

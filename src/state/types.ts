@@ -201,6 +201,7 @@ export interface GameState {
       };
     };
   };
+  TerrainInfo: Api.Game.TerrainList[];
 }
 
 export interface State {

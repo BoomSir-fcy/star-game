@@ -10,6 +10,7 @@ import {
   fetchGamePKAsync,
   fetchGamePlanetUnitsTestAsync,
   fetchGamePKTestAsync,
+  fetchGameterrainAsync,
 } from './reducer';
 
 export const useFetchUnitList = (race?: Api.Game.race) => {
@@ -91,6 +92,21 @@ export const useFetchGamePKTest = (
       dispatch(fetchGamePKTestAsync(`t-${id0}`, maxRound));
     }
   }, [dispatch, id0, id1, maxRound]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return {
+    fetch,
+  };
+};
+
+export const useFetchGameTerrain = () => {
+  const dispatch = useDispatch();
+  const fetch = useCallback(() => {
+    dispatch(fetchGameterrainAsync());
+  }, [dispatch]);
 
   useEffect(() => {
     fetch();
