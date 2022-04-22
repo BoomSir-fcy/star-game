@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Box } from 'uikit';
 
 import Game from 'game/core/Game';
-import Running, { RoundsProps } from 'game/core/Running';
+import RunSimulation from 'game/core/RunSimulation';
 
 const Container = styled(Box)`
   position: absolute;
@@ -16,7 +16,6 @@ const Container = styled(Box)`
   transition: 0.3s all;
   transform: translateX(-215px);
 `;
-
 // 种族动画预览
 const game = new Game({
   width: 200,
@@ -24,86 +23,82 @@ const game = new Game({
   test: true,
   enableDrag: false,
 });
-const running = new Running(
-  game,
-  {
-    1: {
-      data: [
-        // @ts-ignore
-        {
-          round: 1,
-          desc_type: 2,
-          move: {
-            id: 'aaaa',
-            starting_point: {
-              x: 2,
-              y: 3,
+const running = new RunSimulation(game, {
+  1: {
+    data: [
+      // @ts-ignore
+      {
+        round: 1,
+        desc_type: 2,
+        move: {
+          id: 'aaaa',
+          starting_point: {
+            x: 2,
+            y: 3,
+          },
+          dest: [
+            {
+              x: 5,
+              y: 5,
             },
-            dest: [
-              {
-                x: 5,
-                y: 5,
-              },
-              {
+            {
+              x: 5,
+              y: 4,
+            },
+          ],
+        },
+      },
+    ],
+  },
+  2: {
+    data: [
+      // @ts-ignore
+      {
+        round: 1,
+        desc_type: 7,
+        add_firing: {
+          sender_id: 'aaaa',
+          receive_id: 'kkkk',
+          sender_point: {
+            x: 4,
+            y: 5,
+          },
+          receive_point: {
+            x: 5,
+            y: 4,
+          },
+          firing_hp: 40,
+          around: [
+            // @ts-ignore
+            {
+              receive_id: 'kkkk',
+              receive_point: {
                 x: 5,
                 y: 4,
               },
-            ],
-          },
-        },
-      ],
-    },
-    2: {
-      data: [
-        // @ts-ignore
-        {
-          round: 1,
-          desc_type: 7,
-          add_firing: {
-            sender_id: 'aaaa',
-            receive_id: 'kkkk',
-            sender_point: {
-              x: 4,
-              y: 5,
             },
-            receive_point: {
-              x: 5,
-              y: 4,
-            },
-            firing_hp: 40,
-            around: [
-              // @ts-ignore
-              {
-                receive_id: 'kkkk',
-                receive_point: {
-                  x: 5,
-                  y: 4,
-                },
-              },
-            ],
-          },
+          ],
         },
-        {
-          round: 1,
-          desc_type: 8,
-          firing: {
-            sender_id: 'kkkk',
-            receive_id: 'kkkk',
-            long_round: 1,
-            receive_sub_hp: 40,
-            receive_point: {
-              x: 5,
-              y: 4,
-            },
-            // @ts-ignore
-            now_hp: 960,
+      },
+      {
+        round: 1,
+        desc_type: 8,
+        firing: {
+          sender_id: 'kkkk',
+          receive_id: 'kkkk',
+          long_round: 1,
+          receive_sub_hp: 40,
+          receive_point: {
+            x: 5,
+            y: 4,
           },
+          // @ts-ignore
+          now_hp: 960,
         },
-      ],
-    },
+      },
+    ],
   },
-  true,
-);
+});
 const MiniRaceAni = () => {
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -130,10 +125,6 @@ const MiniRaceAni = () => {
         enableDrag: false,
         sid: 'kkkk',
       });
-      // const [s0, s1] = game.soldiers;
-      // if (s0 && s1) {
-      //   s0.attackParabolaEffect(s1, 'ice');
-      // }
       running?.changePlayCount(-1);
     }
   }, [ref]);
