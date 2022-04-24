@@ -5,6 +5,7 @@ import {
   fetchGamePKTest,
   fetchGamePlanetUnits,
   fetchGamePlanetUnitsTest,
+  fetchGameterrain,
   fetchUnitList,
 } from './fetchers';
 
@@ -15,6 +16,13 @@ export const initialState: GameState = {
   baseSkill: {},
   process: null,
   PKInfo: null,
+  TerrainInfo: [
+    {
+      map_id: 0,
+      map_name: '',
+      terrains: [],
+    },
+  ],
 };
 
 export const fetchUnitListAsync =
@@ -73,6 +81,11 @@ export const fetchGamePKTestAsync =
     dispatch(setPKInfo(PKInfo));
   };
 
+export const fetchGameterrainAsync = (): AppThunk => async dispatch => {
+  const TerrainInfo = await fetchGameterrain();
+  dispatch(setTerrainInfo(TerrainInfo));
+};
+
 export const userInfoSlice = createSlice({
   name: 'game',
   initialState,
@@ -109,6 +122,10 @@ export const userInfoSlice = createSlice({
     setPKInfo: (state, { payload }) => {
       state.PKInfo = payload;
     },
+
+    setTerrainInfo: (state, { payload }) => {
+      state.TerrainInfo = payload;
+    },
   },
 });
 
@@ -119,6 +136,7 @@ export const {
   setPKInfo,
   setBaseSkill,
   setPlantUnitsTest,
+  setTerrainInfo,
 } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

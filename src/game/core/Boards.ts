@@ -13,13 +13,14 @@ import { Loader } from '@pixi/loaders';
 import { InteractionEvent, InteractionData } from '@pixi/interaction';
 
 import config from 'game/config';
-import Chequer, { stateType } from './Chequer';
+import Chequer, { mapType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
 
 interface BoardsProps {
   width?: number;
   height?: number;
   test?: boolean;
+  enableDrag?: boolean;
 }
 /**
  * 棋盘
@@ -28,11 +29,11 @@ class Boards extends EventTarget {
   constructor(options?: BoardsProps) {
     super();
     // this.aaa = 1;
-    const { width, height, test } = options || {};
+    const { width, height, test, enableDrag } = options || {};
 
     this.width = width || config.WIDTH;
     this.height = height || config.HEIGHT;
-
+    this.enableDrag = enableDrag || false;
     this.init({ test });
   }
 
@@ -50,6 +51,8 @@ class Boards extends EventTarget {
 
   created = false; //
 
+  enableDrag = true;
+
   private dragData: InteractionData = new InteractionData();
 
   private dragging = false;
@@ -57,7 +60,7 @@ class Boards extends EventTarget {
   init({ test }: { test?: boolean }) {
     this.container.position.set(this.width / 2, this.height / 2);
 
-    this.drawChequers(test);
+    // this.drawChequers(test);
 
     this.container.interactive = true;
     this.container.on('wheel', e => {
@@ -92,18 +95,38 @@ class Boards extends EventTarget {
   }
 
   // 绘制棋格
-  drawChequers(test?: boolean) {
+  drawChequers(test?: boolean, TerrainInfo?: Api.Game.TerrainInfo[]) {
     this.chequers = [];
+    const terrains: {
+      [axis: string]: Api.Game.TerrainInfo;
+    } = {};
+    TerrainInfo?.forEach(item => {
+      item.terrain_areas.forEach(subItem => {
+        terrains[`${subItem.x},${subItem.y}`] = item;
+      });
+    });
+
     for (let row = 0; row < config.BOARDS_ROW_COUNT; row++) {
       for (let col = 0; col < config.BOARDS_COL_COUNT; col++) {
-        const chequer = new Chequer({
-          type: 'map1',
-          axisX: row,
-          axisY: col,
-          state: stateType.PREVIEW,
-          test,
-        });
-        this.chequers.push(chequer);
+        if (terrains[`${row},${col}`]) {
+          const chequer = new Chequer({
+            type: terrains[`${row},${col}`].terrain_type,
+            axisX: row,
+            axisY: col,
+            state: stateType.PREVIEW,
+            test,
+          });
+          this.chequers.push(chequer);
+        } else {
+          const chequer = new Chequer({
+            type: mapType.MAP1,
+            axisX: row,
+            axisY: col,
+            state: stateType.PREVIEW,
+            test,
+          });
+          this.chequers.push(chequer);
+        }
       }
     }
     this.chequers.forEach(s => {
@@ -122,8 +145,10 @@ class Boards extends EventTarget {
   }
 
   onDragStart(event: InteractionEvent) {
-    this.dragData = event.data;
-    this.dragging = true;
+    if (this.enableDrag) {
+      this.dragData = event.data;
+      this.dragging = true;
+    }
   }
 
   onDragEnd() {

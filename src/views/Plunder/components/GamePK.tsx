@@ -12,6 +12,7 @@ import {
   useFetchUnitList,
   useFetchGamePK,
   useFetchGamePKTest,
+  useFetchGameTerrain,
 } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
 import { useStore } from 'state';
@@ -50,6 +51,8 @@ type idMap = { [xy: string]: string };
 const game = new Game({ width: 900, height: 600 });
 
 const GamePK: React.FC<GamePKProps> = () => {
+  useFetchGameTerrain();
+
   const [running, setRunning] = useState<Running | null>(null);
   const PKInfo = useStore(p => p.game.PKInfo);
 
@@ -62,6 +65,7 @@ const GamePK: React.FC<GamePKProps> = () => {
   const [pid0, setPid0] = useState((parsedQs.pid0 as string) || '');
   const [pid1, setPid1] = useState((parsedQs.pid1 as string) || '');
   const [maxRound, setMaxRound] = useState('10');
+  const { TerrainInfo } = useStore(p => p.game);
 
   const planetInfo = useStore(p => p.planet.planetInfo);
 
@@ -79,6 +83,10 @@ const GamePK: React.FC<GamePKProps> = () => {
       dispatch(fetchUnitListAsync(infoP1?.race));
     }
   }, [dispatch, infoP0?.race, infoP1?.race]);
+
+  useEffect(() => {
+    game.creatTerrain(TerrainInfo[0].terrains);
+  }, [TerrainInfo]);
 
   const startHandle = useCallback(() => {
     if (Number(pid0) && Number(pid1)) {

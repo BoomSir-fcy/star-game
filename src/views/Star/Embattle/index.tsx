@@ -12,6 +12,7 @@ import {
   useFetchGamePlanetUnits,
   useFetchUnitList,
   useFetchGamePK,
+  useFetchGameTerrain,
 } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
 import { useStore } from 'state';
@@ -32,12 +33,13 @@ const Embattle = () => {
   const navigate = useNavigate();
 
   // const race = Number(parsedQs.race) as Api.Game.race;
-
+  useFetchGameTerrain();
   useFetchGamePK();
   useFetchGamePlanetUnits(planetId);
 
-  const plantUnits = useStore(p => p.game.plantUnits);
   const planetInfo = useStore(p => p.planet.planetInfo);
+  const { TerrainInfo, plantUnits } = useStore(p => p.game);
+
   const info = useMemo(() => {
     return planetInfo[planetId];
   }, [planetInfo, planetId]);
@@ -85,6 +87,10 @@ const Embattle = () => {
       setSortSoldiers(game.soldiers);
     }
   }, [plantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers]);
+
+  useEffect(() => {
+    game.creatTerrain(TerrainInfo[0].terrains);
+  }, [TerrainInfo]);
 
   return (
     <Box position='relative'>

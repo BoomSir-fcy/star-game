@@ -78,3 +78,17 @@ export const fetchGamePKTest = async (tag: string, maxRound?: number) => {
     return null;
   }
 };
+
+// 获取地形
+export const fetchGameterrain = async () => {
+  try {
+    const res = await Api.GameApi.Gameterrain();
+    if (Api.isSuccess(res)) {
+      return res.data.data;
+    }
+    return null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

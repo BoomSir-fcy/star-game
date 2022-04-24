@@ -9,18 +9,19 @@ import { BoardPositionSelf } from '../types';
 import { checkPolygonPoint } from './utils';
 
 export const mapType = {
-  MAP1: 'map1',
-  MAP2: 'map2',
-  MAP3: 'map3',
-  MAP4: 'map4',
-  MAP5: 'map5',
-  MAP6: 'map6',
+  MAP1: 0,
+  MAP2: 1,
+  MAP3: 2,
+  MAP4: 3,
+  MAP5: 4,
+  MAP6: 5,
 } as const;
 
 export const stateType = {
   PREVIEW: 1,
   ACTIVE: 2,
   DISABLE: 3,
+  PLACE: 4,
 } as const;
 
 export type MapType = typeof mapType[keyof typeof mapType];
@@ -67,17 +68,19 @@ class Chequer {
 
   state: StateType = stateType.PREVIEW;
 
-  static [mapType.MAP1] = Texture.from('/assets/map/map1.png');
+  static maps = {
+    [mapType.MAP1]: Texture.from('/assets/map/map0.png'),
 
-  static [mapType.MAP2] = Texture.from('/assets/map/map2.png');
+    [mapType.MAP2]: Texture.from('/assets/map/map1.png'),
 
-  static [mapType.MAP3] = Texture.from('/assets/map/map3.png');
+    [mapType.MAP3]: Texture.from('/assets/map/map2.png'),
 
-  static [mapType.MAP4] = Texture.from('/assets/map/map4.png');
+    [mapType.MAP4]: Texture.from('/assets/map/map3.png'),
 
-  static [mapType.MAP5] = Texture.from('/assets/map/map5.png');
+    [mapType.MAP5]: Texture.from('/assets/map/map4.png'),
 
-  static [mapType.MAP6] = Texture.from('/assets/map/map6.png');
+    [mapType.MAP6]: Texture.from('/assets/map/map5.png'),
+  };
 
   static [stateType.PREVIEW] = Texture.from('/assets/map/state1.png');
 
@@ -85,7 +88,9 @@ class Chequer {
 
   static [stateType.DISABLE] = Texture.from('/assets/map/state3.png');
 
-  textureButtonDown = Texture.from('/assets/map/map1.png');
+  static [stateType.PLACE] = Texture.from('/assets/map/state4.png');
+
+  textureButtonDown = Texture.from('/assets/map/map0.png');
 
   textureButtonOver = Texture.from('/assets/map/map2.png');
 
@@ -111,7 +116,7 @@ class Chequer {
     this.axisX = axisX;
     this.axisY = axisY;
 
-    this.bunny = new Sprite(Chequer[type]);
+    this.bunny = new Sprite(Chequer.maps[type]);
     this.bunny.anchor.set(0.5);
     this.bunny.width = 100;
     this.bunny.height = 125;

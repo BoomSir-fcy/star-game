@@ -14,6 +14,8 @@ import styled from 'styled-components';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import Game from 'game/core/Game';
+import { useStore } from 'state';
+import { useFetchGameTerrain } from 'state/game/hooks';
 import { States } from './types';
 import {
   PeopleCard,
@@ -27,6 +29,10 @@ import {
 const game = new Game({ width: 900, height: 600 });
 
 const Pk = () => {
+  useFetchGameTerrain();
+
+  const { TerrainInfo } = useStore(p => p.game);
+
   const [state, setState] = useState(States.MATCHING);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -36,6 +42,11 @@ const Pk = () => {
       ref.current.appendChild(game.view);
     }
   }, [ref]);
+
+  useEffect(() => {
+    game.creatTerrain(TerrainInfo[0].terrains);
+  }, [TerrainInfo]);
+
   return (
     <Layout>
       <Flex mb='20px'>

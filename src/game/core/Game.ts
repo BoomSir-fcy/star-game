@@ -2,6 +2,7 @@ import { Loader } from '@pixi/loaders';
 import { InteractionEvent, InteractionData } from '@pixi/interaction';
 import { Spine } from 'pixi-spine';
 import { Application } from '@pixi/app';
+import { Point } from 'pixi.js';
 
 // import * as PIXI from 'pixi.js';
 import config from '../config';
@@ -20,6 +21,8 @@ interface GameOptionsProps {
   height?: number;
   width?: number;
   test?: boolean;
+  enableDrag?: boolean;
+  enableSoliderDrag?: boolean;
 }
 /**
  * 游戏入口
@@ -27,10 +30,16 @@ interface GameOptionsProps {
 class Game extends EventTarget {
   constructor(options?: GameOptionsProps) {
     super();
-    const { width, height, test } = options || {};
+    const {
+      width,
+      height,
+      test,
+      enableDrag = true,
+      enableSoliderDrag = true,
+    } = options || {};
     const _width = width || config.WIDTH;
     const _height = height || config.HEIGHT;
-    this.boards = new Boards({ width, height, test });
+    this.boards = new Boards({ width, height, test, enableDrag });
     this.app = new Application({
       width: _width,
       height: _height,
@@ -38,6 +47,7 @@ class Game extends EventTarget {
       antialias: true,
       backgroundAlpha: 0.5,
     });
+    this.enableSoliderDrag = enableSoliderDrag;
     // 添加棋盘
     this.app.stage.addChild(this.boards.container);
     // 绑定缩放
@@ -47,6 +57,8 @@ class Game extends EventTarget {
     );
     this.init();
   }
+
+  test?: boolean;
 
   app;
 
@@ -62,7 +74,7 @@ class Game extends EventTarget {
 
   private dragPreSoldierEvent?: InteractionEvent; // 当前拖动小人事件数据
 
-  private enableDrag = false; // 是否启用拖动
+  private enableSoliderDrag = false; // 是否启用小人拖动
 
   activeSolider?: Soldier; // 当前选中小人
 
@@ -76,7 +88,7 @@ class Game extends EventTarget {
     // 绑定拖动事件 从棋盘外拖到棋盘内
     this.boards.container.on('pointermove', e => {
       if (
-        this.enableDrag &&
+        this.enableSoliderDrag &&
         this.dragPreSoldier &&
         this.dragPreSoldier.container
       ) {
@@ -88,6 +100,10 @@ class Game extends EventTarget {
     });
 
     this.addEventListenerOfWindow();
+  }
+
+  creatTerrain(TerrainInfo: Api.Game.TerrainInfo[]) {
+    this.boards.drawChequers(this.test, TerrainInfo);
   }
 
   // 取消选中
@@ -110,8 +126,9 @@ class Game extends EventTarget {
         this.showSameSoliderState(soldier);
         soldier.setMoved(false);
       })
-      .on('pointermove', () => {
+      .on('pointermove', event => {
         if (soldier.dragging) {
+          this.onDrageMoveSoldier(event);
           if (!soldier.moved) {
             soldier.setMoved(true);
             this.onDragStarSoldier();
@@ -193,7 +210,7 @@ class Game extends EventTarget {
   }
 
   setEnableDrag(state: boolean) {
-    this.enableDrag = state;
+    this.enableSoliderDrag = state;
   }
 
   // 添加拖拽中的小人
@@ -203,6 +220,9 @@ class Game extends EventTarget {
     this.dragPreSoldier.setDragging(true);
     this.dragPreSoldier.container.visible = false;
     this.app.stage.addChild(this.dragPreSoldier.container);
+    this.dragPreSoldier.container.on('pointermove', event => {
+      this.onDrageMoveSoldier(event);
+    });
   }
 
   // 关闭拖拽中的小人
@@ -248,13 +268,33 @@ class Game extends EventTarget {
     });
   }
 
+  // 移动小人
+  onDrageMoveSoldier(event: InteractionEvent) {
+    this.boards.chequers.forEach(item => {
+      const point = new Point(
+        event.data.global.x - 10,
+        event.data.global.y + 5,
+      );
+      const collection = item.checkCollisionPoint(point);
+      if (collection && item.state === stateType.PREVIEW) {
+        item.setState(stateType.PLACE);
+      } else if (!collection && item.state === stateType.PLACE) {
+        item.setState(stateType.PREVIEW);
+      }
+    });
+  }
+
   // 拖拽小人结束生命周期
   onDragEndSoldier(event: InteractionEvent, soldier: Soldier) {
     let canDrag = false;
 
     this.boards.chequers.forEach(item => {
-      const collection = item.checkCollisionPoint(event.data.global);
-      if (collection && item.state === stateType.PREVIEW) {
+      const point = new Point(
+        event.data.global.x - 10,
+        event.data.global.y + 5,
+      );
+      const collection = item.checkCollisionPoint(point);
+      if (collection && item.state === stateType.PLACE) {
         soldier.setPosition(new AxisPoint(item.axisX, item.axisY, item));
         canDrag = true;
       }
