@@ -17,6 +17,7 @@ const effectConfig: EffectConfig = {
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/rock/rock.png',
       label: '岩石',
+      flip: true,
     },
     {
       name: bulletType.BULLET,
@@ -36,13 +37,20 @@ const effectConfig: EffectConfig = {
     },
     {
       name: bulletType.FIREBALL,
-      // resDir: '/assets/bullet/fireball/huoqiu.json',
-      // spriteRes: '/assets/bullet/fireball/fireball.png',
       bombSpineSrc: '/assets/bullet/fireball/huoqiu.json',
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/fireball/fireball.png',
       label: '火球',
+      flip: true,
+    },
+    {
+      name: bulletType.FIRING,
+      bombSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/bullet/fireball/fireball.png',
+      label: '火焰灼烧',
     },
     {
       name: bulletType.MECHANICAL_BULLET,
@@ -53,6 +61,22 @@ const effectConfig: EffectConfig = {
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/mechanical_bullet/mechanical_bullet.png',
       label: '机械子弹',
+    },
+    {
+      name: bulletType.ADD_BOMB,
+      bombSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/bullet/bomb/bomb.png',
+      label: '炸弹',
+    },
+    {
+      name: bulletType.BOMB,
+      bombSpineSrc: '/assets/bullet/bomb/zhadan.json',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '',
+      label: '炸弹爆炸',
     },
     {
       name: bulletType.MISSILE,
@@ -106,7 +130,7 @@ const effectConfig: EffectConfig = {
     },
     {
       name: bulletType.SHIELD,
-      bombSpineSrc: '',
+      bombSpineSrc: '/assets/bullet/shield/hudun.json',
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/shield/shield.png',
@@ -130,8 +154,8 @@ const effectConfig: EffectConfig = {
     },
     [EffectType.FIRING]: {
       type: EffectType.FIRING,
-      spriteSrc0: '/assets/effects/firing.png',
-      spriteSrc1: '',
+      spriteSrc0: '/assets/effects/firing-animate-1.png',
+      spriteSrc1: '/assets/effects/firing-animate-2.png',
     },
     [EffectType.ICE]: {
       type: EffectType.ICE,
@@ -148,6 +172,16 @@ const effectConfig: EffectConfig = {
       spriteSrc0: '/assets/effects/stop-move-bottom.png',
       spriteSrc1: '/assets/effects/stop-move-top.png',
     },
+    [EffectType.VENOM]: {
+      type: EffectType.VENOM,
+      spriteSrc0: '/assets/effects/venom-animate-1.png',
+      spriteSrc1: '/assets/effects/venom-animate-2.png',
+    },
+    [EffectType.ADD_FIRING]: {
+      type: EffectType.ADD_FIRING,
+      spriteSrc0: '/assets/effects/firing-animate-1.png',
+      spriteSrc1: '/assets/effects/firing-animate-2.png',
+    },
   },
 };
 
@@ -160,7 +194,7 @@ export const descOfEffect = {
     remove: false,
   },
   [descType.ADD_FIRING]: {
-    effect: EffectType.FIRING,
+    effect: EffectType.ADD_FIRING,
     add: true,
     remove: false,
   },
@@ -196,7 +230,7 @@ export const descOfEffect = {
   },
   [descType.FIRING]: {
     effect: EffectType.FIRING,
-    add: false,
+    add: true,
     remove: false,
   },
   [descType.ICE_END]: {
@@ -225,7 +259,7 @@ export const descOfEffect = {
     remove: false,
   },
   [descType.REMOVE_FIRING]: {
-    effect: EffectType.FIRING,
+    effect: EffectType.ADD_FIRING,
     add: false,
     remove: true,
   },

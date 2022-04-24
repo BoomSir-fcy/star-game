@@ -20,10 +20,10 @@ export const useGalaxyList = () => {
   const { galaxyList } = useGalaxySelector();
 
   useEffect(() => {
-    if (account && !galaxyList.length) {
+    if (account) {
       dispatch(fetchGalaxyListAsync());
     }
-  }, [account, galaxyList, dispatch]);
+  }, [account, dispatch]);
 };
 
 export const useGalaxyStarList = (galaxyId: number) => {
@@ -32,10 +32,10 @@ export const useGalaxyStarList = (galaxyId: number) => {
   const { galaxyStarList } = useGalaxySelector();
 
   useEffect(() => {
-    if (account && !galaxyStarList.length) {
+    if (account) {
       dispatch(fetchGalaxyStarListAsync(galaxyId));
     }
-  }, [galaxyId, account, galaxyStarList, dispatch]);
+  }, [galaxyId, account, dispatch]);
 };
 
 export const useGalaxyNft = (tokenId: number) => {

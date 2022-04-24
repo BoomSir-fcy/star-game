@@ -316,10 +316,12 @@ class Combat extends EventTarget {
       this.onAttackEnd();
     });
 
+    // console.log('effect=========', effect);
+
     if (effect === descType.ADD_BOOM) {
-      bullet.attack(bulletType.FIREBALL, target);
+      bullet.attack(bulletType.ADD_BOMB, target);
     } else if (effect === descType.ADD_FIRING) {
-      bullet.attack(bulletType.FIREBALL, target);
+      bullet.attack(bulletType.FIRING, target);
     } else if (effect === descType.ATTACK) {
       bullet.attack(bulletType.BULLET, target);
     } else if (effect === descType.ADD_SHIELD) {
@@ -327,9 +329,9 @@ class Combat extends EventTarget {
     } else if (effect === descType.BEAT) {
       bullet.attack(bulletType.ROCK, target);
     } else if (effect === descType.BOOM) {
-      bullet.attack(bulletType.BUMP, target);
+      bullet.attack(bulletType.BOMB, target);
     } else if (effect === descType.FIRING) {
-      bullet.attack(bulletType.FIREBALL, target);
+      bullet.attack(bulletType.FIRING, target);
     } else if (effect === descType.ICE_END) {
       bullet.attack(bulletType.FIREBALL, target);
     } else if (effect === descType.ICE_START) {
@@ -365,10 +367,13 @@ class Combat extends EventTarget {
     this.container.parent.addChild(container);
     bullet.attack(effect, target);
     bullet.addEventListener('moveEnd', () => {
-      // this.effectBuff.addEffect(EffectType.SHIELD);
+      // target.effectBuff.addEffect(EffectType.BOMB);
     });
     bullet.addEventListener('attackEnd', () => {
       this.onAttackEnd();
+      // setTimeout(() => {
+      // target.effectBuff.removeEffect(EffectType.BOMB);
+      // }, 5 * 1000);
     });
   }
 
