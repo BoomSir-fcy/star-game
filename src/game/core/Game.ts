@@ -21,6 +21,8 @@ interface GameOptionsProps {
   height?: number;
   width?: number;
   test?: boolean;
+  enableDrag?: boolean;
+  enableSoliderDrag?: boolean;
 }
 /**
  * 游戏入口
@@ -28,11 +30,16 @@ interface GameOptionsProps {
 class Game extends EventTarget {
   constructor(options?: GameOptionsProps) {
     super();
-    const { width, height, test } = options || {};
+    const {
+      width,
+      height,
+      test,
+      enableDrag = true,
+      enableSoliderDrag = true,
+    } = options || {};
     const _width = width || config.WIDTH;
     const _height = height || config.HEIGHT;
-    this.test = test;
-    this.boards = new Boards({ width, height, test });
+    this.boards = new Boards({ width, height, test, enableDrag });
     this.app = new Application({
       width: _width,
       height: _height,
@@ -40,6 +47,7 @@ class Game extends EventTarget {
       antialias: true,
       backgroundAlpha: 0.5,
     });
+    this.enableSoliderDrag = enableSoliderDrag;
     // 添加棋盘
     this.app.stage.addChild(this.boards.container);
     // 绑定缩放
@@ -66,7 +74,7 @@ class Game extends EventTarget {
 
   private dragPreSoldierEvent?: InteractionEvent; // 当前拖动小人事件数据
 
-  private enableDrag = false; // 是否启用拖动
+  private enableSoliderDrag = false; // 是否启用小人拖动
 
   activeSolider?: Soldier; // 当前选中小人
 
@@ -80,7 +88,7 @@ class Game extends EventTarget {
     // 绑定拖动事件 从棋盘外拖到棋盘内
     this.boards.container.on('pointermove', e => {
       if (
-        this.enableDrag &&
+        this.enableSoliderDrag &&
         this.dragPreSoldier &&
         this.dragPreSoldier.container
       ) {
@@ -202,7 +210,7 @@ class Game extends EventTarget {
   }
 
   setEnableDrag(state: boolean) {
-    this.enableDrag = state;
+    this.enableSoliderDrag = state;
   }
 
   // 添加拖拽中的小人

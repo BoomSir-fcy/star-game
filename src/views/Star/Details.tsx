@@ -21,7 +21,7 @@ const Upgrade = () => {
       for (let i = 0; i < planet.areaX; i++) {
         for (let j = 0; j < planet.areaY; j++) {
           const buildings = selfBuilding?.find(
-            (r: any) => r.index === i * planet.areaY + j,
+            r => r.index === i * planet.areaY + j,
           );
           if (buildings?.building?._id) {
             data.push({
