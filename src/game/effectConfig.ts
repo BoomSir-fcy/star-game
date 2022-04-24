@@ -17,6 +17,7 @@ const effectConfig: EffectConfig = {
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/rock/rock.png',
       label: '岩石',
+      flip: true,
     },
     {
       name: bulletType.BULLET,
@@ -43,6 +44,7 @@ const effectConfig: EffectConfig = {
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/fireball/fireball.png',
       label: '火球',
+      flip: true,
     },
     {
       name: bulletType.MECHANICAL_BULLET,

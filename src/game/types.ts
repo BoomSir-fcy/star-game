@@ -265,6 +265,7 @@ export interface BulletItemInfoOfConfig {
   moveSpineSrc?: string;
   moveSpriteSrc?: string;
   label?: string;
+  flip?: boolean;
 }
 
 // 技能

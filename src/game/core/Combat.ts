@@ -365,13 +365,12 @@ class Combat extends EventTarget {
     this.container.parent.addChild(container);
     bullet.attack(effect, target);
     bullet.addEventListener('moveEnd', () => {
-      // target.effectBuff.addEffect(EffectType.FIRING);
-      // target.effectBuff.addEffect(EffectType.VENOM);
+      // target.effectBuff.addEffect(EffectType.BOMB);
     });
     bullet.addEventListener('attackEnd', () => {
       this.onAttackEnd();
       // setTimeout(() => {
-      //   target.effectBuff.removeEffect(EffectType.FIRING);
+      // target.effectBuff.removeEffect(EffectType.BOMB);
       // }, 5 * 1000);
     });
   }

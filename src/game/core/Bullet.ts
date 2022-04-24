@@ -49,13 +49,7 @@ type Effects = {
 };
 
 // 初始化攻击特效
-const initEffectInfo = ({
-  name,
-  bombSpriteSrc,
-  bombSpineSrc,
-  moveSpineSrc,
-  moveSpriteSrc,
-}: BulletItemInfoOfConfig) => {
+const initEffectInfo = (configOptions: BulletItemInfoOfConfig) => {
   return {
     loaded: false,
     await: false,
@@ -67,11 +61,8 @@ const initEffectInfo = ({
     complete: false, // 是否完成整个攻击
     completeMove: false, // 是否移动完成
     completeBomb: false, // 是否爆炸完成
-    name,
-    bombSpriteSrc,
-    bombSpineSrc,
-    moveSpineSrc,
-    moveSpriteSrc,
+    // name,
+    ...configOptions,
   };
 };
 /**
@@ -327,18 +318,23 @@ class Bullet extends EventTarget {
    * @param point 爆炸的终点
    */
   async attackBomb(name: BulletType, point: Point) {
-    const { bombEffectSpine, bombEffectSprite } = await this.loadEffect(name);
+    const { bombEffectSpine, bombEffectSprite, flip } = await this.loadEffect(
+      name,
+    );
     if (bombEffectSpine) {
       this.effects[name].completeBomb = false;
       bombEffectSpine.position.set(point.x, point.y);
       bombEffectSpine.visible = true;
       bombEffectSpine.state.setAnimation(0, 'play', false);
-      const { x, y } = this.flipTargetPointOrientation(
-        bombEffectSpine.scale.x,
-        bombEffectSpine.scale.y,
-      );
-      bombEffectSpine.scale.x = x; // Orientation.TO_LEFT_UP;
-      bombEffectSpine.scale.y = y; // Orientation.TO_RIGHT_DOWN;
+      // 需要改变效果方位
+      if (flip) {
+        const { x, y } = this.flipTargetPointOrientation(
+          bombEffectSpine.scale.x,
+          bombEffectSpine.scale.y,
+        );
+        bombEffectSpine.scale.x = x; // Orientation.TO_LEFT_UP;
+        bombEffectSpine.scale.y = y; // Orientation.TO_RIGHT_DOWN;
+      }
       this.spineAnimation(name, bombEffectSpine);
     } else {
       this.onBombEnd(name);
