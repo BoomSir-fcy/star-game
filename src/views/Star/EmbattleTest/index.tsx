@@ -101,7 +101,11 @@ const Embattle = () => {
   }, [testPlantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers]);
 
   useEffect(() => {
-    game.creatTerrain(TerrainInfo[0].terrains);
+    if (TerrainInfo?.length) {
+      game.creatTerrain(TerrainInfo[0].terrains);
+    } else {
+      game.creatTerrain([]);
+    }
   }, [TerrainInfo]);
 
   return (

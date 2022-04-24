@@ -85,7 +85,11 @@ const GamePK: React.FC<GamePKProps> = () => {
   }, [dispatch, infoP0?.race, infoP1?.race]);
 
   useEffect(() => {
-    game.creatTerrain(TerrainInfo[0].terrains);
+    if (TerrainInfo?.length) {
+      game.creatTerrain(TerrainInfo[0].terrains);
+    } else {
+      game.creatTerrain([]);
+    }
   }, [TerrainInfo]);
 
   const startHandle = useCallback(() => {
