@@ -44,7 +44,7 @@ class RunSimulation extends EventTarget {
   constructor(game: Game, rounds: RoundsProps) {
     super();
     this.game = game;
-    this.game.creatTerrain();
+    // this.game.creatTerrain();
     this.rounds = rounds;
     this.init();
   }
@@ -81,17 +81,6 @@ class RunSimulation extends EventTarget {
 
   init() {
     this.getTracks();
-    this.game.createSoldier(4, 5, {
-      srcId: '2',
-      race: 2,
-      id: 1,
-      unique_id: 3,
-      hp: 100,
-      isEnemy: false,
-      enableDrag: false,
-      sid: 'aaaa',
-    });
-    this.generateStakes();
     this.runHandle();
   }
 
@@ -113,20 +102,6 @@ class RunSimulation extends EventTarget {
     } else {
       console.warn(`not find id: ${id} by trackDetails`);
     }
-  }
-
-  // 生成木桩
-  generateStakes() {
-    this.game.createSoldier(4, 4, {
-      srcId: '1',
-      race: 1,
-      id: 1,
-      unique_id: 1,
-      hp: 100,
-      isEnemy: true,
-      enableDrag: false,
-      sid: 'kkkk',
-    });
   }
 
   // 运动

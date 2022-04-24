@@ -134,5 +134,10 @@ declare namespace Api {
       map_name: string;
       terrains: TerrainInfo[];
     }
+
+    interface gameMocksParams {
+      from: ParamsUnit[];
+      to: ParamsUnit[];
+    }
   }
 }

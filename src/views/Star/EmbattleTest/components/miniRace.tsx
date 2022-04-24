@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
+import { MapBaseUnits } from 'state/types';
 
 import Game from 'game/core/Game';
-import RunSimulation from 'game/core/RunSimulation';
+import RunSimulation, { RoundsProps } from 'game/core/RunSimulation';
 
 const Container = styled(Box)`
   position: absolute;
@@ -23,66 +24,66 @@ const game = new Game({
   test: true,
   enableDrag: false,
 });
-const MiniRaceAni = () => {
+const MiniRaceAni: React.FC<{
+  mock: any;
+}> = ({ mock }) => {
   const ref = React.useRef<HTMLDivElement>(null);
+
+  const createSoldiers = React.useCallback(
+    (
+      poses: Api.Game.UnitPlanetPos[],
+      base: MapBaseUnits,
+      ids: { [xy: string]: string },
+      isEnemy: boolean,
+    ) => {
+      poses?.forEach(item => {
+        console.log(item, base);
+        game.createSoldier(item.pos.x, item.pos.y, {
+          srcId: `${item.base_unit_id}`,
+          race: base[item.base_unit_id]?.race || 1,
+          id: item.base_unit_id,
+          sid: ids[`${item.pos.x}${item.pos.y}`],
+          hp: base[item.base_unit_id]?.hp,
+          isEnemy,
+          enableDrag: false,
+          unique_id: item.base_unit_id,
+          // attackId: base[item.base_unit_id].unique_id
+        });
+      });
+    },
+    [],
+  );
+
+  const runGame = useCallback((slot: RoundsProps) => {
+    const run = new RunSimulation(game, slot);
+  }, []);
+
+  const initSoldiers = React.useCallback(
+    soldier => {
+      const ids: { [xy: string]: string } = {};
+      Object.keys(soldier?.init?.ids).forEach(id => {
+        const { x, y } = soldier.init.ids[id];
+        ids[`${x}${y}`] = id;
+      });
+      createSoldiers(
+        soldier.init.blue_units,
+        soldier.init.base_unit,
+        ids,
+        false,
+      );
+      createSoldiers(soldier.init.red_units, soldier.init.base_unit, ids, true);
+      runGame(soldier.slot);
+    },
+    [createSoldiers, runGame],
+  );
 
   React.useEffect(() => {
     if (ref.current) {
       ref.current.appendChild(game.view);
-      const run = new RunSimulation(game, {
-        1: {
-          data: [
-            // @ts-ignore
-            {
-              round: 1,
-              desc_type: 7,
-              add_firing: {
-                sender_id: 'aaaa',
-                receive_id: 'kkkk',
-                sender_point: {
-                  x: 4,
-                  y: 5,
-                },
-                receive_point: {
-                  x: 5,
-                  y: 4,
-                },
-                firing_hp: 40,
-                around: [
-                  // @ts-ignore
-                  {
-                    receive_id: 'kkkk',
-                    receive_point: {
-                      x: 5,
-                      y: 4,
-                    },
-                  },
-                ],
-              },
-            },
-            {
-              round: 1,
-              desc_type: 8,
-              // @ts-ignore
-              firing: {
-                sender_id: 'kkkk',
-                receive_id: 'kkkk',
-                long_round: 1,
-                receive_sub_hp: 30,
-                receive_point: {
-                  x: 5,
-                  y: 4,
-                },
-                // @ts-ignore
-                now_hp: 960,
-              },
-            },
-          ],
-        },
-      });
-      console.log(run);
+      game.creatTerrain();
+      initSoldiers(mock);
     }
-  }, [ref]);
+  }, [ref, mock, initSoldiers]);
 
   React.useEffect(() => {
     return () => {
