@@ -95,6 +95,7 @@ declare namespace Api {
       per_cost_population: number;
       per_cost_stone: number;
       per_durability: number;
+      now_durability: number;
       size: BuildingSize;
     }
 

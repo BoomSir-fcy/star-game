@@ -44,6 +44,7 @@ class RunSimulation extends EventTarget {
   constructor(game: Game, rounds: RoundsProps) {
     super();
     this.game = game;
+    this.game.creatTerrain();
     this.rounds = rounds;
     this.init();
   }

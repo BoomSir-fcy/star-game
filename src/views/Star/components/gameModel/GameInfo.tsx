@@ -69,7 +69,8 @@ export const GameInfo: React.FC<{
   building_id: string;
   planet_id: number;
   currentBuild: Api.Building.Building;
-}> = React.memo(({ building_id, planet_id, currentBuild }) => {
+  callback: () => void;
+}> = React.memo(({ building_id, planet_id, currentBuild, callback }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
@@ -90,10 +91,11 @@ export const GameInfo: React.FC<{
   const init = useCallback(async () => {
     const res = await upgrade(planet_id, building_id);
     setState({ ...state, upgrade: res });
-  }, [upgrade, planet_id, building_id, state]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [upgrade, planet_id, building_id]);
 
   React.useEffect(() => {
-    if (itemData?._id) {
+    if (itemData?._id && !itemData?.isactive) {
       init();
     }
   }, [itemData, init]);
@@ -107,6 +109,7 @@ export const GameInfo: React.FC<{
         building_setting: [building_id],
       });
       if (Api.isSuccess(res)) {
+        callback();
         getSelfBuilding();
         toastSuccess(t('planetDestroyedSuccessfully'));
         dispatch(storeAction.destoryBuildingVisibleModal(false));
@@ -192,7 +195,7 @@ export const GameInfo: React.FC<{
                         <Text color='textSubtle' small>
                           {t('planetDurability')}
                         </Text>
-                        {itemData?.propterty?.per_durability !==
+                        {itemData?.propterty?.now_durability !==
                           itemData?.propterty?.max_durability && (
                           <ThingRepair
                             itemData={itemData}
@@ -203,7 +206,7 @@ export const GameInfo: React.FC<{
                         )}
                       </Flex>
                       <Text small>
-                        {`${itemData?.propterty?.per_durability}/${itemData?.propterty?.max_durability}`}
+                        {`${itemData?.propterty?.now_durability}/${itemData?.propterty?.max_durability}`}
                       </Text>
                     </Box>
                   </ItemInfo>

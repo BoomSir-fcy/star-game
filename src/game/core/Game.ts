@@ -102,7 +102,7 @@ class Game extends EventTarget {
     this.addEventListenerOfWindow();
   }
 
-  creatTerrain(TerrainInfo: Api.Game.TerrainInfo[]) {
+  creatTerrain(TerrainInfo?: Api.Game.TerrainInfo[]) {
     this.boards.drawChequers(this.test, TerrainInfo);
   }
 
