@@ -31,7 +31,6 @@ const ApproveButton: React.FC<ApproveButtonProps> = ({
       await onApprove();
       if (onFinish) onFinish(setLoading);
     } catch (error) {
-      console.log(1211212);
       setLoading(false);
     }
     // setLoading(false);

@@ -66,7 +66,7 @@ const Grow: React.FC = () => {
       }
     } catch (error) {
       toastError(t('Fail to accelerate'));
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -90,7 +90,7 @@ const Grow: React.FC = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     getPlanetStrengthen();
   };
@@ -114,7 +114,7 @@ const Grow: React.FC = () => {
       //   toastWarning(t('The current planet cannot be cultivated'));
       // }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

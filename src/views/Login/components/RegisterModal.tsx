@@ -64,7 +64,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
             spender={getUserAgentAddress()}
             onFinish={() => {
               if (account && token) {
-                console.log(token, account);
                 dispatch(fetchAllowanceAsync({ token, account }));
               }
             }}

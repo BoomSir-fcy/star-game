@@ -108,12 +108,11 @@ const Planet = () => {
         toastError(t('The alliance has not changed'));
         return;
       }
-      console.log(ChooseList);
       await SetWorking(ChooseList);
       toastSuccess(t('Join successfully'));
       navigate('/plant-league');
     } catch (e) {
-      console.log(e);
+      console.error(e);
       toastError(t('Join failed'));
     } finally {
       setpending(false);

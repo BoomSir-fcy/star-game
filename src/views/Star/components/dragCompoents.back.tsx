@@ -211,8 +211,8 @@ export const DragCompoents: React.FC<{
     const rightRow = row;
     const rightCol = col + 1;
 
+    // 已经没有格子了
     if (bottomRow > rows - 1 || rightCol > cols - 1) {
-      console.log('已经没有格子了');
       return [];
     }
     // 斜角点坐标
@@ -492,7 +492,7 @@ export const DragCompoents: React.FC<{
         console.log(res);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

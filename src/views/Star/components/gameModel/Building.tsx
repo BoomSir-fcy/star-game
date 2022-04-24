@@ -96,7 +96,7 @@ export const Building: React.FC<{
         toastError(res.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -114,7 +114,7 @@ export const Building: React.FC<{
         toastError(res.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -154,7 +154,6 @@ export const Building: React.FC<{
                   planet_id={planet_id}
                   building_id={itemData._id}
                   onCallback={(evnet?: number) => {
-                    // console.log(time);
                     setState({ ...state, time: evnet || 0 });
                   }}
                 />

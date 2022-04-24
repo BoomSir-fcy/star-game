@@ -114,7 +114,7 @@ export const GameInfo: React.FC<{
         toastError(res.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -133,7 +133,7 @@ export const GameInfo: React.FC<{
         toastError(res.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

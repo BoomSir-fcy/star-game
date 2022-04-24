@@ -6,8 +6,6 @@ import { Text, TextProps } from '../Text';
 
 gsap.registerPlugin(TextPlugin);
 
-console.log('12222222222222gsap');
-
 interface TweenTextProps extends TextProps {
   to: string;
   from?: string;

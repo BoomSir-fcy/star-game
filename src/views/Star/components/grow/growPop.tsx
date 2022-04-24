@@ -45,7 +45,7 @@ export const GrowPop: React.FC<{
       // }
     } catch (error) {
       toastError(t('Operation failed'));
-      console.log(error);
+      console.error(error);
     }
   };
 

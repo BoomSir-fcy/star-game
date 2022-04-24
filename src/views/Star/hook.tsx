@@ -23,7 +23,6 @@ export const useJoinAlliance = () => {
       // } catch (error) {
       //   throw error;
       // }
-      console.log(arr, '联盟星球');
 
       try {
         const tx = await PlanetContract.setWorking(arr);

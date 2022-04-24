@@ -57,7 +57,6 @@ const MysteryBoxState = () => {
     return mysteryBoxQualities.ORDINARY;
   }, [paramsQs.q]);
   const price = useMemo(() => {
-    console.log(priceBNB[quality], 'priceBNB');
     return getBalanceNumber(new BigNumber(priceBNB[quality]), 18);
   }, [priceBNB, quality]);
 
@@ -110,9 +109,7 @@ const MysteryBoxState = () => {
     async name => {
       try {
         const res = await handleOpen(quality, name);
-        console.log(res);
         // const event = await fetchHandle();
-        // console.log(event, 'event');
         const planetId = await getPlanetId(res?.blockHash);
         // 盲盒打开特效视频
         setOpenedBox(true);

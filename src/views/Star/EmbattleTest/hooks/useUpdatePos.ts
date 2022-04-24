@@ -63,7 +63,6 @@ const useUpdatePos = (planetId: number, game: Game) => {
         tag: `t-${planetId}`,
       });
       setSortSoldiers(game.soldiers);
-      console.log(res);
     },
     [planetId, setSortSoldiers, game.soldiers],
   );

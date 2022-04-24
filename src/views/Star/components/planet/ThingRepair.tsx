@@ -25,7 +25,7 @@ export const ThingRepair: React.FC<{
         setState({ ...state, visible: false });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

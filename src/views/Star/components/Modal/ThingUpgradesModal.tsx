@@ -111,7 +111,7 @@ export const ThingUpgradesModal: React.FC<{
                       planet_id={planet_id}
                       building_id={itemData._id}
                       onCallback={() => {
-                        console.log(222);
+                        // TODO: 更多
                       }}
                     />
                   )}

@@ -43,7 +43,7 @@ export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
         setClaimMax(res.data?.amount);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, [galaxy_id]);
 
@@ -55,7 +55,7 @@ export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
         getClaimMax();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toastError(t('Claim failed'));
     }
   }, [galaxy_id, toastSuccess, toastError, t, getClaimMax]);

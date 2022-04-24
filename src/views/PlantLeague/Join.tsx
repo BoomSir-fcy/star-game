@@ -61,7 +61,6 @@ const JoinTheAlliance = () => {
       const newList = newIds.concat([]);
       const index = newList.indexOf(Number(id));
       newList.splice(index, 1);
-      console.log(newList);
       setNewIds(newList);
     },
     [allianceList, newIds, setNewIds, setAllianceList],
@@ -79,7 +78,7 @@ const JoinTheAlliance = () => {
       await RemoveStar(newIds);
       toastSuccess(t('Removed successfully'));
     } catch (e) {
-      console.log(e);
+      console.error(e);
       toastError(t('Removal failed'));
     }
     dispatch(fetchAllianceViewAsync());

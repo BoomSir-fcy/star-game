@@ -92,7 +92,7 @@ const Upgrade = () => {
         setUpgradeSuccess(rest);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, [planetId]);
 
@@ -124,7 +124,7 @@ const Upgrade = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, [planetId]);
 

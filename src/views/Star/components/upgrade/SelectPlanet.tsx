@@ -42,7 +42,7 @@ const SelectPlanet = () => {
         setStarList(res.data?.Data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, [planetId]);
 

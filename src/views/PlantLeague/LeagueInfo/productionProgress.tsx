@@ -118,10 +118,6 @@ const ProductionProgress = () => {
     const hour = Math.floor(time / 3600).toString();
     let min = Math.floor((time % 3600) / 60).toString();
     let sec = (time % 60).toString();
-    // if (Number(hour) < 10) {
-    //   hour = `0${hour}`;
-    //   console.log(hour, min, sec);
-    // }
     if (Number(min) < 10) {
       min = `0${min}`;
     }

@@ -108,7 +108,7 @@ export const RechargeAssets: React.FC<{
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, [planet_id]);
 
@@ -132,7 +132,7 @@ export const RechargeAssets: React.FC<{
         }
         setPending(false);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         toastError(t('Recharge failed'));
         setPending(false);
       }

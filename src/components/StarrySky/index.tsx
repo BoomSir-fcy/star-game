@@ -43,10 +43,7 @@ interface StarrySkyProps {
 }
 
 const StarrySky: React.FC<StarrySkyProps> = ({ bgType = 0 }) => {
-  console.log(12211212, 'StarrySky');
-
   const type = useMemo(() => {
-    console.log(33333, 'StarrySky');
     return bgType;
   }, [bgType]);
   return (

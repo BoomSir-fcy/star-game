@@ -38,7 +38,7 @@ const InfoFoot = () => {
       })
       .catch(err => {
         toastError(t('Operation failed'));
-        console.log(err);
+        console.error(err);
       });
   };
 

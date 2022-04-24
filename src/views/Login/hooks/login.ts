@@ -29,7 +29,6 @@ export const useLogin = () => {
           localStorage.setItem(storage.SSID, res.data.SSID);
           dispatch(fetchUserInfoByAccountAsync(account)); // TODO: replace 1 for uid
         }
-        console.log(res);
         return (
           res || {
             code: -1,

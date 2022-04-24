@@ -34,7 +34,7 @@ export const ThingRepairModal: React.FC<{
           setStae(res.data);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     init();

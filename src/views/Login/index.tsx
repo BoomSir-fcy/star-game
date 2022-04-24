@@ -165,11 +165,9 @@ const Login = () => {
       const res = await handleLogin();
       if (res.code === 0) {
         const num = await getPlanetNum();
-        console.log(num);
 
         if (num.code === 0) {
           const planetNum = num.data?.List?.planet_num;
-          console.log(planetNum);
 
           if (planetNum > 0) {
             navigate('/star/planet');

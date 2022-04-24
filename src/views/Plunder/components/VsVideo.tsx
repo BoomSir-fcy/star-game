@@ -24,7 +24,6 @@ const VsVideo: React.FC<BoxProps> = ({ ...props }) => {
   const { setVideoOptions, videoRef } = useVideo();
 
   const changeState = useCallback(() => {
-    console.log(9999);
     setVideoOptions({
       src: '/video/pk-2.mp4',
       loop: true,

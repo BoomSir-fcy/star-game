@@ -115,7 +115,7 @@ const Auction = () => {
       }, 10000);
       toastSuccess(t('Auction succeeded'));
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toastError(t('Auction failed'));
     } finally {
       setPending(false);

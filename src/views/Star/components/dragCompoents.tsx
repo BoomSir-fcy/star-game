@@ -471,7 +471,7 @@ export const DragCompoents: React.FC<{
         toastError(res?.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

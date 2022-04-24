@@ -42,8 +42,8 @@ const useUpdatePos = (planetId: number, game: Game) => {
         units,
         planet_id: planetId,
       });
+      // TODO:判断返回值
       setSortSoldiers(game.soldiers);
-      console.log(res);
     },
     [planetId, game.soldiers, setSortSoldiers],
   );

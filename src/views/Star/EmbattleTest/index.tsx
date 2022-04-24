@@ -55,8 +55,6 @@ const Embattle = () => {
     return null;
   }, [baseUnits, race]);
 
-  console.log(unitMaps);
-
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

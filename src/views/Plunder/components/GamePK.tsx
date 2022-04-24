@@ -149,7 +149,6 @@ const GamePK: React.FC<GamePKProps> = () => {
   const [selectOptions, setSelectOptions] = useState<OptionProps[]>([]);
 
   useEffect(() => {
-    console.log(PKInfo, 'PKInfo');
     if (PKInfo && game.soldiers.length === 0) {
       const ids: idMap = {};
       Object.keys(PKInfo.init.ids).forEach(id => {
@@ -160,7 +159,6 @@ const GamePK: React.FC<GamePKProps> = () => {
       createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
       runHandle(PKInfo.slot);
       const res: OptionProps[] = [];
-      console.log(PKInfo.status.status);
       Object.keys(PKInfo.status.status).forEach((item: string) => {
         res.push({
           value: `回合${item}`,
@@ -283,7 +281,6 @@ const GamePK: React.FC<GamePKProps> = () => {
             mb='27px'
             defaultId={0}
             onChange={option => {
-              // console.log(option);
               setActiveBullet(option);
             }}
           />
@@ -414,7 +411,6 @@ const GamePK: React.FC<GamePKProps> = () => {
               mb='27px'
               defaultId={0}
               onChange={option => {
-                console.log(option);
                 selectHandle(option.info, option.id as string);
                 // setSelectId(option.value);
               }}
