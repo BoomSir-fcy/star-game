@@ -323,7 +323,7 @@ class Combat extends EventTarget {
     } else if (effect === descType.ATTACK) {
       bullet.attack(bulletType.BULLET, target);
     } else if (effect === descType.ADD_SHIELD) {
-      bullet.attack(bulletType.ROCK, target);
+      bullet.attack(bulletType.SHIELD, target);
     } else if (effect === descType.BEAT) {
       bullet.attack(bulletType.ROCK, target);
     } else if (effect === descType.BOOM) {
@@ -334,6 +334,8 @@ class Combat extends EventTarget {
       bullet.attack(bulletType.FIREBALL, target);
     } else if (effect === descType.ICE_START) {
       bullet.attack(bulletType.ICE, target);
+    } else if (effect === descType.STOP_MOVE) {
+      bullet.attack(bulletType.STOP_MOVE, target);
     } else {
       bullet.attack(bulletType.BULLET, target, effect);
     }

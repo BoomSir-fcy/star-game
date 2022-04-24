@@ -253,6 +253,8 @@ export const bulletType = {
   FIGHT: 'fight', // 肉搏
   DRAGON: 'dragon', // 岩石
   BUMP: 'bump', // 碰撞
+  SHIELD: 'shield', // 护盾
+  STOP_MOVE: 'stop_move', // 禁锢
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 

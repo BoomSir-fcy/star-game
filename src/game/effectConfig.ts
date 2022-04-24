@@ -104,6 +104,22 @@ const effectConfig: EffectConfig = {
       moveSpriteSrc: '',
       label: '碰撞',
     },
+    {
+      name: bulletType.SHIELD,
+      bombSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/bullet/shield/shield.png',
+      label: '护盾',
+    },
+    {
+      name: bulletType.STOP_MOVE,
+      bombSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/bullet/hold/hold.png',
+      label: '禁锢',
+    },
   ],
 
   effect: {
@@ -176,7 +192,7 @@ export const descOfEffect = {
   [descType.BOOM]: {
     effect: EffectType.BOMB,
     add: false,
-    remove: false,
+    remove: true,
   },
   [descType.FIRING]: {
     effect: EffectType.FIRING,
