@@ -55,6 +55,7 @@ class Game extends EventTarget {
       'wheel',
       this.boards.onHandleWheel.bind(this.boards),
     );
+    this.test = test;
     this.init();
   }
 

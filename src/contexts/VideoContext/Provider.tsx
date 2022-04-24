@@ -7,6 +7,9 @@ interface SizeApi {
 interface PositionApi {
   top?: number | string;
   left?: number | string;
+  bottom?: number | string;
+  right?: number | string;
+  margin?: string;
 }
 interface VideoOptionsApi extends SizeApi, PositionApi {
   src: string;
@@ -33,6 +36,9 @@ const VideoProvider: React.FC = ({ children }) => {
     height: 500,
     top: 0,
     left: 0,
+    bottom: 0,
+    right: 0,
+    margin: '',
     center: true,
   });
   const setVideoOptions = useCallback(options => {

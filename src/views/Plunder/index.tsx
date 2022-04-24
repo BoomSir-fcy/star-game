@@ -6,6 +6,7 @@ import Dashboard from 'components/Dashboard';
 import { GameBoard } from 'game';
 import PeopleCard from './components/PeopleCard';
 import VsVideo from './components/VsVideo';
+import SpinnerBox from './components/SpinnerBox';
 import GamePK from './components/GamePK';
 import { States } from './types';
 import {
@@ -14,7 +15,6 @@ import {
   PeopleCardRight,
   VsVideoStyled,
   ButtonBox,
-  SpinnerBox,
   GameBox,
 } from './components/styled';
 
@@ -28,13 +28,8 @@ const Plunder = () => {
         <PeopleCardLeft state={state} />
         <Fringe />
         <VsVideoStyled />
-        {state === States.MATCHING && (
-          <SpinnerBox>
-            <Spinner />
-          </SpinnerBox>
-        )}
+        {state === States.MATCHING && <SpinnerBox />}
         <PeopleCardRight state={state} />
-        <GameBox>{/* <GamePK planetId={1001} /> */}</GameBox>
 
         <ButtonBox justifyContent='center' alignItems='center'>
           <Button

@@ -1,7 +1,10 @@
 import StarrySky from 'components/StarrySky';
 import { VideoComponent } from 'components/Video';
+import { APP_HEIGHT, APP_WIDTH, VIDEO_GLOBAL_CLASS_NAME } from 'config';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { setGlobalClient, setGlobalScale } from 'state/user/actions';
 import styled from 'styled-components';
 import { Box } from 'uikit';
 import detectOrient from 'utils/detectOrient';
@@ -24,26 +27,38 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   const { pathname } = useLocation();
 
   const [minHeight, setMinHeight] = useState(900);
+  const [cHeight, setCHeight] = useState(900);
   const [scale, setScale] = useState(1);
+
+  const dispatch = useDispatch();
+
   const handleResize = useCallback(() => {
-    const { width, height } =
-      window.document.documentElement.getBoundingClientRect();
+    const { innerHeight, innerWidth } = window;
 
-    // 宽比高大的时候适用
-    const maxV = Math.max(width, height);
-    const rate = maxV / 1920;
+    const maxV = Math.max(innerWidth, innerHeight);
+    const minV = maxV === innerWidth ? innerHeight : innerWidth;
+    const rateMax = maxV / APP_WIDTH;
+    const rateMin = minV / APP_HEIGHT;
 
-    // 宽比高小的时候适用
-    // const minV = Math.min(width, height);
-    // const base = minV === width ? 1920 : 900;
-    // const rate = minV / base;
+    // 处理高度不够显示不全bug
+    const rate = Math.min(rateMax, rateMin);
 
+    // dispatch(setScale)
     setScale(rate);
-    setMinHeight(Math.min(width, height));
+    setMinHeight(Math.min(innerWidth, innerHeight));
+    setCHeight(innerHeight);
+
+    dispatch(
+      setGlobalClient({
+        width: innerWidth,
+        height: innerHeight,
+      }),
+    );
+    dispatch(setGlobalScale(rate));
     if (ref.current) {
       detectOrient(ref.current, false);
     }
-  }, [ref]);
+  }, [ref, dispatch]);
 
   useEffect(() => {
     handleResize();
@@ -56,7 +71,12 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   return (
     <Box position='relative' id='detect-orient' ref={ref}>
       <StarrySky bgType={pathname === '/plant-league' ? 2 : 0} />
-      <VideoComponent minHeight={minHeight} scale={scale} />
+      <VideoComponent
+        cHeight={APP_HEIGHT}
+        minHeight={minHeight}
+        scale={scale}
+      />
+      <div className={VIDEO_GLOBAL_CLASS_NAME} />
       <Content id='scale-content' scale={scale}>
         {children}
       </Content>
