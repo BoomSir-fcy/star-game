@@ -3,7 +3,12 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStore } from 'state/util';
-import { fetchGamePK, fetchGamePKTest } from './fetchers';
+import {
+  fetchGameMatchUser,
+  fetchGamePK,
+  fetchGamePKTest,
+  fetchGamePlunderPk,
+} from './fetchers';
 import {
   fetchUnitListAsync,
   fetchGamePlanetUnitsAsync,
@@ -11,6 +16,8 @@ import {
   fetchGamePlanetUnitsTestAsync,
   fetchGamePKTestAsync,
   fetchGameterrainAsync,
+  fetchGamePlunderPkAsync,
+  fetchGameMatchUserAsync,
 } from './reducer';
 
 export const useFetchUnitList = (race?: Api.Game.race) => {
@@ -92,6 +99,36 @@ export const useFetchGamePKTest = (
       dispatch(fetchGamePKTestAsync(`t-${id0}`, maxRound));
     }
   }, [dispatch, id0, id1, maxRound]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return {
+    fetch,
+  };
+};
+
+export const useFetchGameMatchUser = () => {
+  const dispatch = useDispatch();
+  const fetch = useCallback(() => {
+    dispatch(fetchGameMatchUserAsync());
+  }, [dispatch]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return {
+    fetch,
+  };
+};
+
+export const useFetchGamePkInfo = () => {
+  const dispatch = useDispatch();
+  const fetch = useCallback(() => {
+    dispatch(fetchGamePlunderPkAsync());
+  }, [dispatch]);
 
   useEffect(() => {
     fetch();

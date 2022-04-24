@@ -15,16 +15,16 @@ import Layout from 'components/Layout';
 import { useDispatch } from 'react-redux';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { GamePkState } from 'state/types';
 import { useStore } from 'state';
 import { fetchUnitListAsync } from 'state/game/reducer';
 import { GameBoard } from 'game';
 import PeopleCard from './components/PeopleCard';
 import VsVideo from './components/VsVideo';
 import GamePK from './components/GamePK';
-import { States } from './types';
 
 const Plunder = () => {
-  const [state, setState] = useState(States.MATCHING);
+  const [state, setState] = useState(GamePkState.MATCHING);
   const dispatch = useDispatch();
 
   const parsedQs = useParsedQueryString();

@@ -1,10 +1,12 @@
 import { createReducer, createSlice } from '@reduxjs/toolkit';
-import { AppThunk, GameState } from 'state/types';
+import { AppThunk, GamePkState, GameState } from 'state/types';
 import {
+  fetchGameMatchUser,
   fetchGamePK,
   fetchGamePKTest,
   fetchGamePlanetUnits,
   fetchGamePlanetUnitsTest,
+  fetchGamePlunderPk,
   fetchGameterrain,
   fetchUnitList,
 } from './fetchers';
@@ -16,6 +18,9 @@ export const initialState: GameState = {
   baseSkill: {},
   process: null,
   PKInfo: null,
+  plunderPK: {},
+  state: GamePkState.MATCHING,
+  matchUser: null,
   TerrainInfo: [
     {
       map_id: 0,
@@ -81,6 +86,18 @@ export const fetchGamePKTestAsync =
     dispatch(setPKInfo(PKInfo));
   };
 
+export const fetchGameMatchUserAsync = (): AppThunk => async dispatch => {
+  dispatch(setState(GamePkState.MATCHING));
+  const matchUser = await fetchGameMatchUser();
+  dispatch(setMatchUser(matchUser));
+  dispatch(setState(GamePkState.MATCHED));
+};
+
+export const fetchGamePlunderPkAsync = (): AppThunk => async dispatch => {
+  const matchUser = await fetchGamePlunderPk();
+  dispatch(setMatchUser(matchUser));
+};
+
 export const fetchGameterrainAsync = (): AppThunk => async dispatch => {
   const TerrainInfo = await fetchGameterrain();
   dispatch(setTerrainInfo(TerrainInfo));
@@ -123,6 +140,18 @@ export const userInfoSlice = createSlice({
       state.PKInfo = payload;
     },
 
+    setMatchUser: (state, { payload }) => {
+      state.matchUser = payload;
+    },
+
+    setPlunderPk: (state, { payload }) => {
+      state.matchUser = payload;
+    },
+
+    setState: (state, { payload }: { payload: GamePkState }) => {
+      state.state = payload;
+    },
+
     setTerrainInfo: (state, { payload }) => {
       state.TerrainInfo = payload;
     },
@@ -135,6 +164,8 @@ export const {
   setPlantUnits,
   setPKInfo,
   setBaseSkill,
+  setMatchUser,
+  setState,
   setPlantUnitsTest,
   setTerrainInfo,
 } = userInfoSlice.actions;

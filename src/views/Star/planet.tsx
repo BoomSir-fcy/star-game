@@ -293,7 +293,7 @@ const Planet = () => {
           </Box>
           <Flex ml={choose ? '7px' : '23px'} flex={1}>
             <BgCard
-              variant={choose ? 'full' : 'big'}
+              variant={choose ? 'full' : 'medium'}
               fringe
               padding='40px 37px'
             >

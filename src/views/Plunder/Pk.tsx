@@ -16,7 +16,7 @@ import Dashboard from 'components/Dashboard';
 import Game from 'game/core/Game';
 import { useStore } from 'state';
 import { useFetchGameTerrain } from 'state/game/hooks';
-import { States } from './types';
+import { GamePkState } from 'state/types';
 import {
   PeopleCard,
   Energy,
@@ -33,7 +33,7 @@ const Pk = () => {
 
   const { TerrainInfo } = useStore(p => p.game);
 
-  const [state, setState] = useState(States.MATCHING);
+  const [state, setState] = useState(GamePkState.MATCHING);
 
   const ref = useRef<HTMLDivElement>(null);
 

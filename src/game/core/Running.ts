@@ -18,7 +18,9 @@ import {
   RoundDescBeat,
   RoundDescBeatMove,
   ReceiveChange,
+  RoundDescCarshHarm,
 } from 'game/types';
+import { orderBy } from 'lodash';
 import AxisPoint from './AxisPoint';
 import { stateType } from './Chequer';
 import Game from './Game';
@@ -512,9 +514,6 @@ class Running extends EventTarget {
           if (receiveAxis) {
             const activeSoldier = this.game.findSoldierByAxis(receiveAxis);
             if (activeSoldier) {
-              // activeSoldier.setActiveHp(
-              //   activeSoldier.activePh - (item.receive_sub_hp || 0),
-              // );
               activeSoldier.changeEffect(attacks.type, activeSoldier);
               if (
                 typeof item.now_hp === 'number' &&
@@ -625,6 +624,29 @@ class Running extends EventTarget {
       return null;
     }
     sendSoldier.once('collisionEnd', () => {
+      if (attacks.attackInfo) {
+        const { sender_vhp, receive_vhp } =
+          attacks.attackInfo as RoundDescCarshHarm;
+        if (
+          typeof sender_vhp.now_hp === 'number' &&
+          typeof sender_vhp.now_shield === 'number'
+        ) {
+          sendSoldier.setActiveHpWithShield(
+            sender_vhp.now_hp,
+            sender_vhp.now_shield,
+          );
+        }
+        if (
+          typeof receive_vhp.now_hp === 'number' &&
+          typeof receive_vhp.now_shield === 'number'
+        ) {
+          receiveSoldier.setActiveHpWithShield(
+            receive_vhp.now_hp,
+            receive_vhp.now_shield,
+          );
+        }
+      }
+
       callback();
     });
     sendSoldier.beatCollision(receiveSoldier);
@@ -647,11 +669,16 @@ class Running extends EventTarget {
 
   // 获取轨道详情
   static getDetails(
-    roundInfo: RoundInfo[],
+    roundInfos: RoundInfo[],
     round: string | number,
     self?: boolean,
   ) {
     const details: TrackDetail[] = [];
+
+    const roundInfo = orderBy(
+      roundInfos,
+      item => item.desc_type === descType.REMOVE,
+    );
 
     Object.keys(roundInfo).forEach(_track => {
       const track = Number(_track);

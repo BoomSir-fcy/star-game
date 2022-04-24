@@ -1,22 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit';
+import { UserState } from '../types';
 import { updateVersion } from '../global/actions';
 import { setGlobalClient, setGlobalScale, toggleTheme } from './actions';
 
 const currentTimestamp = () => new Date().getTime();
-
-export interface UserState {
-  // the timestamp of the last updateVersion action
-  lastUpdateVersionTimestamp?: number;
-
-  isDark: boolean;
-
-  scale: number; // 缩放比列
-
-  client: {
-    width: number;
-    height: number;
-  };
-}
 
 export const initialState: UserState = {
   isDark: false,

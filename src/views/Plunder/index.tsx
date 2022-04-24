@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import { Box, Text, Fringe, Button, Flex, RefreshButton, Spinner } from 'uikit';
 import styled from 'styled-components';
 import Layout from 'components/Layout';
+import { useStore } from 'state';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setState } from 'state/game/reducer';
+import { useFetchGameMatchUser } from 'state/game/hooks';
+import { GamePkState } from 'state/types';
+import { GlobalVideo } from 'components/Video';
 import Dashboard from 'components/Dashboard';
 import { GameBoard } from 'game';
 import PeopleCard from './components/PeopleCard';
 import VsVideo from './components/VsVideo';
 import SpinnerBox from './components/SpinnerBox';
 import GamePK from './components/GamePK';
-import { States } from './types';
 import {
   BoxStyled,
   PeopleCardLeft,
@@ -19,7 +25,14 @@ import {
 } from './components/styled';
 
 const Plunder = () => {
-  const [state, setState] = useState(States.MATCHING);
+  // const [state, setState] = useState(GamePkState.MATCHING);
+  const state = useStore(p => p.game.state);
+
+  const dispatch = useDispatch();
+
+  const { fetch } = useFetchGameMatchUser();
+
+  const navigate = useNavigate();
 
   return (
     <Layout>
@@ -27,23 +40,32 @@ const Plunder = () => {
       <BoxStyled position='relative'>
         <PeopleCardLeft state={state} />
         <Fringe />
-        <VsVideoStyled />
-        {state === States.MATCHING && <SpinnerBox />}
+        <GlobalVideo src='/video/pk-2.mp4' loop top={300} left={712} />
+        {state === GamePkState.MATCHING && (
+          <GlobalVideo src='/video/loading.mp4' loop top={300} right={0} />
+        )}
         <PeopleCardRight state={state} />
 
         <ButtonBox justifyContent='center' alignItems='center'>
           <Button
             variant='vs'
             onClick={() => {
-              setState(prev => {
-                if (prev === States.DEFEAT) return States.MATCHING;
-                return prev + 1;
-              });
+              // setState(prev => {
+              //   if (prev === GamePkState.DEFEAT) return GamePkState.MATCHING;
+              //   return prev + 1;
+              // });
+              dispatch(setState(GamePkState.START));
+              navigate('/plunder-pk');
             }}
+            disabled={!GamePkState.MATCHED}
           >
             开始掠夺
           </Button>
-          <RefreshButton variant='vsRefresh' />
+          <RefreshButton
+            disabled={!!GamePkState.MATCHING}
+            onClick={fetch}
+            variant='vsRefresh'
+          />
         </ButtonBox>
       </BoxStyled>
     </Layout>
