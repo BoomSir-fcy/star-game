@@ -120,7 +120,7 @@ class Chequer {
     this.bunny.anchor.set(0.5);
     this.bunny.width = 100;
     this.bunny.height = 125;
-    const { x, y, enemy } = this.getXY(axisX, axisY);
+    const { x, y, enemy } = this.getXY(this.axisY, this.axisX);
     this.bunny.x = x;
     this.bunny.y = y;
 
@@ -139,7 +139,7 @@ class Chequer {
     this.bunny.addChild(this.stateSprite);
     this.stateSprite.visible = false;
 
-    const text = new Text(`x${axisX}, ${axisY}`, {
+    const text = new Text(`x${this.axisX}, ${this.axisY}`, {
       fill: 0xffffff,
       fontSize: 16,
     });
