@@ -50,6 +50,17 @@ class EffectBuff extends EventTarget {
     sprint1: new Sprite(),
     scale: 1,
     positionY: -30,
+    load: true,
+  };
+
+  [EffectType.ADD_FIRING] = {
+    sprint: new AnimatedSprite([
+      Texture.from(effectConfig.effect.firing.spriteSrc0),
+      Texture.from(effectConfig.effect.firing.spriteSrc1 as string),
+    ]),
+    sprint1: new Sprite(),
+    scale: 1,
+    positionY: -30,
     load: false,
   };
 
@@ -94,6 +105,10 @@ class EffectBuff extends EventTarget {
       return;
     }
     if (type === EffectType.FIRING) {
+      this.firingEffect(type);
+      return;
+    }
+    if (type === EffectType.ADD_FIRING) {
       this.addFiringEffect(type);
       return;
     }
@@ -184,9 +199,18 @@ class EffectBuff extends EventTarget {
     sprite.position.set(0, positionY);
     sprite.scale.set(scale);
     this.addAnimateEffect(type, 0.05);
+    this[type].load = true;
+  }
 
+  /**
+   * 添加火焰特效
+   */
+  firingEffect(type: EffectType) {
     this.combat.displaySprite.filters = [new ColorOverlayFilter(0xff0000, 0.3)];
     this[type].load = true;
+    setTimeout(() => {
+      this.combat.displaySprite.filters = [];
+    }, 500);
   }
 
   /**

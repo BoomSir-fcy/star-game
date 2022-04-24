@@ -1,0 +1,71 @@
+{
+  "skeleton": { "hash": " ", "spine": "3.0.0", "name": "hudun" },
+  "bones": [
+    { "name": "root" },
+    { "name": "冰块", "parent": "root" },
+    {
+      "x": 8.1592,
+      "y": 2.2726,
+      "scaleX": 1.029,
+      "scaleY": 1.029,
+      "name": "结冰",
+      "parent": "root"
+    }
+  ],
+  "slots": [
+    { "name": "b1", "bone": "冰块" },
+    { "name": "冰1", "bone": "结冰" }
+  ],
+  "skins": {
+    "default": {
+      "b1": {
+        "b1": { "name": "b1", "width": 299, "height": 162 },
+        "b3": { "name": "b3", "width": 277, "height": 195, "y": 24.13 },
+        "b5": { "name": "b5", "width": 179, "height": 148, "y": 8.35 },
+        "b7": { "name": "b7", "width": 139, "height": 130 },
+        "b8": { "name": "b8", "width": 142, "height": 121 },
+        "b6": { "name": "b6", "width": 141, "height": 143, "y": 3.71 },
+        "b4": { "name": "b4", "width": 263, "height": 174, "y": 18.56 },
+        "b2": { "name": "b2", "width": 348, "height": 206 }
+      },
+      "冰1": {
+        "冰1": { "name": "冰1", "width": 95, "height": 50 },
+        "冰3": { "name": "冰3", "width": 154, "height": 149 },
+        "冰4": { "name": "冰4", "width": 152, "height": 138 },
+        "冰2": { "name": "冰2", "width": 151, "height": 118 }
+      }
+    }
+  },
+  "animations": {
+    "play": {
+      "slots": {
+        "b1": {
+          "attachment": [
+            { "time": 0, "name": "b1" },
+            { "time": 0.1333, "name": "b2" },
+            { "time": 0.2666, "name": "b3" },
+            { "time": 0.3999, "name": "b4" },
+            { "time": 0.5332, "name": "b5" },
+            { "time": 0.6665, "name": "b6" },
+            { "time": 0.7998, "name": "b7" },
+            { "time": 0.9331, "name": "b8" },
+            { "time": 1.0664, "name": "" }
+          ]
+        },
+        "冰1": {
+          "attachment": [
+            { "time": 0, "name": "冰1" },
+            { "time": 0.1667, "name": "冰2" },
+            { "time": 0.3334, "name": "冰3" },
+            { "time": 0.5001, "name": "冰4" }
+          ],
+          "color": [
+            { "time": 0, "curve": "stepped", "color": "FFFFFFFF" },
+            { "time": 0.6667, "color": "FFFFFFFF" },
+            { "time": 2.6667, "color": "FFFFFF00" }
+          ]
+        }
+      }
+    }
+  }
+}

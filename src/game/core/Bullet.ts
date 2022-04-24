@@ -481,7 +481,9 @@ class Bullet extends EventTarget {
       bulletType.ROCK,
       bulletType.CURVE_BULLET,
       bulletType.FIREBALL,
+      bulletType.FIRING,
       bulletType.MISSILE,
+      bulletType.ADD_BOMB,
     ];
 
     this.onStart(attackTarget);
@@ -507,7 +509,7 @@ class Bullet extends EventTarget {
       return;
     }
 
-    const space = [bulletType.STING, bulletType.BUMP];
+    const space = [bulletType.STING, bulletType.BUMP, bulletType.BOMB];
     if (space.includes(name)) {
       this.spaceAttack(name, attackTarget);
     }
