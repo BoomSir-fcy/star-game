@@ -20,6 +20,7 @@ interface BoardsProps {
   width?: number;
   height?: number;
   test?: boolean;
+  enableDrag?: boolean;
 }
 /**
  * 棋盘
@@ -28,11 +29,11 @@ class Boards extends EventTarget {
   constructor(options?: BoardsProps) {
     super();
     // this.aaa = 1;
-    const { width, height, test } = options || {};
+    const { width, height, test, enableDrag } = options || {};
 
     this.width = width || config.WIDTH;
     this.height = height || config.HEIGHT;
-
+    this.enableDrag = enableDrag || false;
     this.init({ test });
   }
 
@@ -49,6 +50,8 @@ class Boards extends EventTarget {
   axis: AxisPoint[][] = []; // 坐标轴
 
   created = false; //
+
+  enableDrag = true;
 
   private dragData: InteractionData = new InteractionData();
 
@@ -142,8 +145,10 @@ class Boards extends EventTarget {
   }
 
   onDragStart(event: InteractionEvent) {
-    this.dragData = event.data;
-    this.dragging = true;
+    if (this.enableDrag) {
+      this.dragData = event.data;
+      this.dragging = true;
+    }
   }
 
   onDragEnd() {
