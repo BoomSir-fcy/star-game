@@ -23,37 +23,26 @@ const VsVideo: React.FC<BoxProps> = ({ ...props }) => {
 
   const { setVideoOptions, videoRef } = useVideo();
 
-  const changeState = useCallback(() => {
-    setVideoOptions({
-      src: '/video/pk-2.mp4',
-      loop: true,
-      center: true,
-    });
-  }, [setVideoOptions]);
-
   React.useEffect(() => {
     setVideoOptions({
-      src: '/video/pk-1.mp4',
-      center: true,
-      loop: false,
+      src: '/video/pk-2.mp4',
+      center: false,
+      // loop: false,
+      top: 300,
+      left: 712,
     });
-    const refCurrent = videoRef.current;
-    if (refCurrent) {
-      refCurrent.addEventListener('ended', changeState);
-    }
-    return () => {
-      if (refCurrent) {
-        refCurrent.removeEventListener('ended', changeState);
-      }
-    };
-  }, [videoRef, setVideoOptions, changeState]);
+    // const refCurrent = videoRef.current;
+    // if (refCurrent) {
+    //   refCurrent.addEventListener('ended', changeState);
+    // }
+    // return () => {
+    //   if (refCurrent) {
+    //     refCurrent.removeEventListener('ended', changeState);
+    //   }
+    // };
+  }, [videoRef, setVideoOptions]);
 
-  return (
-    <div>
-      <VideoStyled src='/video/pk-2.mp4' />
-      <VideoStyled src='/video/pk-1.mp4' />
-    </div>
-  );
+  return null;
 };
 
 export default VsVideo;
