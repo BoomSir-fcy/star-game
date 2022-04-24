@@ -130,8 +130,8 @@ const effectConfig: EffectConfig = {
     },
     [EffectType.FIRING]: {
       type: EffectType.FIRING,
-      spriteSrc0: '/assets/effects/firing.png',
-      spriteSrc1: '',
+      spriteSrc0: '/assets/effects/firing-animate-1.png',
+      spriteSrc1: '/assets/effects/firing-animate-2.png',
     },
     [EffectType.ICE]: {
       type: EffectType.ICE,
@@ -147,6 +147,11 @@ const effectConfig: EffectConfig = {
       type: EffectType.STOP_MOVE,
       spriteSrc0: '/assets/effects/stop-move-bottom.png',
       spriteSrc1: '/assets/effects/stop-move-top.png',
+    },
+    [EffectType.VENOM]: {
+      type: EffectType.VENOM,
+      spriteSrc0: '/assets/effects/venom-animate-1.png',
+      spriteSrc1: '/assets/effects/venom-animate-2.png',
     },
   },
 };

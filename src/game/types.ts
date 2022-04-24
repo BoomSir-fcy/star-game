@@ -274,6 +274,7 @@ export enum EffectType {
   FIRING = 'firing', // 灼烧
   BOMB = 'bomb', // 炸弹
   SHIELD = 'shield', // 护盾
+  VENOM = 'venom',
 }
 
 export interface EffectItemInfoOfConfig {
