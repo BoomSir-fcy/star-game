@@ -329,7 +329,6 @@ class Game extends EventTarget {
       zIndex,
     });
 
-    console.log(soldier);
     this.addSoldier(soldier);
     return soldier;
   }
