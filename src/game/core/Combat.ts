@@ -361,7 +361,7 @@ class Combat extends EventTarget {
     } else if (effect === descType.FIRING) {
       bullet.attack(bulletType.FIRING, target);
     } else if (effect === descType.ICE_END) {
-      bullet.attack(bulletType.FIREBALL, target);
+      bullet.attack(bulletType.BULLET, target);
     } else if (effect === descType.ICE_START) {
       bullet.attack(bulletType.ICE, target);
     } else if (effect === descType.STOP_MOVE) {

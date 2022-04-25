@@ -136,7 +136,6 @@ class EffectBuff extends EventTarget {
     );
     this[type].sprint.anchor.set(0.5);
     this[type].sprint.position.set(0);
-    this[type].sprint.zIndex = 2;
     this[type].sprint.scale.set(this[type].scale);
     this.container.addChild(this[type].sprint);
     const { spriteSrc1 } = effectConfig.effect[type];
@@ -145,7 +144,6 @@ class EffectBuff extends EventTarget {
       this.container.addChild(this[type].sprint1);
       this[type].sprint1.anchor.set(0.5);
       this[type].sprint1.position.set(0, -20);
-      this[type].sprint1.zIndex = 2;
       this[type].sprint1.scale.set(this[type].scale);
     }
     this[type].load = true;
@@ -176,7 +174,7 @@ class EffectBuff extends EventTarget {
     const sprite = this[type].sprint as AnimatedSprite;
     const { scale, positionY } = this[type];
     sprite.anchor.set(0.5);
-    sprite.zIndex = -1;
+    sprite.zIndex = 1;
     sprite.position.set(0, positionY);
     sprite.scale.set(scale);
     this.addAnimateEffect(type, 0.1, () => {
@@ -198,7 +196,7 @@ class EffectBuff extends EventTarget {
     const sprite = this[type].sprint as AnimatedSprite;
     const { scale, positionY } = this[type];
     sprite.anchor.set(0.5);
-    sprite.zIndex = 1;
+    sprite.zIndex = 2;
     sprite.position.set(0, positionY);
     sprite.scale.set(scale);
     this.addAnimateEffect(type, 0.05);
