@@ -139,7 +139,8 @@ export const DragCompoents: React.FC<{
     ],
     data: [] as any,
   });
-  const [builds, setBuilds] = React.useState<any[]>([]);
+  const [grid, setGrid] = React.useState<any[]>([]);
+  const [gridBuilds, setGridBuilds] = React.useState<any[]>([]);
   const [currentBuild, setCurrentBuild] = React.useState<any>({});
   const buildings = useStore(p => p.buildling.buildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
@@ -151,13 +152,19 @@ export const DragCompoents: React.FC<{
     };
   }, [rows, cols, gridSize]);
 
-  // 计算格子
+  const updateGrids = React.useCallback(propsData => {
+    const currBuilds = propsData?.filter((row: any) => row.isbuilding);
+    // const isactive = gridBuilds.filter((row: any) => row.isactive);
+    setGrid(propsData);
+    setGridBuilds(currBuilds);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   React.useEffect(() => {
-    const currBuilds = itemData?.filter((row: any) => row.isbuilding);
-    const isactive = builds.filter((row: any) => row.isactive);
-    setState({ ...state, data: itemData });
-    setBuilds([...currBuilds, ...isactive]);
-  }, [itemData, builds, state]);
+    if (itemData.length > 0) {
+      updateGrids(itemData);
+    }
+  }, [itemData, updateGrids]);
 
   // 计算绝对坐标
   const getAbsolutePosition = (index: number) => {
@@ -182,144 +189,34 @@ export const DragCompoents: React.FC<{
     return [Number(index), Number(index) + 1, bevelIndex - 1, bevelIndex];
   };
 
-  // 计算所有格子的距离
-  // const getPosition = () => {
-  //   if (dragBox?.current) {
-  //     const doms: any = dragBox?.current.children;
-  //     const index = data.findIndex((item: any) => item.row === 2);
-  //     // 判断大方块在什么位置
-  //     const bigGridRow = parseInt(String(index / cols + 1));
-  //     const bigGridCol = parseInt(String((index % rows) + 1));
-  //     for (let i = 0; i < doms.length; i++) {
-  //       let row = parseInt(String(i / cols));
-  //       let col = parseInt(String(i % rows));
-
-  //       // console.log(row, col);
-  //       // console.log(row, col, doms[i], doms[i].previousSibling?.offsetWidth);
-  //       // const prevWidth = doms[i].previousSibling?.offsetWidth;
-  //       // if (col === 2 && prevWidth === 316) {
-  //       //   row += 1;
-  //       //   col = 0;
-  //       // }
-  //       // console.log(doms[i].nextSibling);
-  //       // console.log(doms[i].nextSibling?.offsetWidth);
-
-  //       // if (i > index) {
-  //       //   // 不换行
-  //       //   if (row + 2 === bigGridRow) {
-  //       //     row = col - 2;
-  //       //     col = 2;
-  //       //   } else if (col + 2 >= bigGridCol && row === 0) {
-  //       //     row += 1;
-  //       //     col = 0;
-  //       //     // console.log(doms[i], row, col);
-  //       //   } else if (bigGridRow === row && bigGridCol + 1 === col) {
-  //       //     // console.log(doms[i], row, col);
-  //       //     row += 1;
-  //       //     col = 0;
-  //       //   } else {
-  //       //     row += 1;
-  //       //   }
-  //       // } else if (i === index) {
-  //       //   row = row >= 2 ? row - 1 : row;
-  //       //   col = col >= 2 ? col - 1 : col;
-  //       // } else if (bigGridCol >= col + 2) {
-  //       //   console.log(232, row, col, doms[i]);
-  //       //   row = col;
-  //       //   col = 0;
-  //       // }
-
-  //       if (index !== i && bigGridCol > 0 && bigGridRow > 0) {
-  //         // 当超过最大列数时，换行
-  //         if (bigGridRow === 2) {
-  //           if (row === 1 && bigGridCol === 1) {
-  //             row = col;
-  //             col = bigGridRow;
-  //           }
-  //           if (row + bigGridRow === rows && bigGridCol === cols) {
-  //             row = col + 1;
-  //             col = 0;
-  //           } else if (row + bigGridRow === rows && bigGridCol === col) {
-  //             row += 1;
-  //             col = 0;
-  //           }
-  //         } else if (row === 0 && col !== 0 && bigGridCol + col < cols) {
-  //           row = col - 1 > 0 ? col - 1 : col;
-  //           col = bigGridCol + col;
-  //         } else if (row === 0 && bigGridCol + col > cols) {
-  //           row = bigGridRow + row;
-  //           col = 0;
-  //         } else if (row === 1 && row + bigGridRow <= rows) {
-  //           // 当前行+2X2格子不换行
-  //           row = bigGridRow + row;
-  //         }
-  //       } else {
-  //         col = bigGridCol + col > cols ? col - 1 : col;
-  //       }
-
-  //       doms[i].style.top = `${row * (gridSize / rows)}px`;
-  //       doms[i].style.left = `${col * (gridSize / cols)}px`;
-  //     }
-
-  //     // const rowIndex = data.findIndex((item: any) => item.row === 2);
-  //     // const diffArr: any = data.slice(rowIndex + 1) ?? [];
-  //     // if (rowIndex > -1) {
-  //     //   for (let i = 0; i < diffArr.length; i++) {
-  //     //     const row = parseInt(String(i / cols)) + 2;
-  //     //     const col = parseInt(String(i % cols));
-  //     //     const domIndex = diffArr[i]?.index - 1 || 0;
-
-  //     //     doms[domIndex].style.left = `${col * 158}px`;
-  //     //     doms[domIndex].style.top = `${row * 158}px`;
-  //     //   }
-  //     // }
-
-  //     // const boxWidth = doms[rowIndex]?.offsetWidth;
-  //     // const screenWidth = dragBox?.current?.offsetWidth;
-  //     // const diffString = String(screenWidth / boxWidth);
-  //     // const cols = parseInt(diffString);
-  //     // const heightArr = [];
-  //     // let boxHeight = 0;
-  //     // let minBoxHeight = 0;
-  //     // let minBoxIndex = 0;
-
-  //     // console.log(rowIndex, cols);
-  //     // for (let i = 0; i < doms.length; i++) {
-  //     //   boxHeight = doms[i].offsetHeight;
-  //     //   if (i < cols) {
-  //     //     heightArr.push(boxHeight);
-  //     //     doms[i].style = '';
-  //     //   } else {
-  //     //     minBoxHeight = Math.min(...heightArr);
-  //     //     minBoxIndex = getMinBoxIndex(heightArr, minBoxHeight);
-
-  //     //     doms[i].style.left = `${minBoxIndex * boxWidth}px`;
-  //     //     doms[i].style.top = `${minBoxHeight}px`;
-  //     //     heightArr[minBoxIndex] += boxHeight;
-  //     //   }
-
-  //     //   console.log(heightArr, minBoxIndex, boxHeight);
-  //     // }
-  //   }
-  // };
-
   const handleData = React.useCallback(
     (afterTarget: any) => {
       const from = Number(dragged?.dataset?.id);
       const to = Number(afterTarget?.dataset?.id);
-      const draggedItem = JSON.parse(dragged?.dataset?.item) || {};
-      const targetItem = JSON.parse(afterTarget?.dataset?.item) || {};
+      let draggedItem = {
+        propterty: {
+          size: {
+            area_x: {},
+          },
+        },
+      };
+      let targetItem = {};
+      try {
+        draggedItem = JSON.parse(dragged?.dataset?.item) || {};
+        targetItem = JSON.parse(afterTarget?.dataset?.item) || {};
+      } catch (error) {
+        console.log(error);
+      }
       const area = draggedItem?.propterty?.size?.area_x;
-
       // 获取当前点的正方形下标
       const currentSize = area >= 2 ? getAbsolutePosition(to) : [Number(to)];
       if (area >= 2 && currentSize.length < 4) {
         toastError(t('planetTipsFail1'));
         return;
       }
-      const canSave = currentSize?.every(item => !state.data[item]?.isbuilding);
-      setState(pre => {
-        const next = pre?.data.map((row: any) => {
+      const canSave = currentSize?.every(item => !grid[item]?.isbuilding);
+      setGrid(pre => {
+        const next = pre?.map((row: any) => {
           if (!canSave) {
             return {
               ...row,
@@ -337,17 +234,17 @@ export const DragCompoents: React.FC<{
           }
           return { ...row, pre: false };
         });
-        return { ...pre, data: next };
+        return [...next];
       });
 
       if (canSave) {
-        for (let i = state.data.length - 1; i >= 0; i--) {
+        for (let i = grid.length - 1; i >= 0; i--) {
           if (i === Number(to)) {
-            setBuilds((prev: any) => {
+            setGridBuilds((prev: any) => {
               return [
                 ...prev,
                 {
-                  ...state.data[i],
+                  ...grid[i],
                   ...targetItem,
                   ...draggedItem,
                   pre: false,
@@ -362,7 +259,7 @@ export const DragCompoents: React.FC<{
       }
     },
     // eslint-disable-next-line
-    [state.data, t, toastError],
+    [grid, t, toastError],
   );
 
   const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
@@ -372,11 +269,11 @@ export const DragCompoents: React.FC<{
   const dragEnd = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    setState(pre => {
-      const next = pre?.data.map((row: any) => {
+    setGrid(pre => {
+      const next = pre?.map((row: any) => {
         return { ...row, pre: false };
       });
-      return { ...pre, data: next };
+      return [...next];
     });
   };
 
@@ -395,16 +292,28 @@ export const DragCompoents: React.FC<{
 
   const dragEnter = (event: any) => {
     event.preventDefault();
-    const draggedTarget = JSON.parse(dragged?.dataset?.item) || {};
+    let draggedTarget = {
+      propterty: {
+        size: {
+          area_x: {},
+        },
+      },
+    };
+    try {
+      draggedTarget = JSON.parse(dragged?.dataset?.item) || {};
+    } catch (error) {
+      console.log(error);
+    }
+
     const index = event.target?.dataset?.id;
     const area = draggedTarget?.propterty?.size?.area_x;
     const currentSize =
       area >= 2 ? getAbsolutePosition(index) : [Number(index)];
     // 查看所有点位是否被占领
-    const canSave = currentSize?.every(item => !state.data[item]?.isbuilding);
+    const canSave = currentSize?.every(item => !grid[item]?.isbuilding);
 
-    setState(pre => {
-      const next = pre?.data.map((row: any) => {
+    setGrid(pre => {
+      const next = pre?.map((row: any) => {
         if (!canSave) {
           return {
             ...row,
@@ -422,7 +331,7 @@ export const DragCompoents: React.FC<{
         }
         return { ...row, pre: false };
       });
-      return { ...pre, data: next };
+      return [...next];
     });
   };
 
@@ -439,7 +348,7 @@ export const DragCompoents: React.FC<{
 
   // 创建格子到九宫格中
   const createGrid = async () => {
-    const params = builds?.reduce((current, next, index): any => {
+    const params = gridBuilds?.reduce((current, next, index): any => {
       if (next?.isactive) {
         const [from, to] = getMatrix(
           next?.index,
@@ -465,7 +374,7 @@ export const DragCompoents: React.FC<{
       });
       if (Api.isSuccess(res)) {
         toastSuccess(t('planetTipsSaveSuccess'));
-        setBuilds([]);
+        setGridBuilds([]);
         dispatch(fetchPlanetBuildingsAsync(planet_id));
       } else {
         toastError(res?.message);
@@ -482,9 +391,10 @@ export const DragCompoents: React.FC<{
       return;
     }
     if (currentBuild?.isactive) {
-      const index = builds.findIndex(r => r.index === currentBuild?.index);
-      builds.splice(index, 1);
-      setBuilds([...builds]);
+      const index = gridBuilds.findIndex(r => r.index === currentBuild?.index);
+      gridBuilds.splice(index, 1);
+      setGridBuilds([...gridBuilds]);
+      setCurrentBuild({});
       return;
     }
     dispatch(storeAction.destoryBuildingVisibleModal(true));
@@ -500,7 +410,7 @@ export const DragCompoents: React.FC<{
               width={`${gridSize}px`}
               height={`${gridSize}px`}
             >
-              {(state?.data ?? []).map((item: any, index: number) => {
+              {(grid ?? []).map((item: any, index: number) => {
                 return (
                   <Normal
                     key={`${item.index}_${item?._id}`}
@@ -521,7 +431,7 @@ export const DragCompoents: React.FC<{
                   />
                 );
               })}
-              {builds?.map((item, index) => {
+              {(gridBuilds ?? []).map((item, index) => {
                 return (
                   <BuildingBox
                     key={`${item.index}_${item?._id}_${index}`}
@@ -558,6 +468,7 @@ export const DragCompoents: React.FC<{
             planet_id={planet_id}
             building_id={currentBuild?._id}
             currentBuild={currentBuild}
+            callback={() => setCurrentBuild({})}
           />
         </Flex>
         <BgCard variant='long' mt='12px' padding='40px'>

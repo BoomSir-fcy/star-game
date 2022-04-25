@@ -249,7 +249,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                   activeSoldier?.options?.unitInfo?.attack_effect,
                 ).map(item => {
                   return (
-                    <Flex justifyContent='space-between'>
+                    <Flex key={item} justifyContent='space-between'>
                       <Text fontSize='20' color='textTips'>
                         {item}
                       </Text>

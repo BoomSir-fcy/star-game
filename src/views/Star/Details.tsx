@@ -8,12 +8,14 @@ import { DragCompoents } from './components/dragCompoents';
 
 const Upgrade = () => {
   const parsedQs = useParsedQueryString();
-  const [state, setState] = React.useState({
-    data: [] as any[],
-  });
+  const [state, setState] = React.useState([]);
   const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
+
+  const updateGrid = React.useCallback(data => {
+    setState(data);
+  }, []);
 
   React.useEffect(() => {
     if (planet?.areaX > 0 && planet?.areaY > 0) {
@@ -49,10 +51,9 @@ const Upgrade = () => {
           }
         }
       }
-
-      setState({ ...state, data });
+      updateGrid(data);
     }
-  }, [planet, state, selfBuilding]);
+  }, [planet, selfBuilding, updateGrid]);
 
   return (
     <Box>
@@ -61,7 +62,7 @@ const Upgrade = () => {
         cols={planet?.areaY}
         planet_id={id}
         gridSize={476}
-        itemData={state.data}
+        itemData={state}
       />
     </Box>
   );
