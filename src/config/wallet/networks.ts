@@ -122,34 +122,38 @@ export const contractAddress = {
     [ChainId.MATIC_MAINNET]: '0xF0a1CaB2e58A7C90D9b246633b9E3D6fe60aEcAf',
   },
   pairCodeHash: {
-    [ChainId.MATIC_TESTNET]: '0x32890cd19dfef8a8745fd19c794ab655c6d1ee5ab4cd7af4e9312327ed7ee208',
-    [ChainId.MAINNET]: '0x772d76e02b5a3aeeef00b07a18a744c893227f52ecb6e3d431da85a229ed6a1d',
+    [ChainId.MATIC_TESTNET]:
+      '0x32890cd19dfef8a8745fd19c794ab655c6d1ee5ab4cd7af4e9312327ed7ee208',
+    [ChainId.MAINNET]:
+      '0x772d76e02b5a3aeeef00b07a18a744c893227f52ecb6e3d431da85a229ed6a1d',
     [ChainId.MATIC_MAINNET]: '0xF0a1CaB2e58A7C90D9b246633b9E3D6fe60aEcAf',
   },
-}
+};
 
 export const EmptyAddress = {
   [ChainId.MATIC_TESTNET]: '',
   [ChainId.MATIC_MAINNET]: '',
   [ChainId.MAINNET]: '',
-}
+};
 export const DSG_TOKENS_TOP100 = {
-  [ChainId.MATIC_TESTNET]: 'https://sv.dsgmetaverse.com/tokens/tokens-top100.json',
-  [ChainId.MATIC_MAINNET]: 'https://sv.dsgmetaverse.com/tokens/tokens-top100.json',
+  [ChainId.MATIC_TESTNET]:
+    'https://sv.dsgmetaverse.com/tokens/tokens-top100.json',
+  [ChainId.MATIC_MAINNET]:
+    'https://sv.dsgmetaverse.com/tokens/tokens-top100.json',
   [ChainId.MAINNET]: 'https://sv.dsgmetaverse.com/tokens/tokens-top100.json',
-}
+};
 export const DSG_TOKENS_EXTENDED = {
   [ChainId.MATIC_TESTNET]: 'https://sv.dsgmetaverse.com/tokens/tokens.json',
   [ChainId.MATIC_MAINNET]: 'https://sv.dsgmetaverse.com/tokens/tokens.json',
   [ChainId.MAINNET]: 'https://sv.dsgmetaverse.com/tokens/tokens.json',
-}
+};
 
 export const BASE_BSC_SCAN_URLS = {
   [ChainId.MAINNET]: 'https://polygonscan.com',
   [ChainId.MATIC_MAINNET]: 'https://polygonscan.com/',
   [ChainId.MATIC_TESTNET]: 'https://mumbai.polygonscan.com/',
   [ChainId.TESTNET]: 'https://mumbai.polygonscan.com',
-}
+};
 
 export const ETHEREUM_CHAIN = {
   [ChainId.MAINNET]: {
@@ -176,12 +180,12 @@ export const ETHEREUM_CHAIN = {
       decimals: 18,
     },
     rpcUrls: [
-      'https://data-seed-prebsc-1-s1.binance.org:8545/',
+      // 'https://data-seed-prebsc-1-s1.binance.org:8545/',
       // 'https://data-seed-prebsc-1-s2.binance.org:8545/',
       // 'https://data-seed-prebsc-1-s3.binance.org:8545/',
       // 'https://data-seed-prebsc-2-s1.binance.org:8545/',
       // 'https://data-seed-prebsc-2-s2.binance.org:8545/',
-      // 'https://data-seed-prebsc-2-s3.binance.org:8545/',
+      'https://data-seed-prebsc-2-s3.binance.org:8545/',
     ],
     blockExplorerUrls: [`${BASE_BSC_SCAN_URLS[ChainId.MAINNET]}/`],
   },
@@ -217,4 +221,4 @@ export const ETHEREUM_CHAIN = {
     ],
     blockExplorerUrls: [`${BASE_BSC_SCAN_URLS[ChainId.MATIC_MAINNET]}/`],
   },
-}
+};

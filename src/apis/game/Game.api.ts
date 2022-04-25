@@ -40,4 +40,16 @@ export class GameApi extends Http {
   async Gameterrain() {
     return this.get('game/war/terrain');
   }
+
+  // 模拟战斗信息
+  async Gamemock(params: Api.Game.gameMocksParams) {
+    const res = await this.post(`game/unit/simulation-init`, params);
+    return res;
+  }
+
+  // 获取模拟战斗详情
+  async GamemockDetail(from: number) {
+    const res = await this.post(`game/unit/simulation`, { from });
+    return res;
+  }
 }

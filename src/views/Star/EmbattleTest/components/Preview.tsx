@@ -25,8 +25,11 @@ import {
   Button,
 } from 'uikit';
 import { Container } from './styled';
+
 import PreviewSoldier from './PreviewSoldier';
 import MiniRaceAni from './miniRace';
+
+import useSimulation from '../hooks/useSimulation';
 
 // transform: translateX(252px);
 const BorderCardStyled = styled(BorderCard)<{ show?: boolean }>`
@@ -106,7 +109,10 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     }),
   );
   const [visible, setVisible] = useState(false);
+  const [gameMock, setGameMock] = useState({});
   const ref = useRef<HTMLDivElement>(null);
+
+  const { getSimulation } = useSimulation();
 
   useEffect(() => {
     if (ref.current) {
@@ -137,9 +143,20 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     baseSkill,
   ]);
 
+  const getGameSimulation = React.useCallback(
+    async (from: number) => {
+      const res = await getSimulation(from);
+      setGameMock(res);
+    },
+    [getSimulation],
+  );
+
   React.useEffect(() => {
     setVisible(false);
-  }, [activeSoldier]);
+    if (activeSoldier) {
+      getGameSimulation(activeSoldier?.id);
+    }
+  }, [activeSoldier, getGameSimulation]);
 
   return (
     <Box style={{ position: 'relative' }}>
@@ -343,7 +360,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
         </BorderCardStyled>
       </Box>
       {/* 种族动画预览 */}
-      {visible && !!activeSoldier && <MiniRaceAni />}
+      {visible && !!activeSoldier && <MiniRaceAni mock={gameMock} />}
     </Box>
   );
 };
