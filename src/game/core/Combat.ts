@@ -68,6 +68,8 @@ class Combat extends EventTarget {
 
   activePh = 0; // 当前生命值
 
+  lastHp = 0; // 扣血前的生命值
+
   shield = 0;
 
   hpGraphics = new Graphics();
@@ -114,6 +116,7 @@ class Combat extends EventTarget {
   }
 
   setActiveHp(hp: number) {
+    this.lastHp = this.activePh;
     this.activePh = hp;
     this.drawHp();
   }
@@ -124,6 +127,7 @@ class Combat extends EventTarget {
   }
 
   setActiveHpWithShield(hp: number, shield: number) {
+    this.lastHp = this.activePh;
     this.activePh = hp;
     this.shield = shield;
     this.drawHp();
@@ -156,6 +160,19 @@ class Combat extends EventTarget {
       lineStartX,
       lineY,
       (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+      config.BLOOD_HEIGHT,
+    );
+    this.hpGraphics.endFill();
+
+    // 绘制扣除的血量
+    this.hpGraphics.beginFill(
+      this.isEnemy ? config.BLOOD_COLOR_ENEMY : config.BLOOD_COLOR,
+      0.5,
+    );
+    this.hpGraphics.drawRect(
+      lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+      lineY,
+      ((this.lastHp - this.activePh) / hpAndShield) * config.BLOOD_WIDTH,
       config.BLOOD_HEIGHT,
     );
     this.hpGraphics.endFill();
