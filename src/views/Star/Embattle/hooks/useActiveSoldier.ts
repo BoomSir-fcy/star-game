@@ -28,7 +28,7 @@ const useActiveSoldier = (game: Game) => {
         eventsType.ADD_ACTIVE_SOLDIER,
         handleAddActiveSoldier,
       );
-      game.addEventListener(
+      game.removeEventListener(
         eventsType.REMOVE_ACTIVE_SOLDIER,
         handleRemoveActiveSoldier,
       );

@@ -98,7 +98,6 @@ class Game extends EventTarget {
         this.onDragStarSoldier();
       }
     });
-
     this.addEventListenerOfWindow();
   }
 
@@ -120,6 +119,7 @@ class Game extends EventTarget {
   // 添加小人
   addSoldier(soldier: Soldier) {
     this.soldiers.push(soldier);
+    this.boards.container.sortableChildren = true;
     this.boards.container.addChild(soldier.container);
     soldier.container
       .on('pointerdown', () => {
@@ -315,12 +315,17 @@ class Game extends EventTarget {
    */
   createSoldier(_x: number, _y: number, option: AttrSoldierOptions) {
     const axis = this.getAxis(_x, _y);
+    let zIndex = 0;
+    if (axis) {
+      zIndex = axis?.axisX + axis?.axisY;
+    }
     if (!axis) return null;
     const soldier = new Soldier({
       ...option,
       x: axis.x,
       y: axis.y,
       axisPoint: axis,
+      zIndex,
     });
 
     this.addSoldier(soldier);

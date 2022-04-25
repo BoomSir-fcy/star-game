@@ -11,6 +11,7 @@ import { Texture } from '@pixi/core';
 import { InteractionEvent, InteractionData } from '@pixi/interaction';
 import { Point } from '@pixi/math';
 import { Graphics } from '@pixi/graphics';
+import config from 'game/config';
 import Combat, { CombatOptions } from './Combat';
 import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
@@ -33,6 +34,7 @@ export interface SoldierOptions extends AttrSoldierOptions {
   x: number;
   y: number;
   axisPoint?: AxisPoint;
+  zIndex?: number;
 }
 class Soldier extends Combat {
   constructor(options: SoldierOptions) {
@@ -78,6 +80,7 @@ class Soldier extends Combat {
       unique_id,
       test,
       sid,
+      zIndex = 0,
     } = options;
 
     this.options = {
@@ -101,6 +104,7 @@ class Soldier extends Combat {
     this.displaySprite.anchor.set(0.5);
     this.container.x = x;
     this.container.y = y;
+    this.container.zIndex = zIndex;
     this.container.scale.set(0.6);
     this.displaySprite.position.set(-5, -15);
     this.displaySprite.width = 180;
@@ -109,7 +113,6 @@ class Soldier extends Combat {
     this.startPoint.set(x, y);
 
     this.container.addChild(this.displaySprite);
-
     this.shield = shield;
     this.hp = hp;
     this.activePh = activePh || hp;
@@ -192,6 +195,7 @@ class Soldier extends Combat {
     this.container.alpha = 0.9;
     this.container.filters = [];
     this.dragging = true;
+    this.container.zIndex = 9999;
     // this.axisPoint?.chequer?.setState(stateType.ACTIVE);
     this.changeState(stateType.ACTIVE);
   }
@@ -208,6 +212,13 @@ class Soldier extends Combat {
     this.container.filters = [];
     this.dragging = false;
     this.axisPoint?.chequer?.setState(stateType.DISABLE);
+    this.updateZindex();
+  }
+
+  updateZindex() {
+    if (this.axisPoint?.axisX && this.axisPoint?.axisY) {
+      this.container.zIndex = this.axisPoint?.axisX + this.axisPoint?.axisY;
+    }
   }
 
   setDragging(state: boolean) {
