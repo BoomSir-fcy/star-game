@@ -24,10 +24,10 @@ const getDisabledStyles = ({ $isLoading, theme }: TransientButtonProps) => {
   return `
     &:disabled,
     &.pancake-button--disabled {
-      background-repeat: no-repeat;
-      background-position: 0 0px, 10px 0px, 100% -1px;
-      background-size: 20px 36px, calc(100% - 20px) 36px, 20px 38px;
-      border-color: ${theme.colors.backgroundDisabled};
+      // background-repeat: no-repeat;
+      // background-position: 0 0px, 10px 0px, 100% -1px;
+      // background-size: 20px 36px, calc(100% - 20px) 36px, 20px 38px;
+      // border-color: ${theme.colors.backgroundDisabled};
       box-shadow: none;
       color: white;
       // color: ${theme.colors.textDisabled};

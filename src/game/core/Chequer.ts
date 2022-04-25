@@ -120,6 +120,7 @@ class Chequer {
     this.bunny.anchor.set(0.5);
     this.bunny.width = 100;
     this.bunny.height = 125;
+    // this.getXY(this.axisX, this.axisY); => this.getXY(this.axisY, this.axisX); 从左手坐标系改为右手坐标系
     const { x, y, enemy } = this.getXY(this.axisY, this.axisX);
     this.bunny.x = x;
     this.bunny.y = y;

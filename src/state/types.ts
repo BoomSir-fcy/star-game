@@ -162,6 +162,36 @@ export interface RoundInitState {
   base_id: number;
 }
 
+interface GamePkInfo {
+  init: {
+    base_unit: MapBaseUnits;
+    blue_units: Api.Game.UnitPlanetPos[];
+    red_units: Api.Game.UnitPlanetPos[];
+    ids: {
+      [sid: string]: Api.Game.Pos;
+    };
+  };
+  slot: {
+    [round: number]: {
+      data: RoundInfo[];
+    };
+  };
+  status: {
+    status: {
+      [round: string]: RoundInitState[];
+    };
+  };
+}
+
+export enum GamePkState {
+  MATCHING, // 匹配中
+  MATCHED, // 匹配完成
+  START, // 开始战斗
+  BATTLING, // 战斗中
+  VICTORY, // 胜利
+  DEFEAT, // 失败
+}
+
 export interface GameState {
   baseUnits: {
     [race: string]: MapBaseUnits;
@@ -181,30 +211,32 @@ export interface GameState {
     };
   };
   process: any;
-  PKInfo: null | {
-    init: {
-      base_unit: MapBaseUnits;
-      blue_units: Api.Game.UnitPlanetPos[];
-      red_units: Api.Game.UnitPlanetPos[];
-      ids: {
-        [sid: string]: Api.Game.Pos;
-      };
-    };
-    slot: {
-      [round: number]: {
-        data: RoundInfo[];
-      };
-    };
-    status: {
-      status: {
-        [round: string]: RoundInitState[];
-      };
+  PKInfo: null | GamePkInfo;
+  state: GamePkState;
+  matchUser: null | number; // TODO:
+  plunderPK: {
+    [id: string]: {
+      pkInfo: GamePkInfo;
     };
   };
   TerrainInfo: Api.Game.TerrainList[];
 }
 
+export interface UserState {
+  // the timestamp of the last updateVersion action
+  lastUpdateVersionTimestamp?: number;
+
+  isDark: boolean;
+
+  scale: number; // 缩放比列
+
+  client: {
+    width: number;
+    height: number;
+  };
+}
 export interface State {
+  user: UserState;
   userInfo: UserInfoState;
   mysteryBox: MysteryBoxState;
   galaxy: GalaxyState;

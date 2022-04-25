@@ -107,13 +107,13 @@ class LinearMove extends EventTarget {
       const aX = Math.abs(x);
       const aY = Math.abs(y);
       // Orientation.TO_RIGHT_DOWN;
-      if (x0 - x1 > 0) return { x: aX, y: rY };
+      if (y0 - y1 > 0) return { x: aX, y: rY };
       // Orientation.TO_LEFT_UP;
-      if (x0 - x1 < 0) return { x: rX, y: aY };
+      if (y0 - y1 < 0) return { x: rX, y: aY };
       // Orientation.TO_LEFT_DOWN;
-      if (y0 - y1 > 0) return { x: rX, y: rY };
+      if (x0 - x1 > 0) return { x: rX, y: rY };
       // Orientation.TO_RIGHT_UP
-      if (y0 - y1 < 0) return { x: aX, y: aY };
+      if (x0 - x1 < 0) return { x: aX, y: aY };
     }
     return { x, y };
   }

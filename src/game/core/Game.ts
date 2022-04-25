@@ -103,7 +103,7 @@ class Game extends EventTarget {
     this.addEventListenerOfWindow();
   }
 
-  creatTerrain(TerrainInfo: Api.Game.TerrainInfo[]) {
+  creatTerrain(TerrainInfo?: Api.Game.TerrainInfo[]) {
     this.boards.drawChequers(this.test, TerrainInfo);
   }
 
@@ -121,6 +121,7 @@ class Game extends EventTarget {
   // 添加小人
   addSoldier(soldier: Soldier) {
     this.soldiers.push(soldier);
+    // soldier.container.zIndex = 999;
     this.boards.container.addChild(soldier.container);
     soldier.container
       .on('pointerdown', () => {
@@ -316,6 +317,7 @@ class Game extends EventTarget {
    */
   createSoldier(_x: number, _y: number, option: AttrSoldierOptions) {
     const axis = this.getAxis(_x, _y);
+    console.log(axis);
     if (!axis) return null;
     const soldier = new Soldier({
       ...option,
@@ -324,6 +326,7 @@ class Game extends EventTarget {
       axisPoint: axis,
     });
 
+    console.log(soldier);
     this.addSoldier(soldier);
     return soldier;
   }

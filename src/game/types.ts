@@ -31,6 +31,13 @@ export interface RoundDescMove {
   from?: RoundDescAxis;
 }
 
+export interface RoundS_HP {
+  max_hp: number;
+  max_shield: number;
+  now_hp: number;
+  now_shield: number;
+}
+
 export interface ReceiveChange {
   receive_id: string;
   receive_point: RoundDescAxis;
@@ -126,6 +133,8 @@ export interface RoundDescCarshHarm extends SlotBaseInfo {
   long_round: number;
   receive_sub_hp: number;
   around: ReceiveChange[];
+  receive_vhp: RoundS_HP;
+  sender_vhp: RoundS_HP;
 }
 
 // 添加护盾
