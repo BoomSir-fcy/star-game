@@ -165,17 +165,29 @@ class Combat extends EventTarget {
     this.hpGraphics.endFill();
 
     // 绘制扣除的血量
-    this.hpGraphics.beginFill(
-      this.isEnemy ? config.BLOOD_COLOR_ENEMY : config.BLOOD_COLOR,
-      0.5,
-    );
-    this.hpGraphics.drawRect(
-      lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
-      lineY,
-      ((this.lastHp - this.activePh) / hpAndShield) * config.BLOOD_WIDTH,
-      config.BLOOD_HEIGHT,
-    );
-    this.hpGraphics.endFill();
+    if (this.lastHp - this.activePh > 0) {
+      this.hpGraphics.beginFill(
+        this.isEnemy ? config.BLOOD_COLOR_ENEMY : config.BLOOD_COLOR,
+        0.5,
+      );
+      this.hpGraphics.drawRect(
+        lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+        lineY,
+        ((this.lastHp - this.activePh) / hpAndShield) * config.BLOOD_WIDTH,
+        config.BLOOD_HEIGHT,
+      );
+      this.hpGraphics.endFill();
+      setTimeout(() => {
+        this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
+        this.hpGraphics.drawRect(
+          lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+          lineY,
+          ((this.lastHp - this.activePh) / hpAndShield) * config.BLOOD_WIDTH,
+          config.BLOOD_HEIGHT,
+        );
+        this.hpGraphics.endFill();
+      }, 100);
+    }
 
     // 绘制护盾
     this.hpGraphics.beginFill(config.BLOOD_COLOR_SHIELD);
