@@ -45,22 +45,6 @@ export const Building: React.FC<{
   const { status } = itemData;
   let timer = null as any;
 
-  React.useEffect(() => {
-    const { count_down } = status || {};
-    setState({ ...state, time: count_down || 0 });
-    return () => {
-      clearInterval(timer);
-    };
-    // eslint-disable-next-line
-  }, [status, state]);
-
-  React.useEffect(() => {
-    if (state.time > 0) {
-      countDown();
-    }
-    // eslint-disable-next-line
-  }, [state.time]);
-
   // 倒计时
   const countDown = () => {
     timer = setInterval(() => {
@@ -72,6 +56,22 @@ export const Building: React.FC<{
       });
     }, 1000);
   };
+
+  React.useEffect(() => {
+    const { count_down } = status || {};
+    setState({ ...state, time: count_down || 0 });
+    return () => {
+      clearInterval(timer);
+    };
+    // eslint-disable-next-line
+  }, [status, timer]);
+
+  React.useEffect(() => {
+    if (state.time > 0) {
+      countDown();
+    }
+    // eslint-disable-next-line
+  }, [state.time]);
 
   const formatTime = (time: number) => {
     const hour = Math.floor(time / 3600);
@@ -147,7 +147,7 @@ export const Building: React.FC<{
           {/* 耐久度修复 */}
           {state?.time <= 0 &&
             itemData?.propterty?.max_durability !==
-              itemData?.propterty?.per_durability && (
+              itemData?.propterty?.now_durability && (
               <ToolBar>
                 <ThingRepair
                   itemData={itemData}

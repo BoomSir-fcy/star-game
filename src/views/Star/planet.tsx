@@ -218,13 +218,13 @@ const Planet = () => {
 
   return (
     <Box id='containerBox'>
-      <Steps
+      {/* <Steps
         enabled={stepsEnabled}
         steps={steps}
         initialStep={0}
         onExit={() => console.log('退出')}
       />
-      <Hints enabled={hintsEnabled} hints={hints} />
+      <Hints enabled={hintsEnabled} hints={hints} /> */}
       <Layout>
         {!choose && (
           <Dashboard
@@ -293,7 +293,7 @@ const Planet = () => {
           </Box>
           <Flex ml={choose ? '7px' : '23px'} flex={1}>
             <BgCard
-              variant={choose ? 'full' : 'big'}
+              variant={choose ? 'full' : 'medium'}
               fringe
               padding='40px 37px'
             >

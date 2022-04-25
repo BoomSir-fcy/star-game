@@ -2,14 +2,22 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box } from 'uikit';
 import styled from 'styled-components';
 import { useVideo } from 'contexts/VideoContext';
-import { position, layout, PositionProps, LayoutProps } from 'styled-system';
+import {
+  position,
+  layout,
+  PositionProps,
+  LayoutProps,
+  margin,
+  MarginProps,
+} from 'styled-system';
 
-interface VideoSystes extends PositionProps, LayoutProps {
+interface VideoSystes extends PositionProps, LayoutProps, MarginProps {
   center?: boolean;
 }
 const VideoStyled = styled.video<VideoSystes>`
   position: absolute;
   ${layout}
+  ${margin}
   object-fit: fill;
   mix-blend-mode: lighten;
   ${({ center }) =>
@@ -26,22 +34,24 @@ const VideoStyled = styled.video<VideoSystes>`
 interface VideoComponentProps {
   scale: number;
   minHeight: number;
+  cHeight: number;
 }
 export const VideoComponent: React.FC<VideoComponentProps> = ({
   scale,
   minHeight,
+  cHeight,
   ...props
 }) => {
   const { show, videoOptions, videoRef } = useVideo();
 
   const { boxHeight, boxTop } = useMemo(() => {
-    const _height = minHeight * scale;
+    const _height = cHeight * scale;
     const _top = (minHeight - _height) / 2;
     return {
       boxHeight: _height,
       boxTop: _top,
     };
-  }, [scale, minHeight]);
+  }, [scale, cHeight, minHeight]);
   return (
     <>
       {show && (
@@ -62,6 +72,17 @@ export const VideoComponent: React.FC<VideoComponentProps> = ({
                 ? videoOptions.left * scale
                 : videoOptions.left
             }
+            bottom={
+              typeof videoOptions.bottom === 'number'
+                ? videoOptions.bottom * scale
+                : videoOptions.bottom
+            }
+            right={
+              typeof videoOptions.right === 'number'
+                ? videoOptions.right * scale
+                : videoOptions.right
+            }
+            margin={videoOptions.margin}
             center={videoOptions.center}
             loop={videoOptions.loop}
             autoPlay

@@ -24,6 +24,7 @@ import Preview from './components/Preview';
 import SortBoard, { SortSoldier } from './components/SortBoard';
 import useUpdatePos from './hooks/useUpdatePos';
 import useActiveSoldier from './hooks/useActiveSoldier';
+import useSimulation from './hooks/useSimulation';
 
 const game = new Game({ test: true });
 
@@ -38,6 +39,8 @@ const Embattle = () => {
   useFetchGamePK();
   useFetchGamePlanetUnits(planetId);
   useFetchGamePlanetUnitsTest(planetId);
+
+  const { setSimulation } = useSimulation();
 
   const { TerrainInfo, plantUnits } = useStore(p => p.game);
   const testPlantUnits = useStore(p => p.game.testPlantUnits);
@@ -147,9 +150,7 @@ const Embattle = () => {
           <Button
             padding={0}
             width='50px'
-            onClick={() => {
-              console.log(gameSoldiers);
-            }}
+            onClick={() => setSimulation(gameSoldiers)}
           >
             <Text fontSize='20px'>动画模拟</Text>
           </Button>

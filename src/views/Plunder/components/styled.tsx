@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box, Flex, Image } from 'uikit';
-import { States } from '../types';
+import { GamePkState } from 'state/types';
 import PeopleCard from './PeopleCard';
 import VsVideo from './VsVideo';
 import PixiTest from './PixiTest';
@@ -12,17 +12,17 @@ export const BoxStyled = styled(Box)`
 `;
 
 interface StateProps {
-  state: States;
+  state: GamePkState;
 }
 
-export const PeopleCardLeft = styled(PeopleCard)<{ state: States }>`
+export const PeopleCardLeft = styled(PeopleCard)<{ state: GamePkState }>`
   position: absolute;
   left: 150px;
   top: 20px;
   transition: transform 0.3s;
   transform-origin: top left;
   transform: ${({ state }) =>
-    state === States.MATCHED || state === States.MATCHING
+    state === GamePkState.MATCHED || state === GamePkState.MATCHING
       ? 'scale(1.5) translate(0, 0)'
       : 'scale(1) translate(-150px, -20px)'};
   /* left: 0;
@@ -30,16 +30,16 @@ top: 0; */
 `;
 
 export const getPeopleRightTransform = ({ state }: StateProps) => {
-  if (state === States.MATCHING) {
+  if (state === GamePkState.MATCHING) {
     return 'transform: scale(1.5) translate(800px, 0)';
   }
-  if (state === States.MATCHED) {
+  if (state === GamePkState.MATCHED) {
     return 'transform: scale(1.5) translate(0, 0)';
   }
   return 'transform: scale(1) translate(150px, -20px)';
 };
 
-export const PeopleCardRight = styled(PeopleCard)<{ state: States }>`
+export const PeopleCardRight = styled(PeopleCard)<{ state: GamePkState }>`
   position: absolute;
   right: 150px;
   top: 20px;

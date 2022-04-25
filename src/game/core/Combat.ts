@@ -39,7 +39,7 @@ class Combat extends EventTarget {
     super();
     this.race = options.race;
     this.srcId = options.srcId;
-    this.textureRes = Combat.getSpriteRes(options.race, options.srcId, 2);
+    this.textureRes = Combat.getSpriteRes(options.race, options.srcId, 1);
     this.texture0 = Texture.from(this.textureRes);
     this.texture1 = Texture.from(
       Combat.getSpriteRes(options.race, options.srcId, 2),
@@ -219,19 +219,19 @@ class Combat extends EventTarget {
     if (this.targetAxisPoint && this.axisPoint) {
       if (this.targetAxisPoint.axisX - this.axisPoint?.axisX > 0) {
         this.orientation = Orientation.TO_RIGHT_DOWN;
-        this.displaySprite.texture = this.texture0;
-        this.displaySprite.scale.x = Math.abs(this.displaySprite.scale.x);
+        this.displaySprite.texture = this.texture1;
+        this.displaySprite.scale.x = -Math.abs(this.displaySprite.scale.x);
       } else if (this.targetAxisPoint.axisX - this.axisPoint?.axisX < 0) {
         this.orientation = Orientation.TO_LEFT_UP;
-        this.displaySprite.texture = this.texture1;
+        this.displaySprite.texture = this.texture0;
         this.displaySprite.scale.x = -Math.abs(this.displaySprite.scale.x);
       } else if (this.targetAxisPoint.axisY - this.axisPoint?.axisY > 0) {
         this.orientation = Orientation.TO_LEFT_DOWN;
-        this.displaySprite.texture = this.texture0;
-        this.displaySprite.scale.x = -Math.abs(this.displaySprite.scale.x);
+        this.displaySprite.texture = this.texture1;
+        this.displaySprite.scale.x = Math.abs(this.displaySprite.scale.x);
       } else if (this.targetAxisPoint.axisY - this.axisPoint?.axisY < 0) {
         this.orientation = Orientation.TO_RIGHT_UP;
-        this.displaySprite.texture = this.texture1;
+        this.displaySprite.texture = this.texture0;
         this.displaySprite.scale.x = Math.abs(this.displaySprite.scale.x);
       }
     }
@@ -315,10 +315,12 @@ class Combat extends EventTarget {
       this.onAttackEnd();
     });
 
+    // console.log('effect=========', effect);
+
     if (effect === descType.ADD_BOOM) {
-      bullet.attack(bulletType.FIREBALL, target);
+      bullet.attack(bulletType.ADD_BOMB, target);
     } else if (effect === descType.ADD_FIRING) {
-      bullet.attack(bulletType.FIREBALL, target);
+      bullet.attack(bulletType.FIRING, target);
     } else if (effect === descType.ATTACK) {
       bullet.attack(bulletType.BULLET, target);
     } else if (effect === descType.ADD_SHIELD) {
@@ -326,9 +328,9 @@ class Combat extends EventTarget {
     } else if (effect === descType.BEAT) {
       bullet.attack(bulletType.ROCK, target);
     } else if (effect === descType.BOOM) {
-      bullet.attack(bulletType.BUMP, target);
+      bullet.attack(bulletType.BOMB, target);
     } else if (effect === descType.FIRING) {
-      bullet.attack(bulletType.FIREBALL, target);
+      bullet.attack(bulletType.FIRING, target);
     } else if (effect === descType.ICE_END) {
       bullet.attack(bulletType.FIREBALL, target);
     } else if (effect === descType.ICE_START) {
@@ -364,13 +366,12 @@ class Combat extends EventTarget {
     this.container.parent.addChild(container);
     bullet.attack(effect, target);
     bullet.addEventListener('moveEnd', () => {
-      // target.effectBuff.addEffect(EffectType.FIRING);
-      // target.effectBuff.addEffect(EffectType.VENOM);
+      // target.effectBuff.addEffect(EffectType.BOMB);
     });
     bullet.addEventListener('attackEnd', () => {
       this.onAttackEnd();
       // setTimeout(() => {
-      //   target.effectBuff.removeEffect(EffectType.FIRING);
+      // target.effectBuff.removeEffect(EffectType.BOMB);
       // }, 5 * 1000);
     });
   }
@@ -393,6 +394,7 @@ class Combat extends EventTarget {
   }
 
   static getSpriteRes(race: number, resId: string, index: number) {
+    console.log(`/assets/modal/${1}/${resId}-${index}.png`);
     return `/assets/modal/${1}/${resId}-${index}.png`;
   }
 }

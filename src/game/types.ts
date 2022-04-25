@@ -31,6 +31,13 @@ export interface RoundDescMove {
   from?: RoundDescAxis;
 }
 
+export interface RoundS_HP {
+  max_hp: number;
+  max_shield: number;
+  now_hp: number;
+  now_shield: number;
+}
+
 export interface ReceiveChange {
   receive_id: string;
   receive_point: RoundDescAxis;
@@ -126,6 +133,8 @@ export interface RoundDescCarshHarm extends SlotBaseInfo {
   long_round: number;
   receive_sub_hp: number;
   around: ReceiveChange[];
+  receive_vhp: RoundS_HP;
+  sender_vhp: RoundS_HP;
 }
 
 // 添加护盾
@@ -245,6 +254,7 @@ export const bulletType = {
   BULLET: 'bullet', // 子弹
   CURVE_BULLET: 'curve_bullet', // 曲线子弹
   FIREBALL: 'fireball', // 火球
+  FIRING: 'firing', // 火焰灼烧
   MECHANICAL_BULLET: 'mechanical_bullet', // 机械子弹
   MISSILE: 'missile', // 导弹
   MISSILE_BOOM: 'missile_boom', // 导弹爆炸
@@ -255,6 +265,8 @@ export const bulletType = {
   BUMP: 'bump', // 碰撞
   SHIELD: 'shield', // 护盾
   STOP_MOVE: 'stop_move', // 禁锢
+  BOMB: 'bomb', // 炸弹
+  ADD_BOMB: 'add_bomb', // 添加炸弹
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 
@@ -265,6 +277,7 @@ export interface BulletItemInfoOfConfig {
   moveSpineSrc?: string;
   moveSpriteSrc?: string;
   label?: string;
+  flip?: boolean;
 }
 
 // 技能
@@ -272,9 +285,10 @@ export enum EffectType {
   STOP_MOVE = 'stopMove', // 禁锢
   ICE = 'ice', // 冰冻
   FIRING = 'firing', // 灼烧
+  ADD_FIRING = 'addFiring', // 添加灼烧
   BOMB = 'bomb', // 炸弹
   SHIELD = 'shield', // 护盾
-  VENOM = 'venom',
+  VENOM = 'venom', // 毒液
 }
 
 export interface EffectItemInfoOfConfig {

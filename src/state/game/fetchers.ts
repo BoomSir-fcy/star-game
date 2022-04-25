@@ -66,6 +66,19 @@ export const fetchGamePK = async (
   }
 };
 
+export const fetchGamePlunderPk = async (id = '5000000000000002') => {
+  // TODO:
+  return fetchGamePKTest(`t-${id}`);
+};
+
+export const fetchGameMatchUser = async () => {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      res({});
+    }, 2000);
+  });
+};
+
 export const fetchGamePKTest = async (tag: string, maxRound?: number) => {
   try {
     const res = await Api.GameApi.testPk(tag, maxRound);

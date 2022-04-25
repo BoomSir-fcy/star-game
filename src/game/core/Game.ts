@@ -55,6 +55,7 @@ class Game extends EventTarget {
       'wheel',
       this.boards.onHandleWheel.bind(this.boards),
     );
+    this.test = test;
     this.init();
   }
 
@@ -101,7 +102,7 @@ class Game extends EventTarget {
     this.addEventListenerOfWindow();
   }
 
-  creatTerrain(TerrainInfo: Api.Game.TerrainInfo[]) {
+  creatTerrain(TerrainInfo?: Api.Game.TerrainInfo[]) {
     this.boards.drawChequers(this.test, TerrainInfo);
   }
 
@@ -328,6 +329,7 @@ class Game extends EventTarget {
       zIndex,
     });
 
+    console.log(soldier);
     this.addSoldier(soldier);
     return soldier;
   }
