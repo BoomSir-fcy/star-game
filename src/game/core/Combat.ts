@@ -39,7 +39,7 @@ class Combat extends EventTarget {
     super();
     this.race = options.race;
     this.srcId = options.srcId;
-    this.textureRes = Combat.getSpriteRes(options.race, options.srcId, 2);
+    this.textureRes = Combat.getSpriteRes(options.race, options.srcId, 1);
     this.texture0 = Texture.from(this.textureRes);
     this.texture1 = Texture.from(
       Combat.getSpriteRes(options.race, options.srcId, 2),
@@ -219,19 +219,19 @@ class Combat extends EventTarget {
     if (this.targetAxisPoint && this.axisPoint) {
       if (this.targetAxisPoint.axisX - this.axisPoint?.axisX > 0) {
         this.orientation = Orientation.TO_RIGHT_DOWN;
-        this.displaySprite.texture = this.texture0;
-        this.displaySprite.scale.x = Math.abs(this.displaySprite.scale.x);
+        this.displaySprite.texture = this.texture1;
+        this.displaySprite.scale.x = -Math.abs(this.displaySprite.scale.x);
       } else if (this.targetAxisPoint.axisX - this.axisPoint?.axisX < 0) {
         this.orientation = Orientation.TO_LEFT_UP;
-        this.displaySprite.texture = this.texture1;
+        this.displaySprite.texture = this.texture0;
         this.displaySprite.scale.x = -Math.abs(this.displaySprite.scale.x);
       } else if (this.targetAxisPoint.axisY - this.axisPoint?.axisY > 0) {
         this.orientation = Orientation.TO_LEFT_DOWN;
-        this.displaySprite.texture = this.texture0;
-        this.displaySprite.scale.x = -Math.abs(this.displaySprite.scale.x);
+        this.displaySprite.texture = this.texture1;
+        this.displaySprite.scale.x = Math.abs(this.displaySprite.scale.x);
       } else if (this.targetAxisPoint.axisY - this.axisPoint?.axisY < 0) {
         this.orientation = Orientation.TO_RIGHT_UP;
-        this.displaySprite.texture = this.texture1;
+        this.displaySprite.texture = this.texture0;
         this.displaySprite.scale.x = Math.abs(this.displaySprite.scale.x);
       }
     }
@@ -395,6 +395,7 @@ class Combat extends EventTarget {
   }
 
   static getSpriteRes(race: number, resId: string, index: number) {
+    console.log(`/assets/modal/${1}/${resId}-${index}.png`);
     return `/assets/modal/${1}/${resId}-${index}.png`;
   }
 }
