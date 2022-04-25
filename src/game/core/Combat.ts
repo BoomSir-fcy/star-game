@@ -22,7 +22,8 @@ import Bullet from './Bullet';
 import LinearMove from './LinearMove';
 import { getEffectText } from './utils';
 import EffectBuff from './EffectBuff';
-import { descOfEffect } from '../effectConfig';
+import { descOfEffect, spines } from '../effectConfig';
+import Loaders from './Loaders';
 
 export interface CombatOptions {
   // texture0: string;
@@ -390,6 +391,10 @@ class Combat extends EventTarget {
   }
 
   attackParabolaEffect(target: Combat, effect: BulletType) {
+    console.log(121212211);
+    // const loaders = new Loaders();
+
+    // loaders.load(spines);
     const bullet = new Bullet(this);
     const { container } = bullet;
     this.container.parent.addChild(container);
