@@ -279,7 +279,6 @@ class Combat extends EventTarget {
     this.container.position.set(point.x, point.y);
     this.startPoint.set(point.x, point.y);
     this.axisPoint?.chequer?.setState(stateType.PREVIEW);
-
     this.axisPoint = point;
     this.axisPoint?.chequer?.setState(stateType.DISABLE);
     this.axisPoint?.chequer?.displayState(false);
