@@ -470,7 +470,7 @@ class Running extends EventTarget {
     let lastSender = '';
     let lastReceive = '';
     // 拆分动作 分解执行
-    detail.forEach(item => {
+    detail.forEach((item, index) => {
       /**
        * 当前执行的攻击者和上一个攻击者相同
        * 或者
@@ -495,8 +495,15 @@ class Running extends EventTarget {
         }
         (attack[attack.length - 1].detail as TrackDetail[]).push(item);
       }
-      lastSender = item.sender_id;
-      lastReceive = item.receive_id;
+      if (
+        item.type === descType.BEAT_COLLISION ||
+        item.type === descType.BEAT_MOVE
+      ) {
+        lastSender = item.sender_id;
+        lastReceive = item.receive_id;
+      }
+      // lastSender = item.sender_id;
+      // lastReceive = item.receive_id;
     });
 
     return attack;

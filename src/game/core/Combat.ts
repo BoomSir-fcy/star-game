@@ -20,7 +20,7 @@ import AxisPoint from './AxisPoint';
 import Chequer, { stateType } from './Chequer';
 import Bullet from './Bullet';
 import LinearMove from './LinearMove';
-import { getEffectText } from './utils';
+import { getEffectText, getTwoPointCenter } from './utils';
 import EffectBuff from './EffectBuff';
 import { descOfEffect, spines } from '../effectConfig';
 import Loaders from './Loaders';
@@ -289,10 +289,14 @@ class Combat extends EventTarget {
   beatCollision(target: Combat, attackInfo?: RoundDesc) {
     const point = this.axisPoint?.clone();
     if (target.axisPoint && this.axisPoint) {
+      // const point1 = getTwoPointCenter(this.axisPoint, target.axisPoint);
       const linearMove = new LinearMove(
         this.container,
         this.axisPoint,
         target.axisPoint,
+        {
+          time: 60 * 0.1, // 0.3s 完成
+        },
       );
       linearMove.addEventListener('end', () => {
         if (point && target.axisPoint) {
@@ -300,6 +304,9 @@ class Combat extends EventTarget {
             this.container,
             target.axisPoint,
             point,
+            {
+              time: 60 * 0.15, // 0.3s 完成
+            },
           );
           const bullet = new Bullet(this);
           bullet.attack(bulletType.BUMP, target);

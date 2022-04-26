@@ -273,3 +273,15 @@ export const threeBezier = (
     y2 * t * t * t;
   return new Point(x, y);
 };
+
+/**
+ * @dev 获取两个点直间的中心点
+ * @param p1
+ * @param p2
+ * @returns
+ */
+export const getTwoPointCenter = (p1: Point, p2: Point): Point => {
+  const x = (p1.x + p2.x) / 2;
+  const y = (p1.y + p2.y) / 2;
+  return new Point(x, y);
+};
