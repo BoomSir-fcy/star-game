@@ -16,6 +16,7 @@ import {
   getRemoveActiveSoliderEvent,
   getUpdateSoldierPosition,
 } from './event';
+import LinearMove from './LinearMove';
 
 interface GameOptionsProps {
   height?: number;
@@ -324,12 +325,25 @@ class Game extends EventTarget {
     const soldier = new Soldier({
       ...option,
       x: axis.x,
-      y: axis.y,
+      y: axis.y - 1000,
       axisPoint: axis,
       zIndex,
     });
 
     this.addSoldier(soldier);
+
+    // 小人从天而降
+    soldier.changeState(stateType.PREVIEW, true);
+    const point0 = new Point(axis.x, axis.y - 1000) as AxisPoint;
+    const point1 = new Point(axis.x, axis.y) as AxisPoint;
+
+    const linearMove = new LinearMove(soldier.container, point0, point1);
+    linearMove.addEventListener('end', () => {
+      soldier.container.position.set(axis.x, axis.y);
+      soldier.changeState(stateType.PREVIEW, false);
+    });
+    linearMove.speed = 100;
+    linearMove.move();
     return soldier;
   }
 
