@@ -149,6 +149,7 @@ const effectConfig: EffectConfig = {
       // moveSpine: bulletType.FIGHT,
       bombSpriteSrc: '',
       moveSpineSrc: '',
+      flip: true,
       moveSpriteSrc: '',
       label: '碰撞',
     },

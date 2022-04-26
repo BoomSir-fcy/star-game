@@ -696,31 +696,53 @@ class Running extends EventTarget {
       return null;
     }
     sendSoldier.once('collisionEnd', () => {
-      if (attacks.attackInfo) {
-        const { sender_vhp, receive_vhp } =
-          attacks.attackInfo as RoundDescCarshHarm;
-        if (
-          typeof sender_vhp.now_hp === 'number' &&
-          typeof sender_vhp.now_shield === 'number'
-        ) {
-          sendSoldier.setActiveHpWithShield(
-            sender_vhp.now_hp,
-            sender_vhp.now_shield,
-          );
-        }
-        if (
-          typeof receive_vhp.now_hp === 'number' &&
-          typeof receive_vhp.now_shield === 'number'
-        ) {
-          receiveSoldier.setActiveHpWithShield(
-            receive_vhp.now_hp,
-            receive_vhp.now_shield,
-          );
-        }
-      }
+      // if (attacks.attackInfo) {
+      //   const { sender_vhp, receive_vhp } =
+      //     attacks.attackInfo as RoundDescCarshHarm;
+      //   if (
+      //     typeof sender_vhp.now_hp === 'number' &&
+      //     typeof sender_vhp.now_shield === 'number'
+      //   ) {
+      //     sendSoldier.setActiveHpWithShield(
+      //       sender_vhp.now_hp,
+      //       sender_vhp.now_shield,
+      //     );
+      //   }
+      //   if (
+      //     typeof receive_vhp.now_hp === 'number' &&
+      //     typeof receive_vhp.now_shield === 'number'
+      //   ) {
+      //     receiveSoldier.setActiveHpWithShield(
+      //       receive_vhp.now_hp,
+      //       receive_vhp.now_shield,
+      //     );
+      //   }
+      // }
 
       callback();
     });
+    if (attacks.attackInfo) {
+      const { sender_vhp, receive_vhp } =
+        attacks.attackInfo as RoundDescCarshHarm;
+      if (
+        typeof sender_vhp.now_hp === 'number' &&
+        typeof sender_vhp.now_shield === 'number'
+      ) {
+        sendSoldier.setActiveHpWithShield(
+          sender_vhp.now_hp,
+          sender_vhp.now_shield,
+        );
+      }
+      if (
+        typeof receive_vhp.now_hp === 'number' &&
+        typeof receive_vhp.now_shield === 'number'
+      ) {
+        receiveSoldier.setActiveHpWithShield(
+          receive_vhp.now_hp,
+          receive_vhp.now_shield,
+        );
+      }
+    }
     sendSoldier.beatCollision(receiveSoldier);
     return sendSoldier;
   }
