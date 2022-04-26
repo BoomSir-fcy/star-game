@@ -264,6 +264,8 @@ class Game extends EventTarget {
     this.soldiers.forEach(item => {
       if (soldier?.options?.unique_id === item.options?.unique_id) {
         item.changeState(stateType.ACTIVE, true);
+      } else {
+        item.changeState(stateType.ACTIVE, false);
       }
     });
   }
