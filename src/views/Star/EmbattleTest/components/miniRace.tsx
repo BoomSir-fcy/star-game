@@ -5,6 +5,7 @@ import { MapBaseUnits } from 'state/types';
 
 import Game from 'game/core/Game';
 import RunSimulation, { RoundsProps } from 'game/core/RunSimulation';
+import useGame from 'game/hooks/useGame';
 
 const Container = styled(Box)`
   position: absolute;
@@ -19,16 +20,23 @@ const Container = styled(Box)`
 `;
 
 // 种族动画预览
-const game = new Game({
-  width: 200,
-  height: 200,
-  test: true,
-  enableDrag: false,
-});
+// const game = new Game({
+//   width: 200,
+//   height: 200,
+//   test: true,
+//   enableDrag: false,
+// });
 const MiniRaceAni: React.FC<{
   mock: any;
 }> = ({ mock }) => {
   const ref = React.useRef<HTMLDivElement>(null);
+
+  const game = useGame({
+    width: 200,
+    height: 200,
+    test: true,
+    enableDrag: false,
+  });
 
   const createSoldiers = React.useCallback(
     (
@@ -51,12 +59,15 @@ const MiniRaceAni: React.FC<{
         });
       });
     },
-    [],
+    [game],
   );
 
-  const runGame = useCallback((slot: RoundsProps) => {
-    const run = new RunSimulation(game, slot);
-  }, []);
+  const runGame = useCallback(
+    (slot: RoundsProps) => {
+      const run = new RunSimulation(game, slot);
+    },
+    [game],
+  );
 
   const initSoldiers = React.useCallback(
     soldier => {
@@ -90,7 +101,7 @@ const MiniRaceAni: React.FC<{
       game.creatTerrain();
       initSoldiers(mock);
     }
-  }, [ref, mock, initSoldiers]);
+  }, [ref, mock, initSoldiers, game]);
 
   React.useEffect(() => {
     return () => {
