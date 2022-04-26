@@ -17,6 +17,7 @@ import {
   getUpdateSoldierPosition,
 } from './event';
 import LinearMove from './LinearMove';
+import loaders from './Loaders';
 
 interface GameOptionsProps {
   height?: number;
@@ -57,6 +58,7 @@ class Game extends EventTarget {
       this.boards.onHandleWheel.bind(this.boards),
     );
     this.test = test;
+
     this.init();
   }
 
@@ -67,6 +69,8 @@ class Game extends EventTarget {
   boards;
 
   view = document.createElement('canvas');
+
+  loaders = loaders;
 
   private axis: AxisPoint[][] = [];
 
@@ -101,6 +105,11 @@ class Game extends EventTarget {
       }
     });
     this.addEventListenerOfWindow();
+  }
+
+  loadResources() {
+    this.loaders.loadSpineAll();
+    return this.loaders;
   }
 
   creatTerrain(TerrainInfo?: Api.Game.TerrainInfo[]) {
