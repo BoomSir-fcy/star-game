@@ -17,6 +17,7 @@ const Container = styled(Box)`
   transition: 0.3s all;
   transform: translateX(-215px);
 `;
+
 // 种族动画预览
 const game = new Game({
   width: 200,
@@ -37,7 +38,6 @@ const MiniRaceAni: React.FC<{
       isEnemy: boolean,
     ) => {
       poses?.forEach(item => {
-        console.log(item, base);
         game.createSoldier(item.pos.x, item.pos.y, {
           srcId: `${item.base_unit_id}`,
           race: base[item.base_unit_id]?.race || 1,
@@ -61,18 +61,25 @@ const MiniRaceAni: React.FC<{
   const initSoldiers = React.useCallback(
     soldier => {
       const ids: { [xy: string]: string } = {};
-      Object.keys(soldier?.init?.ids).forEach(id => {
-        const { x, y } = soldier.init.ids[id];
-        ids[`${x}${y}`] = id;
-      });
-      createSoldiers(
-        soldier.init.blue_units,
-        soldier.init.base_unit,
-        ids,
-        false,
-      );
-      createSoldiers(soldier.init.red_units, soldier.init.base_unit, ids, true);
-      runGame(soldier.slot);
+      if (soldier?.init) {
+        Object.keys(soldier?.init?.ids).forEach(id => {
+          const { x, y } = soldier?.init?.ids[id];
+          ids[`${x}${y}`] = id;
+        });
+        createSoldiers(
+          soldier.init.blue_units,
+          soldier.init.base_unit,
+          ids,
+          false,
+        );
+        createSoldiers(
+          soldier.init.red_units,
+          soldier.init.base_unit,
+          ids,
+          true,
+        );
+        runGame(soldier.slot);
+      }
     },
     [createSoldiers, runGame],
   );
