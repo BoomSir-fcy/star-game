@@ -19,7 +19,7 @@ import {
 import LinearMove from './LinearMove';
 import loaders from './Loaders';
 
-interface GameOptionsProps {
+export interface GameOptionsProps {
   height?: number;
   width?: number;
   test?: boolean;
@@ -29,6 +29,7 @@ interface GameOptionsProps {
 /**
  * 游戏入口
  */
+
 class Game extends EventTarget {
   constructor(options?: GameOptionsProps) {
     super();
@@ -142,7 +143,7 @@ class Game extends EventTarget {
           this.onDrageMoveSoldier(event);
           if (!soldier.moved) {
             soldier.setMoved(true);
-            this.onDragStarSoldier();
+            this.onDragStarSoldier(soldier);
           }
         }
       })
@@ -349,7 +350,8 @@ class Game extends EventTarget {
     const linearMove = new LinearMove(soldier.container, point0, point1);
     linearMove.addEventListener('end', () => {
       soldier.container.position.set(axis.x, axis.y);
-      soldier.changeState(stateType.PREVIEW, false);
+      soldier.startPoint = point1;
+      soldier.changeState(stateType.DISABLE, false);
     });
     linearMove.speed = 100;
     linearMove.move();

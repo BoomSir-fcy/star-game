@@ -15,6 +15,7 @@ import {
   useFetchGameTerrain,
 } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
+import useGame from 'game/hooks/useGame';
 import { useStore } from 'state';
 import Game from 'game/core/Game';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -24,13 +25,15 @@ import SortBoard, { SortSoldier } from './components/SortBoard';
 import useUpdatePos from './hooks/useUpdatePos';
 import useActiveSoldier from './hooks/useActiveSoldier';
 
-const game = new Game();
+// const game = new Game();
 
 const Embattle = () => {
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.id);
 
   const navigate = useNavigate();
+
+  const game = useGame();
 
   // const race = Number(parsedQs.race) as Api.Game.race;
   useFetchGameTerrain();
@@ -60,7 +63,7 @@ const Embattle = () => {
     if (ref.current) {
       ref.current.appendChild(game.view);
     }
-  }, [ref]);
+  }, [ref, game]);
 
   const { gameSoldiers, setSortSoldiers } = useUpdatePos(planetId, game);
 
@@ -78,7 +81,7 @@ const Embattle = () => {
         });
       });
     },
-    [unitMaps, race],
+    [unitMaps, race, game],
   );
 
   useEffect(() => {
@@ -86,7 +89,7 @@ const Embattle = () => {
       createSoldiers(plantUnits[planetId]);
       setSortSoldiers(game.soldiers);
     }
-  }, [plantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers]);
+  }, [plantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers, game]);
 
   useEffect(() => {
     if (TerrainInfo?.length) {
@@ -94,7 +97,7 @@ const Embattle = () => {
     } else {
       game.creatTerrain([]);
     }
-  }, [TerrainInfo]);
+  }, [TerrainInfo, game]);
 
   return (
     <Box position='relative'>
