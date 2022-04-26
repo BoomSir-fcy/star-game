@@ -22,6 +22,7 @@ export const stateType = {
   ACTIVE: 2,
   DISABLE: 3,
   PLACE: 4,
+  HOVER: 5,
 } as const;
 
 export type MapType = typeof mapType[keyof typeof mapType];
@@ -89,6 +90,8 @@ class Chequer {
   static [stateType.DISABLE] = Texture.from('/assets/map/state3.png');
 
   static [stateType.PLACE] = Texture.from('/assets/map/state4.png');
+
+  static [stateType.HOVER] = Texture.from('/assets/map/state5.png');
 
   textureButtonDown = Texture.from('/assets/map/map0.png');
 
