@@ -178,16 +178,18 @@ class Combat extends EventTarget {
         config.BLOOD_HEIGHT,
       );
       this.hpGraphics.endFill();
-      setTimeout(() => {
-        this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
-        this.hpGraphics.drawRect(
-          lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
-          lineY,
-          ((this.lastHp - this.activePh) / hpAndShield) * config.BLOOD_WIDTH,
-          config.BLOOD_HEIGHT,
-        );
-        this.hpGraphics.endFill();
-      }, 100);
+      if (this.shield <= 0) {
+        setTimeout(() => {
+          this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
+          this.hpGraphics.drawRect(
+            lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+            lineY,
+            ((this.lastHp - this.activePh) / hpAndShield) * config.BLOOD_WIDTH,
+            config.BLOOD_HEIGHT,
+          );
+          this.hpGraphics.endFill();
+        }, 100);
+      }
     }
 
     // 绘制护盾
@@ -440,7 +442,6 @@ class Combat extends EventTarget {
   }
 
   static getSpriteRes(race: number, resId: string, index: number) {
-    console.log(`/assets/modal/${1}/${resId}-${index}.png`);
     return `/assets/modal/${1}/${resId}-${index}.png`;
   }
 }

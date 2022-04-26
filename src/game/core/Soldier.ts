@@ -137,7 +137,9 @@ class Soldier extends Combat {
         this.onDragEnd();
         this.resetPosition();
       })
-      .on('pointermove', () => this.onDragMove());
+      .on('pointermove', () => this.onDragMove())
+      .on('pointerover', () => this.onDragOver())
+      .on('pointerout', () => this.onDragOut());
 
     if (test) {
       this.testButton.beginFill(0xde3249);
@@ -227,6 +229,14 @@ class Soldier extends Combat {
 
   setMoved(moved: boolean) {
     this.moved = moved;
+  }
+
+  onDragOver() {
+    this.changeState(stateType.HOVER, true);
+  }
+
+  onDragOut() {
+    this.changeState(stateType.ACTIVE, false);
   }
 
   onDragMove(event?: InteractionEvent) {
