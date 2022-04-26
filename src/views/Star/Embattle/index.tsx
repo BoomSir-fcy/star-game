@@ -33,15 +33,19 @@ const Embattle = () => {
 
   const navigate = useNavigate();
 
-  const game = useGame();
+  const game = useGame({ width: 1600, offsetStartX: -330 });
+
+  useEffect(() => {
+    game.creatTerrain(); // 创建地形
+  }, [game]);
 
   // const race = Number(parsedQs.race) as Api.Game.race;
-  useFetchGameTerrain();
+  // useFetchGameTerrain();
   useFetchGamePK();
   useFetchGamePlanetUnits(planetId);
 
   const planetInfo = useStore(p => p.planet.planetInfo);
-  const { TerrainInfo, plantUnits } = useStore(p => p.game);
+  const { plantUnits } = useStore(p => p.game);
 
   const info = useMemo(() => {
     return planetInfo[planetId];
@@ -91,16 +95,21 @@ const Embattle = () => {
     }
   }, [plantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers, game]);
 
-  useEffect(() => {
-    if (TerrainInfo?.length) {
-      game.creatTerrain(TerrainInfo[0].terrains);
-    } else {
-      game.creatTerrain([]);
-    }
-  }, [TerrainInfo, game]);
+  // useEffect(() => {
+  //   if (TerrainInfo?.length) {
+  //     game.creatTerrain(TerrainInfo[0].terrains);
+  //   } else {
+  //     game.creatTerrain([]);
+  //   }
+  // }, [TerrainInfo, game]);
 
   return (
     <Box position='relative'>
+      <Box position='absolute' top={0} left={0} width={200}>
+        <Button onClick={() => game.clearSoldier()}>
+          <Text fontSize='20px'>Clear All</Text>
+        </Button>
+      </Box>
       <Box ref={ref} />
       <Flex
         style={{ userSelect: 'none' }}
@@ -126,18 +135,6 @@ const Embattle = () => {
         top='490px'
         left='0'
       >
-        <Box position='absolute' top='-80px'>
-          <Button onClick={() => game.clearSoldier()} padding={0} width='50px'>
-            <Text fontSize='20px'>清空</Text>
-          </Button>
-          <Button
-            onClick={() => navigate(`/plunder-test?pid0=${planetId}`)}
-            padding={0}
-            width='50px'
-          >
-            <Text fontSize='20px'>战斗测试</Text>
-          </Button>
-        </Box>
         <PreviewList race={race} game={game} activeSoldier={activeSoldier} />
       </Box>
     </Box>

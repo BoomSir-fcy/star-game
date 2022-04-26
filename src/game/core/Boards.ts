@@ -21,6 +21,8 @@ interface BoardsProps {
   height?: number;
   test?: boolean;
   enableDrag?: boolean;
+  offsetStartX?: number;
+  offsetStartY?: number;
 }
 /**
  * 棋盘
@@ -30,12 +32,18 @@ class Boards extends EventTarget {
     super();
     // this.aaa = 1;
     const { width, height, test, enableDrag } = options || {};
+    this.offsetStartX = options?.offsetStartX ?? config.OFFSET_START_X;
+    this.offsetStartY = options?.offsetStartY ?? config.OFFSET_START_Y;
 
     this.width = width || config.WIDTH;
     this.height = height || config.HEIGHT;
     this.enableDrag = enableDrag || false;
     this.init({ test });
   }
+
+  offsetStartX;
+
+  offsetStartY;
 
   startPoint: any;
 
@@ -110,25 +118,18 @@ class Boards extends EventTarget {
 
     for (let row = 0; row < config.BOARDS_ROW_COUNT; row++) {
       for (let col = 0; col < config.BOARDS_COL_COUNT; col++) {
-        if (terrains[`${row},${col}`]) {
-          const chequer = new Chequer({
-            type: terrains[`${row},${col}`].terrain_type,
-            axisX: row,
-            axisY: col,
-            state: stateType.PREVIEW,
-            test,
-          });
-          this.chequers.push(chequer);
-        } else {
-          const chequer = new Chequer({
-            type: mapType.MAP1,
-            axisX: row,
-            axisY: col,
-            state: stateType.PREVIEW,
-            test,
-          });
-          this.chequers.push(chequer);
-        }
+        const chequer = new Chequer({
+          type: terrains[`${row},${col}`]
+            ? terrains[`${row},${col}`].terrain_type
+            : mapType.MAP1,
+          axisX: row,
+          axisY: col,
+          state: stateType.PREVIEW,
+          test,
+          offsetStartX: this.offsetStartX,
+          offsetStartY: this.offsetStartY,
+        });
+        this.chequers.push(chequer);
       }
     }
     this.chequers.forEach(s => {
@@ -166,9 +167,9 @@ class Boards extends EventTarget {
         const dy = event?.data?.global?.y - this.startPoint.y;
         if (
           this.container.position.x + dx < -50 ||
-          this.container.position.x + dx > config.WIDTH + 50 ||
+          this.container.position.x + dx > this.width + 50 ||
           this.container.position.y + dy < -50 ||
-          this.container.position.y + dy > config.HEIGHT + 50
+          this.container.position.y + dy > this.height + 50
         ) {
           return;
         }

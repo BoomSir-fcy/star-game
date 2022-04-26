@@ -45,15 +45,23 @@ interface ChequerOptions {
   type?: MapType;
   state?: StateType;
   test?: boolean;
+  offsetStartX?: number;
+  offsetStartY?: number;
 }
 class Chequer {
   constructor(option: ChequerOptions) {
+    this.offsetStartX = option.offsetStartX ?? config.OFFSET_START_X;
+    this.offsetStartY = option.offsetStartY ?? config.OFFSET_START_Y;
     this.init(option);
   }
 
   static Y_RATIO = 0.308;
 
   static X_RATIO = 0.48;
+
+  offsetStartX;
+
+  offsetStartY;
 
   axisX = 0;
 
@@ -190,24 +198,24 @@ class Chequer {
       axisY >= config.BOARDS_COL_COUNT / 2 &&
       config.BOARD_POSITION_SELF === BoardPositionSelf.BOTTOM_LEFT
     ) {
-      excessOffsetA = 16;
+      excessOffsetA = config.TWO_BOARDS_OFFSET;
       enemy = true;
     }
     if (
       axisX >= config.BOARDS_COL_COUNT / 2 &&
       config.BOARD_POSITION_SELF === BoardPositionSelf.TOP_LEFT
     ) {
-      excessOffsetB = 16;
+      excessOffsetB = config.TWO_BOARDS_OFFSET;
       enemy = true;
     }
     return {
       x:
-        config.OFFSET_START_X -
+        this.offsetStartX -
         excessOffsetA +
         excessOffsetB +
         (axisX - axisY) * this.bunny.width * Chequer.X_RATIO,
       y:
-        config.OFFSET_START_Y +
+        this.offsetStartY +
         excessOffsetA +
         excessOffsetB +
         (axisX + axisY) * this.bunny.height * Chequer.Y_RATIO,
