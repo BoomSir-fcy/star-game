@@ -27,6 +27,7 @@ import Running, { RoundsProps } from 'game/core/Running';
 import { useNavigate } from 'react-router-dom';
 import { OptionProps, Select } from 'components/Select';
 import effectConfig from 'game/effectConfig';
+import Progress from 'components/Progress';
 
 const sleep = (handle: any, delay: number) => {
   return new Promise<void>((res, rej) => {
@@ -160,13 +161,14 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   const [selectOptions, setSelectOptions] = useState<OptionProps[]>([]);
 
-  useEffect(() => {
+  const initHandle = useCallback(() => {
     if (PKInfo && game.soldiers.length === 0) {
       const ids: idMap = {};
       Object.keys(PKInfo.init.ids).forEach(id => {
         const { x, y } = PKInfo.init.ids[id];
         ids[`${x}${y}`] = id;
       });
+
       createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, ids, false);
       createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
       runHandle(PKInfo.slot);
@@ -182,6 +184,25 @@ const GamePK: React.FC<GamePKProps> = () => {
       setSelectOptions(res);
     }
   }, [PKInfo, createSoldiers, runHandle, setSelectOptions]);
+
+  const [loaded, setLoaded] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (PKInfo && game.soldiers.length === 0 && !loaded) {
+      console.log(88888);
+      setLoaded(true);
+      const loaders = game.loadResources();
+      loaders.addEventListener('progress', event => {
+        console.log(event);
+        setProgress((event as ProgressEvent).total);
+      });
+      loaders.addEventListener('complete', () => {
+        initHandle();
+      });
+      // initHandle
+    }
+  }, [PKInfo, initHandle, loaded, setLoaded]);
 
   const resetSolider = useCallback(() => {
     game.clearSoldier();
@@ -335,7 +356,10 @@ const GamePK: React.FC<GamePKProps> = () => {
             {/* <Button>开始战斗</Button> */}
           </Box>
         </Box>
-        <Box ref={ref} />
+        <Box>
+          <Progress width={`${progress}%`} />
+          <Box ref={ref} />
+        </Box>
         <Box ml='20px'>
           <Box>
             <Text>战斗速度</Text>

@@ -4,6 +4,8 @@ const effectConfig: EffectConfig = {
   bullet: [
     {
       name: bulletType.ICE,
+      bombSpine: bulletType.ICE,
+      // moveSpine: ,
       bombSpineSrc: '/assets/bullet/ice/bindog.json',
       bombSpriteSrc: '',
       moveSpineSrc: '',
@@ -13,6 +15,8 @@ const effectConfig: EffectConfig = {
     {
       name: bulletType.ROCK,
       bombSpineSrc: '/assets/bullet/rock/yans.json',
+      bombSpine: bulletType.ROCK,
+      // moveSpine: ,
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/rock/rock.png',
@@ -21,6 +25,8 @@ const effectConfig: EffectConfig = {
     },
     {
       name: bulletType.BULLET,
+      // bombSpine: bulletType.ROCK,
+      moveSpine: bulletType.BULLET,
       bombSpineSrc: '',
       bombSpriteSrc: '',
       moveSpineSrc: '/assets/bullet/bullet/zidan.json',
@@ -29,6 +35,8 @@ const effectConfig: EffectConfig = {
     },
     {
       name: bulletType.CURVE_BULLET,
+      // bombSpine: bulletType.ROCK,
+      moveSpine: bulletType.CURVE_BULLET,
       bombSpineSrc: '',
       bombSpriteSrc: '',
       moveSpineSrc: '/assets/bullet/curve_bullet/quxian.json',
@@ -37,6 +45,8 @@ const effectConfig: EffectConfig = {
     },
     {
       name: bulletType.FIREBALL,
+      bombSpine: bulletType.FIREBALL,
+      // moveSpine: bulletType.CURVE_BULLET,
       bombSpineSrc: '/assets/bullet/fireball/huoqiu.json',
       bombSpriteSrc: '',
       moveSpineSrc: '',
@@ -57,6 +67,8 @@ const effectConfig: EffectConfig = {
       // resDir: '/assets/bullet/mechanical_bullet/jix.json',
       // spriteRes: '/assets/bullet/mechanical_bullet/mechanical_bullet.png',
       bombSpineSrc: '/assets/bullet/mechanical_bullet/jix.json',
+      bombSpine: bulletType.MECHANICAL_BULLET,
+      // moveSpine: bulletType.CURVE_BULLET,
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/mechanical_bullet/mechanical_bullet.png',
@@ -73,6 +85,8 @@ const effectConfig: EffectConfig = {
     {
       name: bulletType.BOMB,
       bombSpineSrc: '/assets/bullet/bomb/zhadan.json',
+      bombSpine: bulletType.BOMB,
+      // moveSpine: bulletType.CURVE_BULLET,
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '',
@@ -83,6 +97,8 @@ const effectConfig: EffectConfig = {
       // resDir: '/assets/bullet/missile/head/dangt.json',
       // spriteRes: '/assets/bullet/missile/head/dangt.png',
       bombSpineSrc: '/assets/bullet/missile/bom/daod.json',
+      bombSpine: bulletType.MISSILE,
+      moveSpine: bulletType.MISSILE_BOOM,
       bombSpriteSrc: '',
       moveSpineSrc: '/assets/bullet/missile/head/dangt.json',
       moveSpriteSrc: '',
@@ -93,6 +109,8 @@ const effectConfig: EffectConfig = {
       // resDir: '/assets/bullet/sting/jianc.json',
       // spriteRes: '/assets/bullet/sting/jianc.png',
       bombSpineSrc: '/assets/bullet/sting/jianc.json',
+      bombSpine: bulletType.STING,
+      // moveSpine: bulletType.MISSILE_BOOM,
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '',
@@ -103,6 +121,8 @@ const effectConfig: EffectConfig = {
       // resDir: '/assets/bullet/venom/duye.json',
       // spriteRes: '/assets/bullet/venom/venom.png',
       bombSpineSrc: '/assets/bullet/venom/duye.json',
+      bombSpine: bulletType.VENOM,
+      // moveSpine: bulletType.MISSILE_BOOM,
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/venom/venom.png',
@@ -112,6 +132,8 @@ const effectConfig: EffectConfig = {
       name: bulletType.FIGHT,
       // resDir: '/assets/bullet/fight/jinzhan.json',
       // spriteRes: '/assets/bullet/fight/jinzhan.png',
+      // bombSpine: bulletType.VENOM,
+      moveSpine: bulletType.FIGHT,
       bombSpineSrc: '',
       bombSpriteSrc: '',
       moveSpineSrc: '/assets/bullet/fight/jinzhan.json',
@@ -123,6 +145,8 @@ const effectConfig: EffectConfig = {
       // resDir: '/assets/bullet/fight/jinzhan.json',
       // spriteRes: '/assets/bullet/fight/jinzhan.png',
       bombSpineSrc: '/assets/bullet/yan/yans.json',
+      bombSpine: bulletType.BUMP,
+      // moveSpine: bulletType.FIGHT,
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '',
@@ -131,6 +155,8 @@ const effectConfig: EffectConfig = {
     {
       name: bulletType.SHIELD,
       bombSpineSrc: '/assets/bullet/shield/hudun.json',
+      bombSpine: bulletType.SHIELD,
+      // moveSpine: bulletType.FIGHT,
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/shield/shield.png',
@@ -279,3 +305,62 @@ export const descOfEffect = {
     remove: false,
   },
 };
+
+export const spines = [
+  {
+    name: bulletType.ICE,
+    src: '/assets/bullet/ice/bindog.json',
+  },
+  {
+    name: bulletType.ROCK,
+    src: '/assets/bullet/rock/yans.json',
+  },
+  {
+    name: bulletType.BULLET,
+    src: '/assets/bullet/bullet/zidan.json',
+  },
+  {
+    name: bulletType.CURVE_BULLET,
+    src: '/assets/bullet/curve_bullet/quxian.json',
+  },
+  {
+    name: bulletType.FIREBALL,
+    src: '/assets/bullet/fireball/huoqiu.json',
+  },
+  {
+    name: bulletType.MECHANICAL_BULLET,
+    src: '/assets/bullet/mechanical_bullet/jix.json',
+  },
+  {
+    name: bulletType.BOMB,
+    src: '/assets/bullet/bomb/zhadan.json',
+  },
+  {
+    name: bulletType.MISSILE,
+    src: '/assets/bullet/missile/bom/dangt.json',
+  },
+  {
+    name: bulletType.MISSILE_BOOM,
+    src: '/assets/bullet/missile/bom/daod.json',
+  },
+  {
+    name: bulletType.STING,
+    src: '/assets/bullet/sting/jianc.json',
+  },
+  {
+    name: bulletType.VENOM,
+    src: '/assets/bullet/venom/duye.json',
+  },
+  {
+    name: bulletType.FIGHT,
+    src: '/assets/bullet/fight/jinzhan.json',
+  },
+  {
+    name: bulletType.BUMP,
+    src: '/assets/bullet/yan/yans.json',
+  },
+  {
+    name: bulletType.SHIELD,
+    src: '/assets/bullet/shield/hudun.json',
+  },
+];

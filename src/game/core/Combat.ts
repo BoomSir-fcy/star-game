@@ -22,7 +22,8 @@ import Bullet from './Bullet';
 import LinearMove from './LinearMove';
 import { getEffectText } from './utils';
 import EffectBuff from './EffectBuff';
-import { descOfEffect } from '../effectConfig';
+import { descOfEffect, spines } from '../effectConfig';
+import Loaders from './Loaders';
 
 export interface CombatOptions {
   // texture0: string;
@@ -67,6 +68,8 @@ class Combat extends EventTarget {
   hp = 0; // 总生命值
 
   activePh = 0; // 当前生命值
+
+  lastHp = 0; // 扣血前的生命值
 
   shield = 0;
 
@@ -114,6 +117,7 @@ class Combat extends EventTarget {
   }
 
   setActiveHp(hp: number) {
+    this.lastHp = this.activePh;
     this.activePh = hp;
     this.drawHp();
   }
@@ -124,6 +128,7 @@ class Combat extends EventTarget {
   }
 
   setActiveHpWithShield(hp: number, shield: number) {
+    this.lastHp = this.activePh;
     this.activePh = hp;
     this.shield = shield;
     this.drawHp();
@@ -159,6 +164,31 @@ class Combat extends EventTarget {
       config.BLOOD_HEIGHT,
     );
     this.hpGraphics.endFill();
+
+    // 绘制扣除的血量
+    if (this.lastHp - this.activePh > 0) {
+      this.hpGraphics.beginFill(
+        this.isEnemy ? config.BLOOD_COLOR_ENEMY : config.BLOOD_COLOR,
+        0.5,
+      );
+      this.hpGraphics.drawRect(
+        lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+        lineY,
+        ((this.lastHp - this.activePh) / hpAndShield) * config.BLOOD_WIDTH,
+        config.BLOOD_HEIGHT,
+      );
+      this.hpGraphics.endFill();
+      setTimeout(() => {
+        this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
+        this.hpGraphics.drawRect(
+          lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
+          lineY,
+          ((this.lastHp - this.activePh) / hpAndShield) * config.BLOOD_WIDTH,
+          config.BLOOD_HEIGHT,
+        );
+        this.hpGraphics.endFill();
+      }, 100);
+    }
 
     // 绘制护盾
     this.hpGraphics.beginFill(config.BLOOD_COLOR_SHIELD);
@@ -332,7 +362,7 @@ class Combat extends EventTarget {
     } else if (effect === descType.FIRING) {
       bullet.attack(bulletType.FIRING, target);
     } else if (effect === descType.ICE_END) {
-      bullet.attack(bulletType.FIREBALL, target);
+      bullet.attack(bulletType.BULLET, target);
     } else if (effect === descType.ICE_START) {
       bullet.attack(bulletType.ICE, target);
     } else if (effect === descType.STOP_MOVE) {
@@ -361,6 +391,10 @@ class Combat extends EventTarget {
   }
 
   attackParabolaEffect(target: Combat, effect: BulletType) {
+    console.log(121212211);
+    // const loaders = new Loaders();
+
+    // loaders.load(spines);
     const bullet = new Bullet(this);
     const { container } = bullet;
     this.container.parent.addChild(container);

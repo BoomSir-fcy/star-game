@@ -97,6 +97,7 @@ class EffectBuff extends EventTarget {
    */
   addEffect(type: EffectType) {
     if (!this.added) {
+      this.container.zIndex = this.combat.container.zIndex;
       this.combat.container.addChild(this.container);
       this.added = true;
     }
@@ -173,7 +174,7 @@ class EffectBuff extends EventTarget {
     const sprite = this[type].sprint as AnimatedSprite;
     const { scale, positionY } = this[type];
     sprite.anchor.set(0.5);
-    sprite.zIndex = 2;
+    sprite.zIndex = 1;
     sprite.position.set(0, positionY);
     sprite.scale.set(scale);
     this.addAnimateEffect(type, 0.1, () => {

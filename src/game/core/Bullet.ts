@@ -24,6 +24,7 @@ import {
 } from './utils';
 import Parabola from './Parabola';
 import LinearMove from './LinearMove';
+import loaders from './Loaders';
 
 /**
  * 攻击特效
@@ -152,39 +153,18 @@ class Bullet extends EventTarget {
   async loadSpine(name: BulletType) {
     return new Promise<void>((resolve, rej) => {
       try {
-        const { bombSpineSrc, moveSpineSrc } = this.effects[name];
-
-        const moveKeyName = `${name}_moveSpineSrc`;
-        const bombKeyName = `${name}_bombSpineSrc`;
-        const tag1 = bombSpineSrc && this.loader.resources[bombKeyName];
-        const tag2 = moveSpineSrc && this.loader.resources[moveKeyName];
-        if (tag1 || tag2) {
-          if (tag1) {
-            this.loadBombSpine(this.loader.resources[bombKeyName], name);
-          }
-          if (tag2) {
-            this.loadMoveSpine(this.loader.resources[moveKeyName], name);
-          }
-          resolve();
-          return;
-        }
-
-        if (bombSpineSrc) {
-          this.loader.add(bombKeyName, bombSpineSrc);
-        }
-
-        if (moveSpineSrc) {
-          this.loader.add(moveKeyName, moveSpineSrc);
-        }
-        this.loader.load((_loader, res: Dict<LoaderResource>) => {
-          this.effects[name].loaded = true;
-          this.effects[name].res = res;
-          const moveLoaderRes = res[moveKeyName];
-          this.loadMoveSpine(moveLoaderRes, name);
-          const bombLoaderRes = res[bombKeyName];
+        const { bombSpine, moveSpine } = this.effects[name];
+        if (bombSpine) {
+          const bombLoaderRes = loaders.loader.resources[bombSpine];
           this.loadBombSpine(bombLoaderRes, name);
-          resolve();
-        });
+        }
+
+        if (moveSpine) {
+          const moveLoaderRes = loaders.loader.resources[moveSpine];
+          this.loadMoveSpine(moveLoaderRes, name);
+        }
+        this.effects[name].loaded = true;
+        resolve();
       } catch (error) {
         console.error('loadSpine error');
         rej(error);

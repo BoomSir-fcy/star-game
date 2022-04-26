@@ -274,8 +274,10 @@ export interface BulletItemInfoOfConfig {
   name: BulletType;
   bombSpriteSrc?: string;
   bombSpineSrc?: string;
-  moveSpineSrc?: string;
+  bombSpine?: BulletType;
+  moveSpine?: BulletType;
   moveSpriteSrc?: string;
+  moveSpineSrc?: string;
   label?: string;
   flip?: boolean;
 }
