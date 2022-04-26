@@ -37,6 +37,8 @@ class Boards extends EventTarget {
     this.init({ test });
   }
 
+  startPoint: any;
+
   width;
 
   height;
@@ -73,7 +75,7 @@ class Boards extends EventTarget {
       .on('pointerupoutside', () => {
         this.onDragEnd();
       })
-      .on('pointermove', () => this.onDragMove());
+      .on('pointermove', e => this.onDragMove(e));
   }
 
   // 滚轮事件 缩放
@@ -147,6 +149,7 @@ class Boards extends EventTarget {
   onDragStart(event: InteractionEvent) {
     if (this.enableDrag) {
       this.dragData = event.data;
+      this.startPoint = { x: event.data.global.x, y: event.data.global.y };
       this.dragging = true;
     }
   }
@@ -158,13 +161,29 @@ class Boards extends EventTarget {
   onDragMove(event?: InteractionEvent) {
     this.dragData = event?.data || this.dragData;
     if (this.dragging) {
-      const newPosition = this?.dragData?.getLocalPosition(
-        this.container.parent,
-      );
-      if (newPosition) {
-        this.container.x = newPosition.x;
-        this.container.y = newPosition.y;
+      if (event?.data?.global?.x && event?.data?.global?.y) {
+        const dx = event?.data?.global?.x - this.startPoint.x;
+        const dy = event?.data?.global?.y - this.startPoint.y;
+        if (
+          this.container.position.x + dx < -50 ||
+          this.container.position.x + dx > config.WIDTH + 50 ||
+          this.container.position.y + dy < -50 ||
+          this.container.position.y + dy > config.HEIGHT + 50
+        ) {
+          return;
+        }
+        this.container.position.x += dx;
+        this.container.position.y += dy;
+        this.startPoint = { x: event.data.global.x, y: event.data.global.y };
       }
+      // const newPosition = this?.dragData?.getLocalPosition(
+      //   this.container.parent,
+      // );
+      // console.log(newPosition, this?.dragData, this.container.parent);
+      // if (newPosition) {
+      //   this.container.x = newPosition.x;
+      //   this.container.y = newPosition.y;
+      // }
     }
   }
 }
