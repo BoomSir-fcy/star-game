@@ -54,7 +54,7 @@ const Pk = () => {
   return (
     <Layout>
       <Flex mb='20px'>
-        <Flex>
+        <Flex position='relative' zIndex={1}>
           <BackButton ml='19px' />
           <RefreshButton ml='33px' />
         </Flex>
