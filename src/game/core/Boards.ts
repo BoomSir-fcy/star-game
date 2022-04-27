@@ -83,7 +83,7 @@ class Boards extends EventTarget {
       .on('pointerupoutside', () => {
         this.onDragEnd();
       })
-      .on('pointermove', e => this.onDragMove(e));
+      .on('pointermove', () => this.onDragMove());
   }
 
   // 滚轮事件 缩放
@@ -150,7 +150,6 @@ class Boards extends EventTarget {
   onDragStart(event: InteractionEvent) {
     if (this.enableDrag) {
       this.dragData = event.data;
-      this.startPoint = { x: event.data.global.x, y: event.data.global.y };
       this.dragging = true;
     }
   }
@@ -177,14 +176,6 @@ class Boards extends EventTarget {
         this.container.position.y += dy;
         this.startPoint = { x: event.data.global.x, y: event.data.global.y };
       }
-      // const newPosition = this?.dragData?.getLocalPosition(
-      //   this.container.parent,
-      // );
-      // console.log(newPosition, this?.dragData, this.container.parent);
-      // if (newPosition) {
-      //   this.container.x = newPosition.x;
-      //   this.container.y = newPosition.y;
-      // }
     }
   }
 }
