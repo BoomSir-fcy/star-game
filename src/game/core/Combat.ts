@@ -101,6 +101,8 @@ class Combat extends EventTarget {
 
   bullet?: Bullet;
 
+  drawHpTimer = 0;
+
   orientation = Orientation.TO_RIGHT_DOWN;
 
   effectBuff;
@@ -167,6 +169,7 @@ class Combat extends EventTarget {
 
     // 绘制扣除的血量
     if (this.lastHp - this.activePh > 0) {
+      clearTimeout(this.drawHpTimer);
       this.hpGraphics.beginFill(
         this.isEnemy ? config.BLOOD_COLOR_ENEMY : config.BLOOD_COLOR,
         0.5,
@@ -178,18 +181,10 @@ class Combat extends EventTarget {
         config.BLOOD_HEIGHT,
       );
       this.hpGraphics.endFill();
-      if (this.shield <= 0) {
-        setTimeout(() => {
-          this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
-          this.hpGraphics.drawRect(
-            lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
-            lineY,
-            ((this.lastHp - this.activePh) / hpAndShield) * config.BLOOD_WIDTH,
-            config.BLOOD_HEIGHT,
-          );
-          this.hpGraphics.endFill();
-        }, 100);
-      }
+      this.drawHpTimer = window.setTimeout(() => {
+        this.lastHp = this.activePh;
+        this.drawHp();
+      }, 200);
     }
 
     // 绘制护盾
