@@ -119,7 +119,7 @@ const GamePK: React.FC<GamePKProps> = () => {
     infoP0?.id,
     infoP1?.id,
     Number(maxRound),
-    Number(ActiveTerrainInfo?.id),
+    parsedQs.terrain ? Number(JSON.parse(String(parsedQs.terrain))?.id) : 0,
   );
 
   const ref = useRef<HTMLDivElement>(null);

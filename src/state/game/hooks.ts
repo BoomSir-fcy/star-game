@@ -96,7 +96,7 @@ export const useFetchGamePKTest = (
 ) => {
   const dispatch = useDispatch();
   const fetch = useCallback(() => {
-    if (id0 && !id1 && terrain_id) {
+    if (id0 && !id1) {
       dispatch(fetchGamePKTestAsync(`t-${id0}`, maxRound, terrain_id));
     }
   }, [dispatch, id0, id1, maxRound, terrain_id]);
