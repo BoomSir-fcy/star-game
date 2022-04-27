@@ -95,14 +95,6 @@ const Embattle = () => {
     }
   }, [plantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers, game]);
 
-  // useEffect(() => {
-  //   if (TerrainInfo?.length) {
-  //     game.creatTerrain(TerrainInfo[0].terrains);
-  //   } else {
-  //     game.creatTerrain([]);
-  //   }
-  // }, [TerrainInfo, game]);
-
   return (
     <Box position='relative'>
       <Box position='absolute' top={0} left={0} width={200}>
@@ -135,6 +127,15 @@ const Embattle = () => {
         top='490px'
         left='0'
       >
+        <Box position='absolute' top='-80px'>
+          <Button
+            onClick={() => navigate(`/plunder-test?pid0=${planetId}`)}
+            padding={0}
+            width='50px'
+          >
+            <Text fontSize='20px'>战斗测试</Text>
+          </Button>
+        </Box>
         <PreviewList race={race} game={game} activeSoldier={activeSoldier} />
       </Box>
     </Box>

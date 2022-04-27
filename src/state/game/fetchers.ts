@@ -79,9 +79,13 @@ export const fetchGameMatchUser = async () => {
   });
 };
 
-export const fetchGamePKTest = async (tag: string, maxRound?: number) => {
+export const fetchGamePKTest = async (
+  tag: string,
+  maxRound?: number,
+  terrain_id?: number,
+) => {
   try {
-    const res = await Api.GameApi.testPk(tag, maxRound);
+    const res = await Api.GameApi.testPk(tag, maxRound, terrain_id);
     if (Api.isSuccess(res)) {
       return res.data.data;
     }
