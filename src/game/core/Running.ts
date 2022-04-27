@@ -840,6 +840,26 @@ class Running extends EventTarget {
           ),
         );
       }
+      if (info.desc_type === descType.ADD_TERRAIN_FIRING) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.add_terrain_firing,
+            info.desc_type,
+            `${round}-${_track}`,
+            true,
+          ),
+        );
+      }
+      if (info.desc_type === descType.TERRAIN_FIRING) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.terrain_firing,
+            info.desc_type,
+            `${round}-${_track}`,
+            true,
+          ),
+        );
+      }
     });
     return details;
   }

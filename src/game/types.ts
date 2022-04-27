@@ -66,6 +66,32 @@ export interface RoundDescAttack extends SlotBaseInfo {
   sender_attack: number;
 }
 
+// 添加地形灼烧
+export interface RoundDescAddTerrainFiring extends SlotBaseInfo {
+  firing_hp: number;
+  firing_point: RoundDescAxis;
+  x: number;
+  y: number;
+  receive_id: string;
+  receive_point: RoundDescAxis;
+  sender_id: string;
+  around: ReceiveChange[];
+}
+
+// 地形灼烧中
+export interface RoundDescTerrainFiring extends SlotBaseInfo {
+  long_round: number;
+  max_hp: number;
+  max_shield: number;
+  now_hp: number;
+  now_shield: number;
+  receive_id: string;
+  receive_point: RoundDescAxis;
+  receive_sub_hp: number;
+  terrain_firing_point: RoundDescAxis;
+  around: ReceiveChange[];
+}
+
 // 添加炸弹
 export interface RoundDescAddBoom extends SlotBaseInfo {
   boom_hp: number;
@@ -172,7 +198,9 @@ export type RoundDesc =
   | RoundDescStopMove
   | RoundDescIceStart
   | RoundDescCarshHarm
-  | RoundDescRemoveStopMove;
+  | RoundDescRemoveStopMove
+  | RoundDescAddTerrainFiring
+  | RoundDescTerrainFiring;
 
 export interface RoundInfo {
   desc_type: number;
@@ -194,6 +222,8 @@ export interface RoundInfo {
   remove_firing: RoundDescRemoveFiring;
   add_shield: RoundDescAddShield;
   sub_shield: RoundDescRemoveShield;
+  add_terrain_firing: RoundDescAddTerrainFiring;
+  terrain_firing: RoundDescTerrainFiring;
 }
 
 export enum Orientation {
@@ -237,6 +267,8 @@ export const descType = {
   REMOVE_STOP_MOVE: 16, // 解除灼烧
   ADD_SHIELD: 17, // 击退碰撞伤害DescUnitRemoveFiring
   REMOVE_SHIELD: 18, // 击退碰撞伤害DescUnitRemoveFiring
+  ADD_TERRAIN_FIRING: 19, // 地形灼烧DescUnitAddTerrainFiring
+  TERRAIN_FIRING: 20, // 地形引起正在灼烧DescUnitTerrainFiring
 };
 
 // 技能
@@ -267,6 +299,8 @@ export const bulletType = {
   STOP_MOVE: 'stop_move', // 禁锢
   BOMB: 'bomb', // 炸弹
   ADD_BOMB: 'add_bomb', // 添加炸弹
+  ADD_TERRAIN_FIRING: 'add_terrain_firing', // 添加地形灼烧
+  TERRAIN_FIRING: 'terrain_firing', // 地形灼烧中
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 

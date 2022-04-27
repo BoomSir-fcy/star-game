@@ -65,6 +65,7 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   const [pid0, setPid0] = useState((parsedQs.pid0 as string) || '');
   const [pid1, setPid1] = useState((parsedQs.pid1 as string) || '');
+  const [ActiveTerrainInfo, setActiveTerrainInfo] = useState<OptionProps>();
   const [maxRound, setMaxRound] = useState('10');
   const { TerrainInfo } = useStore(p => p.game);
 
@@ -86,24 +87,40 @@ const GamePK: React.FC<GamePKProps> = () => {
   }, [dispatch, infoP0?.race, infoP1?.race]);
 
   useEffect(() => {
-    if (TerrainInfo?.length) {
-      game.creatTerrain(TerrainInfo[0].terrains);
+    if (parsedQs.terrain) {
+      setActiveTerrainInfo(JSON.parse(String(parsedQs.terrain)));
+    }
+  }, [parsedQs]);
+
+  useEffect(() => {
+    if (TerrainInfo?.length && ActiveTerrainInfo) {
+      game.creatTerrain(TerrainInfo[ActiveTerrainInfo?.value].terrains);
     } else {
       game.creatTerrain([]);
     }
-  }, [TerrainInfo]);
+  }, [TerrainInfo, ActiveTerrainInfo]);
 
   const startHandle = useCallback(() => {
     if (Number(pid0) && Number(pid1)) {
       dispatch(fetchPlanetInfoAsync([Number(pid0), Number(pid1)]));
-      navigate(`/plunder-test?pid0=${pid0}&pid1=${pid1}`, { replace: true });
+      navigate(
+        `/plunder-test?pid0=${pid0}&pid1=${pid1}&terrain=${JSON.stringify(
+          ActiveTerrainInfo,
+        )}`,
+        { replace: true },
+      );
     } else if (Number(pid0)) {
       dispatch(fetchPlanetInfoAsync([Number(pid0)]));
     }
-  }, [dispatch, pid0, pid1, navigate]);
+  }, [dispatch, pid0, pid1, navigate, ActiveTerrainInfo]);
 
   useFetchGamePK(infoP0?.id, infoP1?.id, Number(maxRound));
-  useFetchGamePKTest(infoP0?.id, infoP1?.id, Number(maxRound));
+  useFetchGamePKTest(
+    infoP0?.id,
+    infoP1?.id,
+    Number(maxRound),
+    Number(ActiveTerrainInfo?.id),
+  );
 
   const ref = useRef<HTMLDivElement>(null);
 
