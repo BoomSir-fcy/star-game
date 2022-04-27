@@ -27,9 +27,7 @@ export class AllianceApi extends Http {
   }
 
   // 行星联盟掠夺
-  async alliancePlunder(
-    params: Api.Alliance.Plunder,
-  ): Promise<Api.Response<Api.Alliance.PlunderInfoMatchUser>> {
+  async alliancePlunder(params: Api.Alliance.Plunder): Promise<any> {
     return this.post('alliance/plunder', params);
   }
 
