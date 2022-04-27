@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
+import useGame from 'game/hooks/useGame';
 import { MapBaseUnits } from 'state/types';
 
-import Game from 'game/core/Game';
 import RunSimulation, { RoundsProps } from 'game/core/RunSimulation';
 
 const Container = styled(Box)`
@@ -18,17 +18,19 @@ const Container = styled(Box)`
   transform: translateX(-215px);
 `;
 
-// 种族动画预览
-const game = new Game({
-  width: 200,
-  height: 200,
-  test: true,
-  enableDrag: false,
-});
+const GridWidth = 200;
+const GridHeight = 200;
+
 const MiniRaceAni: React.FC<{
   mock: any;
 }> = ({ mock }) => {
   const ref = React.useRef<HTMLDivElement>(null);
+
+  const game = useGame({
+    width: GridWidth,
+    height: GridHeight,
+    enableDrag: false,
+  });
 
   const createSoldiers = React.useCallback(
     (
@@ -51,12 +53,15 @@ const MiniRaceAni: React.FC<{
         });
       });
     },
-    [],
+    [game],
   );
 
-  const runGame = useCallback((slot: RoundsProps) => {
-    const run = new RunSimulation(game, slot);
-  }, []);
+  const runGame = useCallback(
+    (slot: RoundsProps) => {
+      const run = new RunSimulation(game, slot);
+    },
+    [game],
+  );
 
   const initSoldiers = React.useCallback(
     soldier => {
@@ -85,13 +90,27 @@ const MiniRaceAni: React.FC<{
     [createSoldiers, runGame],
   );
 
+  const getCenterByAxis = useCallback(
+    (x: number, y: number) => {
+      const axis = game.getAxis(x, y);
+      if (axis) {
+        game.boards.setPosiotion(-axis.x - 30, -axis.y + 60);
+      }
+    },
+    [game],
+  );
+
   React.useEffect(() => {
     if (ref.current) {
       ref.current.appendChild(game.view);
       game.creatTerrain();
       initSoldiers(mock);
+      getCenterByAxis(
+        mock?.init?.blue_units[0].pos.x,
+        mock?.init?.blue_units[0].pos.y,
+      );
     }
-  }, [ref, mock, initSoldiers]);
+  }, [ref, initSoldiers, game, getCenterByAxis, mock]);
 
   React.useEffect(() => {
     return () => {
