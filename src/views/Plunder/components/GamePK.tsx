@@ -194,7 +194,7 @@ const GamePK: React.FC<GamePKProps> = () => {
       setLoaded(true);
       const loaders = game.loadResources();
       loaders.addEventListener('progress', event => {
-        console.log(event);
+        // console.log(event);
         setProgress((event as ProgressEvent).total);
       });
       loaders.addEventListener('complete', () => {
