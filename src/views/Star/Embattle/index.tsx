@@ -146,8 +146,6 @@ const Embattle = () => {
           </Button>
           <Button
             onClick={() => {
-              console.log(terrainSelect[0]);
-
               navigate(
                 `/plunder-test?pid0=${planetId}&terrain=${
                   activeTerrain.id
