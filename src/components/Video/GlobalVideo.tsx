@@ -28,12 +28,13 @@ interface VideoSystem
   center?: boolean;
 }
 const VideoStyled = styled.video<VideoSystem>`
-  position: absolute;
+  /* position: absolute; */
   ${layout}
   ${margin}
   object-fit: fill;
   mix-blend-mode: lighten;
-  ${({ center }) =>
+  z-index: 999;
+  /* ${({ center }) =>
     center
       ? `
     left: 50%;
@@ -41,10 +42,10 @@ const VideoStyled = styled.video<VideoSystem>`
     transform: translate(-50%, -50%);
   `
       : position}
-  z-index: ${({ zIndex }) => zIndex};
+  z-index: ${({ zIndex }) => zIndex}; */
 `;
 
-interface VideoGlobalProps extends VideoSystem {
+export interface VideoGlobalProps extends BoxProps {
   width?: number;
   height?: number;
   src?: string;
@@ -54,6 +55,8 @@ const GlobalVideo: React.FC<VideoGlobalProps> = ({
   width = 500,
   height = 500,
   src,
+  loop,
+  children,
   ...props
 }) => {
   const { scale, client } = useStore(p => p.user);
@@ -102,18 +105,26 @@ const GlobalVideo: React.FC<VideoGlobalProps> = ({
         width='100%'
         style={{ display: show ? 'block' : 'none' }}
       >
-        <VideoStyled
+        <Box
+          {...props}
+          position='absolute'
           width={`${width * scale}px`}
           height={`${height * scale}`}
-          src={src}
-          {...props}
           top={typeof top === 'number' ? top * scale : top}
           left={typeof left === 'number' ? left * scale : left}
           bottom={typeof bottom === 'number' ? bottom * scale : bottom}
           right={typeof right === 'number' ? right * scale : right}
-          autoPlay
-          muted
-        />
+        >
+          <VideoStyled
+            width='100%'
+            height='100%'
+            src={src}
+            autoPlay
+            muted
+            loop={loop}
+          />
+          {children}
+        </Box>
       </Box>
     </div>
   );

@@ -20,7 +20,7 @@ import AxisPoint from './AxisPoint';
 import Chequer, { stateType } from './Chequer';
 import Bullet from './Bullet';
 import LinearMove from './LinearMove';
-import { getEffectText } from './utils';
+import { getEffectText, getTwoPointCenter } from './utils';
 import EffectBuff from './EffectBuff';
 import { descOfEffect, spines } from '../effectConfig';
 import Loaders from './Loaders';
@@ -101,6 +101,8 @@ class Combat extends EventTarget {
 
   bullet?: Bullet;
 
+  drawHpTimer = 0;
+
   orientation = Orientation.TO_RIGHT_DOWN;
 
   effectBuff;
@@ -167,6 +169,7 @@ class Combat extends EventTarget {
 
     // 绘制扣除的血量
     if (this.lastHp - this.activePh > 0) {
+      clearTimeout(this.drawHpTimer);
       this.hpGraphics.beginFill(
         this.isEnemy ? config.BLOOD_COLOR_ENEMY : config.BLOOD_COLOR,
         0.5,
@@ -178,18 +181,10 @@ class Combat extends EventTarget {
         config.BLOOD_HEIGHT,
       );
       this.hpGraphics.endFill();
-      if (this.shield <= 0) {
-        setTimeout(() => {
-          this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
-          this.hpGraphics.drawRect(
-            lineStartX + (this.activePh / hpAndShield) * config.BLOOD_WIDTH,
-            lineY,
-            ((this.lastHp - this.activePh) / hpAndShield) * config.BLOOD_WIDTH,
-            config.BLOOD_HEIGHT,
-          );
-          this.hpGraphics.endFill();
-        }, 100);
-      }
+      this.drawHpTimer = window.setTimeout(() => {
+        this.lastHp = this.activePh;
+        this.drawHp();
+      }, 200);
     }
 
     // 绘制护盾
@@ -290,31 +285,43 @@ class Combat extends EventTarget {
   // 碰撞
   beatCollision(target: Combat, attackInfo?: RoundDesc) {
     const point = this.axisPoint?.clone();
-    if (target.axisPoint && this.axisPoint) {
-      const linearMove = new LinearMove(
-        this.container,
-        this.axisPoint,
-        target.axisPoint,
-      );
-      linearMove.addEventListener('end', () => {
-        if (point && target.axisPoint) {
-          const linearMove1 = new LinearMove(
-            this.container,
-            target.axisPoint,
-            point,
-          );
-          const bullet = new Bullet(this);
-          bullet.attack(bulletType.BUMP, target);
-          linearMove1.addEventListener('end', () => {
-            this.dispatchEvent(new Event('collisionEnd'));
-          });
-          linearMove1.move();
-        }
-      });
-      linearMove.move();
-    } else {
+    const bullet = new Bullet(this);
+    bullet.addEventListener('attackEnd', () => {
       this.dispatchEvent(new Event('collisionEnd'));
-    }
+    });
+    bullet.attack(bulletType.BUMP, target);
+    // if (target.axisPoint && this.axisPoint) {
+    //   // const point1 = getTwoPointCenter(this.axisPoint, target.axisPoint);
+    //   const linearMove = new LinearMove(
+    //     this.container,
+    //     this.axisPoint,
+    //     target.axisPoint,
+    //     {
+    //       time: 60 * 0.1, // 0.3s 完成
+    //     },
+    //   );
+    //   linearMove.addEventListener('end', () => {
+    //     if (point && target.axisPoint) {
+    //       const linearMove1 = new LinearMove(
+    //         this.container,
+    //         target.axisPoint,
+    //         point,
+    //         {
+    //           time: 60 * 0.15, // 0.3s 完成
+    //         },
+    //       );
+    //       const bullet = new Bullet(this);
+    //       bullet.attack(bulletType.BUMP, target);
+    //       linearMove1.addEventListener('end', () => {
+    //         this.dispatchEvent(new Event('collisionEnd'));
+    //       });
+    //       linearMove1.move();
+    //     }
+    //   });
+    //   linearMove.move();
+    // } else {
+    //   this.dispatchEvent(new Event('collisionEnd'));
+    // }
   }
 
   /**

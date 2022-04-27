@@ -4,11 +4,24 @@ import { Point } from 'pixi.js';
 import AxisPoint from './AxisPoint';
 import {
   getDistanceBetweenTwoPoints,
+  getTwoPointCenter,
   oneBezier,
   threeBezier,
   twoBezier,
 } from './utils';
 
+interface LinearMoveOptions {
+  /**
+   *  当同时出现@param time @param speed 时 优先使用 @param time
+   */
+  speed?: number; // 速度
+  time?: number; // 运动总时间
+}
+
+const defaultOptions = {
+  speed: 5,
+  time: 0,
+};
 // 使用贝塞尔曲线函数移动目标
 class LinearMove extends EventTarget {
   /**
@@ -17,11 +30,22 @@ class LinearMove extends EventTarget {
    * @param point0 移动起始点
    * @param point1 移动终点
    */
-  constructor(display: DisplayObject, point0: AxisPoint, point1: AxisPoint) {
+  constructor(
+    display: DisplayObject,
+    point0: Point,
+    point1: Point,
+    options?: LinearMoveOptions,
+  ) {
     super();
     this.display = display;
     this.point0 = point0;
     this.point1 = point1;
+    const option = {
+      ...defaultOptions,
+      ...options,
+    };
+    this.speed = option.speed;
+    this.time = option.time;
   }
 
   display;
@@ -32,7 +56,7 @@ class LinearMove extends EventTarget {
 
   moving = false;
 
-  speed = 3;
+  speed = 0;
 
   timeStep = 0;
 
@@ -53,7 +77,7 @@ class LinearMove extends EventTarget {
     this.moving = true;
     // 两点直接的距离
     const distance = getDistanceBetweenTwoPoints(this.point0, this.point1);
-    this.time = distance / this.speed;
+    this.time = this.time || distance / this.speed;
     if (!this.time) {
       this.onMoveEnd();
       return this;

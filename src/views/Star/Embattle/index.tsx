@@ -34,10 +34,14 @@ const Embattle = () => {
 
   const navigate = useNavigate();
 
-  const game = useGame();
+  const game = useGame({ width: 1600, offsetStartX: -330 });
+
+  useEffect(() => {
+    game.creatTerrain(); // 创建地形
+  }, [game]);
 
   // const race = Number(parsedQs.race) as Api.Game.race;
-  useFetchGameTerrain();
+  // useFetchGameTerrain();
   useFetchGamePK();
   useFetchGamePlanetUnits(planetId);
 
@@ -115,6 +119,11 @@ const Embattle = () => {
 
   return (
     <Box position='relative'>
+      <Box position='absolute' top={0} left={0} width={200}>
+        <Button onClick={() => game.clearSoldier()}>
+          <Text fontSize='20px'>Clear All</Text>
+        </Button>
+      </Box>
       <Box ref={ref} />
       <Flex
         style={{ userSelect: 'none' }}

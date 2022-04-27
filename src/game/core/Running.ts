@@ -448,7 +448,7 @@ class Running extends EventTarget {
   ): TrackDetail[] {
     const detail = Running.getDetails(attacks.detail, id, true);
 
-    return [
+    const attack: TrackDetail[] = [
       {
         id,
         type: desc_type,
@@ -462,10 +462,51 @@ class Running extends EventTarget {
           x: attacks.sender_point?.x,
           y: attacks.sender_point?.y,
         },
-        detail,
+        detail: [],
       },
       // ...detail,
     ];
+
+    let lastSender = '';
+    let lastReceive = '';
+    // 拆分动作 分解执行
+    detail.forEach((item, index) => {
+      /**
+       * 当前执行的攻击者和上一个攻击者相同
+       * 或者
+       * 当前执行的受害者和上一个受害者相同
+       * 并且
+       * 攻击者和受害者不是同一人(相同时没有攻击动画 忽略处理)
+       * 并且
+       * 只处理击退和碰撞
+       *
+       * 当满足以上条件时 拆分到下一个轨道执行
+       */
+      if (
+        (lastReceive === item.receive_id || lastSender === item.sender_id) &&
+        item.sender_id !== item.receive_id &&
+        (item.type === descType.BEAT_COLLISION ||
+          item.type === descType.BEAT_MOVE)
+      ) {
+        attack.push(item);
+      } else {
+        if (!attack[attack.length - 1].detail) {
+          attack[attack.length - 1].detail = [];
+        }
+        (attack[attack.length - 1].detail as TrackDetail[]).push(item);
+      }
+      if (
+        item.type === descType.BEAT_COLLISION ||
+        item.type === descType.BEAT_MOVE
+      ) {
+        lastSender = item.sender_id;
+        lastReceive = item.receive_id;
+      }
+      // lastSender = item.sender_id;
+      // lastReceive = item.receive_id;
+    });
+
+    return attack;
   }
 
   // 更加轨道详情获取小人
@@ -599,6 +640,37 @@ class Running extends EventTarget {
     }
     sendSoldier.once('attackEnd', () => {
       if (attacks.detail) {
+        // const sendIds = [];
+        // const receiveIds = [];
+        const ids: {
+          [id: string]: {
+            send: number;
+            receive: number;
+          };
+        } = {};
+        console.log(attacks.detail);
+        attacks.detail.forEach((item, index) => {
+          if (ids[item.receive_id]) {
+            ids[item.receive_id].receive += 1;
+          } else {
+            ids[item.receive_id] = {
+              send: 0,
+              receive: 1,
+            };
+          }
+          if (ids[item.sender_id]) {
+            ids[item.sender_id].send += 1;
+          } else {
+            ids[item.sender_id] = {
+              send: 1,
+              receive: 0,
+            };
+          }
+          // sendIds.push(item.receive_id);
+          // sendIds.push(item.receive_id);
+        });
+        console.log(ids);
+
         attacks.detail.forEach((item, index) => {
           this.runTrack(item, () => {
             if (index + 1 === attacks.detail?.length) {
@@ -624,31 +696,53 @@ class Running extends EventTarget {
       return null;
     }
     sendSoldier.once('collisionEnd', () => {
-      if (attacks.attackInfo) {
-        const { sender_vhp, receive_vhp } =
-          attacks.attackInfo as RoundDescCarshHarm;
-        if (
-          typeof sender_vhp.now_hp === 'number' &&
-          typeof sender_vhp.now_shield === 'number'
-        ) {
-          sendSoldier.setActiveHpWithShield(
-            sender_vhp.now_hp,
-            sender_vhp.now_shield,
-          );
-        }
-        if (
-          typeof receive_vhp.now_hp === 'number' &&
-          typeof receive_vhp.now_shield === 'number'
-        ) {
-          receiveSoldier.setActiveHpWithShield(
-            receive_vhp.now_hp,
-            receive_vhp.now_shield,
-          );
-        }
-      }
+      // if (attacks.attackInfo) {
+      //   const { sender_vhp, receive_vhp } =
+      //     attacks.attackInfo as RoundDescCarshHarm;
+      //   if (
+      //     typeof sender_vhp.now_hp === 'number' &&
+      //     typeof sender_vhp.now_shield === 'number'
+      //   ) {
+      //     sendSoldier.setActiveHpWithShield(
+      //       sender_vhp.now_hp,
+      //       sender_vhp.now_shield,
+      //     );
+      //   }
+      //   if (
+      //     typeof receive_vhp.now_hp === 'number' &&
+      //     typeof receive_vhp.now_shield === 'number'
+      //   ) {
+      //     receiveSoldier.setActiveHpWithShield(
+      //       receive_vhp.now_hp,
+      //       receive_vhp.now_shield,
+      //     );
+      //   }
+      // }
 
       callback();
     });
+    if (attacks.attackInfo) {
+      const { sender_vhp, receive_vhp } =
+        attacks.attackInfo as RoundDescCarshHarm;
+      if (
+        typeof sender_vhp.now_hp === 'number' &&
+        typeof sender_vhp.now_shield === 'number'
+      ) {
+        sendSoldier.setActiveHpWithShield(
+          sender_vhp.now_hp,
+          sender_vhp.now_shield,
+        );
+      }
+      if (
+        typeof receive_vhp.now_hp === 'number' &&
+        typeof receive_vhp.now_shield === 'number'
+      ) {
+        receiveSoldier.setActiveHpWithShield(
+          receive_vhp.now_hp,
+          receive_vhp.now_shield,
+        );
+      }
+    }
     sendSoldier.beatCollision(receiveSoldier);
     return sendSoldier;
   }
