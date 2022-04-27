@@ -142,6 +142,11 @@ class Game extends EventTarget {
       }
       this.removeActiveSolider();
     });
+    window.addEventListener('keyup', (e: KeyboardEvent) => {
+      if (e.key === 'Delete' && this.activeSolider) {
+        this.removeSoldier(this.activeSolider);
+      }
+    });
   }
 
   // 添加小人
