@@ -18,7 +18,6 @@ import Soldier from 'game/core/Soldier';
 import useGame from 'game/hooks/useGame';
 import { useStore } from 'state';
 import Game from 'game/core/Game';
-import { OptionProps, Select } from 'components/Select';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import PreviewList from './components/PreviewList';
 import Preview from './components/Preview';
@@ -46,20 +45,7 @@ const Embattle = () => {
   useFetchGamePlanetUnits(planetId);
 
   const planetInfo = useStore(p => p.planet.planetInfo);
-  const { TerrainInfo, plantUnits } = useStore(p => p.game);
-
-  const terrainSelect: OptionProps[] = useMemo(() => {
-    if (TerrainInfo?.length) {
-      return TerrainInfo.map((item, index) => ({
-        value: index,
-        label: item.map_name,
-        id: item.map_id,
-      }));
-    }
-    return [];
-  }, [TerrainInfo]);
-
-  const [activeTerrain, setActiveTerrain] = useState(terrainSelect[0]);
+  const { plantUnits } = useStore(p => p.game);
 
   const info = useMemo(() => {
     return planetInfo[planetId];
@@ -109,14 +95,6 @@ const Embattle = () => {
     }
   }, [plantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers, game]);
 
-  useEffect(() => {
-    if (TerrainInfo?.length) {
-      game.creatTerrain(TerrainInfo[activeTerrain.value].terrains);
-    } else {
-      game.creatTerrain([]);
-    }
-  }, [activeTerrain, TerrainInfo, game]);
-
   return (
     <Box position='relative'>
       <Box position='absolute' top={0} left={0} width={200}>
@@ -149,35 +127,15 @@ const Embattle = () => {
         top='490px'
         left='0'
       >
-        <Flex position='absolute' top='-80px'>
-          <Button onClick={() => game.clearSoldier()} padding={0} width='50px'>
-            <Text fontSize='20px'>清空</Text>
-          </Button>
+        <Box position='absolute' top='-80px'>
           <Button
-            onClick={() => {
-              navigate(
-                `/plunder-test?pid0=${planetId}&terrain=${
-                  activeTerrain.id
-                    ? JSON.stringify(activeTerrain)
-                    : JSON.stringify(terrainSelect[0])
-                }`,
-              );
-            }}
+            onClick={() => navigate(`/plunder-test?pid0=${planetId}`)}
             padding={0}
             width='50px'
           >
             <Text fontSize='20px'>战斗测试</Text>
           </Button>
-          <Box width={148}>
-            <Select
-              options={terrainSelect}
-              defaultId={0}
-              onChange={option => {
-                setActiveTerrain(option);
-              }}
-            />
-          </Box>
-        </Flex>
+        </Box>
         <PreviewList race={race} game={game} activeSoldier={activeSoldier} />
       </Box>
     </Box>
