@@ -26,6 +26,9 @@ import {
 } from 'uikit';
 import { Container } from './styled';
 import PreviewSoldier from './PreviewSoldier';
+import MiniRaceAni from './miniRace';
+
+import useSimulation from '../hooks/useSimulation';
 
 // transform: translateX(252px);
 const BorderCardStyled = styled(BorderCard)<{ show?: boolean }>`
@@ -109,6 +112,10 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     }),
   );
   const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [gameMock, setGameMock] = useState({});
+
+  const { getSimulation } = useSimulation();
 
   useEffect(() => {
     if (ref.current) {
@@ -139,134 +146,162 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     baseSkill,
   ]);
 
+  const getGameSimulation = React.useCallback(
+    async (from: number) => {
+      const res = await getSimulation(from);
+      setGameMock(res);
+    },
+    [getSimulation],
+  );
+
+  React.useEffect(() => {
+    setVisible(false);
+    if (activeSoldier) {
+      getGameSimulation(activeSoldier?.id);
+    }
+  }, [activeSoldier, getGameSimulation]);
+
   return (
-    <Box
-      // width='608px'
-      // height='476px'
-      pr='8px'
-      position='relative'
-      overflow='hidden'
-      onClick={e => e.stopPropagation()}
-      {...props}
-    >
-      <BorderCardStyled
-        show={!!activeSoldier}
-        isActive
-        width='600px'
-        height='476px'
+    <Box style={{ position: 'relative' }}>
+      <Box
+        // width='608px'
+        // height='476px'
+        pr='8px'
+        position='relative'
+        overflow='hidden'
+        onClick={e => e.stopPropagation()}
+        {...props}
       >
-        <Flex
-          mt='22px'
-          padding='0 28px 0 36px'
-          alignItems='center'
-          justifyContent='space-between'
+        <BorderCardStyled
+          show={!!activeSoldier}
+          isActive
+          width='600px'
+          height='476px'
         >
-          <Flex alignItems='center' flex={1}>
-            <Text bold shadow='primary'>
-              机甲1
-            </Text>
-            <Text mt='2px' ml='36px' fontSize='22px'>
-              LV 1
-            </Text>
-            <Button width={40} height={40} padding='0' variant='text'>
-              <Image
-                width={40}
-                height={40}
-                src='/images/commons/icon/Mecha_upgrade.png'
-              />
-            </Button>
-            <Button
-              onClick={removeHandle}
-              width={40}
-              height={40}
-              padding='0'
-              variant='text'
-            >
-              <Image
-                width={40}
-                height={40}
-                src='/images/commons/icon/delete.png'
-              />
-            </Button>
-          </Flex>
-          <Image width={40} height={40} src='/images/commons/icon/help.png' />
-        </Flex>
-        <Flex>
-          <PreviewSoldier style={{ flexShrink: 0 }} sid={1} />
-          <Flex flexWrap='wrap' justifyContent='space-between'>
-            <StatusItem
-              label='HP值'
-              value={activeSoldier?.options?.unitInfo?.hp || 0}
-              src='/images/commons/star/HP.png'
-              subSrc='/images/commons/icon/add_blood.png'
-            />
-            <StatusItem
-              label='耐久度'
-              value={activeSoldier?.options?.unitInfo?.hp || 0}
-              src='/images/commons/star/durability.png'
-              subSrc='/images/commons/icon/repair.png'
-            />
-            <StatusItem
-              label='防御值'
-              value={activeSoldier?.options?.unitInfo?.df || 0}
-              src='/images/commons/star/defense.png'
-            />
-            <StatusItem
-              label='攻击值'
-              value={activeSoldier?.options?.unitInfo?.ak || 0}
-              src='/images/commons/star/attackValue.png'
-            />
-          </Flex>
-        </Flex>
-        <Divider margin='8px auto 27px' width={532} />
-        <Flex>
-          <Box ml='22px' ref={ref} width={218} />
-          <Card overflow='auto' width={354} height={217} padding='16px'>
-            <Flex justifyContent='space-between'>
-              <Text fontSize='20' color='textTips'>
-                攻击距离
+          <Flex
+            mt='22px'
+            padding='0 28px 0 36px'
+            alignItems='center'
+            justifyContent='space-between'
+          >
+            <Flex alignItems='center' flex={1}>
+              <Text bold shadow='primary'>
+                机甲1
               </Text>
-              {activeSoldier?.options?.unitInfo?.ak_range_min ===
-              activeSoldier?.options?.unitInfo?.ak_range_max ? (
-                <Text fontSize='22'>{`${activeSoldier?.options?.unitInfo?.ak_range_min}`}</Text>
-              ) : (
-                <Text fontSize='22'>{`${activeSoldier?.options?.unitInfo?.ak_range_min} ~ ${activeSoldier?.options?.unitInfo?.ak_range_max}`}</Text>
-              )}
+              <Text mt='2px' ml='36px' fontSize='22px'>
+                LV 1
+              </Text>
+              <Button width={40} height={40} padding='0' variant='text'>
+                <Image
+                  width={40}
+                  height={40}
+                  src='/images/commons/icon/Mecha_upgrade.png'
+                />
+              </Button>
+              <Button
+                onClick={removeHandle}
+                width={40}
+                height={40}
+                padding='0'
+                variant='text'
+              >
+                <Image
+                  width={40}
+                  height={40}
+                  src='/images/commons/icon/delete.png'
+                />
+              </Button>
             </Flex>
-            <Flex justifyContent='space-between'>
-              <Text fontSize='20' color='textTips'>
-                移动距离
-              </Text>
-              {activeSoldier?.options?.unitInfo?.move_far && (
-                <Text fontSize='22'>
-                  {activeSoldier?.options?.unitInfo?.move_far}
+            <Image width={40} height={40} src='/images/commons/icon/help.png' />
+          </Flex>
+          <Flex alignItems='center' padding='0 10px'>
+            <PreviewSoldier
+              style={{
+                flexShrink: 0,
+                marginRight: '10px',
+                border: '1px solid #3F4147',
+                boxShadow: '0px 7px 3px 0px rgba(0, 0, 0, 0.35)',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                setVisible(!visible);
+              }}
+              sid={1}
+            />
+            <Flex flexWrap='wrap' justifyContent='space-between'>
+              <StatusItem
+                label='HP值'
+                value={activeSoldier?.options?.unitInfo?.hp || 0}
+                src='/images/commons/star/HP.png'
+                subSrc='/images/commons/icon/add_blood.png'
+              />
+              <StatusItem
+                label='耐久度'
+                value={activeSoldier?.options?.unitInfo?.hp || 0}
+                src='/images/commons/star/durability.png'
+                subSrc='/images/commons/icon/repair.png'
+              />
+              <StatusItem
+                label='防御值'
+                value={activeSoldier?.options?.unitInfo?.df || 0}
+                src='/images/commons/star/defense.png'
+              />
+              <StatusItem
+                label='攻击值'
+                value={activeSoldier?.options?.unitInfo?.ak || 0}
+                src='/images/commons/star/attackValue.png'
+              />
+            </Flex>
+          </Flex>
+          <Divider margin='8px auto 27px' width={532} />
+          <Flex>
+            <Box ml='22px' ref={ref} width={218} />
+            <Card overflow='auto' width={354} height={217} padding='16px'>
+              <Flex justifyContent='space-between'>
+                <Text fontSize='20' color='textTips'>
+                  攻击距离
                 </Text>
+                {activeSoldier?.options?.unitInfo?.ak_range_min ===
+                activeSoldier?.options?.unitInfo?.ak_range_max ? (
+                  <Text fontSize='22'>{`${activeSoldier?.options?.unitInfo?.ak_range_min}`}</Text>
+                ) : (
+                  <Text fontSize='22'>{`${activeSoldier?.options?.unitInfo?.ak_range_min} ~ ${activeSoldier?.options?.unitInfo?.ak_range_max}`}</Text>
+                )}
+              </Flex>
+              <Flex justifyContent='space-between'>
+                <Text fontSize='20' color='textTips'>
+                  移动距离
+                </Text>
+                {activeSoldier?.options?.unitInfo?.move_far && (
+                  <Text fontSize='22'>
+                    {activeSoldier?.options?.unitInfo?.move_far}
+                  </Text>
+                )}
+              </Flex>
+              {!!activeSoldier?.options?.unitInfo?.attack_effect && (
+                <Box>
+                  {Object.keys(
+                    activeSoldier?.options?.unitInfo?.attack_effect,
+                  ).map(item => {
+                    return (
+                      <Flex key={item} justifyContent='space-between'>
+                        <Text fontSize='20' color='textTips'>
+                          {item}
+                        </Text>
+                        <Text fontSize='22'>
+                          {JSON.stringify(
+                            (
+                              activeSoldier?.options?.unitInfo
+                                ?.attack_effect as any
+                            )?.[item],
+                          )}
+                        </Text>
+                      </Flex>
+                    );
+                  })}
+                </Box>
               )}
-            </Flex>
-            {!!activeSoldier?.options?.unitInfo?.attack_effect && (
-              <Box>
-                {Object.keys(
-                  activeSoldier?.options?.unitInfo?.attack_effect,
-                ).map(item => {
-                  return (
-                    <Flex key={item} justifyContent='space-between'>
-                      <Text fontSize='20' color='textTips'>
-                        {item}
-                      </Text>
-                      <Text fontSize='22'>
-                        {JSON.stringify(
-                          (
-                            activeSoldier?.options?.unitInfo
-                              ?.attack_effect as any
-                          )?.[item],
-                        )}
-                      </Text>
-                    </Flex>
-                  );
-                })}
-              </Box>
-            )}
-            {/* <Box>
+              {/* <Box>
                 {activeSoldier?.options?.unitInfo?.attack_effect?.boom && (
                   <Flex justifyContent='space-between'>
                     <Text fontSize='20' color='textTips'>
@@ -321,13 +356,16 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                   <Text fontSize='22'>{skillValue}</Text>
                 </Flex>
               </Box> */}
-            <Text mt='16px' fontSize='20' color='textTips'>
-              提高角色最终命中率，同时处于反击状态。每提升1级，
-              最终命中率提高3%，同时每提升1级，反击的为例提高。
-            </Text>
-          </Card>
-        </Flex>
-      </BorderCardStyled>
+              <Text mt='16px' fontSize='20' color='textTips'>
+                提高角色最终命中率，同时处于反击状态。每提升1级，
+                最终命中率提高3%，同时每提升1级，反击的为例提高。
+              </Text>
+            </Card>
+          </Flex>
+        </BorderCardStyled>
+      </Box>
+      {/* 种族动画预览 */}
+      {visible && !!activeSoldier && <MiniRaceAni mock={gameMock} />}
     </Box>
   );
 };
