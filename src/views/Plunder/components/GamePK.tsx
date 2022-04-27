@@ -94,7 +94,7 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   useEffect(() => {
     if (TerrainInfo?.length && ActiveTerrainInfo) {
-      game.creatTerrain(TerrainInfo[ActiveTerrainInfo?.value].terrains);
+      game.creatTerrain(TerrainInfo[ActiveTerrainInfo?.value]?.terrains);
     } else {
       game.creatTerrain([]);
     }
