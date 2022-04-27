@@ -18,8 +18,10 @@ import useGame from 'game/hooks/useGame';
 import Progress from 'components/Progress';
 import Game from 'game/core/Game';
 import { useStore } from 'state';
-import { useFetchGameTerrain } from 'state/game/hooks';
+import { useToast } from 'contexts/ToastsContext';
+import { useFetchGameMatchUser, useFetchGameTerrain } from 'state/game/hooks';
 import { GamePkState } from 'state/types';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 import {
   PeopleCard,
   Energy,
@@ -28,6 +30,7 @@ import {
   WaitPlunderList,
   PlunderPanel,
 } from './components';
+import usePlunder from './hooks/usePlunder';
 
 // const game = new Game({ width: 1400, height: 600 });
 
@@ -35,10 +38,14 @@ import {
 
 const Pk = () => {
   useFetchGameTerrain();
+  const { toastError } = useToast();
+
+  const { state, matchUser, mineUser } = useStore(p => p.game);
 
   const { TerrainInfo } = useStore(p => p.game);
 
-  const [state, setState] = useState(GamePkState.MATCHING);
+  const PKInfo = useStore(p => p.game.PKInfo);
+
   const [complete, setComplete] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -47,7 +54,7 @@ const Pk = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (ref.current && game) {
+    if (ref.current && game && PKInfo) {
       ref.current.appendChild(game.view);
       const loaders = game.loadResources();
       loaders.addEventListener('progress', event => {
@@ -56,8 +63,12 @@ const Pk = () => {
       loaders.addEventListener('complete', () => {
         setComplete(true);
       });
+    } else {
+      setTimeout(() => {
+        alert('未查询到作战信息');
+      }, 1000);
     }
-  }, [ref, game, setProgress, setComplete]);
+  }, [ref, game, setProgress, setComplete, PKInfo]);
 
   useEffect(() => {
     if (TerrainInfo?.length) {
@@ -79,7 +90,7 @@ const Pk = () => {
       </Flex>
       <Flex>
         <Flex flexDirection='column' alignItems='center'>
-          <PeopleCard mb='10px' active />
+          <PeopleCard mb='10px' active {...mineUser} />
           <Energy />
         </Flex>
         <Flex flex='1' flexDirection='column'>
@@ -94,16 +105,18 @@ const Pk = () => {
         </Flex>
 
         <Flex flexDirection='column' alignItems='center'>
-          <PeopleCard mb='10px' />
+          <PeopleCard mb='10px' {...matchUser} />
           <Energy />
         </Flex>
       </Flex>
-      <Flex alignItems='center' margin=' 36px auto' width='900px'>
-        <Box width='900px'>
-          <Progress width={`${progress}%`} />
-        </Box>
-        <Text>{progress}</Text>
-      </Flex>
+      {PKInfo && (
+        <Flex alignItems='center' margin=' 36px auto' width='900px'>
+          <Box width='900px'>
+            <Progress width={`${progress}%`} />
+          </Box>
+          <Text>{progress}</Text>
+        </Flex>
+      )}
 
       <Flex
         justifyContent='space-between'

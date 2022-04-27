@@ -111,11 +111,15 @@ export const useFetchGamePKTest = (
 
 export const useFetchGameMatchUser = () => {
   const dispatch = useDispatch();
-  const fetch = useCallback(() => {
-    dispatch(fetchGameMatchUserAsync());
-  }, [dispatch]);
+  const fetch = useCallback(
+    (out?: 1 | 2) => {
+      dispatch(fetchGameMatchUserAsync(out));
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
+    fetch(1);
     fetch();
   }, [fetch]);
 

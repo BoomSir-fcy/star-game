@@ -22,7 +22,9 @@ export const PeopleCardLeft = styled(PeopleCard)<{ state: GamePkState }>`
   transition: transform 0.3s;
   transform-origin: top left;
   transform: ${({ state }) =>
-    state === GamePkState.MATCHED || state === GamePkState.MATCHING
+    state === GamePkState.MATCHED ||
+    state === GamePkState.MATCHING ||
+    state === GamePkState.MATCH_ERROR
       ? 'scale(1.5) translate(0, 0)'
       : 'scale(1) translate(-150px, -20px)'};
   /* left: 0;
@@ -33,7 +35,7 @@ export const getPeopleRightTransform = ({ state }: StateProps) => {
   if (state === GamePkState.MATCHING) {
     return 'transform: scale(1.5) translate(800px, 0)';
   }
-  if (state === GamePkState.MATCHED) {
+  if (state === GamePkState.MATCHED || state === GamePkState.MATCH_ERROR) {
     return 'transform: scale(1.5) translate(0, 0)';
   }
   return 'transform: scale(1) translate(150px, -20px)';

@@ -185,7 +185,9 @@ interface GamePkInfo {
 
 export enum GamePkState {
   MATCHING, // 匹配中
+  MATCH_ERROR, // 匹配失败
   MATCHED, // 匹配完成
+  CONFIRMING, // 确定中
   START, // 开始战斗
   BATTLING, // 战斗中
   VICTORY, // 胜利
@@ -213,7 +215,8 @@ export interface GameState {
   process: any;
   PKInfo: null | GamePkInfo;
   state: GamePkState;
-  matchUser: null | number; // TODO:
+  matchUser: Api.Alliance.PlunderInfoMatchUser | null;
+  mineUser: Api.Alliance.PlunderInfoMatchUser | null;
   plunderPK: {
     [id: string]: {
       pkInfo: GamePkInfo;

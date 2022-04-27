@@ -49,7 +49,7 @@ interface GamePKProps {
 
 type idMap = { [xy: string]: string };
 
-const game = new Game({ width: 900, height: 600 });
+const game = new Game({ width: 900, height: 600, test: true });
 
 const GamePK: React.FC<GamePKProps> = () => {
   useFetchGameTerrain();
