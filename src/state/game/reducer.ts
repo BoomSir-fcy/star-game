@@ -82,9 +82,10 @@ export const fetchGamePKAsync =
   };
 
 export const fetchGamePKTestAsync =
-  (tag: string, maxRound?: number): AppThunk =>
+  (tag: string, maxRound?: number, terrain_id?: number): AppThunk =>
   async dispatch => {
-    const PKInfo = await fetchGamePKTest(tag, maxRound);
+    dispatch(setPKInfo(null));
+    const PKInfo = await fetchGamePKTest(tag, maxRound, terrain_id);
     dispatch(setPKInfo(PKInfo));
   };
 

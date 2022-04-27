@@ -153,6 +153,7 @@ class Game extends EventTarget {
   addSoldier(soldier: Soldier) {
     this.soldiers.push(soldier);
     this.boards.container.sortableChildren = true;
+    this.boards.container.zIndex = 1;
     this.boards.container.addChild(soldier.container);
     soldier.container
       .on('pointerdown', () => {

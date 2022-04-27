@@ -53,8 +53,6 @@ class Soldier extends Combat {
 
   id = 0;
 
-  sid?: string;
-
   unique_id = 0;
 
   attackId = '';

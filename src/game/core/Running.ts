@@ -648,7 +648,6 @@ class Running extends EventTarget {
             receive: number;
           };
         } = {};
-        console.log(attacks.detail);
         attacks.detail.forEach((item, index) => {
           if (ids[item.receive_id]) {
             ids[item.receive_id].receive += 1;
@@ -669,11 +668,13 @@ class Running extends EventTarget {
           // sendIds.push(item.receive_id);
           // sendIds.push(item.receive_id);
         });
-        console.log(ids);
 
+        let trackIndex = 0;
         attacks.detail.forEach((item, index) => {
           this.runTrack(item, () => {
-            if (index + 1 === attacks.detail?.length) {
+            trackIndex += 1;
+
+            if (trackIndex === attacks.detail?.length) {
               callback();
             }
           });
@@ -696,52 +697,52 @@ class Running extends EventTarget {
       return null;
     }
     sendSoldier.once('collisionEnd', () => {
-      // if (attacks.attackInfo) {
-      //   const { sender_vhp, receive_vhp } =
-      //     attacks.attackInfo as RoundDescCarshHarm;
-      //   if (
-      //     typeof sender_vhp.now_hp === 'number' &&
-      //     typeof sender_vhp.now_shield === 'number'
-      //   ) {
-      //     sendSoldier.setActiveHpWithShield(
-      //       sender_vhp.now_hp,
-      //       sender_vhp.now_shield,
-      //     );
-      //   }
-      //   if (
-      //     typeof receive_vhp.now_hp === 'number' &&
-      //     typeof receive_vhp.now_shield === 'number'
-      //   ) {
-      //     receiveSoldier.setActiveHpWithShield(
-      //       receive_vhp.now_hp,
-      //       receive_vhp.now_shield,
-      //     );
-      //   }
-      // }
+      if (attacks.attackInfo) {
+        const { sender_vhp, receive_vhp } =
+          attacks.attackInfo as RoundDescCarshHarm;
+        if (
+          typeof sender_vhp.now_hp === 'number' &&
+          typeof sender_vhp.now_shield === 'number'
+        ) {
+          sendSoldier.setActiveHpWithShield(
+            sender_vhp.now_hp,
+            sender_vhp.now_shield,
+          );
+        }
+        if (
+          typeof receive_vhp.now_hp === 'number' &&
+          typeof receive_vhp.now_shield === 'number'
+        ) {
+          receiveSoldier.setActiveHpWithShield(
+            receive_vhp.now_hp,
+            receive_vhp.now_shield,
+          );
+        }
+      }
 
       callback();
     });
     if (attacks.attackInfo) {
-      const { sender_vhp, receive_vhp } =
-        attacks.attackInfo as RoundDescCarshHarm;
-      if (
-        typeof sender_vhp.now_hp === 'number' &&
-        typeof sender_vhp.now_shield === 'number'
-      ) {
-        sendSoldier.setActiveHpWithShield(
-          sender_vhp.now_hp,
-          sender_vhp.now_shield,
-        );
-      }
-      if (
-        typeof receive_vhp.now_hp === 'number' &&
-        typeof receive_vhp.now_shield === 'number'
-      ) {
-        receiveSoldier.setActiveHpWithShield(
-          receive_vhp.now_hp,
-          receive_vhp.now_shield,
-        );
-      }
+      // const { sender_vhp, receive_vhp } =
+      //   attacks.attackInfo as RoundDescCarshHarm;
+      // if (
+      //   typeof sender_vhp.now_hp === 'number' &&
+      //   typeof sender_vhp.now_shield === 'number'
+      // ) {
+      //   sendSoldier.setActiveHpWithShield(
+      //     sender_vhp.now_hp,
+      //     sender_vhp.now_shield,
+      //   );
+      // }
+      // if (
+      //   typeof receive_vhp.now_hp === 'number' &&
+      //   typeof receive_vhp.now_shield === 'number'
+      // ) {
+      //   receiveSoldier.setActiveHpWithShield(
+      //     receive_vhp.now_hp,
+      //     receive_vhp.now_shield,
+      //   );
+      // }
     }
     sendSoldier.beatCollision(receiveSoldier);
     return sendSoldier;
@@ -931,6 +932,26 @@ class Running extends EventTarget {
             info.desc_type,
             `${round}-${_track}`,
             self,
+          ),
+        );
+      }
+      if (info.desc_type === descType.ADD_TERRAIN_FIRING) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.add_terrain_firing,
+            info.desc_type,
+            `${round}-${_track}`,
+            true,
+          ),
+        );
+      }
+      if (info.desc_type === descType.TERRAIN_FIRING) {
+        details.push(
+          ...Running.getAttackTracks(
+            info.terrain_firing,
+            info.desc_type,
+            `${round}-${_track}`,
+            true,
           ),
         );
       }

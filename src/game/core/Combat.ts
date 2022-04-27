@@ -65,6 +65,8 @@ class Combat extends EventTarget {
 
   running = false;
 
+  sid?: string;
+
   hp = 0; // 总生命值
 
   activePh = 0; // 当前生命值
@@ -286,6 +288,9 @@ class Combat extends EventTarget {
   beatCollision(target: Combat, attackInfo?: RoundDesc) {
     const point = this.axisPoint?.clone();
     const bullet = new Bullet(this);
+    // bullet.addEventListener('moveEnd', () => {
+    //   this.dispatchEvent(new Event('collisionEnd'));
+    // });
     bullet.addEventListener('attackEnd', () => {
       this.dispatchEvent(new Event('collisionEnd'));
     });
@@ -400,7 +405,6 @@ class Combat extends EventTarget {
   }
 
   attackParabolaEffect(target: Combat, effect: BulletType) {
-    console.log(121212211);
     // const loaders = new Loaders();
 
     // loaders.load(spines);
