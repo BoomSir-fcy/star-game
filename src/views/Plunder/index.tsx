@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, Fringe, Button, Flex, RefreshButton, Spinner } from 'uikit';
 import styled from 'styled-components';
 import Layout from 'components/Layout';
@@ -23,6 +23,7 @@ import {
   ButtonBox,
   GameBox,
 } from './components/styled';
+import useFetchMatchUser from './hooks/useFetchMatchUser';
 
 const Plunder = () => {
   // const [state, setState] = useState(GamePkState.MATCHING);
@@ -30,7 +31,21 @@ const Plunder = () => {
 
   const dispatch = useDispatch();
 
-  const { fetch } = useFetchGameMatchUser();
+  const { fetch, mineData, data, loading } = useFetchMatchUser();
+
+  useEffect(() => {
+    if (loading) {
+      dispatch(setState(GamePkState.MATCHING));
+    } else {
+      dispatch(setState(GamePkState.MATCHED));
+    }
+  }, [loading, dispatch]);
+
+  useEffect(() => {
+    console.log(8888);
+    fetch(1); //
+    fetch();
+  }, [fetch]);
 
   const navigate = useNavigate();
 
@@ -63,7 +78,7 @@ const Plunder = () => {
           </Button>
           <RefreshButton
             disabled={!!GamePkState.MATCHING}
-            onClick={fetch}
+            onClick={() => fetch()}
             variant='vsRefresh'
           />
         </ButtonBox>

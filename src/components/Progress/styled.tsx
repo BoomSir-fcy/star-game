@@ -6,7 +6,7 @@ export const Progressbar = styled.div`
   position: relative;
   display: block;
   /* width: 560px; */
-  /* height: 20px; */
+  height: 20px;
   /* padding: 10px 20px; */
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 16px;

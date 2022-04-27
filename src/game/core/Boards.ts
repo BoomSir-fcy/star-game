@@ -83,7 +83,7 @@ class Boards extends EventTarget {
       .on('pointerupoutside', () => {
         this.onDragEnd();
       })
-      .on('pointermove', () => this.onDragMove());
+      .on('pointermove', e => this.onDragMove(e));
   }
 
   // 滚轮事件 缩放
@@ -149,6 +149,7 @@ class Boards extends EventTarget {
 
   onDragStart(event: InteractionEvent) {
     if (this.enableDrag) {
+      this.startPoint = { x: event.data.global.x, y: event.data.global.y };
       this.dragData = event.data;
       this.dragging = true;
     }

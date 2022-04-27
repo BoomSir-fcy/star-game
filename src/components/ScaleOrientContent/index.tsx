@@ -33,25 +33,27 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   const dispatch = useDispatch();
 
   const handleResize = useCallback(() => {
-    const { innerHeight, innerWidth } = window;
+    const { clientHeight, clientWidth } = window.document.body;
 
-    const maxV = Math.max(innerWidth, innerHeight);
-    const minV = maxV === innerWidth ? innerHeight : innerWidth;
+    const maxV = Math.max(clientWidth, clientHeight);
+    const minV = Math.min(clientWidth, clientHeight);
     const rateMax = maxV / APP_WIDTH;
     const rateMin = minV / APP_HEIGHT;
 
     // 处理高度不够显示不全bug
     const rate = Math.min(rateMax, rateMin);
 
+    console.log(rateMax, rateMin);
+
     // dispatch(setScale)
     setScale(rate);
-    setMinHeight(Math.min(innerWidth, innerHeight));
-    setCHeight(innerHeight);
+    setMinHeight(Math.min(clientWidth, clientHeight));
+    setCHeight(clientHeight);
 
     dispatch(
       setGlobalClient({
-        width: innerWidth,
-        height: innerHeight,
+        width: clientWidth,
+        height: clientHeight,
       }),
     );
     dispatch(setGlobalScale(rate));

@@ -151,13 +151,15 @@ class Chequer {
     this.bunny.addChild(this.stateSprite);
     this.stateSprite.visible = false;
 
-    const text = new Text(`x${this.axisX}, ${this.axisY}`, {
-      fill: 0xffffff,
-      fontSize: 16,
-    });
-    text.x = -30;
-    text.y = -28;
-    this.bunny.addChild(text);
+    if (test) {
+      const text = new Text(`x${this.axisX}, ${this.axisY}`, {
+        fill: 0xffffff,
+        fontSize: 16,
+      });
+      text.x = -30;
+      text.y = -28;
+      this.bunny.addChild(text);
+    }
   }
 
   // 底色是不规则渲染 所以事件范围也不规则
