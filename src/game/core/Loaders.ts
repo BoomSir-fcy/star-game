@@ -8,10 +8,21 @@ interface LoadItem {
 class Loaders extends EventTarget {
   loader = new Loader();
 
+  loaded = false;
+
+  loading = false;
+
   static progressEvent = new ProgressEvent('progress');
 
   load(items: LoadItem[]) {
-    console.log('===========');
+    if (this.loading) {
+      return;
+    }
+    if (this.loaded) {
+      this.dispatchEvent(new Event('complete'));
+      return;
+    }
+    this.loading = true;
     items.forEach(item => {
       this.loader.add(item.name, item.src);
     });
@@ -21,6 +32,8 @@ class Loaders extends EventTarget {
       );
     });
     this.loader.onComplete.add(_loader => {
+      this.loaded = true;
+      this.loading = false;
       this.dispatchEvent(new Event('complete'));
     });
     this.loader.load();
@@ -28,7 +41,6 @@ class Loaders extends EventTarget {
 
   async loadSpineAll() {
     this.load(spines);
-    console.log(this);
   }
 }
 const loaders = new Loaders();

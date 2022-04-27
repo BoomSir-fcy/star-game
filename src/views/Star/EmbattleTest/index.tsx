@@ -16,6 +16,7 @@ import {
   useFetchGameTerrain,
 } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
+import { OptionProps, Select } from 'components/Select';
 import { useStore } from 'state';
 import useGame from 'game/hooks/useGame';
 import Game from 'game/core/Game';
@@ -46,6 +47,20 @@ const Embattle = () => {
   const { TerrainInfo, plantUnits } = useStore(p => p.game);
   const testPlantUnits = useStore(p => p.game.testPlantUnits);
   const planetInfo = useStore(p => p.planet.planetInfo);
+
+  const terrainSelect: OptionProps[] = useMemo(() => {
+    if (TerrainInfo?.length) {
+      return TerrainInfo.map((item, index) => ({
+        value: index,
+        label: item.map_name,
+        id: item.map_id,
+      }));
+    }
+    return [];
+  }, [TerrainInfo]);
+
+  const [activeTerrain, setActiveTerrain] = useState(terrainSelect[0]);
+
   const info = useMemo(() => {
     return planetInfo[planetId];
   }, [planetInfo, planetId]);
@@ -110,14 +125,12 @@ const Embattle = () => {
   ]);
 
   useEffect(() => {
-    if (TerrainInfo?.length && ref.current) {
-      // ref.current.style.transform = 'rotate(-90deg)';
-      // game.boards.container.rotation = Math.PI / 2;
-      game.creatTerrain(TerrainInfo[0].terrains);
+    if (TerrainInfo?.length) {
+      game.creatTerrain(TerrainInfo[activeTerrain.value].terrains);
     } else {
       game.creatTerrain([]);
     }
-  }, [TerrainInfo, ref, game]);
+  }, [activeTerrain, TerrainInfo, game]);
 
   return (
     <Box position='relative'>
@@ -151,7 +164,15 @@ const Embattle = () => {
             <Text fontSize='20px'>清空</Text>
           </Button>
           <Button
-            onClick={() => navigate(`/plunder-test?pid0=${planetId}`)}
+            onClick={() =>
+              navigate(
+                `/plunder-test?pid0=${planetId}&terrain=${
+                  activeTerrain.id
+                    ? JSON.stringify(activeTerrain)
+                    : JSON.stringify(terrainSelect[0])
+                }`,
+              )
+            }
             padding={0}
             width='50px'
           >
@@ -164,6 +185,13 @@ const Embattle = () => {
           >
             <Text fontSize='20px'>动画模拟</Text>
           </Button>
+          <Select
+            options={terrainSelect}
+            defaultId={0}
+            onChange={option => {
+              setActiveTerrain(option);
+            }}
+          />
         </Flex>
         <PreviewList race={race} game={game} activeSoldier={activeSoldier} />
       </Box>

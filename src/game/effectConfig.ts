@@ -305,6 +305,16 @@ export const descOfEffect = {
     add: true,
     remove: false,
   },
+  [descType.ADD_TERRAIN_FIRING]: {
+    effect: EffectType.ADD_FIRING,
+    add: true,
+    remove: false,
+  },
+  [descType.TERRAIN_FIRING]: {
+    effect: EffectType.FIRING,
+    add: true,
+    remove: false,
+  },
 };
 
 export const spines = [
