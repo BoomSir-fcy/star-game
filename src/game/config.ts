@@ -18,9 +18,10 @@ const config = {
   OFFSET_START_Y: -300, // (0, 0) 坐标Y轴偏移量
 
   BOARD_POSITION_SELF: BoardPositionSelf.TOP_LEFT, // 自己棋盘的位置
+  TWO_BOARDS_OFFSET: 16,
 
   SCALE_BASE: 0.2,
-  MAX_SCALE: 1.5,
+  MAX_SCALE: 2,
   MIN_SCALE: 0.5,
 
   BLOOD_PER: 100, // 每格血条代表多少血量

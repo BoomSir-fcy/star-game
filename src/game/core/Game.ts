@@ -25,6 +25,8 @@ export interface GameOptionsProps {
   test?: boolean;
   enableDrag?: boolean;
   enableSoliderDrag?: boolean;
+  offsetStartX?: number;
+  offsetStartY?: number;
 }
 /**
  * 游戏入口
@@ -39,16 +41,26 @@ class Game extends EventTarget {
       test,
       enableDrag = true,
       enableSoliderDrag = true,
+      offsetStartY,
+      offsetStartX,
     } = options || {};
     const _width = width || config.WIDTH;
     const _height = height || config.HEIGHT;
-    this.boards = new Boards({ width, height, test, enableDrag });
+    this.boards = new Boards({
+      width,
+      height,
+      test,
+      enableDrag,
+      offsetStartX,
+      offsetStartY,
+    });
+    console.log(offsetStartY, offsetStartX);
     this.app = new Application({
       width: _width,
       height: _height,
       resolution: config.resolution,
       antialias: true,
-      backgroundAlpha: 0.5,
+      backgroundAlpha: test ? 0.5 : 0,
     });
     this.enableSoliderDrag = enableSoliderDrag;
     // 添加棋盘
@@ -68,6 +80,8 @@ class Game extends EventTarget {
   app;
 
   boards;
+
+  boardsCreated = false;
 
   view = document.createElement('canvas');
 
@@ -115,6 +129,8 @@ class Game extends EventTarget {
 
   creatTerrain(TerrainInfo?: Api.Game.TerrainInfo[]) {
     this.boards.drawChequers(this.test, TerrainInfo);
+    this.boardsCreated = true;
+    this.dispatchEvent(new Event('boardsCreated'));
   }
 
   // 取消选中

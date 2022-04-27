@@ -194,8 +194,8 @@ const GamePK: React.FC<GamePKProps> = () => {
       setLoaded(true);
       const loaders = game.loadResources();
       loaders.addEventListener('progress', event => {
-        // console.log(event);
-        setProgress((event as ProgressEvent).total);
+        console.log(event);
+        setProgress((event as ProgressEvent).loaded);
       });
       loaders.addEventListener('complete', () => {
         initHandle();
@@ -357,12 +357,15 @@ const GamePK: React.FC<GamePKProps> = () => {
           </Box>
         </Box>
         <Box>
+          <Text>{progress}</Text>
           <Progress width={`${progress}%`} />
           <Box ref={ref} />
         </Box>
         <Box ml='20px'>
           <Box>
-            <Text>战斗速度</Text>
+            <Box mt='50px'>
+              <Text>战斗速度</Text>
+            </Box>
             <Text>X {running?.rate}</Text>
             <Button
               onClick={() => {
