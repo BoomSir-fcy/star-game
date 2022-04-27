@@ -110,12 +110,14 @@ const Embattle = () => {
   ]);
 
   useEffect(() => {
-    if (TerrainInfo?.length) {
+    if (TerrainInfo?.length && ref.current) {
+      // ref.current.style.transform = 'rotate(-90deg)';
+      // game.boards.container.rotation = Math.PI / 2;
       game.creatTerrain(TerrainInfo[0].terrains);
     } else {
       game.creatTerrain([]);
     }
-  }, [TerrainInfo, game]);
+  }, [TerrainInfo, ref, game]);
 
   return (
     <Box position='relative'>
