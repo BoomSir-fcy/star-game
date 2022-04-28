@@ -1,9 +1,12 @@
+import AxisPoint from 'game/core/AxisPoint';
 import { getAddActiveSoliderEvent } from 'game/core/event';
 import Game from 'game/core/Game';
 import Soldier from 'game/core/Soldier';
+import { Point } from 'pixi.js';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
 import { Box, Text, BgCard, Flex, BorderCard } from 'uikit';
+import { isApp } from 'utils/client';
 import PreviewSoldier from './PreviewSoldier';
 
 interface PreviewListProps {
@@ -43,19 +46,24 @@ const PreviewList: React.FC<PreviewListProps> = ({
   const dragStartHandle = useCallback(
     (event: React.PointerEvent<HTMLDivElement>, item: Api.Game.UnitInfo) => {
       event.preventDefault();
-      const soldier = new Soldier({
+      const options = {
         x: 0,
         y: 0,
         race,
         srcId: `${item.unique_id}`,
-        enableDrag: false,
+        enableDrag: true,
         id: item.unique_id,
         unique_id: item.unique_id,
         unitInfo: item,
         isEnemy: false,
         hp: 100,
         test: true,
-      });
+      };
+      if (isApp()) {
+        game.addDragPreSoldierApp(options);
+        return;
+      }
+      const soldier = new Soldier(options);
       setMoving(true);
       game?.addDragPreSoldier(soldier);
     },

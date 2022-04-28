@@ -8,6 +8,7 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Text, Flex } from 'uikit';
 import { Api } from 'apis';
+import { isAppAndVerticalScreen } from 'utils/detectOrient';
 import {
   useFetchGamePlanetUnits,
   useFetchUnitList,
@@ -125,12 +126,17 @@ const Embattle = () => {
   ]);
 
   useEffect(() => {
+    if (ref.current && isAppAndVerticalScreen()) {
+      ref.current.style.transform = 'rotate(-90deg)';
+      ref.current.style.touchAction = 'none';
+      game.boards.container.rotation = Math.PI / 2;
+    }
     if (TerrainInfo?.length) {
       game.creatTerrain(TerrainInfo[activeTerrain.value].terrains);
     } else {
       game.creatTerrain([]);
     }
-  }, [activeTerrain, TerrainInfo, game]);
+  }, [activeTerrain, ref, TerrainInfo, game]);
 
   return (
     <Box position='relative'>
