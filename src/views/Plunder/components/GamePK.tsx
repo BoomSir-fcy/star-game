@@ -166,6 +166,7 @@ const GamePK: React.FC<GamePKProps> = () => {
     (slot: RoundsProps) => {
       const _running = new Running(game, slot);
       setRunning(_running);
+      _running.play();
       setRunningInfo(prev => {
         return {
           ...prev,
