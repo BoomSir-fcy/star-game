@@ -114,7 +114,7 @@ class Running extends EventTarget {
 
   init() {
     this.getTracks();
-    this.runHandle();
+    // this.runHandle();
   }
 
   // start() {
@@ -124,6 +124,18 @@ class Running extends EventTarget {
   play() {
     this.paused = false;
     this.runHandle();
+    this.dispatchEvent(new Event('play'));
+  }
+
+  // 跳过当前回合
+  skipStep() {
+    // TODO:
+    console.log(this);
+  }
+
+  skipAll() {
+    // TODO: 跳过所有回合
+    console.log(this);
   }
 
   reStart() {
@@ -169,6 +181,7 @@ class Running extends EventTarget {
     if (this.paused) return;
     this.playing = true;
     const track = this.trackDetails[this.trackIndex];
+    this.dispatchEvent(new CustomEvent('updateTrack', { detail: track }));
     this.runTrack(track, () => {
       this.runningHandle();
     });

@@ -162,7 +162,7 @@ export interface RoundInitState {
   base_id: number;
 }
 
-interface GamePkInfo {
+export interface GamePkInfo {
   init: {
     base_unit: MapBaseUnits;
     blue_units: Api.Game.UnitPlanetPos[];

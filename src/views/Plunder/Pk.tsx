@@ -19,7 +19,11 @@ import Progress from 'components/Progress';
 import Game from 'game/core/Game';
 import { useStore } from 'state';
 import { useToast } from 'contexts/ToastsContext';
-import { useFetchGameMatchUser, useFetchGameTerrain } from 'state/game/hooks';
+import {
+  useFetchGameMatchUser,
+  useFetchGamePK,
+  useFetchGameTerrain,
+} from 'state/game/hooks';
 import { GamePkState } from 'state/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import {
@@ -31,6 +35,7 @@ import {
   PlunderPanel,
 } from './components';
 import usePlunder from './hooks/usePlunder';
+import { usePK } from './hooks/usePK';
 
 // const game = new Game({ width: 1400, height: 600 });
 
@@ -47,28 +52,50 @@ const Pk = () => {
   const PKInfo = useStore(p => p.game.PKInfo);
 
   const [complete, setComplete] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
 
   const game = useGame({ width: 1400, height: 600 });
   const [progress, setProgress] = useState(0);
 
+  // TODO: 要干掉
+  useFetchGamePK(5000000000000004, 5000000000000002, 10);
+
+  console.log(PKInfo);
+
+  const { initHandle } = usePK(game);
+
   useEffect(() => {
-    if (ref.current && game && PKInfo) {
-      ref.current.appendChild(game.view);
-      const loaders = game.loadResources();
-      loaders.addEventListener('progress', event => {
-        setProgress((event as ProgressEvent).loaded);
-      });
-      loaders.addEventListener('complete', () => {
-        setComplete(true);
-      });
-    } else {
-      setTimeout(() => {
-        alert('未查询到作战信息');
-      }, 1000);
+    if (!mounted) {
+      if (ref.current && game && PKInfo) {
+        console.log(121221);
+        setMounted(true);
+        ref.current.appendChild(game.view);
+        const loaders = game.loadResources();
+        loaders.addEventListener('progress', event => {
+          setProgress((event as ProgressEvent).loaded);
+        });
+        loaders.addEventListener('complete', () => {
+          setComplete(true);
+          initHandle(PKInfo);
+        });
+      } else {
+        setTimeout(() => {
+          // alert('未查询到作战信息');
+        }, 1000);
+      }
     }
-  }, [ref, game, setProgress, setComplete, PKInfo]);
+  }, [
+    ref,
+    game,
+    setProgress,
+    setMounted,
+    mounted,
+    setComplete,
+    PKInfo,
+    initHandle,
+  ]);
 
   useEffect(() => {
     if (TerrainInfo?.length) {
