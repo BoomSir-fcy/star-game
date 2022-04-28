@@ -71,12 +71,8 @@ export const fetchGamePlunderPk = async (id = '5000000000000002') => {
   return fetchGamePKTest(`t-${id}`);
 };
 
-export const fetchGameMatchUser = async () => {
-  return new Promise((res, rej) => {
-    setTimeout(() => {
-      res({});
-    }, 2000);
-  });
+export const fetchGameMatchUser = async (our: 1 | 2 = 2) => {
+  return Api.AllianceApi.alliancePlunderInfo(our);
 };
 
 export const fetchGamePKTest = async (

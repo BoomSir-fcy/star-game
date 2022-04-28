@@ -19,6 +19,18 @@ export class AllianceApi extends Http {
     return res;
   }
 
+  // 匹配用户
+  async alliancePlunderInfo(
+    our: 1 | 2,
+  ): Promise<Api.Response<Api.Alliance.PlunderInfoMatchUser>> {
+    return this.get('alliance/plunder/info', { our });
+  }
+
+  // 行星联盟掠夺
+  async alliancePlunder(params: Api.Alliance.Plunder): Promise<any> {
+    return this.post('alliance/plunder', params);
+  }
+
   // 行星联盟提取资源
   async AllianceExtract() {
     const res = await this.post('buildings/store/extract');

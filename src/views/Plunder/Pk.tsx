@@ -13,10 +13,15 @@ import {
 import styled from 'styled-components';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
+import { GlobalVideo } from 'components/Video';
+import useGame from 'game/hooks/useGame';
+import Progress from 'components/Progress';
 import Game from 'game/core/Game';
 import { useStore } from 'state';
-import { useFetchGameTerrain } from 'state/game/hooks';
+import { useToast } from 'contexts/ToastsContext';
+import { useFetchGameMatchUser, useFetchGameTerrain } from 'state/game/hooks';
 import { GamePkState } from 'state/types';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 import {
   PeopleCard,
   Energy,
@@ -25,23 +30,45 @@ import {
   WaitPlunderList,
   PlunderPanel,
 } from './components';
+import usePlunder from './hooks/usePlunder';
 
-const game = new Game({ width: 900, height: 600 });
+// const game = new Game({ width: 1400, height: 600 });
+
+// const GAME_LOAD_RATE = 0.9; // 加载进度条占的比值
 
 const Pk = () => {
   useFetchGameTerrain();
+  const { toastError } = useToast();
+
+  const { state, matchUser, mineUser } = useStore(p => p.game);
 
   const { TerrainInfo } = useStore(p => p.game);
 
-  const [state, setState] = useState(GamePkState.MATCHING);
+  const PKInfo = useStore(p => p.game.PKInfo);
+
+  const [complete, setComplete] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
 
+  const game = useGame({ width: 1400, height: 600 });
+  const [progress, setProgress] = useState(0);
+
   useEffect(() => {
-    if (ref.current) {
+    if (ref.current && game && PKInfo) {
       ref.current.appendChild(game.view);
+      const loaders = game.loadResources();
+      loaders.addEventListener('progress', event => {
+        setProgress((event as ProgressEvent).loaded);
+      });
+      loaders.addEventListener('complete', () => {
+        setComplete(true);
+      });
+    } else {
+      setTimeout(() => {
+        alert('未查询到作战信息');
+      }, 1000);
     }
-  }, [ref]);
+  }, [ref, game, setProgress, setComplete, PKInfo]);
 
   useEffect(() => {
     if (TerrainInfo?.length) {
@@ -49,7 +76,7 @@ const Pk = () => {
     } else {
       game.creatTerrain([]);
     }
-  }, [TerrainInfo]);
+  }, [TerrainInfo, game]);
 
   return (
     <Layout>
@@ -63,7 +90,7 @@ const Pk = () => {
       </Flex>
       <Flex>
         <Flex flexDirection='column' alignItems='center'>
-          <PeopleCard mb='10px' active />
+          <PeopleCard mb='10px' active {...mineUser} />
           <Energy />
         </Flex>
         <Flex flex='1' flexDirection='column'>
@@ -78,14 +105,27 @@ const Pk = () => {
         </Flex>
 
         <Flex flexDirection='column' alignItems='center'>
-          <PeopleCard mb='10px' />
+          <PeopleCard mb='10px' {...matchUser} />
           <Energy />
         </Flex>
       </Flex>
+      {PKInfo && (
+        <Flex alignItems='center' margin=' 36px auto' width='900px'>
+          <Box width='900px'>
+            <Progress width={`${progress}%`} />
+          </Box>
+          <Text>{progress}</Text>
+        </Flex>
+      )}
+
       <Flex
-        mt='-50px'
         justifyContent='space-between'
-        style={{ transform: 'translateZ(1px)' }}
+        position='absolute'
+        bottom='-1000px'
+        style={{
+          transform: `translateZ(1px) translateY(${complete ? -960 : 0}px)`,
+          transition: 'all 0.5s',
+        }}
       >
         <WaitPlunderList />
         <PlunderPanel />

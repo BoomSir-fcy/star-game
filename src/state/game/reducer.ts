@@ -1,4 +1,5 @@
 import { createReducer, createSlice } from '@reduxjs/toolkit';
+import { Api } from 'apis';
 import { AppThunk, GamePkState, GameState } from 'state/types';
 import {
   fetchGameMatchUser,
@@ -21,6 +22,7 @@ export const initialState: GameState = {
   plunderPK: {},
   state: GamePkState.MATCHING,
   matchUser: null,
+  mineUser: null,
   TerrainInfo: [
     {
       map_id: 0,
@@ -87,12 +89,21 @@ export const fetchGamePKTestAsync =
     dispatch(setPKInfo(PKInfo));
   };
 
-export const fetchGameMatchUserAsync = (): AppThunk => async dispatch => {
-  dispatch(setState(GamePkState.MATCHING));
-  const matchUser = await fetchGameMatchUser();
-  dispatch(setMatchUser(matchUser));
-  dispatch(setState(GamePkState.MATCHED));
-};
+export const fetchGameMatchUserAsync =
+  (our?: 1 | 2): AppThunk =>
+  async dispatch => {
+    dispatch(setState(GamePkState.MATCHING));
+    const res = await fetchGameMatchUser(our);
+    if (Api.isSuccess(res) && res.data) {
+      if (our === 1) {
+        dispatch(setMineUser(res.data));
+      }
+      dispatch(setMatchUser(res.data));
+      dispatch(setState(GamePkState.MATCHED));
+    } else {
+      dispatch(setState(GamePkState.MATCH_ERROR));
+    }
+  };
 
 export const fetchGamePlunderPkAsync = (): AppThunk => async dispatch => {
   const matchUser = await fetchGamePlunderPk();
@@ -145,6 +156,10 @@ export const userInfoSlice = createSlice({
       state.matchUser = payload;
     },
 
+    setMineUser: (state, { payload }) => {
+      state.mineUser = payload;
+    },
+
     setPlunderPk: (state, { payload }) => {
       state.matchUser = payload;
     },
@@ -165,6 +180,7 @@ export const {
   setPlantUnits,
   setPKInfo,
   setBaseSkill,
+  setMineUser,
   setMatchUser,
   setState,
   setPlantUnitsTest,

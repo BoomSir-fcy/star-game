@@ -49,26 +49,39 @@ const ForceText = styled(Text).attrs({ color: 'force', bold: true })`
   font-size: 12px;
 `;
 
-interface PeopleCardProps extends BoxProps {
+interface PeopleCardProps
+  extends BoxProps,
+    Partial<Api.Alliance.PlunderInfoMatchUser> {
   active?: boolean;
 }
 
-const PeopleCard: React.FC<PeopleCardProps> = ({ active, ...props }) => {
+const PeopleCard: React.FC<PeopleCardProps> = ({
+  active,
+  avatar,
+  build_count,
+  nick_name,
+  planet_count,
+  power,
+  ak,
+  df,
+  hp,
+  ...props
+}) => {
   return (
     <BoxStyled {...props}>
       <CardStyled>
         <BgImg active={active} />
         <Text textAlign='center' fontSize='12px' color='force'>
-          盘哥
+          {nick_name ?? '--'}
         </Text>
-        <PlunderAvatar />
+        <PlunderAvatar src={avatar} />
         <TipText mt='6px' textAlign='center'>
           战斗力
         </TipText>
         <Flex mt='-5px' justifyContent='center' alignItems='center'>
           <Image src='/images/plunder/fc.png' width={18} height={18} />
           <Text ml='4px' fontSize='20px' color='force' bold>
-            55044
+            {power ?? '--'}
           </Text>
         </Flex>
         <Flex mt='6px' ml='27px' flexWrap='wrap'>
@@ -76,7 +89,7 @@ const PeopleCard: React.FC<PeopleCardProps> = ({ active, ...props }) => {
             <Image src='/images/commons/star/HP.png' width={30} height={30} />
             <Flex ml='2px' flexDirection='column'>
               <TipText mb='-5px'>HP</TipText>
-              <ForceText>1000</ForceText>
+              <ForceText>{hp ?? '--'}</ForceText>
             </Flex>
           </Flex>
           <Flex width='80px' alignItems='center'>
@@ -87,7 +100,7 @@ const PeopleCard: React.FC<PeopleCardProps> = ({ active, ...props }) => {
             />
             <Flex ml='2px' flexDirection='column'>
               <TipText mb='-5px'>防御</TipText>
-              <ForceText>1000</ForceText>
+              <ForceText>{df ?? '--'}</ForceText>
             </Flex>
           </Flex>
           <Flex width='80px' alignItems='center'>
@@ -98,7 +111,7 @@ const PeopleCard: React.FC<PeopleCardProps> = ({ active, ...props }) => {
             />
             <Flex ml='2px' flexDirection='column'>
               <TipText mb='-5px'>攻击</TipText>
-              <ForceText>1000</ForceText>
+              <ForceText>{ak ?? '--'}</ForceText>
             </Flex>
           </Flex>
         </Flex>
@@ -108,11 +121,11 @@ const PeopleCard: React.FC<PeopleCardProps> = ({ active, ...props }) => {
           justifyContent='space-between'
         >
           <TipText>星球联盟数：</TipText>
-          <TipText>5</TipText>
+          <TipText>{planet_count ?? '--'}</TipText>
         </Flex>
         <Flex width='108px' margin='0 auto' justifyContent='space-between'>
           <TipText>总建筑物：</TipText>
-          <TipText>100</TipText>
+          <TipText>{build_count ?? '--'}</TipText>
         </Flex>
       </CardStyled>
     </BoxStyled>
@@ -121,7 +134,7 @@ const PeopleCard: React.FC<PeopleCardProps> = ({ active, ...props }) => {
 
 export default PeopleCard;
 
-const PlunderAvatar = () => {
+const PlunderAvatar = ({ src }: { src?: string }) => {
   return (
     <Box zIndex={-2} position='relative'>
       <Image
@@ -131,7 +144,7 @@ const PlunderAvatar = () => {
         height={125}
         style={{ zIndex: -1 }}
       />
-      <AvatarImage src='/images/plunder/avatar.png' width={100} height={100} />
+      <AvatarImage src={src} width={100} height={100} />
     </Box>
   );
 };
