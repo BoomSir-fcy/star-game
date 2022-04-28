@@ -52,10 +52,9 @@ export const usePK = (game: Game) => {
         true,
       );
       game.addEventListener('lastSoldierCreated', (event: Event) => {
-        console.log('loade');
-
         const _running = new Running(game, PKInfo.slot);
         setRunning(_running);
+        _running.play();
       });
     },
     [game, createSoldiers],
@@ -63,5 +62,6 @@ export const usePK = (game: Game) => {
 
   return {
     initHandle,
+    running,
   };
 };

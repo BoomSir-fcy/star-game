@@ -31,6 +31,11 @@ export interface RoundDescMove {
   from?: RoundDescAxis;
 }
 
+export interface RoundDescTotalHp {
+  blue_total_hp: number;
+  red_total_hp: number;
+}
+
 export interface RoundS_HP {
   max_hp: number;
   max_shield: number;
@@ -205,6 +210,7 @@ export type RoundDesc =
 export interface RoundInfo {
   desc_type: number;
   round: number;
+  info: RoundDescTotalHp;
   attack: RoundDescAttack;
   move: RoundDescMove;
   add_boom: RoundDescAddBoom;
@@ -269,6 +275,7 @@ export const descType = {
   REMOVE_SHIELD: 18, // 击退碰撞伤害DescUnitRemoveFiring
   ADD_TERRAIN_FIRING: 19, // 地形灼烧DescUnitAddTerrainFiring
   TERRAIN_FIRING: 20, // 地形引起正在灼烧DescUnitTerrainFiring
+  TOTAL_INFO: 21, // 所有血量
 };
 
 // 技能

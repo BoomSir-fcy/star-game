@@ -24,12 +24,16 @@ const ButtonStyled = styled(Button).attrs({ variant: 'vs' })`
   height: 51px;
 `;
 
-const RoundPanel: React.FC<BoxProps> = ({ ...props }) => {
+interface RoundPanelProps extends BoxProps {
+  roundName?: string;
+}
+
+const RoundPanel: React.FC<RoundPanelProps> = ({ roundName, ...props }) => {
   return (
     <BoxStyled {...props}>
       <FlexStyled>
         <Text shadow='primary' fontSize='24px' bold>
-          6-2
+          {roundName || '--'}
         </Text>
         <Text shadow='primary' fontSize='22px' bold>
           我方行动

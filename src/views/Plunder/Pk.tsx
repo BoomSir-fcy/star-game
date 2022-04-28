@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   Box,
   Text,
@@ -18,14 +18,17 @@ import useGame from 'game/hooks/useGame';
 import Progress from 'components/Progress';
 import Game from 'game/core/Game';
 import { useStore } from 'state';
+import { RoundDescTotalHp } from 'game/types';
 import { useToast } from 'contexts/ToastsContext';
 import {
   useFetchGameMatchUser,
   useFetchGamePK,
+  useFetchGamePKTest,
   useFetchGameTerrain,
 } from 'state/game/hooks';
 import { GamePkState } from 'state/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { TrackDetail } from 'game/core/Running';
 import {
   PeopleCard,
   Energy,
@@ -60,16 +63,21 @@ const Pk = () => {
   const [progress, setProgress] = useState(0);
 
   // TODO: 要干掉
-  useFetchGamePK(5000000000000004, 5000000000000002, 10);
+  // useFetchGamePK(5000000000000004, 5000000000000002, 10);
+  useFetchGamePKTest(5000000000000040, undefined, 10);
 
   console.log(PKInfo);
 
-  const { initHandle } = usePK(game);
+  const { initHandle, running } = usePK(game);
+
+  const [roundInfo, setRoundInfo] = useState<TrackDetail | null>(null);
+  const [totalInfo, setTotalInfo] = useState<RoundDescTotalHp | null>(null);
 
   useEffect(() => {
     if (!mounted) {
       if (ref.current && game && PKInfo) {
         console.log(121221);
+        setTotalInfo(PKInfo.init.show_hp);
         setMounted(true);
         ref.current.appendChild(game.view);
         const loaders = game.loadResources();
@@ -97,6 +105,32 @@ const Pk = () => {
     initHandle,
   ]);
 
+  const onRunningUpdate = useCallback(
+    (event: Event) => {
+      // console.log(event);
+      const { detail } = event as CustomEvent<TrackDetail>;
+      if (detail) {
+        setRoundInfo(detail);
+        if (detail.info) {
+          console.log(detail.info);
+          setTotalInfo(detail.info);
+        }
+      }
+    },
+    [setRoundInfo, setTotalInfo],
+  );
+
+  useEffect(() => {
+    if (running) {
+      running.addEventListener('updateTrack', onRunningUpdate);
+    }
+    return () => {
+      if (running) {
+        running.removeEventListener('updateTrack', onRunningUpdate);
+      }
+    };
+  }, [running, onRunningUpdate]);
+
   useEffect(() => {
     if (TerrainInfo?.length) {
       game.creatTerrain(TerrainInfo[0].terrains);
@@ -122,9 +156,16 @@ const Pk = () => {
         </Flex>
         <Flex flex='1' flexDirection='column'>
           <Flex mt='-52px' justifyContent='space-between'>
-            <PKProgress />
-            <RoundPanel mt='-45px' />
-            <PKProgress opponent />
+            <PKProgress
+              total={PKInfo?.init?.show_hp?.blue_total_hp}
+              current={totalInfo?.blue_total_hp}
+            />
+            <RoundPanel mt='-45px' roundName={roundInfo?.id} />
+            <PKProgress
+              opponent
+              total={PKInfo?.init?.show_hp?.red_total_hp}
+              current={totalInfo?.red_total_hp}
+            />
           </Flex>
           <Flex justifyContent='center' alignItems='center'>
             <Box ref={ref} />

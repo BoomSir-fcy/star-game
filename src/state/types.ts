@@ -170,6 +170,10 @@ export interface GamePkInfo {
     ids: {
       [sid: string]: Api.Game.Pos;
     };
+    show_hp: {
+      blue_total_hp: number;
+      red_total_hp: number;
+    };
   };
   slot: {
     [round: number]: {
