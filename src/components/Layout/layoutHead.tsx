@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-
 import Modal from 'components/Modal';
 import InvitePop from 'components/NavPop/Invite';
 import UserInfo from 'components/NavPop/userInfo';
 import { useTranslation } from 'contexts/Localization';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import { Box, Image, Text, Button } from 'uikit';
 import { useStore } from 'state/util';
 
@@ -20,7 +19,7 @@ const ButtonStyled = styled(Button)`
   text-shadow: none;
 `;
 
-const Avatar = () => {
+const LayoutHead = () => {
   const { t } = useTranslation();
   const { userInfo } = useStore(p => p.userInfo);
 
@@ -38,9 +37,7 @@ const Avatar = () => {
         }}
       >
         <Box position='absolute' top={20} width='100%'>
-          <Text textAlign='center' ellipsis>
-            {userInfo.nickname}
-          </Text>
+          <Text textAlign='center'>{userInfo.nickname}</Text>
         </Box>
         <Box position='relative' zIndex={-1} width={224} mt='15px' ml='24px'>
           <Image
@@ -61,11 +58,11 @@ const Avatar = () => {
           {t('Invitation')}
         </ButtonStyled>
       </Box>
-      <Modal title={PopTitle} visible={visible} setVisible={setVisible}>
+      {/* <Modal title={PopTitle} visible={visible} setVisible={setVisible}>
         {PopType === 1 ? <UserInfo /> : <InvitePop />}
-      </Modal>
+      </Modal> */}
     </Box>
   );
 };
 
-export default Avatar;
+export default LayoutHead;

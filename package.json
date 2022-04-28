@@ -38,6 +38,7 @@
     "intro.js-react": "^0.6.0",
     "lib-flexible": "^0.3.2",
     "lodash": "^4.17.21",
+    "mobile-drag-drop": "^2.3.0-rc.2",
     "pixi-dragonbones": "^5.7.0-1",
     "pixi-filters": "^4.1.6",
     "pixi-lights": "^3.0.0",
