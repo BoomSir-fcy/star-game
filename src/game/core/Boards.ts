@@ -104,6 +104,11 @@ class Boards extends EventTarget {
     e.preventDefault();
   }
 
+  // 重新设置中心点
+  setPosiotion(x: number, y: number) {
+    this.container.position.set(this.width / 2 + x, this.height / 2 + y);
+  }
+
   // 绘制棋格
   drawChequers(test?: boolean, TerrainInfo?: Api.Game.TerrainInfo[]) {
     this.chequers = [];

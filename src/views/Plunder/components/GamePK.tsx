@@ -181,7 +181,7 @@ const GamePK: React.FC<GamePKProps> = () => {
   const initHandle = useCallback(() => {
     if (PKInfo && game.soldiers.length === 0) {
       const ids: idMap = {};
-      Object.keys(PKInfo.init.ids).forEach(id => {
+      Object.keys(PKInfo?.init?.ids).forEach(id => {
         const { x, y } = PKInfo.init.ids[id];
         ids[`${x}${y}`] = id;
       });

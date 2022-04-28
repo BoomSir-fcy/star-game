@@ -2,10 +2,7 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
 import { MapBaseUnits } from 'state/types';
-import { Point } from '@pixi/math';
 
-import config from 'game/config';
-import Game from 'game/core/Game';
 import RunSimulation, { RoundsProps } from 'game/core/RunSimulation';
 import useGame from 'game/hooks/useGame';
 
@@ -21,22 +18,17 @@ const Container = styled(Box)`
   transform: translateX(-215px);
 `;
 
-// 种族动画预览
-// const game = new Game({
-//   width: 200,
-//   height: 200,
-//   test: true,
-//   enableDrag: false,
-// });
+const GridWidth = 200;
+const GridHeight = 200;
+
 const MiniRaceAni: React.FC<{
   mock: any;
 }> = ({ mock }) => {
   const ref = React.useRef<HTMLDivElement>(null);
 
   const game = useGame({
-    width: 200,
-    height: 200,
-    test: true,
+    width: GridWidth,
+    height: GridHeight,
     enableDrag: false,
   });
 
@@ -97,32 +89,27 @@ const MiniRaceAni: React.FC<{
     [createSoldiers, runGame],
   );
 
-  const getCenter = (x: number, y: number, width: number, height: number) => {
-    return {
-      x: ((x * 100) / 2 - width) / 2,
-      y: ((y * 125) / 2 - height) / 2,
-    };
-  };
+  const getCenterByAxis = useCallback(
+    (x: number, y: number) => {
+      const axis = game.getAxis(x, y);
+      if (axis) {
+        game.boards.setPosiotion(-axis.x - 30, -axis.y + 60);
+      }
+    },
+    [game],
+  );
 
   React.useEffect(() => {
     if (ref.current) {
       ref.current.appendChild(game.view);
       game.creatTerrain();
-
-      // 通过x,y计算坐标中心点
-      // const center = getCenter(
-      //   mock?.init?.blue_units[0].pos.x + 8,
-      //   mock?.init?.blue_units[0].pos.y + 8,
-      //   200,
-      //   200,
-      // );
-
-      // console.log(mock?.init?.blue_units);
-      // console.log(center);
-
       initSoldiers(mock);
+      getCenterByAxis(
+        mock?.init?.blue_units[0].pos.x,
+        mock?.init?.blue_units[0].pos.y,
+      );
     }
-  }, [ref, mock, initSoldiers, game]);
+  }, [ref, initSoldiers, game, getCenterByAxis, mock]);
 
   React.useEffect(() => {
     return () => {
