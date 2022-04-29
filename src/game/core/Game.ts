@@ -104,6 +104,8 @@ class Game extends EventTarget {
 
   private lastCreateSoldierId = '';
 
+  private enemyOfSoldierId: { [id: string]: boolean } = {};
+
   init() {
     this.view = this.app.view;
 
@@ -429,6 +431,10 @@ class Game extends EventTarget {
    */
   findSoldierById(sid: string) {
     return this.soldiers.find(soldier => soldier.sid === sid);
+  }
+
+  getSoliderEnemyById(sid: string) {
+    console.log(this.enemyOfSoldierId);
   }
 }
 

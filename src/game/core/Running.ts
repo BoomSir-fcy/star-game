@@ -39,6 +39,16 @@ type HandleType = typeof handleType[keyof typeof handleType];
 
 // }
 
+interface SenderInfo {
+  pos: RoundDescAxis;
+  isEnemy: boolean;
+}
+interface DescInfo {
+  sender: SenderInfo;
+  receives: SenderInfo[];
+  descType: DescType;
+}
+
 interface RunTrackDetail {
   currentAxisPoint: RoundDescAxis;
   targetAxisPoint: RoundDescAxis;
@@ -48,6 +58,7 @@ interface RunTrackDetail {
   attackInfo?: RoundDesc;
   id: string;
   detail?: TrackDetail[];
+  descInfo?: DescInfo;
 }
 interface InfoTrackDetail {
   info: RoundDescTotalHp;

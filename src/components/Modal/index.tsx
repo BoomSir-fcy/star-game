@@ -6,7 +6,7 @@ import useTheme from 'hooks/useTheme';
 
 Modal.setAppElement('#scale-content');
 
-const BoxStyled = styled(Box) <{ overflow?: string }>`
+const BoxStyled = styled(Box)<{ overflow?: string }>`
   margin: 40px 0 0 0;
 `;
 

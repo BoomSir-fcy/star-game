@@ -296,25 +296,20 @@ class Combat extends EventTarget {
     // });
     // bullet.attack(bulletType.BUMP, target);
     if (target.axisPoint && this.axisPoint) {
-      // const point1 = getTwoPointCenter(this.axisPoint, target.axisPoint);
+      const point1 = getTwoPointCenter(this.axisPoint, target.axisPoint);
       const linearMove = new LinearMove(
         this.container,
         this.axisPoint,
-        target.axisPoint,
+        point1,
         {
           time: 60 * 0.3, // 0.3s 完成
         },
       );
       linearMove.addEventListener('end', () => {
-        if (point && target.axisPoint) {
-          const linearMove1 = new LinearMove(
-            this.container,
-            target.axisPoint,
-            point,
-            {
-              time: 60 * 0.2, // 0.3s 完成
-            },
-          );
+        if (point && point1) {
+          const linearMove1 = new LinearMove(this.container, point1, point, {
+            time: 60 * 0.2, // 0.3s 完成
+          });
           const bullet = new Bullet(this);
           bullet.attack(bulletType.BUMP, target);
           linearMove1.addEventListener('end', () => {
