@@ -9,11 +9,12 @@ import styled from 'styled-components';
 import { Box } from 'uikit';
 import detectOrient from 'utils/detectOrient';
 
+import Dashboard from 'components/Dashboard';
+
 const Content = styled(Box)<{ scale: number }>`
   width: 1920px;
   height: 900px;
   transform-origin: 0 0;
-  /* z-index: 0; */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -79,9 +80,10 @@ const ScaleOrientContent: React.FC = ({ children }) => {
         scale={scale}
       />
       <div className={VIDEO_GLOBAL_CLASS_NAME} />
-      <Content id='scale-content' scale={scale}>
-        {children}
-      </Content>
+      <Box id='scale-content'>
+        <Dashboard />
+        <Content scale={scale}>{children}</Content>
+      </Box>
     </Box>
   );
 };

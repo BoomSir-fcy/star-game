@@ -13,7 +13,7 @@ const MysteryBox = () => {
   const { t } = useTranslation();
   return (
     <Layout>
-      <Dashboard>
+      {/* <Dashboard>
         <BgCard variant='short'>
           <Flex alignItems='center' height='100%' width='100%'>
             <TweenText
@@ -27,7 +27,7 @@ const MysteryBox = () => {
             />
           </Flex>
         </BgCard>
-      </Dashboard>
+      </Dashboard> */}
       <Flex margin='auto' width='80%' justifyContent='space-between'>
         <Link to={`/mystery-box/state?q=${mysteryBoxQualities.ORDINARY}`}>
           <MysteryBoxCom quality={mysteryBoxQualities.ORDINARY} />

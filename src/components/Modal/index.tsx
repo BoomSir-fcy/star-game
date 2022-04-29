@@ -1,10 +1,8 @@
 import React, { useCallback } from 'react';
 import Modal from 'react-modal';
 import styled, { DefaultTheme } from 'styled-components';
-import { Text, Flex, HelpIcon, Button, Box } from 'uikit';
+import { Text, Flex, Button, Box } from 'uikit';
 import useTheme from 'hooks/useTheme';
-
-Modal.setAppElement('#scale-content');
 
 const BoxStyled = styled(Box)<{ overflow?: string }>`
   margin: 40px 0 0 0;
@@ -129,6 +127,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
             </div>
           );
         }}
+        appElement={document.getElementById('scale-content') || document.body}
       >
         <ModalHeader title={title} onClose={onClose} theme={themes} />
         <BoxStyled>{children}</BoxStyled>
