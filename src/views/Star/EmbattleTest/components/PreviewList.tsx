@@ -1,10 +1,14 @@
+import AxisPoint from 'game/core/AxisPoint';
 import { getAddActiveSoliderEvent } from 'game/core/event';
 import Game from 'game/core/Game';
 import Soldier from 'game/core/Soldier';
+import { Point } from 'pixi.js';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
 import { Box, Text, BgCard, Flex, BorderCard } from 'uikit';
+import { isApp } from 'utils/client';
 import PreviewSoldier from './PreviewSoldier';
+import { PlayBtn } from './styled';
 
 interface PreviewListProps {
   game: Game;
@@ -17,6 +21,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   race = 1,
 }) => {
   const units = useStore(p => p.game.baseUnits);
+  const [visibleBtn, setVisibleBtn] = useState(false);
 
   const unitMaps = useMemo(() => {
     if (units[race]) return units[race];
@@ -43,24 +48,45 @@ const PreviewList: React.FC<PreviewListProps> = ({
   const dragStartHandle = useCallback(
     (event: React.PointerEvent<HTMLDivElement>, item: Api.Game.UnitInfo) => {
       event.preventDefault();
-      const soldier = new Soldier({
+      const options = {
         x: 0,
         y: 0,
         race,
         srcId: `${item.unique_id}`,
-        enableDrag: false,
+        enableDrag: true,
         id: item.unique_id,
         unique_id: item.unique_id,
         unitInfo: item,
         isEnemy: false,
         hp: 100,
         test: true,
-      });
+      };
+      if (isApp()) {
+        //   game.addDragPreSoldierApp(options);
+        return;
+      }
+      const soldier = new Soldier(options);
       setMoving(true);
       game?.addDragPreSoldier(soldier);
     },
     [game, race],
   );
+
+  // 上阵
+  const handleGoIntoBattle = (item: Api.Game.UnitInfo) => {
+    const options = {
+      race,
+      srcId: `${item.unique_id}`,
+      enableDrag: true,
+      id: item.unique_id,
+      unique_id: item.unique_id,
+      unitInfo: item,
+      isEnemy: false,
+      hp: 100,
+      test: true,
+    };
+    game.addDragPreSoldierApp(options);
+  };
 
   useEffect(() => {
     window.addEventListener('pointerup', dragEndHandle);
@@ -80,7 +106,13 @@ const PreviewList: React.FC<PreviewListProps> = ({
               }}
               key={item.unique_id}
               margin='49px 20px 0'
+              position='relative'
             >
+              {visibleBtn && activeSoldier?.unique_id === item.unique_id ? (
+                <PlayBtn scale='xs' onClick={() => handleGoIntoBattle(item)}>
+                  上阵
+                </PlayBtn>
+              ) : null}
               <BorderCard
                 isActive={activeSoldier?.unique_id === item.unique_id}
                 width={122}
@@ -99,6 +131,9 @@ const PreviewList: React.FC<PreviewListProps> = ({
                     unitInfo: unitMaps?.[item.unique_id],
                   });
                   game.addActiveSolider(soldier);
+                  if (isApp()) {
+                    setVisibleBtn(true);
+                  }
                   // game.dispatchEvent(getAddActiveSoliderEvent(soldier));
                 }}
               >
