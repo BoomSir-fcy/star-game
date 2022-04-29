@@ -1,6 +1,7 @@
-import { env } from "process";
+import { env } from 'process';
+import { isApp } from './client';
 
-const detectOrient = (dom: HTMLElement, mode=false) => {
+const detectOrient = (dom: HTMLElement, mode = false) => {
   /**
    * 强制横屏竖屏处理;
    * @param  {HTMLElement} dom
@@ -11,43 +12,53 @@ const detectOrient = (dom: HTMLElement, mode=false) => {
     if (process.env.NODE_ENV !== 'production') {
       throw new Error(`${dom} is not a HTMLElement`);
     }
-    console.error(`${dom} is not a HTMLElement`)
+    console.error(`${dom} is not a HTMLElement`);
   }
   const width = document.documentElement.clientWidth;
   const height = document.documentElement.clientHeight;
   const wrapper = dom;
-  let style = "";
-  if(width >= height) { // 竖屏
-      if (mode) {
-          style += `width: ${height}px;`;// 注意旋转后的宽高切换
-          style += `height: ${width}px;`;
-          style += "-webkit-transform: rotate(-90deg); transform: rotate(-90deg);";
-          // 注意旋转中点的处理
-          style += `-webkit-transform-origin: ${height / 2}px ${height / 2}px;`;
-          style += `-transform-origin: ${height / 2}px ${height / 2}px;`;
-      } else {
-          style += "width:100%"; 
-          style += "height:100%;";
-          style += "-webkit-transform: rotate(0); transform: rotate(0);";
-          style += "-webkit-transform-origin: 0 0;";
-          style += "transform-origin: 0 0;";
-      }
-  } else if (mode) { // 横屏
-      style += "width:100%"; 
-      style += "height:100%;";
-      style += "-webkit-transform: rotate(0); transform: rotate(0);";
-      style += "-webkit-transform-origin: 0 0;";
-      style += "transform-origin: 0 0;";
-  } else {
-      style += `width: ${height}px;`;// 注意旋转后的宽高切换
+  let style = '';
+  if (width >= height) {
+    // 竖屏
+    if (mode) {
+      style += `width: ${height}px;`; // 注意旋转后的宽高切换
       style += `height: ${width}px;`;
-      style += "-webkit-transform: rotate(90deg); transform: rotate(90deg);";
+      style += '-webkit-transform: rotate(-90deg); transform: rotate(-90deg);';
       // 注意旋转中点的处理
-      style += `-webkit-transform-origin: ${width / 2}px ${width / 2}px;`;
-      style += `-transform-origin: ${width / 2}px ${width / 2}px;`;
+      style += `-webkit-transform-origin: ${height / 2}px ${height / 2}px;`;
+      style += `-transform-origin: ${height / 2}px ${height / 2}px;`;
+    } else {
+      style += 'width:100%';
+      style += 'height:100%;';
+      style += '-webkit-transform: rotate(0); transform: rotate(0);';
+      style += '-webkit-transform-origin: 0 0;';
+      style += 'transform-origin: 0 0;';
+    }
+  } else if (mode) {
+    // 横屏
+    style += 'width:100%';
+    style += 'height:100%;';
+    style += '-webkit-transform: rotate(0); transform: rotate(0);';
+    style += '-webkit-transform-origin: 0 0;';
+    style += 'transform-origin: 0 0;';
+  } else {
+    style += `width: ${height}px;`; // 注意旋转后的宽高切换
+    style += `height: ${width}px;`;
+    style += '-webkit-transform: rotate(90deg); transform: rotate(90deg);';
+    // 注意旋转中点的处理
+    style += `-webkit-transform-origin: ${width / 2}px ${width / 2}px;`;
+    style += `-transform-origin: ${width / 2}px ${width / 2}px;`;
   }
   wrapper.style.cssText = style;
-  
-}
+};
 
 export default detectOrient;
+
+/**
+ * 移动端并且竖屏模式
+ * @returns
+ */
+export const isAppAndVerticalScreen = () => {
+  const { clientWidth, clientHeight } = document.documentElement;
+  return isApp() && clientHeight >= clientWidth;
+};

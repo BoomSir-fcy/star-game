@@ -1,55 +1,60 @@
-
 const _ua = window.navigator.userAgent;
 
 // 判断是否微信登陆
-function isWeiXin() {
+export function isWeiXin() {
   return /MicroMessenger/i.test(_ua);
 }
 
 // 是否为移动终端;
-function isApp() {
-  return _ua.toLowerCase().match(/(ipod|iphone|android|coolpad|mmp|smartphone|midp|wap|xoom|symbian|j2me|blackberry|wince)/i) != null;
+export function isApp() {
+  return (
+    _ua
+      .toLowerCase()
+      .match(
+        /(ipod|iphone|android|coolpad|mmp|smartphone|midp|wap|xoom|symbian|j2me|blackberry|wince)/i,
+      ) != null
+  );
 }
 
-// 是否为android终端 
-function isAndroid() {
+// 是否为android终端
+export function isAndroid() {
   return _ua.indexOf('Android') > -1 || _ua.indexOf('Adr') > -1;
 }
 
 // 是否为ios终端
-function isiOS() {
+export function isiOS() {
   return !!_ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 }
 
 // 原生iOS
-function isFirefox() {
+export function isFirefox() {
   return /Firefox/.test(_ua);
 }
 
 // 原生iOS
-function isNativeiOS() {
+export function isNativeiOS() {
   return /Native_iOS/.test(_ua);
 }
 // 原生ios APP
-function isNativeAppiOS() {
+export function isNativeAppiOS() {
   return /Native_iOS_App/.test(_ua);
 }
 // 原生 android
-function isNativeAndroid() {
+export function isNativeAndroid() {
   return /Native_Android/.test(_ua);
 }
 // 原生 android App
-function isNativeAppAndroid() {
+export function isNativeAppAndroid() {
   return /Native_Android_App/.test(_ua);
 }
 
 // 判断QQ浏览器
-function isQQBrowser() {
+export function isQQBrowser() {
   return /MQQbrowser/i.test(_ua);
 }
 
 // 判断原生版本
-function nativeVersion() {
+export function nativeVersion() {
   if (isNativeiOS() || isNativeAndroid()) {
     // eslint-disable-next-line no-useless-escape
     const res = _ua.match(/Native_V[\d+][\.\d+]*/);
@@ -58,7 +63,7 @@ function nativeVersion() {
       return res[0].split('Native_V')[1];
     }
   }
-  return ''
+  return '';
 }
 
 const client = {
@@ -73,6 +78,6 @@ const client = {
   isNativeAppAndroid: isNativeAppAndroid(),
   isNativeAppiOS: isNativeAppiOS(),
   isFirefox: isFirefox(),
-}
+};
 
 export default client;

@@ -10,7 +10,7 @@ import config from '../config';
 import '../libs/pixi-dragonbones';
 import AxisPoint from './AxisPoint';
 import Boards from './Boards';
-import { stateType } from './Chequer';
+import Chequer, { stateType } from './Chequer';
 import Soldier, { AttrSoldierOptions } from './Soldier';
 import {
   getAddActiveSoliderEvent,
@@ -253,7 +253,17 @@ class Game extends EventTarget {
     this.enableSoliderDrag = state;
   }
 
-  // 添加拖拽中的小人
+  // 移动端, 棋盘外向棋盘内拖拽小人
+  addDragPreSoldierApp(options: AttrSoldierOptions) {
+    const chequer = this.boards.chequers.find(
+      item => item.state === stateType.PREVIEW,
+    ) as Chequer;
+    if (chequer) {
+      this.createSoldier(chequer.axisX, chequer.axisY, { ...options });
+    }
+  }
+
+  // PC端, 棋盘外向棋盘内拖拽小人
   addDragPreSoldier(soldier: Soldier) {
     this.setEnableDrag(true);
     this.dragPreSoldier = soldier.clone({ enableDrag: true });
