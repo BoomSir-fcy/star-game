@@ -135,7 +135,7 @@ const MysteryBoxState = () => {
 
   return (
     <Layout>
-      <Dashboard />
+      {/* <Dashboard /> */}
       <BgCard margin='auto' variant='longMedium'>
         <Flex alignItems='center' justifyContent='center'>
           <MysteryBoxStyled>
