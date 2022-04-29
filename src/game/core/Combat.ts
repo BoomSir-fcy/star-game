@@ -234,6 +234,9 @@ class Combat extends EventTarget {
         this.container,
         this.axisPoint,
         axisPoint,
+        {
+          // time: 60, // 移动一格时间为1秒
+        },
       );
       linearMove.addEventListener('end', () => {
         this.setPosition(axisPoint);

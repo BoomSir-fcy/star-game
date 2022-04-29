@@ -55,7 +55,6 @@ class Game extends EventTarget {
       offsetStartX,
       offsetStartY,
     });
-    console.log(offsetStartY, offsetStartX);
     this.app = new Application({
       width: _width,
       height: _height,
@@ -191,7 +190,9 @@ class Game extends EventTarget {
       });
     // 小人阵亡事件
     soldier.addEventListener('death', () => {
-      this.removeSoldier(soldier);
+      setTimeout(() => {
+        this.removeSoldier(soldier);
+      }, 300);
     });
 
     // 小人叛变事件
@@ -433,8 +434,17 @@ class Game extends EventTarget {
     return this.soldiers.find(soldier => soldier.sid === sid);
   }
 
+  // 判断是敌是友
   getSoliderEnemyById(sid: string) {
-    console.log(this.enemyOfSoldierId);
+    if (sid in this.enemyOfSoldierId) {
+      return this.enemyOfSoldierId[sid];
+    }
+    const soldier = this.findSoldierById(sid);
+    if (soldier) {
+      this.enemyOfSoldierId[sid] = soldier.isEnemy;
+      return soldier.isEnemy;
+    }
+    return false;
   }
 }
 

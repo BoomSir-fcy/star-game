@@ -212,6 +212,14 @@ class EffectBuff extends EventTarget {
     setTimeout(() => {
       this.combat.displaySprite.filters = [];
     }, 500);
+    setTimeout(() => {
+      this.combat.displaySprite.filters = [
+        new ColorOverlayFilter(0xff0000, 0.3),
+      ];
+    }, 1000);
+    setTimeout(() => {
+      this.combat.displaySprite.filters = [];
+    }, 1500);
   }
 
   /**

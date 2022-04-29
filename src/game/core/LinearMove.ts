@@ -19,7 +19,7 @@ interface LinearMoveOptions {
 }
 
 const defaultOptions = {
-  speed: 5,
+  speed: 4,
   time: 0,
 };
 // 使用贝塞尔曲线函数移动目标
