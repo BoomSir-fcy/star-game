@@ -1,5 +1,5 @@
 import { useTranslation } from 'contexts/Localization';
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Box, FlexProps, Text, Flex } from 'uikit';
 
@@ -83,9 +83,24 @@ const FlexStyled = styled(Flex)<{ rotate?: boolean }>`
 
 interface PKProgressProps extends FlexProps {
   opponent?: boolean;
+  total?: number;
+  current?: number;
 }
-const PKProgress: React.FC<PKProgressProps> = ({ opponent, ...props }) => {
+const PKProgress: React.FC<PKProgressProps> = ({
+  opponent,
+  total,
+  current,
+  ...props
+}) => {
   const { t } = useTranslation();
+
+  const progress = useMemo(() => {
+    if (total && typeof current === 'number') {
+      return Math.floor((current / total) * 100);
+    }
+    return 100;
+  }, [total, current]);
+
   return (
     <FlexStyled alignItems={opponent ? 'flex-end' : 'flex-start'} {...props}>
       <Text
@@ -96,7 +111,7 @@ const PKProgress: React.FC<PKProgressProps> = ({ opponent, ...props }) => {
         {opponent ? t('红色方') : t('蓝色方')}
       </Text>
       <FlexStyled rotate={opponent}>
-        <ProgressBox step='50%' />
+        <ProgressBox step={`${progress}%`} />
         <Flex mt='14px'>
           <Round win />
           <Round lose />

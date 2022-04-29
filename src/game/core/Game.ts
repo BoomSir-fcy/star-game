@@ -3,6 +3,7 @@ import { InteractionEvent, InteractionData } from '@pixi/interaction';
 import { Spine } from 'pixi-spine';
 import { Application } from '@pixi/app';
 import { Point } from 'pixi.js';
+import uniqueId from 'lodash/uniqueId';
 
 // import * as PIXI from 'pixi.js';
 import config from '../config';
@@ -100,6 +101,8 @@ class Game extends EventTarget {
   activeSolider?: Soldier; // 当前选中小人
 
   activeSoliderFlag?: boolean; // 表示事件触发源未activeSolider
+
+  private lastCreateSoldierId = '';
 
   init() {
     this.view = this.app.view;
@@ -371,13 +374,26 @@ class Game extends EventTarget {
     const point0 = new Point(axis.x, axis.y - 1000) as AxisPoint;
     const point1 = new Point(axis.x, axis.y) as AxisPoint;
 
-    const linearMove = new LinearMove(soldier.container, point0, point1);
+    const id = uniqueId();
+    this.lastCreateSoldierId = id;
+
+    const linearMove = new LinearMove(soldier.container, point0, point1, {
+      time: 60,
+    });
     linearMove.addEventListener('end', () => {
       soldier.container.position.set(axis.x, axis.y);
       soldier.startPoint = point1;
       soldier.changeState(stateType.DISABLE, false);
+      this.dispatchEvent(
+        new CustomEvent('soldierCreated', { detail: { soldier } }),
+      );
+      if (id === this.lastCreateSoldierId) {
+        this.dispatchEvent(
+          new CustomEvent('lastSoldierCreated', { detail: { soldier } }),
+        );
+      }
     });
-    linearMove.speed = 100;
+    // linearMove.speed = 100;
     linearMove.move();
     return soldier;
   }

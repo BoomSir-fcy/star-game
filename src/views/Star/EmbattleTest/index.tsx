@@ -167,9 +167,15 @@ const Embattle = () => {
             onClick={() =>
               navigate(
                 `/plunder-test?pid0=${planetId}&terrain=${
-                  activeTerrain.id
+                  activeTerrain?.id
                     ? JSON.stringify(activeTerrain)
-                    : JSON.stringify(terrainSelect[0])
+                    : JSON.stringify(
+                        terrainSelect[0] || {
+                          label: '',
+                          value: 0,
+                          id: 0,
+                        },
+                      )
                 }`,
               )
             }
