@@ -1,5 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { polyfill } from 'mobile-drag-drop';
+import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour';
 import { useDispatch } from 'react-redux';
 import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
 import { useStore, storeAction } from 'state';
@@ -10,6 +12,10 @@ import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 
 import { GameInfo, GameThing, Building } from './gameModel';
+
+polyfill({
+  dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
+});
 
 const Container = styled(Flex)`
   position: relative;

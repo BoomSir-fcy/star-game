@@ -58,11 +58,11 @@ const Galaxy = () => {
 
   return (
     <Layout>
-      <Dashboard
+      {/* <Dashboard
         onRefresh={async () => {
           dispatch(fetchGalaxyListAsync());
         }}
-      />
+      /> */}
       {!loadingGalaxy ? (
         <Flex alignItems='center'>
           <Nav

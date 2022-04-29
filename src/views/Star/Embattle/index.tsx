@@ -129,7 +129,7 @@ const Embattle = () => {
       >
         <Box position='absolute' top='-80px'>
           <Button
-            onClick={() => navigate(`/plunder-test?pid0=${planetId}`)}
+            onClick={() => navigate(`/plunder-pk?pid0=${planetId}`)}
             padding={0}
             width='50px'
           >

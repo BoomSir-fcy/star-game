@@ -162,13 +162,17 @@ export interface RoundInitState {
   base_id: number;
 }
 
-interface GamePkInfo {
+export interface GamePkInfo {
   init: {
     base_unit: MapBaseUnits;
     blue_units: Api.Game.UnitPlanetPos[];
     red_units: Api.Game.UnitPlanetPos[];
     ids: {
       [sid: string]: Api.Game.Pos;
+    };
+    show_hp: {
+      blue_total_hp: number;
+      red_total_hp: number;
     };
   };
   slot: {

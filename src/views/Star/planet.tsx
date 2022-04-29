@@ -33,8 +33,8 @@ import { useJoinAlliance } from './hook';
 
 const ScrollBox = styled(Flex)`
   margin-top: 22px;
-  min-height: 550px;
-  max-height: 550px;
+  min-height: 450px;
+  max-height: 450px;
   overflow-y: auto;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -226,7 +226,7 @@ const Planet = () => {
       />
       <Hints enabled={hintsEnabled} hints={hints} /> */}
       <Layout>
-        {!choose && (
+        {/* {!choose && (
           <Dashboard
             className='planet_number'
             onRefresh={async () => {
@@ -241,7 +241,7 @@ const Planet = () => {
               );
             }}
           />
-        )}
+        )} */}
         <Flex width='100%' position='relative'>
           <Box>
             {choose && (
