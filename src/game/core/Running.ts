@@ -39,6 +39,19 @@ type HandleType = typeof handleType[keyof typeof handleType];
 
 // }
 
+interface PeopleInfo {
+  pos: RoundDescAxis;
+  isEnemy: boolean;
+  receive_sub_hp?: number;
+}
+export interface DescInfo {
+  sender: PeopleInfo;
+  receives: PeopleInfo[];
+  type: DescType;
+  moveTo?: RoundDescAxis;
+  id: string;
+}
+
 interface RunTrackDetail {
   currentAxisPoint: RoundDescAxis;
   targetAxisPoint: RoundDescAxis;
@@ -48,6 +61,7 @@ interface RunTrackDetail {
   attackInfo?: RoundDesc;
   id: string;
   detail?: TrackDetail[];
+  descInfo?: DescInfo;
 }
 interface InfoTrackDetail {
   info: RoundDescTotalHp;
@@ -190,7 +204,7 @@ class Running extends EventTarget {
     const track = this.trackDetails[this.trackIndex];
     this.dispatchEvent(new CustomEvent('updateTrack', { detail: track }));
     this.runTrack(track, () => {
-      this.runningHandle();
+      this.thisHandle();
     });
   }
 
@@ -209,12 +223,12 @@ class Running extends EventTarget {
         callback(s);
       });
     }
-    if (track?.type === descType.REMOVE) {
-      this.infoText.text = `回合: ${track.id}`;
-      return this.removeHandle(track, s => {
-        callback(s);
-      });
-    }
+    // if (track?.type === descType.REMOVE) {
+    //   this.infoText.text = `回合: ${track.id}`;
+    //   return this.removeHandle(track, s => {
+    //     callback(s);
+    //   });
+    // }
     if (track?.type === descType.BEAT) {
       this.infoText.text = `回合: ${track.id}`;
       return this.beatHandle(track, s => {
@@ -243,7 +257,7 @@ class Running extends EventTarget {
     return null;
   }
 
-  runningHandle() {
+  thisHandle() {
     this.playing = false;
     if (this.paused) return;
     if (this.playCount === 0) return;
@@ -273,7 +287,7 @@ class Running extends EventTarget {
       this.playEnd = false;
     }
     this.paused = false;
-    this.runningHandle();
+    this.thisHandle();
   }
 
   // 获取所有播放轨道
@@ -290,7 +304,22 @@ class Running extends EventTarget {
   }
 
   // 获取移动轨道详情
-  static getMoveTracks(moves: RoundDescMove, id: string): TrackDetail[] {
+  getMoveTracks(moves: RoundDescMove, id: string): TrackDetail[] {
+    const startPoint = moves.starting_point || moves.from;
+    const moveToPoint = moves.dest[moves.dest.length - 1];
+    const descInfo: DescInfo = {
+      type: descType.MOVE,
+      id,
+      sender: {
+        isEnemy: this.game.getSoliderEnemyById(moves.id),
+        pos: {
+          x: startPoint?.x ?? 0,
+          y: startPoint?.y ?? 0,
+        },
+      },
+      moveTo: moveToPoint,
+      receives: [],
+    };
     const tracks: TrackDetail[] = moves.dest.map((item, index) => {
       const point = moves.starting_point || moves.from;
       const { x, y } = index === 0 && point ? point : moves.dest[index - 1];
@@ -299,6 +328,7 @@ class Running extends EventTarget {
         type: descType.MOVE,
         receive_id: moves.id,
         sender_id: moves.id,
+        descInfo,
         currentAxisPoint: { x, y },
         targetAxisPoint: {
           x: item.x,
@@ -311,7 +341,8 @@ class Running extends EventTarget {
   }
 
   // 获取血量轨道详情
-  static getTotalHpTracks(info: RoundDescTotalHp, id: string): TrackDetail[] {
+  getTotalHpTracks(info: RoundDescTotalHp, id: string): TrackDetail[] {
+    console.log(this);
     return [
       {
         id,
@@ -329,12 +360,22 @@ class Running extends EventTarget {
   }
 
   // 获取击退轨道详情
-  static getBeatMoveTracks(
-    moves: RoundDescBeatMove,
-    id: string,
-  ): TrackDetail[] {
+  getBeatMoveTracks(moves: RoundDescBeatMove, id: string): TrackDetail[] {
     const { x, y } = moves.from;
     const { x: x1, y: y1 } = moves.dest;
+    console.log(this);
+    // const descInfo: DescInfo = {
+    //   type: descType.MOVE,
+    //   sender: {
+    //     isEnemy: this.game.getSoliderEnemyById(moves.move_unit),
+    //     pos: {
+    //       x: startPoint?.x ?? 0,
+    //       y: startPoint?.y ?? 0,
+    //     },
+    //   },
+    //   moveTo: moveToPoint,
+    //   receives: [],
+    // };
 
     return [
       {
@@ -420,13 +461,43 @@ class Running extends EventTarget {
   }
 
   // 获取攻击轨道
-  static getAttackTracks(
+  getAttackTracks(
     attacks: RoundDesc,
     desc_type: DescType,
     id: string,
     self?: boolean, // 没有动画效果的攻击(自伤、仅前端概念)
     info?: RoundDescTotalHp,
   ): TrackDetail[] {
+    console.log(this);
+    const receives: PeopleInfo[] = [];
+    if (attacks.around && attacks.around.length > 1) {
+      attacks.around.forEach(item => {
+        receives.push({
+          pos: item.receive_point,
+          isEnemy: this.game.getSoliderEnemyById(item.receive_id),
+          receive_sub_hp: item.receive_sub_hp,
+        });
+      });
+    } else {
+      receives.push({
+        pos: attacks.receive_point,
+        isEnemy: this.game.getSoliderEnemyById(attacks.receive_id),
+        receive_sub_hp: attacks.receive_sub_hp,
+      });
+    }
+    const descInfo: DescInfo = {
+      type: desc_type,
+      id,
+      sender: {
+        isEnemy: this.game.getSoliderEnemyById(attacks.sender_id),
+        pos: {
+          x: attacks.sender_point?.x ?? 0,
+          y: attacks.sender_point?.y ?? 0,
+        },
+      },
+      receives,
+    };
+
     const currentAxisPoint = {
       x: self
         ? attacks.receive_point?.x
@@ -451,21 +522,35 @@ class Running extends EventTarget {
         receive_id: attacks.receive_id ?? attacks.sender_id,
         sender_id,
         info,
+        descInfo,
         attackInfo: { ...attacks },
       },
     ];
   }
 
   // 获取移除轨道
-  static getRemoveTracks(
+  getRemoveTracks(
     attacks: RoundDescRemove,
     desc_type: DescType,
     id: string,
   ): TrackDetail[] {
+    const descInfo: DescInfo = {
+      type: desc_type,
+      id,
+      sender: {
+        isEnemy: this.game.getSoliderEnemyById(attacks.receive_id),
+        pos: {
+          x: attacks.receive_point?.x ?? 0,
+          y: attacks.receive_point?.y ?? 0,
+        },
+      },
+      receives: [],
+    };
     return [
       {
         id,
         type: desc_type,
+        descInfo,
         receive_id: attacks.receive_id,
         sender_id: attacks.receive_id,
         currentAxisPoint: {
@@ -481,12 +566,12 @@ class Running extends EventTarget {
   }
 
   // 获取AOE轨道
-  static getBeatTracks(
+  getBeatTracks(
     attacks: RoundDescBeat,
     desc_type: DescType,
     id: string,
   ): TrackDetail[] {
-    const detail = Running.getDetails(attacks.detail, id, true);
+    const detail = this.getDetails(attacks.detail, id, true);
 
     const attack: TrackDetail[] = [
       {
@@ -549,7 +634,7 @@ class Running extends EventTarget {
     return attack;
   }
 
-  // 更加轨道详情获取小人
+  // 根据轨道详情获取小人
   getSoldiersByTrack(attacks: TrackDetail) {
     // const senderAxis = this.game.getAxis(
     //   attacks.currentAxisPoint.x,
@@ -605,6 +690,9 @@ class Running extends EventTarget {
                   item.now_shield,
                 );
               }
+              if (item.now_hp === 0) {
+                activeSoldier.dispatchEvent(new Event('death'));
+              }
             }
           }
         });
@@ -619,6 +707,9 @@ class Running extends EventTarget {
             attacks?.attackInfo?.now_hp,
             attacks?.attackInfo.now_shield,
           );
+        }
+        if (attacks?.attackInfo?.now_hp === 0) {
+          receiveSoldier.dispatchEvent(new Event('death'));
         }
         // if (attacks?.attackInfo?.receive_sub_hp) {
         //   receiveSoldier.setActiveHp(
@@ -749,6 +840,9 @@ class Running extends EventTarget {
             sender_vhp.now_shield,
           );
         }
+        if (sender_vhp.now_hp === 0) {
+          receiveSoldier.dispatchEvent(new Event('death'));
+        }
         if (
           typeof receive_vhp.now_hp === 'number' &&
           typeof receive_vhp.now_shield === 'number'
@@ -757,6 +851,9 @@ class Running extends EventTarget {
             receive_vhp.now_hp,
             receive_vhp.now_shield,
           );
+        }
+        if (receive_vhp.now_hp === 0) {
+          receiveSoldier.dispatchEvent(new Event('death'));
         }
       }
 
@@ -798,7 +895,7 @@ class Running extends EventTarget {
         list: [],
       };
       // if (this.rounds[])
-      const detail = Running.getDetails(this.rounds[round].data, round);
+      const detail = this.getDetails(this.rounds[round].data, round);
       this.trackDetails.push(...detail);
     });
   }
@@ -821,17 +918,13 @@ class Running extends EventTarget {
   };
 
   // 获取轨道详情
-  static getDetails(
-    roundInfos: RoundInfo[],
-    round: string | number,
-    self?: boolean,
-  ) {
+  getDetails(roundInfo: RoundInfo[], round: string | number, self?: boolean) {
     const details: TrackDetail[] = [];
 
-    const roundInfo = orderBy(
-      roundInfos,
-      item => item.desc_type === descType.REMOVE,
-    );
+    // const roundInfo = orderBy(
+    //   roundInfos,
+    //   item => item.desc_type === descType.REMOVE,
+    // );
 
     Object.keys(roundInfo).forEach((_track, index) => {
       const track = Number(_track);
@@ -843,14 +936,14 @@ class Running extends EventTarget {
 
       // 移动
       if (info.desc_type === descType.MOVE) {
-        details.push(...Running.getMoveTracks(info.move, `${round}-${_track}`));
+        details.push(...this.getMoveTracks(info.move, `${round}-${_track}`));
       }
 
       // 攻击
       const type = Running.attackOfType[info.desc_type] as 'attack';
       if (Running.attackOfType[info.desc_type]) {
         details.push(
-          ...Running.getAttackTracks(
+          ...this.getAttackTracks(
             info[type],
             info.desc_type,
             `${round}-${_track}`,
@@ -862,7 +955,7 @@ class Running extends EventTarget {
       // 移除
       if (info.desc_type === descType.REMOVE) {
         details.push(
-          ...Running.getRemoveTracks(
+          ...this.getRemoveTracks(
             info.unit_remove,
             info.desc_type,
             `${round}-${_track}`,
@@ -872,7 +965,7 @@ class Running extends EventTarget {
       // 击退(AOE)
       if (info.desc_type === descType.BEAT) {
         details.push(
-          ...Running.getBeatTracks(
+          ...this.getBeatTracks(
             info.beat,
             info.desc_type,
             `${round}-${_track}`,
@@ -883,13 +976,13 @@ class Running extends EventTarget {
       // 击退产生位移
       if (info.desc_type === descType.BEAT_MOVE) {
         details.push(
-          ...Running.getBeatMoveTracks(info.beat_move, `${round}-${_track}`),
+          ...this.getBeatMoveTracks(info.beat_move, `${round}-${_track}`),
         );
       }
       // 击退产生碰撞
       if (info.desc_type === descType.BEAT_COLLISION) {
         details.push(
-          ...Running.getAttackTracks(
+          ...this.getAttackTracks(
             info.carsh_harm,
             info.desc_type,
             `${round}-${_track}`,
@@ -899,7 +992,7 @@ class Running extends EventTarget {
 
       if (info.desc_type === descType.ADD_TERRAIN_FIRING) {
         details.push(
-          ...Running.getAttackTracks(
+          ...this.getAttackTracks(
             info.add_terrain_firing,
             info.desc_type,
             `${round}-${_track}`,
@@ -909,7 +1002,7 @@ class Running extends EventTarget {
       }
       if (info.desc_type === descType.TERRAIN_FIRING) {
         details.push(
-          ...Running.getAttackTracks(
+          ...this.getAttackTracks(
             info.terrain_firing,
             info.desc_type,
             `${round}-${_track}`,
@@ -919,9 +1012,7 @@ class Running extends EventTarget {
       }
 
       if (info.desc_type === descType.TOTAL_INFO) {
-        details.push(
-          ...Running.getTotalHpTracks(info.info, `${round}-${_track}`),
-        );
+        details.push(...this.getTotalHpTracks(info.info, `${round}-${_track}`));
       }
     });
     return details;

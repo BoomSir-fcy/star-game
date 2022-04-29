@@ -43,11 +43,26 @@ interface EffectInfo extends BulletItemInfoOfConfig {
   complete: boolean; // 是否完成整个攻击
   completeMove: boolean; // 是否移动完成
   completeBomb: boolean; // 是否爆炸完成
+  minTimeEnd: boolean; // 是否到达已经执行时间
+  timer: number; // 计时器
 }
 
 type Effects = {
   [effect in BulletType]: EffectInfo;
 };
+
+/**
+ * 最短执行时间
+ * 比如子弹需要飞行1秒、爆炸1秒
+ * 但是最短执行时间为3秒
+ * 则在3秒后再触发attackEnd
+ *
+ * 如果子弹飞行2秒、爆炸2秒
+ * 最短执行时间为3秒
+ * 则在2+2=4秒后触发attackEnd
+ *
+ *
+ */
 
 // 初始化攻击特效
 const initEffectInfo = (configOptions: BulletItemInfoOfConfig) => {
@@ -62,6 +77,8 @@ const initEffectInfo = (configOptions: BulletItemInfoOfConfig) => {
     complete: false, // 是否完成整个攻击
     completeMove: false, // 是否移动完成
     completeBomb: false, // 是否爆炸完成
+    minTimeEnd: true, // 是否到达已经执行时间
+    timer: 0,
     // name,
     ...configOptions,
   };
@@ -88,6 +105,8 @@ class Bullet extends EventTarget {
 
   speed = 0.1; // 速度
 
+  minTime = 60 * 3; // 最小执行时间
+
   sprite = new Sprite();
 
   container = new Container();
@@ -103,16 +122,23 @@ class Bullet extends EventTarget {
   loader = Loader.shared;
 
   // 生命周期, 开始
-  onStart(attackTarget: Combat) {
+  onStart(name: BulletType, attackTarget: Combat) {
     this.attackTarget = attackTarget;
     this.combat.container.parent.addChild(this.container);
     this.dispatchEvent(new Event('start'));
+    // this.timTricker(name);
   }
 
   // 生命周期, 结束
-  onEnd() {
-    this.container.parent.removeChild(this.container);
-    this.dispatchEvent(new Event('attackEnd'));
+  onEnd(name: BulletType) {
+    const { complete, minTimeEnd } = this.effects[name];
+    if (minTimeEnd && complete) {
+      this.dispatchEvent(new Event('attackEnd'));
+      this.effects[name].complete = false;
+      // this.effects[name].minTimeEnd = false;
+    }
+
+    // this.container.parent.removeChild(this.container);
   }
 
   // 加载特效
@@ -244,6 +270,9 @@ class Bullet extends EventTarget {
           display,
           this.combat.axisPoint,
           attackTarget.axisPoint,
+          {
+            // time: 60 * 2, // 2秒
+          },
         );
         this.onMoveStart(
           name,
@@ -329,7 +358,9 @@ class Bullet extends EventTarget {
   onBombEnd(name: BulletType) {
     this.effects[name].completeBomb = true;
     // this.dispatchEvent(new Event('attackEnd'));
-    this.onEnd();
+    this.container.parent.removeChild(this.container);
+    this.effects[name].complete = true;
+    this.onEnd(name);
   }
 
   /**
@@ -449,6 +480,17 @@ class Bullet extends EventTarget {
     }
   }
 
+  timTricker(name: BulletType) {
+    this.effects[name].timer += 1;
+    if (this.effects[name].timer >= this.minTime) {
+      this.effects[name].minTimeEnd = true;
+      this.effects[name].timer = 0;
+      this.onEnd(name);
+      return;
+    }
+    requestAnimationFrame(this.timTricker.bind(this, name));
+  }
+
   /**
    *
    * @param name 类型
@@ -467,7 +509,7 @@ class Bullet extends EventTarget {
       bulletType.ADD_BOMB,
     ];
 
-    this.onStart(attackTarget);
+    this.onStart(name, attackTarget);
     if (effect) {
       this.testAttack(name, attackTarget, effect);
       return;

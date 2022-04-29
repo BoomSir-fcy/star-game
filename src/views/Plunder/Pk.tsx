@@ -64,19 +64,17 @@ const Pk = () => {
 
   // TODO: 要干掉
   // useFetchGamePK(5000000000000004, 5000000000000002, 10);
-  useFetchGamePKTest(5000000000000040, undefined, 10);
-
-  console.log(PKInfo);
+  useFetchGamePKTest(5000000000000040, undefined, 30);
 
   const { initHandle, running } = usePK(game);
 
   const [roundInfo, setRoundInfo] = useState<TrackDetail | null>(null);
+  const [roundInfos, setRoundInfos] = useState<TrackDetail[]>([]);
   const [totalInfo, setTotalInfo] = useState<RoundDescTotalHp | null>(null);
 
   useEffect(() => {
     if (!mounted) {
       if (ref.current && game && PKInfo) {
-        console.log(121221);
         setTotalInfo(PKInfo.init.show_hp);
         setMounted(true);
         ref.current.appendChild(game.view);
@@ -107,17 +105,30 @@ const Pk = () => {
 
   const onRunningUpdate = useCallback(
     (event: Event) => {
-      // console.log(event);
       const { detail } = event as CustomEvent<TrackDetail>;
       if (detail) {
+        setRoundInfos(prev => {
+          console.log(detail.id);
+
+          if (
+            !prev.find(
+              item =>
+                item.descInfo?.id === detail.descInfo?.id &&
+                detail.descInfo?.id,
+            )
+          ) {
+            return [...prev, detail];
+          }
+          console.log(999999, detail.descInfo?.id);
+          return prev;
+        });
         setRoundInfo(detail);
         if (detail.info) {
-          console.log(detail.info);
           setTotalInfo(detail.info);
         }
       }
     },
-    [setRoundInfo, setTotalInfo],
+    [setRoundInfo, setTotalInfo, setRoundInfos],
   );
 
   useEffect(() => {
@@ -157,14 +168,14 @@ const Pk = () => {
         <Flex flex='1' flexDirection='column'>
           <Flex mt='-52px' justifyContent='space-between'>
             <PKProgress
-              total={PKInfo?.init?.show_hp?.blue_total_hp}
-              current={totalInfo?.blue_total_hp}
+              total={PKInfo?.init?.show_hp?.blue_total_hp ?? 0}
+              current={totalInfo?.blue_total_hp ?? 0}
             />
             <RoundPanel mt='-45px' roundName={roundInfo?.id} />
             <PKProgress
               opponent
-              total={PKInfo?.init?.show_hp?.red_total_hp}
-              current={totalInfo?.red_total_hp}
+              total={PKInfo?.init?.show_hp?.red_total_hp ?? 0}
+              current={totalInfo?.red_total_hp ?? 0}
             />
           </Flex>
           <Flex justifyContent='center' alignItems='center'>
@@ -190,13 +201,16 @@ const Pk = () => {
         justifyContent='space-between'
         position='absolute'
         bottom='-1000px'
+        width='100%'
         style={{
           transform: `translateZ(1px) translateY(${complete ? -960 : 0}px)`,
           transition: 'all 0.5s',
         }}
       >
         <WaitPlunderList />
-        <PlunderPanel />
+        <Flex flex={1}>
+          <PlunderPanel width='100%' details={roundInfos} />
+        </Flex>
         <WaitPlunderList />
       </Flex>
     </Layout>

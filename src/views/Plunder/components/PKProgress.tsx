@@ -95,7 +95,7 @@ const PKProgress: React.FC<PKProgressProps> = ({
   const { t } = useTranslation();
 
   const progress = useMemo(() => {
-    if (total && typeof current === 'number') {
+    if (total && typeof current === 'number' && current !== 0) {
       return Math.floor((current / total) * 100);
     }
     return 100;

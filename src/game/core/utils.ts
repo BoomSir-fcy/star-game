@@ -185,6 +185,41 @@ export const getEffectText = (effect?: DescType) => {
   return '未知';
 };
 
+export const getEffectDescText = (effect?: DescType) => {
+  if (effect === descType.ATTACK) return '攻击造成';
+  if (effect === descType.STOP_MOVE) return '产生禁锢';
+  if (effect === descType.ICE_END) return '解除冰冻';
+  if (effect === descType.FIRING) return '造成灼烧';
+  if (effect === descType.BOOM) return '炸弹爆炸,造成';
+  if (effect === descType.ICE_START) return '冰冻';
+  if (effect === descType.ADD_FIRING) return '灼烧';
+  if (effect === descType.ADD_BOOM) return '放置炸弹';
+  if (effect === descType.REMOVE_FIRING) return '发动灭火';
+  if (effect === descType.ADD_SHIELD) return '使用护盾';
+  if (effect === descType.REMOVE_SHIELD) return '护盾';
+  if (effect === descType.REMOVE_STOP_MOVE) return '解除禁锢';
+  if (effect === descType.ADD_TERRAIN_FIRING) return '产生地形灼烧';
+  if (effect === descType.TERRAIN_FIRING) return '灼烧造成';
+  return '未知';
+};
+export const getEffectDescTypeText = (effect?: DescType) => {
+  if (effect === descType.ATTACK) return '伤害';
+  if (effect === descType.STOP_MOVE) return '效果';
+  if (effect === descType.ICE_END) return '效果';
+  if (effect === descType.FIRING) return '伤害';
+  if (effect === descType.BOOM) return '伤害';
+  if (effect === descType.ICE_START) return '效果';
+  if (effect === descType.ADD_FIRING) return '伤害';
+  if (effect === descType.ADD_BOOM) return '伤害';
+  if (effect === descType.REMOVE_FIRING) return '效果';
+  if (effect === descType.ADD_SHIELD) return '护盾';
+  if (effect === descType.REMOVE_SHIELD) return '减少护盾';
+  if (effect === descType.REMOVE_STOP_MOVE) return '效果';
+  if (effect === descType.ADD_TERRAIN_FIRING) return '效果';
+  if (effect === descType.TERRAIN_FIRING) return '伤害';
+  return '未知';
+};
+
 // INIT: 1, // 初始化棋子
 // MOVE: 2, // 棋子移动
 // ATTACK: 3, // 棋子攻击
