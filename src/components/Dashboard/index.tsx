@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Flex, Box, Image } from 'uikit';
+import { Flex, BgCard, Image, TweenText } from 'uikit';
+
+import eventBus from 'utils/eventBus';
+import { useTranslation } from 'contexts/Localization';
 
 import {
   fetchUserBalanceAsync,
@@ -19,9 +22,7 @@ const FlexStyled = styled(Flex)`
   background-size: 100% 100%;
   width: 100%;
   height: 295px;
-  + div {
-    top: calc(50% + 295px);
-  }
+  margin-bottom: 30px;
 `;
 
 const Dashboard: React.FC<ButtonGroupProps> = ({
@@ -31,6 +32,11 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { t } = useTranslation();
+
+  const onRefreshClick = () => {
+    eventBus.dispatchEvent(new MessageEvent('onRefresh'));
+  };
 
   useEffect(() => {
     dispatch(fetchUserBalanceAsync());
@@ -43,7 +49,22 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
         <FlexStyled>
           <Avatar />
           <Flex flex={1}>
-            <Info onRefresh={onRefresh} className={className}>
+            <Info onRefresh={() => onRefreshClick()} className={className}>
+              {location.pathname === '/mystery-box' && (
+                <BgCard variant='short'>
+                  <Flex alignItems='center' height='100%' width='100%'>
+                    <TweenText
+                      width='100%'
+                      textAlign='center'
+                      fontSize='22px'
+                      to={t(
+                        "You don't have a planet yet, please get a planet first to start your planetary journey",
+                      )}
+                      shadow='primary'
+                    />
+                  </Flex>
+                </BgCard>
+              )}
               {children}
             </Info>
           </Flex>

@@ -28,6 +28,7 @@ import { fetchMePlanetAsync } from 'state/planet/fetchers';
 import { setActivePlanet } from 'state/planet/actions';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useToast } from 'contexts/ToastsContext';
+import eventBus from 'utils/eventBus';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 import { useJoinAlliance } from './hook';
 
@@ -216,6 +217,18 @@ const Planet = () => {
     setHints([...hints, newHint]);
   };
 
+  const onRefreshClick = React.useCallback(() => {
+    init();
+  }, [init]);
+
+  // 添加事件监听，用于更新状态
+  React.useEffect(() => {
+    eventBus.addEventListener('onRefresh', onRefreshClick);
+    return () => {
+      eventBus.removeEventListener('onRefresh', onRefreshClick);
+    };
+  }, [onRefreshClick]);
+
   return (
     <Box id='containerBox'>
       {/* <Steps
@@ -226,22 +239,6 @@ const Planet = () => {
       />
       <Hints enabled={hintsEnabled} hints={hints} /> */}
       <Layout>
-        {/* {!choose && (
-          <Dashboard
-            className='planet_number'
-            onRefresh={async () => {
-              dispatch(
-                fetchMePlanetAsync({
-                  page: state.page,
-                  page_size: 10,
-                  token: state.token,
-                  race: state.race,
-                  rarity: Number(parsedQs.t) || 0,
-                }),
-              );
-            }}
-          />
-        )} */}
         <Flex width='100%' position='relative'>
           <Box>
             {choose && (

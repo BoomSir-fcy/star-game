@@ -6,7 +6,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 
 import { DragCompoents } from './components/dragCompoents';
 
-const Upgrade = () => {
+const Details = () => {
   const parsedQs = useParsedQueryString();
   const [state, setState] = React.useState([]);
   const id = Number(parsedQs.id);
@@ -55,6 +55,8 @@ const Upgrade = () => {
     }
   }, [planet, selfBuilding, updateGrid]);
 
+  const getCallback = React.useCallback(() => {}, []);
+
   return (
     <Box>
       <DragCompoents
@@ -68,4 +70,4 @@ const Upgrade = () => {
   );
 };
 
-export default Upgrade;
+export default Details;

@@ -64,7 +64,6 @@ const Plunder = () => {
 
   return (
     <Layout>
-      {/* <Dashboard /> */}
       <BoxStyled position='relative'>
         <PeopleCardLeft state={state} {...mineUser} />
         <Fringe />

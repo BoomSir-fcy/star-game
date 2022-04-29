@@ -14,7 +14,7 @@ import {
 import { useTranslation } from 'contexts/Localization';
 
 export interface ButtonGroupProps {
-  onRefresh?: ButtonOnRefresh;
+  onRefresh?: () => void;
   onBack?: ButtonOnBack;
   className?: string;
 }

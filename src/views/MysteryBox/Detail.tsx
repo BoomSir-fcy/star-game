@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useTranslation } from 'contexts/Localization';
+import eventBus from 'utils/eventBus';
 import Attributes from './components/Attributes';
 import Extra from './components/Extra';
 import Race from './components/Race';
@@ -66,13 +67,20 @@ const MysteryBoxDetail = () => {
     }
   }, [info, id, dispatch]);
 
+  const onRefreshClick = React.useCallback(() => {
+    dispatch(fetchPlanetInfoAsync([id]));
+  }, [dispatch, id]);
+
+  // 添加事件监听，用于更新状态
+  React.useEffect(() => {
+    eventBus.addEventListener('onRefresh', onRefreshClick);
+    return () => {
+      eventBus.removeEventListener('onRefresh', onRefreshClick);
+    };
+  }, [onRefreshClick]);
+
   return (
     <Layout>
-      {/* <Dashboard
-        onRefresh={async () => {
-          dispatch(fetchPlanetInfoAsync([id]));
-        }}
-      /> */}
       <Flex>
         <MysteryBox>
           <MysteryBoxBaseStyled quality={mysteryBoxQualities.ORDINARY} />

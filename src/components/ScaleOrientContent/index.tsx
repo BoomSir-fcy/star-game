@@ -16,7 +16,7 @@ const Content = styled(Box)<{ scale: number }>`
   height: 900px;
   transform-origin: 0 0;
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
   /* background: pink; */
   transform: ${({ scale }) =>
@@ -81,8 +81,10 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       />
       <div className={VIDEO_GLOBAL_CLASS_NAME} />
       <Box id='scale-content'>
-        <Dashboard />
-        <Content scale={scale}>{children}</Content>
+        <Content scale={scale}>
+          <Dashboard />
+          {children}
+        </Content>
       </Box>
     </Box>
   );

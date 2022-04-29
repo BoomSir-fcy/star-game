@@ -57,7 +57,6 @@ const Plunder = () => {
 
   return (
     <Layout>
-      <Dashboard />
       <GamePK pid0={infoP0?.id} pid1={infoP1?.id} />
     </Layout>
   );

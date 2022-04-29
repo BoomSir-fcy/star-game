@@ -143,7 +143,6 @@ export const DragCompoents: React.FC<{
       //   title: `${t('planetBuildingTypeCombatClass')}`,
       // },
     ],
-    data: [] as any,
   });
   const [grid, setGrid] = React.useState<any[]>([]);
   const [gridBuilds, setGridBuilds] = React.useState<any[]>([]);
@@ -163,7 +162,6 @@ export const DragCompoents: React.FC<{
     // const isactive = gridBuilds.filter((row: any) => row.isactive);
     setGrid(propsData);
     setGridBuilds(currBuilds);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
@@ -173,27 +171,27 @@ export const DragCompoents: React.FC<{
   }, [itemData, updateGrids]);
 
   // 计算绝对坐标
-  const getAbsolutePosition = (index: number) => {
-    const row = Math.floor(index / cols);
-    const col = Math.floor(index % rows);
-    // 计算相邻的格子坐标
-    const bottomRow = row + 1;
-    const bottomCol = col;
-    // 当前格子右边坐标
-    const rightRow = row;
-    const rightCol = col + 1;
-
-    if (bottomRow > rows - 1 || rightCol > cols - 1) {
-      console.log('已经没有格子了');
-      return [];
-    }
-    // 斜角点坐标
-    const bottomRightRow = bottomRow - row + (rightRow - row) + row;
-    const bottomRightCol = bottomCol - col + (rightCol - col) + col;
-    const bevelIndex = bottomRightRow * rows + bottomRightCol;
-
-    return [Number(index), Number(index) + 1, bevelIndex - 1, bevelIndex];
-  };
+  const getAbsolutePosition = React.useCallback(
+    (index: number) => {
+      const row = Math.floor(index / cols);
+      const col = Math.floor(index % rows);
+      // 计算相邻的格子坐标
+      const bottomRow = row + 1;
+      const bottomCol = col;
+      // 当前格子右边坐标
+      const rightRow = row;
+      const rightCol = col + 1;
+      if (bottomRow > rows - 1 || rightCol > cols - 1) {
+        return [];
+      }
+      // 斜角点坐标
+      const bottomRightRow = bottomRow - row + (rightRow - row) + row;
+      const bottomRightCol = bottomCol - col + (rightCol - col) + col;
+      const bevelIndex = bottomRightRow * rows + bottomRightCol;
+      return [Number(index), Number(index) + 1, bevelIndex - 1, bevelIndex];
+    },
+    [cols, rows],
+  );
 
   const handleData = React.useCallback(
     (afterTarget: any) => {
@@ -264,8 +262,7 @@ export const DragCompoents: React.FC<{
         }
       }
     },
-    // eslint-disable-next-line
-    [grid, t, toastError],
+    [getAbsolutePosition, grid, t, toastError],
   );
 
   const dragStart = (e: React.DragEvent<HTMLDivElement>) => {

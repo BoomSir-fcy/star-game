@@ -18,6 +18,7 @@ import { toast } from 'react-toastify';
 import { StarLevelInfo } from 'state/types';
 import { useWeb3React } from '@web3-react/core';
 import { useTranslation } from 'contexts/Localization';
+import eventBus from 'utils/eventBus';
 import { GalaxyImage } from './components/GalaxyImage';
 import { Rewards } from './Rewards';
 
@@ -56,13 +57,20 @@ const Galaxy = () => {
     initList();
   }, [initList]);
 
+  const onRefreshClick = React.useCallback(() => {
+    dispatch(fetchGalaxyListAsync());
+  }, [dispatch]);
+
+  // 添加事件监听，用于更新状态
+  React.useEffect(() => {
+    eventBus.addEventListener('onRefresh', onRefreshClick);
+    return () => {
+      eventBus.removeEventListener('onRefresh', onRefreshClick);
+    };
+  }, [onRefreshClick]);
+
   return (
     <Layout>
-      {/* <Dashboard
-        onRefresh={async () => {
-          dispatch(fetchGalaxyListAsync());
-        }}
-      /> */}
       {!loadingGalaxy ? (
         <Flex alignItems='center'>
           <Nav

@@ -1,6 +1,4 @@
 const getHidePath = (urls: string[], key: string) => {
-  console.log(key, urls.indexOf(key) > -1);
-
   return urls.indexOf(key) > -1;
 };
 

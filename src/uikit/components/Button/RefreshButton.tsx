@@ -4,7 +4,7 @@ import Button from './Button';
 import { ButtonProps, ButtonOnRefresh } from './types';
 
 interface RefreshButtonProps extends ButtonProps {
-  onRefresh?: ButtonOnRefresh;
+  onRefresh?: () => void;
   variant?: 'tertiary' | 'vsRefresh';
 }
 
