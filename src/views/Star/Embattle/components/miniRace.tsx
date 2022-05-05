@@ -4,7 +4,7 @@ import { Box } from 'uikit';
 import useGame from 'game/hooks/useGame';
 import { MapBaseUnits } from 'state/types';
 
-import RunSimulation, { RoundsProps } from 'game/core/RunSimulation';
+import RunSimulation, { RoundsProps } from 'game/core/Running';
 
 const Container = styled(Box)`
   position: absolute;
