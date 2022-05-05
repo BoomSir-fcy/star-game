@@ -85,11 +85,17 @@ interface PKProgressProps extends FlexProps {
   opponent?: boolean;
   total?: number;
   current?: number;
+  result: boolean[];
+  isRed?: boolean;
+  totalRound?: number;
 }
 const PKProgress: React.FC<PKProgressProps> = ({
   opponent,
   total,
   current,
+  totalRound = 5,
+  result,
+  isRed,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -113,12 +119,13 @@ const PKProgress: React.FC<PKProgressProps> = ({
       <FlexStyled rotate={opponent}>
         <ProgressBox step={`${progress}%`} />
         <Flex mt='14px'>
-          <Round win />
-          <Round lose />
-          <Round />
-          <Round />
-          <Round />
-          <Round />
+          {Array.from(new Array(totalRound)).map((item, index) => {
+            if (index > result.length - 1) {
+              return <Round />;
+            }
+            const win = isRed ? !result[index] : result[index];
+            return <Round win={win} lose={!win} />;
+          })}
         </Flex>
       </FlexStyled>
     </FlexStyled>
