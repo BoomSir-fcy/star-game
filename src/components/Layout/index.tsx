@@ -6,7 +6,6 @@ import { Box } from 'uikit';
 const Layout: React.FC = ({ children }) => {
   return (
     <Box width='100%' height='100%'>
-      {/* <Dashboard /> */}
       {children}
     </Box>
   );

@@ -53,7 +53,7 @@ function App() {
         <Suspense fallback='loading...'>
           <Routes>
             <Route path='/' element={<Login />} />
-            <Route path='/index' element={<Home />} />
+            {/* <Route path='/index' element={<Home />} /> */}
 
             {/* 盲盒 */}
             <Route path='/mystery-box' element={<MysteryBox />} />

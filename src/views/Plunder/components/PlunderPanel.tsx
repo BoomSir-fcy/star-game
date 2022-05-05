@@ -86,6 +86,27 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
       </PanelText>
     );
   }
+  if (detail?.type === descType.FIRING) {
+    console.log(detail, '===灼烧');
+    return (
+      <PanelText>
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <>
+              <PanelSide isEnemy={item.isEnemy} />
+              <PanelAxis axis={item.pos} />
+              建筑
+              {getEffectDescText(detail.descInfo?.type)}
+              {detail.attackInfo?.receive_sub_hp &&
+                `${detail.attackInfo?.receive_sub_hp}HP`}
+              {getEffectDescTypeText(detail.descInfo?.type)}
+              {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
+            </>
+          );
+        })}
+      </PanelText>
+    );
+  }
   if (detail?.type) {
     return (
       <PanelText>

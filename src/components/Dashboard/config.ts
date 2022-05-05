@@ -13,6 +13,7 @@ export const getHideHeader = (url: string) => {
       '/star/embattle-test',
       '/star/search',
       '/upgrade-list',
+      '/plunder-pk',
     ],
     url,
   );
