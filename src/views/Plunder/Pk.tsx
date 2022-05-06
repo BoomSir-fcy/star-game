@@ -36,6 +36,7 @@ import {
   RoundPanel,
   WaitPlunderList,
   PlunderPanel,
+  OtherDetail,
 } from './components';
 import usePlunder from './hooks/usePlunder';
 import { usePK } from './hooks/usePK';
@@ -48,6 +49,10 @@ const Pk = () => {
   useFetchGameTerrain();
   const { toastError } = useToast();
 
+  const parseQs = useParsedQueryString();
+
+  const id = Number(parseQs.pid0) || 5000000000000040;
+
   const { state, matchUser, mineUser } = useStore(p => p.game);
 
   const { TerrainInfo } = useStore(p => p.game);
@@ -57,6 +62,8 @@ const Pk = () => {
   const [complete, setComplete] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  const [current, setCurrent] = useState(0);
+
   const ref = useRef<HTMLDivElement>(null);
 
   const game = useGame({ width: 1400, height: 600 });
@@ -64,28 +71,36 @@ const Pk = () => {
 
   // TODO: 要干掉
   // useFetchGamePK(5000000000000004, 5000000000000002, 10);
-  useFetchGamePKTest(5000000000000040, undefined, 30);
+  useFetchGamePKTest(id, undefined, 30);
 
   const { initHandle, running } = usePK(game);
 
   const [roundInfo, setRoundInfo] = useState<TrackDetail | null>(null);
   const [roundInfos, setRoundInfos] = useState<TrackDetail[]>([]);
+  const [others, setOthers] = useState<OtherDetail[]>([]);
   const [totalInfo, setTotalInfo] = useState<RoundDescTotalHp | null>(null);
+  const [result, setResult] = useState<boolean[]>([]);
 
   useEffect(() => {
     if (!mounted) {
       if (ref.current && game && PKInfo) {
         setTotalInfo(PKInfo.init.show_hp);
         setMounted(true);
-        ref.current.appendChild(game.view);
-        const loaders = game.loadResources();
-        loaders.addEventListener('progress', event => {
-          setProgress((event as ProgressEvent).loaded);
-        });
-        loaders.addEventListener('complete', () => {
+        // 初始化
+        if (current === 0) {
+          ref.current.appendChild(game.view);
+          const loaders = game.loadResources();
+          loaders.addEventListener('progress', event => {
+            setProgress((event as ProgressEvent).loaded);
+          });
+          loaders.addEventListener('complete', () => {
+            setComplete(true);
+            initHandle(PKInfo);
+          });
+        } else if (current <= 5) {
           setComplete(true);
           initHandle(PKInfo);
-        });
+        }
       } else {
         setTimeout(() => {
           // alert('未查询到作战信息');
@@ -101,6 +116,7 @@ const Pk = () => {
     setComplete,
     PKInfo,
     initHandle,
+    current,
   ]);
 
   const onRunningUpdate = useCallback(
@@ -108,8 +124,7 @@ const Pk = () => {
       const { detail } = event as CustomEvent<TrackDetail>;
       if (detail) {
         setRoundInfos(prev => {
-          console.log(detail.id);
-
+          console.log(prev);
           if (
             !prev.find(
               item =>
@@ -119,7 +134,6 @@ const Pk = () => {
           ) {
             return [...prev, detail];
           }
-          console.log(999999, detail.descInfo?.id);
           return prev;
         });
         setRoundInfo(detail);
@@ -131,16 +145,69 @@ const Pk = () => {
     [setRoundInfo, setTotalInfo, setRoundInfos],
   );
 
+  const newRoundHandle = useCallback(() => {
+    console.log('重新开始');
+    game.clearSoldier();
+    setTotalInfo(null);
+    setOthers([]);
+    setRoundInfos([]);
+    setMounted(false);
+    setCurrent(prev => prev + 1);
+  }, [setMounted, setTotalInfo, setCurrent, setOthers, setRoundInfos, game]);
+
+  const onRunEnd = useCallback(() => {
+    const res = Math.random() > 0.5;
+    console.log('结束了 一切都结束了', res);
+    setResult(prev => {
+      return [...prev, res];
+    });
+    // descType
+    setOthers(prev => {
+      return [
+        ...prev,
+        {
+          id: 0,
+          text: '本场战斗结束',
+          type: 1,
+        },
+      ];
+    });
+
+    if (current < 4) {
+      const timer = setInterval(() => {
+        setOthers(prev => {
+          const { length } = prev;
+          const index = 4 - length;
+          if (index === 0) {
+            clearInterval(timer);
+            newRoundHandle();
+            return prev;
+          }
+          return [
+            ...prev,
+            {
+              id: length,
+              text: `${index}`,
+              type: 2,
+            },
+          ];
+        });
+      }, 1000);
+    }
+  }, [setOthers, current, newRoundHandle, setResult]);
+
   useEffect(() => {
     if (running) {
       running.addEventListener('updateTrack', onRunningUpdate);
+      running.addEventListener('runEnd', onRunEnd);
     }
     return () => {
       if (running) {
         running.removeEventListener('updateTrack', onRunningUpdate);
+        running.removeEventListener('runEnd', onRunEnd);
       }
     };
-  }, [running, onRunningUpdate]);
+  }, [running, onRunningUpdate, onRunEnd]);
 
   useEffect(() => {
     if (TerrainInfo?.length) {
@@ -170,10 +237,13 @@ const Pk = () => {
             <PKProgress
               total={PKInfo?.init?.show_hp?.blue_total_hp ?? 0}
               current={totalInfo?.blue_total_hp ?? 0}
+              result={result}
             />
             <RoundPanel mt='-45px' roundName={roundInfo?.id} />
             <PKProgress
               opponent
+              result={result}
+              isRed
               total={PKInfo?.init?.show_hp?.red_total_hp ?? 0}
               current={totalInfo?.red_total_hp ?? 0}
             />
@@ -209,7 +279,7 @@ const Pk = () => {
       >
         <WaitPlunderList />
         <Flex flex={1}>
-          <PlunderPanel width='100%' details={roundInfos} />
+          <PlunderPanel width='100%' details={roundInfos} others={others} />
         </Flex>
         <WaitPlunderList />
       </Flex>

@@ -3,6 +3,7 @@ import { Flex, Spinner } from 'uikit';
 import { useDispatch } from 'react-redux';
 import { Layout, Dashboard, Nav, StarAddBtn } from 'components';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import eventBus from 'utils/eventBus';
 import { useStore } from 'state';
 import {
   fetchGalaxyStarListAsync,
@@ -60,13 +61,20 @@ const Stars = () => {
     initList();
   }, [initList]);
 
+  const onRefreshClick = React.useCallback(() => {
+    dispatch(fetchGalaxyStarListAsync(galaxyId));
+  }, [dispatch, galaxyId]);
+
+  // 添加事件监听，用于更新状态
+  React.useEffect(() => {
+    eventBus.addEventListener('onRefresh', onRefreshClick);
+    return () => {
+      eventBus.removeEventListener('onRefresh', onRefreshClick);
+    };
+  }, [onRefreshClick]);
+
   return (
     <Layout>
-      <Dashboard
-        onRefresh={async () => {
-          dispatch(fetchGalaxyStarListAsync(galaxyId));
-        }}
-      />
       {loading ? (
         <Spinner />
       ) : (

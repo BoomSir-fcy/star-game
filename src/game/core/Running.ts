@@ -43,6 +43,7 @@ interface PeopleInfo {
   pos: RoundDescAxis;
   isEnemy: boolean;
   receive_sub_hp?: number;
+  now_shield?: number;
 }
 export interface DescInfo {
   sender: PeopleInfo;
@@ -271,6 +272,7 @@ class Running extends EventTarget {
       this.trackIndex = 0;
       this.runHandle();
     } else {
+      // console.log(this.trackDetails[this.trackDetails.length - 1]);
       this.infoText.text = `结束战斗`;
       this.playing = false;
       this.dispatchEvent(new CustomEvent('runEnd'));
@@ -341,8 +343,7 @@ class Running extends EventTarget {
   }
 
   // 获取血量轨道详情
-  getTotalHpTracks(info: RoundDescTotalHp, id: string): TrackDetail[] {
-    console.log(this);
+  static getTotalHpTracks(info: RoundDescTotalHp, id: string): TrackDetail[] {
     return [
       {
         id,
@@ -360,22 +361,29 @@ class Running extends EventTarget {
   }
 
   // 获取击退轨道详情
-  getBeatMoveTracks(moves: RoundDescBeatMove, id: string): TrackDetail[] {
+  getBeatMoveTracks(
+    moves: RoundDescBeatMove,
+    id: string,
+    descId: string,
+  ): TrackDetail[] {
     const { x, y } = moves.from;
     const { x: x1, y: y1 } = moves.dest;
-    console.log(this);
-    // const descInfo: DescInfo = {
-    //   type: descType.MOVE,
-    //   sender: {
-    //     isEnemy: this.game.getSoliderEnemyById(moves.move_unit),
-    //     pos: {
-    //       x: startPoint?.x ?? 0,
-    //       y: startPoint?.y ?? 0,
-    //     },
-    //   },
-    //   moveTo: moveToPoint,
-    //   receives: [],
-    // };
+    const descInfo: DescInfo = {
+      id: descId,
+      type: descType.BEAT_MOVE,
+      sender: {
+        isEnemy: this.game.getSoliderEnemyById(moves.move_unit),
+        pos: {
+          x,
+          y,
+        },
+      },
+      moveTo: {
+        x: x1,
+        y: y1,
+      },
+      receives: [],
+    };
 
     return [
       {
@@ -383,6 +391,7 @@ class Running extends EventTarget {
         type: descType.BEAT_MOVE,
         sender_id: moves.move_unit,
         receive_id: moves.move_unit,
+        descInfo,
         currentAxisPoint: { x, y },
         targetAxisPoint: {
           x: x1,
@@ -417,6 +426,7 @@ class Running extends EventTarget {
     soldier.once('moveEnd', () => {
       callback(soldier);
     });
+    soldier.flipTargetPointOrientation(axisPoint);
     soldier.moveTo(axisPoint, t);
 
     return soldier;
@@ -468,7 +478,6 @@ class Running extends EventTarget {
     self?: boolean, // 没有动画效果的攻击(自伤、仅前端概念)
     info?: RoundDescTotalHp,
   ): TrackDetail[] {
-    console.log(this);
     const receives: PeopleInfo[] = [];
     if (attacks.around && attacks.around.length > 1) {
       attacks.around.forEach(item => {
@@ -476,13 +485,16 @@ class Running extends EventTarget {
           pos: item.receive_point,
           isEnemy: this.game.getSoliderEnemyById(item.receive_id),
           receive_sub_hp: item.receive_sub_hp,
+          now_shield: item.now_shield,
         });
       });
     } else {
       receives.push({
         pos: attacks.receive_point,
         isEnemy: this.game.getSoliderEnemyById(attacks.receive_id),
-        receive_sub_hp: attacks.receive_sub_hp,
+        receive_sub_hp:
+          attacks.receive_sub_hp ?? attacks.around?.[0]?.receive_sub_hp,
+        now_shield: attacks.now_shield ?? attacks.around?.[0]?.now_shield,
       });
     }
     const descInfo: DescInfo = {
@@ -573,6 +585,47 @@ class Running extends EventTarget {
   ): TrackDetail[] {
     const detail = this.getDetails(attacks.detail, id, true);
 
+    /**
+     * 红色方发起进攻
+     * 对蓝色方A、蓝色方B造成20hp伤害
+     * 对蓝色方A、蓝色方B击退
+     * A和C碰撞
+     *
+     */
+    // TODO: 想不出来怎么描述 啊啊啊啊啊啊啊啊啊啊啊
+    // const receives: PeopleInfo[] = [];
+    // if (attacks.around && attacks.around.length > 1) {
+    //   attacks.around.forEach(item => {
+    //     receives.push({
+    //       pos: item.receive_point,
+    //       isEnemy: this.game.getSoliderEnemyById(item.receive_id),
+    //       receive_sub_hp: item.receive_sub_hp,
+    //       now_shield: item.now_shield,
+    //     });
+    //   });
+    // } else {
+    //   receives.push({
+    //     pos: attacks.receive_point,
+    //     isEnemy: this.game.getSoliderEnemyById(attacks.receive_id),
+    //     receive_sub_hp:
+    //       attacks.receive_sub_hp ?? attacks.around?.[0]?.receive_sub_hp,
+    //     now_shield: attacks.now_shield ?? attacks.around?.[0]?.now_shield,
+    //   });
+    // }
+
+    // const descInfo: DescInfo = {
+    //   type: desc_type,
+    //   id,
+    //   sender: {
+    //     isEnemy: this.game.getSoliderEnemyById(attacks.sender_id),
+    //     pos: {
+    //       x: attacks.sender_point?.x ?? 0,
+    //       y: attacks.sender_point?.y ?? 0,
+    //     },
+    //   },
+    //   receives,
+    // };
+
     const attack: TrackDetail[] = [
       {
         id,
@@ -631,6 +684,9 @@ class Running extends EventTarget {
       // lastReceive = item.receive_id;
     });
 
+    if (attack.length !== 1) {
+      console.log(attack, '===attack');
+    }
     return attack;
   }
 
@@ -769,7 +825,7 @@ class Running extends EventTarget {
       console.warn(`warn: ${attacks.id}`);
       return null;
     }
-    sendSoldier.once('attackEnd', () => {
+    sendSoldier.once('bulletMoveEnd', () => {
       if (attacks.detail) {
         // const sendIds = [];
         // const receiveIds = [];
@@ -841,7 +897,7 @@ class Running extends EventTarget {
           );
         }
         if (sender_vhp.now_hp === 0) {
-          receiveSoldier.dispatchEvent(new Event('death'));
+          sendSoldier.dispatchEvent(new Event('death'));
         }
         if (
           typeof receive_vhp.now_hp === 'number' &&
@@ -976,7 +1032,11 @@ class Running extends EventTarget {
       // 击退产生位移
       if (info.desc_type === descType.BEAT_MOVE) {
         details.push(
-          ...this.getBeatMoveTracks(info.beat_move, `${round}-${_track}`),
+          ...this.getBeatMoveTracks(
+            info.beat_move,
+            `${round}-${_track}`,
+            `${round}`,
+          ),
         );
       }
       // 击退产生碰撞
@@ -1012,7 +1072,9 @@ class Running extends EventTarget {
       }
 
       if (info.desc_type === descType.TOTAL_INFO) {
-        details.push(...this.getTotalHpTracks(info.info, `${round}-${_track}`));
+        details.push(
+          ...Running.getTotalHpTracks(info.info, `${round}-${_track}`),
+        );
       }
     });
     return details;

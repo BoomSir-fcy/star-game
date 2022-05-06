@@ -4,11 +4,7 @@ import { Heading, Text, Flex, Box } from 'uikit';
 import Dashboard from 'components/Dashboard';
 
 const Home: React.FC = () => {
-  return (
-    <Box>
-      <Dashboard />
-    </Box>
-  );
+  return <Box>Home</Box>;
 };
 
 export default Home;

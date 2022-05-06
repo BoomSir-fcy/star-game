@@ -41,6 +41,10 @@ const PanelText = styled(Text).attrs({ small: true })`
   display: inline;
 `;
 
+const PanelTextHp: React.FC = ({ children }) => {
+  return <PanelText color='hp'>{children}HP</PanelText>;
+};
+
 const PanelSide = ({ isEnemy }: { isEnemy?: boolean }) => {
   if (isEnemy) {
     return <PanelText color='redSide'>红色方&nbsp;</PanelText>;
@@ -54,6 +58,8 @@ const PanelAxis = ({ axis }: { axis?: RoundDescAxis }) => {
   }
   return null;
 };
+
+// hp
 
 const PanelType = ({ detail }: { detail: TrackDetail }) => {
   if (detail?.type === descType.MOVE) {
@@ -71,9 +77,10 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
     return (
       <PanelText>
         <PanelSide />
-        总血量:{detail.info?.blue_total_hp || 0}HP;
+        总血量: <PanelTextHp>{detail.info?.blue_total_hp || 0}</PanelTextHp>
+        ;&nbsp;&nbsp;
         <PanelSide isEnemy />
-        总血量:{detail.info?.red_total_hp || 0}HP
+        总血量: <PanelTextHp>{detail.info?.red_total_hp || 0}</PanelTextHp>
       </PanelText>
     );
   }
@@ -83,6 +90,74 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
         <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
         <PanelAxis axis={detail.descInfo?.sender?.pos} />
         阵亡
+      </PanelText>
+    );
+  }
+  if (detail?.type === descType.FIRING) {
+    return (
+      <PanelText>
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <>
+              <PanelSide isEnemy={item.isEnemy} />
+              <PanelAxis axis={item.pos} />
+              建筑
+              {getEffectDescText(detail.descInfo?.type)}
+              {item.receive_sub_hp && (
+                <PanelTextHp>{item.receive_sub_hp}</PanelTextHp>
+              )}
+              {getEffectDescTypeText(detail.descInfo?.type)}
+              {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
+            </>
+          );
+        })}
+      </PanelText>
+    );
+  }
+  if (detail?.type === descType.ADD_SHIELD) {
+    return (
+      <PanelText>
+        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+        <PanelAxis axis={detail.descInfo?.sender?.pos} />向
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <>
+              <PanelSide isEnemy={item.isEnemy} />
+              <PanelAxis axis={item.pos} />
+              建筑
+              {getEffectDescText(detail.descInfo?.type)}
+              {getEffectDescTypeText(detail.descInfo?.type)}
+              ,当前护盾值为{item.now_shield}
+              {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
+            </>
+          );
+        })}
+      </PanelText>
+    );
+  }
+  if (
+    detail?.type === descType.STOP_MOVE ||
+    detail?.type === descType.ADD_BOOM ||
+    detail?.type === descType.ADD_FIRING ||
+    detail?.type === descType.ADD_TERRAIN_FIRING ||
+    descType.ICE_START
+  ) {
+    return (
+      <PanelText>
+        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+        发起进攻，对{' '}
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <>
+              <PanelSide isEnemy={item.isEnemy} />
+              <PanelAxis axis={item.pos} />
+              建筑
+              {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
+            </>
+          );
+        })}
+        {getEffectDescText(detail.descInfo?.type)}
+        {getEffectDescTypeText(detail.descInfo?.type)}
       </PanelText>
     );
   }
@@ -98,8 +173,9 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
               <PanelAxis axis={item.pos} />
               建筑
               {getEffectDescText(detail.descInfo?.type)}
-              {detail.attackInfo?.receive_sub_hp &&
-                `${detail.attackInfo?.receive_sub_hp}HP`}
+              {item.receive_sub_hp && (
+                <PanelTextHp>{item.receive_sub_hp}</PanelTextHp>
+              )}
               {getEffectDescTypeText(detail.descInfo?.type)}
               {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
             </>
@@ -112,11 +188,21 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
   return <PanelText>未知&nbsp;</PanelText>;
 };
 
+export interface OtherDetail {
+  id: number;
+  type: number;
+  text: string;
+}
 interface PlunderPanelProps extends BoxProps {
   details: TrackDetail[];
+  others?: OtherDetail[];
 }
 // TrackDetail
-const PlunderPanel: React.FC<PlunderPanelProps> = ({ details, ...props }) => {
+const PlunderPanel: React.FC<PlunderPanelProps> = ({
+  details,
+  others,
+  ...props
+}) => {
   const msgBox = useRef<HTMLDivElement>(null);
 
   const [needScroll, setNeedScroll] = useState(true);
@@ -125,7 +211,7 @@ const PlunderPanel: React.FC<PlunderPanelProps> = ({ details, ...props }) => {
     if (needScroll && msgBox.current && details) {
       msgBox.current.scrollTop = msgBox.current.scrollHeight;
     }
-  }, [details, needScroll, msgBox]);
+  }, [details, others, needScroll, msgBox]);
 
   const scrollHandle = useCallback(
     (event: React.UIEvent<HTMLDivElement>) => {
@@ -184,6 +270,18 @@ const PlunderPanel: React.FC<PlunderPanelProps> = ({ details, ...props }) => {
                       </Flex>
                     </Flex>
                   </CardStyled> */}
+              </Flex>
+            );
+          })}
+
+          {others?.map(item => {
+            return (
+              <Flex key={item.id} flex={1}>
+                <Flex flexDirection='column' flex={1} pl='20px' mt='10px'>
+                  <PanelText style={{ whiteSpace: 'nowrap' }}>
+                    {item.text}
+                  </PanelText>
+                </Flex>
               </Flex>
             );
           })}

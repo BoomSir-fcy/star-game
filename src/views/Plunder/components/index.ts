@@ -6,3 +6,4 @@ export { default as PKProgress } from './PKProgress';
 export { default as RoundPanel } from './RoundPanel';
 export { default as WaitPlunderList } from './WaitPlunderList';
 export { default as PlunderPanel } from './PlunderPanel';
+export type { OtherDetail } from './PlunderPanel';
