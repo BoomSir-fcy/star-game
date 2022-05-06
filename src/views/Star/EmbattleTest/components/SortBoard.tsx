@@ -8,12 +8,12 @@ import React, {
 import styled from 'styled-components';
 import { polyfill } from 'mobile-drag-drop';
 import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour';
-import { Box, Text, Flex, Image, BorderCard, BorderCardProps } from 'uikit';
+import { Box, Text, Flex, BorderCard, BorderCardProps } from 'uikit';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import AsanySortable, { SortableItemProps } from '@asany/sortable';
-import client from 'utils/client';
+import client, { isApp } from 'utils/client';
 import Soldier from 'game/core/Soldier';
 import { ReactSortable } from 'react-sortablejs';
 
@@ -98,7 +98,15 @@ const SortBoard: React.FC<SortBoardProps> = ({
     [setSortSoldiers],
   );
 
-  const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragStart = (e: any) => {
+    if (isApp()) {
+      const img = new Image();
+      img.src = e.target.getElementsByTagName('img')[0]?.src;
+      img.style.transform = 'rotate(90deg)';
+      img.style.width = '100px';
+      img.style.height = '100px';
+      e.dataTransfer.setDragImage(img, 0, 0);
+    }
     dragged = e.target;
   };
 

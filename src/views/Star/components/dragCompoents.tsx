@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
 import { useStore, storeAction } from 'state';
 import { Api } from 'apis';
+import { isApp } from 'utils/client';
 
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
@@ -265,7 +266,15 @@ export const DragCompoents: React.FC<{
     [getAbsolutePosition, grid, t, toastError],
   );
 
-  const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragStart = (e: any) => {
+    if (isApp()) {
+      const img = new Image();
+      img.src = e.target.getElementsByTagName('img')[0]?.src;
+      img.style.transform = 'rotate(90deg)';
+      img.style.width = '100px';
+      img.style.height = '100px';
+      e.dataTransfer.setDragImage(img, 0, 0);
+    }
     dragged = e.target;
   };
 
