@@ -204,8 +204,11 @@ class Running extends EventTarget {
     this.playing = true;
     const track = this.trackDetails[this.trackIndex];
     this.dispatchEvent(new CustomEvent('updateTrack', { detail: track }));
+    // setTimeout(() => {
+    //   this.runningHandle();
+    // }, 500);
     this.runTrack(track, () => {
-      this.thisHandle();
+      this.runningHandle();
     });
   }
 
@@ -258,7 +261,7 @@ class Running extends EventTarget {
     return null;
   }
 
-  thisHandle() {
+  runningHandle() {
     this.playing = false;
     if (this.paused) return;
     if (this.playCount === 0) return;
@@ -289,7 +292,7 @@ class Running extends EventTarget {
       this.playEnd = false;
     }
     this.paused = false;
-    this.thisHandle();
+    this.runningHandle();
   }
 
   // 获取所有播放轨道

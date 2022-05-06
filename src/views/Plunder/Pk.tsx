@@ -124,7 +124,7 @@ const Pk = () => {
       const { detail } = event as CustomEvent<TrackDetail>;
       if (detail) {
         setRoundInfos(prev => {
-          console.log(prev);
+          // console.log(prev);
           if (
             !prev.find(
               item =>

@@ -69,6 +69,9 @@ class Game extends EventTarget {
     this.app.view.addEventListener(
       'wheel',
       this.boards.onHandleWheel.bind(this.boards),
+      {
+        passive: true,
+      },
     );
     this.test = test;
 
@@ -455,6 +458,14 @@ class Game extends EventTarget {
       return soldier.isEnemy;
     }
     return false;
+  }
+
+  once(event: string, handle: any) {
+    // const callback = () => {
+    //   handle();
+    //   this.removeEventListener(event, callback);
+    // };
+    this.addEventListener(event, handle, { once: true });
   }
 }
 

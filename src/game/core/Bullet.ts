@@ -537,6 +537,14 @@ class Bullet extends EventTarget {
       this.spaceAttack(name, attackTarget);
     }
   }
+
+  once(event: string, handle: any) {
+    // const callback = () => {
+    //   handle();
+    //   this.removeEventListener(event, callback);
+    // };
+    this.addEventListener(event, handle, { once: true });
+  }
 }
 
 export default Bullet;

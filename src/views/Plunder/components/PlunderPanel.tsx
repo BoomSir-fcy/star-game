@@ -293,4 +293,4 @@ const PlunderPanel: React.FC<PlunderPanelProps> = ({
   );
 };
 
-export default PlunderPanel;
+export default React.memo(PlunderPanel);
