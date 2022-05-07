@@ -14,6 +14,7 @@ export const getHideHeader = (url: string) => {
       '/star/search',
       '/upgrade-list',
       '/plunder-pk',
+      '/galaxy/auction',
     ],
     url,
   );

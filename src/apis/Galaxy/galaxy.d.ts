@@ -18,6 +18,7 @@ declare namespace Api {
       protect_timestamp: number; // 保护结束时间
       history_hold_number: number; // 历史占领次数
       disapth_box: number; // 恒星收益分配比例
+      nick_name: string;
     }
 
     interface OwnerInfo {
@@ -28,6 +29,14 @@ declare namespace Api {
       galaxy: GalaxyInfo;
       data: StarInfo[];
       users: OwnerInfo;
+    }
+
+    interface AttckStarParams {
+      nft_id: number;
+      number: number;
+      nonce: string;
+      timestamp: number;
+      signature: string;
     }
   }
 }

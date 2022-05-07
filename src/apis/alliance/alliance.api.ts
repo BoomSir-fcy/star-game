@@ -21,9 +21,9 @@ export class AllianceApi extends Http {
 
   // 匹配用户
   async alliancePlunderInfo(
-    our: 1 | 2,
+    address?: string,
   ): Promise<Api.Response<Api.Alliance.PlunderInfoMatchUser>> {
-    return this.get('alliance/plunder/info', { our });
+    return this.get('alliance/plunder/info', { address });
   }
 
   // 行星联盟掠夺

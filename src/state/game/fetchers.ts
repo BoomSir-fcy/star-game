@@ -71,8 +71,8 @@ export const fetchGamePlunderPk = async (id = '5000000000000002') => {
   return fetchGamePKTest(`t-${id}`);
 };
 
-export const fetchGameMatchUser = async (our: 1 | 2 = 2) => {
-  return Api.AllianceApi.alliancePlunderInfo(our);
+export const fetchGameMatchUser = async (address?: string) => {
+  return Api.AllianceApi.alliancePlunderInfo(address);
 };
 
 export const fetchGamePKTest = async (

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { BgCard, Box, Button } from 'uikit';
+import { PeopleCard } from 'views/Plunder/components';
 
 export const StarBox = styled(Box)`
   position: relative;
@@ -65,4 +66,9 @@ export const ButtonStyled = styled(Button)`
 
 export const BgCardStyled = styled(BgCard)`
   float: right;
+`;
+
+export const PkPeopleCard = styled(PeopleCard)`
+  margin: 30px 0;
+  z-index: 1;
 `;
