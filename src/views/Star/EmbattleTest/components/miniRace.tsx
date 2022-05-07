@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Box } from 'uikit';
 import { MapBaseUnits } from 'game/types';
 
-import RunSimulation, { RoundsProps } from 'game/core/RunSimulation';
+import RunSimulation, { RoundsProps } from 'game/core/Running';
 import useGame from 'game/hooks/useGame';
 
 const Container = styled(Box)`
