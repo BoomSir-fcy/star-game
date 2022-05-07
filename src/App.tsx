@@ -4,6 +4,7 @@ import { ResetCSS } from 'uikit';
 import ScaleOrientContent from 'components/ScaleOrientContent';
 import useEagerConnect from 'hooks/useEagerConnect';
 import Toast from 'components/Toast';
+import { ConnectWalletProvider } from 'contexts/ConnectWallet';
 import AccountUpdater from './views/Updater/AccountUpdater';
 import EventBusUpdater from './views/Updater/EventBusUpdater';
 
@@ -50,47 +51,52 @@ function App() {
       <EventBusUpdater />
       <ResetCSS />
       <ScaleOrientContent>
-        <Suspense fallback='loading...'>
-          <Routes>
-            <Route path='/' element={<Login />} />
-            {/* <Route path='/index' element={<Home />} /> */}
+        <ConnectWalletProvider>
+          <Suspense fallback='loading...'>
+            <Routes>
+              <Route path='/' element={<Login />} />
+              {/* <Route path='/index' element={<Home />} /> */}
 
-            {/* 盲盒 */}
-            <Route path='/mystery-box' element={<MysteryBox />} />
-            <Route path='/mystery-box/detail' element={<MysteryBoxDetail />} />
-            <Route path='/mystery-box/state' element={<MysteryBoxState />} />
+              {/* 盲盒 */}
+              <Route path='/mystery-box' element={<MysteryBox />} />
+              <Route
+                path='/mystery-box/detail'
+                element={<MysteryBoxDetail />}
+              />
+              <Route path='/mystery-box/state' element={<MysteryBoxState />} />
 
-            {/* 升级星球背包 */}
-            <Route path='/upgrade-list' element={<UpgradeList />} />
+              {/* 升级星球背包 */}
+              <Route path='/upgrade-list' element={<UpgradeList />} />
 
-            {/* 我的星球 */}
-            <Route path='/star/planet' element={<StartPlanet />} />
-            {/* 星球 */}
-            <Route path='/star/*' element={<Start />} />
+              {/* 我的星球 */}
+              <Route path='/star/planet' element={<StartPlanet />} />
+              {/* 星球 */}
+              <Route path='/star/*' element={<Start />} />
 
-            {/* 星球联盟 */}
-            <Route path='/plant-league' element={<PlantLeague />} />
+              {/* 星球联盟 */}
+              <Route path='/plant-league' element={<PlantLeague />} />
 
-            {/* 星系 */}
-            <Route path='/galaxy' element={<Galaxy />} />
-            <Route path='/galaxy/auction' element={<Auction />} />
-            <Route path='/galaxy/stars' element={<Stars />} />
+              {/* 星系 */}
+              <Route path='/galaxy' element={<Galaxy />} />
+              <Route path='/galaxy/auction' element={<Auction />} />
+              <Route path='/galaxy/stars' element={<Stars />} />
 
-            {/* 掠夺 */}
-            <Route path='/plunder' element={<Plunder />} />
-            <Route path='/plunder-test' element={<PlunderTest />} />
-            <Route path='/plunder-pk' element={<PlunderPk />} />
+              {/* 掠夺 */}
+              <Route path='/plunder' element={<Plunder />} />
+              <Route path='/plunder-test' element={<PlunderTest />} />
+              <Route path='/plunder-pk' element={<PlunderPk />} />
 
-            <Route path='/test' element={<Test />}>
-              <Route path='card' element={<TestCard />} />
-              <Route path='bg-card' element={<TestBgCard />} />
-              <Route path='button' element={<TestButton />} />
-              <Route path='star' element={<TestStar />} />
-              <Route path='text' element={<TestText />} />
-              <Route path='label' element={<TestLabel />} />
-            </Route>
-          </Routes>
-        </Suspense>
+              <Route path='/test' element={<Test />}>
+                <Route path='card' element={<TestCard />} />
+                <Route path='bg-card' element={<TestBgCard />} />
+                <Route path='button' element={<TestButton />} />
+                <Route path='star' element={<TestStar />} />
+                <Route path='text' element={<TestText />} />
+                <Route path='label' element={<TestLabel />} />
+              </Route>
+            </Routes>
+          </Suspense>
+        </ConnectWalletProvider>
         <Toast />
       </ScaleOrientContent>
     </>

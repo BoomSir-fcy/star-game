@@ -9,7 +9,7 @@ import { getLibrary } from 'utils/web3Core';
 import { LanguageProvider } from 'contexts/Localization';
 import { RefreshContextProvider } from 'contexts/RefreshContext';
 import { ToastsProvider } from 'contexts/ToastsContext';
-import { ConnectWalletProvider } from 'contexts/ConnectWallet';
+// import { ConnectWalletProvider } from 'contexts/ConnectWallet';
 import store from 'state';
 import { VideoProvider } from 'contexts/VideoContext';
 
@@ -28,9 +28,9 @@ const Providers: React.FC = ({ children }) => {
               <LanguageProvider>
                 <RefreshContextProvider>
                   <ToastsProvider>
-                    <ConnectWalletProvider>
-                      <VideoProvider>{children}</VideoProvider>
-                    </ConnectWalletProvider>
+                    {/* <ConnectWalletProvider> */}
+                    <VideoProvider>{children}</VideoProvider>
+                    {/* </ConnectWalletProvider> */}
                   </ToastsProvider>
                 </RefreshContextProvider>
               </LanguageProvider>

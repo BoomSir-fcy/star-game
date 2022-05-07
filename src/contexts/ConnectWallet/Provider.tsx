@@ -4,9 +4,11 @@ import { useWeb3React } from '@web3-react/core';
 import { CONNECT_WALLET_BODY_CLASS_NAME } from 'config';
 
 interface ContextApi {
-  onConnectWallet: () => void
+  onConnectWallet: () => void;
 }
-const ConnectWallet = React.createContext({ onConnectWallet: () => {}, } as ContextApi);
+const ConnectWallet = React.createContext({
+  onConnectWallet: () => {},
+} as ContextApi);
 
 const ConnectWalletProvider: React.FC = ({ children }) => {
   const [show, setShow] = useState(false);
