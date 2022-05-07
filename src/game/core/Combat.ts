@@ -20,7 +20,7 @@ import AxisPoint from './AxisPoint';
 import Chequer, { stateType } from './Chequer';
 import Bullet from './Bullet';
 import LinearMove from './LinearMove';
-import { getEffectText, getTwoPointCenter } from './utils';
+import { getEffectText, getTwoPointCenter, getSpriteRes } from './utils';
 import EffectBuff from './EffectBuff';
 import { descOfEffect, spines } from '../effectConfig';
 import Loaders from './Loaders';
@@ -40,11 +40,9 @@ class Combat extends EventTarget {
     super();
     this.race = options.race;
     this.srcId = options.srcId;
-    this.textureRes = Combat.getSpriteRes(options.race, options.srcId, 1);
+    this.textureRes = getSpriteRes(options.race, options.srcId, 1);
     this.texture0 = Texture.from(this.textureRes);
-    this.texture1 = Texture.from(
-      Combat.getSpriteRes(options.race, options.srcId, 2),
-    );
+    this.texture1 = Texture.from(getSpriteRes(options.race, options.srcId, 2));
 
     this.effectBuff = new EffectBuff(this);
   }
@@ -436,9 +434,14 @@ class Combat extends EventTarget {
     this.addEventListener(event, callback);
   }
 
-  static getSpriteRes(race: number, resId: string, index: number) {
-    return `/assets/modal/${1}/${resId}-${index}.png`;
-  }
+  // static getSpriteRes(race: number, resId: string, index: number) {
+  //   const info = raceData[race].children.find(
+  //     item => item.id === Number(resId),
+  //   );
+  //   const img = index === 1 ? info?.thumb1 : info?.thumb2;
+  //   return img || `/assets/modal/${race}/${resId}-${index}.png`;
+  //   // return `/assets/modal/${1}/${resId}-${index}.png`;
+  // }
 }
 
 export default Combat;

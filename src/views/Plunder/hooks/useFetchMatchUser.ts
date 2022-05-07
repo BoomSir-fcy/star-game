@@ -1,3 +1,4 @@
+import { useWeb3React } from '@web3-react/core';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'contexts/ToastsContext';
@@ -13,11 +14,16 @@ const useFetchMatchUser = () => {
   const { toastError } = useToast();
   const { t } = useTranslation();
 
+  const { account } = useWeb3React();
+
   // 1为自己的详情 2为随机一个掠夺用户的详情
   const fetch = useCallback(
     async (our: 1 | 2 = 2) => {
+      if (!account) return;
       setLoading(true);
-      const res = await Api.AllianceApi.alliancePlunderInfo(our);
+      const res = await Api.AllianceApi.alliancePlunderInfo(
+        our === 1 ? account : '',
+      );
       setLoading(false);
       // 判断是否报错
       if (Api.isSuccess(res)) {
@@ -34,7 +40,7 @@ const useFetchMatchUser = () => {
         }
       }
     },
-    [setLoading, setData, toastError, t],
+    [account, setLoading, setData, toastError, t],
   );
 
   return {

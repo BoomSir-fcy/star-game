@@ -4,8 +4,8 @@ import { Image, Text, Flex, BoxProps } from 'uikit';
 import { RaceTypeColor } from 'uikit/theme/colors';
 import { Races, RaceType } from 'uikit/theme/types';
 import { useTranslation } from 'contexts/Localization';
+import { raceData } from 'config/raceConfig';
 import { RaceCardStyled, LabelText, ScrollBox } from './styled';
-import { raceBase } from '../config';
 
 interface RaceProps extends BoxProps {
   info: any;
@@ -23,14 +23,14 @@ const Race: React.FC<RaceProps> = ({ info, ...props }) => {
           <Flex>
             <LabelText>{t('Planet race')}</LabelText>
             <Text color={RaceTypeColor[race]} ml='17px' fontSize='22px' bold>
-              {race ? t(raceBase[race]?.label) : ''}
+              {race ? t(raceData[race]?.name) : ''}
             </Text>
           </Flex>
           <ScrollBox>
             <LabelText>{t('Ethnicity')}</LabelText>
-            <LabelText>{t(raceBase[race]?.ethnicity)}</LabelText>
+            <LabelText>{t(raceData[race]?.desc)}</LabelText>
             <LabelText>
-              {t('Features')}: {t(raceBase[race]?.features)}
+              {t('Features')}: {t(raceData[race]?.features)}
             </LabelText>
           </ScrollBox>
         </Flex>

@@ -1,3 +1,4 @@
+import { useWeb3React } from '@web3-react/core';
 import Game from 'game/core/Game';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -112,17 +113,20 @@ export const useFetchGamePKTest = (
 
 export const useFetchGameMatchUser = () => {
   const dispatch = useDispatch();
+  const { account } = useWeb3React();
   const fetch = useCallback(
-    (out?: 1 | 2) => {
-      dispatch(fetchGameMatchUserAsync(out));
+    (address?: string, our?: number) => {
+      dispatch(fetchGameMatchUserAsync(address, our));
     },
     [dispatch],
   );
 
   useEffect(() => {
-    fetch(1);
+    if (account) {
+      fetch(account, 1);
+    }
     fetch();
-  }, [fetch]);
+  }, [fetch, account]);
 
   return {
     fetch,

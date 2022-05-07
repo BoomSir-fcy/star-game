@@ -21,8 +21,8 @@ export class GalaxyApi extends Http {
   }
 
   // 抢夺恒星
-  async plunderStar(galaxyId: number, starId: number) {
-    return this.post('galaxy/attck', { nft_id: galaxyId, number: starId });
+  async plunderStar(params: Api.Galaxy.AttckStarParams) {
+    return this.post('galaxy/attck', params);
   }
 
   // 星系竞拍记录列表

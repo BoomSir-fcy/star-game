@@ -90,10 +90,10 @@ export const fetchGamePKTestAsync =
   };
 
 export const fetchGameMatchUserAsync =
-  (our?: 1 | 2): AppThunk =>
+  (address?: string, our?: number): AppThunk =>
   async dispatch => {
     dispatch(setState(GamePkState.MATCHING));
-    const res = await fetchGameMatchUser(our);
+    const res = await fetchGameMatchUser(address);
     if (Api.isSuccess(res) && res.data) {
       if (our === 1) {
         dispatch(setMineUser(res.data));

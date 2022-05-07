@@ -9,7 +9,12 @@ import styled from 'styled-components';
 import RadarChart from 'game/core/RadarChart';
 import Soldier from 'game/core/Soldier';
 import { eventsType, SoldierCustomEvent } from 'game/core/event';
-import { getSkillKey, getSkillText } from 'game/core/utils';
+import {
+  getSkillKey,
+  getSkillText,
+  getSpriteRes,
+  getSpriteName,
+} from 'game/core/utils';
 import { useStore } from 'state';
 import Game from 'game/core/Game';
 import {
@@ -24,6 +29,8 @@ import {
   Card,
   Button,
 } from 'uikit';
+import { raceData } from 'config/raceConfig';
+import { Races } from 'uikit/theme/types';
 import { Container } from './styled';
 
 import PreviewSoldier from './PreviewSoldier';
@@ -158,6 +165,39 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     }
   }, [activeSoldier, getGameSimulation]);
 
+  const soldierDesc = useMemo(() => {
+    let desc = '';
+    if (activeSoldier?.race) {
+      const list = raceData[activeSoldier.race as Races].children;
+      desc =
+        list.find(item => item.id === Number(activeSoldier.srcId))?.desc || '';
+    }
+    return desc;
+  }, [activeSoldier]);
+
+  const getSoldierSrc = useCallback(() => {
+    let img = '';
+    if (activeSoldier?.race) {
+      img = getSpriteRes(
+        activeSoldier.race,
+        activeSoldier.unique_id.toString(),
+        2,
+      );
+    }
+    return img;
+  }, [activeSoldier]);
+
+  const getSoldierName = useCallback(() => {
+    let name = '';
+    if (activeSoldier?.race) {
+      name = getSpriteName(
+        activeSoldier.race,
+        activeSoldier.unique_id.toString(),
+      );
+    }
+    return name || activeSoldier?.options?.unitInfo?.tag;
+  }, [activeSoldier]);
+
   return (
     <Box style={{ position: 'relative' }}>
       <Box
@@ -183,7 +223,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
           >
             <Flex alignItems='center' flex={1}>
               <Text bold shadow='primary'>
-                {activeSoldier?.options?.unitInfo?.tag}
+                {getSoldierName()}
               </Text>
               <Text mt='2px' ml='36px' fontSize='22px'>
                 LV 1
@@ -213,6 +253,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
           </Flex>
           <Flex alignItems='center' padding='0 10px'>
             <PreviewSoldier
+              src={getSoldierSrc()}
               style={{
                 flexShrink: 0,
                 marginRight: '10px',
@@ -355,8 +396,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                 </Flex>
               </Box> */}
               <Text mt='16px' fontSize='20' color='textTips'>
-                提高角色最终命中率，同时处于反击状态。每提升1级，
-                最终命中率提高3%，同时每提升1级，反击的为例提高。
+                {soldierDesc}
               </Text>
             </Card>
           </Flex>

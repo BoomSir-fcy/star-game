@@ -28,6 +28,7 @@ export const initialState: UserInfoState = {
     userProfile_: '', // 用户信息合约地址
     price_: '0', // 价格
     createdCount_: '0', // 已创建数量
+    priceBnb_: '0', // BNB价格
   },
 
   userInfo: {

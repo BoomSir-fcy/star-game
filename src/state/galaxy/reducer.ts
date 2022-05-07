@@ -83,9 +83,13 @@ export const galaxySlice = createSlice({
         const users: Api.Galaxy.OwnerInfo = payload.users || {};
         const list = rsData.map((item: any) => {
           if (item.owner) {
-            return { ...item, ownerAvatar: users[item.owner]?.avatar };
+            return {
+              ...item,
+              ownerAvatar: users[item.owner]?.avatar,
+              nick_name: users[item.owner]?.nickname,
+            };
           }
-          return { ...item, ownerAvatar: '' };
+          return { ...item, ownerAvatar: '', nick_name: '' };
         });
         state.galaxyStarList = list;
         state.loading = false;
