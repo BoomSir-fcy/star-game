@@ -6,14 +6,20 @@ import React, {
   useState,
 } from 'react';
 import styled from 'styled-components';
-import { Box, Text, Image, BorderCard, BorderCardProps } from 'uikit';
+import { polyfill } from 'mobile-drag-drop';
+import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour';
+import { Box, Text, Flex, BorderCard, BorderCardProps } from 'uikit';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import AsanySortable, { SortableItemProps } from '@asany/sortable';
-import client from 'utils/client';
+import client, { isApp } from 'utils/client';
 import Soldier from 'game/core/Soldier';
 import { ReactSortable } from 'react-sortablejs';
+
+polyfill({
+  dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
+});
 
 export interface SortSoldier {
   id: string;
@@ -33,6 +39,19 @@ const defaultStyle = {
   display: 'inline-block',
   margin: '12px auto 0',
 };
+
+const ItemBox = styled(Box)`
+  margin-top: 16px;
+  width: 126px;
+  height: 126px;
+  background: #161920;
+  border: 1px solid #34363b;
+  border-radius: 10px;
+  box-shadow: 0px 7px 3px 0px rgba(0, 0, 0, 0.35);
+  div {
+    pointer-events: none;
+  }
+`;
 
 interface SortItemProps extends Partial<SortSoldier> {
   isActive: boolean;
@@ -64,6 +83,8 @@ const SortItem: React.FC<SortItemProps> = ({
   );
 };
 
+let dragged = {} as any;
+let targeted = {} as any;
 const SortBoard: React.FC<SortBoardProps> = ({
   sortSoldiers,
   activeSoldier,
@@ -81,6 +102,28 @@ const SortBoard: React.FC<SortBoardProps> = ({
   //   { id: 1, name: 'shrek' },
   //   { id: 2, name: 'fiona' },
   // ]);
+
+  const dragStart = (e: any) => {
+    if (isApp()) {
+      const img = new Image();
+      img.src = e.target.getElementsByTagName('img')[0]?.src;
+      img.style.transform = 'rotate(90deg)';
+      img.style.width = '100px';
+      img.style.height = '100px';
+      e.dataTransfer.setDragImage(img, 0, 0);
+    }
+    dragged = e.target;
+  };
+
+  const dragEnter = (e: any) => {
+    e.preventDefault();
+    const { target } = e;
+    if (target.tagName !== 'DIV') {
+      return;
+    }
+    targeted = target;
+    handleUpdate();
+  };
 
   const handleUpdate = useCallback(() => {
     setSortSoldiers(
@@ -100,25 +143,36 @@ const SortBoard: React.FC<SortBoardProps> = ({
       <Text margin='20px 0 8px' fontSize='20px' textAlign='center'>
         攻击顺序
       </Text>
-      <Box position='relative'>
-        <ReactSortable
+      <Flex
+        position='relative'
+        alignItems='center'
+        justifyContent='center'
+        flexDirection='column'
+      >
+        {/* <ReactSortable
           onEnd={() => {
             handleUpdate();
           }}
           list={sortSoldiers}
           setList={setState}
-        >
-          {sortSoldiers.map(item => (
-            <div style={{ marginTop: '16px' }} key={item.id}>
-              <SortItem
-                isActive={activeSoldier === item.soldier}
-                id={`${item.id}`}
-                src={item.src}
-              />
-            </div>
-          ))}
-        </ReactSortable>
-      </Box>
+        > */}
+        {sortSoldiers.map((item, index) => (
+          <ItemBox
+            key={item.id}
+            draggable
+            data-index={index}
+            onDragStart={dragStart}
+            onDragEnter={dragEnter}
+          >
+            <SortItem
+              isActive={activeSoldier === item.soldier}
+              id={`${item.id}`}
+              src={item.src}
+            />
+          </ItemBox>
+        ))}
+        {/* </ReactSortable> */}
+      </Flex>
     </BorderCard>
   );
 };

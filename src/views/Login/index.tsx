@@ -24,7 +24,9 @@ import { useToast } from 'contexts/ToastsContext';
 import { isAddress } from 'utils';
 import { useConnectWallet } from 'contexts/ConnectWallet';
 import { fetchUserProductAsync } from 'state/userInfo/reducer';
+import { getDsgAddress } from 'utils/addressHelpers';
 import { useTranslation } from 'contexts/Localization';
+import { useTokenBalance } from 'hooks/useTokenBalance';
 import StarGameBox from './components/StarGameBox';
 import Flyer from './components/Flyer';
 import Create, { ForwardRefRenderProps } from './components/Create';
@@ -49,6 +51,8 @@ const CreateBoxShow = styled(Box)<{ show?: boolean }>`
 `;
 
 const Login = () => {
+  const DsgAddress = getDsgAddress();
+  const { balance: DSGBalance } = useTokenBalance(DsgAddress);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const parsedQs = useParsedQueryString();
@@ -73,6 +77,7 @@ const Login = () => {
 
   const createRef = useRef<ForwardRefRenderProps>(null);
   const [visible, setVisible] = useState(false);
+  const [pending, setpending] = useState(false);
 
   const handleSign = useCallback(async () => {
     if (createRef?.current?.getState) {
@@ -113,43 +118,56 @@ const Login = () => {
     }
   }, [handleCheck, createRef, setVisible, toastError, t]);
 
-  const onHandleRegister = useCallback(async () => {
-    let timer: any = 0;
-
-    if (createRef?.current?.getState) {
-      try {
-        const { name, gender, superior } = createRef.current.getState();
-        const res = await handleRegister({
-          nickname: name,
-          superior: superior || AddressZero,
-          gender,
-        });
-        timer = setInterval(async () => {
-          toastWarning(t('loginSigninSearch'));
-          const result = await Api.UserApi.getCheck({
-            address: String(account),
-          });
-          if (Api.isSuccess(result) && result?.data?.register) {
-            if (timer) clearInterval(timer);
-            fetch();
-            setVisible(false);
-          }
-        }, 6000);
-      } catch (error) {
-        console.error(error);
-        toastError(t('RegistrationCheckBalance'));
+  const onHandleRegister = useCallback(
+    async (payType: string) => {
+      let timer: any = 0;
+      if (pending) {
+        return;
       }
-    }
-  }, [
-    handleRegister,
-    toastError,
-    toastWarning,
-    fetch,
-    setVisible,
-    t,
-    createRef,
-    account,
-  ]);
+      setpending(true);
+      if (createRef?.current?.getState) {
+        try {
+          setpending(false);
+          setVisible(false);
+          toastWarning(t('registerSigninSearch'));
+          const { name, gender, superior } = createRef.current.getState();
+          const res = await handleRegister({
+            nickname: name,
+            superior: superior || AddressZero,
+            gender,
+            payType,
+            BNB_price: infoView?.priceBnb_,
+          });
+          timer = setInterval(async () => {
+            toastWarning(t('loginSigninSearch'));
+            const result = await Api.UserApi.getCheck({
+              address: String(account),
+            });
+            if (Api.isSuccess(result) && result?.data?.register) {
+              if (timer) clearInterval(timer);
+              fetch();
+            }
+          }, 6000);
+        } catch (error) {
+          console.error(error);
+          toastError(t('RegistrationCheckBalance'));
+        }
+      }
+    },
+    [
+      handleRegister,
+      toastError,
+      toastWarning,
+      fetch,
+      setVisible,
+      t,
+      setpending,
+      createRef,
+      pending,
+      account,
+      infoView,
+    ],
+  );
 
   const handleEnter = useCallback(async () => {
     if (!account) {
@@ -248,9 +266,11 @@ const Login = () => {
           visible={visible}
           setVisible={setVisible}
           price={infoView.price_}
+          BNBprice={infoView.priceBnb_}
+          DsgBalance={DSGBalance}
           account={account}
           token={infoView.payToken_}
-          onRegister={onHandleRegister}
+          onRegister={payType => onHandleRegister(payType)}
         />
       )}
     </>

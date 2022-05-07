@@ -204,12 +204,9 @@ class Combat extends EventTarget {
 
     for (let i = 1; i < per; i++) {
       this.hpGraphics.beginFill(config.BLOOD_COLOR_BACK);
-      this.hpGraphics.drawRect(
-        lineStartX + perW * i,
-        lineY,
-        lineW,
-        config.BLOOD_HEIGHT,
-      );
+      const height =
+        i % 10 === 0 ? config.BLOOD_HEIGHT : config.BLOOD_HEIGHT * 0.6;
+      this.hpGraphics.drawRect(lineStartX + perW * i, lineY, lineW, height);
       this.hpGraphics.endFill();
     }
 
@@ -227,7 +224,6 @@ class Combat extends EventTarget {
   moveTo(axisPoint: AxisPoint, moveTime?: number) {
     this.targetAxisPoint = axisPoint;
     if (this.axisPoint) {
-      this.flipTargetPointOrientation();
       const linearMove = new LinearMove(
         this.container,
         this.axisPoint,
@@ -245,21 +241,21 @@ class Combat extends EventTarget {
   }
 
   // 更换方向
-  flipTargetPointOrientation() {
-    if (this.targetAxisPoint && this.axisPoint) {
-      if (this.targetAxisPoint.axisX - this.axisPoint?.axisX > 0) {
+  flipTargetPointOrientation(axisPoint?: AxisPoint) {
+    if (axisPoint && this.axisPoint) {
+      if (axisPoint.axisX - this.axisPoint?.axisX > 0) {
         this.orientation = Orientation.TO_RIGHT_DOWN;
         this.displaySprite.texture = this.texture1;
         this.displaySprite.scale.x = -Math.abs(this.displaySprite.scale.x);
-      } else if (this.targetAxisPoint.axisX - this.axisPoint?.axisX < 0) {
+      } else if (axisPoint.axisX - this.axisPoint?.axisX < 0) {
         this.orientation = Orientation.TO_LEFT_UP;
         this.displaySprite.texture = this.texture0;
         this.displaySprite.scale.x = -Math.abs(this.displaySprite.scale.x);
-      } else if (this.targetAxisPoint.axisY - this.axisPoint?.axisY > 0) {
+      } else if (axisPoint.axisY - this.axisPoint?.axisY > 0) {
         this.orientation = Orientation.TO_LEFT_DOWN;
         this.displaySprite.texture = this.texture1;
         this.displaySprite.scale.x = Math.abs(this.displaySprite.scale.x);
-      } else if (this.targetAxisPoint.axisY - this.axisPoint?.axisY < 0) {
+      } else if (axisPoint.axisY - this.axisPoint?.axisY < 0) {
         this.orientation = Orientation.TO_RIGHT_UP;
         this.displaySprite.texture = this.texture0;
         this.displaySprite.scale.x = Math.abs(this.displaySprite.scale.x);
@@ -342,7 +338,7 @@ class Combat extends EventTarget {
     this.attackInfo = attackInfo;
     this.attacking = true;
     this.targetAxisPoint = target.axisPoint;
-    this.flipTargetPointOrientation();
+    this.flipTargetPointOrientation(target.axisPoint);
 
     const bullet = new Bullet(this);
 
@@ -380,6 +376,8 @@ class Combat extends EventTarget {
     } else {
       bullet.attack(bulletType.BULLET, target, effect);
     }
+
+    // bullet = null;
   }
 
   /**

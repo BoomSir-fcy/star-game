@@ -1,10 +1,5 @@
 [
 	{
-		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -79,6 +74,141 @@
 		],
 		"name": "Unpaused",
 		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userProfile_",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "payToken_",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "avatarNft_",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "router_",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "wbnb",
+				"type": "address"
+			}
+		],
+		"name": "initialize",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "nickname",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "superior",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "gender",
+				"type": "uint256"
+			}
+		],
+		"name": "registerWithBnb",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "nickname",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "superior",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "gender",
+				"type": "uint256"
+			}
+		],
+		"name": "registerWithDsg",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "val",
+				"type": "address"
+			}
+		],
+		"name": "setRouter",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "val",
+				"type": "address"
+			}
+		],
+		"name": "setWBNB",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	},
 	{
 		"inputs": [],
@@ -190,39 +320,16 @@
 			},
 			{
 				"internalType": "uint256",
+				"name": "priceBnb_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
 				"name": "createdCount_",
 				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "userProfile_",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "payToken_",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "avatarNft_",
-				"type": "address"
-			}
-		],
-		"name": "initialize",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -278,46 +385,16 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "nickname",
-				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "superior",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "gender",
-				"type": "uint256"
-			}
-		],
-		"name": "registerWithDsg",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
+		"name": "router",
+		"outputs": [
 			{
-				"internalType": "address",
-				"name": "newOwner",
+				"internalType": "contract ISwapRouter",
+				"name": "",
 				"type": "address"
 			}
 		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -326,6 +403,19 @@
 		"outputs": [
 			{
 				"internalType": "contract IUserProfile",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "WBNB",
+		"outputs": [
+			{
+				"internalType": "address",
 				"name": "",
 				"type": "address"
 			}

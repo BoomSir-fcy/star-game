@@ -24,6 +24,11 @@ export interface RoundDescAxis {
   x: number;
   y: number;
 }
+
+export interface MapBaseUnits {
+  [id: string]: Api.Game.UnitInfo;
+}
+
 export interface RoundDescMove {
   dest: RoundDescAxis[];
   id: string;
@@ -187,6 +192,12 @@ export interface RoundDescRemove {
   receive_id: string;
 }
 
+export interface RoundDescInset {
+  active_unit_pos: RoundDescAxis;
+  active_unit_id: string;
+  active_unit_unique_id: number;
+}
+
 export interface RoundDescBeatMove {
   move_unit: string;
   from: RoundDescAxis;
@@ -230,6 +241,7 @@ export interface RoundInfo {
   sub_shield: RoundDescRemoveShield;
   add_terrain_firing: RoundDescAddTerrainFiring;
   terrain_firing: RoundDescTerrainFiring;
+  unit_activing: RoundDescInset;
 }
 
 export enum Orientation {
@@ -255,6 +267,8 @@ export const descType = {
   // INIT: 1, // 冰冻
   // BURN: 2, // 灼烧
   // REPEL: 3,
+  COUNT_DOWN: -2, // 倒计时
+  RUNNING_END: -1, // 运行结束
   INIT: 1, // 初始化棋子
   MOVE: 2, // 棋子移动
   ATTACK: 3, // 棋子攻击
@@ -271,11 +285,12 @@ export const descType = {
   BEAT_COLLISION: 14, // 击退碰撞伤害
   REMOVE_FIRING: 15, // 解除灼烧
   REMOVE_STOP_MOVE: 16, // 解除灼烧
-  ADD_SHIELD: 17, // 击退碰撞伤害DescUnitRemoveFiring
-  REMOVE_SHIELD: 18, // 击退碰撞伤害DescUnitRemoveFiring
+  ADD_SHIELD: 17, // 添加护盾
+  REMOVE_SHIELD: 18, // 减少护盾
   ADD_TERRAIN_FIRING: 19, // 地形灼烧DescUnitAddTerrainFiring
   TERRAIN_FIRING: 20, // 地形引起正在灼烧DescUnitTerrainFiring
   TOTAL_INFO: 21, // 所有血量
+  INSERT_UNIT: 22, // 空降小人
 };
 
 // 技能

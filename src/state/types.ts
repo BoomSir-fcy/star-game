@@ -2,7 +2,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Qualities } from 'uikit/theme/types';
-import { RoundInfo, RoundDescAxis } from 'game/types';
+import { RoundInfo, RoundDescAxis, MapBaseUnits } from 'game/types';
 
 // 性别
 export enum Gender {
@@ -29,6 +29,7 @@ export interface UserAgentInfoView {
   payToken_: string; // 要支付的token的合约地址
   userProfile_: string; // 用户信息合约地址
   price_: string; // 价格
+  priceBnb_: string; // BNB价格
   createdCount_: string; // 已创建数量
   loading?: boolean;
 }
@@ -143,10 +144,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 enum DescType {
   MOVE = 1,
   ATTACK = 2,
-}
-
-export interface MapBaseUnits {
-  [id: string]: Api.Game.UnitInfo;
 }
 
 export interface RoundInitState {

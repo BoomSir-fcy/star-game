@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>测试回调函数和闭包的垃圾回收机制</title>
+    <script src="./gc-test.js"></script>
+  </head>
+  <body>
+    <button id="btn">play</button>
+    <script>
+      var gcTest = new GcTest();
+      gcTest.addEventListener('play', () => {
+        // console.log('play event');
+      });
+      gcTest.addEventListener(
+        'play',
+        () => {
+          // console.log('play event once');
+        },
+        { once: true },
+      );
+      const btn = document.querySelector('#btn');
+      btn.addEventListener('click', () => {
+        gcTest.play();
+      });
+      setInterval(() => {
+        // console.log(1);
+        btn.dispatchEvent(new Event('click'));
+      }, 100);
+    </script>
+  </body>
+</html>
