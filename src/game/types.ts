@@ -195,6 +195,7 @@ export interface RoundDescRemove {
 export interface RoundDescInset {
   active_unit_pos: RoundDescAxis;
   active_unit_id: string;
+  active_unit_unique_id: number;
 }
 
 export interface RoundDescBeatMove {

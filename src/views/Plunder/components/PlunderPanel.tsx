@@ -207,11 +207,15 @@ const PlunderPanel: React.FC<PlunderPanelProps> = ({
 
   const [needScroll, setNeedScroll] = useState(true);
 
+  const renderDetails = useMemo(() => {
+    return details.slice(-20, details.length);
+  }, [details]);
+
   useEffect(() => {
-    if (needScroll && msgBox.current && details) {
+    if (needScroll && msgBox.current && renderDetails) {
       msgBox.current.scrollTop = msgBox.current.scrollHeight;
     }
-  }, [details, others, needScroll, msgBox]);
+  }, [renderDetails, others, needScroll, msgBox]);
 
   const scrollHandle = useCallback(
     (event: React.UIEvent<HTMLDivElement>) => {
@@ -240,7 +244,7 @@ const PlunderPanel: React.FC<PlunderPanelProps> = ({
           overflow='auto'
           height='150px'
         >
-          {details.map(item => {
+          {renderDetails.map(item => {
             return (
               <Flex key={item.id} flex={1}>
                 <Flex flexDirection='column' flex={1} pl='20px' mt='10px'>

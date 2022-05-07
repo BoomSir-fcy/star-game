@@ -132,6 +132,9 @@ const Pk = () => {
                 detail.descInfo?.id,
             )
           ) {
+            // const { length } = prev;
+            // // 大于20条就截取
+            // return length >= 20 ? [...prev.slice(1, length), detail] : [...prev, detail];
             return [...prev, detail];
           }
           return prev;
