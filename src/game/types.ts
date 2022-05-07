@@ -24,6 +24,11 @@ export interface RoundDescAxis {
   x: number;
   y: number;
 }
+
+export interface MapBaseUnits {
+  [id: string]: Api.Game.UnitInfo;
+}
+
 export interface RoundDescMove {
   dest: RoundDescAxis[];
   id: string;
@@ -187,6 +192,11 @@ export interface RoundDescRemove {
   receive_id: string;
 }
 
+export interface RoundDescInset {
+  active_unit_pos: RoundDescAxis;
+  active_unit_id: string;
+}
+
 export interface RoundDescBeatMove {
   move_unit: string;
   from: RoundDescAxis;
@@ -230,6 +240,7 @@ export interface RoundInfo {
   sub_shield: RoundDescRemoveShield;
   add_terrain_firing: RoundDescAddTerrainFiring;
   terrain_firing: RoundDescTerrainFiring;
+  unit_activing: RoundDescInset;
 }
 
 export enum Orientation {
@@ -278,6 +289,7 @@ export const descType = {
   ADD_TERRAIN_FIRING: 19, // 地形灼烧DescUnitAddTerrainFiring
   TERRAIN_FIRING: 20, // 地形引起正在灼烧DescUnitTerrainFiring
   TOTAL_INFO: 21, // 所有血量
+  INSERT_UNIT: 22, // 空降小人
 };
 
 // 技能

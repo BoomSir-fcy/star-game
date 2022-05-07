@@ -20,6 +20,8 @@ import {
   ReceiveChange,
   RoundDescCarshHarm,
   RoundDescTotalHp,
+  RoundDescInset,
+  MapBaseUnits,
 } from 'game/types';
 import { orderBy } from 'lodash';
 import AxisPoint from './AxisPoint';
@@ -77,9 +79,12 @@ interface Track {
 }
 
 export interface RoundsProps {
-  [round: number]: {
-    data: RoundInfo[];
+  round: {
+    [round: number]: {
+      data: RoundInfo[];
+    };
   };
+  base?: MapBaseUnits;
 }
 
 /**
@@ -90,7 +95,8 @@ class Running extends EventTarget {
     super();
 
     this.game = game;
-    this.rounds = rounds;
+    this.rounds = rounds.round;
+    this.base = rounds.base;
     this.playLoop = loop || false;
     this.game.app.stage.addChild(this.infoText);
     this.infoText.x = 10;
@@ -99,6 +105,8 @@ class Running extends EventTarget {
   }
 
   game;
+
+  base;
 
   rounds;
 
@@ -204,8 +212,11 @@ class Running extends EventTarget {
     this.playing = true;
     const track = this.trackDetails[this.trackIndex];
     this.dispatchEvent(new CustomEvent('updateTrack', { detail: track }));
+    // setTimeout(() => {
+    //   this.runningHandle();
+    // }, 500);
     this.runTrack(track, () => {
-      this.thisHandle();
+      this.runningHandle();
     });
   }
 
@@ -258,7 +269,7 @@ class Running extends EventTarget {
     return null;
   }
 
-  thisHandle() {
+  runningHandle() {
     this.playing = false;
     if (this.paused) return;
     if (this.playCount === 0) return;
@@ -289,7 +300,7 @@ class Running extends EventTarget {
       this.playEnd = false;
     }
     this.paused = false;
-    this.thisHandle();
+    this.runningHandle();
   }
 
   // 获取所有播放轨道
@@ -470,6 +481,20 @@ class Running extends EventTarget {
     return soldier;
   }
 
+  // 空降添加小人
+  insetUnitHandle(track: TrackDetail, callback: (soldier?: Soldier) => void) {
+    console.log(this.base);
+    // const soldier = this.game.findSoldierById(track.receive_id);
+    // if (!soldier) {
+    //   console.warn(`warn: ${track.id}`);
+    //   callback();
+    //   return null;
+    // }
+    // soldier.dispatchEvent(new Event('death'));
+    // callback(soldier);
+    // return soldier;
+  }
+
   // 获取攻击轨道
   getAttackTracks(
     attacks: RoundDesc,
@@ -572,6 +597,43 @@ class Running extends EventTarget {
         targetAxisPoint: {
           x: attacks.receive_point?.x,
           y: attacks.receive_point?.y,
+        },
+      },
+    ];
+  }
+
+  // 获取空降轨道
+  getInsetUnitTracks(
+    attacks: RoundDescInset,
+    desc_type: DescType,
+    id: string,
+  ): TrackDetail[] {
+    const descInfo: DescInfo = {
+      type: desc_type,
+      id,
+      sender: {
+        isEnemy: this.game.getSoliderEnemyById(attacks.active_unit_id),
+        pos: {
+          x: attacks.active_unit_pos?.x ?? 0,
+          y: attacks.active_unit_pos?.y ?? 0,
+        },
+      },
+      receives: [],
+    };
+    return [
+      {
+        id,
+        type: desc_type,
+        descInfo,
+        receive_id: attacks.active_unit_id,
+        sender_id: attacks.active_unit_id,
+        currentAxisPoint: {
+          x: attacks.active_unit_pos?.x,
+          y: attacks.active_unit_pos?.y,
+        },
+        targetAxisPoint: {
+          x: attacks.active_unit_pos?.x,
+          y: attacks.active_unit_pos?.y,
         },
       },
     ];
@@ -1067,6 +1129,15 @@ class Running extends EventTarget {
             info.desc_type,
             `${round}-${_track}`,
             true,
+          ),
+        );
+      }
+      if (info.desc_type === descType.INSERT_UNIT) {
+        details.push(
+          ...this.getInsetUnitTracks(
+            info.unit_activing,
+            info.desc_type,
+            `${round}-${_track}`,
           ),
         );
       }

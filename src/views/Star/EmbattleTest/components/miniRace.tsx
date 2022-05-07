@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
-import { MapBaseUnits } from 'state/types';
+import { MapBaseUnits } from 'game/types';
 
-import RunSimulation, { RoundsProps } from 'game/core/Running';
+import Running, { RoundsProps } from 'game/core/Running';
 import useGame from 'game/hooks/useGame';
 
 const Container = styled(Box)`
@@ -58,7 +58,8 @@ const MiniRaceAni: React.FC<{
 
   const runGame = useCallback(
     (slot: RoundsProps) => {
-      const run = new RunSimulation(game, slot);
+      const run = new Running(game, slot);
+      run.play();
     },
     [game],
   );
@@ -83,7 +84,7 @@ const MiniRaceAni: React.FC<{
           ids,
           true,
         );
-        runGame(soldier.slot);
+        runGame({ round: soldier.slot });
       }
     },
     [createSoldiers, runGame],

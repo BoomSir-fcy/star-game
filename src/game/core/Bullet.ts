@@ -138,6 +138,7 @@ class Bullet extends EventTarget {
       // this.effects[name].minTimeEnd = false;
     }
 
+    // delete this;
     // this.container.parent.removeChild(this.container);
   }
 
@@ -536,6 +537,14 @@ class Bullet extends EventTarget {
     if (space.includes(name)) {
       this.spaceAttack(name, attackTarget);
     }
+  }
+
+  once(event: string, handle: any) {
+    // const callback = () => {
+    //   handle();
+    //   this.removeEventListener(event, callback);
+    // };
+    this.addEventListener(event, handle, { once: true });
   }
 }
 
