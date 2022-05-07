@@ -69,7 +69,13 @@ interface RunTrackDetail {
 interface InfoTrackDetail {
   info: RoundDescTotalHp;
 }
-export interface TrackDetail extends RunTrackDetail, Partial<InfoTrackDetail> {
+interface InfoTrackInset {
+  active_unit_unique_id: number;
+}
+export interface TrackDetail
+  extends RunTrackDetail,
+    Partial<InfoTrackInset>,
+    Partial<InfoTrackDetail> {
   type: DescType;
 }
 interface Track {
@@ -241,6 +247,12 @@ class Running extends EventTarget {
     //     callback(s);
     //   });
     // }
+    if (track?.type === descType.INSERT_UNIT) {
+      this.infoText.text = `回合: ${track.id}`;
+      return this.insetUnitHandle(track, s => {
+        callback(s);
+      });
+    }
     if (track?.type === descType.BEAT) {
       this.infoText.text = `回合: ${track.id}`;
       return this.beatHandle(track, s => {
@@ -252,6 +264,13 @@ class Running extends EventTarget {
       return this.beatCollision(track, s => {
         callback(s);
       });
+    }
+    if (track?.type === descType.TOTAL_INFO) {
+      const round = `回合: ${track.id} \n`;
+      const effect = `我方: ${track.info?.blue_total_hp}; 敌方${track.info?.red_total_hp} \n`;
+      this.infoText.text = `${round}${effect}`;
+      callback();
+      return null;
     }
     if (track?.type) {
       const round = `回合: ${track.id} \n`;
@@ -483,7 +502,31 @@ class Running extends EventTarget {
 
   // 空降添加小人
   insetUnitHandle(track: TrackDetail, callback: (soldier?: Soldier) => void) {
-    console.log(this.base);
+    const { active_unit_unique_id, receive_id, currentAxisPoint } = track;
+    console.log(this.base, active_unit_unique_id);
+    if (
+      this.base &&
+      active_unit_unique_id &&
+      this.base[active_unit_unique_id]
+    ) {
+      console.log(6666);
+      this.game.once('soldierCreated', () => {
+        callback();
+      });
+
+      this.game.createSoldier(currentAxisPoint.x, currentAxisPoint.y, {
+        srcId: `${track.receive_id}`,
+        race: this.base[active_unit_unique_id]?.race || 1,
+        id: active_unit_unique_id,
+        sid: receive_id,
+        hp: this.base[active_unit_unique_id]?.hp,
+        isEnemy: false,
+        enableDrag: false,
+        unique_id: active_unit_unique_id,
+      });
+    } else {
+      callback();
+    }
     // const soldier = this.game.findSoldierById(track.receive_id);
     // if (!soldier) {
     //   console.warn(`warn: ${track.id}`);
@@ -543,9 +586,12 @@ class Running extends EventTarget {
         ? attacks.receive_point?.y
         : attacks.sender_point?.y ?? attacks.receive_point?.y,
     };
-    const sender_id = self
-      ? attacks.receive_id
-      : attacks.sender_id ?? attacks.receive_id;
+    // 炸弹自己炸
+    const sender_id =
+      self || desc_type === descType.BOOM
+        ? attacks.receive_id
+        : attacks.sender_id ?? attacks.receive_id;
+
     return [
       {
         id,
@@ -625,6 +671,8 @@ class Running extends EventTarget {
         id,
         type: desc_type,
         descInfo,
+        active_unit_unique_id: attacks.active_unit_unique_id,
+
         receive_id: attacks.active_unit_id,
         sender_id: attacks.active_unit_id,
         currentAxisPoint: {
@@ -885,8 +933,12 @@ class Running extends EventTarget {
     const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
     if (!sendSoldier || !receiveSoldier) {
       console.warn(`warn: ${attacks.id}`);
+      callback();
       return null;
     }
+    // 判断其他效果有没有执行完成
+    let endTag = false;
+
     sendSoldier.once('bulletMoveEnd', () => {
       if (attacks.detail) {
         // const sendIds = [];
@@ -924,13 +976,25 @@ class Running extends EventTarget {
             trackIndex += 1;
 
             if (trackIndex === attacks.detail?.length) {
-              callback();
+              if (endTag) {
+                callback();
+              }
+              endTag = true;
             }
           });
         });
       } else {
+        if (endTag) {
+          callback();
+        }
+        endTag = true;
+      }
+    });
+    sendSoldier.once('attackEnd', () => {
+      if (endTag) {
         callback();
       }
+      endTag = true;
     });
     sendSoldier.attack(receiveSoldier, attacks.type, attacks?.attackInfo);
 
@@ -1133,6 +1197,7 @@ class Running extends EventTarget {
         );
       }
       if (info.desc_type === descType.INSERT_UNIT) {
+        console.log(121212);
         details.push(
           ...this.getInsetUnitTracks(
             info.unit_activing,
