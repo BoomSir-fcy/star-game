@@ -17,8 +17,14 @@ import {
 import Soldier from 'game/core/Soldier';
 import { useStore } from 'state';
 import Game from 'game/core/Game';
-import { MapBaseUnits, RoundInitState } from 'state/types';
-import { RoundInfo, RoundDescMove, RoundDescAttack } from 'game/types';
+import { GamePkInfo, RoundInitState } from 'state/types';
+
+import {
+  RoundInfo,
+  RoundDescMove,
+  RoundDescAttack,
+  MapBaseUnits,
+} from 'game/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { fetchUnitListAsync } from 'state/game/reducer';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
@@ -163,8 +169,11 @@ const GamePK: React.FC<GamePKProps> = () => {
   });
 
   const runHandle = useCallback(
-    (slot: RoundsProps) => {
-      const _running = new Running(game, slot);
+    (info: GamePkInfo) => {
+      const _running = new Running(game, {
+        round: info.slot,
+        base: info.init.base_unit,
+      });
       setRunning(_running);
       setTimeout(() => {
         _running.play();
@@ -191,7 +200,7 @@ const GamePK: React.FC<GamePKProps> = () => {
 
       createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, ids, false);
       createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
-      runHandle(PKInfo.slot);
+      runHandle(PKInfo);
       const res: OptionProps[] = [];
       Object.keys(PKInfo.status.status).forEach((item: string) => {
         res.push({

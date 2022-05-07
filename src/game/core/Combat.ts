@@ -378,6 +378,8 @@ class Combat extends EventTarget {
     } else {
       bullet.attack(bulletType.BULLET, target, effect);
     }
+
+    // bullet = null;
   }
 
   /**

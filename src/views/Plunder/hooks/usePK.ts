@@ -2,7 +2,8 @@ import Game from 'game/core/Game';
 import Running from 'game/core/Running';
 import Soldier from 'game/core/Soldier';
 import { useCallback, useState } from 'react';
-import { GamePkInfo, MapBaseUnits } from 'state/types';
+import { GamePkInfo } from 'state/types';
+import { MapBaseUnits } from 'game/types';
 
 type idMap = { [xy: string]: string };
 
@@ -48,7 +49,10 @@ export const usePK = (game: Game) => {
       createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
       game.once('lastSoldierCreated', (event: Event) => {
         console.log('lastSoldierCreated');
-        const _running = new Running(game, PKInfo.slot);
+        const _running = new Running(game, {
+          round: PKInfo.slot,
+          base: PKInfo.init.base_unit,
+        });
         setRunning(_running);
         _running.play();
       });

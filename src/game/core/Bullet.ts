@@ -138,6 +138,7 @@ class Bullet extends EventTarget {
       // this.effects[name].minTimeEnd = false;
     }
 
+    // delete this;
     // this.container.parent.removeChild(this.container);
   }
 

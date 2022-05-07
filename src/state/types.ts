@@ -2,7 +2,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Qualities } from 'uikit/theme/types';
-import { RoundInfo, RoundDescAxis } from 'game/types';
+import { RoundInfo, RoundDescAxis, MapBaseUnits } from 'game/types';
 
 // 性别
 export enum Gender {
@@ -143,10 +143,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 enum DescType {
   MOVE = 1,
   ATTACK = 2,
-}
-
-export interface MapBaseUnits {
-  [id: string]: Api.Game.UnitInfo;
 }
 
 export interface RoundInitState {

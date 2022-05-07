@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
-import { MapBaseUnits } from 'state/types';
+import { MapBaseUnits } from 'game/types';
 
 import RunSimulation, { RoundsProps } from 'game/core/RunSimulation';
 import useGame from 'game/hooks/useGame';
