@@ -84,7 +84,7 @@ export interface RoundsProps {
       data: RoundInfo[];
     };
   };
-  base: MapBaseUnits;
+  base?: MapBaseUnits;
 }
 
 /**
