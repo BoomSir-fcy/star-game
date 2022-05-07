@@ -28,12 +28,12 @@ export const fetchInfoView = async (
   try {
     const contract = getUserAgentContract();
     const res = await contract.infoView();
-
     return {
       avatarNft_: res.avatarNft_, // 头像nft的合约地址
       payToken_: res.payToken_, // 要支付的token的合约地址
       userProfile_: res.userProfile_, // 用户信息合约地址
       price_: res.price_.toJSON().hex, // 价格
+      priceBnb_: res.priceBnb_.toJSON().hex, // BNB价格
       createdCount_: res.createdCount_.toJSON().hex, // 已创建数量
     };
   } catch (error) {
