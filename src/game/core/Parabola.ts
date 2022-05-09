@@ -1,5 +1,6 @@
 import { DisplayObject } from '@pixi/display';
 import AxisPoint from './AxisPoint';
+import speeder from './Speeder';
 
 /**
  * 抛物线运动
@@ -36,7 +37,7 @@ class Parabola extends EventTarget {
 
   // scale = 1;
 
-  speed = 60;
+  speed = 6;
 
   // endScale = 1;
 
@@ -80,7 +81,7 @@ class Parabola extends EventTarget {
 
   step() {
     const tangent = 2 * this.curvature * this.startX + this.b;
-    const sx = Math.sqrt(this.speed / (tangent * tangent + 1));
+    const sx = Math.sqrt(speeder.bulletParabola / (tangent * tangent + 1));
     const stepMoveX = this.rate * sx;
     this.startX += stepMoveX;
 

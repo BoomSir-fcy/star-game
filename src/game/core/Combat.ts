@@ -7,6 +7,7 @@ import {
   Orientation,
   RoundDesc,
   RoundDescAttack,
+  SpeederType,
 } from 'game/types';
 // import { Graphics, Sprite, Container, Point, Texture } from 'pixi.js';
 import { Container } from '@pixi/display';
@@ -229,7 +230,7 @@ class Combat extends EventTarget {
         this.axisPoint,
         axisPoint,
         {
-          // time: 60, // 移动一格时间为1秒
+          speed: SpeederType.SOLDIER_MOVE,
         },
       );
       linearMove.addEventListener('end', () => {
@@ -299,13 +300,13 @@ class Combat extends EventTarget {
         this.axisPoint,
         point1,
         {
-          time: 60 * 0.3, // 0.3s 完成
+          speed: SpeederType.COLLECTION,
         },
       );
       linearMove.addEventListener('end', () => {
         if (point && point1) {
           const linearMove1 = new LinearMove(this.container, point1, point, {
-            time: 60 * 0.2, // 0.3s 完成
+            speed: SpeederType.COLLECTION,
           });
           const bullet = new Bullet(this);
           bullet.attack(bulletType.BUMP, target);

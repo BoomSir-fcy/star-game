@@ -1,5 +1,5 @@
 import { DisplayObject } from '@pixi/display';
-import { Orientation } from 'game/types';
+import { Orientation, SpeederType } from 'game/types';
 import { Point } from 'pixi.js';
 import AxisPoint from './AxisPoint';
 import {
@@ -9,17 +9,18 @@ import {
   threeBezier,
   twoBezier,
 } from './utils';
+import speeder from './Speeder';
 
 interface LinearMoveOptions {
   /**
    *  当同时出现@param time @param speed 时 优先使用 @param time
    */
-  speed?: number; // 速度
+  speed: SpeederType; // 速度
   time?: number; // 运动总时间
 }
 
 const defaultOptions = {
-  speed: 4,
+  speed: SpeederType.BULLET_LINEAR,
   time: 0,
 };
 // 使用贝塞尔曲线函数移动目标
@@ -56,7 +57,7 @@ class LinearMove extends EventTarget {
 
   moving = false;
 
-  speed = 0;
+  speed;
 
   timeStep = 0;
 
@@ -77,7 +78,7 @@ class LinearMove extends EventTarget {
     this.moving = true;
     // 两点直接的距离
     const distance = getDistanceBetweenTwoPoints(this.point0, this.point1);
-    this.time = this.time || distance / this.speed;
+    this.time = this.time || distance / speeder[this.speed];
     if (!this.time) {
       this.onMoveEnd();
       return this;

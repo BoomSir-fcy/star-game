@@ -290,7 +290,7 @@ export const descType = {
   ADD_TERRAIN_FIRING: 19, // 地形灼烧DescUnitAddTerrainFiring
   TERRAIN_FIRING: 20, // 地形引起正在灼烧DescUnitTerrainFiring
   TOTAL_INFO: 21, // 所有血量
-  INSERT_UNIT: 22, // 空降小人
+  INSERT_UNIT: 999, // 空降小人 被废弃
 };
 
 // 技能
@@ -363,3 +363,39 @@ export interface EffectConfig {
 }
 
 export type DescType = typeof descType[keyof typeof descType];
+
+// get soldierMove(): number {
+//   return this._soldierMove * this.base;
+// }
+
+// private _bulletLinear = 3;
+
+// get bulletLinear() {
+//   return this._bulletLinear * this.base;
+// }
+
+// private _bulletParabola = 60;
+
+// get bulletParabola() {
+//   return this._bulletParabola * this.base;
+// }
+
+// private _update = 0.016666666666;
+
+// get update() {
+//   return this._update * this.base;
+// }
+
+// private _collision = 10;
+
+// get collision() {
+//   return this._collision * this.base;
+// }
+export enum SpeederType {
+  SOLDIER_MOVE = 'soldierMove',
+  BULLET_LINEAR = 'bulletLinear',
+  BULLET_PARABOLA = 'bulletParabola',
+  UPDATE = 'update',
+  COLLECTION = 'collision',
+  SOLDIER_CREATE = 'soldierCreated',
+}

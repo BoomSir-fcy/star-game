@@ -4,6 +4,7 @@ import { Spine } from 'pixi-spine';
 import { Application } from '@pixi/app';
 import { Point } from 'pixi.js';
 import uniqueId from 'lodash/uniqueId';
+import PixiFps from 'pixi-fps';
 
 // import * as PIXI from 'pixi.js';
 import config from '../config';
@@ -19,6 +20,7 @@ import {
 } from './event';
 import LinearMove from './LinearMove';
 import loaders from './Loaders';
+import { SpeederType } from '../types';
 
 export interface GameOptionsProps {
   height?: number;
@@ -112,6 +114,12 @@ class Game extends EventTarget {
     this.view = this.app.view;
 
     this.axis = this.boards.axis;
+
+    if (this.test) {
+      const fpsCounter = new PixiFps();
+
+      this.app.stage.addChild(fpsCounter);
+    }
 
     // 绑定拖动事件 从棋盘外拖到棋盘内
     this.boards.container.on('pointermove', e => {
@@ -394,7 +402,7 @@ class Game extends EventTarget {
     this.lastCreateSoldierId = id;
 
     const linearMove = new LinearMove(soldier.container, point0, point1, {
-      time: 60,
+      speed: SpeederType.SOLDIER_CREATE,
     });
     linearMove.addEventListener('end', () => {
       soldier.container.position.set(axis.x, axis.y);

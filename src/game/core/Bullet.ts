@@ -15,6 +15,7 @@ import {
   descType,
   DescType,
   Skill,
+  SpeederType,
 } from 'game/types';
 import type Combat from './Combat';
 import {
@@ -272,7 +273,7 @@ class Bullet extends EventTarget {
           this.combat.axisPoint,
           attackTarget.axisPoint,
           {
-            // time: 60 * 2, // 2秒
+            speed: SpeederType.BULLET_LINEAR,
           },
         );
         this.onMoveStart(

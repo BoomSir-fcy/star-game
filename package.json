@@ -41,6 +41,7 @@
     "mobile-drag-drop": "^2.3.0-rc.2",
     "pixi-dragonbones": "^5.7.0-1",
     "pixi-filters": "^4.1.6",
+    "pixi-fps": "^2.0.1",
     "pixi-lights": "^3.0.0",
     "pixi-projection": "^0.4.4",
     "pixi-spine": "^3.0.13",
