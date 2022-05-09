@@ -6,6 +6,7 @@ import { Flex, BgCard, Image, TweenText } from 'uikit';
 
 import eventBus from 'utils/eventBus';
 import { useTranslation } from 'contexts/Localization';
+import { useStore } from 'state';
 
 import {
   fetchUserBalanceAsync,
@@ -43,6 +44,8 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
     dispatch(fetchUserProductAsync());
   }, [dispatch]);
 
+  const Product = useStore(p => p.userInfo.userProduct);
+
   return (
     <>
       {!getHideHeader(location.pathname) && (
@@ -50,7 +53,7 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
           <Avatar />
           <Flex flex={1}>
             <Info onRefresh={() => onRefreshClick()} className={className}>
-              {location.pathname === '/mystery-box' && (
+              {location.pathname === '/mystery-box' && !Product.planet_num && (
                 <BgCard variant='short'>
                   <Flex alignItems='center' height='100%' width='100%'>
                     <TweenText
