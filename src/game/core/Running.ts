@@ -22,6 +22,7 @@ import {
   RoundDescTotalHp,
   RoundDescInset,
   MapBaseUnits,
+  RoundDescPurify,
 } from 'game/types';
 import { orderBy } from 'lodash';
 import AxisPoint from './AxisPoint';
@@ -262,6 +263,12 @@ class Running extends EventTarget {
     if (track?.type === descType.BEAT_COLLISION) {
       this.infoText.text = `回合: ${track.id}`;
       return this.beatCollision(track, s => {
+        callback(s);
+      });
+    }
+    if (track?.type === descType.PURIFY) {
+      this.infoText.text = `回合: ${track.id}`;
+      return this.handlePurify(track, s => {
         callback(s);
       });
     }
@@ -689,59 +696,19 @@ class Running extends EventTarget {
 
   // 获取AOE轨道
   getBeatTracks(
-    attacks: RoundDescBeat,
+    attacks: RoundDescBeat | RoundDescPurify,
     desc_type: DescType,
     id: string,
+    self?: boolean,
   ): TrackDetail[] {
-    const detail = this.getDetails(attacks.detail, id, true);
-
-    /**
-     * 红色方发起进攻
-     * 对蓝色方A、蓝色方B造成20hp伤害
-     * 对蓝色方A、蓝色方B击退
-     * A和C碰撞
-     *
-     */
-    // TODO: 想不出来怎么描述 啊啊啊啊啊啊啊啊啊啊啊
-    // const receives: PeopleInfo[] = [];
-    // if (attacks.around && attacks.around.length > 1) {
-    //   attacks.around.forEach(item => {
-    //     receives.push({
-    //       pos: item.receive_point,
-    //       isEnemy: this.game.getSoliderEnemyById(item.receive_id),
-    //       receive_sub_hp: item.receive_sub_hp,
-    //       now_shield: item.now_shield,
-    //     });
-    //   });
-    // } else {
-    //   receives.push({
-    //     pos: attacks.receive_point,
-    //     isEnemy: this.game.getSoliderEnemyById(attacks.receive_id),
-    //     receive_sub_hp:
-    //       attacks.receive_sub_hp ?? attacks.around?.[0]?.receive_sub_hp,
-    //     now_shield: attacks.now_shield ?? attacks.around?.[0]?.now_shield,
-    //   });
-    // }
-
-    // const descInfo: DescInfo = {
-    //   type: desc_type,
-    //   id,
-    //   sender: {
-    //     isEnemy: this.game.getSoliderEnemyById(attacks.sender_id),
-    //     pos: {
-    //       x: attacks.sender_point?.x ?? 0,
-    //       y: attacks.sender_point?.y ?? 0,
-    //     },
-    //   },
-    //   receives,
-    // };
+    const detail = this.getDetails(attacks.detail || [], id, true);
 
     const attack: TrackDetail[] = [
       {
         id,
         type: desc_type,
         receive_id: attacks.receive_id,
-        sender_id: attacks.sender_id,
+        sender_id: self ? attacks.receive_id : attacks.sender_id,
         currentAxisPoint: {
           x: attacks.receive_point?.x,
           y: attacks.receive_point?.y,
@@ -1001,6 +968,81 @@ class Running extends EventTarget {
     return sendSoldier;
   }
 
+  // 净化
+  handlePurify(
+    attacks: TrackDetail,
+    callback: (soldier?: Soldier) => void,
+  ): Soldier | null {
+    const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
+    if (!sendSoldier || !receiveSoldier) {
+      console.warn(`warn: ${attacks.id}`);
+      callback();
+      return null;
+    }
+    // 判断其他效果有没有执行完成
+    let endTag = false;
+
+    sendSoldier.once('bulletMoveEnd', () => {
+      if (attacks.detail?.length) {
+        // const sendIds = [];
+        // const receiveIds = [];
+        // const ids: {
+        //   [id: string]: {
+        //     send: number;
+        //     receive: number;
+        //   };
+        // } = {};
+        // attacks.detail.forEach((item, index) => {
+        //   if (ids[item.receive_id]) {
+        //     ids[item.receive_id].receive += 1;
+        //   } else {
+        //     ids[item.receive_id] = {
+        //       send: 0,
+        //       receive: 1,
+        //     };
+        //   }
+        //   if (ids[item.sender_id]) {
+        //     ids[item.sender_id].send += 1;
+        //   } else {
+        //     ids[item.sender_id] = {
+        //       send: 1,
+        //       receive: 0,
+        //     };
+        //   }
+        //   // sendIds.push(item.receive_id);
+        //   // sendIds.push(item.receive_id);
+        // });
+
+        let trackIndex = 0;
+        attacks.detail.forEach((item, index) => {
+          this.runTrack(item, () => {
+            trackIndex += 1;
+            if (trackIndex === attacks.detail?.length) {
+              if (endTag) {
+                callback();
+              }
+              endTag = true;
+            }
+          });
+        });
+      } else {
+        if (endTag) {
+          callback();
+        }
+        endTag = true;
+      }
+    });
+    sendSoldier.once('attackEnd', () => {
+      if (endTag) {
+        callback();
+      }
+      endTag = true;
+    });
+    sendSoldier.attack(receiveSoldier, attacks.type, attacks?.attackInfo);
+
+    return sendSoldier;
+  }
+
   // 碰撞
   beatCollision(attacks: TrackDetail, callback: (soldier?: Soldier) => void) {
     const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
@@ -1151,6 +1193,17 @@ class Running extends EventTarget {
             info.beat,
             info.desc_type,
             `${round}-${_track}`,
+          ),
+        );
+      }
+      // 净化
+      if (info.desc_type === descType.PURIFY) {
+        details.push(
+          ...this.getBeatTracks(
+            info.purify,
+            info.desc_type,
+            `${round}-${_track}`,
+            self,
           ),
         );
       }

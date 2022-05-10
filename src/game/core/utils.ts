@@ -183,6 +183,7 @@ export const getEffectText = (effect?: DescType) => {
   if (effect === descType.REMOVE_STOP_MOVE) return '解除禁锢';
   if (effect === descType.ADD_TERRAIN_FIRING) return '地形灼烧';
   if (effect === descType.TERRAIN_FIRING) return '地形灼烧中';
+  if (effect === descType.PURIFY) return '净化';
   return '未知';
 };
 

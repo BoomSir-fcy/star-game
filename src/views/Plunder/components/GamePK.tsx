@@ -34,6 +34,7 @@ import { useNavigate } from 'react-router-dom';
 import { OptionProps, Select } from 'components/Select';
 import effectConfig from 'game/effectConfig';
 import Progress from 'components/Progress';
+import speeder from 'game/core/Speeder';
 
 const sleep = (handle: any, delay: number) => {
   return new Promise<void>((res, rej) => {
@@ -219,11 +220,9 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   useEffect(() => {
     if (PKInfo && game.soldiers.length === 0 && !loaded) {
-      console.log(88888);
       setLoaded(true);
       const loaders = game.loadResources();
       loaders.addEventListener('progress', event => {
-        console.log(event);
         setProgress((event as ProgressEvent).loaded);
       });
       loaders.addEventListener('complete', () => {
@@ -333,6 +332,8 @@ const GamePK: React.FC<GamePKProps> = () => {
     }
   }, []);
 
+  const [speederBase, setSpeederBase] = useState(speeder.base);
+
   return (
     <Box position='relative'>
       <Flex>
@@ -386,8 +387,6 @@ const GamePK: React.FC<GamePKProps> = () => {
           </Box>
         </Box>
         <Box>
-          <Text>{progress}</Text>
-          <Progress width={`${progress}%`} />
           <Box ref={ref} />
         </Box>
         <Box ml='20px'>
@@ -395,33 +394,19 @@ const GamePK: React.FC<GamePKProps> = () => {
             <Box mt='50px'>
               <Text>战斗速度</Text>
             </Box>
-            <Text>X {running?.rate}</Text>
+            <Text>X {speederBase}</Text>
             <Button
               onClick={() => {
-                if (running?.rate) {
-                  running.rate += running.rate > 1 ? -0.2 : -1;
-                  setRunningInfo(prev => {
-                    return {
-                      ...prev,
-                      rate: running.rate,
-                    };
-                  });
-                }
+                speeder.base /= 2;
+                setSpeederBase(speeder.base);
               }}
             >
               减速
             </Button>
             <Button
               onClick={() => {
-                if (running?.rate) {
-                  running.rate += running.rate > 1 ? 1 : 0.2;
-                  setRunningInfo(prev => {
-                    return {
-                      ...prev,
-                      rate: running.rate,
-                    };
-                  });
-                }
+                speeder.base *= 2;
+                setSpeederBase(speeder.base);
               }}
             >
               加速

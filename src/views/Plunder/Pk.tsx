@@ -10,7 +10,6 @@ import {
   Spinner,
   BorderCard,
 } from 'uikit';
-import styled from 'styled-components';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import { GlobalVideo } from 'components/Video';
@@ -38,7 +37,6 @@ import {
   PlunderPanel,
   OtherDetail,
 } from './components';
-import usePlunder from './hooks/usePlunder';
 import { usePK } from './hooks/usePK';
 
 // const game = new Game({ width: 1400, height: 600 });

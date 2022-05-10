@@ -26,6 +26,7 @@ import {
 import Parabola from './Parabola';
 import LinearMove from './LinearMove';
 import loaders from './Loaders';
+import speeder from './Speeder';
 
 /**
  * 攻击特效
@@ -372,7 +373,7 @@ class Bullet extends EventTarget {
    */
   spineAnimation(name: BulletType, spine: Spine) {
     if (spine && !this.effects[name].completeBomb) {
-      spine.update(0.016666666666);
+      spine.update(speeder.update);
       requestAnimationFrame(() => this.spineAnimation(name, spine));
     }
   }

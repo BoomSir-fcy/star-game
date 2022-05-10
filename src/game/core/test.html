@@ -5,38 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="./parabola.base.js"></script>
-    <style>
-      .box1,
-      .box2 {
-        border: 1px solid red;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-      }
-      .box1 {
-        position: fixed;
-        left: 20px;
-        bottom: 200px;
-      }
-      .box2 {
-        position: fixed;
-        left: 21px;
-        bottom: 500px;
-      }
-    </style>
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
   </head>
-  <body>
-    <div class="box1">1</div>
-    <div class="box2">2</div>
-    <button class="btn" onclick="onStart">开始</button>
-    <script>
-      document.querySelector('.btn').addEventListener('click', () => {
-        new Parabola(
-          document.querySelector('.box1'),
-          document.querySelector('.box2'),
-        ).init();
-      });
-    </script>
-  </body>
+  <body></body>
 </html>

@@ -163,6 +163,12 @@ export interface RoundDescBeat extends SlotBaseInfo {
   receive_sub_hp: number;
   detail: RoundInfo[];
 }
+// 净化
+export interface RoundDescPurify extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  detail: RoundInfo[];
+}
 
 // 碰撞
 export interface RoundDescCarshHarm extends SlotBaseInfo {
@@ -242,6 +248,7 @@ export interface RoundInfo {
   add_terrain_firing: RoundDescAddTerrainFiring;
   terrain_firing: RoundDescTerrainFiring;
   unit_activing: RoundDescInset;
+  purify: RoundDescPurify;
 }
 
 export enum Orientation {
@@ -290,6 +297,8 @@ export const descType = {
   ADD_TERRAIN_FIRING: 19, // 地形灼烧DescUnitAddTerrainFiring
   TERRAIN_FIRING: 20, // 地形引起正在灼烧DescUnitTerrainFiring
   TOTAL_INFO: 21, // 所有血量
+  PURIFY: 22, // 净化
+  REMOVE_BOMB: 23, // 移除炸弹
   INSERT_UNIT: 999, // 空降小人 被废弃
 };
 

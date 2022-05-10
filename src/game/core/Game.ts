@@ -115,11 +115,11 @@ class Game extends EventTarget {
 
     this.axis = this.boards.axis;
 
-    if (this.test) {
-      const fpsCounter = new PixiFps();
+    // if (this.test) {
+    const fpsCounter = new PixiFps();
 
-      this.app.stage.addChild(fpsCounter);
-    }
+    this.app.stage.addChild(fpsCounter);
+    // }
 
     // 绑定拖动事件 从棋盘外拖到棋盘内
     this.boards.container.on('pointermove', e => {
