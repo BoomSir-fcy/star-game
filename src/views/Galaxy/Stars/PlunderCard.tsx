@@ -48,28 +48,28 @@ export const PlunderCard: React.FC<{
 
   useEffect(() => {
     if (hasOwner) {
-      // getPlunderInfo();
+      getPlunderInfo();
     }
-  }, [hasOwner]);
+  }, [hasOwner, getPlunderInfo]);
 
   // 抢夺
   const handleAttckStar = useCallback(async () => {
-    // if (info?.owner) {
-    //   setPending(true);
-    //   dispatch(setState(GamePkState.CONFIRMING));
-    //   const res = await handlePlunder({
-    //     nft_id: info.token_id,
-    //     number: info.number,
-    //   });
-    //   if (res) {
-    //     dispatch(setState(GamePkState.START));
-    //     navigate('/plunder-pk');
-    //   } else {
-    //     dispatch(setState(GamePkState.MATCHED));
-    //   }
-    //   setPending(false);
-    // }
-  }, []);
+    if (info?.owner) {
+      setPending(true);
+      dispatch(setState(GamePkState.CONFIRMING));
+      const res = await handlePlunder({
+        nft_id: info.token_id,
+        number: info.number,
+      });
+      if (res) {
+        dispatch(setState(GamePkState.START));
+        navigate('/plunder-pk');
+      } else {
+        dispatch(setState(GamePkState.MATCHED));
+      }
+      setPending(false);
+    }
+  }, [info, dispatch, navigate, handlePlunder]);
 
   // 占领
   const handleHold = useCallback(async () => {

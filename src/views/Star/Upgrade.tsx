@@ -237,12 +237,12 @@ const Upgrade = () => {
                       'Upgrade requires sacrifice to add planets of the same quality and level',
                     )}
                   </Text>
-                  <Text small>
+                  {/* <Text small>
                     *
                     {t(
                       'To upgrade, you need to add a planet to become an alliance',
                     )}
-                  </Text>
+                  </Text> */}
                   <Text small>
                     *
                     {t(

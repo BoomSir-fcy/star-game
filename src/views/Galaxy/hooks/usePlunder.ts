@@ -26,7 +26,7 @@ const usePlunder = () => {
           const params = { ...sign, signature, ...starInfo };
           const res = await Api.GalaxyApi.plunderStar(params);
           if (Api.isSuccess(res)) {
-            dispatch(setPKInfo(res.data));
+            dispatch(setPKInfo(res.data.pk_result));
             return true;
           }
         } catch (error) {
