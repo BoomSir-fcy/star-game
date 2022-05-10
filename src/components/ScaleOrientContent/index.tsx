@@ -80,12 +80,12 @@ const ScaleOrientContent: React.FC = ({ children }) => {
         scale={scale}
       />
       <div className={VIDEO_GLOBAL_CLASS_NAME} />
-      <Box id='scale-content'>
-        <Content scale={scale}>
-          <Dashboard />
-          {children}
-        </Content>
-      </Box>
+      <Content id='scale-content' scale={scale}>
+        <Dashboard />
+        {children}
+      </Content>
+      {/* <Box>
+      </Box> */}
     </Box>
   );
 };

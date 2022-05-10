@@ -3,6 +3,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import random from 'lodash/random';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { setPKInfo } from 'state/game/reducer';
 import { signMessage } from 'utils/web3React';
 
 const usePlunder = () => {
@@ -25,7 +26,7 @@ const usePlunder = () => {
           const params = { ...sign, signature, to_address: address };
           const res = await Api.AllianceApi.alliancePlunder(params);
           if (Api.isSuccess(res)) {
-            dispatch(res.data);
+            dispatch(setPKInfo(res.data));
             return true;
           }
         } catch (error) {
