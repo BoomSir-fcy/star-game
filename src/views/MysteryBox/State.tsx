@@ -25,7 +25,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { TokenImage } from 'components/TokenImage';
 import { getBalanceNumber } from 'utils/formatBalance';
-import { getDsgAddress } from 'utils/addressHelpers';
+import { getDsgAddress, getWEtherAddress } from 'utils/addressHelpers';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { mysteryConfig } from 'components/MysteryBoxCom/config';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
@@ -172,7 +172,7 @@ const MysteryBoxState = () => {
                     <TokenImage
                       width={80}
                       height={80}
-                      tokenAddress={getDsgAddress()}
+                      tokenAddress={getWEtherAddress()}
                     />
                   </Box>
                   <Box ml='20px'>

@@ -16,18 +16,16 @@ const Content = styled(Box)<{ scale: number }>`
   height: 900px;
   transform-origin: 0 0;
   position: absolute;
-  top: 48%;
+  top: 2px;
   left: 50%;
   /* background: pink; */
-  transform: ${({ scale }) =>
-    `translate(${-scale * 50}%, ${-scale * 50}%) scale(${scale})`};
-  ${({ theme }) => theme.mediaQueries.sm} {
-    /* 576 - 852 */
+  transform: ${({ scale }) => `translate(${-scale * 50}%) scale(${scale})`};
+  /* ${({ theme }) => theme.mediaQueries.sm} {
     top: ${({ scale }) => `${scale * 58}%`};
   }
   ${({ theme }) => theme.mediaQueries.md} {
     top: ${({ scale }) => `${scale * 48}%`};
-  }
+  } */
 `;
 
 const ScaleOrientContent: React.FC = ({ children }) => {

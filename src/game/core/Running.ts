@@ -1138,6 +1138,7 @@ class Running extends EventTarget {
     [descType.ADD_SHIELD]: 'add_shield',
     [descType.REMOVE_SHIELD]: 'sub_shield',
     [descType.RESTORE]: 'restore',
+    // [descType.REMOVE_BOMB]: 'restore',
     // [descType.ADD_TERRAIN_FIRING]: 'add_terrain_firing',
     // [descType.TERRAIN_FIRING]: 'terrain_firing',
   };

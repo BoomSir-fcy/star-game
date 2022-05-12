@@ -1,7 +1,42 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, Box } from 'uikit';
+import Parallax from 'parallax-js';
+import styled from 'styled-components';
+
+const ContainerBg = styled(Box)`
+  position: absolute;
+  background: url('/images/commons/sky-bg1.jpg');
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+  width: 110vw;
+  height: 110vh;
+  left: -1vw !important;
+  top: -1vh !important;
+`;
 
 const Flyer = () => {
+  const boxRef = useRef(null);
+
+  const [createdPara, setCreatedPara] = useState(false);
+
+  const createParaHandle = useCallback(
+    (el: HTMLDivElement) => {
+      if (!createdPara) {
+        // eslint-disable-next-line
+        new Parallax(el);
+        setCreatedPara(true);
+      }
+    },
+    [createdPara, setCreatedPara],
+  );
+
+  useEffect(() => {
+    if (boxRef.current) {
+      createParaHandle(boxRef.current);
+    }
+  }, [boxRef, createParaHandle]);
+
   return (
     <>
       <Box
@@ -11,7 +46,9 @@ const Flyer = () => {
         top={0}
         left={0}
         zIndex={-1}
+        ref={boxRef}
       >
+        <ContainerBg data-depth='0.1' />
         <Box
           position='absolute'
           width={800}
@@ -28,8 +65,9 @@ const Flyer = () => {
           position='absolute'
           width={160}
           height={160}
-          top='-80px'
-          left='580px'
+          data-depth='0.15'
+          top='-80px !important'
+          left='580px !important'
         >
           <Image width={160} height={160} src='/images/login/star.png' />
         </Box>
@@ -37,8 +75,10 @@ const Flyer = () => {
           position='absolute'
           width={80}
           height={80}
-          bottom='30px'
-          left='520px'
+          data-depth='0.16'
+          top='auto !important'
+          bottom='30px !important'
+          left='520px !important'
         >
           <Image width={80} height={80} src='/images/login/star.png' />
         </Box>
@@ -46,8 +86,9 @@ const Flyer = () => {
           position='absolute'
           width={406}
           height={225}
-          top='80px'
-          left='1350px'
+          data-depth='0.2'
+          top='80px !important'
+          left='1350px !important'
         >
           <Image width={406} height={225} src='/images/login/flyer.png' />
         </Box>
