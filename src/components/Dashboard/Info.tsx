@@ -93,7 +93,29 @@ const Info: React.FC<InfoProps> = ({
               setActiveToken(BOXblance);
               setVisible(true);
             }}
-            mt='28px'
+            mt='24px'
+            variant='custom'
+          >
+            <Flex width='100%' alignItems='center'>
+              <Flex flex={1}>
+                <TokenImage
+                  width={45}
+                  height={48}
+                  tokenAddress={getDsgAddress()}
+                />
+                <Text mb='8px' ml='8px'>
+                  {BOXblance?.amount}
+                </Text>
+              </Flex>
+              <Text mb='8px'>{BOXblance?.symbol}</Text>
+            </Flex>
+          </ButtonLeft>
+          <ButtonLeft
+            onClick={() => {
+              setActiveToken(BOXblance);
+              setVisible(true);
+            }}
+            mt='22px'
             variant='custom'
           >
             <Flex width='100%' alignItems='center'>
