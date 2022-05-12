@@ -3,18 +3,6 @@ import { Image, Box } from 'uikit';
 import Parallax from 'parallax-js';
 import styled from 'styled-components';
 
-const ContainerBg = styled(Box)`
-  position: absolute;
-  background: url('/images/commons/sky-bg1.jpg');
-  background-position: center;
-  background-size: cover;
-  position: absolute;
-  width: 110vw;
-  height: 110vh;
-  left: -1vw !important;
-  top: -1vh !important;
-`;
-
 const Flyer = () => {
   const boxRef = useRef(null);
 
@@ -48,7 +36,6 @@ const Flyer = () => {
         zIndex={-1}
         ref={boxRef}
       >
-        <ContainerBg data-depth='0.1' />
         <Box
           position='absolute'
           width={800}
