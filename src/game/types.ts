@@ -151,6 +151,12 @@ export interface RoundDescIceEnd extends SlotBaseInfo {
   receive_sub_hp: number;
   around: ReceiveChange[];
 }
+// 恢复
+export interface RoundDescIceRestore extends SlotBaseInfo {
+  long_round: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
+}
 // 移除灼烧
 export interface RoundDescRemoveFiring extends SlotBaseInfo {
   long_round: number;
@@ -249,6 +255,7 @@ export interface RoundInfo {
   terrain_firing: RoundDescTerrainFiring;
   unit_activing: RoundDescInset;
   purify: RoundDescPurify;
+  restore: RoundDescIceRestore;
 }
 
 export enum Orientation {
@@ -299,6 +306,7 @@ export const descType = {
   TOTAL_INFO: 21, // 所有血量
   PURIFY: 22, // 净化
   REMOVE_BOMB: 23, // 移除炸弹
+  RESTORE: 24, // 恢复生命值
   INSERT_UNIT: 999, // 空降小人 被废弃
 };
 

@@ -21,6 +21,13 @@ const Content = styled(Box)<{ scale: number }>`
   /* background: pink; */
   transform: ${({ scale }) =>
     `translate(${-scale * 50}%, ${-scale * 50}%) scale(${scale})`};
+  ${({ theme }) => theme.mediaQueries.sm} {
+    /* 576 - 852 */
+    top: ${({ scale }) => `${scale * 58}%`};
+  }
+  ${({ theme }) => theme.mediaQueries.md} {
+    top: ${({ scale }) => `${scale * 48}%`};
+  }
 `;
 
 const ScaleOrientContent: React.FC = ({ children }) => {
