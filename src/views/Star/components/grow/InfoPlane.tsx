@@ -60,7 +60,7 @@ const InfoPlane: React.FC<{
       <Flex margin='12px 0' alignItems='center' justifyContent='center'>
         <Flex flex={1} justifyContent='center'>
           <Text fontSize='20px'>
-            {t('Plunder speed')} {nowPlante?.plunder_speed}
+            {t('Looting Speed')} {nowPlante?.plunder_speed}
           </Text>
         </Flex>
         <Box width={47}>
@@ -68,7 +68,7 @@ const InfoPlane: React.FC<{
         </Box>
         <Flex flex={1} justifyContent='center'>
           <Text fontSize='20px'>
-            {t('Plunder speed')} {estimatePlante?.plunder_speed}
+            {t('Looting Speed')} {estimatePlante?.plunder_speed}
           </Text>
         </Flex>
       </Flex>
@@ -77,7 +77,7 @@ const InfoPlane: React.FC<{
           <Image width={85} height={85} src='/images/commons/icon/ore.png' />
           <Box>
             <Text color='textTips' fontSize='20px'>
-              {t('Ore capacity')}
+              {t('Ore Capacity')}
             </Text>
             <Text fontSize='22px'>{nowPlante?.oreYield}/s</Text>
           </Box>
@@ -87,7 +87,7 @@ const InfoPlane: React.FC<{
         </Box>
         <RightBox>
           <Box>
-            <Text fontSize='20px'>{t('Ore capacity')}</Text>
+            <Text fontSize='20px'>{t('Ore Capacity')}</Text>
             <Flex>
               <Image width={33} height={33} src='/images/commons/icon/up.png' />
               <Text fontSize='22px' color='up'>
@@ -106,7 +106,7 @@ const InfoPlane: React.FC<{
           />
           <Box>
             <Text color='textTips' fontSize='20px'>
-              {t('Population productivity')}
+              {t('Population Capacity')}
             </Text>
             <Text fontSize='22px'>{nowPlante?.populationYield}/s</Text>
           </Box>
@@ -116,7 +116,7 @@ const InfoPlane: React.FC<{
         </Box>
         <RightBox>
           <Box>
-            <Text fontSize='20px'> {t('Population productivity')}</Text>
+            <Text fontSize='20px'> {t('Population Capacity')}</Text>
             <Flex>
               <Image width={33} height={33} src='/images/commons/icon/up.png' />
               <Text fontSize='22px' color='up'>
@@ -131,7 +131,7 @@ const InfoPlane: React.FC<{
           <Image width={85} height={85} src='/images/commons/icon/energy.png' />
           <Box>
             <Text color='textTips' fontSize='20px'>
-              {t('Energy production')}
+              {t('Energy Capacity')}
             </Text>
             <Text fontSize='22px'>{nowPlante?.energyYield}/s</Text>
           </Box>
@@ -141,7 +141,7 @@ const InfoPlane: React.FC<{
         </Box>
         <RightBox>
           <Box>
-            <Text fontSize='20px'> {t('Energy production')}</Text>
+            <Text fontSize='20px'> {t('Energy Capacity')}</Text>
             <Flex>
               <Image width={33} height={33} src='/images/commons/icon/up.png' />
               <Text fontSize='22px' color='up'>

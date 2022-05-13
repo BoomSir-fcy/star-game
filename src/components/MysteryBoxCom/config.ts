@@ -3,12 +3,12 @@ import { qualities } from './types';
 export const mysteryConfig = {
   [qualities.ORDINARY]: {
     label: 'Ordinary',
-    tips: 'Common, Good, Rare Planets',
+    tips: 'Common, Good, Rare Planet Count',
     srcName: 'ordinary',
   },
   [qualities.ADVANCED]: {
     label: 'Advanced',
-    tips: 'Good, Rare, Epic Planets',
+    tips: 'Good, Rare, Epic Planet Count',
     srcName: 'advanced',
   },
   [qualities.SUPER]: {

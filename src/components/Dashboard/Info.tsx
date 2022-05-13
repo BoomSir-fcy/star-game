@@ -140,7 +140,7 @@ const Info: React.FC<InfoProps> = ({
                 <Flex alignItems='center' width='100%'>
                   <StarCom variant='none' ml='16px' />
                   <Box>
-                    <Text textAlign='left'>{t('Planets')}</Text>
+                    <Text textAlign='left'>{t('Planet Count')}</Text>
                     <Text textAlign='left'>{Product.planet_num}</Text>
                   </Box>
                 </Flex>
@@ -159,10 +159,10 @@ const Info: React.FC<InfoProps> = ({
                 </Box>
                 <Box ml='8px'>
                   <Text textAlign='left'>
-                    {t('Total capacity')}: {Product.stone_product}/s
+                    {t('Total Capacity')}: {Product.stone_product}/s
                   </Text>
                   <Text textAlign='left'>
-                    {t('Total ore')}: {Product.stone}
+                    {t('Total Ore')}: {Product.stone}
                   </Text>
                 </Box>
               </Flex>
@@ -178,10 +178,10 @@ const Info: React.FC<InfoProps> = ({
                 </Box>
                 <Box ml='8px'>
                   <Text textAlign='left'>
-                    {t('Total capacity')}: {Product.population_product}/s
+                    {t('Total Capacity')}: {Product.population_product}/s
                   </Text>
                   <Text textAlign='left'>
-                    {t('Total population')}: {Product.population}
+                    {t('Total Population')}: {Product.population}
                   </Text>
                 </Box>
               </Flex>
@@ -198,10 +198,10 @@ const Info: React.FC<InfoProps> = ({
                   </Box>
                   <Box ml='8px'>
                     <Text textAlign='left'>
-                      {t('Total capacity')}: {Product.energy_product}/s
+                      {t('Total Capacity')}: {Product.energy_product}/s
                     </Text>
                     <Text textAlign='left'>
-                      {t('Total energy')}: {Product.energy}
+                      {t('Total Energy')}: {Product.energy}
                     </Text>
                   </Box>
                 </Flex>

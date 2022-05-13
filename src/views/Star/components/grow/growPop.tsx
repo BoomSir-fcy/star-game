@@ -31,20 +31,20 @@ export const GrowPop: React.FC<{
         planet_id: Number(parsedQs.id),
       });
       if (Api.isSuccess(res)) {
-        toastSuccess(t('Successful operation'));
+        toastSuccess(t('Operate Succeeded'));
         callBack();
       }
       onClose();
       // if (res.code === 200007) {
-      //   toastError(t('The planet is being upgraded and cannot be upgraded'));
+      //   toastError(t('The planet is under upgrading, cannot be upgraded now.'));
       //   onClose();
       // }
       // if (res.code === 200017) {
-      //   toastError(t('Planet already has max strengthen level'));
+      //   toastError(t('Planet already has max strengthen grade'));
       //   onClose();
       // }
     } catch (error) {
-      toastError(t('Operation failed'));
+      toastError(t('Operate Failed'));
       console.error(error);
     }
   };
@@ -90,7 +90,7 @@ export const GrowPop: React.FC<{
             </Box>
             <Flex width='100%' justifyContent='center'>
               <Button onClick={() => ToStrengthenPlante()}>
-                {t('Confirm the cultivation')}
+                {t('Confirm Cultivating')}
               </Button>
             </Flex>
           </Flex>

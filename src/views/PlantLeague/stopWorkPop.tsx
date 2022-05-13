@@ -14,12 +14,12 @@ const StopWorkPop: React.FC<{
     <Box width='100%' padding='100px 0'>
       <Text mb='150px' textAlign='center' fontSize='28px'>
         {t(
-          'Stopping work will not properly produce resources and will not consume resources. Did it stop working?',
+          'After stopping work, resources will not be produced or consumed. Do you want to stop working?',
         )}
       </Text>
       <Flex justifyContent='center'>
         <Button width='270px' onClick={callBack}>
-          {t('Confirm stop')}
+          {t('Confirm Stop')}
         </Button>
       </Flex>
     </Box>

@@ -16,7 +16,7 @@ const Extra: React.FC<BoxProps> = props => {
     <Box {...props}>
       <ExtraLabelStyled justifyContent='space-between'>
         <Flex>
-          <Text fontSize='22px'>{t('Defense bonus')}:</Text>
+          <Text fontSize='22px'>{t('Defense Enhancement')}:</Text>
           <Text fontSize='22px'>{t('All building defenses')}+10</Text>
         </Flex>
         <Flex width={100}>
@@ -28,7 +28,7 @@ const Extra: React.FC<BoxProps> = props => {
       </ExtraLabelStyled>
       <ExtraLabelStyled justifyContent='space-between' mt='21px'>
         <Flex>
-          <Text fontSize='22px'>{t('Attack bonus')}:</Text>
+          <Text fontSize='22px'>{t('Attack Enhancement')}:</Text>
           <Text fontSize='22px'>{t('Attack building damage')}+10</Text>
         </Flex>
         <Flex width={100}>
@@ -40,7 +40,7 @@ const Extra: React.FC<BoxProps> = props => {
       </ExtraLabelStyled>
       <ExtraLabelStyled justifyContent='space-between' mt='21px'>
         <Flex>
-          <Text fontSize='22px'>{t('HP bonus')}:</Text>
+          <Text fontSize='22px'>{t('HP Enhancement')}:</Text>
           <Text fontSize='22px'>{t('All buildings HP')}+10</Text>
         </Flex>
         <Flex width={100}>
@@ -52,8 +52,8 @@ const Extra: React.FC<BoxProps> = props => {
       </ExtraLabelStyled>
       <ExtraLabelStyled justifyContent='space-between' mt='21px'>
         <Flex>
-          <Text fontSize='22px'>{t('Capacity bonus')}:</Text>
-          <Text fontSize='22px'>{t('All throughput speeds')}+10</Text>
+          <Text fontSize='22px'>{t('Capacity Enhancement')}:</Text>
+          <Text fontSize='22px'>{t("All capacities'speed")}+10</Text>
         </Flex>
         <Flex width={100}>
           <Image width={33} height={33} src='/images/commons/icon/up.png' />
@@ -64,7 +64,7 @@ const Extra: React.FC<BoxProps> = props => {
       </ExtraLabelStyled>
       <ExtraLabelStyled justifyContent='space-between' mt='21px'>
         <Flex>
-          <Text fontSize='22px'>{t('The cost of building')}:</Text>
+          <Text fontSize='22px'>{t('Building Cost')}:</Text>
           <Text fontSize='22px'>
             {t('All building construction costs')}-10%
           </Text>

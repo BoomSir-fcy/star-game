@@ -76,10 +76,10 @@ const JoinTheAlliance = () => {
     }
     try {
       await RemoveStar(newIds);
-      toastSuccess(t('Removed successfully'));
+      toastSuccess(t('Remove Succeeded'));
     } catch (e) {
       console.error(e);
-      toastError(t('Removal failed'));
+      toastError(t('Remove Failed'));
     }
     dispatch(fetchAllianceViewAsync());
   }, [RemoveStar, toastError, toastSuccess, dispatch, t, workingList, newIds]);

@@ -59,13 +59,13 @@ const Grow: React.FC = () => {
           time: 0,
         });
         if (res?.data?.success) {
-          toastSuccess(t('Nurture success'));
+          toastSuccess(t('Cultivate Succeeded'));
         } else {
-          toastError(t('Nurture failure'));
+          toastError(t('Cultivate Failed'));
         }
       }
     } catch (error) {
-      toastError(t('Fail to accelerate'));
+      toastError(t('Accelerate Failed'));
       console.error(error);
     }
   };
@@ -79,9 +79,9 @@ const Grow: React.FC = () => {
         const { data } = res;
         if (data.strengthen_is_end) {
           if (data.strengthen_is_success) {
-            toastSuccess(t('Nurture success'));
+            toastSuccess(t('Cultivate Succeeded'));
           } else {
-            toastInfo(t('Nurture failure'));
+            toastInfo(t('Cultivate Failed'));
           }
         }
         setState({
@@ -108,10 +108,10 @@ const Grow: React.FC = () => {
       }
       // else if (res.code === 200016) {
       //   toastWarning(
-      //     t('Planets in the Planetary Federation cannot be nurtured'),
+      //     t('Planets in the Planet Alliance cannot be cultivated'),
       //   );
       // } else {
-      //   toastWarning(t('The current planet cannot be cultivated'));
+      //   toastWarning(t('This planet cannot be cultivated'));
       // }
     } catch (error) {
       console.error(error);
@@ -180,9 +180,7 @@ const Grow: React.FC = () => {
                 <Button
                   onClick={() => {
                     if (!nowPlante?.id) {
-                      toastWarning(
-                        t('The current planet cannot be cultivated'),
-                      );
+                      toastWarning(t('This planet cannot be cultivated'));
                       return;
                     }
                     if (state.time === 0) {
@@ -196,7 +194,7 @@ const Grow: React.FC = () => {
                 >
                   {state.time > 0
                     ? formatTime(state.time)
-                    : t('Start nurturing')}
+                    : t('Start Cultivating')}
                 </Button>
               </TopBox>
               <Extra />

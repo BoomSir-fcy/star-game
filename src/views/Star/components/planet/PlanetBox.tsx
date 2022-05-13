@@ -107,7 +107,7 @@ export const PlanetBox: React.FC<{
                   Lv{info.level}
                 </Text>
                 <Text ml='12px' small>
-                  {t('Lattice')}:{info.areaX}x{info.areaY}
+                  {t('Grid')}:{info.areaX}x{info.areaY}
                 </Text>
               </Flex>
             </Box>
@@ -125,7 +125,7 @@ export const PlanetBox: React.FC<{
                     ellipsis
                     style={{ flex: 1, textAlign: 'right' }}
                   >
-                    {t('During upgrade')}
+                    {t('Upgrading')}
                   </Text>
                   <Image
                     src='/images/commons/icon/icon_arrow_right.png'

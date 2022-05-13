@@ -56,16 +56,16 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({ onBack, onRefresh }) => {
   return (
     <Flex>
       <SecondaryButton href='/plunder' tag='attack'>
-        {t('Plunder resources').toLocaleUpperCase()}
+        {t('Loot Resources').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/galaxy' tag='flag'>
         {t('Occupy the stars').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/plant-league' tag='star'>
-        {t('STAR GPOUP').toLocaleUpperCase()}
+        {t('Planet Alliance').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/mystery-box' tag='m-box'>
-        {t('STAR BOX').toLocaleUpperCase()}
+        {t('Planet Box').toLocaleUpperCase()}
       </SecondaryButton>
       {/* <BackButton onBack={onBack} /> */}
       <RefreshButton mr='23px' onRefresh={onRefresh} />
