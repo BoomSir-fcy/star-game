@@ -12,7 +12,7 @@ const Addition = () => {
     const arr = [
       {
         type: 1,
-        name: t('Total ore'),
+        name: t('Total Ore'),
         total: energy.total_stone,
         capacity: energy.per_stone,
         speed: new BigNumber(energy.per_stone)
@@ -21,7 +21,7 @@ const Addition = () => {
       },
       {
         type: 2,
-        name: t('Total population'),
+        name: t('Total Population'),
         total: energy.total_population,
         capacity: energy.per_population,
         speed: new BigNumber(energy.per_population)
@@ -30,7 +30,7 @@ const Addition = () => {
       },
       {
         type: 3,
-        name: t('Total energy'),
+        name: t('Total Energy'),
         total: energy.total_energy,
         capacity: energy.per_energy,
         speed: new BigNumber(energy.per_energy)
@@ -83,7 +83,7 @@ const ItemRow: React.FC<{
             {info.name}:{info.total}
           </Text>
           <Text fontSize='22px'>
-            {t('Total capacity')}:{info.capacity}%
+            {t('Total Capacity')}:{info.capacity}%
           </Text>
         </Box>
       </Flex>

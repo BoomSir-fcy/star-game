@@ -110,11 +110,11 @@ const Planet = () => {
         return;
       }
       await SetWorking(ChooseList);
-      toastSuccess(t('Join successfully'));
+      toastSuccess(t('Join Succeeded'));
       navigate('/plant-league');
     } catch (e) {
       console.error(e);
-      toastError(t('Join failed'));
+      toastError(t('Join Failed'));
     } finally {
       setpending(false);
     }

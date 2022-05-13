@@ -12,31 +12,31 @@ const Extra: React.FC<ExtraProps> = ({ info, children, ...props }) => {
     <Box {...props}>
       <Text mb='10px'>{t('More Attributes')}</Text>
       <ExtraLabelStyled>
-        <LabelText>{t('Defense bonus')}：</LabelText>
+        <LabelText>{t('Defense Enhancement')}：</LabelText>
         <AttrText>
           {t("All buildings' defenses")} +{info?.defense}
         </AttrText>
       </ExtraLabelStyled>
       <ExtraLabelStyled mt='13px'>
-        <LabelText>{t('Attack bonus')}：</LabelText>
+        <LabelText>{t('Attack Enhancement')}：</LabelText>
         <AttrText>
           {t('Attack building damage')} +{info?.attack}
         </AttrText>
       </ExtraLabelStyled>
       <ExtraLabelStyled mt='13px'>
-        <LabelText>{t('HP bonus')}：</LabelText>
+        <LabelText>{t('HP Enhancement')}：</LabelText>
         <AttrText>
           {t("All buildings' HP")} +{info?.hp}
         </AttrText>
       </ExtraLabelStyled>
       <ExtraLabelStyled mt='13px'>
-        <LabelText>{t('Capacity bonus')}：</LabelText>
+        <LabelText>{t('Capacity Enhancement')}：</LabelText>
         <AttrText>
-          {t('All throughput speeds')} +{info?.product}
+          {t("All capacities'speed")} +{info?.product}
         </AttrText>
       </ExtraLabelStyled>
       <ExtraLabelStyled mt='13px'>
-        <LabelText>{t('The cost of building')}：</LabelText>
+        <LabelText>{t('Building Cost')}：</LabelText>
         <AttrText>
           {t('All building construction costs')} +{info?.build}
         </AttrText>

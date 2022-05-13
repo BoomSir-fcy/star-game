@@ -295,6 +295,11 @@ export const descOfEffect = {
     add: false,
     remove: false,
   },
+  [descType.RESTORE]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
   [descType.REMOVE_STOP_MOVE]: {
     effect: EffectType.STOP_MOVE,
     add: false,

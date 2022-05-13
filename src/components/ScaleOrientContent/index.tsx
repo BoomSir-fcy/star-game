@@ -1,7 +1,13 @@
 import StarrySky from 'components/StarrySky';
 import { VideoComponent } from 'components/Video';
 import { APP_HEIGHT, APP_WIDTH, VIDEO_GLOBAL_CLASS_NAME } from 'config';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { setGlobalClient, setGlobalScale } from 'state/user/actions';
@@ -16,18 +22,16 @@ const Content = styled(Box)<{ scale: number }>`
   height: 900px;
   transform-origin: 0 0;
   position: absolute;
-  top: 48%;
+  top: 2px;
   left: 50%;
   /* background: pink; */
-  transform: ${({ scale }) =>
-    `translate(${-scale * 50}%, ${-scale * 50}%) scale(${scale})`};
-  ${({ theme }) => theme.mediaQueries.sm} {
-    /* 576 - 852 */
+  transform: ${({ scale }) => `translate(${-scale * 50}%) scale(${scale})`};
+  /* ${({ theme }) => theme.mediaQueries.sm} {
     top: ${({ scale }) => `${scale * 58}%`};
   }
   ${({ theme }) => theme.mediaQueries.md} {
     top: ${({ scale }) => `${scale * 48}%`};
-  }
+  } */
 `;
 
 const ScaleOrientContent: React.FC = ({ children }) => {
@@ -78,9 +82,14 @@ const ScaleOrientContent: React.FC = ({ children }) => {
     };
   }, [handleResize]);
 
+  const bgType = useMemo(() => {
+    if (pathname === '/plant-league') return 2;
+    if (pathname === '/') return 1;
+    return 0;
+  }, [pathname]);
   return (
     <Box position='relative' id='detect-orient' ref={ref}>
-      <StarrySky bgType={pathname === '/plant-league' ? 2 : 0} />
+      <StarrySky bgType={bgType} />
       <VideoComponent
         cHeight={APP_HEIGHT}
         minHeight={minHeight}

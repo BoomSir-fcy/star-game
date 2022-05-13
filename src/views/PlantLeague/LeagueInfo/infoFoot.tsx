@@ -32,12 +32,12 @@ const InfoFoot = () => {
     await Api.AllianceApi[work ? 'AllianceWorking' : 'AllianceStopWork']()
       .then(res => {
         if (Api.isSuccess(res)) {
-          toastSuccess(t('Successful operation'));
+          toastSuccess(t('Operate Succeeded'));
           dispatch(fetchAllianceViewAsync());
         }
       })
       .catch(err => {
-        toastError(t('Operation failed'));
+        toastError(t('Operate Failed'));
         console.error(err);
       });
   };
@@ -46,18 +46,16 @@ const InfoFoot = () => {
     <ShaDowBox alignItems='center'>
       <Flex flex='1' flexDirection='column' justifyContent='space-between'>
         <Text mb='20px' shadow='primary' fontSize='28px' bold>
-          {t('Combat power')} {alliance.power}
+          {t('Combat Power')} {alliance.power}
         </Text>
         <Box>
           <Text fontSize='22px'>
             *
             {t(
-              'Alliance loot battle order, will be looted in ascending order of serial number',
+              'Alliance looting order: looting in sequence according to the serial number',
             )}
           </Text>
-          <Text fontSize='22px'>
-            *{t('More than 20% can participate in resource plunder')}
-          </Text>
+          <Text fontSize='22px'>*{t('20%+ can join the lootings')}</Text>
         </Box>
       </Flex>
       <Button
@@ -71,10 +69,10 @@ const InfoFoot = () => {
           }
         }}
       >
-        {alliance.working > 0 ? t('Stop working') : t('Start working')}
+        {alliance.working > 0 ? t('Stop Working') : t('Start Working')}
       </Button>
       <Modal
-        title={t('Stop working')}
+        title={t('Stop Working')}
         visible={visible}
         setVisible={setVisible}
       >

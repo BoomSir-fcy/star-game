@@ -69,7 +69,7 @@ export const PlanetSearch: React.FC<{
                 value: e.target.value,
               })
             }
-            placeholder={t('Enter planet token search')}
+            placeholder={t('Enter the planet token to search')}
           />
         </SearchContainer>
       </Flex>

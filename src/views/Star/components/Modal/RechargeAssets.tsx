@@ -125,7 +125,7 @@ export const RechargeAssets: React.FC<{
         if (selectId === StoreType.ENERGY) params.energy = val;
         const res = await Api.BuildingApi.storeReCharge(params);
         if (Api.isSuccess(res)) {
-          toastSuccess(t('Successful recharge'));
+          toastSuccess(t('Recharge Succeeded'));
           setInputValue('');
           getStoreData();
           dispatch(fetchPlanetInfoAsync([planet_id]));
@@ -199,7 +199,7 @@ export const RechargeAssets: React.FC<{
         />
         <Flex justifyContent='center' mt='29px'>
           <Button disabled={pending} width={270} onClick={handleCharge}>
-            {t('Confirm recharge')}
+            {t('Confirm Recharge')}
           </Button>
         </Flex>
       </Box>

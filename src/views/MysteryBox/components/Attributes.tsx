@@ -24,7 +24,7 @@ const Attributes: React.FC<AttributesProps> = ({
       <Text mb='10px'>{t('Attributes')}</Text>
       <Flex>
         <LabelStyled>
-          <LabelText>{t('Lattice')}:</LabelText>
+          <LabelText>{t('Grid')}:</LabelText>
           <AttrText>
             {info?.areaX ? `${info?.areaX}x${info?.areaY}` : ''}
           </AttrText>
@@ -45,7 +45,7 @@ const Attributes: React.FC<AttributesProps> = ({
       </Flex>
       <Flex mt='13px'>
         <LabelStyled>
-          <LabelText>{t('Plunder speed')}:</LabelText>
+          <LabelText>{t('Looting Speed')}:</LabelText>
           <AttrText>{info?.plunder_speed}</AttrText>
         </LabelStyled>
         <LabelStyled ml='15px'>
@@ -63,7 +63,7 @@ const Attributes: React.FC<AttributesProps> = ({
           <AttrText>{info?.energy}</AttrText>
         </LabelStyled>
         <LabelStyled ml='15px'>
-          <LabelText>{t('Buildings')}:</LabelText>
+          <LabelText>{t('Building Count')}:</LabelText>
           <AttrText>{info?.build_count}</AttrText>
         </LabelStyled>
       </Flex>

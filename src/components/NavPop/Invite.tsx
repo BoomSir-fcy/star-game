@@ -33,7 +33,7 @@ const InvitePop: React.FC = () => {
     aux.select();
     document.execCommand('copy');
     document.body.removeChild(aux);
-    toastSuccess(t('Copy successfully'));
+    toastSuccess(t('Copy Succeeded'));
   };
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const InvitePop: React.FC = () => {
     <Box width='100%' padding='50px 20px'>
       <Text mb='60px' fontSize='22px'>
         {t(
-          'After inviting a friend to register a character and drawing a blind box, you can get 5% of the cost of each blind box drawn by your friend as a reward',
+          'After inviting a friend to register a character and open a blind box, you can get 5% of the cost of each blind box opened by your friend as a reward',
         )}
       </Text>
       <ShaDowBox alignItems='center' justifyContent='space-between'>
@@ -70,7 +70,7 @@ const InvitePop: React.FC = () => {
         </Box>
         <Box>
           <Text mb='10px' color='textSubtle' fontSize='24px'>
-            {t('Get rebate')}
+            {t('Rebate')}
           </Text>
           <Text fontSize='22px'>{InviteInfo.bnb_income || 0} BNB</Text>
         </Box>
@@ -80,7 +80,7 @@ const InvitePop: React.FC = () => {
           <Image src='/images/commons/icon/plane.png' width={60} height={60} />
           <Box ml='30px'>
             <Text color='textSubtle' fontSize='24px'>
-              {t('My invite address')}
+              {t('My inviter’s address')}
             </Text>
             <Text fontSize='22px'>https://star.game.box</Text>
           </Box>

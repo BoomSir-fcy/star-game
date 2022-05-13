@@ -53,22 +53,22 @@ const ProductionProgress = () => {
 
   const ExtractResources = useCallback(async () => {
     if (alliance.working !== 0) {
-      toastError(t('Stop working to extract'));
+      toastError(t('Stop working to claim'));
       return;
     }
     if (alliance.laterExtractTime > 0) {
-      toastError(t('Freezing'));
+      toastError(t('Claim Freezing'));
       return;
     }
     try {
       const res = await Api.AllianceApi.AllianceExtract();
       if (Api.isSuccess(res)) {
-        toastSuccess(t('Extraction succeeded'));
+        toastSuccess(t('Claim Succeeded'));
       } else {
-        toastError(t('Extraction failed'));
+        toastError(t('Claim Failed'));
       }
     } catch (error) {
-      toastError(t('Extraction failed'));
+      toastError(t('Claim Failed'));
     }
     dispatch(fetchAllianceViewAsync());
   }, [alliance, t, dispatch, toastError, toastSuccess]);
@@ -149,7 +149,7 @@ const ProductionProgress = () => {
     <Flex flex='1' flexDirection='column' padding='30px'>
       <Flex mb='20px' justifyContent='center'>
         <Text fontSize='20px'>
-          {t('Resource production')}({formatTime(state.time)})
+          {t('Resource Production')}({formatTime(state.time)})
         </Text>
       </Flex>
       <ProgressBox mb='56px' ml='15px'>

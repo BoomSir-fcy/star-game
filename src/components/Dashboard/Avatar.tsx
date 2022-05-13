@@ -9,8 +9,9 @@ import { Box, Image, Text, Button } from 'uikit';
 import { useStore } from 'state/util';
 
 const ButtonStyled = styled(Button)`
-  background: url('/images/commons/dashboard/a1.png');
-  background-size: 100% 100%;
+  /* background: url('/images/commons/dashboard/a1.png'); */
+  /* background-size: 100% 100%; */
+  background: transparent;
   border: none;
   outline: none;
   box-shadow: none;

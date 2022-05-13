@@ -28,7 +28,7 @@ export default createReducer(initialState, builder =>
       state.scale = payload;
     })
 
-    .addCase(setGlobalClient, (state, { payload }) => {
+    .addCase(setGlobalClient, (state, { payload }: { payload: any }) => {
       state.client = {
         ...state.client,
         ...payload,
