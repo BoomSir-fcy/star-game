@@ -234,7 +234,7 @@ const Upgrade = () => {
                   <Text small>
                     *
                     {t(
-                      'Upgrade requires sacrifice to add planets of the same quality and level',
+                      'To upgrade, you need to sacrifice planets of the same quality and grade',
                     )}
                   </Text>
                   {/* <Text small>
@@ -246,14 +246,14 @@ const Upgrade = () => {
                   <Text small>
                     *
                     {t(
-                      'All buildings can be upgraded when the level is higher than planet level 1',
+                      "When all buildings' grade is 1 level above the planet grade, the planet can be upgraded",
                     )}
                   </Text>
                 </Flex>
                 <Flex mt='40px' flexDirection='column' alignItems='center'>
                   {!upgradeInfo.success && (
                     <Text fontSize='22px' color='failure'>
-                      *{t('Energy building level does not meet')}
+                      *{t('Energy building grade does not meet the standard')}
                     </Text>
                   )}
                   <Button
@@ -263,7 +263,7 @@ const Upgrade = () => {
                     padding='0'
                     onClick={() => setVisible(true)}
                   >
-                    {t('Planet upgrade')}
+                    {t('Upgrade Planet')}
                   </Button>
                 </Flex>
               </Flex>
@@ -273,7 +273,7 @@ const Upgrade = () => {
       )}
 
       <ModalWrapper
-        title={t('Planet upgrade')}
+        title={t('Upgrade Planet')}
         visible={visible}
         setVisible={() => setVisible(false)}
       >
@@ -282,7 +282,7 @@ const Upgrade = () => {
           <Flex flex={1} flexDirection='column' justifyContent='space-between'>
             <Text fontSize='22px'>
               {t(
-                'The upgrade will last for 6 hours, during which the planet cannot be operated. Do you want to continue the upgrade?',
+                'The upgrade process will last for 6 hours, during which the planet will not be able to operate. Do you want to continue?',
               )}
             </Text>
             {!account ? (
@@ -319,9 +319,9 @@ const Upgrade = () => {
                 }}
               >
                 {pending ? (
-                  <Dots>{t('Confirm upgrade')}</Dots>
+                  <Dots>{t('Confirm to upgrade')}</Dots>
                 ) : (
-                  <Text fontSize='inherit'>{t('Confirm upgrade')}</Text>
+                  <Text fontSize='inherit'>{t('Confirm to upgrade')}</Text>
                 )}
               </Button>
             )}

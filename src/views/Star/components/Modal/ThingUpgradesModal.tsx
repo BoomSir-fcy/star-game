@@ -192,7 +192,7 @@ export const ThingUpgradesModal: React.FC<{
               unit='DSG'
             />
             <Button ml='34px' onClick={onChange}>
-              {t('Confirm upgrade')}
+              {t('Confirm to upgrade')}
             </Button>
           </Flex>
         </ConfirmBox>

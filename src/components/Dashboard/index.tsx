@@ -61,7 +61,7 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
                       textAlign='center'
                       fontSize='22px'
                       to={t(
-                        "You don't have a planet yet, please get a planet first to start your planetary journey",
+                        "You don't have a planet yet, please acquire a planet to start your Galaxy journey",
                       )}
                       shadow='primary'
                     />

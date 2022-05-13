@@ -51,11 +51,11 @@ const LayoutHead = () => {
         <ButtonStyled
           onClick={() => {
             setPopType(2);
-            setPopTitle(t('Invitation'));
+            setPopTitle(t('Invite to earn'));
             setVisible(true);
           }}
         >
-          {t('Invitation')}
+          {t('Invite to earn')}
         </ButtonStyled>
       </Box>
       {/* <Modal title={PopTitle} visible={visible} setVisible={setVisible}>

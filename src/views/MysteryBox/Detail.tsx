@@ -112,7 +112,7 @@ const MysteryBoxDetail = () => {
                     navigate(`/star?id=${id}`);
                   }}
                 >
-                  {t('Manage the planet')}
+                  {t('Manage Planet')}
                 </Button>
               </Flex>
             </Extra>

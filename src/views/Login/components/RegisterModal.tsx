@@ -47,7 +47,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
 
   return (
     <Modal
-      title={t('Confirm creation')}
+      title={t('Confirm to create')}
       visible={visible}
       setVisible={setVisible}
     >
@@ -62,7 +62,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
           </Text>
         ) : (
           <Text mt='42px' fontSize='24px'>
-            {t('Payment to create identity')}{' '}
+            {t('Payment for creating identity')}{' '}
             {formatDisplayBalance(new BigNumber(price), 18)} DSG
           </Text>
         )}
@@ -77,7 +77,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
             }}
             mt='58px'
           >
-            {t('Confirm payment')}
+            {t('Confirm and Pay')}
           </Button>
         ) : (
           <ApproveButton

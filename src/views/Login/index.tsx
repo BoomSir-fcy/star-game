@@ -87,14 +87,16 @@ const Login = () => {
         const state = await handleCheck(name);
 
         if (state === CheckNickNameState.NULL_NAME) {
-          toastError(t('Enter your desired name'));
+          toastError(t('Enter a name you want'));
           return;
         }
         if (
           state === CheckNickNameState.SHORT_NAME ||
           state === CheckNickNameState.LONG_NAME
         ) {
-          toastError(t('6~30 characters (Support English, Chinese, numbers)'));
+          toastError(
+            t('6~30 characters (Support English, Chinese, and numbers)'),
+          );
           return;
         }
 
@@ -113,7 +115,7 @@ const Login = () => {
         }
       } catch (error) {
         console.error(error);
-        console.error(t('Registration failed'));
+        console.error(t('Registration Failed'));
       }
     }
   }, [handleCheck, createRef, setVisible, toastError, t]);

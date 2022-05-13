@@ -215,8 +215,8 @@ export const raceData = {
         thumb2: '/assets/modal/1/30-2.png',
       },
     ],
-    desc: 'Cosmic beings belong to the mysterious high-level creatures of the galaxy. They have the highest racial civilization, and their highly advanced technology and spiritual abilities give them absolute strength in space. The Cosmos has an AOE damage structure, and its comprehensive combat power is more balanced than the other two groups.',
-    features: 'Shield, Restoration, AOE',
+    desc: 'Spacemen are the mysterious advanced creatures of galaxies. They have the supreme racial civilization, and their highly advanced technology and spiritual abilities give them absolute strength in space. Spacemen have AOE damage skills, and their comprehensive combat power is more balanced than the other two groups.',
+    features: 'shield, recovery, AOE',
   },
   [RaceType.HUMAN]: {
     name: 'race-2',
@@ -453,8 +453,8 @@ export const raceData = {
         thumb2: '/assets/modal/2/30-2.png',
       },
     ],
-    desc: 'Interstellar guards composed of the United Legion, wandering in various galaxies. Absolute mechanical capabilities and high-tech technology provide absolute combat protection, and have long-range tactical capabilities, which have a resistance to the Zerg. Production efficiency and building HP are relatively low due to wandering.',
-    features: 'Defensive, Medical, Remote',
+    desc: 'Interstellar guards composed of the United Legion, roam in various galaxies. Absolute mechanical capabilities and high-tech technology provide absolute combat protection, and they have long-range tactical capabilities, which can give them defense against Zerg. Productivity and building HP are relatively low due to their roam.',
+    features: 'defense, healthcare, long-range operation',
   },
   [RaceType.ZERG]: {
     name: 'race-3',
@@ -670,7 +670,7 @@ export const raceData = {
         thumb2: '/assets/modal/3/30-2.png',
       },
     ],
-    desc: 'A brutal race evolved from interstellar creatures, with extremely high damage, natural weapons and armor are comparable to other races, and their dedication makes the Zerg extremely strong and deadly. But no AOE and close range attack are their weak points.',
-    features: 'Speed,High burst',
+    desc: ' A brutal race evolved from interstellar creatures, with super high damage power, their innate weapons and armor are comparable to other races, and devoting spirit makes them extremely strong and deadly. But no AOE and short-range attack abilities are their weak points.',
+    features: 'speed, high burst',
   },
 };

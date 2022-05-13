@@ -86,7 +86,7 @@ const StarHeader = () => {
                 <TextStyled ml='10px' fontSize='20px' color='warning'>
                   {planetInfo?.status === 2
                     ? t(
-                        'During cultivation, the planet has no production capacity for the time being',
+                        'The planet is under cultivating, it has no capacity yet',
                       )
                     : null}
                 </TextStyled>
@@ -159,7 +159,7 @@ const StarHeader = () => {
                   scale='sm'
                   onClick={() => setState({ ...state, visible: true })}
                 >
-                  {t('Supplementary resources')}
+                  {t('Supplement Resources')}
                 </ButtonStyled>
               </Flex>
             </Flex>

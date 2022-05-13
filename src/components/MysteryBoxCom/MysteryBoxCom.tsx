@@ -31,7 +31,7 @@ const MysteryBoxCom: React.FC<MysteryBoxComProps> = ({ quality, ...props }) => {
         </Box>
         <Box>
           <Text textAlign='center' fontSize='22px' color='textTips'>
-            {t('Chance to get')}
+            {t('You will have a chance to get')}
           </Text>
           <Text maxWidth='360px' ellipsis mt='8px'>
             {t(info.tips)}

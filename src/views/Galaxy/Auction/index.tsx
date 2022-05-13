@@ -113,10 +113,10 @@ const Auction = () => {
       setTimeout(() => {
         dispatch(fetchAuctionRecordListAsync(galaxyId));
       }, 10000);
-      toastSuccess(t('Auction succeeded'));
+      toastSuccess(t('Bidding Succeeded'));
     } catch (error) {
       console.error(error);
-      toastError(t('Auction failed'));
+      toastError(t('Bidding Failed'));
     } finally {
       setPending(false);
     }
@@ -140,15 +140,15 @@ const Auction = () => {
             <Flex>
               <GalaxyImage width={351} height={351} ml='53px' mr='174px' />
               <Flex flexDirection='column'>
-                <Text fontSize='28px'>{t('Current price')}</Text>
+                <Text fontSize='28px'>{t('Current Price')}</Text>
                 <PriceText>{lastPrice ? `${lastPrice} BNB` : '---'}</PriceText>
 
                 <Flex mt='20px' mb='10px' alignItems='center'>
-                  <Text>{t('Current winner')}</Text>
+                  <Text>{t('Current Winner')}</Text>
                   {account?.toLowerCase() ===
                     ownerInfo?.newOwner?.toLowerCase() && (
                     <Text ml='55px' fontSize='22px' small>
-                      {t('After others bid, you can get (≈ %value% BNB)', {
+                      {t('After other’s bidding, you can get (≈ %value% BNB)', {
                         value: incomingPrice,
                       })}
                     </Text>
@@ -163,7 +163,7 @@ const Auction = () => {
                       justifyContent='space-evenly'
                     >
                       <Text>{ownerInfo?.nickname}</Text>
-                      <Text>{t('Get galaxy rewards (10000 STAR)')}</Text>
+                      <Text>{t('Galaxy rewards for you (10,000 STAR)')}</Text>
                     </Flex>
                   </Flex>
                 ) : (
@@ -175,8 +175,10 @@ const Auction = () => {
               <Flex>
                 <LeftFlex>
                   <Flex justifyContent='space-between'>
-                    <Text fontSize='22px'>{t('Bid price')}</Text>
-                    <Text fontSize='22px'>{t('Calculation:')} 2.5*(1+30%)</Text>
+                    <Text fontSize='22px'>{t('Bidding Reward')}</Text>
+                    <Text fontSize='22px'>
+                      {t('Calculation Method:')} 2.5*(1+30%)
+                    </Text>
                   </Flex>
                   <PriceText mt='10px'>
                     {currentPrice ? `${currentPrice} BNB` : '---'}
@@ -200,21 +202,21 @@ const Auction = () => {
                           timePeriod.seconds
                         }${t('s')}`
                       ) : pending ? (
-                        <Dots>{t('Bid now')}</Dots>
+                        <Dots>{t('Bidding Now')}</Dots>
                       ) : (
-                        <Text fontSize='inherit'>{t('Bid now')}</Text>
+                        <Text fontSize='inherit'>{t('Bidding Now')}</Text>
                       )}
                     </Button>
                   )}
 
                   <Text mt='20px' small>
                     {t(
-                      'After the auction is successful, you can receive the reward of the galaxy at 24:00 UTC every day, which will be sent by',
+                      'After a successfully bid, you can claim the reward of the Galaxy at 24:00 UTC every day',
                     )}
                   </Text>
                   <Text small>
                     {t(
-                      'If you are auctioned by other people in the middle, you can only receive the reward from the time when you have it to when you lose it.',
+                      'If other people bid it while you have it, you can only claim the reward from when you take it to the time when you lose it.',
                     )}
                   </Text>
                 </LeftFlex>
@@ -224,7 +226,7 @@ const Auction = () => {
                     ? auctionRecordList.map(item => (
                         <Text key={item.id} small>
                           {t(
-                            'UTC %time% %name% won the system at %price% BNB auction',
+                            '%name% successfully bid the galaxy with %price% BNB at %time% UTC',
                             {
                               time: formatUTC(item?.auctionAt, 'HH:mm'),
                               name: item?.nickname,

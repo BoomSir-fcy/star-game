@@ -21,13 +21,13 @@ const Race: React.FC<RaceProps> = ({ info, ...props }) => {
         <RaceAvatar race={race} />
         <Flex ml='13px' flexDirection='column'>
           <Flex>
-            <LabelText>{t('Planet race')}</LabelText>
+            <LabelText>{t('Planet Race')}</LabelText>
             <Text color={RaceTypeColor[race]} ml='17px' fontSize='22px' bold>
               {race ? t(raceData[race]?.name) : ''}
             </Text>
           </Flex>
           <ScrollBox>
-            <LabelText>{t('Ethnicity')}</LabelText>
+            <LabelText>{t('Race Features')}</LabelText>
             <LabelText>{t(raceData[race]?.desc)}</LabelText>
             <LabelText>
               {t('Features')}: {t(raceData[race]?.features)}

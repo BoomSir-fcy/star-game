@@ -17,7 +17,7 @@ const Extra: React.FC<BoxProps> = props => {
       <ExtraLabelStyled justifyContent='space-between'>
         <Flex>
           <Text fontSize='22px'>{t('Defense bonus')}:</Text>
-          <Text fontSize='22px'>{t('All building defenses')}+10</Text>
+          <Text fontSize='22px'>{t("All buildings' defenses")}+10</Text>
         </Flex>
         <Flex width={100}>
           <Image width={33} height={33} src='/images/commons/icon/up.png' />
@@ -41,7 +41,7 @@ const Extra: React.FC<BoxProps> = props => {
       <ExtraLabelStyled justifyContent='space-between' mt='21px'>
         <Flex>
           <Text fontSize='22px'>{t('HP bonus')}:</Text>
-          <Text fontSize='22px'>{t('All buildings HP')}+10</Text>
+          <Text fontSize='22px'>{t("All buildings' HP")}+10</Text>
         </Flex>
         <Flex width={100}>
           <Image width={33} height={33} src='/images/commons/icon/up.png' />

@@ -6,10 +6,10 @@ import { BoxProps, Card, CardProps, Flex, Image, Text } from 'uikit';
 
 const StyledCard = styled(Card)<{ width?: string }>`
   width: ${({ width }) => width || '300px'};
+  max-height: 463px;
   justify-content: center;
   align-items: center;
-  /* padding: 56px 35px; */
-  padding: 56px 20px;
+  padding: 46px 20px;
 `;
 const ItemFlex = styled(Flex)`
   margin-top: 23px;
@@ -59,7 +59,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
           />
           <ItemInfoFlex>
             <Text small color='textSubtle'>
-              {t('Building level cap')}
+              {t('Building grade up limit')}
             </Text>
             <Flex
               width='130px'
@@ -79,7 +79,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
           />
           <ItemInfoFlex>
             <Text small color='textSubtle'>
-              {t('All buildings HP')}
+              {t("All buildings' HP")}
             </Text>
             <Flex
               width='130px'
@@ -99,7 +99,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
           />
           <ItemInfoFlex>
             <Text small color='textSubtle'>
-              {t('All building defenses')}
+              {t("All buildings' defenses")}
             </Text>
             <Flex
               width='130px'

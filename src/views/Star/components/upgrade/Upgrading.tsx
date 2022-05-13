@@ -53,7 +53,7 @@ export const Upgrading: React.FC<{
           <Flex flexDirection='column' justifyContent='space-between'>
             <Flex mb='35px' justifyContent='space-between'>
               <Text fontSize='28px' shadow='primary'>
-                {t('The planet is being upgraded')}
+                {t('Planet Upgrading')}
               </Text>
               <Text fontSize='24px' color='textTips'>
                 Countdown Time

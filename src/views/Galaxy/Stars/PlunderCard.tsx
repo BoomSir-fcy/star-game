@@ -77,12 +77,12 @@ export const PlunderCard: React.FC<{
       setPending(true);
       const res = await Api.GalaxyApi.holdStar(info.token_id, info.number);
       if (Api.isSuccess(res)) {
-        toastSuccess(t('Occupied succeeded'));
+        toastSuccess(t('Occupy Succeeded'));
         setPending(false);
         onClose();
       }
     } catch (error) {
-      toastError(t('Occupied failed'));
+      toastError(t('Occupy Failed'));
       setPending(false);
     }
   }, [info, onClose, toastSuccess, toastError, t]);
@@ -104,7 +104,7 @@ export const PlunderCard: React.FC<{
               {t('Output')} BOX: {info.disapth_box}
             </Text>
             <Text shadow='primary' small bold>
-              {t('Occupied')}: {info.history_hold_number}
+              {t('Occupied Times')}: {info.history_hold_number}
             </Text>
           </Flex>
           {hasOwner ? (
@@ -117,9 +117,9 @@ export const PlunderCard: React.FC<{
               onClick={handleAttckStar}
             >
               {pending ? (
-                <Dots>{t('Snatch the stars')}</Dots>
+                <Dots>{t('Seize Star')}</Dots>
               ) : (
-                <Text fontSize='inherit'>{t('Snatch the stars')}</Text>
+                <Text fontSize='inherit'>{t('Seize Star')}</Text>
               )}
             </ButtonStyled>
           ) : (
@@ -130,9 +130,9 @@ export const PlunderCard: React.FC<{
               onClick={handleHold}
             >
               {pending ? (
-                <Dots>{t('Occupy the stars')}</Dots>
+                <Dots>{t('Occupy Star')}</Dots>
               ) : (
-                <Text fontSize='inherit'>{t('Occupy the stars')}</Text>
+                <Text fontSize='inherit'>{t('Occupy Star')}</Text>
               )}
             </ButtonStyled>
           )}

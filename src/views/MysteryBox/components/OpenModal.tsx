@@ -26,7 +26,7 @@ const OpenModal: React.FC<{
 
   const onHandleOpen = useCallback(async () => {
     if (!value || value.length < 5 || value.length > 20) {
-      toastError(t('Limit 5-20 characters'));
+      toastError(t('5~20 characters '));
       return;
     }
     setHandleLoading(true);
@@ -36,7 +36,7 @@ const OpenModal: React.FC<{
 
   return (
     <ModalWrapper
-      title={t('Planet naming')}
+      title={t('Planet Name')}
       visible={visible}
       setVisible={onClose}
     >
@@ -62,7 +62,7 @@ const OpenModal: React.FC<{
               flexDirection='column'
             >
               <Box>
-                <Text mt='-6px'>{t('Planet nickname')}</Text>
+                <Text mt='-6px'>{t('Planet Nickname')}</Text>
                 <PrimaryInput
                   width={387}
                   height={65}
@@ -72,9 +72,9 @@ const OpenModal: React.FC<{
                   onChange={event => {
                     setValue(event.target.value);
                   }}
-                  placeholder={t('Please enter planet nickname')}
+                  placeholder={t('Enter planet nickname')}
                 />
-                <Text mt='8px'>{t('Limit 5-20 characters')}</Text>
+                <Text mt='8px'>{t('5~20 characters ')}</Text>
               </Box>
               <Button
                 disabled={handleLoading}

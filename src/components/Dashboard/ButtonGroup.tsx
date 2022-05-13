@@ -59,7 +59,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({ onBack, onRefresh }) => {
         {t('Plunder resources').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/galaxy' tag='flag'>
-        {t('Occupy the stars').toLocaleUpperCase()}
+        {t('Occupy Star').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/plant-league' tag='star'>
         {t('STAR GPOUP').toLocaleUpperCase()}

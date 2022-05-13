@@ -39,9 +39,9 @@ const ApproveButton: React.FC<ApproveButtonProps> = ({
   return (
     <Button disabled={loading} onClick={handleApprove} {...props}>
       {loading ? (
-        <Dots>{t('Authorize')}</Dots>
+        <Dots>{t('Approve')}</Dots>
       ) : (
-        <Text fontSize='inherit'>{t('Authorize')}</Text>
+        <Text fontSize='inherit'>{t('Approve')}</Text>
       )}
     </Button>
   );

@@ -96,7 +96,7 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
           onChange={event => {
             setName(event.target.value);
           }}
-          placeholder={t('Enter your desired name')}
+          placeholder={t('Enter a name you want')}
         />
         <Button variant='text'>
           <Box onClick={randomName} width='37px'>
@@ -115,7 +115,7 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
       </Label>
       <Text mt={32} small>
         {t(
-          'It needs to consume 100 DSG to create, and the system will create an identity through BNB instant transaction of the same amount of DSG',
+          'Create an identity will consume 100 DSG, the system will automatically exchange BNB for this amount of DSG using a real-time exchange rate.',
         )}
       </Text>
     </BoxStyled>

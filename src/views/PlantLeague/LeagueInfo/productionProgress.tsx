@@ -179,7 +179,7 @@ const ProductionProgress = () => {
             : t('Extract resources')}
         </Button>
         <Link to='/galaxy'>
-          <Button variant='black'>{t('Occupy the stars')}</Button>
+          <Button variant='black'>{t('Occupy Star')}</Button>
         </Link>
       </BtnFlex>
     </Flex>

@@ -89,14 +89,12 @@ const Galaxy = () => {
                 <Flex flexDirection='column' justifyContent='space-between'>
                   <Flex flexDirection='column'>
                     <Text mt='10px' fontSize='24px'>
-                      {t('Galaxy Lord: %name% (can be obtained by auction)', {
-                        name: currentGalaxy?.nickname || t('none'),
+                      {t('Galaxy Lord: %name% (Available for auction)', {
+                        name: currentGalaxy?.nickname || t('None'),
                       })}
                     </Text>
                     <Text mt='10px' fontSize='24px'>
-                      {t(
-                        'Galaxy Rewards: 10000 STAR (distributed every 24:00 UTC)',
-                      )}
+                      {t('Galaxy prize: 10,000 STAR (issue at 24:00 UTC)')}
                     </Text>
                     <Text mt='10px' fontSize='24px'>
                       Token: {currentGalaxy?.id}
@@ -114,7 +112,7 @@ const Galaxy = () => {
                       as={Link}
                       to={`/galaxy/stars?i=${currentGalaxy?.id}`}
                     >
-                      {t('Occupy the stars')}
+                      {t('Occupy Star')}
                     </Button>
                   </Flex>
                 </Flex>

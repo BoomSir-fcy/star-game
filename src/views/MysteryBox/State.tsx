@@ -163,7 +163,7 @@ const MysteryBoxState = () => {
               {existBox ? (
                 <Flex height='100%' justifyContent='center' alignItems='center'>
                   <Text color='textTips'>
-                    {t('The purchase is successful, try your luck now!')}
+                    {t('Purchase succeeded, try your luck now!')}
                   </Text>
                 </Flex>
               ) : (
@@ -176,7 +176,7 @@ const MysteryBoxState = () => {
                     />
                   </Box>
                   <Box ml='20px'>
-                    <Text color='textTips'>{t('ValueBNB')} BNB</Text>
+                    <Text color='textTips'>{t('BNB Value')}</Text>
                     {loading ? <Skeleton height={40} /> : <Text>{price} </Text>}
                   </Box>
                 </Flex>
@@ -193,7 +193,7 @@ const MysteryBoxState = () => {
                   {handleLoading ? (
                     <Dots>{t('Opening')}</Dots>
                   ) : (
-                    <Text fontSize='inherit'>{t('Open the blind box')}</Text>
+                    <Text fontSize='inherit'>{t('Open blind box')}</Text>
                   )}
                 </Button>
               ) : (

@@ -51,12 +51,12 @@ export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
     try {
       const res = await Api.GalaxyApi.ClaimRewards(galaxy_id);
       if (Api.isSuccess(res)) {
-        toastSuccess(t('Claim succeeded'));
+        toastSuccess(t('Claim Succeeded'));
         getClaimMax();
       }
     } catch (error) {
       console.error(error);
-      toastError(t('Claim failed'));
+      toastError(t('Claim Failed'));
     }
   }, [galaxy_id, toastSuccess, toastError, t, getClaimMax]);
 
@@ -68,7 +68,7 @@ export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
       <Flex justifyContent='space-between' alignItems='center'>
         <Flex flexDirection='column'>
           <Text color='textTips' small>
-            {t('Available today(STAR)')}
+            {t('Claimable today (STAR)')}
           </Text>
           <Text mt='10px' fontSize='28px' shadow='primary'>
             {claimMax}
@@ -76,7 +76,7 @@ export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
         </Flex>
         <Flex flexDirection='column'>
           <Text color='textTips' small>
-            {t('Remaining available time (UTC 24)')}
+            {t('Remaining time for claiming (24:00 UTC)')}
           </Text>
           <Text mt='10px' fontSize='28px'>
             {`${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')}`}

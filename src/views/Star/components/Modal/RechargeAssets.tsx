@@ -154,13 +154,13 @@ export const RechargeAssets: React.FC<{
   }, [getStoreData, visible]);
   return (
     <ModalWrapper
-      title={t('Supplementary resources')}
+      title={t('Supplement Resources')}
       visible={visible}
       setVisible={onClose}
     >
       <Box padding='30px 25px'>
         <Flex justifyContent='space-between'>
-          <Text small>{t('Planetary storage tank')}</Text>
+          <Text small>{t('Planet storage tank')}</Text>
           <Flex alignItems='center'>
             <Text fontSize='30px' bold>
               {store[selectId]?.already}
