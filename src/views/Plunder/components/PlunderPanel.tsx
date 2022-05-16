@@ -135,32 +135,6 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
       </PanelText>
     );
   }
-  if (
-    detail?.type === descType.STOP_MOVE ||
-    detail?.type === descType.ADD_BOOM ||
-    detail?.type === descType.ADD_FIRING ||
-    detail?.type === descType.ADD_TERRAIN_FIRING ||
-    descType.ICE_START
-  ) {
-    return (
-      <PanelText>
-        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-        发起进攻，对{' '}
-        {detail.descInfo?.receives.map((item, index) => {
-          return (
-            <>
-              <PanelSide isEnemy={item.isEnemy} />
-              <PanelAxis axis={item.pos} />
-              建筑
-              {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
-            </>
-          );
-        })}
-        {getEffectDescText(detail.descInfo?.type)}
-        {getEffectDescTypeText(detail.descInfo?.type)}
-      </PanelText>
-    );
-  }
   if (detail?.type === descType.ATTACK_DODGE) {
     return (
       <PanelText>
@@ -184,6 +158,40 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
       </PanelText>
     );
   }
+  if (
+    detail?.type === descType.STOP_MOVE ||
+    detail?.type === descType.ADD_BOOM ||
+    detail?.type === descType.ADD_FIRING ||
+    detail?.type === descType.ADD_TERRAIN_FIRING ||
+    descType.ICE_START
+  ) {
+    console.log(detail);
+
+    return (
+      <PanelText>
+        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+        发起进攻，对{' '}
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <>
+              <PanelSide isEnemy={item.isEnemy} />
+              <PanelAxis axis={item.pos} />
+              建筑
+              {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
+            </>
+          );
+        })}
+        {getEffectDescText(detail.descInfo?.type)}
+        {detail.attackInfo?.attack_crit ? (
+          <PanelText color='redSide'>&nbsp;暴击&nbsp;</PanelText>
+        ) : (
+          ''
+        )}
+        {getEffectDescTypeText(detail.descInfo?.type)}
+      </PanelText>
+    );
+  }
+
   if (detail?.type) {
     return (
       <PanelText>

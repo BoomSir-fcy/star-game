@@ -175,27 +175,27 @@ const Pk = () => {
     });
 
     if (current < 4) {
-      const timer = setInterval(() => {
-        setOthers(prev => {
-          const { length } = prev;
-          const index = 4 - length;
-          if (index === 0) {
-            clearInterval(timer);
-            newRoundHandle();
-            return prev;
-          }
-          return [
-            ...prev,
-            {
-              id: length,
-              text: `${index}`,
-              type: 2,
-            },
-          ];
-        });
-      }, 1000);
+      // const timer = setInterval(() => {
+      //   setOthers(prev => {
+      //     const { length } = prev;
+      //     const index = 4 - length;
+      //     if (index === 0) {
+      //       clearInterval(timer);
+      //       newRoundHandle();
+      //       return prev;
+      //     }
+      //     return [
+      //       ...prev,
+      //       {
+      //         id: length,
+      //         text: `${index}`,
+      //         type: 2,
+      //       },
+      //     ];
+      //   });
+      // }, 1000);
     }
-  }, [setOthers, current, newRoundHandle, setResult]);
+  }, [setOthers, current, setResult]);
 
   useEffect(() => {
     if (running) {
