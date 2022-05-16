@@ -13,7 +13,7 @@ interface Options {
 class TipsText extends EventTarget {
   constructor(text: string, options?: Options) {
     super();
-    this.text = new Text(text);
+    this.text = new Text(text, { fill: [0xffffff] });
   }
 
   text: Text;
