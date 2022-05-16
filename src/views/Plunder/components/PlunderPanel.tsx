@@ -161,6 +161,29 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
       </PanelText>
     );
   }
+  if (detail?.type === descType.ATTACK_DODGE) {
+    return (
+      <PanelText>
+        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+        发起进攻，
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <>
+              <PanelSide isEnemy={item.isEnemy} />
+              <PanelAxis axis={item.pos} />
+              建筑
+              {getEffectDescText(detail.descInfo?.type)}
+              {item.receive_sub_hp && (
+                <PanelTextHp>{item.receive_sub_hp}</PanelTextHp>
+              )}
+              {getEffectDescTypeText(detail.descInfo?.type)}
+              {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
+            </>
+          );
+        })}
+      </PanelText>
+    );
+  }
   if (detail?.type) {
     return (
       <PanelText>
