@@ -146,11 +146,10 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
               <PanelSide isEnemy={item.isEnemy} />
               <PanelAxis axis={item.pos} />
               建筑
-              {getEffectDescText(detail.descInfo?.type)}
-              {item.receive_sub_hp && (
-                <PanelTextHp>{item.receive_sub_hp}</PanelTextHp>
-              )}
-              {getEffectDescTypeText(detail.descInfo?.type)}
+              <PanelText color='missTxt'>
+                {getEffectDescText(detail.descInfo?.type)}
+                {getEffectDescTypeText(detail.descInfo?.type)}
+              </PanelText>
               {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
             </>
           );
@@ -165,8 +164,6 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
     detail?.type === descType.ADD_TERRAIN_FIRING ||
     descType.ICE_START
   ) {
-    console.log(detail);
-
     return (
       <PanelText>
         <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
@@ -181,7 +178,14 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
             </>
           );
         })}
-        {getEffectDescText(detail.descInfo?.type)}
+        {}
+        <PanelText
+          color={
+            detail.descInfo?.type === descType.ATTACK_MISS ? 'missTxt' : ''
+          }
+        >
+          {getEffectDescText(detail.descInfo?.type)}
+        </PanelText>
         {detail.attackInfo?.attack_crit ? (
           <PanelText color='redSide'>&nbsp;暴击&nbsp;</PanelText>
         ) : (
