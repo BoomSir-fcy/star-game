@@ -25,6 +25,7 @@ import { getEffectText, getTwoPointCenter, getSpriteRes } from './utils';
 import EffectBuff from './EffectBuff';
 import { descOfEffect, spines } from '../effectConfig';
 import Loaders from './Loaders';
+import TipsText from './TipsText';
 
 export interface CombatOptions {
   // texture0: string;
@@ -349,6 +350,11 @@ class Combat extends EventTarget {
     });
 
     bullet.addEventListener('attackEnd', () => {
+      if (effect === descType.ATTACK_DODGE) {
+        const tipsText = new TipsText('闪避');
+
+        tipsText.show(target.axisPoint);
+      }
       this.onAttackEnd();
     });
 

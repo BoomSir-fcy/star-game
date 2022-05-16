@@ -1166,16 +1166,6 @@ class Running extends EventTarget {
         details.push(...this.getMoveTracks(info.move, `${round}-${_track}`));
       }
 
-      // 闪避
-      if (info.desc_type === descType.ATTACK_DODGE) {
-        details.push(
-          ...this.getMoveTracks(
-            info.attack_dodge.detail[0].move,
-            `${round}-${_track}`,
-          ),
-        );
-      }
-
       // 攻击
       const type = Running.attackOfType[info.desc_type] as 'attack';
       if (Running.attackOfType[info.desc_type]) {
@@ -1185,6 +1175,16 @@ class Running extends EventTarget {
             info.desc_type,
             `${round}-${_track}`,
             self,
+          ),
+        );
+      }
+
+      // 闪避
+      if (info.desc_type === descType.ATTACK_DODGE) {
+        details.push(
+          ...this.getMoveTracks(
+            info.attack_dodge.detail[0].move,
+            `${round}-${_track}-${1}`,
           ),
         );
       }
