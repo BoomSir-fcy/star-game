@@ -2,7 +2,7 @@
 import { Container } from '@pixi/display';
 import { Point } from '@pixi/math';
 import { raceData } from 'config/raceConfig';
-import { DescType, descType, Skill } from 'game/types';
+import { DescType, descType, Skill, TipsTextType } from 'game/types';
 
 export function onDragStart(this: any, event: any) {
   // store a reference to the data
@@ -341,4 +341,11 @@ export const getSpriteRes = (race: number, resId: string, index: number) => {
 export const getSpriteName = (race: number, resId: string) => {
   // return raceData[race].children.find(item => item.id === Number(resId))?.name;
   return '';
+};
+
+export const getTipsColorByType = (type: TipsTextType): number | number[] => {
+  if (type === TipsTextType.CRIT) {
+    return 0xeb5419;
+  }
+  return 0xffffff;
 };
