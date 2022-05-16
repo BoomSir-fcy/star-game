@@ -1138,6 +1138,8 @@ class Running extends EventTarget {
     [descType.ADD_SHIELD]: 'add_shield',
     [descType.REMOVE_SHIELD]: 'sub_shield',
     [descType.RESTORE]: 'restore',
+    [descType.ATTACK_DODGE]: 'attack_dodge',
+    [descType.ATTACK_MISS]: 'attack_miss',
     // [descType.REMOVE_BOMB]: 'restore',
     // [descType.ADD_TERRAIN_FIRING]: 'add_terrain_firing',
     // [descType.TERRAIN_FIRING]: 'terrain_firing',
@@ -1163,6 +1165,16 @@ class Running extends EventTarget {
       // 移动
       if (info.desc_type === descType.MOVE) {
         details.push(...this.getMoveTracks(info.move, `${round}-${_track}`));
+      }
+
+      // 闪避
+      if (info.desc_type === descType.ATTACK_DODGE) {
+        details.push(
+          ...this.getMoveTracks(
+            info.attack_dodge.detail[0].move,
+            `${round}-${_track}`,
+          ),
+        );
       }
 
       // 攻击
@@ -1252,7 +1264,6 @@ class Running extends EventTarget {
         );
       }
       if (info.desc_type === descType.INSERT_UNIT) {
-        console.log(121212);
         details.push(
           ...this.getInsetUnitTracks(
             info.unit_activing,

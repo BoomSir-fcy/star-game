@@ -185,6 +185,8 @@ export const getEffectText = (effect?: DescType) => {
   if (effect === descType.TERRAIN_FIRING) return '地形灼烧中';
   if (effect === descType.PURIFY) return '净化';
   if (effect === descType.RESTORE) return '治疗';
+  if (effect === descType.ATTACK_DODGE) return '闪避';
+  if (effect === descType.ATTACK_MISS) return '未命中';
   return '未知';
 };
 
