@@ -1139,6 +1139,7 @@ class Running extends EventTarget {
     [descType.REMOVE_SHIELD]: 'sub_shield',
     [descType.RESTORE]: 'restore',
     [descType.ATTACK_DODGE]: 'attack_dodge',
+    [descType.ATTACK_MISS]: 'attack_miss',
     // [descType.REMOVE_BOMB]: 'restore',
     // [descType.ADD_TERRAIN_FIRING]: 'add_terrain_firing',
     // [descType.TERRAIN_FIRING]: 'terrain_firing',

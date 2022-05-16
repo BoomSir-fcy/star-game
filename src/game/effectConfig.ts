@@ -325,6 +325,11 @@ export const descOfEffect = {
     add: false,
     remove: false,
   },
+  [descType.ATTACK_MISS]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
 };
 
 export const spines = [
