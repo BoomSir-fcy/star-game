@@ -313,7 +313,7 @@ export const raceData = {
         thumb2: '/assets/modal/3/13-2.png',
       },
       {
-        id: '14--1~2',
+        id: 14,
         name: 'Blue Spider',
         desc: 'Ultra-mobility combat machine, it can quickly approach the enemy and cause confusion, but its damage power is extremely low.',
         thumb1: '/assets/modal/3/14--1~2-1.png',
