@@ -216,6 +216,14 @@ export interface RoundDescBeatMove {
   dest: RoundDescAxis;
 }
 
+export interface RoundDescMiss {
+  detail: RoundInfo[];
+  receive_id: string;
+  receive_point: RoundDescAxis;
+  sender_id: string;
+  sender_point: RoundDescAxis;
+}
+
 export type RoundDesc =
   | RoundDescAttack
   | RoundDescBoom
@@ -256,6 +264,7 @@ export interface RoundInfo {
   unit_activing: RoundDescInset;
   purify: RoundDescPurify;
   restore: RoundDescIceRestore;
+  attack_dodge: RoundDescMiss;
 }
 
 export enum Orientation {
@@ -307,6 +316,7 @@ export const descType = {
   PURIFY: 22, // 净化
   REMOVE_BOMB: 23, // 移除炸弹
   RESTORE: 24, // 恢复生命值
+  ATTACK_DODGE: 26, // 攻击闪避
   INSERT_UNIT: 999, // 空降小人 被废弃
 };
 

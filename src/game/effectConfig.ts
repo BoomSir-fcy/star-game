@@ -320,6 +320,11 @@ export const descOfEffect = {
     add: true,
     remove: false,
   },
+  [descType.ATTACK_DODGE]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
 };
 
 export const spines = [
