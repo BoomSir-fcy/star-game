@@ -10,37 +10,39 @@ const Extra: React.FC<ExtraProps> = ({ info, children, ...props }) => {
   const { t } = useTranslation();
   return (
     <Box {...props}>
-      <Text mb='10px'>{t('More Attributes')}</Text>
-      <ExtraLabelStyled>
-        <LabelText>{t('Defense Enhancement')}：</LabelText>
-        <AttrText>
-          {t("All buildings' defenses")} +{info?.defense}
-        </AttrText>
-      </ExtraLabelStyled>
-      <ExtraLabelStyled mt='13px'>
-        <LabelText>{t('Attack Enhancement')}：</LabelText>
-        <AttrText>
-          {t('Attack building damage')} +{info?.attack}
-        </AttrText>
-      </ExtraLabelStyled>
-      <ExtraLabelStyled mt='13px'>
-        <LabelText>{t('HP Enhancement')}：</LabelText>
-        <AttrText>
-          {t("All buildings' HP")} +{info?.hp}
-        </AttrText>
-      </ExtraLabelStyled>
-      <ExtraLabelStyled mt='13px'>
-        <LabelText>{t('Capacity Enhancement')}：</LabelText>
-        <AttrText>
-          {t("All capacities'speed")} +{info?.product}
-        </AttrText>
-      </ExtraLabelStyled>
-      <ExtraLabelStyled mt='13px'>
-        <LabelText>{t('Building Cost')}：</LabelText>
-        <AttrText>
-          {t('All building construction costs')} +{info?.build}
-        </AttrText>
-      </ExtraLabelStyled>
+      <Box className='mystery-detail-step2'>
+        <Text mb='10px'>{t('More Attributes')}</Text>
+        <ExtraLabelStyled>
+          <LabelText>{t('Defense Enhancement')}：</LabelText>
+          <AttrText>
+            {t("All buildings' defenses")} +{info?.defense}
+          </AttrText>
+        </ExtraLabelStyled>
+        <ExtraLabelStyled mt='13px'>
+          <LabelText>{t('Attack Enhancement')}：</LabelText>
+          <AttrText>
+            {t('Attack building damage')} +{info?.attack}
+          </AttrText>
+        </ExtraLabelStyled>
+        <ExtraLabelStyled mt='13px'>
+          <LabelText>{t('HP Enhancement')}：</LabelText>
+          <AttrText>
+            {t("All buildings' HP")} +{info?.hp}
+          </AttrText>
+        </ExtraLabelStyled>
+        <ExtraLabelStyled mt='13px'>
+          <LabelText>{t('Capacity Enhancement')}：</LabelText>
+          <AttrText>
+            {t("All capacities'speed")} +{info?.product}
+          </AttrText>
+        </ExtraLabelStyled>
+        <ExtraLabelStyled mt='13px'>
+          <LabelText>{t('Building Cost')}：</LabelText>
+          <AttrText>
+            {t('All building construction costs')} +{info?.build}
+          </AttrText>
+        </ExtraLabelStyled>
+      </Box>
       {children}
     </Box>
   );

@@ -16,7 +16,7 @@ const Race: React.FC<RaceProps> = ({ info, ...props }) => {
     return info?.race as Races;
   }, [info]);
   return (
-    <RaceCardStyled mt='13px'>
+    <RaceCardStyled mt='13px' {...props}>
       <Flex width='100%'>
         <RaceAvatar race={race} />
         <Flex ml='13px' flexDirection='column'>

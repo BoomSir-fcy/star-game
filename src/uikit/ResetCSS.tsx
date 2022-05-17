@@ -209,6 +209,7 @@ const ResetCSS = createGlobalStyle`
     padding: 20px 30px;
     color: #fff;
     max-width: 475px !important;
+    max-width: 327px !important;
     width: 475px !important;
     height: 327px !important;
     background-color: transparent !important;
