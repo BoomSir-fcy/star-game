@@ -39,7 +39,7 @@ const Avatar = () => {
         }}
       >
         <Box position='absolute' top={20} width='100%'>
-          <Text textAlign='center' ellipsis>
+          <Text textAlign='center' fontSize='20px' ellipsis>
             {userInfo.nickname}
           </Text>
         </Box>
@@ -59,7 +59,9 @@ const Avatar = () => {
             setVisible(true);
           }}
         >
-          {t('Invite to earn')}
+          <Text fontSize='20px' bold>
+            {t('Invite to earn')}
+          </Text>
         </ButtonStyled>
       </Box>
       <Modal title={PopTitle} visible={visible} setVisible={setVisible}>

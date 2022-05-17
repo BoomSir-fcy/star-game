@@ -10,6 +10,7 @@ import {
   ButtonOnRefresh,
   ButtonProps,
   Box,
+  Text,
 } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 
@@ -43,7 +44,9 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
             />
           }
         >
-          {children}
+          <Text fontSize='20px' bold shadow='secondary'>
+            {children}
+          </Text>
         </Button>
       </Link>
     </Box>
