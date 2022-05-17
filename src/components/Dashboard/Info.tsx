@@ -81,11 +81,13 @@ const Info: React.FC<InfoProps> = ({
                   height={48}
                   tokenAddress={getDsgAddress()}
                 />
-                <Text mt='8px' ml='8px'>
+                <Text fontSize='20px' mt='8px' ml='8px'>
                   {DSGblance?.amount}
                 </Text>
               </Flex>
-              <Text mt='8px'>{DSGblance?.symbol}</Text>
+              <Text mt='8px' fontSize='20px'>
+                {DSGblance?.symbol}
+              </Text>
             </Flex>
           </ButtonLeft>
           <ButtonLeft
@@ -103,11 +105,13 @@ const Info: React.FC<InfoProps> = ({
                   height={48}
                   tokenAddress={getDsgAddress()}
                 />
-                <Text mb='8px' ml='8px'>
+                <Text fontSize='20px' mb='8px' ml='8px'>
                   {BOXblance?.amount}
                 </Text>
               </Flex>
-              <Text mb='8px'>{BOXblance?.symbol}</Text>
+              <Text mb='8px' fontSize='20px'>
+                {BOXblance?.symbol}
+              </Text>
             </Flex>
           </ButtonLeft>
           <ButtonLeft
@@ -125,11 +129,13 @@ const Info: React.FC<InfoProps> = ({
                   height={48}
                   tokenAddress={getDsgAddress()}
                 />
-                <Text mb='8px' ml='8px'>
+                <Text fontSize='20px' mb='8px' ml='8px'>
                   {BOXblance?.amount}
                 </Text>
               </Flex>
-              <Text mb='8px'>{BOXblance?.symbol}</Text>
+              <Text mb='8px' fontSize='20px'>
+                {BOXblance?.symbol}
+              </Text>
             </Flex>
           </ButtonLeft>
         </Box>
@@ -137,10 +143,12 @@ const Info: React.FC<InfoProps> = ({
           <Box>
             <Link to='/star/planet'>
               <ButtonTag1 variant='custom' className={className}>
-                <Flex alignItems='center' width='100%'>
-                  <StarCom variant='none' ml='16px' />
+                <Flex pt='16px' alignItems='center' width='100%'>
+                  <StarCom variant='none' />
                   <Box>
-                    <Text textAlign='left'>{t('Planet Count')}</Text>
+                    <Text fontSize='20px' textAlign='left'>
+                      {t('Planet Count')}
+                    </Text>
                     <Text textAlign='left'>{Product.planet_num}</Text>
                   </Box>
                 </Flex>
@@ -158,10 +166,10 @@ const Info: React.FC<InfoProps> = ({
                   />
                 </Box>
                 <Box ml='8px'>
-                  <Text textAlign='left'>
+                  <Text fontSize='20px' mb='20px' textAlign='left'>
                     {t('Total Capacity')}: {Product.stone_product}/s
                   </Text>
-                  <Text textAlign='left'>
+                  <Text fontSize='20px' textAlign='left'>
                     {t('Total Ore')}: {Product.stone}
                   </Text>
                 </Box>
@@ -177,10 +185,10 @@ const Info: React.FC<InfoProps> = ({
                   />
                 </Box>
                 <Box ml='8px'>
-                  <Text textAlign='left'>
+                  <Text fontSize='20px' mb='20px' textAlign='left'>
                     {t('Total Capacity')}: {Product.population_product}/s
                   </Text>
-                  <Text textAlign='left'>
+                  <Text fontSize='20px' textAlign='left'>
                     {t('Total Population')}: {Product.population}
                   </Text>
                 </Box>
@@ -188,7 +196,7 @@ const Info: React.FC<InfoProps> = ({
             </ButtonTag2>
             <Link to='/test/card'>
               <ButtonTag2 variant='custom' ml='8px'>
-                <Flex pl='8px' alignItems='center' width='100%'>
+                <Flex pl='8px' alignItems='center' height='100%' width='100%'>
                   <Box width={70}>
                     <Image
                       src='/images/commons/dashboard/item.png'
@@ -197,10 +205,10 @@ const Info: React.FC<InfoProps> = ({
                     />
                   </Box>
                   <Box ml='8px'>
-                    <Text textAlign='left'>
+                    <Text fontSize='20px' mb='20px' textAlign='left'>
                       {t('Total Capacity')}: {Product.energy_product}/s
                     </Text>
-                    <Text textAlign='left'>
+                    <Text fontSize='20px' textAlign='left'>
                       {t('Total Energy')}: {Product.energy}
                     </Text>
                   </Box>

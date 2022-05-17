@@ -47,6 +47,7 @@ export const lightColors: Colors = {
   ...additionalColors,
   ...nftTokenColors,
   ...QualityColor,
+  legendText: '#FFB93D',
   background: '#FAF9FA',
   backgroundDisabled: '#E9EAEB',
   backgroundCard: '#161920',
@@ -69,6 +70,7 @@ export const lightColors: Colors = {
   goldBorder: '#8ac001',
   lightBorder: '#f9feff',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
+  missTxt: '#5af3eb',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
     progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',
@@ -80,6 +82,7 @@ export const darkColors: Colors = {
   ...additionalColors,
   ...nftTokenColors,
   ...QualityColor,
+  legendText: '#FFB93D',
   background: '#08060B',
   backgroundDisabled: '#3c3742',
   backgroundCard: '#161920',
@@ -102,6 +105,7 @@ export const darkColors: Colors = {
   goldBorder: '#EB9C12',
   lightBorder: '#f9feff',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
+  missTxt: '#5af3eb',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',
     progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',

@@ -27,7 +27,7 @@ const RightBox = styled(Flex)`
   width: 180px;
   height: 97px;
   align-items: center;
-  margin-left: 30px;
+  margin-left: 14px;
 `;
 
 const InfoPlane: React.FC<{
@@ -40,7 +40,7 @@ const InfoPlane: React.FC<{
     <Card pt='8px' width={434} height={490}>
       <Flex justifyContent='space-between' alignItems='center'>
         <TopBox1>
-          <Text bold fontSize='24px'>
+          <Text bold fontSize='24px' color='legendText'>
             {t('Strengthen')} +{nowPlante?.strengthenLevel}
           </Text>
         </TopBox1>
@@ -52,7 +52,7 @@ const InfoPlane: React.FC<{
           />
         </Box>
         <TopBox2>
-          <Text bold fontSize='24px'>
+          <Text bold fontSize='24px' color='legendText'>
             {t('Strengthen')} +{estimatePlante?.strengthenLevel}
           </Text>
         </TopBox2>
@@ -74,7 +74,7 @@ const InfoPlane: React.FC<{
       </Flex>
       <Flex alignItems='flex-end' justifyContent='center'>
         <RightBox>
-          <Image width={85} height={85} src='/images/commons/icon/ore.png' />
+          <Image width={54} height={54} src='/images/commons/icon/ore.png' />
           <Box>
             <Text color='textTips' fontSize='20px'>
               {t('Ore Capacity')}
@@ -100,8 +100,8 @@ const InfoPlane: React.FC<{
       <Flex alignItems='flex-end' justifyContent='center'>
         <RightBox>
           <Image
-            width={85}
-            height={85}
+            width={54}
+            height={54}
             src='/images/commons/icon/population.png'
           />
           <Box>
@@ -128,7 +128,7 @@ const InfoPlane: React.FC<{
       </Flex>
       <Flex alignItems='flex-end' justifyContent='center'>
         <RightBox>
-          <Image width={85} height={85} src='/images/commons/icon/energy.png' />
+          <Image width={54} height={54} src='/images/commons/icon/energy.png' />
           <Box>
             <Text color='textTips' fontSize='20px'>
               {t('Energy Capacity')}

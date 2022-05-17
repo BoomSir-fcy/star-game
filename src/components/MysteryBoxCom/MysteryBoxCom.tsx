@@ -21,19 +21,19 @@ const MysteryBoxCom: React.FC<MysteryBoxComProps> = ({ quality, ...props }) => {
         flexDirection='column'
         position='relative'
         height='100%'
-        padding='30px 0 72px'
+        padding='30px 22px 80px 0'
         zIndex={5}
       >
-        <Box width='100%'>
-          <Text color='navy' textAlign='center' width='255px'>
+        <Box mt='4px' width='100%'>
+          <Text fontSize='24px' color='navy' textAlign='center' width='270px'>
             {t(info.label)}
           </Text>
         </Box>
         <Box>
-          <Text textAlign='center' fontSize='22px' color='textTips'>
+          <Text textAlign='center' fontSize='20px' color='textSecondary'>
             {t('You will have a chance to get')}
           </Text>
-          <Text maxWidth='360px' ellipsis mt='8px'>
+          <Text fontSize='22px' maxWidth='360px' ellipsis mt='8px'>
             {t(info.tips)}
           </Text>
         </Box>

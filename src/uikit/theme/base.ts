@@ -1,4 +1,4 @@
-import { MediaQueries, Breakpoints, Spacing, MediaQueriesSize } from "./types";
+import { MediaQueries, Breakpoints, Spacing, MediaQueriesSize } from './types';
 
 export const breakpointMap: { [key: string]: number } = {
   xxs: 369,
@@ -10,7 +10,9 @@ export const breakpointMap: { [key: string]: number } = {
   xxl: 1280,
 };
 
-const breakpoints: Breakpoints = Object.values(breakpointMap).map((breakpoint) => `${breakpoint}px`);
+const breakpoints: Breakpoints = Object.values(breakpointMap).map(
+  breakpoint => `${breakpoint}px`,
+);
 
 export const mediaQueries: MediaQueries = {
   xxs: `@media screen and (max-width: ${breakpointMap.xs}px)`,
@@ -42,7 +44,7 @@ const mediaQueriesMargin = `
     margin: 24px 32px;
   }
 
-`
+`;
 const mediaQueriesPadding = `
   ${mediaQueries.xxs} {
     padding: 8px 4px;
@@ -62,20 +64,20 @@ const mediaQueriesPadding = `
   ${mediaQueries.lg} {
     padding: 16px 24px;
   }
-`
+`;
 
 export const mediaQueriesSize: MediaQueriesSize = {
   margin: mediaQueriesMargin,
   padding: mediaQueriesPadding,
-}
+};
 
 export const shadows = {
-  active: "0px 0px 0px 1px #0098A1, 0px 0px 4px 8px rgba(31, 199, 212, 0.4)",
-  success: "0px 0px 0px 1px #31D0AA, 0px 0px 0px 4px rgba(49, 208, 170, 0.2)",
-  warning: "0px 0px 0px 1px #ED4B9E, 0px 0px 0px 4px rgba(237, 75, 158, 0.2)",
-  focus: "0px 0px 0px 1px #fbf2e9, 0px 0px 0px 4px rgba(77, 205, 179, 0.6)",
-  input: "inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35)",
-  inset: "inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21)",
+  active: '0px 0px 0px 1px #0098A1, 0px 0px 4px 8px rgba(31, 199, 212, 0.4)',
+  success: '0px 0px 0px 1px #31D0AA, 0px 0px 0px 4px rgba(49, 208, 170, 0.2)',
+  warning: '0px 0px 0px 1px #ED4B9E, 0px 0px 0px 4px rgba(237, 75, 158, 0.2)',
+  focus: '0px 0px 0px 1px #fbf2e9, 0px 0px 0px 4px rgba(77, 205, 179, 0.6)',
+  input: 'inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35)',
+  inset: 'inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21)',
   box: 'inset 0px 7px 3px 0px rgba(0, 0, 0, 0.35)',
   nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)',
   primary: 'inset 0px 0px 60px -30px #F9F9F9;',
@@ -83,20 +85,21 @@ export const shadows = {
 };
 
 export const textShadows = {
-  primary: "1px 1px 5px #41B7FF, -1px -1px 5px #41B7FF",
-  secondary: "1px 1px 5px #E3681E, -1px -1px 5px #E3681E",
-  tertiary: "1px 1px 5px #E96262, -1px -1px 5px #E96262",
+  primary: '1px 1px 5px #41B7FF, -1px -1px 5px #41B7FF',
+  secondary: '1px 1px 5px #E3681E, -1px -1px 5px #E3681E',
+  tertiary: '1px 1px 5px #E96262, -1px -1px 5px #E96262',
+  green: '1px 1px 5px #52FF83, -1px -1px 5px #52FF83',
 };
 
 const spacing: Spacing = [0, 4, 8, 16, 24, 32, 48, 64];
 
 const radii = {
-  small: "4px",
-  tag: "10px",
-  default: "16px",
-  nftImage: "10px",
-  card: "10px",
-  circle: "50%",
+  small: '4px',
+  tag: '10px',
+  default: '16px',
+  nftImage: '10px',
+  card: '10px',
+  circle: '50%',
 };
 
 const zIndices = {
