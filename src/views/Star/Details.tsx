@@ -55,8 +55,6 @@ const Details = () => {
     }
   }, [planet, selfBuilding, updateGrid]);
 
-  const getCallback = React.useCallback(() => {}, []);
-
   return (
     <Box>
       <DragCompoents

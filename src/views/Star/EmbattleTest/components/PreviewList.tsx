@@ -59,7 +59,6 @@ const PreviewList: React.FC<PreviewListProps> = ({
         unique_id: item.unique_id,
         unitInfo: item,
         isEnemy: false,
-        hp: 100,
         test: true,
       };
       if (isApp()) {
@@ -83,7 +82,6 @@ const PreviewList: React.FC<PreviewListProps> = ({
       unique_id: item.unique_id,
       unitInfo: item,
       isEnemy: false,
-      hp: 100,
       test: true,
     };
     game.addDragPreSoldierApp(options);

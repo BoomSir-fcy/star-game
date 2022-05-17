@@ -174,12 +174,18 @@ const ProductionProgress = () => {
       </ProgressBox>
       <BtnFlex justifyContent='space-between'>
         <Button variant='black' onClick={() => ExtractResources()}>
-          {later_extract_time > 0
-            ? formatTime(state.Extracttime)
-            : t('Extract resources')}
+          <Text fontSize='20px' bold>
+            {later_extract_time > 0
+              ? formatTime(state.Extracttime)
+              : t('Extract resources')}
+          </Text>
         </Button>
         <Link to='/galaxy'>
-          <Button variant='black'>{t('Occupy Star')}</Button>
+          <Button variant='black'>
+            <Text fontSize='20px' bold>
+              {t('Occupy Star')}
+            </Text>
+          </Button>
         </Link>
       </BtnFlex>
     </Flex>

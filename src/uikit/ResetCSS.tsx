@@ -201,6 +201,83 @@ const ResetCSS = createGlobalStyle`
       display: none;
     }
   }
+
+  /* 引导页 */
+
+  .introjs-tooltip {
+    position: absolute;
+    padding: 20px 30px;
+    color: #fff;
+    max-width: 475px !important;
+    width: 475px !important;
+    height: 327px !important;
+    background-color: transparent !important;
+    background-image: url('/images/commons/introjs-mask.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+
+  .introjs-tooltip-header {
+    position: relative;
+    padding: 0 !important;
+    bottom: 8px;
+    right: 1px;
+  }
+
+  .introjs-skipbutton {
+    width: 43px;
+    height: 43px;
+    padding: 0 !important;
+    background-image: url('/images/commons/introjs-close.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    color: transparent !important;
+  }
+  
+  .introjs-tooltiptext {
+    min-height: 180px;
+    max-height: 180px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 20px;
+  }
+
+  .introjs-helperLayer {
+    position: absolute;
+    z-index: 9999998;
+    border: 3px solid #FFFFFF;
+    border-radius: 10px !important;
+  }
+
+  .introjs-tooltipbuttons {
+    border-top: 0 !important;
+  }
+
+  .introjs-arrow {
+    opacity: 0 !important;
+  }
+  
+  .introjs-button {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    width: 137px;
+    height: 50px;
+    font-weight: bold;
+    color: #000000;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    background-image: url('/images/commons/btn/enter.png');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+  }
+  .introjs-disabled {
+    background-image: url('/images/commons/btn/enter.png') !important;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+  }
 `;
 
 export default ResetCSS;

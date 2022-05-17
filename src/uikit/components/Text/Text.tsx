@@ -20,6 +20,24 @@ const getFontSize = ({ fontSize, small }: TextProps) => {
 };
 
 const Text = styled.div<TextProps>`
+  ${({ mark }) =>
+    mark
+      ? `
+      font-weight: bold;
+      font-style: italic;
+
+      color: #ffffff;
+      text-shadow: 0px 3px 0.4em #79c6c4;
+
+      background: linear-gradient(
+        0deg,
+        rgba(79, 255, 251, 1) 0%,
+        rgba(255, 255, 255, 1) 60.4873046875%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    `
+      : ''};
   color: ${getColor};
   text-shadow: ${getTextShadows};
   font-size: ${getFontSize};

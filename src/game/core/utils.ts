@@ -2,7 +2,7 @@
 import { Container } from '@pixi/display';
 import { Point } from '@pixi/math';
 import { raceData } from 'config/raceConfig';
-import { DescType, descType, Skill } from 'game/types';
+import { DescType, descType, Skill, TipsTextType } from 'game/types';
 
 export function onDragStart(this: any, event: any) {
   // store a reference to the data
@@ -205,6 +205,8 @@ export const getEffectDescText = (effect?: DescType) => {
   if (effect === descType.REMOVE_STOP_MOVE) return '解除禁锢';
   if (effect === descType.ADD_TERRAIN_FIRING) return '产生地形灼烧';
   if (effect === descType.TERRAIN_FIRING) return '灼烧造成';
+  if (effect === descType.ATTACK_DODGE) return '触发闪避';
+  if (effect === descType.ATTACK_MISS) return '攻击未命中';
   return '未知';
 };
 export const getEffectDescTypeText = (effect?: DescType) => {
@@ -222,6 +224,8 @@ export const getEffectDescTypeText = (effect?: DescType) => {
   if (effect === descType.REMOVE_STOP_MOVE) return '效果';
   if (effect === descType.ADD_TERRAIN_FIRING) return '效果';
   if (effect === descType.TERRAIN_FIRING) return '伤害';
+  if (effect === descType.ATTACK_DODGE) return '效果';
+  if (effect === descType.ATTACK_MISS) return '';
   return '未知';
 };
 
@@ -337,4 +341,11 @@ export const getSpriteRes = (race: number, resId: string, index: number) => {
 export const getSpriteName = (race: number, resId: string) => {
   // return raceData[race].children.find(item => item.id === Number(resId))?.name;
   return '';
+};
+
+export const getTipsColorByType = (type: TipsTextType): number | number[] => {
+  if (type === TipsTextType.CRIT) {
+    return 0xeb5419;
+  }
+  return 0xffffff;
 };

@@ -51,6 +51,7 @@ export type TextShadows = {
   primary: string;
   secondary: string;
   tertiary: string;
+  green: string;
 };
 
 export type Gradients = {
@@ -77,6 +78,7 @@ export type Qualities = typeof qualities[keyof typeof qualities];
 export type Races = typeof RaceType[keyof typeof RaceType];
 
 export type Colors = {
+  legendText: string;
   profit: string;
   failure: string;
   warning: string;
@@ -119,7 +121,7 @@ export type Colors = {
   silver: string;
   bronze: string;
   navy: string;
-
+  missTxt: string;
   // NFT Token Colors
   triangleDinosaur: string;
   meat: string;

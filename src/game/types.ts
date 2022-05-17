@@ -65,6 +65,7 @@ interface SlotBaseInfo {
   sub_shield: number;
   now_shield: number;
   max_shield: number;
+  attack_crit?: boolean;
   receive_point: RoundDescAxis;
 }
 
@@ -72,7 +73,6 @@ export interface RoundDescAttack extends SlotBaseInfo {
   receive_df: number;
   now_hp: number;
   receive_sub_hp: number;
-  attack_crit?: boolean;
   around: ReceiveChange[];
   sender_attack: number;
 }
@@ -430,4 +430,9 @@ export enum SpeederType {
   UPDATE = 'update',
   COLLECTION = 'collision',
   SOLDIER_CREATE = 'soldierCreated',
+}
+
+export enum TipsTextType {
+  NORMAL, // 普通
+  CRIT, // 暴击
 }

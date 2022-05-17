@@ -135,6 +135,28 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
       </PanelText>
     );
   }
+  if (detail?.type === descType.ATTACK_DODGE) {
+    return (
+      <PanelText>
+        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+        发起进攻，
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <>
+              <PanelSide isEnemy={item.isEnemy} />
+              <PanelAxis axis={item.pos} />
+              建筑
+              <PanelText color='missTxt'>
+                {getEffectDescText(detail.descInfo?.type)}
+                {getEffectDescTypeText(detail.descInfo?.type)}
+              </PanelText>
+              {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
+            </>
+          );
+        })}
+      </PanelText>
+    );
+  }
   if (
     detail?.type === descType.STOP_MOVE ||
     detail?.type === descType.ADD_BOOM ||
@@ -156,11 +178,24 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
             </>
           );
         })}
-        {getEffectDescText(detail.descInfo?.type)}
+        {}
+        <PanelText
+          color={
+            detail.descInfo?.type === descType.ATTACK_MISS ? 'missTxt' : ''
+          }
+        >
+          {getEffectDescText(detail.descInfo?.type)}
+        </PanelText>
+        {detail.attackInfo?.attack_crit ? (
+          <PanelText color='redSide'>&nbsp;暴击&nbsp;</PanelText>
+        ) : (
+          ''
+        )}
         {getEffectDescTypeText(detail.descInfo?.type)}
       </PanelText>
     );
   }
+
   if (detail?.type) {
     return (
       <PanelText>

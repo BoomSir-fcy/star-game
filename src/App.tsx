@@ -26,6 +26,7 @@ const MysteryBoxDetail = lazy(() => import('./views/MysteryBox/Detail'));
 const MysteryBoxState = lazy(() => import('./views/MysteryBox/State'));
 
 const PlantLeague = lazy(() => import('./views/PlantLeague'));
+const BattleReport = lazy(() => import('./views/BattleReport'));
 
 const Plunder = lazy(() => import('./views/Plunder'));
 const PlunderPk = lazy(() => import('./views/Plunder/Pk'));
@@ -75,7 +76,7 @@ function App() {
 
               {/* 星球联盟 */}
               <Route path='/plant-league' element={<PlantLeague />} />
-
+              <Route path='/battleReport' element={<BattleReport />} />
               {/* 星系 */}
               <Route path='/galaxy' element={<Galaxy />} />
               <Route path='/galaxy/auction' element={<Auction />} />

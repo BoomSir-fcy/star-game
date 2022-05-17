@@ -14,7 +14,7 @@ export const LabelStyled = styled(Label)`
 export const ExtraLabelStyled = styled(Label)`
   width: 500px;
   height: 60px;
-  padding-left: 26px;
+  padding-left: 10px;
 `;
 
 export const RaceCardStyled = styled(Card)`
@@ -24,10 +24,13 @@ export const RaceCardStyled = styled(Card)`
   padding-left: 17px;
 `;
 
-export const LabelText = styled(Text).attrs({ small: true })``;
+export const LabelText = styled(Text).attrs({ small: true })`
+  font-size: 18px;
+`;
 export const AttrText = styled(LabelText)`
   margin-left: 5px;
   flex: 1;
+  font-size: 18px;
 `;
 
 export const ScrollBox = styled(Box)`

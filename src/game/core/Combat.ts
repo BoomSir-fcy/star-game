@@ -8,6 +8,7 @@ import {
   RoundDesc,
   RoundDescAttack,
   SpeederType,
+  TipsTextType,
 } from 'game/types';
 // import { Graphics, Sprite, Container, Point, Texture } from 'pixi.js';
 import { Container } from '@pixi/display';
@@ -25,6 +26,7 @@ import { getEffectText, getTwoPointCenter, getSpriteRes } from './utils';
 import EffectBuff from './EffectBuff';
 import { descOfEffect, spines } from '../effectConfig';
 import Loaders from './Loaders';
+import TipsText from './TipsText';
 
 export interface CombatOptions {
   // texture0: string;
@@ -211,10 +213,10 @@ class Combat extends EventTarget {
       this.hpGraphics.endFill();
     }
 
-    this.hpText.style.fill = this.isEnemy
-      ? config.BLOOD_COLOR_ENEMY
-      : config.BLOOD_COLOR;
-    this.hpText.text = `${this.activePh}`;
+    // this.hpText.style.fill = this.isEnemy
+    //   ? config.BLOOD_COLOR_ENEMY
+    //   : config.BLOOD_COLOR;
+    // this.hpText.text = `${this.activePh}`;
   }
 
   /**
@@ -345,6 +347,28 @@ class Combat extends EventTarget {
 
     bullet.addEventListener('moveEnd', () => {
       // this.changeEffect(effect, target);
+
+      // 暴击
+      if (attackInfo?.attack_crit) {
+        console.log(attackInfo, '暴击');
+        let { receive_sub_hp } = attackInfo || {};
+        if (attackInfo?.around?.length) {
+          receive_sub_hp = attackInfo.around[0].receive_sub_hp;
+        }
+        const tipsText = new TipsText(`${receive_sub_hp}`, {
+          type: TipsTextType.CRIT,
+        });
+        tipsText.show(target.axisPoint);
+      }
+
+      // 文字效果
+      if (effect === descType.ATTACK_DODGE) {
+        const tipsText = new TipsText('闪避');
+        tipsText.show(target.axisPoint);
+      } else if (effect === descType.ATTACK_MISS) {
+        const tipsText = new TipsText('未命中');
+        tipsText.show(target.axisPoint);
+      }
       this.onBulletMoveEnd();
     });
 

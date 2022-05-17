@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
+import { Link } from 'react-router-dom';
 import StopWorkPop from '../stopWorkPop';
 
 const ShaDowBox = styled(Flex)`
@@ -45,7 +46,7 @@ const InfoFoot = () => {
   return (
     <ShaDowBox alignItems='center'>
       <Flex flex='1' flexDirection='column' justifyContent='space-between'>
-        <Text mb='20px' shadow='primary' fontSize='28px' bold>
+        <Text mb='10px' shadow='primary' fontSize='28px' bold>
           {t('Combat Power')} {alliance.power}
         </Text>
         <Box>
@@ -58,6 +59,11 @@ const InfoFoot = () => {
           <Text fontSize='22px'>*{t('20%+ can join the lootings')}</Text>
         </Box>
       </Flex>
+      <Link to='/BattleReport'>
+        <Button style={{ borderRadius: '20px' }} onClick={() => {}}>
+          {t('战报详情')}
+        </Button>
+      </Link>
       <Button
         variant='stop'
         onClick={() => {

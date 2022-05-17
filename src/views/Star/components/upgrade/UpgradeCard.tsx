@@ -16,7 +16,7 @@ const ItemFlex = styled(Flex)`
 `;
 const ItemInfoFlex = styled(Flex)`
   flex-direction: column;
-  margin-left: 23px;
+  margin-left: 10px;
   flex: 1;
 `;
 const LevelText = styled(Text)`
@@ -46,7 +46,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
   return (
     <StyledCard width={width} {...props}>
       <Flex flexDirection='column'>
-        <Text bold fontSize='22px' shadow='primary'>
+        <Text bold fontSize='20px' shadow='primary'>
           {!up
             ? t('Current Lv%value% effect', { value: info?.level || '' })
             : t('Lv%value% effect after upgrade', { value: info?.level || '' })}
