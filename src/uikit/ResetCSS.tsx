@@ -249,13 +249,14 @@ const ResetCSS = createGlobalStyle`
     border-radius: 10px !important;
   }
 
-  
   .introjs-tooltipbuttons {
     border-top: 0 !important;
   }
-  .introjs-arrow.bottom {
+
+  .introjs-arrow {
     opacity: 0 !important;
   }
+  
   .introjs-button {
     display: flex !important;
     justify-content: center;
@@ -269,6 +270,11 @@ const ResetCSS = createGlobalStyle`
     box-shadow: none !important;
     background-color: transparent !important;
     background-image: url('/images/commons/btn/enter.png');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+  }
+  .introjs-disabled {
+    background-image: url('/images/commons/btn/enter.png') !important;
     background-size: 100% auto;
     background-repeat: no-repeat;
   }
