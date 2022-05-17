@@ -66,7 +66,7 @@ const Info: React.FC<InfoProps> = ({
   return (
     <Box width='100%'>
       <Flex height='179px' width='100%'>
-        <Box width='312px' pl='20px' pt='22px'>
+        <Box width='312px' pl='20px' pt='28px'>
           <ButtonLeft
             onClick={() => {
               setActiveToken(DSGblance);
@@ -85,9 +85,7 @@ const Info: React.FC<InfoProps> = ({
                   {DSGblance?.amount}
                 </Text>
               </Flex>
-              <Text mt='8px' fontSize='20px'>
-                {DSGblance?.symbol}
-              </Text>
+              <Text fontSize='20px'>{DSGblance?.symbol}</Text>
             </Flex>
           </ButtonLeft>
           <ButtonLeft
@@ -95,7 +93,7 @@ const Info: React.FC<InfoProps> = ({
               setActiveToken(BOXblance);
               setVisible(true);
             }}
-            mt='24px'
+            mt='18px'
             variant='custom'
           >
             <Flex width='100%' alignItems='center'>
@@ -105,11 +103,11 @@ const Info: React.FC<InfoProps> = ({
                   height={48}
                   tokenAddress={getDsgAddress()}
                 />
-                <Text fontSize='20px' mb='8px' ml='8px'>
+                <Text fontSize='20px' mt='8px' ml='8px'>
                   {BOXblance?.amount}
                 </Text>
               </Flex>
-              <Text mb='8px' fontSize='20px'>
+              <Text mt='-2px' fontSize='20px'>
                 {BOXblance?.symbol}
               </Text>
             </Flex>
@@ -119,7 +117,7 @@ const Info: React.FC<InfoProps> = ({
               setActiveToken(BOXblance);
               setVisible(true);
             }}
-            mt='22px'
+            mt='18px'
             variant='custom'
           >
             <Flex width='100%' alignItems='center'>
@@ -129,11 +127,11 @@ const Info: React.FC<InfoProps> = ({
                   height={48}
                   tokenAddress={getDsgAddress()}
                 />
-                <Text fontSize='20px' mb='8px' ml='8px'>
+                <Text fontSize='20px' mt='8px' ml='8px'>
                   {BOXblance?.amount}
                 </Text>
               </Flex>
-              <Text mb='8px' fontSize='20px'>
+              <Text mt='-2px' fontSize='20px'>
                 {BOXblance?.symbol}
               </Text>
             </Flex>
