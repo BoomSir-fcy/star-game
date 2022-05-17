@@ -350,7 +350,7 @@ class Combat extends EventTarget {
 
       // 暴击
       if (attackInfo?.attack_crit) {
-        console.log(attackInfo, '暴击');
+        // console.log(attackInfo, '暴击');
         let { receive_sub_hp } = attackInfo || {};
         if (attackInfo?.around?.length) {
           receive_sub_hp = attackInfo.around[0].receive_sub_hp;
@@ -358,15 +358,28 @@ class Combat extends EventTarget {
         const tipsText = new TipsText(`${receive_sub_hp}`, {
           type: TipsTextType.CRIT,
         });
-        tipsText.show(target.axisPoint);
+        const axisPointTarget = target.axisPoint.clone();
+        axisPointTarget.y -= 60;
+        tipsText.show(axisPointTarget);
+      }
+
+      // 治疗
+      if (effect === descType.RESTORE) {
+        const { add_hp } = attackInfo.around[0];
+        const tipsText = new TipsText(`+${add_hp}`, {
+          type: TipsTextType.RESTORE,
+        });
+        const axisPointTarget = target.axisPoint.clone();
+        axisPointTarget.y -= 70;
+        tipsText.show(axisPointTarget);
       }
 
       // 文字效果
       if (effect === descType.ATTACK_DODGE) {
-        const tipsText = new TipsText('闪避');
+        const tipsText = new TipsText('[闪避]');
         tipsText.show(target.axisPoint);
       } else if (effect === descType.ATTACK_MISS) {
-        const tipsText = new TipsText('未命中');
+        const tipsText = new TipsText('[未命中]');
         tipsText.show(target.axisPoint);
       }
       this.onBulletMoveEnd();
@@ -438,7 +451,7 @@ class Combat extends EventTarget {
     this.container.parent.addChild(container);
     bullet.attack(effect, target);
     bullet.addEventListener('moveEnd', () => {
-      target.effectBuff.addEffect(EffectType.RESTORE);
+      // target.effectBuff.addEffect(EffectType.RESTORE);
     });
     bullet.addEventListener('attackEnd', () => {
       this.onAttackEnd();

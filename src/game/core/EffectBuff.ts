@@ -94,8 +94,10 @@ class EffectBuff extends EventTarget {
   [EffectType.RESTORE] = {
     sprint: new Sprite(),
     sprint1: new Sprite(),
+    sprint2: new Sprite(),
     scale: 0.2,
     positionY: 0,
+    alpha: 1,
     load: false,
   };
 
@@ -184,32 +186,50 @@ class EffectBuff extends EventTarget {
    */
   addRestoreEffect(type: EffectType) {
     const texture = Texture.from(effectConfig.effect[type].spriteSrc0);
-    const { scale } = this[type];
-    this[type].sprint.texture = texture;
-    this[type].sprint.anchor.set(0.5);
-    this[type].sprint.position.set(-10, 20);
-    this[type].sprint.scale.set(scale);
+    const restore = this[EffectType.RESTORE];
+    const { scale } = restore;
+    restore.alpha = 1;
+    restore.sprint.texture = texture;
+    restore.sprint.anchor.set(0.5);
+    restore.sprint.position.set(-10, 20);
+    restore.sprint.scale.set(scale);
 
-    const sprint2 = new Sprite(texture);
-    sprint2.anchor.set(0.5);
-    sprint2.position.set(-40, -25);
-    sprint2.scale.set(scale);
-    sprint2.scale.x = -(sprint2.scale.x * 0.5);
+    restore.sprint1.texture = texture;
+    restore.sprint1.anchor.set(0.5);
+    restore.sprint1.position.set(-40, -25);
+    restore.sprint1.scale.set(scale);
+    restore.sprint1.scale.x = -(restore.sprint1.scale.x * 0.5);
 
-    const sprint3 = new Sprite(texture);
-    sprint3.anchor.set(0.5);
-    sprint3.position.set(20, -30);
-    sprint3.scale.set(scale);
-    sprint3.scale.x = -(sprint3.scale.x * 0.5);
+    restore.sprint2.texture = texture;
+    restore.sprint2.anchor.set(0.5);
+    restore.sprint2.position.set(20, -30);
+    restore.sprint2.scale.set(scale);
+    restore.sprint2.scale.x = -(restore.sprint2.scale.x * 0.5);
 
-    this.container.addChild(this[type].sprint);
-    this.container.addChild(sprint2);
-    this.container.addChild(sprint3);
+    this.container.addChild(restore.sprint);
+    this.container.addChild(restore.sprint1);
+    this.container.addChild(restore.sprint2);
 
     this[type].load = true;
-    this[type].sprint.visible = true;
-    sprint2.visible = true;
-    sprint3.visible = true;
+    this.animation(type);
+  }
+
+  animation(type: EffectType) {
+    if (type === EffectType.RESTORE) {
+      this[type].alpha -= 0.01;
+      if (this[type].alpha <= 0.1) {
+        this.container.removeChild(this[type].sprint);
+        this.container.removeChild(this[type].sprint1);
+        this.container.removeChild(this[type].sprint2);
+        return;
+      }
+      this[type].sprint.alpha = this[type].alpha;
+      this[type].sprint1.alpha = this[type].alpha;
+      this[type].sprint2.alpha = this[type].alpha;
+    }
+    requestAnimationFrame(() => {
+      this.animation(type);
+    });
   }
 
   /**

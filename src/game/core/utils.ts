@@ -345,7 +345,11 @@ export const getSpriteName = (race: number, resId: string) => {
 
 export const getTipsColorByType = (type: TipsTextType): number | number[] => {
   if (type === TipsTextType.CRIT) {
-    return 0xeb5419;
+    // return 0xeb5419;
+    return 0xf1dd32;
+  }
+  if (type === TipsTextType.RESTORE) {
+    return 0x5adf82;
   }
   return 0xffffff;
 };

@@ -530,6 +530,7 @@ class Bullet extends EventTarget {
       bulletType.STOP_MOVE,
       bulletType.SHIELD,
       bulletType.RESTORE,
+      bulletType.PURIFY,
     ];
     if (linear.includes(name)) {
       this.linearAttack(name, attackTarget);

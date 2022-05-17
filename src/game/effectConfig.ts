@@ -179,6 +179,14 @@ const effectConfig: EffectConfig = {
       moveSpriteSrc: '/assets/bullet/restore/restore.png',
       label: '治疗',
     },
+    {
+      name: bulletType.PURIFY,
+      bombSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/bullet/purify/purify.png',
+      label: '净化',
+    },
   ],
 
   effect: {
