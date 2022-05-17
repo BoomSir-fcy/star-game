@@ -378,6 +378,8 @@ class Combat extends EventTarget {
       bullet.attack(bulletType.BULLET, target);
     } else if (effect === descType.ATTACK_MISS) {
       bullet.attack(bulletType.BULLET, target);
+    } else if (effect === descType.RESTORE) {
+      bullet.attack(bulletType.RESTORE, target);
     } else {
       bullet.attack(bulletType.BULLET, target, effect);
     }
@@ -412,7 +414,7 @@ class Combat extends EventTarget {
     this.container.parent.addChild(container);
     bullet.attack(effect, target);
     bullet.addEventListener('moveEnd', () => {
-      // target.effectBuff.addEffect(EffectType.BOMB);
+      target.effectBuff.addEffect(EffectType.RESTORE);
     });
     bullet.addEventListener('attackEnd', () => {
       this.onAttackEnd();

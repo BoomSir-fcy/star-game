@@ -91,6 +91,14 @@ class EffectBuff extends EventTarget {
     load: false,
   };
 
+  [EffectType.RESTORE] = {
+    sprint: new Sprite(),
+    sprint1: new Sprite(),
+    scale: 0.2,
+    positionY: 0,
+    load: false,
+  };
+
   /**
    *
    * @param type 添加特效
@@ -115,6 +123,10 @@ class EffectBuff extends EventTarget {
     }
     if (type === EffectType.VENOM) {
       this.addVenomEffect(type);
+      return;
+    }
+    if (type === EffectType.RESTORE) {
+      this.addRestoreEffect(type);
       return;
     }
     if (this.combat.container)
@@ -165,6 +177,39 @@ class EffectBuff extends EventTarget {
     }
     this[type].sprint.visible = false;
     this[type].sprint1.visible = false;
+  }
+
+  /**
+   * 添加治疗特效
+   */
+  addRestoreEffect(type: EffectType) {
+    const texture = Texture.from(effectConfig.effect[type].spriteSrc0);
+    const { scale } = this[type];
+    this[type].sprint.texture = texture;
+    this[type].sprint.anchor.set(0.5);
+    this[type].sprint.position.set(-10, 20);
+    this[type].sprint.scale.set(scale);
+
+    const sprint2 = new Sprite(texture);
+    sprint2.anchor.set(0.5);
+    sprint2.position.set(-40, -25);
+    sprint2.scale.set(scale);
+    sprint2.scale.x = -(sprint2.scale.x * 0.5);
+
+    const sprint3 = new Sprite(texture);
+    sprint3.anchor.set(0.5);
+    sprint3.position.set(20, -30);
+    sprint3.scale.set(scale);
+    sprint3.scale.x = -(sprint3.scale.x * 0.5);
+
+    this.container.addChild(this[type].sprint);
+    this.container.addChild(sprint2);
+    this.container.addChild(sprint3);
+
+    this[type].load = true;
+    this[type].sprint.visible = true;
+    sprint2.visible = true;
+    sprint3.visible = true;
   }
 
   /**
