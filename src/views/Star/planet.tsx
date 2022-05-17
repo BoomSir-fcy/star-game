@@ -2,7 +2,6 @@ import React, { useCallback, useState, useEffect } from 'react';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
-// import 'intro.js/themes/introjs-flattener.css';
 
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -75,7 +74,7 @@ const Planet = () => {
   const { SetWorking } = useJoinAlliance();
 
   // 控制是否开启新手指导的
-  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [stepsEnabled, setStepsEnabled] = useState(false);
   const [steps, setSteps] = useState([
     {
       element: '.planet_number',
@@ -238,6 +237,7 @@ const Planet = () => {
         initialStep={0}
         options={{
           exitOnOverlayClick: false,
+          tooltipPosition: 'top',
         }}
         onExit={() => console.log('退出')}
       />

@@ -6,6 +6,7 @@ import { PlanetApi } from './Planet';
 import { AllianceApi } from './alliance';
 import { BuildingApi } from './Building';
 import { GameApi } from './game';
+import { GuideApi } from './guide';
 
 export const Api = {
   isSuccess,
@@ -16,4 +17,5 @@ export const Api = {
   AllianceApi: new AllianceApi(),
   BuildingApi: new BuildingApi(),
   GameApi: new GameApi(),
+  GuideApi: new GuideApi(),
 };
