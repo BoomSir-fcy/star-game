@@ -213,10 +213,10 @@ class Combat extends EventTarget {
       this.hpGraphics.endFill();
     }
 
-    this.hpText.style.fill = this.isEnemy
-      ? config.BLOOD_COLOR_ENEMY
-      : config.BLOOD_COLOR;
-    this.hpText.text = `${this.activePh}`;
+    // this.hpText.style.fill = this.isEnemy
+    //   ? config.BLOOD_COLOR_ENEMY
+    //   : config.BLOOD_COLOR;
+    // this.hpText.text = `${this.activePh}`;
   }
 
   /**

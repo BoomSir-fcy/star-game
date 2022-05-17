@@ -98,7 +98,6 @@ const Embattle = () => {
           unique_id: item.base_unit_id,
           unitInfo: unitMaps?.[item.base_unit_id],
           isEnemy,
-          hp: 100,
           test: true,
         });
       });
