@@ -65,6 +65,7 @@ const Star: React.FC<{
       </Flex>
       <Flex width='100%'>
         <Nav
+          className='common_nav'
           nav={[
             {
               id: 'build',

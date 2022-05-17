@@ -421,6 +421,7 @@ export const DragCompoents: React.FC<{
               ref={dragBox}
               width={`${gridSize}px`}
               height={`${gridSize}px`}
+              className='star_manager'
             >
               {(grid ?? []).map((item: any, index: number) => {
                 return (
@@ -484,7 +485,7 @@ export const DragCompoents: React.FC<{
           />
         </Flex>
         <BgCard variant='long' mt='12px' padding='40px'>
-          <Flex>
+          <Flex className='buildings'>
             <Flex flexDirection='column' width='230px'>
               <CardTab>
                 {(state.tabs ?? []).map(row => (
@@ -507,7 +508,10 @@ export const DragCompoents: React.FC<{
             <BuildingsScroll ml='40px'>
               {(buildings[state?.currentTab] ?? []).map(
                 (row: any, index: number) => (
-                  <BuildingsItem key={`${row.buildings_number}_${index}`}>
+                  <BuildingsItem
+                    key={`${row.buildings_number}_${index}`}
+                    className={`building_${index}`}
+                  >
                     <GameThing
                       draggable
                       onDragStart={dragStart}

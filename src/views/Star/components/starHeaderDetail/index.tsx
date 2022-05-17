@@ -67,6 +67,7 @@ const StarHeader = () => {
               style={{ flexShrink: 1 }}
             />
             <Flex
+              className='planet_header'
               flex={1}
               flexDirection='column'
               justifyContent='space-between'
@@ -155,29 +156,35 @@ const StarHeader = () => {
                     </Flex>
                   </Flex>
                 </Flex>
-                <ButtonStyled
-                  scale='sm'
-                  onClick={() => setState({ ...state, visible: true })}
-                >
-                  {t('Supplement Resources')}
-                </ButtonStyled>
               </Flex>
             </Flex>
           </Flex>
-          <RaceFlex ml='10px'>
-            <img alt='' src='/images/commons/star/race-box.png' />
-            <RaceImageFlex>
-              <Text
-                color={RaceTypeColor[planetInfo?.race]}
-                mb='2px'
-                fontSize='22px'
-                bold
-              >
-                {planetInfo?.race ? t(`race-${planetInfo?.race}`) : ''}
-              </Text>
-              <RaceAvatar width='99px' height='99px' race={planetInfo?.race} />
-            </RaceImageFlex>
-          </RaceFlex>
+          <Flex ml='20px' alignItems='flex-end'>
+            <ButtonStyled
+              scale='sm'
+              onClick={() => setState({ ...state, visible: true })}
+            >
+              {t('Supplement Resources')}
+            </ButtonStyled>
+            <RaceFlex ml='10px'>
+              <img alt='' src='/images/commons/star/race-box.png' />
+              <RaceImageFlex>
+                <Text
+                  color={RaceTypeColor[planetInfo?.race]}
+                  mb='2px'
+                  fontSize='22px'
+                  bold
+                >
+                  {planetInfo?.race ? t(`race-${planetInfo?.race}`) : ''}
+                </Text>
+                <RaceAvatar
+                  width='99px'
+                  height='99px'
+                  race={planetInfo?.race}
+                />
+              </RaceImageFlex>
+            </RaceFlex>
+          </Flex>
         </Flex>
       </CardStyled>
 
