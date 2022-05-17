@@ -236,6 +236,9 @@ const Planet = () => {
         enabled={stepsEnabled}
         steps={steps}
         initialStep={0}
+        options={{
+          exitOnOverlayClick: false,
+        }}
         onExit={() => console.log('退出')}
       />
       <Hints enabled={hintsEnabled} hints={hints} />
