@@ -51,6 +51,7 @@ export type TextShadows = {
   primary: string;
   secondary: string;
   tertiary: string;
+  green: string;
 };
 
 export type Gradients = {

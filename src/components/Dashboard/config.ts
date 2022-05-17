@@ -15,6 +15,7 @@ export const getHideHeader = (url: string) => {
       '/upgrade-list',
       '/plunder-pk',
       '/galaxy/auction',
+      '/BattleReport',
     ],
     url,
   );
