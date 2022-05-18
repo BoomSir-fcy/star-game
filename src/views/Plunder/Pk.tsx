@@ -10,6 +10,10 @@ import {
   Spinner,
   BorderCard,
 } from 'uikit';
+
+import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import 'intro.js/introjs.css';
+
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import { GlobalVideo } from 'components/Video';
@@ -19,6 +23,7 @@ import Game from 'game/core/Game';
 import { useStore } from 'state';
 import { RoundDescTotalHp } from 'game/types';
 import { useToast } from 'contexts/ToastsContext';
+import { useGuide } from 'hooks/useGuide';
 import {
   useFetchGameMatchUser,
   useFetchGamePK,
@@ -218,8 +223,58 @@ const Pk = () => {
     }
   }, [TerrainInfo, game]);
 
+  const { guides, setGuide } = useGuide('plunder-pk');
+
+  // 控制是否开启新手指导的
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [activeStep, setActiveStep] = useState(guides.step);
+  const [steps, setSteps] = useState([
+    {
+      element: '.plunder-pk-step0',
+      intro: '这里是您的战斗信息。',
+    },
+    {
+      element: '.plunder-pk-step1',
+      intro: '这里是我方阵营的全体HP值，如果为空则失败。',
+    },
+    {
+      element: '.plunder-pk-step2',
+      intro: '这里是对战方的基础信息。',
+    },
+    {
+      element: '.plunder-pk-step3',
+      intro: '这里是当前战斗过程的战报详情。',
+    },
+  ]);
+
   return (
     <Layout>
+      {guides.finish && steps.length - 1 > guides.step && (
+        <Steps
+          enabled={stepsEnabled}
+          steps={steps}
+          initialStep={activeStep}
+          options={{
+            exitOnOverlayClick: false,
+            tooltipPosition: 'top',
+          }}
+          onBeforeChange={event => {
+            setActiveStep(event);
+          }}
+          onExit={() => {
+            setStepsEnabled(false);
+          }}
+        />
+      )}
+      <Box
+        position='absolute'
+        width={800}
+        height={480}
+        top={50}
+        right={0}
+        className='plunder-pk-step2'
+        zIndex={-1}
+      />
       <Flex mb='20px'>
         <Flex position='relative' zIndex={1}>
           <BackButton ml='19px' />
@@ -230,12 +285,18 @@ const Pk = () => {
       </Flex>
       <Flex>
         <Flex flexDirection='column' alignItems='center'>
-          <PeopleCard mb='10px' active {...mineUser} />
+          <PeopleCard
+            className='plunder-pk-step0'
+            mb='10px'
+            active
+            {...mineUser}
+          />
           <Energy />
         </Flex>
         <Flex flex='1' flexDirection='column'>
           <Flex mt='-52px' justifyContent='space-between'>
             <PKProgress
+              className='plunder-pk-step1'
               total={PKInfo?.init?.show_hp?.blue_total_hp ?? 0}
               current={totalInfo?.blue_total_hp ?? 0}
               result={result}
@@ -280,7 +341,12 @@ const Pk = () => {
       >
         <WaitPlunderList />
         <Flex flex={1}>
-          <PlunderPanel width='100%' details={roundInfos} others={others} />
+          <PlunderPanel
+            className='plunder-pk-step3'
+            width='100%'
+            details={roundInfos}
+            others={others}
+          />
         </Flex>
         <WaitPlunderList />
       </Flex>
