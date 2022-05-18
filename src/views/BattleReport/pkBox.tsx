@@ -27,22 +27,22 @@ export const PkBox: React.FC<{
   const BoxList = useMemo(() => {
     const List = [
       {
-        title: t('获得矿石'),
+        title: t('Get Ore'),
         img: '/images/commons/icon/ore.png',
         num: info.ore,
       },
       {
-        title: t('获得能量'),
+        title: t('Get Energy'),
         img: '/images/commons/icon/energy.png',
         num: info.energy,
       },
       {
-        title: t('损耗战斗单位'),
+        title: t('Attrition combat unit'),
         img: '/images/commons/star/HP.png',
         num: info.attrition_combat,
       },
       {
-        title: t('损耗建筑耐久度'),
+        title: t('Lose Building Durability'),
         img: '/images/commons/star/durability.png',
         num: info.LoseDurability,
       },

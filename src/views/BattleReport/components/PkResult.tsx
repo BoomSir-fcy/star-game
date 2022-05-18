@@ -23,11 +23,11 @@ export const PkResult: React.FC<{
       <ImgFlex result={result} justifyContent='center'>
         {result ? (
           <Text fontSize='22px' bold fontStyle='italic' shadow='green'>
-            {t('胜利')}
+            {t('Victory')}
           </Text>
         ) : (
           <Text fontSize='22px' bold fontStyle='italic' shadow='secondary'>
-            {t('失败')}
+            {t('Fail')}
           </Text>
         )}
       </ImgFlex>
