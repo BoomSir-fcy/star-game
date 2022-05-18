@@ -167,6 +167,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
         // width='608px'
         // height='476px'
         pr='8px'
+        className='star-embattle-step4'
         position='relative'
         overflow='hidden'
         onClick={e => e.stopPropagation()}

@@ -9,6 +9,7 @@ import React, {
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
 
+import { createGlobalStyle } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Text, Flex } from 'uikit';
 import { useGuide } from 'hooks/useGuide';
@@ -31,6 +32,22 @@ import useUpdatePos from './hooks/useUpdatePos';
 import useActiveSoldier from './hooks/useActiveSoldier';
 
 // const game = new Game();
+
+const GlobalStyle = createGlobalStyle<{ interactive?: boolean }>`
+  ${({ interactive }) => {
+    return interactive
+      ? `
+    *{
+      pointer-events: none;
+    }
+    .introjs-showElement, .introjs-showElement *, .introjs-tooltip, .introjs-tooltip *{
+      pointer-events: auto;
+    }
+    `
+      : '';
+  }};
+  
+`;
 
 const Embattle = () => {
   const parsedQs = useParsedQueryString();
@@ -104,6 +121,7 @@ const Embattle = () => {
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [activeStep, setActiveStep] = useState(guides.step);
   const [steps, setSteps] = useState([
     {
       element: '.star-embattle-step0',
@@ -117,6 +135,7 @@ const Embattle = () => {
     {
       element: '.star-embattle-step2',
       intro: '点击了解战斗单位详情。',
+      interactive: true,
     },
     {
       element: '.star-embattle-step3',
@@ -138,7 +157,8 @@ const Embattle = () => {
   ]);
 
   return (
-    <Box position='relative'>
+    <Box className='star-embattle-step5' position='relative'>
+      <GlobalStyle interactive={steps[activeStep]?.interactive} />
       {guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
@@ -149,7 +169,7 @@ const Embattle = () => {
             tooltipPosition: 'top',
           }}
           onBeforeChange={event => {
-            console.log(event);
+            setActiveStep(event);
           }}
           onExit={() => {
             setStepsEnabled(false);
@@ -179,6 +199,7 @@ const Embattle = () => {
       >
         <Preview game={game} activeSoldier={activeSoldier} />
         <SortBoard
+          className='star-embattle-step6'
           sortSoldiers={gameSoldiers}
           activeSoldier={activeSoldier}
           setSortSoldiers={(newItems, update) => {
@@ -204,7 +225,14 @@ const Embattle = () => {
             <Text fontSize='20px'>战斗测试</Text>
           </Button>
         </Box>
-        <PreviewList race={race} game={game} activeSoldier={activeSoldier} />
+        <PreviewList
+          onClick={() => {
+            console.log(12232332);
+          }}
+          race={race}
+          game={game}
+          activeSoldier={activeSoldier}
+        />
       </Box>
     </Box>
   );

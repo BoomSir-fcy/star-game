@@ -3,10 +3,10 @@ import Game from 'game/core/Game';
 import Soldier from 'game/core/Soldier';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
-import { Box, Text, BgCard, Flex, BorderCard } from 'uikit';
+import { Box, Text, BgCard, Flex, BorderCard, BgCardProps } from 'uikit';
 import PreviewSoldier from './PreviewSoldier';
 
-interface PreviewListProps {
+interface PreviewListProps extends BgCardProps {
   game: Game;
   activeSoldier: Soldier | null;
   race?: Api.Game.race;
@@ -15,6 +15,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   activeSoldier,
   game,
   race = 1,
+  ...props
 }) => {
   const units = useStore(p => p.game.baseUnits);
 
@@ -67,15 +68,16 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, [dragEndHandle]);
 
   return (
-    <BgCard padding='0 28px' variant='long'>
+    <BgCard padding='0 28px' variant='long' {...props}>
       <Flex
         className='star-embattle-step1'
         style={{ overflow: 'auto' }}
         width='100%'
       >
-        {list.map(item => {
+        {list.map((item, index) => {
           return (
             <Box
+              className={index === 0 ? 'star-embattle-step2' : ''}
               style={{
                 cursor: 'pointer',
               }}

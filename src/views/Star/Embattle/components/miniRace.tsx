@@ -120,7 +120,7 @@ const MiniRaceAni: React.FC<{
   });
 
   return (
-    <Container>
+    <Container className='star-embattle-step3'>
       <Box ref={ref} />
     </Container>
   );
