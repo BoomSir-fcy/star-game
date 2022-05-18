@@ -91,6 +91,16 @@ class EffectBuff extends EventTarget {
     load: false,
   };
 
+  [EffectType.RESTORE] = {
+    sprint: new Sprite(),
+    sprint1: new Sprite(),
+    sprint2: new Sprite(),
+    scale: 0.2,
+    positionY: 0,
+    alpha: 1,
+    load: false,
+  };
+
   /**
    *
    * @param type 添加特效
@@ -115,6 +125,10 @@ class EffectBuff extends EventTarget {
     }
     if (type === EffectType.VENOM) {
       this.addVenomEffect(type);
+      return;
+    }
+    if (type === EffectType.RESTORE) {
+      this.addRestoreEffect(type);
       return;
     }
     if (this.combat.container)
@@ -165,6 +179,57 @@ class EffectBuff extends EventTarget {
     }
     this[type].sprint.visible = false;
     this[type].sprint1.visible = false;
+  }
+
+  /**
+   * 添加治疗特效
+   */
+  addRestoreEffect(type: EffectType) {
+    const texture = Texture.from(effectConfig.effect[type].spriteSrc0);
+    const restore = this[EffectType.RESTORE];
+    const { scale } = restore;
+    restore.alpha = 1;
+    restore.sprint.texture = texture;
+    restore.sprint.anchor.set(0.5);
+    restore.sprint.position.set(-10, 20);
+    restore.sprint.scale.set(scale);
+
+    restore.sprint1.texture = texture;
+    restore.sprint1.anchor.set(0.5);
+    restore.sprint1.position.set(-40, -25);
+    restore.sprint1.scale.set(scale);
+    restore.sprint1.scale.x = -(restore.sprint1.scale.x * 0.5);
+
+    restore.sprint2.texture = texture;
+    restore.sprint2.anchor.set(0.5);
+    restore.sprint2.position.set(20, -30);
+    restore.sprint2.scale.set(scale);
+    restore.sprint2.scale.x = -(restore.sprint2.scale.x * 0.5);
+
+    this.container.addChild(restore.sprint);
+    this.container.addChild(restore.sprint1);
+    this.container.addChild(restore.sprint2);
+
+    this[type].load = true;
+    this.animation(type);
+  }
+
+  animation(type: EffectType) {
+    if (type === EffectType.RESTORE) {
+      this[type].alpha -= 0.01;
+      if (this[type].alpha <= 0.1) {
+        this.container.removeChild(this[type].sprint);
+        this.container.removeChild(this[type].sprint1);
+        this.container.removeChild(this[type].sprint2);
+        return;
+      }
+      this[type].sprint.alpha = this[type].alpha;
+      this[type].sprint1.alpha = this[type].alpha;
+      this[type].sprint2.alpha = this[type].alpha;
+    }
+    requestAnimationFrame(() => {
+      this.animation(type);
+    });
   }
 
   /**

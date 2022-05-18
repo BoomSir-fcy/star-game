@@ -171,6 +171,22 @@ const effectConfig: EffectConfig = {
       moveSpriteSrc: '/assets/bullet/hold/hold.png',
       label: '禁锢',
     },
+    {
+      name: bulletType.RESTORE,
+      bombSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/bullet/restore/restore.png',
+      label: '治疗',
+    },
+    {
+      name: bulletType.PURIFY,
+      bombSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '/assets/bullet/purify/purify.png',
+      label: '净化',
+    },
   ],
 
   effect: {
@@ -208,6 +224,11 @@ const effectConfig: EffectConfig = {
       type: EffectType.ADD_FIRING,
       spriteSrc0: '/assets/effects/firing-animate-1.png',
       spriteSrc1: '/assets/effects/firing-animate-2.png',
+    },
+    [EffectType.RESTORE]: {
+      type: EffectType.RESTORE,
+      spriteSrc0: '/assets/effects/restore.png',
+      spriteSrc1: '',
     },
   },
 };
@@ -296,8 +317,8 @@ export const descOfEffect = {
     remove: false,
   },
   [descType.RESTORE]: {
-    effect: null,
-    add: false,
+    effect: EffectType.RESTORE,
+    add: true,
     remove: false,
   },
   [descType.REMOVE_STOP_MOVE]: {
