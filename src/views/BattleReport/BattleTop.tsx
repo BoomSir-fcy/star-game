@@ -43,12 +43,12 @@ export const BattleTop: React.FC = () => {
       </Box>
       <TitleBox>
         <MarkText fontSize='18px' bold fontStyle='italic'>
-          战报详情
+          {t('Battle report details')}
         </MarkText>
       </TitleBox>
       <RecordBox>
         <MarkText ml='20px' mt='10px' fontSize='22px' bold fontStyle='italic'>
-          总战斗场数
+          {t('total number of battles')}
         </MarkText>
         <MarkText fontSize='28px' bold fontStyle='italic'>
           10
@@ -56,7 +56,7 @@ export const BattleTop: React.FC = () => {
       </RecordBox>
       <RecordBox>
         <MarkText ml='20px' mt='10px' fontSize='22px' bold fontStyle='italic'>
-          胜利场数
+          {t('Victories')}
         </MarkText>
         <MarkText fontSize='28px' bold fontStyle='italic'>
           10
@@ -64,7 +64,7 @@ export const BattleTop: React.FC = () => {
       </RecordBox>
       <RecordBox>
         <MarkText ml='20px' mt='10px' fontSize='22px' bold fontStyle='italic'>
-          失败场数
+          {t('Number of failed games')}
         </MarkText>
         <MarkText fontSize='28px' bold fontStyle='italic'>
           10

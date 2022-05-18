@@ -3,18 +3,25 @@ import Game from 'game/core/Game';
 import Soldier from 'game/core/Soldier';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
-import { Box, Text, BgCard, Flex, BorderCard } from 'uikit';
+import { Box, Text, BgCard, Flex, BorderCard, BgCardProps } from 'uikit';
 import PreviewSoldier from './PreviewSoldier';
 
-interface PreviewListProps {
+interface PreviewListProps extends BgCardProps {
   game: Game;
   activeSoldier: Soldier | null;
   race?: Api.Game.race;
+  disableClick?: boolean;
+  disableDrag?: boolean;
+  onDrag: () => void;
 }
 const PreviewList: React.FC<PreviewListProps> = ({
   activeSoldier,
   game,
   race = 1,
+  disableDrag,
+  disableClick,
+  onDrag,
+  ...props
 }) => {
   const units = useStore(p => p.game.baseUnits);
 
@@ -26,6 +33,22 @@ const PreviewList: React.FC<PreviewListProps> = ({
   const list = useMemo(() => {
     return Object.values(unitMaps);
   }, [unitMaps]);
+
+  useEffect(() => {
+    if (list.length) {
+      const [, item] = list;
+      const soldier = new Soldier({
+        x: 0,
+        y: 0,
+        srcId: `${item.unique_id}`,
+        race,
+        id: item.unique_id,
+        unique_id: item.unique_id,
+        unitInfo: unitMaps?.[item.unique_id],
+      });
+      game.addActiveSolider(soldier);
+    }
+  }, [list, game, race, unitMaps]);
 
   const [moving, setMoving] = useState(false);
 
@@ -67,11 +90,16 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, [dragEndHandle]);
 
   return (
-    <BgCard padding='0 28px' variant='long'>
-      <Flex style={{ overflow: 'auto' }} width='100%'>
-        {list.map(item => {
+    <BgCard padding='0 28px' variant='long' {...props}>
+      <Flex
+        className='star-embattle-step1'
+        style={{ overflow: 'auto' }}
+        width='100%'
+      >
+        {list.map((item, index) => {
           return (
             <Box
+              className={index === 0 ? 'star-embattle-step2' : ''}
               style={{
                 cursor: 'pointer',
               }}
@@ -86,16 +114,18 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 borderRadius='10px'
                 position='relative'
                 onClick={() => {
-                  const soldier = new Soldier({
-                    x: 0,
-                    y: 0,
-                    srcId: `${item.unique_id}`,
-                    race,
-                    id: item.unique_id,
-                    unique_id: item.unique_id,
-                    unitInfo: unitMaps?.[item.unique_id],
-                  });
-                  game.addActiveSolider(soldier);
+                  if (!disableClick) {
+                    const soldier = new Soldier({
+                      x: 0,
+                      y: 0,
+                      srcId: `${item.unique_id}`,
+                      race,
+                      id: item.unique_id,
+                      unique_id: item.unique_id,
+                      unitInfo: unitMaps?.[item.unique_id],
+                    });
+                    game.addActiveSolider(soldier);
+                  }
                   // game.dispatchEvent(getAddActiveSoliderEvent(soldier));
                 }}
               >
@@ -109,7 +139,12 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   left='0'
                   sid={item.unique_id}
                   customDrag
-                  onPointerDown={e => dragStartHandle(e, item)}
+                  onPointerDown={e => {
+                    if (!disableDrag) {
+                      onDrag();
+                      dragStartHandle(e, item);
+                    }
+                  }}
                 />
               </BorderCard>
               <Text mt='8px' textAlign='center' fontSize='20' bold>

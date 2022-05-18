@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { polyfill } from 'mobile-drag-drop';
 import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour';
 import { useDispatch } from 'react-redux';
-import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
+import { Box, Flex, BgCard, Card, Button, Text, Input } from 'uikit';
 import { useStore, storeAction } from 'state';
 import { Api } from 'apis';
 import { isApp } from 'utils/client';

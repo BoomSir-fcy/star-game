@@ -93,6 +93,7 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
       <Label mt={22} width={603} pr='18px'>
         <Input
           value={name}
+          className='login-step0'
           onChange={event => {
             setName(event.target.value);
           }}

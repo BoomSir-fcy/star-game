@@ -5,7 +5,11 @@ import { qualities, MysteryBoxComProps } from './types';
 import { mysteryConfig } from './config';
 import { BoxStyled, BoxBgStyled, BoxBaseStyled, BoxBoxStyled } from './styled';
 
-const MysteryBoxCom: React.FC<MysteryBoxComProps> = ({ quality, ...props }) => {
+const MysteryBoxCom: React.FC<MysteryBoxComProps> = ({
+  quality,
+  children,
+  ...props
+}) => {
   const { t } = useTranslation();
   const info = useMemo(() => {
     if (mysteryConfig[quality]) {
@@ -13,6 +17,7 @@ const MysteryBoxCom: React.FC<MysteryBoxComProps> = ({ quality, ...props }) => {
     }
     return mysteryConfig[qualities.ORDINARY];
   }, [quality]);
+
   return (
     <BoxStyled {...props}>
       <Flex
@@ -41,6 +46,7 @@ const MysteryBoxCom: React.FC<MysteryBoxComProps> = ({ quality, ...props }) => {
       <BoxBgStyled quality={quality} />
       <BoxBaseStyled quality={quality} />
       <BoxBoxStyled quality={quality} />
+      {children}
     </BoxStyled>
   );
 };

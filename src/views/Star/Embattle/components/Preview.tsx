@@ -112,7 +112,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     }),
   );
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [gameMock, setGameMock] = useState({});
 
   const { getSimulation } = useSimulation();
@@ -155,7 +155,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
   );
 
   React.useEffect(() => {
-    setVisible(false);
+    // setVisible(false);
     if (activeSoldier) {
       getGameSimulation(activeSoldier?.id);
     }
@@ -167,6 +167,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
         // width='608px'
         // height='476px'
         pr='8px'
+        className='star-embattle-step4'
         position='relative'
         overflow='hidden'
         onClick={e => e.stopPropagation()}

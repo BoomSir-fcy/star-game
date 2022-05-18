@@ -105,7 +105,7 @@ class Running extends EventTarget {
     this.rounds = rounds.round;
     this.base = rounds.base;
     this.playLoop = loop || false;
-    this.game.app.stage.addChild(this.infoText);
+    // this.game.app.stage.addChild(this.infoText);
     this.infoText.x = 10;
     this.infoText.y = 10;
     this.init();

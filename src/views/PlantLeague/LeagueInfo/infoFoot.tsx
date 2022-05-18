@@ -61,7 +61,7 @@ const InfoFoot = () => {
       </Flex>
       <Link to='/BattleReport'>
         <Button style={{ borderRadius: '20px' }} onClick={() => {}}>
-          {t('战报详情')}
+          {t('Battle report details')}
         </Button>
       </Link>
       <Button

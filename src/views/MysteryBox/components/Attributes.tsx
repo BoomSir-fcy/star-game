@@ -21,52 +21,54 @@ const Attributes: React.FC<AttributesProps> = ({
 
   return (
     <Box {...props}>
-      <Text mb='10px'>{t('Attributes')}</Text>
-      <Flex>
-        <LabelStyled>
-          <LabelText>{t('Grid')}:</LabelText>
-          <AttrText>
-            {info?.areaX ? `${info?.areaX}x${info?.areaY}` : ''}
-          </AttrText>
-        </LabelStyled>
-        <LabelStyled ml='15px'>
-          <LabelText>{t('Grade')}:</LabelText>
-          <AttrText>
-            Lv{info?.level}
-            {/* {t('Level')} */}
-          </AttrText>
-        </LabelStyled>
-        <LabelStyled ml='15px'>
-          <LabelText>{t('Rarity')}:</LabelText>
-          <AttrText color={QualityColor[rarity]}>
-            {rarity ? t(`rarity-${rarity}`) : ''}
-          </AttrText>
-        </LabelStyled>
-      </Flex>
-      <Flex mt='13px'>
-        <LabelStyled>
-          <LabelText>{t('Looting Speed')}:</LabelText>
-          <AttrText>{info?.plunder_speed}</AttrText>
-        </LabelStyled>
-        <LabelStyled ml='15px'>
-          <LabelText>{t('Ore')}:</LabelText>
-          <AttrText>{info?.stone}</AttrText>
-        </LabelStyled>
-        <LabelStyled ml='15px'>
-          <LabelText>{t('Population')}:</LabelText>
-          <AttrText>{info?.population}</AttrText>
-        </LabelStyled>
-      </Flex>
-      <Flex mt='13px'>
-        <LabelStyled>
-          <LabelText>{t('Energy')}:</LabelText>
-          <AttrText>{info?.energy}</AttrText>
-        </LabelStyled>
-        <LabelStyled ml='15px'>
-          <LabelText>{t('Building Count')}:</LabelText>
-          <AttrText>{info?.build_count}</AttrText>
-        </LabelStyled>
-      </Flex>
+      <Box className='mystery-detail-step1'>
+        <Text mb='10px'>{t('Attributes')}</Text>
+        <Flex>
+          <LabelStyled>
+            <LabelText>{t('Grid')}:</LabelText>
+            <AttrText>
+              {info?.areaX ? `${info?.areaX}x${info?.areaY}` : ''}
+            </AttrText>
+          </LabelStyled>
+          <LabelStyled ml='15px'>
+            <LabelText>{t('Grade')}:</LabelText>
+            <AttrText>
+              Lv{info?.level}
+              {/* {t('Level')} */}
+            </AttrText>
+          </LabelStyled>
+          <LabelStyled ml='15px'>
+            <LabelText>{t('Rarity')}:</LabelText>
+            <AttrText color={QualityColor[rarity]}>
+              {rarity ? t(`rarity-${rarity}`) : ''}
+            </AttrText>
+          </LabelStyled>
+        </Flex>
+        <Flex mt='13px'>
+          <LabelStyled>
+            <LabelText>{t('Looting Speed')}:</LabelText>
+            <AttrText>{info?.plunder_speed}</AttrText>
+          </LabelStyled>
+          <LabelStyled ml='15px'>
+            <LabelText>{t('Ore')}:</LabelText>
+            <AttrText>{info?.stone}</AttrText>
+          </LabelStyled>
+          <LabelStyled ml='15px'>
+            <LabelText>{t('Population')}:</LabelText>
+            <AttrText>{info?.population}</AttrText>
+          </LabelStyled>
+        </Flex>
+        <Flex mt='13px'>
+          <LabelStyled>
+            <LabelText>{t('Energy')}:</LabelText>
+            <AttrText>{info?.energy}</AttrText>
+          </LabelStyled>
+          <LabelStyled ml='15px'>
+            <LabelText>{t('Building Count')}:</LabelText>
+            <AttrText>{info?.build_count}</AttrText>
+          </LabelStyled>
+        </Flex>
+      </Box>
       {children}
     </Box>
   );

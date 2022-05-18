@@ -5,6 +5,10 @@ import React, {
   useRef,
   useState,
 } from 'react';
+
+import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import 'intro.js/introjs.css';
+
 import { useWeb3React } from '@web3-react/core';
 import { AddressZero } from '@ethersproject/constants';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -26,6 +30,7 @@ import { useConnectWallet } from 'contexts/ConnectWallet';
 import { fetchUserProductAsync } from 'state/userInfo/reducer';
 import { getDsgAddress } from 'utils/addressHelpers';
 import { useTranslation } from 'contexts/Localization';
+import { useGuide } from 'hooks/useGuide';
 import { useTokenBalance } from 'hooks/useTokenBalance';
 import StarGameBox from './components/StarGameBox';
 import Flyer from './components/Flyer';
@@ -237,8 +242,62 @@ const Login = () => {
     return parsedQs.s === '1';
   }, [parsedQs.s]);
 
+  // const location = useLocation();
+  // const { guides, setGuide } = useGuide('login');
+
+  // // 控制是否开启新手指导的
+  // const [stepsEnabled, setStepsEnabled] = useState(true);
+  // const [steps, setSteps] = useState([
+  //   {
+  //     element: '.login-step0',
+  //     intro: '指挥官，给自己像一个舰队名称吧!',
+  //   },
+  //   {
+  //     element: '.login-step1',
+  //     intro: '点击确认进入下一步',
+  //   },
+  // ]);
+
+  // // 是否开启提示的
+  // const [hintsEnabled, setHintsEnabled] = useState(true);
+  // // 设置哪些需要提示
+  // const [hints, setHints] = useState([
+  //   {
+  //     element: '.planet_number',
+  //     hint: 'Hello hint',
+  //     hintPosition: 'middle-right',
+  //   },
+  // ]);
+
   return (
     <>
+      {/* {guides.finish && steps.length - 1 > guides.step && (
+        <Steps
+          enabled={stepsEnabled}
+          steps={steps}
+          initialStep={guides.step}
+          options={{
+            exitOnOverlayClick: false,
+          }}
+          onBeforeChange={event => {
+            console.log(event);
+            if (event === 2) {
+              setVisible(true);
+            }
+          }}
+          onExit={() => {
+            setStepsEnabled(false);
+          }}
+        />
+      )} */}
+      {/* <Hints
+        enabled={hintsEnabled}
+        hints={hints}
+        onClose={() => {
+          console.log(211221);
+          setHintsEnabled(false);
+        }}
+      /> */}
       <Flex
         height='100%'
         flexDirection='column'
@@ -253,12 +312,18 @@ const Login = () => {
           position='absolute'
           top='150px'
           zIndex={1}
+          className='planet_number1'
         >
           {/* 显示文字加载动画 */}
           {showCreate && <Create ref={createRef} />}
         </CreateBoxShow>
         <EnterBoxMove move={showCreate} position='relative' zIndex={2}>
-          <Button onClick={handleEnter} variant='login'>
+          <Button
+            className='login-step1'
+            data-disable-interaction={false}
+            onClick={handleEnter}
+            variant='login'
+          >
             ENTER
           </Button>
         </EnterBoxMove>
