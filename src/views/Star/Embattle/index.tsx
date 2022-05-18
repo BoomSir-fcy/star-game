@@ -9,9 +9,9 @@ import React, {
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
 
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Text, Flex } from 'uikit';
+import { Box, Button, Text, Flex, Image } from 'uikit';
 import { useGuide } from 'hooks/useGuide';
 import { Api } from 'apis';
 import {
@@ -47,6 +47,30 @@ const GlobalStyle = createGlobalStyle<{ interactive?: boolean }>`
       : '';
   }};
   
+`;
+
+const moveKeyframes = keyframes`
+  0% {
+    transform: translate(0, -0);
+    opacity: 0.5;    
+    
+  }
+  50% {
+    opacity:1;    
+  }
+  100% {
+  transform: translate(100px, -100px);
+  opacity: 0.5;    
+  
+    
+  }
+`;
+
+const ArrowBox = styled(Box)`
+  animation: ${moveKeyframes} 2s linear infinite;
+  & img {
+    transform: rotate(-45deg);
+  }
 `;
 
 const Embattle = () => {
@@ -119,6 +143,8 @@ const Embattle = () => {
 
   const { guides, setGuide } = useGuide('star-embattle');
 
+  const stepRef = useRef(null);
+  const [updaterStep, setUpdaterStep] = useState<Steps | null>(null);
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const [activeStep, setActiveStep] = useState(guides.step);
@@ -135,7 +161,6 @@ const Embattle = () => {
     {
       element: '.star-embattle-step2',
       intro: '点击了解战斗单位详情。',
-      interactive: true,
     },
     {
       element: '.star-embattle-step3',
@@ -149,6 +174,7 @@ const Embattle = () => {
       element: '.star-embattle-step5',
       intro:
         '现在开始布阵，拖住战斗单位放置我方作战区域上，合理的部署位置才是只剩关键。',
+      interactive: true,
     },
     {
       element: '.star-embattle-step6',
@@ -156,20 +182,30 @@ const Embattle = () => {
     },
   ]);
 
+  const [arrowShow, setArrowShow] = useState(false);
+
   return (
     <Box className='star-embattle-step5' position='relative'>
-      <GlobalStyle interactive={steps[activeStep]?.interactive} />
+      <GlobalStyle
+        interactive={steps[activeStep]?.interactive && stepsEnabled}
+      />
       {guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
-          initialStep={guides.step}
+          initialStep={activeStep}
+          ref={stepRef}
           options={{
             exitOnOverlayClick: false,
             tooltipPosition: 'top',
           }}
           onBeforeChange={event => {
             setActiveStep(event);
+          }}
+          onChange={event => {
+            if (event === 5) {
+              setArrowShow(true);
+            }
           }}
           onExit={() => {
             setStepsEnabled(false);
@@ -226,14 +262,32 @@ const Embattle = () => {
           </Button>
         </Box>
         <PreviewList
-          onClick={() => {
-            console.log(12232332);
-          }}
           race={race}
           game={game}
+          disableClick={activeStep === 5 && stepsEnabled}
+          disableDrag={activeStep === 2 && stepsEnabled}
           activeSoldier={activeSoldier}
+          onDrag={() => {
+            console.log(121221);
+            setArrowShow(false);
+          }}
         />
       </Box>
+      {arrowShow && (
+        <ArrowBox
+          position='absolute'
+          top={400}
+          left={100}
+          width={200}
+          height={200}
+        >
+          <Image
+            width={200}
+            height={200}
+            src='/images/commons/icon/to-arrow.png'
+          />
+        </ArrowBox>
+      )}
     </Box>
   );
 };
