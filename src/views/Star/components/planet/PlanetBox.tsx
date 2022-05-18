@@ -81,8 +81,8 @@ export const PlanetBox: React.FC<{
   });
 
   return (
-    <CardBox>
-      <Flex className={className}>
+    <CardBox className={className}>
+      <Flex>
         <StarCom quality={info?.rarity} />
         <Flex ml='29px' flex='1' flexDirection='column'>
           <Desc justifyContent='space-between'>

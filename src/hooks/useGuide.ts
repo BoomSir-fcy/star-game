@@ -4,6 +4,7 @@ import { Api } from 'apis';
 export const useGuide = (url: string) => {
   const [guides, setGuides] = React.useState({
     step: 0,
+    guideFinish: false,
     finish: false,
   });
 
@@ -13,6 +14,7 @@ export const useGuide = (url: string) => {
       if (Api.isSuccess(res)) {
         setGuides({
           step: res.data.step,
+          guideFinish: res.data.finish,
           finish: true,
         });
       }

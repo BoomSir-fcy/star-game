@@ -60,11 +60,16 @@ const InfoFoot = () => {
         </Box>
       </Flex>
       <Link to='/BattleReport'>
-        <Button style={{ borderRadius: '20px' }} onClick={() => {}}>
+        <Button
+          className='battle_report'
+          style={{ borderRadius: '20px' }}
+          onClick={() => {}}
+        >
           {t('Battle report details')}
         </Button>
       </Link>
       <Button
+        className='start_exploring'
         variant='stop'
         onClick={() => {
           if (alliance.working > 0) {
