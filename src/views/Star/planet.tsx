@@ -74,20 +74,15 @@ const Planet = () => {
   const { SetWorking } = useJoinAlliance();
 
   // 控制是否开启新手指导的
-  const [stepsEnabled, setStepsEnabled] = useState(false);
+  const [stepsEnabled, setStepsEnabled] = useState(true);
   const [steps, setSteps] = useState([
     {
-      element: '.planet_number',
-      intro: '星球数量',
-    },
-    {
-      element: '.planet_list',
-      intro:
-        'The simplicity of Intro.js API helps you develop an advanced onboarding tour for your products. Intro.js is lightweight, 10kB and has no external dependencies!',
+      element: '.planet_choose',
+      intro: '点击选择星球。',
     },
   ]);
   // 是否开启提示的
-  const [hintsEnabled, setHintsEnabled] = useState(true);
+  const [hintsEnabled, setHintsEnabled] = useState(false);
   // 设置哪些需要提示
   const [hints, setHints] = useState([
     {
@@ -237,9 +232,8 @@ const Planet = () => {
         initialStep={0}
         options={{
           exitOnOverlayClick: false,
-          tooltipPosition: 'top',
         }}
-        onExit={() => console.log('退出')}
+        onExit={() => setStepsEnabled(false)}
       />
       <Hints enabled={hintsEnabled} hints={hints} />
       <Layout>
@@ -252,7 +246,6 @@ const Planet = () => {
               </Flex>
             )}
             <Nav
-              className='planet_number'
               activeId={Number(parsedQs.t)}
               nav={[
                 {
@@ -308,8 +301,8 @@ const Planet = () => {
                   onEndCallback={e => setState({ ...state, token: e })}
                 />
               </Flex>
-              <ScrollBox className='planet_list'>
-                {(StarList ?? []).map(item => (
+              <ScrollBox className='planet_choose'>
+                {(StarList ?? []).map((item, index) => (
                   <React.Fragment key={`${item.id}_${item.name}`}>
                     {choose ? (
                       <Box

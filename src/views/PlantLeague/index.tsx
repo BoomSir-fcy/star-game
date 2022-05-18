@@ -7,14 +7,18 @@ import { useDispatch } from 'react-redux';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import eventBus from 'utils/eventBus';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import { useGuide } from 'hooks/useGuide';
+import { useLocation } from 'react-router-dom';
 import JoinTheAlliance from './Join';
 import LeagueInfo from './LeagueInfo';
-
 import 'intro.js/introjs.css';
 
 const PlantLeague = () => {
   useFetchAllianceView();
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const { guides, setGuide } = useGuide(location.pathname);
 
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
   const [steps, setSteps] = React.useState([
@@ -44,14 +48,25 @@ const PlantLeague = () => {
     };
   }, [onRefreshClick]);
 
+  React.useEffect(() => {
+    window.addEventListener('click', event => {
+      console.log(event);
+    });
+  }, []);
+
   return (
     <Layout>
       <Steps
         enabled={stepsEnabled}
         steps={steps}
-        initialStep={0}
+        initialStep={guides.step}
         options={{
           exitOnOverlayClick: false,
+        }}
+        onChange={currentStep => {
+          if (currentStep > guides.step) {
+            // setGuide(currentStep);
+          }
         }}
         onExit={step => {
           // if (step === 1) {

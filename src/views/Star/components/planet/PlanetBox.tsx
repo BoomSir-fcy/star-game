@@ -35,7 +35,8 @@ export const PlanetBox: React.FC<{
   choose?: boolean;
   info: Api.Planet.PlanetInfo;
   ChooseList?: number[];
-}> = ({ info, choose, ChooseList }) => {
+  className?: string;
+}> = ({ info, choose, ChooseList, className }) => {
   const { t } = useTranslation();
   const [state, setState] = useState({
     time: info?.status_countdown,
@@ -81,7 +82,7 @@ export const PlanetBox: React.FC<{
 
   return (
     <CardBox>
-      <Flex>
+      <Flex className={className}>
         <StarCom quality={info?.rarity} />
         <Flex ml='29px' flex='1' flexDirection='column'>
           <Desc justifyContent='space-between'>
