@@ -98,15 +98,14 @@ const Details = () => {
           initialStep={guides.step}
           options={{
             exitOnOverlayClick: false,
-            tooltipPosition: 'top',
+            disableInteraction: false,
           }}
           onChange={currentStep => {
             if (currentStep > guides.step) {
               // setGuide(currentStep);
             }
-            console.log(currentStep);
           }}
-          onExit={() => console.log('退出')}
+          onExit={() => setStepsEnabled(false)}
         />
       )}
       <DragCompoents

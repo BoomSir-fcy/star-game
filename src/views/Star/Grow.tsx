@@ -13,6 +13,7 @@ import {
 } from 'components/MysteryBoxCom';
 import ScoringPanel from 'components/ScoringPanel';
 import StarCom from 'components/StarCom';
+import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import InfoPlane from './components/grow/InfoPlane';
 import Extra from './components/grow/Extra';
 import {
@@ -20,6 +21,8 @@ import {
   StrengthenConsumeType,
 } from './components/grow/type';
 import { GrowPop } from './components/grow/growPop';
+
+import 'intro.js/introjs.css';
 
 const MysteryBoxStarStyled = styled(MysteryBoxBoxStyled)`
   background: none;
@@ -46,6 +49,14 @@ const Grow: React.FC = () => {
   const [state, setState] = React.useState({
     time: 0,
   });
+
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [steps, setSteps] = useState([
+    {
+      element: '.planet',
+      intro: '培育可以大幅提升它的战斗力和产能获取，包括各项属性的增长',
+    },
+  ]);
   let timer = null as any;
 
   const ToStrengthenSpeedUp = async () => {
@@ -157,6 +168,16 @@ const Grow: React.FC = () => {
 
   return (
     <Box>
+      <Steps
+        enabled={stepsEnabled}
+        steps={steps}
+        initialStep={0}
+        options={{
+          exitOnOverlayClick: false,
+          tooltipPosition: 'top',
+        }}
+        onExit={step => setStepsEnabled(false)}
+      />
       <BgCard variant='big' padding='50px 33px'>
         <Flex>
           <MysteryBoxStyled>
@@ -165,7 +186,7 @@ const Grow: React.FC = () => {
               <StarCom variant='none' scale='ld' />
             </MysteryBoxStarStyled>
           </MysteryBoxStyled>
-          <Flex>
+          <Flex className='planet'>
             <Box>
               <TopBox>
                 <ScoringPanel count={Number(nowPlante?.strengthenLevel) || 0} />

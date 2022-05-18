@@ -20,8 +20,11 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setActiveMaterialMap, setUpgradePlanetId } from 'state/planet/actions';
 import { useToast } from 'contexts/ToastsContext';
+import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';
 import { useUpgrade } from './components/upgrade/hooks';
+
+import 'intro.js/introjs.css';
 
 const MysteryBoxFlexStyled = styled(MysteryBoxStyled)`
   width: 320px;
@@ -68,6 +71,14 @@ const Upgrade = () => {
     upgrade_end_time: 0,
     upgrade_is_success: false,
   });
+
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [steps, setSteps] = useState([
+    {
+      element: '.planet_level_head',
+      intro: '升级星球可以建造更高等级的建筑， 提升星球的基础属性。',
+    },
+  ]);
 
   const { upgrade } = useUpgrade();
   const { activeMaterialMap, upgradePlanetId } = useStore(p => p.planet);
@@ -185,6 +196,16 @@ const Upgrade = () => {
 
   return (
     <BgCard variant='big' padding='40px 68px'>
+      <Steps
+        enabled={stepsEnabled}
+        steps={steps}
+        initialStep={0}
+        options={{
+          exitOnOverlayClick: false,
+        }}
+        onExit={step => setStepsEnabled(false)}
+      />
+
       {!upgradeSuccess.upgrade_is_end ? (
         <Upgrading
           timePeriod={upgradeSuccess.upgrade_end_time}
@@ -193,7 +214,7 @@ const Upgrade = () => {
         />
       ) : (
         <Flex flexDirection='column'>
-          <Flex alignItems='center'>
+          <Flex alignItems='center' className='planet_level_head'>
             <Flex width='320px' mr='50px' alignItems='center'>
               <GradeBox>
                 <Text bold shadow='primary'>
