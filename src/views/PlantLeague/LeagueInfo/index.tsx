@@ -20,7 +20,12 @@ const Centent = styled(Flex)`
 
 const LeagueInfo = () => {
   return (
-    <Flex flex='1' flexDirection='column' justifyContent='space-between'>
+    <Flex
+      flex='1'
+      flexDirection='column'
+      justifyContent='space-between'
+      className='planet_info'
+    >
       <Flex flex='1' justifyContent='space-between' alignItems='center'>
         <InfoCard>
           <Centent flex='1'>

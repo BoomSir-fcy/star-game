@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
-import 'intro.js/introjs.css'; // 引入 introjs 的样式
+import 'intro.js/introjs.css';
 
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -21,7 +21,6 @@ import {
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useTranslation } from 'contexts/Localization';
 import Layout from 'components/Layout';
-import Dashboard from 'components/Dashboard';
 import Nav from 'components/Nav';
 import { useStore } from 'state/util';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
@@ -75,7 +74,7 @@ const Planet = () => {
   const { SetWorking } = useJoinAlliance();
 
   // 控制是否开启新手指导的
-  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [stepsEnabled, setStepsEnabled] = useState(false);
   const [steps, setSteps] = useState([
     {
       element: '.planet_number',
@@ -83,7 +82,8 @@ const Planet = () => {
     },
     {
       element: '.planet_list',
-      intro: '星球列表',
+      intro:
+        'The simplicity of Intro.js API helps you develop an advanced onboarding tour for your products. Intro.js is lightweight, 10kB and has no external dependencies!',
     },
   ]);
   // 是否开启提示的
@@ -231,13 +231,17 @@ const Planet = () => {
 
   return (
     <Box id='containerBox'>
-      {/* <Steps
+      <Steps
         enabled={stepsEnabled}
         steps={steps}
         initialStep={0}
+        options={{
+          exitOnOverlayClick: false,
+          tooltipPosition: 'top',
+        }}
         onExit={() => console.log('退出')}
       />
-      <Hints enabled={hintsEnabled} hints={hints} /> */}
+      <Hints enabled={hintsEnabled} hints={hints} />
       <Layout>
         <Flex width='100%' position='relative'>
           <Box>
@@ -248,6 +252,7 @@ const Planet = () => {
               </Flex>
             )}
             <Nav
+              className='planet_number'
               activeId={Number(parsedQs.t)}
               nav={[
                 {

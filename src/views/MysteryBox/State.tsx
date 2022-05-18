@@ -1,4 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import 'intro.js/introjs.css';
+
 import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
 import {
@@ -27,6 +31,7 @@ import { TokenImage } from 'components/TokenImage';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { getDsgAddress, getWEtherAddress } from 'utils/addressHelpers';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useGuide } from 'hooks/useGuide';
 import { mysteryConfig } from 'components/MysteryBoxCom/config';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
 import { useStore } from 'state';
@@ -133,9 +138,41 @@ const MysteryBoxState = () => {
     return Boolean(Number(seedBlocks[quality])) || bought;
   }, [seedBlocks, quality, bought]);
 
+  const { guides, setGuide } = useGuide('mystery-state');
+
+  // 控制是否开启新手指导的
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [steps, setSteps] = useState([
+    {
+      element: '.mystery-state-step0',
+      intro: '点击按钮，立即开始星辰大海~',
+    },
+  ]);
+
   return (
     <Layout>
-      <BgCard margin='auto' variant='longMedium'>
+      {guides.finish && steps.length - 1 > guides.step && (
+        <Steps
+          enabled={stepsEnabled}
+          steps={steps}
+          initialStep={guides.step}
+          options={{
+            exitOnOverlayClick: false,
+            tooltipPosition: 'top',
+          }}
+          onBeforeChange={event => {
+            console.log(event);
+          }}
+          onExit={() => {
+            setStepsEnabled(false);
+          }}
+        />
+      )}
+      <BgCard
+        className='mystery-state-step0'
+        margin='auto'
+        variant='longMedium'
+      >
         <Flex alignItems='center' justifyContent='center'>
           <MysteryBoxStyled>
             <MysteryBoxBaseStyled quality={quality} />

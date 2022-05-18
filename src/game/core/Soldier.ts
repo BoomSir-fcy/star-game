@@ -79,6 +79,7 @@ class Soldier extends Combat {
       test,
       sid,
       zIndex = 0,
+      unitInfo,
     } = options;
 
     this.options = {
@@ -112,9 +113,10 @@ class Soldier extends Combat {
 
     this.container.addChild(this.displaySprite);
     this.shield = shield;
-    this.hp = hp;
-    this.activePh = activePh || hp;
-    if (hp) {
+
+    this.hp = hp || unitInfo?.hp;
+    this.activePh = activePh || this.hp;
+    if (this.hp) {
       this.renderPh();
     }
 

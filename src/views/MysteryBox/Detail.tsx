@@ -1,4 +1,8 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import 'intro.js/introjs.css';
+
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Card, Text, Flex, BgCard, Label, Button } from 'uikit';
@@ -14,6 +18,7 @@ import StarCom from 'components/StarCom';
 import { useStore } from 'state';
 import { useDispatch } from 'react-redux';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useGuide } from 'hooks/useGuide';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useTranslation } from 'contexts/Localization';
 import eventBus from 'utils/eventBus';
@@ -79,8 +84,51 @@ const MysteryBoxDetail = () => {
     };
   }, [onRefreshClick]);
 
+  const { guides, setGuide } = useGuide('mystery-index');
+
+  // 控制是否开启新手指导的
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [steps, setSteps] = useState([
+    {
+      element: '.mystery-detail-step0',
+      intro:
+        '太好了，恭喜获得第一个星球。这是星球的主宰种族，每个种族间有各自的特性。',
+    },
+    {
+      element: '.mystery-detail-step1',
+      intro: '这里是星球的属性信息，品质决定属性，格子数也决定了星球的建造数。',
+    },
+    {
+      element: '.mystery-detail-step2',
+      intro:
+        '星球的额外属性信息，对整个星球的经营与战斗都有密切关系，可通过培育提升。',
+    },
+    {
+      element: '.mystery-detail-step3',
+      intro: '接下来让我们开始经营星球吧~',
+    },
+  ]);
+
   return (
     <Layout>
+      {guides.finish && steps.length - 1 > guides.step && (
+        <Steps
+          enabled={stepsEnabled}
+          steps={steps}
+          initialStep={guides.step}
+          options={{
+            exitOnOverlayClick: false,
+            tooltipPosition: 'top',
+            scrollPadding: 0,
+          }}
+          onBeforeChange={event => {
+            console.log(event);
+          }}
+          onExit={() => {
+            setStepsEnabled(false);
+          }}
+        />
+      )}
       <Flex>
         <MysteryBox>
           <MysteryBoxBaseStyled quality={mysteryBoxQualities.ORDINARY} />
@@ -101,11 +149,12 @@ const MysteryBoxDetail = () => {
         <BgCard fringe variant='sFull'>
           <Flex padding='38px 53px' justifyContent='space-between'>
             <Attributes info={info}>
-              <Race info={info} />
+              <Race className='mystery-detail-step0' info={info} />
             </Attributes>
             <Extra info={info} ml='20px'>
               <Flex mt='30px' justifyContent='center'>
                 <Button
+                  className='mystery-detail-step3'
                   variant='transparent'
                   onClick={() => {
                     navigate('/star/planet');

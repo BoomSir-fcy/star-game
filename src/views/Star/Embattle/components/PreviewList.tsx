@@ -68,7 +68,11 @@ const PreviewList: React.FC<PreviewListProps> = ({
 
   return (
     <BgCard padding='0 28px' variant='long'>
-      <Flex style={{ overflow: 'auto' }} width='100%'>
+      <Flex
+        className='star-embattle-step1'
+        style={{ overflow: 'auto' }}
+        width='100%'
+      >
         {list.map(item => {
           return (
             <Box

@@ -42,6 +42,7 @@ class TipsText extends EventTarget {
   }
 
   animation() {
+    this.scale -= 0.01;
     this.alpha -= 0.05;
 
     if (this.alpha <= 0.1) {
@@ -54,8 +55,14 @@ class TipsText extends EventTarget {
       this.text.position.y -= 2;
       this.text.scale.set(this.scale);
     } else if (this.type === TipsTextType.CRIT) {
-      this.scale += 0.01;
-      this.text.position.y -= 2;
+      this.scale += 0.02;
+      this.text.alpha = this.alpha;
+      this.text.position.y -= 1;
+      this.text.scale.set(this.scale);
+    } else if (this.type === TipsTextType.RESTORE) {
+      this.scale -= 0.01;
+      this.text.alpha = this.alpha;
+      this.text.position.y -= 1;
       this.text.scale.set(this.scale);
     }
     requestAnimationFrame(() => {
@@ -69,8 +76,14 @@ class TipsText extends EventTarget {
     if (type === TipsTextType.CRIT) {
       return {
         fill,
-        fontSize: 22,
+        fontSize: 24,
         fontWeight: 'bold',
+      };
+    }
+    if (type === TipsTextType.RESTORE) {
+      return {
+        fill,
+        fontSize: 24,
       };
     }
     return {

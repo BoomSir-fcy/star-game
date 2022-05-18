@@ -54,6 +54,7 @@ export interface ReceiveChange {
   receive_sub_hp: number;
   now_hp: number;
   now_shield: number;
+  add_hp: number;
 }
 
 interface SlotBaseInfo {
@@ -353,6 +354,8 @@ export const bulletType = {
   ADD_BOMB: 'add_bomb', // 添加炸弹
   ADD_TERRAIN_FIRING: 'add_terrain_firing', // 添加地形灼烧
   TERRAIN_FIRING: 'terrain_firing', // 地形灼烧中
+  RESTORE: 'restore', // 治疗
+  PURIFY: 'purify', // 净化
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 
@@ -377,6 +380,7 @@ export enum EffectType {
   BOMB = 'bomb', // 炸弹
   SHIELD = 'shield', // 护盾
   VENOM = 'venom', // 毒液
+  RESTORE = 'restore', // 治疗
 }
 
 export interface EffectItemInfoOfConfig {
@@ -433,4 +437,5 @@ export enum SpeederType {
 export enum TipsTextType {
   NORMAL, // 普通
   CRIT, // 暴击
+  RESTORE, // 治疗
 }
