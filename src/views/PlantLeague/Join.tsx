@@ -103,8 +103,18 @@ const JoinTheAlliance = () => {
   }, [order]);
 
   return (
-    <Box position='relative' width='40%' padding='0 80px 0 70px'>
-      <Flex mb='-36px' alignItems='center' justifyContent='center'>
+    <Box
+      position='relative'
+      width='40%'
+      padding='0 80px 0 70px'
+      className='planet'
+    >
+      <Flex
+        mb='-36px'
+        alignItems='center'
+        justifyContent='center'
+        className='test-add'
+      >
         <StarAddBtn
           name={allianceList && allianceList[0]?.planet?.name}
           onRemove={() => Remove(allianceList[0]?.planetId)}
