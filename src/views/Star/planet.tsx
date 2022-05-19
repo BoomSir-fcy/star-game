@@ -113,7 +113,7 @@ const Planet = () => {
   const { guides, setGuide } = useGuide(location.pathname);
 
   // 控制是否开启新手指导的
-  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [stepsEnabled, setStepsEnabled] = useState(false);
   const [activeStep, setActiveStep] = React.useState(guides.step);
   const [steps, setSteps] = useState([
     {
@@ -136,6 +136,7 @@ const Planet = () => {
       element: '.planet_choose_button',
       intro: '点击添加星球。',
       interactive: true,
+      disabled: true,
     },
   ]);
 
@@ -244,9 +245,15 @@ const Planet = () => {
     init();
   }, [init]);
 
-  // React.useEffect(() => {
-  //   setGuide(0);
-  // }, [destroy, guides, setGuide]);
+  React.useEffect(() => {
+    setGuide(0);
+  }, [destroy, guides, setGuide]);
+
+  React.useEffect(() => {
+    if (choose) {
+      setStepsEnabled(true);
+    }
+  }, [choose]);
 
   // 添加事件监听，用于更新状态
   React.useEffect(() => {
@@ -348,37 +355,41 @@ const Planet = () => {
                   onEndCallback={e => setState({ ...state, token: e })}
                 />
               </Flex>
-              <ScrollBox className='planet_list'>
-                {(StarList ?? []).map((item, index) => (
-                  <React.Fragment key={`${item.id}_${item.name}`}>
-                    {choose ? (
-                      <Box
-                        onClick={() => {
-                          dispatch(setActivePlanet(item));
-                          addPlanetToList(item.id);
-                        }}
-                      >
-                        <PlanetBox
-                          choose
-                          ChooseList={ChooseList}
-                          info={item}
-                          className={`planet_choose_${index}`}
-                        />
-                      </Box>
-                    ) : (
-                      <LinkItem to={`/star?id=${item.id}`}>
+              {StarList.length > 0 && (
+                <ScrollBox className='planet_list'>
+                  {(StarList ?? []).map((item, index) => (
+                    <React.Fragment key={`${item.id}_${item.name}`}>
+                      {choose ? (
                         <Box
                           onClick={() => {
                             dispatch(setActivePlanet(item));
+                            addPlanetToList(item.id);
                           }}
                         >
-                          <PlanetBox info={item} />
+                          <PlanetBox
+                            choose
+                            ChooseList={ChooseList}
+                            info={item}
+                            className={`${
+                              guides.step <= 1 && `planet_choose_${index}`
+                            }`}
+                          />
                         </Box>
-                      </LinkItem>
-                    )}
-                  </React.Fragment>
-                ))}
-              </ScrollBox>
+                      ) : (
+                        <LinkItem to={`/star?id=${item.id}`}>
+                          <Box
+                            onClick={() => {
+                              dispatch(setActivePlanet(item));
+                            }}
+                          >
+                            <PlanetBox info={item} />
+                          </Box>
+                        </LinkItem>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </ScrollBox>
+              )}
               {choose && (
                 <Flex
                   justifyContent='center'
