@@ -38,7 +38,9 @@ const StarStyleImg = styled.img`
   width: 65%;
 `;
 
-const JoinTheAlliance = () => {
+const JoinTheAlliance: React.FC<{
+  callbackGuide: () => void;
+}> = ({ callbackGuide }) => {
   const { t } = useTranslation();
   const { account } = useActiveWeb3React();
   const { onConnectWallet } = useConnectWallet();
@@ -89,6 +91,7 @@ const JoinTheAlliance = () => {
       onConnectWallet();
       return;
     }
+    callbackGuide();
     navigate(`/star/planet?choose=${id || 1}`);
   };
 
@@ -107,13 +110,13 @@ const JoinTheAlliance = () => {
       position='relative'
       width='40%'
       padding='0 80px 0 70px'
-      className='planet'
+      className='planet planet-union'
     >
       <Flex
         mb='-36px'
         alignItems='center'
         justifyContent='center'
-        className='test-add'
+        className='join-union'
       >
         <StarAddBtn
           name={allianceList && allianceList[0]?.planet?.name}
