@@ -199,7 +199,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
                 <IconToken
                   width={60}
                   height={60}
-                  src={`/images/Token/${Token}.svg`}
+                  src={`/images/tokens/${Token}.svg`}
                   alt=''
                 />
                 <Text fontSize='38px' mr='16px'>

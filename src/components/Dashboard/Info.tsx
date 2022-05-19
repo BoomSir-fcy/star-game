@@ -63,6 +63,13 @@ const Info: React.FC<InfoProps> = ({
     return balance[0];
   }, [Balance]);
 
+  const BNBblance = useMemo(() => {
+    const balance = Balance.filter(item => {
+      return item.symbol === 'BNB';
+    });
+    return balance[0];
+  }, [Balance]);
+
   return (
     <Box width='100%'>
       <Flex height='179px' width='100%'>
@@ -114,7 +121,7 @@ const Info: React.FC<InfoProps> = ({
           </ButtonLeft>
           <ButtonLeft
             onClick={() => {
-              setActiveToken(BOXblance);
+              setActiveToken(BNBblance);
               setVisible(true);
             }}
             mt='18px'
@@ -122,17 +129,13 @@ const Info: React.FC<InfoProps> = ({
           >
             <Flex width='100%' alignItems='center'>
               <Flex flex={1}>
-                <TokenImage
-                  width={45}
-                  height={48}
-                  tokenAddress={getDsgAddress()}
-                />
+                <TokenImage width={45} height={48} tokenAddress='BNB' />
                 <Text fontSize='20px' mt='8px' ml='8px'>
-                  {BOXblance?.amount}
+                  {BNBblance?.amount}
                 </Text>
               </Flex>
               <Text mt='-2px' fontSize='20px'>
-                {BOXblance?.symbol}
+                {BNBblance?.symbol}
               </Text>
             </Flex>
           </ButtonLeft>

@@ -11,6 +11,7 @@ const getTokenLogoURLs = (address?: string): string[] => {
     return ['/images/tokens/DSG.svg'];
   if (getMatterAddress().toLowerCase() === address?.toLowerCase())
     return ['/images/tokens/MATTER.svg'];
+  if (address === 'BNB') return ['/images/tokens/BNB.svg'];
   return [
     `/images/tokens/${address}.svg`,
     `/images/tokens/${address}.png`,
