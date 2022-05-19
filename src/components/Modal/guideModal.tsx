@@ -20,9 +20,9 @@ export const GuideModal: React.FC<{
 
   return (
     <ModalWrapper title='温馨提示' visible={visible} setVisible={onClose}>
-      <Box padding='30px 25px'>
+      <Box padding='80px 25px'>
         <Text>下次登录是否继续上次的教程？ </Text>
-        <Flex justifyContent='space-between' mt='50px'>
+        <Flex justifyContent='space-between' mt='300px'>
           <Button onClick={onClose}>确定</Button>
           <Button onClick={closeGuide}>永久关闭</Button>
         </Flex>
