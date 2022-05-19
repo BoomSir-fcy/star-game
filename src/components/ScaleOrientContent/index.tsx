@@ -13,10 +13,11 @@ import { useLocation } from 'react-router-dom';
 import { setGlobalClient, setGlobalScale } from 'state/user/actions';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Box } from 'uikit';
-import { useStore } from 'state';
+import { storeAction, useStore } from 'state';
 import detectOrient from 'utils/detectOrient';
 
 import Dashboard from 'components/Dashboard';
+import { GuideModal } from 'components/Modal/guideModal';
 
 // .introjs-tooltip{
 //   transform-origin: ${({ rotate }) => (rotate ? 'center' : '0  0')};
@@ -80,15 +81,15 @@ const Content = styled(Box)<{ scale: number }>`
 
 const ScaleOrientContent: React.FC = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
 
   const { client } = useStore(p => p.user);
+  const guideState = useStore(p => p.guide);
 
   const [minHeight, setMinHeight] = useState(900);
   const [cHeight, setCHeight] = useState(900);
   const [scale, setScale] = useState(1);
-
-  const dispatch = useDispatch();
 
   const handleResize = useCallback(() => {
     const { clientHeight, clientWidth } = window.document.body;
@@ -149,6 +150,16 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       <Content id='scale-content' scale={scale}>
         <Dashboard />
         {children}
+
+        {/* 引导提示框 */}
+        {guideState.visible && (
+          <GuideModal
+            visible={guideState.visible}
+            onClose={() =>
+              dispatch(storeAction.toggleVisible({ visible: false }))
+            }
+          />
+        )}
       </Content>
       {/* <Box>
       </Box> */}

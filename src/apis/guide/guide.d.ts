@@ -3,6 +3,7 @@ declare namespace Api {
     interface guideParams {
       url: string;
       step?: number;
+      finish?: boolean;
     }
   }
 }
