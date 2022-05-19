@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { useStore } from 'state';
+import { useDispatch } from 'react-redux';
+import { useStore, storeAction } from 'state';
 import { Box } from 'uikit';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
@@ -13,6 +14,7 @@ import { DragCompoents } from './components/dragCompoents';
 const Details = () => {
   const parsedQs = useParsedQueryString();
   const location = useLocation();
+  const dispatch = useDispatch();
   const { guides, setGuide } = useGuide(location.pathname);
   const [state, setState] = React.useState([]);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
@@ -89,6 +91,10 @@ const Details = () => {
     }
   }, [planet, selfBuilding, updateGrid]);
 
+  React.useEffect(() => {
+    dispatch(storeAction.toggleVisible({ visible: false }));
+  }, [dispatch]);
+
   return (
     <Box>
       {guides.finish && steps.length - 1 > guides.step && (
@@ -102,10 +108,13 @@ const Details = () => {
           }}
           onChange={currentStep => {
             if (currentStep > guides.step) {
-              // setGuide(currentStep);
+              setGuide(currentStep);
             }
           }}
-          onExit={() => setStepsEnabled(false)}
+          onExit={() => {
+            setStepsEnabled(false);
+            dispatch(storeAction.toggleVisible({ visible: true }));
+          }}
         />
       )}
       <DragCompoents
