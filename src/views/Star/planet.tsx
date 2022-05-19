@@ -3,9 +3,9 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
 
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -28,6 +28,7 @@ import { setActivePlanet } from 'state/planet/actions';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useToast } from 'contexts/ToastsContext';
 import eventBus from 'utils/eventBus';
+import { useGuide } from 'hooks/useGuide';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 import { useJoinAlliance } from './hook';
 
@@ -54,13 +55,49 @@ const LoadingBox = styled(Box)`
   transform: translate(-50%, -50%);
 `;
 
+const GlobalStyle = createGlobalStyle<{
+  interactive?: boolean;
+  disabled?: boolean;
+}>`
+
+  ${({ disabled }) => {
+    return disabled
+      ? `
+    .introjs-nextbutton {
+      pointer-events: none !important;
+      color: #9e9e9e !important;
+      cursor: default !important;
+    }
+    `
+      : '';
+  }};
+
+
+  ${({ interactive }) => {
+    return interactive
+      ? `
+    *{
+      pointer-events: none;
+    }
+    .introjs-showElement, .introjs-showElement *, .introjs-tooltip, .introjs-tooltip *{
+      pointer-events: auto;
+    }
+    `
+      : '';
+  }};
+  
+`;
+
 const Planet = () => {
   const { t } = useTranslation();
   const { toastError, toastSuccess, toastWarning } = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
+
+  const guideRef = React.useRef(null);
   const [state, setState] = useState({
     page: 1,
     token: '',
@@ -73,29 +110,43 @@ const Planet = () => {
   const workingList = useStore(p => p.alliance.workingPlanet);
   const { SetWorking } = useJoinAlliance();
 
+  const { guides, setGuide } = useGuide(location.pathname);
+
   // 控制是否开启新手指导的
-  const [stepsEnabled, setStepsEnabled] = useState(false);
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [activeStep, setActiveStep] = React.useState(guides.step);
   const [steps, setSteps] = useState([
     {
-      element: '.planet_number',
-      intro: '星球数量',
+      element: '.planet_choose_0',
+      intro: '点击选择星球。',
+      interactive: true,
+    },
+    {
+      element: '.planet_choose_button',
+      intro: '点击添加星球。',
+      interactive: true,
+      disabled: true,
     },
     {
       element: '.planet_list',
-      intro:
-        'The simplicity of Intro.js API helps you develop an advanced onboarding tour for your products. Intro.js is lightweight, 10kB and has no external dependencies!',
+      intro: '点击星球列表。',
+      interactive: true,
     },
-  ]);
-  // 是否开启提示的
-  const [hintsEnabled, setHintsEnabled] = useState(true);
-  // 设置哪些需要提示
-  const [hints, setHints] = useState([
     {
-      element: '.planet_number',
-      hint: 'Hello hint',
-      hintPosition: 'middle-right',
+      element: '.planet_choose_button',
+      intro: '点击添加星球。',
+      interactive: true,
     },
   ]);
+
+  const destroy = React.useCallback(
+    (n: number) => {
+      if (!guides.guideFinish) {
+        setGuide(n);
+      }
+    },
+    [guides, setGuide],
+  );
 
   const ToSetWorking = useCallback(async () => {
     if (pending) {
@@ -111,6 +162,7 @@ const Planet = () => {
       }
       await SetWorking(ChooseList);
       toastSuccess(t('Join Succeeded'));
+      destroy(activeStep + 1);
       navigate('/plant-league');
     } catch (e) {
       console.error(e);
@@ -119,15 +171,16 @@ const Planet = () => {
       setpending(false);
     }
   }, [
-    t,
-    SetWorking,
-    toastSuccess,
-    toastError,
-    navigate,
-    setpending,
+    pending,
     ChooseList,
     workingList,
-    pending,
+    SetWorking,
+    toastSuccess,
+    t,
+    destroy,
+    activeStep,
+    navigate,
+    toastError,
   ]);
 
   const addPlanetToList = useCallback(
@@ -187,39 +240,13 @@ const Planet = () => {
     }
   }, [choose, dispatch]);
 
-  // 将步骤关掉
-  const onExit = () => {
-    setStepsEnabled(false);
-  };
-  // 设置是否开始引导
-  const toggleSteps = () => {
-    setStepsEnabled(!stepsEnabled);
-  };
-  // 增加引导部署
-  const addStep = () => {
-    const newStep = {
-      element: '.test-add', // 这里应该是动态的哈
-      intro: 'Test step', // 这里应该是动态的哈
-    };
-    setSteps([...steps, newStep]);
-  };
-  // 控制是否提示
-  const toggleHints = () => {
-    setHintsEnabled(!hintsEnabled);
-  };
-  // 增加提示
-  const addHint = () => {
-    const newHint = {
-      element: '.test', // 这里应该是动态的哈
-      hint: 'Test hint', // 这里应该是动态的哈
-      hintPosition: 'middle-right', // 这里应该是动态的哈
-    };
-    setHints([...hints, newHint]);
-  };
-
   const onRefreshClick = React.useCallback(() => {
     init();
   }, [init]);
+
+  // React.useEffect(() => {
+  //   setGuide(0);
+  // }, [destroy, guides, setGuide]);
 
   // 添加事件监听，用于更新状态
   React.useEffect(() => {
@@ -231,17 +258,31 @@ const Planet = () => {
 
   return (
     <Box id='containerBox'>
-      <Steps
-        enabled={stepsEnabled}
-        steps={steps}
-        initialStep={0}
-        options={{
-          exitOnOverlayClick: false,
-          tooltipPosition: 'top',
-        }}
-        onExit={() => console.log('退出')}
+      <GlobalStyle
+        interactive={steps[activeStep]?.interactive && stepsEnabled}
+        disabled={steps[activeStep]?.disabled}
       />
-      <Hints enabled={hintsEnabled} hints={hints} />
+      {guides.finish && steps.length - 1 > guides.step && StarList.length > 0 && (
+        <Steps
+          ref={guideRef}
+          enabled={stepsEnabled}
+          steps={steps}
+          initialStep={guides.step}
+          options={{
+            exitOnOverlayClick: false,
+          }}
+          onBeforeChange={event => {
+            setActiveStep(event);
+          }}
+          onChange={currentStep => {
+            if (currentStep > guides.step) {
+              console.log('更新');
+              setGuide(currentStep);
+            }
+          }}
+          onExit={() => setStepsEnabled(false)}
+        />
+      )}
       <Layout>
         <Flex width='100%' position='relative'>
           <Box>
@@ -252,7 +293,6 @@ const Planet = () => {
               </Flex>
             )}
             <Nav
-              className='planet_number'
               activeId={Number(parsedQs.t)}
               nav={[
                 {
@@ -309,7 +349,7 @@ const Planet = () => {
                 />
               </Flex>
               <ScrollBox className='planet_list'>
-                {(StarList ?? []).map(item => (
+                {(StarList ?? []).map((item, index) => (
                   <React.Fragment key={`${item.id}_${item.name}`}>
                     {choose ? (
                       <Box
@@ -318,7 +358,12 @@ const Planet = () => {
                           addPlanetToList(item.id);
                         }}
                       >
-                        <PlanetBox choose ChooseList={ChooseList} info={item} />
+                        <PlanetBox
+                          choose
+                          ChooseList={ChooseList}
+                          info={item}
+                          className={`planet_choose_${index}`}
+                        />
                       </Box>
                     ) : (
                       <LinkItem to={`/star?id=${item.id}`}>
@@ -335,7 +380,11 @@ const Planet = () => {
                 ))}
               </ScrollBox>
               {choose && (
-                <Flex justifyContent='center' paddingTop='20px'>
+                <Flex
+                  justifyContent='center'
+                  paddingTop='20px'
+                  className='planet_choose_button'
+                >
                   <Button variant='vs' onClick={() => ToSetWorking()}>
                     {t('Join in')}
                   </Button>

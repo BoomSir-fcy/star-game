@@ -322,6 +322,7 @@ const ResetCSS = createGlobalStyle`
     z-index: 9999998;
     border: 3px solid #FFFFFF;
     border-radius: 10px !important;
+    pointer-events: none;
   }
 
   .introjs-tooltip .introjs-tooltipbuttons {

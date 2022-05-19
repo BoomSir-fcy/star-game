@@ -181,7 +181,8 @@ const effectConfig: EffectConfig = {
     },
     {
       name: bulletType.PURIFY,
-      bombSpineSrc: '',
+      bombSpineSrc: '/assets/bullet/purify/jinghua.json',
+      bombSpine: bulletType.PURIFY,
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/purify/purify.png',
@@ -409,5 +410,9 @@ export const spines = [
   {
     name: bulletType.SHIELD,
     src: '/assets/bullet/shield/hudun.json',
+  },
+  {
+    name: bulletType.PURIFY,
+    src: '/assets/bullet/purify/jinghua.json',
   },
 ];
