@@ -24,9 +24,9 @@ export const useGuide = (url: string) => {
   }, [url]);
 
   const setGuide = React.useCallback(
-    async (step: number) => {
+    async (step: number, finish?: boolean) => {
       try {
-        const res = await Api.GuideApi.setGuide({ url, step });
+        const res = await Api.GuideApi.setGuide({ url, step, finish });
         return res;
       } catch (error: any) {
         throw new Error(error);

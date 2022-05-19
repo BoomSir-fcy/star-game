@@ -4,6 +4,7 @@ import { Box, Flex, Text } from 'uikit';
 import Layout from 'components/Layout';
 import { useFetchAllianceView } from 'state/alliance/hooks';
 import { useDispatch } from 'react-redux';
+import { storeAction, useStore } from 'state';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import eventBus from 'utils/eventBus';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
@@ -135,7 +136,11 @@ const PlantLeague = () => {
               setGuide(currentStep);
             }
           }}
-          onExit={() => setStepsEnabled(false)}
+          onExit={step => {
+            console.log('qiehuanye', step);
+            setStepsEnabled(false);
+            // dispatch(storeAction.toggleVisible({ visible: true }));
+          }}
         />
       )}
       <Flex justifyContent='space-between' padding='0 30px'>
