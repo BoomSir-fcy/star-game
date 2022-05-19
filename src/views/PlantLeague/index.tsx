@@ -8,6 +8,7 @@ import { storeAction, useStore } from 'state';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import eventBus from 'utils/eventBus';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import { useTranslation } from 'contexts/Localization';
 import { useGuide } from 'hooks/useGuide';
 import { useLocation } from 'react-router-dom';
 import JoinTheAlliance from './Join';
@@ -52,43 +53,55 @@ const PlantLeague = () => {
   const location = useLocation();
   const guideRef = React.useRef(null);
 
+  const { t } = useTranslation();
+
   const { guides, setGuide } = useGuide(location.pathname);
 
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(guides.step);
-  const [steps, setSteps] = React.useState([
-    {
-      element: '.planet',
-      intro: '星际探索需要3~5个星球组成才可进行，星际探索可以发掘更多资源。',
-    },
-    {
-      element: '.planet_info',
-      intro: '这里展示为星球联盟的资源和战力，以及包含的可用资产等。',
-    },
-    {
-      element: '.join-union',
-      intro: '点击选择一个星球，加入联盟',
-      interactive: true,
-      disabled: true,
-    },
-    {
-      element: '.planet-union',
-      intro:
-        '至少还需要2个星球才可以进行探索，请添加其他星球，添加越多掠夺资源成功率越大',
-      interactive: true,
-      disabled: true,
-    },
-    {
-      element: '.start_exploring',
-      intro: '指挥官您已准备就绪，现在开始星际探索。',
-      interactive: true,
-    },
-    {
-      element: '.battle_report',
-      intro: '指挥官! 联盟最新的战斗情况已生成，点击查看。',
-      interactive: true,
-    },
-  ]);
+  const steps = React.useMemo(
+    () => [
+      {
+        element: '.planet',
+        intro: t(
+          'Interstellar exploration needs to be composed of 3 ~ 5 planets, and interstellar exploration can explore more resources.',
+        ),
+      },
+      {
+        element: '.planet_info',
+        intro: t(
+          'Here are the resources and combat power of the Star Alliance, as well as the available assets contained.',
+        ),
+      },
+      {
+        element: '.join-union',
+        intro: t('Click to select a planet and join the alliance.'),
+        interactive: true,
+        disabled: true,
+      },
+      {
+        element: '.planet-union',
+        intro: t(
+          'You need at least 2 more planets to explore. Please add other planets. The more you add, the greater the success rate of plundering resources.',
+        ),
+        interactive: true,
+        disabled: true,
+      },
+      {
+        element: '.start_exploring',
+        intro: t('Commander, you are ready for interstellar exploration.'),
+        interactive: true,
+      },
+      {
+        element: '.battle_report',
+        intro: t(
+          'Commander! The latest battle situation of the alliance has been generated. Click to view it.',
+        ),
+        interactive: true,
+      },
+    ],
+    [t],
+  );
 
   const onRefreshClick = React.useCallback(() => {
     dispatch(fetchAllianceViewAsync());

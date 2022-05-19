@@ -22,7 +22,8 @@ import {
 } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
 import useGame from 'game/hooks/useGame';
-import { useStore } from 'state';
+import { useStore, storeAction } from 'state';
+import { useDispatch } from 'react-redux';
 import Game from 'game/core/Game';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import PreviewList from './components/PreviewList';
@@ -76,6 +77,8 @@ const ArrowBox = styled(Box)`
 const Embattle = () => {
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.id);
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -207,8 +210,11 @@ const Embattle = () => {
               setArrowShow(true);
             }
           }}
-          onExit={() => {
+          onExit={index => {
             setStepsEnabled(false);
+            if (index < steps.length) {
+              dispatch(storeAction.toggleVisible({ visible: true }));
+            }
           }}
         />
       )}

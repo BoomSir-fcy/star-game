@@ -91,17 +91,9 @@ const MysteryBox = () => {
           }}
           onExit={index => {
             setStepsEnabled(false);
-            console.log('退出', index);
             if (index < steps.length) {
               dispatch(storeAction.toggleVisible({ visible: true }));
             }
-          }}
-          onComplete={() => {
-            console.log('完成');
-          }}
-          onBeforeExit={() => {
-            console.log('退出之前');
-            setStepsEnabled(true);
           }}
         />
       )}
