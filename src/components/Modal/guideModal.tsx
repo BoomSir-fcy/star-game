@@ -3,6 +3,7 @@ import { Flex, Box, Text, Button } from 'uikit';
 import { useGuide } from 'hooks/useGuide';
 
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'contexts/Localization';
 import ModalWrapper from '.';
 
 export const GuideModal: React.FC<{
@@ -10,21 +11,25 @@ export const GuideModal: React.FC<{
   onClose: () => void;
 }> = ({ visible, onClose }) => {
   const location = useLocation();
+  const { t } = useTranslation();
   const { setGuide } = useGuide(location.pathname);
-  console.log(location.pathname);
 
   const closeGuide = async () => {
-    await setGuide(-1, false);
+    await setGuide(-1, true);
     onClose();
   };
 
   return (
-    <ModalWrapper title='温馨提示' visible={visible} setVisible={onClose}>
+    <ModalWrapper
+      title={t('GuideModalTips')}
+      visible={visible}
+      setVisible={onClose}
+    >
       <Box padding='80px 25px'>
-        <Text>下次登录是否继续上次的教程？ </Text>
+        <Text>{t('GuideModalText')}</Text>
         <Flex justifyContent='space-between' mt='300px'>
-          <Button onClick={onClose}>确定</Button>
-          <Button onClick={closeGuide}>永久关闭</Button>
+          <Button onClick={onClose}>{t('GuideModalButtonConfirn')}</Button>
+          <Button onClick={closeGuide}>{t('GuideModalButtonClose')}</Button>
         </Flex>
       </Box>
     </ModalWrapper>

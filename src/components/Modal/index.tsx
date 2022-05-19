@@ -56,7 +56,7 @@ const getCustomStyles = (themes: DefaultTheme) => ({
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    transform: 'translate(-50%, -50%)',
+    transform: 'translate(-50%, -50%) translateZ(1px)',
     minWidth: '320px',
     border: 0,
     zIndex: 200,

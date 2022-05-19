@@ -4,7 +4,7 @@ import { Box, Flex, Text } from 'uikit';
 import Layout from 'components/Layout';
 import { useFetchAllianceView } from 'state/alliance/hooks';
 import { useDispatch } from 'react-redux';
-import { storeAction, useStore } from 'state';
+import { storeAction } from 'state';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import eventBus from 'utils/eventBus';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
@@ -119,7 +119,14 @@ const PlantLeague = () => {
     if (!guides.guideFinish) {
       setGuide(activeStep + 1);
     }
-  }, [activeStep, guides.guideFinish, setGuide]);
+    setTimeout(() => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    }, 100);
+  }, [activeStep, dispatch, guides.guideFinish, setGuide]);
+
+  React.useEffect(() => {
+    dispatch(storeAction.toggleVisible({ visible: false }));
+  }, [dispatch]);
 
   // React.useEffect(() => {
   //   setGuide(0);
@@ -131,7 +138,7 @@ const PlantLeague = () => {
         interactive={steps[activeStep]?.interactive && stepsEnabled}
         disabled={steps[activeStep]?.disabled}
       />
-      {guides.finish && steps.length - 1 > guides.step && (
+      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
@@ -145,14 +152,15 @@ const PlantLeague = () => {
           }}
           onAfterChange={event => {}}
           onChange={currentStep => {
+            if (currentStep === 3) return;
             if (currentStep > guides.step) {
               setGuide(currentStep);
             }
           }}
           onExit={step => {
-            console.log('qiehuanye', step);
+            console.log(step, '中途离开页面', guides.step, activeStep);
             setStepsEnabled(false);
-            // dispatch(storeAction.toggleVisible({ visible: true }));
+            dispatch(storeAction.toggleVisible({ visible: true }));
           }}
         />
       )}

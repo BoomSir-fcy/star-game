@@ -47,7 +47,7 @@ const StarGameBoxMove = styled(StarGameBox)<{ move?: boolean }>`
 
 const EnterBoxMove = styled(Box)<{ move?: boolean }>`
   transition: 0.3s;
-  transform: translateY(${({ move }) => (move ? '200px' : '0')});
+  transform: translateY(${({ move }) => (move ? '200px' : '0')}) translateZ(1px);
 `;
 
 const CreateBoxShow = styled(Box)<{ show?: boolean }>`
