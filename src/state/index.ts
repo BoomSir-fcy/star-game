@@ -9,9 +9,11 @@ import planetReducer from './planet/reducer';
 import allianceReducer from './alliance/reducer';
 import buildlingReducer from './buildling/reducer';
 import gameReducer from './game/reducer';
+import guideReducer from './guide/reducer';
 import { updateVersion } from './global/actions';
 
 import buildingAction from './buildling/action';
+import guideAction from './guide/actions';
 
 export { useStore } from './util';
 
@@ -28,6 +30,7 @@ const store = configureStore({
     alliance: allianceReducer,
     buildling: buildlingReducer,
     game: gameReducer,
+    guide: guideReducer,
   },
   middleware: getDefaultMiddleware => [
     ...getDefaultMiddleware({ thunk: true }),
@@ -47,6 +50,7 @@ export const useAppDispatch = () => useDispatch();
 
 export const storeAction = {
   ...buildingAction,
+  ...guideAction,
 };
 
 export default store;

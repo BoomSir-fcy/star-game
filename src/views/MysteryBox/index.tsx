@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
@@ -10,28 +10,72 @@ import Dashboard from 'components/Dashboard';
 import { MysteryBoxCom, mysteryBoxQualities } from 'components/MysteryBoxCom';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
 import { useGuide } from 'hooks/useGuide';
+import { createGlobalStyle } from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { storeAction } from 'state';
+import { useTranslation } from 'contexts/Localization';
+
+const GlobalStyle = createGlobalStyle<{ interactive?: boolean }>`
+  ${({ interactive }) => {
+    return interactive
+      ? `
+    *{
+      pointer-events: none;
+    }
+    .introjs-showElement, .introjs-showElement *, .introjs-tooltip, .introjs-tooltip *{
+      pointer-events: auto;
+    }
+    `
+      : '';
+  }};
+  
+`;
 
 const MysteryBox = () => {
   useFetchBoxView();
 
   const { guides, setGuide } = useGuide('mystery-index');
+  const dispatch = useDispatch();
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
-  const [steps, setSteps] = useState([
-    {
-      element: '.mystery-index-step0',
-      intro:
-        '指挥官!开启星球之旅，需要拥有自己的星球。下面盒子可以开出不同品质星球，星球品质决定着综合实力。!',
-    },
-    {
-      element: '.mystery-index-step1',
-      intro: '让我们开启第一个星球吧',
-    },
-  ]);
+  const [activeStep, setActiveStep] = useState(guides.step);
+  // const [steps, setSteps] = useState([
+  //   {
+  //     element: '.mystery-index-step0',
+  //     intro:
+  //       'Commander! To start a journey to the planet, you need to have your own planet. The following box can open planets of different quality, and the quality of the planet determines the comprehensive strength.',
+  //   },
+  //   {
+  //     element: '.mystery-index-step1',
+  //     intro: '让我们开启第一个星球吧',
+  //     interactive: true,
+  //   },
+  // ]);
+
+  const { t } = useTranslation();
+
+  const steps = useMemo(() => {
+    return [
+      {
+        element: '.mystery-index-step0',
+        intro: t(
+          'Commander! To start a journey to the planet, you need to have your own planet. The following box can open planets of different quality, and the quality of the planet determines the comprehensive strength.',
+        ),
+      },
+      {
+        element: '.mystery-index-step1',
+        intro: t("Let's open the first planet"),
+        interactive: true,
+      },
+    ];
+  }, [t]);
 
   return (
     <Layout>
+      <GlobalStyle
+        interactive={steps[activeStep]?.interactive && stepsEnabled}
+      />
       {guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
@@ -43,10 +87,21 @@ const MysteryBox = () => {
             scrollPadding: 0,
           }}
           onBeforeChange={event => {
-            console.log(event);
+            setActiveStep(event);
           }}
-          onExit={() => {
+          onExit={index => {
             setStepsEnabled(false);
+            console.log('退出', index);
+            if (index < steps.length) {
+              dispatch(storeAction.toggleVisible({ visible: true }));
+            }
+          }}
+          onComplete={() => {
+            console.log('完成');
+          }}
+          onBeforeExit={() => {
+            console.log('退出之前');
+            setStepsEnabled(true);
           }}
         />
       )}

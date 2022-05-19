@@ -248,6 +248,7 @@ export interface State {
   planet: PlanetState;
   buildling: BuildlingState;
   game: GameState;
+  guide: GuideState;
 }
 
 export interface planetInfo {
@@ -330,4 +331,8 @@ export enum PlanetStatus {
   Enhancement = 2,
   BuildingUpgrades = 3,
   BuildingsDurability = 4,
+}
+
+export interface GuideState {
+  visible: boolean;
 }
