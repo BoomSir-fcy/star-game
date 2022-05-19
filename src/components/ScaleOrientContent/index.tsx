@@ -25,7 +25,11 @@ import Dashboard from 'components/Dashboard';
 
 // }
 const ResetCSS = createGlobalStyle<{ scale: number; rotate: boolean }>`
-  
+.introjs-tooltip{
+  transform-origin: ${({ rotate }) => (rotate ? 'center' : '0  0')};
+  transform: ${({ scale, rotate }) => `${rotate ? 'rotate(90deg)' : ''} `};
+
+}
   
 `;
 // const ResetCSS = createGlobalStyle<{ scale: number; rotate: boolean }>`
