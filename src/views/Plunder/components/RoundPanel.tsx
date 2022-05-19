@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Box, BoxProps, Text, Flex, Button } from 'uikit';
+import Modal from 'components/Modal';
 
 const BoxStyled = styled(Box)`
   width: 281px;
@@ -26,9 +27,16 @@ const ButtonStyled = styled(Button).attrs({ variant: 'vs' })`
 
 interface RoundPanelProps extends BoxProps {
   roundName?: string;
+  isEnemy?: boolean;
 }
 
-const RoundPanel: React.FC<RoundPanelProps> = ({ roundName, ...props }) => {
+const RoundPanel: React.FC<RoundPanelProps> = ({
+  roundName,
+  isEnemy,
+  ...props
+}) => {
+  const [visible, setVisible] = useState(false);
+
   return (
     <BoxStyled {...props}>
       <FlexStyled>
@@ -36,14 +44,18 @@ const RoundPanel: React.FC<RoundPanelProps> = ({ roundName, ...props }) => {
           {roundName || '--'}
         </Text>
         <Text shadow='primary' fontSize='22px' bold>
-          我方行动
+          {isEnemy ? 'Enemy actions' : 'Our actions'}
         </Text>
         <ButtonStyled mt='26px'>
           <Text shadow='primary' small bold>
-            结束回合
+            跳过
           </Text>
         </ButtonStyled>
       </FlexStyled>
+      <Modal title='温馨提示' visible={visible} setVisible={setVisible}>
+        <Text>是否跳过本轮战斗?</Text>
+        <Text>(跳过不会影响本次战斗结果)</Text>
+      </Modal>
     </BoxStyled>
   );
 };

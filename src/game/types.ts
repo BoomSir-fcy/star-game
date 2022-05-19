@@ -298,12 +298,12 @@ export const descType = {
   INIT: 1, // 初始化棋子
   MOVE: 2, // 棋子移动
   ATTACK: 3, // 棋子攻击
-  STOP_MOVE: 4, // 禁锢
-  ICE_START: 5, // 冰冻开始
-  ICE_END: 6, // 冰冻结束
-  ADD_FIRING: 7, // 添加灼烧
-  FIRING: 8, // 正在灼烧
-  ADD_BOOM: 9, // 添加炸弹
+  STOP_MOVE: 4, // 禁锢 红色方把蓝色方禁锢
+  ICE_START: 5, // 冰冻开始  红色方发起攻击, 蓝色方被冰冻
+  ICE_END: 6, // 冰冻结束 红色方冰冻效果解除
+  ADD_FIRING: 7, // 添加灼烧 红色方向蓝色方添加灼烧效果
+  FIRING: 8, // 正在灼烧 红色方被造成灼烧伤害
+  ADD_BOOM: 9, // 添加炸弹 // 红色方向蓝色方
   BOOM: 10, // 炸弹爆炸
   REMOVE: 11, // 移除棋子
   BEAT: 12, // 击退

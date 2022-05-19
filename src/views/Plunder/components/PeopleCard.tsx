@@ -1,3 +1,4 @@
+import { useTranslation } from 'contexts/Localization';
 import React from 'react';
 import styled from 'styled-components';
 import { Box, BoxProps, Text, Image, Flex } from 'uikit';
@@ -67,6 +68,7 @@ const PeopleCard: React.FC<PeopleCardProps> = ({
   hp,
   ...props
 }) => {
+  const { t } = useTranslation();
   return (
     <BoxStyled {...props}>
       <CardStyled>
@@ -76,7 +78,7 @@ const PeopleCard: React.FC<PeopleCardProps> = ({
         </Text>
         <PlunderAvatar src={avatar} />
         <TipText mt='6px' textAlign='center'>
-          战斗力
+          {t('Combat Power')}
         </TipText>
         <Flex mt='-5px' justifyContent='center' alignItems='center'>
           <Image src='/images/plunder/fc.png' width={18} height={18} />
@@ -99,7 +101,7 @@ const PeopleCard: React.FC<PeopleCardProps> = ({
               height={30}
             />
             <Flex ml='2px' flexDirection='column'>
-              <TipText mb='-5px'>防御</TipText>
+              <TipText mb='-5px'>{t('Defense')}</TipText>
               <ForceText>{df ?? '--'}</ForceText>
             </Flex>
           </Flex>
@@ -110,7 +112,7 @@ const PeopleCard: React.FC<PeopleCardProps> = ({
               height={30}
             />
             <Flex ml='2px' flexDirection='column'>
-              <TipText mb='-5px'>攻击</TipText>
+              <TipText mb='-5px'>{t('Attack')}</TipText>
               <ForceText>{ak ?? '--'}</ForceText>
             </Flex>
           </Flex>
@@ -120,11 +122,11 @@ const PeopleCard: React.FC<PeopleCardProps> = ({
           margin='8px auto 0 auto'
           justifyContent='space-between'
         >
-          <TipText>星球联盟数：</TipText>
+          <TipText>{t('Planet Alliance')}: </TipText>
           <TipText>{planet_count ?? '--'}</TipText>
         </Flex>
         <Flex width='108px' margin='0 auto' justifyContent='space-between'>
-          <TipText>总建筑物：</TipText>
+          <TipText>{t('Total Building')}: </TipText>
           <TipText>{build_count ?? '--'}</TipText>
         </Flex>
       </CardStyled>

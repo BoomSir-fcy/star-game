@@ -301,7 +301,11 @@ const Pk = () => {
               current={totalInfo?.blue_total_hp ?? 0}
               result={result}
             />
-            <RoundPanel mt='-45px' roundName={roundInfo?.id} />
+            <RoundPanel
+              mt='-45px'
+              roundName={roundInfo?.id}
+              isEnemy={roundInfo?.descInfo?.sender?.isEnemy}
+            />
             <PKProgress
               opponent
               result={result}

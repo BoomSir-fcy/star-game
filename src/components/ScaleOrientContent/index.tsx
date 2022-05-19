@@ -13,6 +13,7 @@ import { useLocation } from 'react-router-dom';
 import { setGlobalClient, setGlobalScale } from 'state/user/actions';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Box } from 'uikit';
+import agentClient from 'utils/client';
 import { storeAction, useStore } from 'state';
 import detectOrient from 'utils/detectOrient';
 
@@ -62,6 +63,21 @@ const ResetCSS = createGlobalStyle<{ scale: number; rotate: boolean }>`
 
 // `;
 
+window.addEventListener(
+  'click',
+  () => {
+    // document.documentElement.requestFullscreen();
+    try {
+      if (agentClient.android) {
+        document.documentElement.requestFullscreen();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  { once: true },
+);
+
 const Content = styled(Box)<{ scale: number }>`
   width: 1920px;
   height: 900px;
@@ -91,46 +107,85 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   const [cHeight, setCHeight] = useState(900);
   const [scale, setScale] = useState(1);
 
-  const handleResize = useCallback(() => {
-    const { clientHeight, clientWidth } = window.document.body;
+  const handleResize = useCallback(
+    (mode?: boolean | Event) => {
+      const { clientHeight, clientWidth } = window.document.body;
 
-    const maxV = Math.max(clientWidth, clientHeight);
-    const minV = Math.min(clientWidth, clientHeight);
+      const maxV = Math.max(clientWidth, clientHeight);
+      const minV = Math.min(clientWidth, clientHeight);
 
-    console.log(maxV);
-    console.log(minV);
-    const rateMax = maxV / APP_WIDTH;
-    const rateMin = minV / APP_HEIGHT;
+      const rateMax = maxV / APP_WIDTH;
+      const rateMin = minV / APP_HEIGHT;
 
-    // 处理高度不够显示不全bug
-    const rate = Math.min(rateMax, rateMin);
+      // 处理高度不够显示不全bug
+      const rate = Math.min(rateMax, rateMin);
 
-    console.log(rateMax, rateMin);
+      console.log(rateMax, rateMin);
 
-    // dispatch(setScale)
-    setScale(rate);
-    setMinHeight(Math.min(clientWidth, clientHeight));
-    setCHeight(clientHeight);
+      // dispatch(setScale)
+      setScale(rate);
+      setMinHeight(Math.min(clientWidth, clientHeight));
+      setCHeight(clientHeight);
 
-    dispatch(
-      setGlobalClient({
-        width: clientWidth,
-        height: clientHeight,
-      }),
-    );
-    dispatch(setGlobalScale(rate));
-    if (ref.current) {
-      detectOrient(ref.current, false);
-    }
-  }, [ref, dispatch]);
+      dispatch(
+        setGlobalClient({
+          width: clientWidth,
+          height: clientHeight,
+        }),
+      );
+      dispatch(setGlobalScale(rate));
+      if (ref.current) {
+        console.log(
+          typeof mode === 'boolean' ? mode : false,
+          "typeof mode === 'boolean' ? mode : false",
+        );
+        detectOrient(ref.current, typeof mode === 'boolean' ? mode : false);
+      }
+    },
+    [ref, dispatch],
+  );
+
+  const onFocusin = useCallback(
+    (event: FocusEvent) => {
+      console.log(event.target, 'focusin');
+      if ((event?.target as HTMLElement)?.nodeName === 'INPUT') {
+        handleResize(true);
+      }
+    },
+    [handleResize],
+  );
+
+  const onFocusout = useCallback(
+    (event: FocusEvent) => {
+      if ((event?.target as HTMLElement)?.nodeName === 'INPUT') {
+        handleResize(false);
+      }
+    },
+    [handleResize],
+  );
 
   useEffect(() => {
     handleResize();
-    window.addEventListener('resize', handleResize);
+
+    if (agentClient.ios) {
+      // 软键盘弹出的事件处理
+      document.body.addEventListener('focusin', onFocusin);
+      // 软键盘收起的事件处理
+      document.body.addEventListener('focusout', onFocusout);
+    } else {
+      window.addEventListener('resize', handleResize);
+    }
     return () => {
-      window.removeEventListener('resize', handleResize);
+      if (agentClient.ios) {
+        // 软键盘弹出的事件处理
+        document.body.removeEventListener('focusin', onFocusin);
+        // 软键盘收起的事件处理
+        document.body.removeEventListener('focusout', onFocusout);
+      } else {
+        window.removeEventListener('resize', handleResize);
+      }
     };
-  }, [handleResize]);
+  }, [handleResize, onFocusout, onFocusin]);
 
   const bgType = useMemo(() => {
     if (pathname === '/plant-league') return 2;
