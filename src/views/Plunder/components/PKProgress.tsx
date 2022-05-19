@@ -114,7 +114,7 @@ const PKProgress: React.FC<PKProgressProps> = ({
         shadow={opponent ? 'secondary' : 'primary'}
         fontSize='24px'
       >
-        {opponent ? t('红色方') : t('蓝色方')}
+        {opponent ? t('Red Side') : t('Blue Side')}
       </Text>
       <FlexStyled rotate={opponent}>
         <ProgressBox step={`${progress}%`} />

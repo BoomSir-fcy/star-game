@@ -1,3 +1,4 @@
+import { useTranslation } from 'contexts/Localization';
 import { DescInfo, TrackDetail } from 'game/core/Running';
 import { getEffectDescText, getEffectDescTypeText } from 'game/core/utils';
 import { descType, DescType, RoundDescAxis } from 'game/types';
@@ -46,10 +47,12 @@ const PanelTextHp: React.FC = ({ children }) => {
 };
 
 const PanelSide = ({ isEnemy }: { isEnemy?: boolean }) => {
+  const { t } = useTranslation();
+
   if (isEnemy) {
-    return <PanelText color='redSide'>红色方&nbsp;</PanelText>;
+    return <PanelText color='redSide'>{t('Red Side')}&nbsp;</PanelText>;
   }
-  return <PanelText color='blueSide'>蓝色方&nbsp;</PanelText>;
+  return <PanelText color='blueSide'>{t('Blue Side')}&nbsp;</PanelText>;
 };
 
 const PanelAxis = ({ axis }: { axis?: RoundDescAxis }) => {
@@ -118,20 +121,8 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
     return (
       <PanelText>
         <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-        <PanelAxis axis={detail.descInfo?.sender?.pos} />向
-        {detail.descInfo?.receives.map((item, index) => {
-          return (
-            <>
-              <PanelSide isEnemy={item.isEnemy} />
-              <PanelAxis axis={item.pos} />
-              建筑
-              {getEffectDescText(detail.descInfo?.type)}
-              {getEffectDescTypeText(detail.descInfo?.type)}
-              ,当前护盾值为{item.now_shield}
-              {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
-            </>
-          );
-        })}
+        <PanelAxis axis={detail.descInfo?.sender?.pos} />
+        向队友添加护盾
       </PanelText>
     );
   }
@@ -139,21 +130,9 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
     return (
       <PanelText>
         <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-        发起进攻，
-        {detail.descInfo?.receives.map((item, index) => {
-          return (
-            <>
-              <PanelSide isEnemy={item.isEnemy} />
-              <PanelAxis axis={item.pos} />
-              建筑
-              <PanelText color='missTxt'>
-                {getEffectDescText(detail.descInfo?.type)}
-                {getEffectDescTypeText(detail.descInfo?.type)}
-              </PanelText>
-              {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
-            </>
-          );
-        })}
+        发起进攻,
+        <PanelSide isEnemy={detail.descInfo?.receives?.[0]?.isEnemy} />
+        位移闪避
       </PanelText>
     );
   }
@@ -162,7 +141,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
     detail?.type === descType.ADD_BOOM ||
     detail?.type === descType.ADD_FIRING ||
     detail?.type === descType.ADD_TERRAIN_FIRING ||
-    descType.ICE_START
+    detail?.type === descType.ICE_START
   ) {
     return (
       <PanelText>
@@ -263,6 +242,8 @@ const PlunderPanel: React.FC<PlunderPanelProps> = ({
   others,
   ...props
 }) => {
+  const { t } = useTranslation();
+
   const msgBox = useRef<HTMLDivElement>(null);
 
   const [needScroll, setNeedScroll] = useState(true);
@@ -296,7 +277,7 @@ const PlunderPanel: React.FC<PlunderPanelProps> = ({
       <Fringe mt='-19px' zIndex={1} />
       <BorderCard mt='31px' padding='0 10px 10px 10px'>
         <Text textAlign='center' shadow='primary' fontSize='24px' bold>
-          掠夺信息面板
+          {t('Plunder information panel')}
         </Text>
         <Box
           onScroll={scrollHandle}
@@ -314,26 +295,8 @@ const PlunderPanel: React.FC<PlunderPanelProps> = ({
                     </PanelText>
 
                     <PanelType detail={item} />
-                    {/* <PanelText color='blueSide'>蓝色方&nbsp;</PanelText> */}
-                    {/* <PanelText>发起进攻，对&nbsp;</PanelText>
-                      <PanelText color='redSide'>红色方&nbsp;</PanelText>
-                      <PanelText>坐标X2:Y2坐标建筑造成&nbsp;</PanelText>
-                      <PanelText color='hp'>100HP&nbsp;</PanelText>
-                      <PanelText>伤害。</PanelText> */}
                   </Flex>
-                  {/* <Text small>红色剩余总 HP 500</Text> */}
                 </Flex>
-                {/* <CardStyled>
-                    <Flex>
-                      <Image src='/assets/map/map6.png' width={80} height={100} />
-                      <Flex flexDirection='column' ml='14px'>
-                        <Text small>岩浆方格</Text>
-                        <Text mt='14px' small>
-                          火焰伤害，每回合持续减少 10HP，持续 3 回合
-                        </Text>
-                      </Flex>
-                    </Flex>
-                  </CardStyled> */}
               </Flex>
             );
           })}

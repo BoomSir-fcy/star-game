@@ -195,7 +195,7 @@ export const getEffectDescText = (effect?: DescType) => {
   if (effect === descType.ATTACK) return '攻击造成';
   if (effect === descType.STOP_MOVE) return '产生禁锢';
   if (effect === descType.ICE_END) return '解除冰冻';
-  if (effect === descType.FIRING) return '被造成灼烧';
+  if (effect === descType.FIRING) return '被灼烧,造成';
   if (effect === descType.BOOM) return '炸弹爆炸,造成';
   if (effect === descType.ICE_START) return '冰冻';
   if (effect === descType.ADD_FIRING) return '添加灼烧';
