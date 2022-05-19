@@ -22,7 +22,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useTranslation } from 'contexts/Localization';
 import Layout from 'components/Layout';
 import Nav from 'components/Nav';
-import { useStore } from 'state/util';
+import { storeAction, useStore } from 'state';
 import { fetchMePlanetAsync } from 'state/planet/fetchers';
 import { setActivePlanet } from 'state/planet/actions';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
@@ -128,7 +128,7 @@ const Planet = () => {
       disabled: true,
     },
     {
-      element: '.planet_list',
+      element: '.planet_list_content',
       intro: '点击星球列表。',
       interactive: true,
     },
@@ -163,8 +163,11 @@ const Planet = () => {
       }
       await SetWorking(ChooseList);
       toastSuccess(t('Join Succeeded'));
-      destroy(activeStep + 1);
       navigate('/plant-league');
+      setTimeout(() => {
+        destroy(activeStep + 1);
+        dispatch(storeAction.toggleVisible({ visible: true }));
+      }, 100);
     } catch (e) {
       console.error(e);
       toastError(t('Join Failed'));
@@ -178,10 +181,11 @@ const Planet = () => {
     SetWorking,
     toastSuccess,
     t,
-    destroy,
-    activeStep,
     navigate,
     toastError,
+    destroy,
+    activeStep,
+    dispatch,
   ]);
 
   const addPlanetToList = useCallback(
@@ -246,14 +250,10 @@ const Planet = () => {
   }, [init]);
 
   React.useEffect(() => {
-    setGuide(0);
-  }, [destroy, guides, setGuide]);
-
-  React.useEffect(() => {
-    if (choose) {
+    if (guides.finish && choose && !guides.guideFinish) {
       setStepsEnabled(true);
     }
-  }, [choose]);
+  }, [choose, guides]);
 
   // 添加事件监听，用于更新状态
   React.useEffect(() => {
@@ -263,33 +263,48 @@ const Planet = () => {
     };
   }, [onRefreshClick]);
 
+  React.useEffect(() => {
+    dispatch(storeAction.toggleVisible({ visible: false }));
+  }, [dispatch]);
+
+  // React.useEffect(() => {
+  //   setGuide(0);
+  // }, [destroy, guides, setGuide]);
+
   return (
     <Box id='containerBox'>
       <GlobalStyle
         interactive={steps[activeStep]?.interactive && stepsEnabled}
         disabled={steps[activeStep]?.disabled}
       />
-      {guides.finish && steps.length - 1 > guides.step && StarList.length > 0 && (
-        <Steps
-          ref={guideRef}
-          enabled={stepsEnabled}
-          steps={steps}
-          initialStep={guides.step}
-          options={{
-            exitOnOverlayClick: false,
-          }}
-          onBeforeChange={event => {
-            setActiveStep(event);
-          }}
-          onChange={currentStep => {
-            if (currentStep > guides.step) {
-              console.log('更新');
-              setGuide(currentStep);
-            }
-          }}
-          onExit={() => setStepsEnabled(false)}
-        />
-      )}
+      {!guides.guideFinish &&
+        guides.finish &&
+        steps.length - 1 > guides.step &&
+        StarList.length > 0 && (
+          <Steps
+            ref={guideRef}
+            enabled={stepsEnabled}
+            steps={steps}
+            initialStep={guides.step}
+            options={{
+              exitOnOverlayClick: false,
+            }}
+            onBeforeChange={event => {
+              setActiveStep(event);
+            }}
+            onChange={currentStep => {
+              console.log(currentStep, 'currentStep', guides.step);
+              if (currentStep === 3) return;
+              if (currentStep > guides.step) {
+                setGuide(currentStep);
+              }
+            }}
+            onExit={() => {
+              setStepsEnabled(false);
+              dispatch(storeAction.toggleVisible({ visible: true }));
+            }}
+          />
+        )}
       <Layout>
         <Flex width='100%' position='relative'>
           <Box>
@@ -355,41 +370,39 @@ const Planet = () => {
                   onEndCallback={e => setState({ ...state, token: e })}
                 />
               </Flex>
-              {StarList.length > 0 && (
-                <ScrollBox className='planet_list'>
-                  {(StarList ?? []).map((item, index) => (
-                    <React.Fragment key={`${item.id}_${item.name}`}>
-                      {choose ? (
+              <ScrollBox className='planet_list_content'>
+                {(StarList ?? []).map((item, index) => (
+                  <React.Fragment key={`${item.id}_${item.name}`}>
+                    {choose ? (
+                      <Box
+                        onClick={() => {
+                          dispatch(setActivePlanet(item));
+                          addPlanetToList(item.id);
+                        }}
+                      >
+                        <PlanetBox
+                          choose
+                          ChooseList={ChooseList}
+                          info={item}
+                          className={`${
+                            guides.step <= 1 && `planet_choose_${index}`
+                          }`}
+                        />
+                      </Box>
+                    ) : (
+                      <LinkItem to={`/star?id=${item.id}`}>
                         <Box
                           onClick={() => {
                             dispatch(setActivePlanet(item));
-                            addPlanetToList(item.id);
                           }}
                         >
-                          <PlanetBox
-                            choose
-                            ChooseList={ChooseList}
-                            info={item}
-                            className={`${
-                              guides.step <= 1 && `planet_choose_${index}`
-                            }`}
-                          />
+                          <PlanetBox info={item} />
                         </Box>
-                      ) : (
-                        <LinkItem to={`/star?id=${item.id}`}>
-                          <Box
-                            onClick={() => {
-                              dispatch(setActivePlanet(item));
-                            }}
-                          >
-                            <PlanetBox info={item} />
-                          </Box>
-                        </LinkItem>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </ScrollBox>
-              )}
+                      </LinkItem>
+                    )}
+                  </React.Fragment>
+                ))}
+              </ScrollBox>
               {choose && (
                 <Flex
                   justifyContent='center'

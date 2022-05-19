@@ -12,11 +12,14 @@ export const useGuide = (url: string) => {
     try {
       const res = await Api.GuideApi.getGuide({ url });
       if (Api.isSuccess(res)) {
-        setGuides({
-          step: res.data.step,
-          guideFinish: res.data.finish,
-          finish: true,
-        });
+        // Todo 这里可以做一些处理
+        setTimeout(() => {
+          setGuides({
+            step: res.data.step,
+            guideFinish: res.data.finish,
+            finish: true,
+          });
+        }, 500);
       }
     } catch (error: any) {
       throw new Error(error);
