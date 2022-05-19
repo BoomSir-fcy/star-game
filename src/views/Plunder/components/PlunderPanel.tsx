@@ -195,6 +195,31 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
       </PanelText>
     );
   }
+  if (detail?.type === descType.BEAT) {
+    return (
+      <PanelText>
+        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+        发起进攻，对{' '}
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <>
+              <PanelSide isEnemy={item.isEnemy} />
+              <PanelAxis axis={item.pos} />
+              建筑
+              {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
+            </>
+          );
+        })}
+        <PanelText
+          color={
+            detail.descInfo?.type === descType.ATTACK_MISS ? 'missTxt' : ''
+          }
+        >
+          造成群体伤害
+        </PanelText>
+      </PanelText>
+    );
+  }
 
   if (detail?.type) {
     return (
