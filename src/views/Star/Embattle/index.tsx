@@ -21,6 +21,7 @@ import {
   useFetchGameTerrain,
 } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
+import { useTranslation } from 'contexts/Localization';
 import useGame from 'game/hooks/useGame';
 import { useStore, storeAction } from 'state';
 import { useDispatch } from 'react-redux';
@@ -81,6 +82,8 @@ const Embattle = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const game = useGame({ width: 1600, offsetStartX: -330 });
 
@@ -151,39 +154,50 @@ const Embattle = () => {
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const [activeStep, setActiveStep] = useState(guides.step);
-  const [steps, setSteps] = useState([
-    {
-      element: '.star-embattle-step0',
-      intro:
-        '战斗布阵界面，敌我双方分为两个作战区域，用策略部署战斗单位，达到胜利。',
-    },
-    {
-      element: '.star-embattle-step1',
-      intro: '这是你当前可以上阵的战斗单位列表。',
-    },
-    {
-      element: '.star-embattle-step2',
-      intro: '点击了解战斗单位详情。',
-    },
-    {
-      element: '.star-embattle-step3',
-      intro: '当前战斗单位的作战示意动画，可以了解其作战方式。',
-    },
-    {
-      element: '.star-embattle-step4',
-      intro: '当前战斗单位的基础属性和能力蛛网图， 可以通过升级提升能力。',
-    },
-    {
-      element: '.star-embattle-step5',
-      intro:
-        '现在开始布阵，拖住战斗单位放置我方作战区域上，合理的部署位置才是只剩关键。',
-      interactive: true,
-    },
-    {
-      element: '.star-embattle-step6',
-      intro: '好了，部署结束!这里是作战时的攻击顺序。',
-    },
-  ]);
+  const steps = useMemo(
+    () => [
+      {
+        element: '.star-embattle-step0',
+        intro: t(
+          'In the battle array interface, the enemy and ourselves are divided into two battle areas, and the combat units are deployed strategically to achieve victory.',
+        ),
+      },
+      {
+        element: '.star-embattle-step1',
+        intro: t('This is the list of combat units you can fight now.'),
+      },
+      {
+        element: '.star-embattle-step2',
+        intro: t('Click to learn more about combat units.'),
+      },
+      {
+        element: '.star-embattle-step3',
+        intro: t(
+          'The operation animation of the current combat unit can understand its operation mode.',
+        ),
+      },
+      {
+        element: '.star-embattle-step4',
+        intro: t(
+          'The basic attributes and capability cobweb of the current combat unit can be upgraded to improve the capability.',
+        ),
+      },
+      {
+        element: '.star-embattle-step5',
+        intro: t(
+          'Now start to arrange the formation, drag the combat units and place them in our combat area, and the reasonable deployment position is the only key',
+        ),
+        interactive: true,
+      },
+      {
+        element: '.star-embattle-step6',
+        intro: t(
+          'All right, deployment is over! Here is the order of attack in combat.',
+        ),
+      },
+    ],
+    [t],
+  );
 
   const [arrowShow, setArrowShow] = useState(false);
 

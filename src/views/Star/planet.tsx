@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
@@ -115,30 +115,33 @@ const Planet = () => {
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(false);
   const [activeStep, setActiveStep] = React.useState(guides.step);
-  const [steps, setSteps] = useState([
-    {
-      element: '.planet_choose_0',
-      intro: '点击选择星球。',
-      interactive: true,
-    },
-    {
-      element: '.planet_choose_button',
-      intro: '点击添加星球。',
-      interactive: true,
-      disabled: true,
-    },
-    {
-      element: '.planet_list_content',
-      intro: '点击星球列表。',
-      interactive: true,
-    },
-    {
-      element: '.planet_choose_button',
-      intro: '点击添加星球。',
-      interactive: true,
-      disabled: true,
-    },
-  ]);
+  const steps = useMemo(
+    () => [
+      {
+        element: '.planet_choose_0',
+        intro: t('Click to select the planet.'),
+        interactive: true,
+      },
+      {
+        element: '.planet_choose_button',
+        intro: t('Click Add planet.'),
+        interactive: true,
+        disabled: true,
+      },
+      {
+        element: '.planet_list_content',
+        intro: t('Click on the planet list.'),
+        interactive: true,
+      },
+      {
+        element: '.planet_choose_button',
+        intro: t('Click Add planet.'),
+        interactive: true,
+        disabled: true,
+      },
+    ],
+    [t],
+  );
 
   const destroy = React.useCallback(
     (n: number) => {

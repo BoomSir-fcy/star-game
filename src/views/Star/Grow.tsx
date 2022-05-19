@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Card, BgCard, Text, Button, Label } from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -51,12 +51,17 @@ const Grow: React.FC = () => {
   });
 
   const [stepsEnabled, setStepsEnabled] = useState(true);
-  const [steps, setSteps] = useState([
-    {
-      element: '.planet',
-      intro: '培育可以大幅提升它的战斗力和产能获取，包括各项属性的增长',
-    },
-  ]);
+  const steps = useMemo(
+    () => [
+      {
+        element: '.planet',
+        intro: t(
+          'Cultivation can greatly improve its combat effectiveness and capacity acquisition, including the growth of various attributes',
+        ),
+      },
+    ],
+    [t],
+  );
   let timer = null as any;
 
   const ToStrengthenSpeedUp = async () => {

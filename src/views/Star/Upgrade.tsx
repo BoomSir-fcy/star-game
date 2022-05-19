@@ -73,12 +73,17 @@ const Upgrade = () => {
   });
 
   const [stepsEnabled, setStepsEnabled] = useState(true);
-  const [steps, setSteps] = useState([
-    {
-      element: '.planet_level_head',
-      intro: '升级星球可以建造更高等级的建筑， 提升星球的基础属性。',
-    },
-  ]);
+  const steps = useMemo(
+    () => [
+      {
+        element: '.planet_level_head',
+        intro: t(
+          'Upgrading the planet can build higher-level buildings and improve the basic attributes of the planet.',
+        ),
+      },
+    ],
+    [t],
+  );
 
   const { upgrade } = useUpgrade();
   const { activeMaterialMap, upgradePlanetId } = useStore(p => p.planet);

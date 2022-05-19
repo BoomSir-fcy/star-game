@@ -15,7 +15,7 @@ import {
   mysteryBoxQualities,
 } from 'components/MysteryBoxCom';
 import StarCom from 'components/StarCom';
-import { useStore } from 'state';
+import { useStore, storeAction } from 'state';
 import { useDispatch } from 'react-redux';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useGuide } from 'hooks/useGuide';
@@ -88,26 +88,33 @@ const MysteryBoxDetail = () => {
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
-  const [steps, setSteps] = useState([
-    {
-      element: '.mystery-detail-step0',
-      intro:
-        '太好了，恭喜获得第一个星球。这是星球的主宰种族，每个种族间有各自的特性。',
-    },
-    {
-      element: '.mystery-detail-step1',
-      intro: '这里是星球的属性信息，品质决定属性，格子数也决定了星球的建造数。',
-    },
-    {
-      element: '.mystery-detail-step2',
-      intro:
-        '星球的额外属性信息，对整个星球的经营与战斗都有密切关系，可通过培育提升。',
-    },
-    {
-      element: '.mystery-detail-step3',
-      intro: '接下来让我们开始经营星球吧~',
-    },
-  ]);
+  const steps = useMemo(
+    () => [
+      {
+        element: '.mystery-detail-step0',
+        intro: t(
+          'Great. Congratulations on your first planet. This is the dominant race of the planet, and each race has its own characteristics.',
+        ),
+      },
+      {
+        element: '.mystery-detail-step1',
+        intro: t(
+          'Here is the attribute information of the planet. The quality determines the attribute, and the number of grids also determines the number of planets built.',
+        ),
+      },
+      {
+        element: '.mystery-detail-step2',
+        intro: t(
+          'The additional attribute information of the planet is closely related to the operation and combat of the whole planet, which can be improved through cultivation.',
+        ),
+      },
+      {
+        element: '.mystery-detail-step3',
+        intro: t("Now let's start running the planet~"),
+      },
+    ],
+    [t],
+  );
 
   return (
     <Layout>
@@ -124,8 +131,11 @@ const MysteryBoxDetail = () => {
           onBeforeChange={event => {
             console.log(event);
           }}
-          onExit={() => {
+          onExit={index => {
             setStepsEnabled(false);
+            if (index < steps.length) {
+              dispatch(storeAction.toggleVisible({ visible: true }));
+            }
           }}
         />
       )}
