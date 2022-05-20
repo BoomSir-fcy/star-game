@@ -14,6 +14,8 @@ import {
 import ScoringPanel from 'components/ScoringPanel';
 import StarCom from 'components/StarCom';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import { storeAction } from 'state';
+import { useDispatch } from 'react-redux';
 import InfoPlane from './components/grow/InfoPlane';
 import Extra from './components/grow/Extra';
 import {
@@ -35,6 +37,7 @@ const TopBox = styled(Box)`
 const Grow: React.FC = () => {
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
+  const dispatch = useDispatch();
   const { toastError, toastSuccess, toastWarning, toastInfo } = useToast();
   const [visible, setVisible] = useState(false);
   const [nowPlante, setNowPlante] = useState<StrengthenPlanetInfo>();
@@ -181,7 +184,11 @@ const Grow: React.FC = () => {
           exitOnOverlayClick: false,
           tooltipPosition: 'top',
         }}
-        onExit={step => setStepsEnabled(false)}
+        onExit={step => {
+          console.log(step);
+          setStepsEnabled(false);
+          // dispatch(storeAction.toggleVisible({ visible: true }));
+        }}
       />
       <BgCard variant='big' padding='50px 33px'>
         <Flex>
