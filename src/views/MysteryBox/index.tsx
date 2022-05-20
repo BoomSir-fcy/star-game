@@ -76,7 +76,7 @@ const MysteryBox = () => {
       <GlobalStyle
         interactive={steps[activeStep]?.interactive && stepsEnabled}
       />
-      {guides.finish && steps.length - 1 > guides.step && (
+      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
@@ -85,6 +85,11 @@ const MysteryBox = () => {
             exitOnOverlayClick: false,
             tooltipPosition: 'top',
             scrollPadding: 0,
+          }}
+          onChange={currentStep => {
+            if (currentStep > guides.step) {
+              setGuide(currentStep);
+            }
           }}
           onBeforeChange={event => {
             setActiveStep(event);

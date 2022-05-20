@@ -253,19 +253,20 @@ const ResetCSS = createGlobalStyle`
     color: transparent !important;
     width: 20px;
     height: 20px;
-    margin-top: -2px;
-    margin-right: -10px;
+    margin-top: -3px;
+    margin-right: -11px;
     ${mediaQueries.sm} {
       width: 25px;
       height: 25px;
-      margin-right: -13px;
+      margin-right: -10px;
     }
     ${mediaQueries.md} {
       width: 34px;
       height: 34px;
-      margin-right: -15px;
+      margin-right: -5px;
     }
     ${mediaQueries.xxl} {
+      margin-right: 2px;
       width: 43px;
       height: 43px;
     }

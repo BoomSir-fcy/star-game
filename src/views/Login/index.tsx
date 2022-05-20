@@ -245,59 +245,41 @@ const Login = () => {
   // const location = useLocation();
   // const { guides, setGuide } = useGuide('login');
 
-  // // 控制是否开启新手指导的
-  // const [stepsEnabled, setStepsEnabled] = useState(true);
-  // const [steps, setSteps] = useState([
-  //   {
-  //     element: '.login-step0',
-  //     intro: '指挥官，给自己像一个舰队名称吧!',
-  //   },
-  //   {
-  //     element: '.login-step1',
-  //     intro: '点击确认进入下一步',
-  //   },
-  // ]);
+  // 控制是否开启新手指导的
+  const [stepsEnabled, setStepsEnabled] = useState(
+    !localStorage.getItem('guide_login_key'),
+  );
 
-  // // 是否开启提示的
-  // const [hintsEnabled, setHintsEnabled] = useState(true);
-  // // 设置哪些需要提示
-  // const [hints, setHints] = useState([
-  //   {
-  //     element: '.planet_number',
-  //     hint: 'Hello hint',
-  //     hintPosition: 'middle-right',
-  //   },
-  // ]);
+  const steps = useMemo(
+    () => [
+      {
+        element: '.login-step0',
+        intro: t('Commander, give yourself the name of a fleet!'),
+      },
+      {
+        element: '.login-step1',
+        intro: t('Click to enter the next step'),
+      },
+    ],
+    [t],
+  );
 
   return (
     <>
-      {/* {guides.finish && steps.length - 1 > guides.step && (
+      {showCreate && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
-          initialStep={guides.step}
+          initialStep={0}
           options={{
             exitOnOverlayClick: false,
           }}
-          onBeforeChange={event => {
-            console.log(event);
-            if (event === 2) {
-              setVisible(true);
-            }
-          }}
           onExit={() => {
             setStepsEnabled(false);
+            localStorage.setItem('guide_login_key', '1');
           }}
         />
-      )} */}
-      {/* <Hints
-        enabled={hintsEnabled}
-        hints={hints}
-        onClose={() => {
-          console.log(211221);
-          setHintsEnabled(false);
-        }}
-      /> */}
+      )}
       <Flex
         height='100%'
         flexDirection='column'

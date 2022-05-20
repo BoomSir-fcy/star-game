@@ -206,23 +206,29 @@ const Embattle = () => {
       <GlobalStyle
         interactive={steps[activeStep]?.interactive && stepsEnabled}
       />
-      {guides.finish && steps.length - 1 > guides.step && (
+      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
-          initialStep={activeStep}
+          initialStep={guides.step}
           ref={stepRef}
           options={{
             exitOnOverlayClick: false,
             tooltipPosition: 'top',
           }}
+          onChange={currentStep => {
+            if (currentStep === 5) {
+              setArrowShow(true);
+            } else if (currentStep > 5) {
+              setArrowShow(false);
+            }
+            console.log(currentStep, guides.step);
+            if (currentStep > guides.step) {
+              setGuide(currentStep);
+            }
+          }}
           onBeforeChange={event => {
             setActiveStep(event);
-          }}
-          onChange={event => {
-            if (event === 5) {
-              setArrowShow(true);
-            }
           }}
           onExit={index => {
             setStepsEnabled(false);

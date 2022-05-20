@@ -1,5 +1,5 @@
 import styled, { ThemeConsumer } from 'styled-components';
-import { space, layout, border, position } from 'styled-system';
+import { space, layout, border, position, background } from 'styled-system';
 import { BorderCardProps } from './types';
 
 const BorderCard = styled.div<BorderCardProps>`
@@ -14,6 +14,7 @@ const BorderCard = styled.div<BorderCardProps>`
   ${space}
   ${layout}
   ${border}
+  ${background}
 `;
 
 BorderCard.defaultProps = {

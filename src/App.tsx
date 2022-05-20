@@ -31,6 +31,7 @@ const BattleReport = lazy(() => import('./views/BattleReport'));
 
 const Plunder = lazy(() => import('./views/Plunder'));
 const PlunderPk = lazy(() => import('./views/Plunder/Pk'));
+const PlunderResult = lazy(() => import('./views/Plunder/Result'));
 const PlunderTest = lazy(() => import('./views/Plunder/Test'));
 const Galaxy = lazy(() => import('./views/Galaxy'));
 const Auction = lazy(() => import('./views/Galaxy/Auction'));
@@ -94,6 +95,7 @@ function App() {
               <Route path='/plunder' element={<Plunder />} />
               <Route path='/plunder-test' element={<PlunderTest />} />
               <Route path='/plunder-pk' element={<PlunderPk />} />
+              <Route path='/plunder-result' element={<PlunderResult />} />
 
               <Route path='/test' element={<Test />}>
                 <Route path='card' element={<TestCard />} />

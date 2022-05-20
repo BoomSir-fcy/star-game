@@ -113,7 +113,7 @@ const Details = () => {
 
   return (
     <Box>
-      {guides.finish && steps.length - 1 > guides.step && (
+      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}

@@ -268,14 +268,19 @@ const Pk = () => {
 
   return (
     <Layout>
-      {guides.finish && steps.length - 1 > guides.step && (
+      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
-          initialStep={activeStep}
+          initialStep={guides.step}
           options={{
             exitOnOverlayClick: false,
             tooltipPosition: 'top',
+          }}
+          onChange={currentStep => {
+            if (currentStep > guides.step) {
+              setGuide(currentStep);
+            }
           }}
           onBeforeChange={event => {
             setActiveStep(event);

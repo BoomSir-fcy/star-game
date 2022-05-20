@@ -118,7 +118,7 @@ const MysteryBoxDetail = () => {
 
   return (
     <Layout>
-      {guides.finish && steps.length - 1 > guides.step && (
+      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
@@ -127,6 +127,11 @@ const MysteryBoxDetail = () => {
             exitOnOverlayClick: false,
             tooltipPosition: 'top',
             scrollPadding: 0,
+          }}
+          onChange={currentStep => {
+            if (currentStep > guides.step) {
+              setGuide(currentStep);
+            }
           }}
           onBeforeChange={event => {
             console.log(event);

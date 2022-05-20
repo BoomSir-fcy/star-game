@@ -117,7 +117,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
       ],
     }),
   );
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [gameMock, setGameMock] = useState({});
   const ref = useRef<HTMLDivElement>(null);
 
