@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
 import { useWeb3React } from '@web3-react/core';
 import { UserBalanceView } from 'state/types';
-import { useTokenBalance } from 'hooks/useTokenBalance';
+import { useGetBnbBalance, useTokenBalance } from 'hooks/useTokenBalance';
 import { getBalanceAmount } from 'utils/formatBalance';
 import { BIG_TEN } from 'config/constants/bigNumber';
 import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
@@ -50,6 +50,8 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
   const { account } = useWeb3React();
   const { amount: withdrawalBalance, symbol: Token } = TokenInfo;
   const { balance: BigNumberBalance } = useTokenBalance(TokenInfo?.coinId);
+  const { balance: bnbBalance } = useGetBnbBalance();
+
   const { Recharge, onApprove, drawCallback } = useRWA(TokenInfo?.coinId);
 
   const [approvedNum, setapprovedNum] = useState(0);
@@ -59,8 +61,11 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
   const [LoadApprovedNum, setLoadApprovedNum] = useState(false);
 
   const TokenBalance = useMemo(() => {
+    if (Token === 'BNB') {
+      return getBalanceAmount(bnbBalance).toString();
+    }
     return getBalanceAmount(BigNumberBalance).toString();
-  }, [BigNumberBalance]);
+  }, [BigNumberBalance, Token, bnbBalance]);
 
   // 复制地址
   const Copy = () => {
@@ -233,7 +238,9 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
             style={{ fontSize: '26px' }}
             width='100%'
             height={90}
-            disabled={approvedNum === 0 && OperationType === 1}
+            disabled={
+              approvedNum === 0 && OperationType === 1 && Token !== 'BNB'
+            }
             pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
             inputMode='decimal'
             value={val}
@@ -257,7 +264,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
                   handSure();
                   return;
                 }
-                if (approvedNum > 0) {
+                if (approvedNum > 0 || Token === 'BNB') {
                   // 充值、提现
                   handSure();
                 } else {
@@ -267,7 +274,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
               }}
             >
               {OperationType === 1 ? (
-                approvedNum > 0 ? (
+                approvedNum > 0 || Token === 'BNB' ? (
                   pending ? (
                     <Dots>{t('Recharging')}</Dots>
                   ) : (
