@@ -1,6 +1,7 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { useStore } from 'state';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useStore, storeAction } from 'state';
 import { Box } from 'uikit';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
@@ -8,41 +9,58 @@ import 'intro.js/introjs.css';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useGuide } from 'hooks/useGuide';
+import { useTranslation } from 'contexts/Localization';
 import { DragCompoents } from './components/dragCompoents';
 
 const Details = () => {
   const parsedQs = useParsedQueryString();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const { guides, setGuide } = useGuide(location.pathname);
   const [state, setState] = React.useState([]);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
-  const [steps, setSteps] = React.useState([
-    {
-      element: '.planet_header',
-      intro: '每个星球都有自己的产能和资源，来源于建筑的建造策略。',
-    },
-    {
-      element: '.common_nav',
-      intro: '左侧导航可以对星球升级，培育，布阵等进行管理。',
-    },
-    {
-      element: '.star_manager',
-      intro:
-        '每个星球都有建造格子，格子数量与品质挂钩。合理的建造策略，也是致胜的方法之一。',
-    },
-    {
-      element: '.buildings',
-      intro: '建造列表会展示可以建造的单位，包括消耗，类型，产能等',
-    },
-    {
-      element: '.building_0',
-      intro: '开始创建星球的第一个建筑，拖住建筑放置到棋盘合适的地方。',
-    },
-    {
-      element: '.building_1',
-      intro: '继续建造一个建筑。',
-    },
-  ]);
+
+  const steps = React.useMemo(() => {
+    return [
+      {
+        element: '.planet_header',
+        intro: t(
+          'Each planet has its own production capacity and resources, which comes from the construction strategy of buildings.',
+        ),
+      },
+      {
+        element: '.common_nav',
+        intro: t(
+          'The left navigation can manage the upgrading, cultivation and array arrangement of the planet.',
+        ),
+      },
+      {
+        element: '.star_manager',
+        intro: t(
+          'Each planet has a built grid, and the number of grids is linked to the quality. Reasonable construction strategy is also one of the ways to win.',
+        ),
+      },
+      {
+        element: '.buildings',
+        intro: t(
+          'The construction list will show the units that can be built, including consumption, type, capacity, etc',
+        ),
+      },
+      {
+        element: '.building_0',
+        intro: t(
+          'Start to create the first building of the planet and drag the building to the right place on the chessboard.',
+        ),
+      },
+      {
+        element: '.building_1',
+        intro: t('Continue to build a building.'),
+      },
+    ];
+  }, [t]);
+
   const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
@@ -89,9 +107,13 @@ const Details = () => {
     }
   }, [planet, selfBuilding, updateGrid]);
 
+  React.useEffect(() => {
+    dispatch(storeAction.toggleVisible({ visible: false }));
+  }, [dispatch]);
+
   return (
     <Box>
-      {guides.finish && steps.length - 1 > guides.step && (
+      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
@@ -102,10 +124,17 @@ const Details = () => {
           }}
           onChange={currentStep => {
             if (currentStep > guides.step) {
-              // setGuide(currentStep);
+              setGuide(currentStep);
             }
           }}
-          onExit={() => setStepsEnabled(false)}
+          onExit={step => {
+            setStepsEnabled(false);
+            if (step === steps.length - 1) {
+              navigate(`/star/upgrade?id=${id}`);
+              return;
+            }
+            dispatch(storeAction.toggleVisible({ visible: true }));
+          }}
         />
       )}
       <DragCompoents

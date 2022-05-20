@@ -16,6 +16,7 @@ import AsanySortable, { SortableItemProps } from '@asany/sortable';
 import client, { isApp } from 'utils/client';
 import Soldier from 'game/core/Soldier';
 import { ReactSortable } from 'react-sortablejs';
+import { useTranslation } from 'contexts/Localization';
 
 polyfill({
   dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
@@ -91,6 +92,7 @@ const SortBoard: React.FC<SortBoardProps> = ({
   setSortSoldiers,
   ...props
 }) => {
+  const { t } = useTranslation();
   const setState = useCallback(
     data => {
       setSortSoldiers(data.map((item: SortSoldier) => item.soldier));
@@ -141,7 +143,7 @@ const SortBoard: React.FC<SortBoardProps> = ({
       {...props}
     >
       <Text margin='20px 0 8px' fontSize='20px' textAlign='center'>
-        攻击顺序
+        {t('Attack Order')}
       </Text>
       <Flex
         position='relative'

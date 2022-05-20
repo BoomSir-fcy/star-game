@@ -177,10 +177,11 @@ export const getEffectText = (effect?: DescType) => {
   if (effect === descType.ICE_START) return '冰冻';
   if (effect === descType.ADD_FIRING) return '灼烧';
   if (effect === descType.ADD_BOOM) return '炸弹';
-  if (effect === descType.REMOVE_FIRING) return '灭火';
+  if (effect === descType.REMOVE_FIRING) return '净化'; // '灭火'
   if (effect === descType.ADD_SHIELD) return '护盾';
   if (effect === descType.REMOVE_SHIELD) return '减少护盾';
   if (effect === descType.REMOVE_STOP_MOVE) return '解除禁锢';
+  if (effect === descType.REMOVE_BOMB) return '拆除炸弹';
   if (effect === descType.ADD_TERRAIN_FIRING) return '地形灼烧';
   if (effect === descType.TERRAIN_FIRING) return '地形灼烧中';
   if (effect === descType.PURIFY) return '净化';
@@ -194,7 +195,7 @@ export const getEffectDescText = (effect?: DescType) => {
   if (effect === descType.ATTACK) return '攻击造成';
   if (effect === descType.STOP_MOVE) return '产生禁锢';
   if (effect === descType.ICE_END) return '解除冰冻';
-  if (effect === descType.FIRING) return '被造成灼烧';
+  if (effect === descType.FIRING) return '被灼烧,造成';
   if (effect === descType.BOOM) return '炸弹爆炸,造成';
   if (effect === descType.ICE_START) return '冰冻';
   if (effect === descType.ADD_FIRING) return '添加灼烧';
@@ -203,6 +204,7 @@ export const getEffectDescText = (effect?: DescType) => {
   if (effect === descType.ADD_SHIELD) return '添加护盾';
   if (effect === descType.REMOVE_SHIELD) return '减少护盾';
   if (effect === descType.REMOVE_STOP_MOVE) return '解除禁锢';
+  if (effect === descType.REMOVE_BOMB) return '拆除炸弹';
   if (effect === descType.ADD_TERRAIN_FIRING) return '产生地形灼烧';
   if (effect === descType.TERRAIN_FIRING) return '灼烧造成';
   if (effect === descType.ATTACK_DODGE) return '触发闪避';
@@ -221,6 +223,7 @@ export const getEffectDescTypeText = (effect?: DescType) => {
   if (effect === descType.REMOVE_FIRING) return '效果';
   if (effect === descType.ADD_SHIELD) return '';
   if (effect === descType.REMOVE_SHIELD) return '';
+  if (effect === descType.REMOVE_BOMB) return '';
   if (effect === descType.REMOVE_STOP_MOVE) return '效果';
   if (effect === descType.ADD_TERRAIN_FIRING) return '效果';
   if (effect === descType.TERRAIN_FIRING) return '伤害';

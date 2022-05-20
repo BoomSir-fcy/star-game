@@ -11,16 +11,17 @@ import {
 import styled from 'styled-components';
 import { Image, Flex, Text, BgCard, Button, Card, Box, Dots } from 'uikit';
 import { Api } from 'apis';
-import { useStore } from 'state';
+import { useStore, storeAction } from 'state';
 import { useWeb3React } from '@web3-react/core';
 import { ConnectWalletButton } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setActiveMaterialMap, setUpgradePlanetId } from 'state/planet/actions';
 import { useToast } from 'contexts/ToastsContext';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import { useGuide } from 'hooks/useGuide';
 import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';
 import { useUpgrade } from './components/upgrade/hooks';
 
@@ -56,8 +57,10 @@ const Upgrade = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.id);
+  const { guides, setGuide } = useGuide(location.pathname);
   const [visible, setVisible] = useState(false);
   const [pending, setPending] = useState(false);
   const [upgradeInfo, setUpgradeInfo] = useState({
@@ -73,12 +76,17 @@ const Upgrade = () => {
   });
 
   const [stepsEnabled, setStepsEnabled] = useState(true);
-  const [steps, setSteps] = useState([
-    {
-      element: '.planet_level_head',
-      intro: '升级星球可以建造更高等级的建筑， 提升星球的基础属性。',
-    },
-  ]);
+  const steps = useMemo(
+    () => [
+      {
+        element: '.planet_level_head',
+        intro: t(
+          'Upgrading the planet can build higher-level buildings and improve the basic attributes of the planet.',
+        ),
+      },
+    ],
+    [t],
+  );
 
   const { upgrade } = useUpgrade();
   const { activeMaterialMap, upgradePlanetId } = useStore(p => p.planet);
@@ -196,15 +204,20 @@ const Upgrade = () => {
 
   return (
     <BgCard variant='big' padding='40px 68px'>
-      <Steps
-        enabled={stepsEnabled}
-        steps={steps}
-        initialStep={0}
-        options={{
-          exitOnOverlayClick: false,
-        }}
-        onExit={step => setStepsEnabled(false)}
-      />
+      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
+        <Steps
+          enabled={stepsEnabled}
+          steps={steps}
+          initialStep={0}
+          options={{
+            exitOnOverlayClick: false,
+          }}
+          onExit={step => {
+            setStepsEnabled(false);
+            dispatch(storeAction.toggleVisible({ visible: true }));
+          }}
+        />
+      )}
 
       {!upgradeSuccess.upgrade_is_end ? (
         <Upgrading

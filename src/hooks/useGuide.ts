@@ -4,6 +4,7 @@ import { Api } from 'apis';
 export const useGuide = (url: string) => {
   const [guides, setGuides] = React.useState({
     step: 0,
+    guideFinish: false,
     finish: false,
   });
 
@@ -11,10 +12,14 @@ export const useGuide = (url: string) => {
     try {
       const res = await Api.GuideApi.getGuide({ url });
       if (Api.isSuccess(res)) {
-        setGuides({
-          step: res.data.step,
-          finish: true,
-        });
+        // Todo 这里可以做一些处理
+        setTimeout(() => {
+          setGuides({
+            step: res.data.step,
+            guideFinish: res.data.finish,
+            finish: true,
+          });
+        }, 500);
       }
     } catch (error: any) {
       throw new Error(error);
@@ -22,9 +27,9 @@ export const useGuide = (url: string) => {
   }, [url]);
 
   const setGuide = React.useCallback(
-    async (step: number) => {
+    async (step: number, finish?: boolean) => {
       try {
-        const res = await Api.GuideApi.setGuide({ url, step });
+        const res = await Api.GuideApi.setGuide({ url, step, finish });
         return res;
       } catch (error: any) {
         throw new Error(error);

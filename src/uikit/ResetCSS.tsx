@@ -208,14 +208,32 @@ const ResetCSS = createGlobalStyle`
     position: absolute;
     padding: 20px 30px;
     color: #fff;
-    max-width: 475px !important;
-    max-width: 327px !important;
-    width: 475px !important;
-    height: 327px !important;
     background-color: transparent !important;
     background-image: url('/images/commons/introjs-mask.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
+    max-width: 237px !important;
+    max-height: 163px !important;
+    width: 237px !important;
+    height: 163px !important;
+    ${mediaQueries.sm} {
+      max-width: 285px !important;
+      max-height: 196px !important;
+      width: 285px !important;
+      height: 196px !important;
+    }
+    ${mediaQueries.md} {
+      max-width: 380px !important;
+      max-height: 261px !important;
+      width: 380px !important;
+      height: 261px !important;
+    }
+    ${mediaQueries.xxl} {
+      max-width: 475px !important;
+      max-height: 327px !important;
+      width: 475px !important;
+      height: 327px !important;
+    }
   }
 
   .introjs-tooltip-header {
@@ -233,25 +251,97 @@ const ResetCSS = createGlobalStyle`
     background-size: 100% 100%;
     background-repeat: no-repeat;
     color: transparent !important;
+    width: 20px;
+    height: 20px;
+    margin-top: -2px;
+    margin-right: -10px;
+    ${mediaQueries.sm} {
+      width: 25px;
+      height: 25px;
+      margin-right: -13px;
+    }
+    ${mediaQueries.md} {
+      width: 34px;
+      height: 34px;
+      margin-right: -15px;
+    }
+    ${mediaQueries.xxl} {
+      width: 43px;
+      height: 43px;
+    }
   }
   
-  .introjs-tooltiptext {
-    min-height: 180px;
-    max-height: 180px;
-    font-size: 16px;
+  .introjs-tooltip .introjs-tooltiptext {
+
+    min-height: 90px;
+    max-height: 90px;
+    line-height: 1.5;
+    font-size: 14px;
+    padding: 4px;
+    ${mediaQueries.sm} {
+      min-height: 86px;
+      max-height: 86px;
+      font-size: 14px;
+      padding: 8px;
+    }
+    ${mediaQueries.md} {
+      min-height: 128px;
+      max-height: 128px;
+      font-size: 14px;
+      padding: 12px;
+    }
+    ${mediaQueries.xxl} {
     font-weight: bold;
-    line-height: 20px;
+
+      min-height: 180px;
+      max-height: 180px;
+      font-size: 16px;
+      padding: 20px;
+    }
   }
 
+  .introjs-tooltip .introjs-bullets {
+    padding: 5px;
+    ${mediaQueries.sm} {
+      padding: 6px;
+
+
+    }
+    ${mediaQueries.md} {
+      padding: 8px;
+
+
+    }
+    ${mediaQueries.xxl} {
+      padding: 10px;
+    
+    }
+  }
   .introjs-helperLayer {
     position: absolute;
     z-index: 9999998;
     border: 3px solid #FFFFFF;
     border-radius: 10px !important;
+    pointer-events: none;
   }
 
-  .introjs-tooltipbuttons {
+  .introjs-tooltip .introjs-tooltipbuttons {
     border-top: 0 !important;
+    padding: 5px;
+    ${mediaQueries.sm} {
+      padding: 6px;
+
+
+    }
+    ${mediaQueries.md} {
+      padding: 8px;
+
+
+    }
+    ${mediaQueries.xxl} {
+      padding: 10px;
+    
+    }
   }
 
   .introjs-arrow {
@@ -273,6 +363,23 @@ const ResetCSS = createGlobalStyle`
     background-image: url('/images/commons/btn/enter.png');
     background-size: 100% auto;
     background-repeat: no-repeat;
+    width: 68px;
+    height: 25px;
+    ${mediaQueries.sm} {
+      width: 82px;
+    height: 30px;
+
+    }
+    ${mediaQueries.md} {
+      width: 109px;
+    height: 40px;
+
+    }
+    ${mediaQueries.xxl} {
+      width: 137px;
+    height: 50px;
+    
+    }
   }
   .introjs-disabled {
     background-image: url('/images/commons/btn/enter.png') !important;

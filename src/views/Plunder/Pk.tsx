@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 import {
   Box,
   Text,
@@ -10,15 +16,21 @@ import {
   Spinner,
   BorderCard,
 } from 'uikit';
+
+import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import 'intro.js/introjs.css';
+
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
 import { GlobalVideo } from 'components/Video';
 import useGame from 'game/hooks/useGame';
 import Progress from 'components/Progress';
 import Game from 'game/core/Game';
-import { useStore } from 'state';
+import { useStore, storeAction } from 'state';
 import { RoundDescTotalHp } from 'game/types';
 import { useToast } from 'contexts/ToastsContext';
+import { useTranslation } from 'contexts/Localization';
+import { useGuide } from 'hooks/useGuide';
 import {
   useFetchGameMatchUser,
   useFetchGamePK,
@@ -27,6 +39,7 @@ import {
 } from 'state/game/hooks';
 import { GamePkState } from 'state/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useDispatch } from 'react-redux';
 import { TrackDetail } from 'game/core/Running';
 import {
   PeopleCard,
@@ -46,6 +59,8 @@ import { usePK } from './hooks/usePK';
 const Pk = () => {
   useFetchGameTerrain();
   const { toastError } = useToast();
+
+  const dispatch = useDispatch();
 
   const parseQs = useParsedQueryString();
 
@@ -218,8 +233,70 @@ const Pk = () => {
     }
   }, [TerrainInfo, game]);
 
+  const { guides, setGuide } = useGuide('plunder-pk');
+
+  const { t } = useTranslation();
+
+  // 控制是否开启新手指导的
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [activeStep, setActiveStep] = useState(guides.step);
+  const steps = useMemo(
+    () => [
+      {
+        element: '.plunder-pk-step0',
+        intro: t('Here is your battle information.'),
+      },
+      {
+        element: '.plunder-pk-step1',
+        intro: t(
+          'Here are all HP values of our camp. If it is empty, it will fail.',
+        ),
+      },
+      {
+        element: '.plunder-pk-step2',
+        intro: t('Here is the basic information of the opponent.'),
+      },
+      {
+        element: '.plunder-pk-step3',
+        intro: t(
+          'Here are the details of the battle report of the current battle process.',
+        ),
+      },
+    ],
+    [t],
+  );
+
   return (
     <Layout>
+      {guides.finish && steps.length - 1 > guides.step && (
+        <Steps
+          enabled={stepsEnabled}
+          steps={steps}
+          initialStep={activeStep}
+          options={{
+            exitOnOverlayClick: false,
+            tooltipPosition: 'top',
+          }}
+          onBeforeChange={event => {
+            setActiveStep(event);
+          }}
+          onExit={index => {
+            setStepsEnabled(false);
+            if (index < steps.length) {
+              dispatch(storeAction.toggleVisible({ visible: true }));
+            }
+          }}
+        />
+      )}
+      <Box
+        position='absolute'
+        width={800}
+        height={480}
+        top={50}
+        right={0}
+        className='plunder-pk-step2'
+        zIndex={-1}
+      />
       <Flex mb='20px'>
         <Flex position='relative' zIndex={1}>
           <BackButton ml='19px' />
@@ -230,17 +307,27 @@ const Pk = () => {
       </Flex>
       <Flex>
         <Flex flexDirection='column' alignItems='center'>
-          <PeopleCard mb='10px' active {...mineUser} />
+          <PeopleCard
+            className='plunder-pk-step0'
+            mb='10px'
+            active
+            {...mineUser}
+          />
           <Energy />
         </Flex>
         <Flex flex='1' flexDirection='column'>
           <Flex mt='-52px' justifyContent='space-between'>
             <PKProgress
+              className='plunder-pk-step1'
               total={PKInfo?.init?.show_hp?.blue_total_hp ?? 0}
               current={totalInfo?.blue_total_hp ?? 0}
               result={result}
             />
-            <RoundPanel mt='-45px' roundName={roundInfo?.id} />
+            <RoundPanel
+              mt='-45px'
+              roundName={roundInfo?.id}
+              isEnemy={roundInfo?.descInfo?.sender?.isEnemy}
+            />
             <PKProgress
               opponent
               result={result}
@@ -280,7 +367,12 @@ const Pk = () => {
       >
         <WaitPlunderList />
         <Flex flex={1}>
-          <PlunderPanel width='100%' details={roundInfos} others={others} />
+          <PlunderPanel
+            className='plunder-pk-step3'
+            width='100%'
+            details={roundInfos}
+            others={others}
+          />
         </Flex>
         <WaitPlunderList />
       </Flex>

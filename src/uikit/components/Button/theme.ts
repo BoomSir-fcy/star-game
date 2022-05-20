@@ -31,6 +31,7 @@ export const styleVariants = {
     width: '210px',
     height: '123px',
     paddingBottom: '48px',
+    color: 'black',
   },
   [variants.PRIMARY]: {
     backgroundColor: '#161920',

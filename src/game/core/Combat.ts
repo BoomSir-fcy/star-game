@@ -351,15 +351,15 @@ class Combat extends EventTarget {
       // 暴击
       if (attackInfo?.attack_crit) {
         // console.log(attackInfo, '暴击');
-        let { receive_sub_hp } = attackInfo || {};
+        let hp = attackInfo?.receive_sub_hp;
         if (attackInfo?.around?.length) {
-          receive_sub_hp = attackInfo.around[0].receive_sub_hp;
+          hp = attackInfo.around[0].receive_sub_hp;
         }
-        const tipsText = new TipsText(`${receive_sub_hp}`, {
+        const tipsText = new TipsText(`${hp}`, {
           type: TipsTextType.CRIT,
         });
         const axisPointTarget = target.axisPoint.clone();
-        axisPointTarget.y -= 60;
+        axisPointTarget.y -= 70;
         tipsText.show(axisPointTarget);
       }
 
@@ -381,6 +381,17 @@ class Combat extends EventTarget {
       } else if (effect === descType.ATTACK_MISS) {
         const tipsText = new TipsText('[未命中]');
         tipsText.show(target.axisPoint);
+      } else if (attackInfo) {
+        let hp = attackInfo?.receive_sub_hp;
+        if (attackInfo?.around?.length) {
+          hp = attackInfo.around[0].receive_sub_hp;
+        }
+        if (hp) {
+          const tipsText = new TipsText(`${hp}`);
+          const axisPointTarget = target.axisPoint.clone();
+          axisPointTarget.y -= 70;
+          tipsText.show(axisPointTarget);
+        }
       }
       this.onBulletMoveEnd();
     });
@@ -417,6 +428,8 @@ class Combat extends EventTarget {
       bullet.attack(bulletType.BULLET, target);
     } else if (effect === descType.RESTORE) {
       bullet.attack(bulletType.RESTORE, target);
+    } else if (effect === descType.PURIFY) {
+      bullet.attack(bulletType.PURIFY, target);
     } else {
       bullet.attack(bulletType.BULLET, target, effect);
     }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Card, BgCard, Text, Button, Label } from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -14,6 +14,8 @@ import {
 import ScoringPanel from 'components/ScoringPanel';
 import StarCom from 'components/StarCom';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import { storeAction } from 'state';
+import { useDispatch } from 'react-redux';
 import InfoPlane from './components/grow/InfoPlane';
 import Extra from './components/grow/Extra';
 import {
@@ -35,6 +37,7 @@ const TopBox = styled(Box)`
 const Grow: React.FC = () => {
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
+  const dispatch = useDispatch();
   const { toastError, toastSuccess, toastWarning, toastInfo } = useToast();
   const [visible, setVisible] = useState(false);
   const [nowPlante, setNowPlante] = useState<StrengthenPlanetInfo>();
@@ -51,12 +54,17 @@ const Grow: React.FC = () => {
   });
 
   const [stepsEnabled, setStepsEnabled] = useState(true);
-  const [steps, setSteps] = useState([
-    {
-      element: '.planet',
-      intro: '培育可以大幅提升它的战斗力和产能获取，包括各项属性的增长',
-    },
-  ]);
+  const steps = useMemo(
+    () => [
+      {
+        element: '.planet',
+        intro: t(
+          'Cultivation can greatly improve its combat effectiveness and capacity acquisition, including the growth of various attributes',
+        ),
+      },
+    ],
+    [t],
+  );
   let timer = null as any;
 
   const ToStrengthenSpeedUp = async () => {
@@ -176,7 +184,11 @@ const Grow: React.FC = () => {
           exitOnOverlayClick: false,
           tooltipPosition: 'top',
         }}
-        onExit={step => setStepsEnabled(false)}
+        onExit={step => {
+          console.log(step);
+          setStepsEnabled(false);
+          // dispatch(storeAction.toggleVisible({ visible: true }));
+        }}
       />
       <BgCard variant='big' padding='50px 33px'>
         <Flex>

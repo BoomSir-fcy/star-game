@@ -43,7 +43,7 @@ class TipsText extends EventTarget {
 
   animation() {
     this.scale -= 0.01;
-    this.alpha -= 0.05;
+    this.alpha -= 0.02;
 
     if (this.alpha <= 0.1) {
       this.text.parent.removeChild(this.text);
@@ -52,17 +52,17 @@ class TipsText extends EventTarget {
     if (this.type === TipsTextType.NORMAL) {
       this.scale -= 0.01;
       this.text.alpha = this.alpha;
-      this.text.position.y -= 2;
+      // this.text.position.y -= 1;
       this.text.scale.set(this.scale);
     } else if (this.type === TipsTextType.CRIT) {
       this.scale += 0.02;
       this.text.alpha = this.alpha;
-      this.text.position.y -= 1;
+      // this.text.position.y -= 1;
       this.text.scale.set(this.scale);
     } else if (this.type === TipsTextType.RESTORE) {
       this.scale -= 0.01;
       this.text.alpha = this.alpha;
-      this.text.position.y -= 1;
+      // this.text.position.y -= 1;
       this.text.scale.set(this.scale);
     }
     requestAnimationFrame(() => {
@@ -88,7 +88,7 @@ class TipsText extends EventTarget {
     }
     return {
       fill,
-      fontSize: 22,
+      fontSize: 24,
     };
   }
 }

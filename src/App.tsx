@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ResetCSS } from 'uikit';
+import VConsole from 'vconsole';
 import ScaleOrientContent from 'components/ScaleOrientContent';
 import useEagerConnect from 'hooks/useEagerConnect';
 import Toast from 'components/Toast';
@@ -41,6 +42,13 @@ const StartPlanet = lazy(() => import('./views/Star/planet'));
 const UpgradeList = React.lazy(
   () => import('./views/Star/components/upgrade/SelectPlanet'),
 );
+
+// window.addEventListener('click', () => {
+//   console.log(Object.keys(document.documentElement));
+//   console.log((document as any).webkitRequestFullScreen);
+// });
+
+// const vConsole = new VConsole();
 
 function App() {
   useEagerConnect(); // 自动链接钱包

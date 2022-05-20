@@ -19,19 +19,19 @@ const useActiveSoldier = (game: Game) => {
       eventsType.ADD_ACTIVE_SOLDIER,
       handleAddActiveSoldier,
     );
-    game.addEventListener(
-      eventsType.REMOVE_ACTIVE_SOLDIER,
-      handleRemoveActiveSoldier,
-    );
+    // game.addEventListener(
+    //   eventsType.REMOVE_ACTIVE_SOLDIER,
+    //   handleRemoveActiveSoldier,
+    // );
     return () => {
       game.removeEventListener(
         eventsType.ADD_ACTIVE_SOLDIER,
         handleAddActiveSoldier,
       );
-      game.removeEventListener(
-        eventsType.REMOVE_ACTIVE_SOLDIER,
-        handleRemoveActiveSoldier,
-      );
+      // game.removeEventListener(
+      //   eventsType.REMOVE_ACTIVE_SOLDIER,
+      //   handleRemoveActiveSoldier,
+      // );
     };
   }, [handleAddActiveSoldier, handleRemoveActiveSoldier, game]);
 
