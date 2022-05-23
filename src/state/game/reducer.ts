@@ -78,7 +78,7 @@ export const fetchGamePKAsync =
   (id1: number, id2: number, maxRound?: number): AppThunk =>
   async dispatch => {
     const PKInfo = await fetchGamePK(id1, id2, maxRound);
-    dispatch(setPKInfo(PKInfo));
+    dispatch(setPKInfo([PKInfo]));
   };
 
 export const fetchGamePKTestAsync =
@@ -86,7 +86,7 @@ export const fetchGamePKTestAsync =
   async dispatch => {
     dispatch(setPKInfo(null));
     const PKInfo = await fetchGamePKTest(tag, maxRound, terrain_id);
-    dispatch(setPKInfo(PKInfo));
+    dispatch(setPKInfo([PKInfo]));
   };
 
 export const fetchGameMatchUserAsync =

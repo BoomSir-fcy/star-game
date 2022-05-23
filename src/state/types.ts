@@ -214,7 +214,7 @@ export interface GameState {
     };
   };
   process: any;
-  PKInfo: null | GamePkInfo;
+  PKInfo: null | GamePkInfo[];
   state: GamePkState;
   matchUser: Api.Alliance.PlunderInfoMatchUser | null;
   mineUser: Api.Alliance.PlunderInfoMatchUser | null;

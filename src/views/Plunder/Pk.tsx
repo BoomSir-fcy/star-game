@@ -97,7 +97,7 @@ const Pk = () => {
   useEffect(() => {
     if (!mounted) {
       if (ref.current && game && PKInfo) {
-        setTotalInfo(PKInfo.init.show_hp);
+        setTotalInfo(PKInfo[current].init.show_hp);
         setMounted(true);
         // 初始化
         if (current === 0) {
@@ -108,11 +108,11 @@ const Pk = () => {
           });
           loaders.addEventListener('complete', () => {
             setComplete(true);
-            initHandle(PKInfo);
+            initHandle(PKInfo[current]);
           });
         } else if (current <= 5) {
           setComplete(true);
-          initHandle(PKInfo);
+          initHandle(PKInfo[current]);
         }
       } else {
         setTimeout(() => {
@@ -189,28 +189,28 @@ const Pk = () => {
       ];
     });
 
-    if (current < 4) {
-      // const timer = setInterval(() => {
-      //   setOthers(prev => {
-      //     const { length } = prev;
-      //     const index = 4 - length;
-      //     if (index === 0) {
-      //       clearInterval(timer);
-      //       newRoundHandle();
-      //       return prev;
-      //     }
-      //     return [
-      //       ...prev,
-      //       {
-      //         id: length,
-      //         text: `${index}`,
-      //         type: 2,
-      //       },
-      //     ];
-      //   });
-      // }, 1000);
+    if (current < PKInfo?.length) {
+      const timer = setInterval(() => {
+        setOthers(prev => {
+          const { length } = prev;
+          const index = 4 - length;
+          if (index === 0) {
+            clearInterval(timer);
+            newRoundHandle();
+            return prev;
+          }
+          return [
+            ...prev,
+            {
+              id: length,
+              text: `${index}`,
+              type: 2,
+            },
+          ];
+        });
+      }, 1000);
     }
-  }, [setOthers, current, setResult]);
+  }, [setOthers, current, setResult, PKInfo?.length, newRoundHandle]);
 
   useEffect(() => {
     if (running) {
@@ -324,7 +324,7 @@ const Pk = () => {
           <Flex mt='-52px' justifyContent='space-between'>
             <PKProgress
               className='plunder-pk-step1'
-              total={PKInfo?.init?.show_hp?.blue_total_hp ?? 0}
+              total={PKInfo?.[current]?.init?.show_hp?.blue_total_hp ?? 0}
               current={totalInfo?.blue_total_hp ?? 0}
               result={result}
             />
@@ -337,7 +337,7 @@ const Pk = () => {
               opponent
               result={result}
               isRed
-              total={PKInfo?.init?.show_hp?.red_total_hp ?? 0}
+              total={PKInfo?.[current]?.init?.show_hp?.red_total_hp ?? 0}
               current={totalInfo?.red_total_hp ?? 0}
             />
           </Flex>
