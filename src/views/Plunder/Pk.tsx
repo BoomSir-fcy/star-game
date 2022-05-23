@@ -84,7 +84,7 @@ const Pk = () => {
 
   // TODO: 要干掉
   // useFetchGamePK(5000000000000004, 5000000000000002, 10);
-  useFetchGamePKTest(id, undefined, 30);
+  // useFetchGamePKTest(id, undefined, 30);
 
   const { initHandle, running } = usePK(game);
 
