@@ -116,6 +116,12 @@ const MysteryBoxDetail = () => {
     [t],
   );
 
+  React.useEffect(() => {
+    return () => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    };
+  }, [dispatch]);
+
   return (
     <Layout>
       {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (

@@ -6,7 +6,6 @@ import 'intro.js/introjs.css';
 import { Box, Text, BgCard, Flex, TweenText } from 'uikit';
 import { Link } from 'react-router-dom';
 import Layout from 'components/Layout';
-import Dashboard from 'components/Dashboard';
 import { MysteryBoxCom, mysteryBoxQualities } from 'components/MysteryBoxCom';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
 import { useGuide } from 'hooks/useGuide';
@@ -70,6 +69,12 @@ const MysteryBox = () => {
       },
     ];
   }, [t]);
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    };
+  }, [dispatch]);
 
   return (
     <Layout>

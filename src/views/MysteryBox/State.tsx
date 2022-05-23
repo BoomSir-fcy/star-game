@@ -17,7 +17,6 @@ import {
   Dots,
 } from 'uikit';
 import Layout from 'components/Layout';
-import Dashboard from 'components/Dashboard';
 import {
   MysteryBoxStyled,
   MysteryBoxBaseStyled,
@@ -138,27 +137,28 @@ const MysteryBoxState = () => {
     return Boolean(Number(seedBlocks[quality])) || bought;
   }, [seedBlocks, quality, bought]);
 
-  const { guides, setGuide } = useGuide('mystery-state');
-
   // 控制是否开启新手指导的
+  const { guides, setGuide } = useGuide('mystery-state');
   const [stepsEnabled, setStepsEnabled] = useState(true);
-  const [steps, setSteps] = useState([
-    {
-      element: '.mystery-state-step0',
-      intro: '点击按钮，立即开始星辰大海~',
-    },
-  ]);
+  const steps = React.useMemo(() => {
+    return [
+      {
+        element: '.mystery-state-step0',
+        intro: t('Click the button to start the star sea immediately~~'),
+      },
+    ];
+  }, [t]);
 
+  console.log(steps, steps.length, guides);
   return (
     <Layout>
-      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
+      {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
           initialStep={guides.step}
           options={{
             exitOnOverlayClick: false,
-            tooltipPosition: 'top',
           }}
           onChange={currentStep => {
             if (currentStep > guides.step) {
@@ -183,7 +183,7 @@ const MysteryBoxState = () => {
             <MysteryBoxBaseStyled quality={quality} />
             <MysteryBoxBoxStyled quality={quality} />
           </MysteryBoxStyled>
-          <Box>
+          <Box className='mystery-state-step0'>
             <CardStyled>
               <Flex height='100%' alignItems='center'>
                 <Box width={100}>

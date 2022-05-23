@@ -267,7 +267,9 @@ const Planet = () => {
   }, [onRefreshClick]);
 
   React.useEffect(() => {
-    dispatch(storeAction.toggleVisible({ visible: false }));
+    return () => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    };
   }, [dispatch]);
 
   // React.useEffect(() => {
