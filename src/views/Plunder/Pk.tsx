@@ -29,6 +29,7 @@ import Game from 'game/core/Game';
 import { useStore, storeAction } from 'state';
 import { RoundDescTotalHp } from 'game/types';
 import { useToast } from 'contexts/ToastsContext';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
 import { useGuide } from 'hooks/useGuide';
 import {
@@ -61,6 +62,7 @@ const Pk = () => {
   const { toastError } = useToast();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const parseQs = useParsedQueryString();
 
@@ -97,6 +99,7 @@ const Pk = () => {
   useEffect(() => {
     if (!mounted) {
       if (ref.current && game && PKInfo) {
+        console.log(PKInfo);
         setTotalInfo(PKInfo[current].init.show_hp);
         setMounted(true);
         // 初始化
@@ -170,6 +173,10 @@ const Pk = () => {
     setMounted(false);
     setCurrent(prev => prev + 1);
   }, [setMounted, setTotalInfo, setCurrent, setOthers, setRoundInfos, game]);
+
+  const onEndHandle = useCallback(() => {
+    navigate('/plunder-result');
+  }, [navigate]);
 
   const onRunEnd = useCallback(() => {
     const res = Math.random() > 0.5;
@@ -305,7 +312,7 @@ const Pk = () => {
       <Flex mb='20px'>
         <Flex position='relative' zIndex={1}>
           <BackButton ml='19px' />
-          <RefreshButton ml='33px' />
+          {/* <RefreshButton ml='33px' /> */}
         </Flex>
         <Fringe ml='-192px' />
         <Box />
@@ -332,6 +339,7 @@ const Pk = () => {
               mt='-45px'
               roundName={roundInfo?.id}
               isEnemy={roundInfo?.descInfo?.sender?.isEnemy}
+              onEnd={onEndHandle}
             />
             <PKProgress
               opponent
@@ -361,7 +369,7 @@ const Pk = () => {
       )}
 
       <Flex
-        justifyContent='space-between'
+        justifyContent='center'
         position='absolute'
         bottom='-1000px'
         width='100%'
@@ -370,7 +378,7 @@ const Pk = () => {
           transition: 'all 0.5s',
         }}
       >
-        <WaitPlunderList />
+        {/* <WaitPlunderList /> */}
         <Flex flex={1}>
           <PlunderPanel
             className='plunder-pk-step3'
@@ -379,7 +387,7 @@ const Pk = () => {
             others={others}
           />
         </Flex>
-        <WaitPlunderList />
+        {/* <WaitPlunderList /> */}
       </Flex>
     </Layout>
   );

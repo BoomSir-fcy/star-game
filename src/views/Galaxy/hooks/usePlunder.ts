@@ -46,7 +46,7 @@ const usePlunder = () => {
           const res = await Api.GalaxyApi.plunderStar(params);
           if (Api.isSuccess(res)) {
             // dispatch(setPKInfo(res.data.pk_result1[0]));
-            dispatch(setPKInfo(parseZip(res.data.pk_result)[0]));
+            dispatch(setPKInfo(parseZip(res.data.pk_result)));
             return true;
           }
         } catch (error) {
