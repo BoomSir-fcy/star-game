@@ -194,7 +194,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   }, [pathname]);
   return (
     <Box position='relative' id='detect-orient' ref={ref}>
-      <ResetCSS scale={scale} rotate={client.width < client.height} />
+      <ResetCSS scale={scale} rotate={client?.width < client?.height} />
       <StarrySky bgType={bgType} />
       <VideoComponent
         cHeight={APP_HEIGHT}

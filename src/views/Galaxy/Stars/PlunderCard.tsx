@@ -54,6 +54,7 @@ export const PlunderCard: React.FC<{
 
   // 抢夺
   const handleAttckStar = useCallback(async () => {
+    // TODO: 掠夺保护期，按钮禁用样式
     if (info?.owner) {
       setPending(true);
       dispatch(setState(GamePkState.CONFIRMING));
@@ -101,7 +102,7 @@ export const PlunderCard: React.FC<{
               {t('Star')} Lv: {info.number}
             </Text>
             <Text shadow='primary' small bold>
-              {t('Output')} BOX: {info.disapth_box}
+              {t('Output')} BOX: {info.product_box}
             </Text>
             <Text shadow='primary' small bold>
               {t('Occupied Times')}: {info.history_hold_number}

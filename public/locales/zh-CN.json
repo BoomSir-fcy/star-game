@@ -443,7 +443,7 @@
   "Commander, give yourself the name of a fleet!": "指挥官，给自己像一个舰队名称吧!",
   "Click to enter the next step": "点击确认进入下一步",
   "Attack distance": "攻击距离",
-   "Moving distance": "移动距离",
+  "Moving distance": "移动距离",
   "Burst": "爆发",
   "Defense": "防御",
   "Treatment": "治疗",
@@ -544,5 +544,6 @@
   "http-error-500002": "星系已经拥有者",
   "http-error-1000001": "游戏初始化失败",
   "http-error-1000002": "设置游戏单位失败",
+  "http-error-400004": "BOX余额不足",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }
