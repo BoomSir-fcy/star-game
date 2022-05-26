@@ -199,6 +199,7 @@ const Planet = () => {
         // 选择
         if (ChooseList.length >= 5) {
           // 满了
+          toastWarning(t('Alliance has 5 planets'));
           return;
         }
         list.push(id);
@@ -208,7 +209,7 @@ const Planet = () => {
       }
       setChooseList(list);
     },
-    [ChooseList, setChooseList],
+    [ChooseList, t, toastWarning, setChooseList],
   );
 
   const init = useCallback(() => {
