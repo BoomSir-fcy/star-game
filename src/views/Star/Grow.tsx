@@ -174,6 +174,12 @@ const Grow: React.FC = () => {
   //   }
   // }, [parsedQs.id]);
 
+  React.useEffect(() => {
+    return () => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    };
+  }, [dispatch]);
+
   return (
     <Box>
       <Steps
@@ -185,9 +191,11 @@ const Grow: React.FC = () => {
           tooltipPosition: 'top',
         }}
         onExit={step => {
-          console.log(step);
-          setStepsEnabled(false);
-          // dispatch(storeAction.toggleVisible({ visible: true }));
+          if (step) {
+            console.log(step, 1111);
+            setStepsEnabled(false);
+            dispatch(storeAction.toggleVisible({ visible: true }));
+          }
         }}
       />
       <BgCard variant='big' padding='50px 33px'>

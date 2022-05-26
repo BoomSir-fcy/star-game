@@ -6,6 +6,7 @@ export const useGuide = (url: string) => {
     step: 0,
     guideFinish: false,
     finish: false,
+    round: 0,
   });
 
   const getGuide = React.useCallback(async () => {
@@ -16,6 +17,7 @@ export const useGuide = (url: string) => {
         setTimeout(() => {
           setGuides({
             step: res.data.step,
+            round: res.data.round,
             guideFinish: res.data.finish,
             finish: true,
           });
@@ -27,9 +29,9 @@ export const useGuide = (url: string) => {
   }, [url]);
 
   const setGuide = React.useCallback(
-    async (step: number, finish?: boolean) => {
+    async (step: number, finish?: boolean, round?: number) => {
       try {
-        const res = await Api.GuideApi.setGuide({ url, step, finish });
+        const res = await Api.GuideApi.setGuide({ url, step, finish, round });
         return res;
       } catch (error: any) {
         throw new Error(error);

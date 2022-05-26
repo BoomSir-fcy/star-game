@@ -110,7 +110,9 @@ const Planet = () => {
   const workingList = useStore(p => p.alliance.workingPlanet);
   const { SetWorking } = useJoinAlliance();
 
-  const { guides, setGuide } = useGuide(location.pathname);
+  const { guides, setGuide } = useGuide(
+    `${location.pathname}${location.search}`,
+  );
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(false);
@@ -142,6 +144,29 @@ const Planet = () => {
     ],
     [t],
   );
+
+  const planetSteps = useMemo(() => {
+    return [
+      {
+        element: '.header_asset',
+        intro: t('This is your token asset.'),
+      },
+      {
+        element: '.header_resource',
+        intro: t(
+          'Here is the total capacity and resources of all your planets.',
+        ),
+      },
+      {
+        element: '.header_explore',
+        intro: t(
+          'Click to enter the Star Alliance to start interstellar exploration',
+        ),
+        interactive: true,
+        disabled: true,
+      },
+    ];
+  }, [t]);
 
   const destroy = React.useCallback(
     (n: number) => {
@@ -253,7 +278,7 @@ const Planet = () => {
   }, [init]);
 
   React.useEffect(() => {
-    if (guides.finish && choose && !guides.guideFinish) {
+    if (guides.finish && !guides.guideFinish) {
       setStepsEnabled(true);
     }
   }, [choose, guides]);
@@ -275,12 +300,13 @@ const Planet = () => {
   // React.useEffect(() => {
   //   setGuide(0);
   // }, [destroy, guides, setGuide]);
+  const currentSteps = choose ? steps : planetSteps;
 
   return (
     <Box id='containerBox'>
       <GlobalStyle
-        interactive={steps[activeStep]?.interactive && stepsEnabled}
-        disabled={steps[activeStep]?.disabled}
+        interactive={currentSteps[activeStep]?.interactive && stepsEnabled}
+        disabled={currentSteps[activeStep]?.disabled}
       />
       {!guides.guideFinish &&
         guides.finish &&
@@ -289,7 +315,7 @@ const Planet = () => {
           <Steps
             ref={guideRef}
             enabled={stepsEnabled}
-            steps={steps}
+            steps={currentSteps}
             initialStep={guides.step}
             options={{
               exitOnOverlayClick: false,
@@ -304,9 +330,15 @@ const Planet = () => {
                 setGuide(currentStep);
               }
             }}
-            onExit={() => {
+            onExit={step => {
               setStepsEnabled(false);
-              dispatch(storeAction.toggleVisible({ visible: true }));
+              if (!choose) {
+                setGuide(step + 1);
+                return;
+              }
+              if (step === currentSteps.length) {
+                dispatch(storeAction.toggleVisible({ visible: true }));
+              }
             }}
           />
         )}

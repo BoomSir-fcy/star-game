@@ -73,7 +73,13 @@ const Info: React.FC<InfoProps> = ({
   return (
     <Box width='100%'>
       <Flex height='179px' width='100%'>
-        <Box width='312px' pl='20px' pt='28px'>
+        <Box
+          width='312px'
+          height='250px'
+          pl='20px'
+          pt='28px'
+          className='header_asset'
+        >
           <ButtonLeft
             onClick={() => {
               setActiveToken(DSGblance);
@@ -156,7 +162,7 @@ const Info: React.FC<InfoProps> = ({
               </ButtonTag1>
             </Link>
           </Box>
-          <Box ml='22px'>
+          <Box ml='22px' className='header_resource'>
             <ButtonTag2 variant='custom'>
               <Flex pl='8px' alignItems='center' width='100%'>
                 <Box width={70}>

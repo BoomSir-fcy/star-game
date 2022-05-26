@@ -201,7 +201,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
   }, [activeSoldier]);
 
   return (
-    <Box style={{ position: 'relative' }}>
+    <Box style={{ position: 'relative' }} className='star-embattle-step4'>
       <Box
         // width='608px'
         // height='476px'

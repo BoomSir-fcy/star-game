@@ -4,6 +4,7 @@ declare namespace Api {
       url: string;
       step?: number;
       finish?: boolean;
+      round?: number;
     }
   }
 }
