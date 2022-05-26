@@ -1,4 +1,9 @@
-import React, { useCallback, useState, useImperativeHandle } from 'react';
+import React, {
+  useCallback,
+  useState,
+  useImperativeHandle,
+  useEffect,
+} from 'react';
 import Chance from 'chance';
 import { Box, TweenText, Flex, Input, Label, Button, Text } from 'uikit';
 import { ManAvatar, WoManAvatar } from 'components/Avatar';
@@ -40,6 +45,13 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
   const [superior, setSuperior] = useState('');
 
   const { toastSuccess, toastError } = useToast();
+
+  useEffect(() => {
+    const InviteAddress = localStorage.getItem('InviteAddress');
+    if (InviteAddress) {
+      setSuperior(InviteAddress);
+    }
+  }, [setSuperior]);
 
   const randomName = useCallback(() => {
     setName(chance.name());

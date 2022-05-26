@@ -25,9 +25,10 @@ const InvitePop: React.FC = () => {
     invite_user_num: 0,
     bnb_income: '0',
   });
+  const Url = `${window.location.origin}?InviteAddress=${account}`;
   const Copy = () => {
     const aux = document.createElement('input');
-    const content = 'https://star.game.box';
+    const content = Url;
     aux.setAttribute('value', content);
     document.body.appendChild(aux);
     aux.select();
@@ -76,13 +77,15 @@ const InvitePop: React.FC = () => {
         </Box>
       </ShaDowBox>
       <ShaDowBox alignItems='center' justifyContent='space-between'>
-        <Flex flex='1'>
+        <Flex flex='1' maxWidth='60%'>
           <Image src='/images/commons/icon/plane.png' width={60} height={60} />
           <Box ml='30px'>
             <Text color='textSubtle' fontSize='24px'>
               {t('My inviter’s address')}
             </Text>
-            <Text fontSize='22px'>https://star.game.box</Text>
+            <Text fontSize='22px' ellipsis maxWidth='350px'>
+              {Url}
+            </Text>
           </Box>
         </Flex>
         <Box>

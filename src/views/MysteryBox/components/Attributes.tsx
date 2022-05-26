@@ -25,20 +25,20 @@ const Attributes: React.FC<AttributesProps> = ({
         <Text mb='10px'>{t('Attributes')}</Text>
         <Flex>
           <LabelStyled>
-            <LabelText>{t('Grid')}:</LabelText>
+            <LabelText>{t('Grid')}: </LabelText>
             <AttrText>
               {info?.areaX ? `${info?.areaX}x${info?.areaY}` : ''}
             </AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
-            <LabelText>{t('Grade')}:</LabelText>
+            <LabelText>{t('Grade')}: </LabelText>
             <AttrText>
               Lv{info?.level}
               {/* {t('Level')} */}
             </AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
-            <LabelText>{t('Rarity')}:</LabelText>
+            <LabelText>{t('Rarity')}: </LabelText>
             <AttrText color={QualityColor[rarity]}>
               {rarity ? t(`rarity-${rarity}`) : ''}
             </AttrText>
@@ -46,25 +46,25 @@ const Attributes: React.FC<AttributesProps> = ({
         </Flex>
         <Flex mt='13px'>
           <LabelStyled>
-            <LabelText>{t('Looting Speed')}:</LabelText>
+            <LabelText>{t('Looting Speed')}: </LabelText>
             <AttrText>{info?.plunder_speed}</AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
-            <LabelText>{t('Ore')}:</LabelText>
+            <LabelText>{t('Ore')}: </LabelText>
             <AttrText>{info?.stone}</AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
-            <LabelText>{t('Population')}:</LabelText>
+            <LabelText>{t('Population')}: </LabelText>
             <AttrText>{info?.population}</AttrText>
           </LabelStyled>
         </Flex>
         <Flex mt='13px'>
           <LabelStyled>
-            <LabelText>{t('Energy')}:</LabelText>
+            <LabelText>{t('Energy')}: </LabelText>
             <AttrText>{info?.energy}</AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
-            <LabelText>{t('Building Count')}:</LabelText>
+            <LabelText>{t('Building Count')}: </LabelText>
             <AttrText>{info?.build_count}</AttrText>
           </LabelStyled>
         </Flex>
