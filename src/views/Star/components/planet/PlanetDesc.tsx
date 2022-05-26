@@ -11,10 +11,10 @@ export const PlanetDesc: React.FC<{
     <Flex width='100%' flexDirection='column'>
       <Flex flex={1} margin='3px 0'>
         <Text color='textSubtle' small>
-          {t('Looting Speed')}:{info?.plunder_speed}
+          {t('Looting Speed')}: {info?.plunder_speed}
         </Text>
         <Text color='textSubtle' ml='140px' small>
-          {t('Building Count')}:{info?.build_count}
+          {t('Building Count')}: {info?.build_count}
         </Text>
       </Flex>
       <Flex justifyContent='space-between' flex={1}>

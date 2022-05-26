@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Text, Image } from 'uikit';
 import { useStore } from 'state/util';
 import { TokenImage } from 'components/TokenImage';
-import { getDsgAddress } from 'utils/addressHelpers';
+import { getBoxAddress, getDsgAddress } from 'utils/addressHelpers';
 import StarCom from 'components/StarCom';
 import Modal from 'components/Modal';
 import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
@@ -108,7 +108,7 @@ const Info: React.FC<InfoProps> = ({
                 <TokenImage
                   width={45}
                   height={48}
-                  tokenAddress={getDsgAddress()}
+                  tokenAddress={getBoxAddress()}
                 />
                 <Text fontSize='20px' mt='8px' ml='8px'>
                   {BOXblance?.amount}
