@@ -87,9 +87,11 @@ export const PlanetBox: React.FC<{
         <Flex ml='29px' flex='1' flexDirection='column'>
           <Desc justifyContent='space-between'>
             <Box>
-              <Text fontSize='24px'>{info.name}</Text>
-              <Flex alignItems='center' mt='2px'>
-                <Text color={QualityColor[info?.rarity]} bold small>
+              <Flex alignItems='center'>
+                <Text fontSize='24px' maxWidth='100px' ellipsis>
+                  {info.name}
+                </Text>
+                <Text ml='12px' color={QualityColor[info?.rarity]} bold small>
                   {t(getPlanetRarity(info?.rarity))}
                 </Text>
                 <Text
@@ -107,8 +109,13 @@ export const PlanetBox: React.FC<{
                 <Text ml='12px' bold small>
                   Lv{info.level}
                 </Text>
-                <Text ml='12px' small>
-                  {t('Grid')}:{info.areaX}x{info.areaY}
+              </Flex>
+              <Flex alignItems='center' mt='12px'>
+                <Text small color='textSubtle'>
+                  {t('Grid')}: {info.areaX}x{info.areaY}
+                </Text>
+                <Text small color='textSubtle' ml='40px'>
+                  {t('Building Count')}: {info?.build_count}
                 </Text>
               </Flex>
             </Box>
@@ -119,7 +126,7 @@ export const PlanetBox: React.FC<{
                   justifyContent='flex-end'
                   alignItems='center'
                 >
-                  <Text
+                  {/* <Text
                     shadow='primary'
                     fontSize='20px'
                     mr='15px'
@@ -127,7 +134,7 @@ export const PlanetBox: React.FC<{
                     style={{ flex: 1, textAlign: 'right' }}
                   >
                     {t('Upgrading')}
-                  </Text>
+                  </Text> */}
                   <Image
                     src='/images/commons/icon/icon_arrow_right.png'
                     width={22}

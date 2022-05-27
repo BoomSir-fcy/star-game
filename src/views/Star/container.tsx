@@ -23,17 +23,28 @@ const Star: React.FC<{
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
-  const { t } = useTranslation();
   const id = Number(parsedQs.id);
+  const { t } = useTranslation();
   const { activeNavId } = useStore(p => p.planet);
+  const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
 
   React.useEffect(() => {
     if (id) {
       dispatch(fetchPlanetInfoAsync([id]));
       dispatch(fetchPlanetBuildingsAsync(id));
-      dispatch(fetchBuildingsListAsync(1));
     }
   }, [id, dispatch]);
+
+  React.useEffect(() => {
+    if (id && planet?.race) {
+      dispatch(
+        fetchBuildingsListAsync({
+          type: 1,
+          race: planet?.race,
+        }),
+      );
+    }
+  }, [id, dispatch, planet?.race]);
 
   React.useEffect(() => {
     dispatch(setActiveNavId('build'));

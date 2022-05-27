@@ -130,15 +130,15 @@ export const Building: React.FC<{
         <>
           {state?.time > 0 && (
             <ToolBar
-              onClick={() => {
-                clearInterval(timer);
-                setState({ ...state, time: 0 });
-                if (status?.upgrade_type === 1) {
-                  handleUpgrade();
-                } else {
-                  handleRepair();
-                }
-              }}
+            // onClick={() => {
+            //   clearInterval(timer);
+            //   setState({ ...state, time: 0 });
+            //   if (status?.upgrade_type === 1) {
+            //     handleUpgrade();
+            //   } else {
+            //     handleRepair();
+            //   }
+            // }}
             >
               <Text small>{formatTime(state.time)}</Text>
             </ToolBar>

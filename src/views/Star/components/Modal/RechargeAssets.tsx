@@ -43,7 +43,7 @@ export const RechargeAssets: React.FC<{
             mr='15px'
             width={50}
             height={50}
-            src='/images/commons/icon/ore.png'
+            src='/images/commons/icon/icon_minera.png'
             alt=''
           />
         ),
@@ -56,7 +56,7 @@ export const RechargeAssets: React.FC<{
             mr='15px'
             width={50}
             height={50}
-            src='/images/commons/icon/population.png'
+            src='/images/commons/icon/icon_spice.png'
             alt=''
           />
         ),
@@ -69,7 +69,7 @@ export const RechargeAssets: React.FC<{
             mr='15px'
             width={50}
             height={50}
-            src='/images/commons/icon/energy.png'
+            src='/images/commons/icon/icon_energy.png'
             alt=''
           />
         ),
