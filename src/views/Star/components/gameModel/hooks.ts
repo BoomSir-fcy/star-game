@@ -140,3 +140,12 @@ export const useBuildingOperate = () => {
 
   return { upgrade, setBuildingQuick, upgradBuildingComplete, destory };
 };
+
+export const useBuildingOperateAll = () => {
+  // 一键修复
+  const repairAll = React.useCallback(() => {}, []);
+
+  return {
+    repairAll,
+  };
+};

@@ -84,7 +84,10 @@ const StarHeader = () => {
                   {/* <TextStyled ml='52px' small>
                     {planetInfo?.id}
                   </TextStyled> */}
-                  <ScoringPanel scale='sm' count={2} />
+                  <ScoringPanel
+                    scale='sm'
+                    count={planetInfo?.strengthenLevel}
+                  />
                 </Flex>
                 <TextStyled ml='10px' fontSize='20px' color='warning'>
                   {planetInfo?.status === 2

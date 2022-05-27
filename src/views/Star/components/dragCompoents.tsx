@@ -20,7 +20,7 @@ polyfill({
 
 const Container = styled(Flex)`
   position: relative;
-  border: 1px solid #fff;
+  border: 1px solid #30343d;
 `;
 
 const Normal = styled(Flex)<{ pre: boolean }>`
@@ -32,7 +32,7 @@ const Normal = styled(Flex)<{ pre: boolean }>`
   color: #ffffff;
   font-size: 40px;
   text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
-  border: 1px solid #fff;
+  border: 1px solid #30343d;
   transition: all 0.5s;
   background: ${({ pre }) => (pre ? 'rgba(0,0,0,0.5)' : 'transparent')};
   img {
@@ -52,8 +52,8 @@ const BuildingBox = styled(Box)<{ checked: boolean }>`
   ${({ checked }) =>
     checked &&
     css`
-      border: 1px solid #000;
-      box-shadow: 0px 0px 9px 0px #41b7ff, inset 0px 0px 9px 0px #41b7ff;
+      border: 1px solid #fff;
+      box-shadow: 0 0 5px 2px #41b7ff;
     `}
   img {
     max-width: 100%;
