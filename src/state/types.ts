@@ -324,6 +324,33 @@ export interface AllianceView {
 export interface AllianceState {
   allianceView: AllianceView;
   workingPlanet: number[];
+  pkRecord: PkRecord;
+}
+
+export interface PkRecord {
+  record: RecordInfo[];
+  page: number;
+  page_size: number;
+  count: number;
+  win_count: number;
+  failed_count: number;
+  isEnd: boolean;
+  loading: boolean;
+}
+
+export interface RecordInfo {
+  id: number;
+  fromAddress: string;
+  toAddress: string;
+  incomeStone: number;
+  incomeEnergy: number;
+  incomePopulation: number;
+  success: number;
+  createTime: number;
+  detail: string;
+  blueLoseUnit: number;
+  lostDurability: number;
+  redLoseUnit: number;
 }
 
 export enum PlanetStatus {

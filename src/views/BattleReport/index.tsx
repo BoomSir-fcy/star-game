@@ -4,7 +4,10 @@ import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { BgCard, Box, Flex, Spinner, Text } from 'uikit';
 import { useStore, storeAction } from 'state';
-import { useFetchAllianceView } from 'state/alliance/hooks';
+import {
+  useFetchAllianceView,
+  useFetchCombatRecord,
+} from 'state/alliance/hooks';
 
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import eventBus from 'utils/eventBus';
@@ -13,7 +16,6 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { PkBox } from './pkBox';
 import { BattleTop } from './BattleTop';
-import { useFetchCombatRecord } from './hook';
 
 const ScrollBox = styled(Flex)`
   min-height: 400px;
@@ -43,19 +45,24 @@ const BattleReport = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { t } = useTranslation();
+
+  const { pkRecord } = useStore(p => p.alliance);
+  const {
+    record: RecordList,
+    failed_count: FailedCont,
+    win_count: WinCont,
+    count: Cont,
+    isEnd: end,
+    loading,
+    page: StatePage,
+  } = pkRecord;
+
   const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [page, setPageNum] = useState<number>(1);
+  const [page_size, setPageSize] = useState<number>(10);
 
-  const {
-    list: RecordList,
-    page,
-    setPageNum,
-    loading,
-    end,
-    WinCont,
-    FailedCont,
-    Cont,
-  } = useFetchCombatRecord();
+  useFetchCombatRecord(page, page_size);
 
   const loadMore = useCallback(
     (e: any) => {
@@ -81,6 +88,10 @@ const BattleReport = () => {
     ],
     [t],
   );
+
+  useEffect(() => {
+    setPageNum(StatePage);
+  }, [StatePage, setPageNum]);
 
   // 添加事件监听，用于更新状态
   useEffect(() => {
@@ -116,7 +127,10 @@ const BattleReport = () => {
           />
         )}
 
-      <BattleTop cont={{ Cont, WinCont, FailedCont }} />
+      <BattleTop
+        cont={{ Cont, WinCont, FailedCont }}
+        upDate={e => setPageNum(e)}
+      />
       <Flex flex={1}>
         <BgCard variant='Fullscreen' padding='40px 37px'>
           <ScrollBox onScroll={loadMore} className='Pk_list'>

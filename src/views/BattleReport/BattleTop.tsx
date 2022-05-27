@@ -11,6 +11,8 @@ import {
   MarkText,
 } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
+import { useDispatch } from 'react-redux';
+import { setRefresh } from 'state/alliance/reducer';
 
 const TitleBox = styled(Flex)`
   width: 512px;
@@ -40,14 +42,22 @@ interface contInfo {
 
 export const BattleTop: React.FC<{
   cont: contInfo;
-}> = ({ cont }) => {
+  upDate: (e) => void;
+}> = ({ cont, upDate }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   return (
     <Flex padding='0 20px' mb='16px' alignItems='center' flex={1}>
       <Box mr='40px'>
         <BackButton />
-        <RefreshButton ml='33px' />
+        <RefreshButton
+          ml='33px'
+          onRefresh={() => {
+            upDate(0);
+            dispatch(setRefresh());
+          }}
+        />
       </Box>
       <TitleBox>
         <MarkText fontSize='18px' bold fontStyle='italic'>
