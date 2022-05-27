@@ -166,7 +166,7 @@ export const ThingUpgradesModal: React.FC<{
             <UpgradeItem
               width={50}
               height={50}
-              src='/images/commons/icon/population.png'
+              src='/images/commons/icon/spices.png'
               title={t('planetPopulationConsumption')}
               value={`${itemData?.propterty?.per_cost_population}/h`}
               extValue={

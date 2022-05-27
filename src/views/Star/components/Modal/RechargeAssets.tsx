@@ -56,7 +56,7 @@ export const RechargeAssets: React.FC<{
             mr='15px'
             width={50}
             height={50}
-            src='/images/commons/icon/population.png'
+            src='/images/commons/icon/spices.png'
             alt=''
           />
         ),

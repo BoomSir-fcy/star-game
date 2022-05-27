@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import { BoxProps, Card, CardProps, Flex, Image, Text } from 'uikit';
 
 const StyledCard = styled(Card)<{ width?: string }>`
-  width: ${({ width }) => width || '300px'};
+  width: ${({ width }) => width || '369px'};
   max-height: 463px;
   justify-content: center;
   align-items: center;
-  padding: 46px 20px;
+  padding: 26px 20px;
 `;
 const ItemFlex = styled(Flex)`
   margin-top: 23px;
@@ -34,12 +34,14 @@ interface UpgradeCardProps extends CardProps {
   info: Api.Planet.PlanetInfo;
   width?: string;
   up?: any;
+  upgradeInfo?: Api.Planet.PlanetInfo;
 }
 
 export const UpgradeCard: React.FC<UpgradeCardProps> = ({
   info,
   width,
   up,
+  upgradeInfo,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -47,9 +49,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
     <StyledCard width={width} {...props}>
       <Flex flexDirection='column'>
         <Text bold fontSize='20px' shadow='primary'>
-          {!up
-            ? t('Current Lv%value% effect', { value: info?.level || '' })
-            : t('Lv%value% effect after upgrade', { value: info?.level || '' })}
+          {t('Current Lv%value% effect', { value: info?.level || '' })}
         </Text>
         <ItemFlex>
           <StyledImage
@@ -67,11 +67,10 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
               alignItems='center'
             >
               <LevelText fontSize='22px'>Lv {info?.level}</LevelText>
-              {up && <UpBox value={up?.build_level} />}
             </Flex>
           </ItemInfoFlex>
         </ItemFlex>
-        <ItemFlex>
+        {/* <ItemFlex>
           <StyledImage
             width={57}
             height={53}
@@ -108,6 +107,33 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
             >
               <LevelText fontSize='22px'>+{info?.defense}</LevelText>
               {up && <UpBox value={up?.defense} />}
+            </Flex>
+          </ItemInfoFlex>
+        </ItemFlex> */}
+      </Flex>
+      <Flex mt='65px' flexDirection='column'>
+        <Text bold fontSize='20px' shadow='primary'>
+          {t('Lv%value% effect after upgrade', {
+            value: upgradeInfo?.level || '',
+          })}
+        </Text>
+        <ItemFlex>
+          <StyledImage
+            width={57}
+            height={53}
+            src='/images/commons/star/LV.png'
+          />
+          <ItemInfoFlex>
+            <Text small color='textSubtle'>
+              {t('Building grade up limit')}
+            </Text>
+            <Flex
+              width='130px'
+              justifyContent='space-between'
+              alignItems='center'
+            >
+              <LevelText fontSize='22px'>Lv {upgradeInfo?.level}</LevelText>
+              {up && <UpBox value={up?.build_level} />}
             </Flex>
           </ItemInfoFlex>
         </ItemFlex>

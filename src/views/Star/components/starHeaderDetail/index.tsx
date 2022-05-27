@@ -115,7 +115,7 @@ const StarHeader = () => {
                   </Flex>
                 </Flex>
                 <Flex alignItems='center'>
-                  <ImageStyled src='/images/commons/icon/population.png' />
+                  <ImageStyled src='/images/commons/icon/spices.png' />
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
                       <TextStyled color='textTips' small>

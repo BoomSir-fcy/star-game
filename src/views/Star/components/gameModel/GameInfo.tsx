@@ -266,7 +266,7 @@ export const GameInfo: React.FC<{
                   <ItemInfo bottomMargin>
                     <Box width={50} height={50} mr='5px'>
                       <Image
-                        src='/images/commons/icon/population.png'
+                        src='/images/commons/icon/spices.png'
                         width={50}
                         height={50}
                       />

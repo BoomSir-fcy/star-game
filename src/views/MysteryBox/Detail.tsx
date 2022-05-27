@@ -168,6 +168,25 @@ const MysteryBoxDetail = () => {
           </StarLabelStyled>
         </MysteryBox>
         <BgCard fringe variant='sFull'>
+          <Flex padding='43px 37px' flexDirection='column'>
+            <Attributes info={info}>
+              <Race className='mystery-detail-step0' info={info} />
+            </Attributes>
+            <Flex mt='30px' justifyContent='center'>
+              <Button
+                className='mystery-detail-step3'
+                variant='transparent'
+                onClick={() => {
+                  navigate('/star/planet');
+                  navigate(`/star?id=${id}`);
+                }}
+              >
+                {t('Manage Planet')}
+              </Button>
+            </Flex>
+          </Flex>
+        </BgCard>
+        {/* <BgCard fringe variant='sFull'>
           <Flex padding='38px 53px' justifyContent='space-between'>
             <Attributes info={info}>
               <Race className='mystery-detail-step0' info={info} />
@@ -187,7 +206,7 @@ const MysteryBoxDetail = () => {
               </Flex>
             </Extra>
           </Flex>
-        </BgCard>
+        </BgCard> */}
       </Flex>
     </Layout>
   );

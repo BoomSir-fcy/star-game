@@ -6,7 +6,8 @@ import styled from 'styled-components';
 import { Box, Card, Label, Text, Flex } from 'uikit';
 
 export const LabelStyled = styled(Label)`
-  width: 232px;
+  /* width: 232px; */
+  width: 297px;
   height: 60px;
   padding-left: 26px;
 `;
@@ -18,9 +19,11 @@ export const ExtraLabelStyled = styled(Label)`
 `;
 
 export const RaceCardStyled = styled(Card)`
-  width: 726px;
-  height: 234px;
-  padding-top: 20px;
+  /* width: 726px;
+  height: 234px; */
+  width: 100%;
+  height: 190px;
+  padding-top: 16px;
   padding-left: 17px;
 `;
 

@@ -99,11 +99,7 @@ const InfoPlane: React.FC<{
       </Flex>
       <Flex alignItems='flex-end' justifyContent='center'>
         <RightBox>
-          <Image
-            width={54}
-            height={54}
-            src='/images/commons/icon/population.png'
-          />
+          <Image width={54} height={54} src='/images/commons/icon/spices.png' />
           <Box>
             <Text color='textTips' fontSize='20px'>
               {t('Population Capacity')}
