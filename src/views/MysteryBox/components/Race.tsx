@@ -20,7 +20,7 @@ const Race: React.FC<RaceProps> = ({ info, ...props }) => {
       <Flex width='100%'>
         <RaceAvatar race={race} />
         <Flex ml='13px' flexDirection='column'>
-          <Flex>
+          <Flex alignItems='center'>
             <LabelText>{t('Planet Race')}</LabelText>
             <Text color={RaceTypeColor[race]} ml='17px' fontSize='22px' bold>
               {race ? t(raceData[race]?.name) : ''}

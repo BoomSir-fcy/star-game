@@ -9,7 +9,17 @@ import {
   MysteryBoxBoxStyled,
 } from 'components/MysteryBoxCom';
 import styled from 'styled-components';
-import { Image, Flex, Text, BgCard, Button, Card, Box, Dots } from 'uikit';
+import {
+  Image,
+  Flex,
+  Text,
+  BgCard,
+  Button,
+  Card,
+  Box,
+  Dots,
+  StripedProgress,
+} from 'uikit';
 import { Api } from 'apis';
 import { useStore, storeAction } from 'state';
 import { useWeb3React } from '@web3-react/core';
@@ -26,12 +36,14 @@ import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';
 import { useUpgrade } from './components/upgrade/hooks';
 
 import 'intro.js/introjs.css';
+import { UpgradeCost } from './components/upgrade/UpgradeCost';
 
 const MysteryBoxFlexStyled = styled(MysteryBoxStyled)`
   width: 320px;
   height: 366px;
   margin-right: 100px;
   margin-left: -40px;
+  margin-top: 50px;
 `;
 
 const MysteryBoxBaseNewStyled = styled(MysteryBoxBaseStyled)`
@@ -44,12 +56,8 @@ const MysteryBoxStarStyled = styled(MysteryBoxBoxStyled)`
 const StyledCard = styled(Card)`
   width: 448px;
   /* height: 366px; */
-  padding: 50px 20px;
+  padding: 26px 20px;
 `;
-
-export interface UpgradePlanetInfo extends Api.Planet.PlanetInfo {
-  build_level: number;
-}
 
 const Upgrade = () => {
   const { toastSuccess, toastError } = useToast();
@@ -63,10 +71,17 @@ const Upgrade = () => {
   const { guides, setGuide } = useGuide(location.pathname);
   const [visible, setVisible] = useState(false);
   const [pending, setPending] = useState(false);
-  const [upgradeInfo, setUpgradeInfo] = useState({
-    estimate_planet_info: {} as UpgradePlanetInfo,
-    now_planet_info: {} as UpgradePlanetInfo,
+  const [upgradeInfo, setUpgradeInfo] = useState<Api.Planet.UpgradePlanetInfo>({
+    consume_population: 0,
+    consume_star: 0,
+    consume_stone: 0,
+    estimate_max_building_level: 2,
+    estimate_planet_info: {} as Api.Planet.PlanetInfo,
     material_planet_num: 5,
+    now_max_building_level: 1,
+    now_planet_info: {} as Api.Planet.PlanetInfo,
+    space_utilization: '0',
+    upgrade_time: 0,
     success: false,
   });
   const [upgradeSuccess, setUpgradeSuccess] = useState({
@@ -127,18 +142,22 @@ const Upgrade = () => {
         Api.PlanetApi.getPlanetUpgradeInfo(planetId),
       ]);
       if (Api.isSuccess(planetUpgradeInfo)) {
-        const { estimate_planet_info, now_planet_info, material_planet_num } =
-          planetUpgradeInfo.data;
+        const {
+          estimate_planet_info,
+          now_planet_info,
+          estimate_max_building_level,
+          now_max_building_level,
+        } = planetUpgradeInfo.data;
         setUpgradeInfo({
+          ...planetUpgradeInfo.data,
           estimate_planet_info: {
             ...estimate_planet_info,
-            build_level: planetUpgradeInfo.data?.estimate_max_building_level,
+            build_level: estimate_max_building_level,
           },
           now_planet_info: {
             ...now_planet_info,
-            build_level: planetUpgradeInfo.data?.now_max_building_level,
+            build_level: now_max_building_level,
           },
-          material_planet_num,
           success: planetCanLevel.code === 0,
         });
       }
@@ -154,8 +173,8 @@ const Upgrade = () => {
   const upInfo = useMemo(() => {
     return {
       build_level:
-        upgradeInfo.estimate_planet_info?.build_level -
-        upgradeInfo.now_planet_info?.build_level,
+        upgradeInfo.estimate_max_building_level -
+        upgradeInfo.now_max_building_level,
       hp:
         upgradeInfo.estimate_planet_info?.hp - upgradeInfo.now_planet_info?.hp,
       defense:
@@ -208,6 +227,18 @@ const Upgrade = () => {
     };
   }, [dispatch]);
 
+  // 升级经验
+  const getUpgradeExperience = useMemo(() => {
+    const value = Number(upgradeInfo.space_utilization);
+    if (!value || value <= 0) {
+      return 0;
+    }
+    if (value && value > 100) {
+      return 100;
+    }
+    return value;
+  }, [upgradeInfo]);
+
   return (
     <BgCard variant='big' padding='40px 68px'>
       {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
@@ -232,8 +263,12 @@ const Upgrade = () => {
           up={upInfo}
         />
       ) : (
-        <Flex flexDirection='column'>
-          <Flex alignItems='center' className='planet_level_head'>
+        <Flex justifyContent='space-between'>
+          <Flex
+            flexDirection='column'
+            alignItems='center'
+            className='planet_level_head'
+          >
             <Flex width='320px' mr='50px' alignItems='center'>
               <GradeBox>
                 <Text bold shadow='primary'>
@@ -252,9 +287,10 @@ const Upgrade = () => {
                 </Text>
               </GradeBox>
             </Flex>
-            <Flex>{StarAddBox}</Flex>
-          </Flex>
-          <Flex>
+            <Flex flexDirection='column' alignItems='center'>
+              <Text fontSize='20px'>升级经验</Text>
+              <StripedProgress step={`${getUpgradeExperience}%`} />
+            </Flex>
             <MysteryBoxFlexStyled>
               <MysteryBoxBaseNewStyled quality={mysteryBoxQualities.SUPER}>
                 <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
@@ -262,52 +298,57 @@ const Upgrade = () => {
                 </MysteryBoxStarStyled>
               </MysteryBoxBaseNewStyled>
             </MysteryBoxFlexStyled>
-            <UpgradeCard info={upgradeInfo.now_planet_info} mr='33px' />
-            <UpgradeCard
-              info={upgradeInfo.estimate_planet_info}
-              up={upInfo}
-              mr='33px'
-            />
-            <StyledCard>
-              <Flex flexDirection='column' justifyContent='space-between'>
-                <Flex flexDirection='column'>
-                  <Text small>
-                    *
-                    {t(
-                      'To upgrade, you need to sacrifice planets of the same quality and grade',
-                    )}
-                  </Text>
-                  {/* <Text small>
-                    *
-                    {t(
-                      'To upgrade, you need to add a planet to become an alliance',
-                    )}
-                  </Text> */}
-                  <Text small>
-                    *
-                    {t(
-                      "When all buildings' grade is 1 level above the planet grade, the planet can be upgraded",
-                    )}
-                  </Text>
-                </Flex>
-                <Flex mt='40px' flexDirection='column' alignItems='center'>
-                  {!upgradeInfo.success && (
-                    <Text fontSize='22px' color='failure'>
-                      *{t('Energy building grade does not meet the standard')}
+          </Flex>
+
+          <Flex flexDirection='column'>
+            <Flex>{StarAddBox}</Flex>
+            <Flex mb='10px' justifyContent='center'>
+              <Text small>{t('添加同稀有度且同等级或低一个等级的星球')}</Text>
+            </Flex>
+            <Flex>
+              <UpgradeCard
+                info={upgradeInfo.now_planet_info}
+                upgradeInfo={upgradeInfo.estimate_planet_info}
+                up={upInfo}
+                mr='33px'
+              />
+              <StyledCard>
+                <Flex flexDirection='column' justifyContent='space-between'>
+                  {/* <Flex flexDirection='column'>
+                    <Text small>
+                      *
+                      {t(
+                        'To upgrade, you need to sacrifice planets of the same quality and grade',
+                      )}
                     </Text>
-                  )}
-                  <Button
-                    disabled={!upgradeInfo.success || !usableMaterialIds.length}
-                    width='270px'
-                    mt='20px'
-                    padding='0'
-                    onClick={() => setVisible(true)}
-                  >
-                    {t('Upgrade Planet')}
-                  </Button>
+                    <Text small>
+                      *
+                      {t(
+                        "When all buildings' grade is 1 level above the planet grade, the planet can be upgraded",
+                      )}
+                    </Text>
+                  </Flex> */}
+                  <UpgradeCost />
+                  <Flex mt='30px' flexDirection='column' alignItems='center'>
+                    <Button
+                      disabled={
+                        !upgradeInfo.success || !usableMaterialIds.length
+                      }
+                      width='270px'
+                      padding='0'
+                      onClick={() => setVisible(true)}
+                    >
+                      {t('Upgrade Planet')}
+                    </Button>
+                    {!upgradeInfo.success && (
+                      <Text mt='10px' fontSize='22px' color='failure'>
+                        *{t('Energy building grade does not meet the standard')}
+                      </Text>
+                    )}
+                  </Flex>
                 </Flex>
-              </Flex>
-            </StyledCard>
+              </StyledCard>
+            </Flex>
           </Flex>
         </Flex>
       )}

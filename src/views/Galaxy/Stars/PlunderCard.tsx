@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { Api } from 'apis';
+import { getTimePeriod, useCountdownTime } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'contexts/ToastsContext';
 import dayjs from 'dayjs';
@@ -38,6 +39,17 @@ export const PlunderCard: React.FC<{
   const hasOwner = info.owner;
 
   const { handlePlunder } = usePlunder();
+
+  // 保护时间
+  const protect_timestamp = useMemo(() => {
+    return dayjs.unix(info.protect_timestamp).year() === dayjs().year()
+      ? info.protect_timestamp
+      : 0;
+  }, [info.protect_timestamp]);
+  const diffSeconds = useCountdownTime(protect_timestamp, dayjs().unix());
+  const timePeriod = useMemo(() => {
+    return getTimePeriod(diffSeconds);
+  }, [diffSeconds]);
 
   const getPlunderInfo = useCallback(async () => {
     const res = await Api.AllianceApi.alliancePlunderInfo(info.owner);
@@ -111,13 +123,19 @@ export const PlunderCard: React.FC<{
           {hasOwner ? (
             <ButtonStyled
               disabled={
-                pending || hasOwner?.toLowerCase() === account?.toLowerCase()
+                diffSeconds > 0 ||
+                pending ||
+                hasOwner?.toLowerCase() === account?.toLowerCase()
               }
               scale='sm'
               ml='60px'
               onClick={handleAttckStar}
             >
-              {pending ? (
+              {diffSeconds > 0 ? (
+                `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
+                  timePeriod.seconds
+                }${t('s')}`
+              ) : pending ? (
                 <Dots>{t('Seize Star')}</Dots>
               ) : (
                 <Text fontSize='inherit'>{t('Seize Star')}</Text>
