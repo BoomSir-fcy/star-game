@@ -197,13 +197,6 @@
       "thumb2": "/assets/modal/2/25-2.png"
     },
     {
-      "id": 26,
-      "name": "Explorer",
-      "desc": "Ground reconnaissance unit, without any attack capability.",
-      "thumb1": "/assets/modal/2/26-1.png",
-      "thumb2": "/assets/modal/2/26-2.png"
-    },
-    {
       "id": 27,
       "name": "Victor",
       "desc": "The Aurora Cannon has a massive single-unit killing capability; its disadvantage is the long attack interval.",

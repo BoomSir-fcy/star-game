@@ -25,7 +25,7 @@ const Attributes: React.FC<AttributesProps> = ({
         <Text mb='10px'>{t('Attributes')}</Text>
         <Flex>
           <LabelStyled>
-            <LabelText>{t('Rarity')}:</LabelText>
+            <LabelText>{t('Rarity')}: </LabelText>
             <AttrText color={QualityColor[rarity]}>
               {rarity ? t(`rarity-${rarity}`) : ''}
             </AttrText>
@@ -38,19 +38,19 @@ const Attributes: React.FC<AttributesProps> = ({
             </AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
-            <LabelText>{t('Grid')}:</LabelText>
+            <LabelText>{t('Grid')}: </LabelText>
             <AttrText>
               {info?.areaX ? `${info?.areaX}x${info?.areaY}` : ''}
             </AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
-            <LabelText>{t('Building Count')}:</LabelText>
+            <LabelText>{t('Building Count')}: </LabelText>
             <AttrText>{info?.build_count}</AttrText>
           </LabelStyled>
         </Flex>
         <Flex mt='11px'>
           <LabelStyled>
-            <LabelText>{t('Population')}:</LabelText>
+            <LabelText>{t('Population')}: </LabelText>
             <AttrText>{info?.population}</AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
@@ -58,7 +58,7 @@ const Attributes: React.FC<AttributesProps> = ({
             <AttrText>{info?.stone}</AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
-            <LabelText>{t('Energy')}:</LabelText>
+            <LabelText>{t('Energy')}: </LabelText>
             <AttrText>{info?.energy}</AttrText>
           </LabelStyled>
         </Flex>
