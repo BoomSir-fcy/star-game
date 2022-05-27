@@ -2,7 +2,11 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStore } from 'state/util';
-import { fetchAllianceViewAsync, fetchCombatRecordAsync } from './reducer';
+import {
+  fetchAllianceViewAsync,
+  fetchCombatRecordAsync,
+  setRecordLoad,
+} from './reducer';
 
 export const useFetchAllianceView = () => {
   const dispatch = useDispatch();
@@ -27,6 +31,7 @@ export const useFetchCombatRecord = (page: number, page_size: number) => {
   const { account } = useActiveWeb3React();
   const fetch = useCallback(() => {
     if (account && page_size) {
+      dispatch(setRecordLoad());
       dispatch(fetchCombatRecordAsync(account, page || 1, page_size));
     }
   }, [account, page, page_size, dispatch]);

@@ -94,11 +94,14 @@ export const allianceSlice = createSlice({
     setRefresh: state => {
       state.pkRecord.record = [];
     },
+    setRecordLoad: state => {
+      state.pkRecord.loading = true;
+    },
   },
 });
 
 // Actions
-export const { setAllianceView, setPkRecord, setRefresh } =
+export const { setAllianceView, setPkRecord, setRefresh, setRecordLoad } =
   allianceSlice.actions;
 
 export default allianceSlice.reducer;
