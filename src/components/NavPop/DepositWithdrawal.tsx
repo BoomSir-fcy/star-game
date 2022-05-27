@@ -221,6 +221,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
           <Text
             onClick={() => {
               if (OperationType === 1) {
+                setVal('');
                 setOperationType(2);
               } else {
                 Copy();

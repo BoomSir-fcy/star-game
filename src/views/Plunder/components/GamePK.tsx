@@ -194,20 +194,30 @@ const GamePK: React.FC<GamePKProps> = () => {
   const initHandle = useCallback(() => {
     if (PKInfo && game.soldiers.length === 0) {
       const ids: idMap = {};
-      Object.keys(PKInfo?.init?.ids).forEach(id => {
-        const { x, y } = PKInfo.init.ids[id];
+      Object.keys(PKInfo?.[0]?.init?.ids).forEach(id => {
+        const { x, y } = PKInfo?.[0].init.ids[id];
         ids[`${x}${y}`] = id;
       });
 
-      createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, ids, false);
-      createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
-      runHandle(PKInfo);
+      createSoldiers(
+        PKInfo?.[0].init.blue_units,
+        PKInfo?.[0].init.base_unit,
+        ids,
+        false,
+      );
+      createSoldiers(
+        PKInfo?.[0].init.red_units,
+        PKInfo?.[0].init.base_unit,
+        ids,
+        true,
+      );
+      runHandle(PKInfo?.[0]);
       const res: OptionProps[] = [];
-      Object.keys(PKInfo.status.status).forEach((item: string) => {
+      Object.keys(PKInfo?.[0].status.status).forEach((item: string) => {
         res.push({
           value: `回合${item}`,
           label: `回合${item}`,
-          info: PKInfo.status.status[item],
+          info: PKInfo?.[0].status.status[item],
           id: `${item}-0`,
         });
       });
@@ -237,12 +247,22 @@ const GamePK: React.FC<GamePKProps> = () => {
 
     if (PKInfo && game.soldiers.length === 0) {
       const ids: idMap = {};
-      Object.keys(PKInfo.init.ids).forEach(id => {
-        const { x, y } = PKInfo.init.ids[id];
+      Object.keys(PKInfo?.[0].init.ids).forEach(id => {
+        const { x, y } = PKInfo?.[0].init.ids[id];
         ids[`${x}${y}`] = id;
       });
-      createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, ids, false);
-      createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
+      createSoldiers(
+        PKInfo?.[0].init.blue_units,
+        PKInfo?.[0].init.base_unit,
+        ids,
+        false,
+      );
+      createSoldiers(
+        PKInfo?.[0].init.red_units,
+        PKInfo?.[0].init.base_unit,
+        ids,
+        true,
+      );
       // runHandle(PKInfo.slot);
     }
   }, [PKInfo, createSoldiers]);
@@ -255,9 +275,9 @@ const GamePK: React.FC<GamePKProps> = () => {
       info.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
           srcId: `${item.base_id % 30}`,
-          race: PKInfo?.init.base_unit[item.base_id].race || 1,
+          race: PKInfo?.[0]?.init.base_unit[item.base_id].race || 1,
           id: item.base_id,
-          hp: PKInfo?.init.base_unit[item.base_id].hp,
+          hp: PKInfo?.[0]?.init.base_unit[item.base_id].hp,
           isEnemy: item.red,
           enableDrag: false,
           unique_id: item.base_id,

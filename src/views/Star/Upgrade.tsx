@@ -202,9 +202,15 @@ const Upgrade = () => {
     return Object.keys(activeMaterialMap);
   }, [activeMaterialMap]);
 
+  React.useEffect(() => {
+    return () => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    };
+  }, [dispatch]);
+
   return (
     <BgCard variant='big' padding='40px 68px'>
-      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
+      {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}

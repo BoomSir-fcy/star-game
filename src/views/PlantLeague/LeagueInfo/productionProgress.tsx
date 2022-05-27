@@ -149,7 +149,7 @@ const ProductionProgress = () => {
     <Flex flex='1' flexDirection='column' padding='30px'>
       <Flex mb='20px' justifyContent='center'>
         <Text fontSize='20px'>
-          {t('Resource Production')}({formatTime(state.time)})
+          {t('Resource Production')}( {formatTime(state.time)} )
         </Text>
       </Flex>
       <ProgressBox mb='56px' ml='15px'>

@@ -427,6 +427,7 @@ export const DragCompoents: React.FC<{
                 return (
                   <Normal
                     key={`${item.index}_${item?._id}`}
+                    className={`energy_tank_${index}`}
                     draggable={false}
                     data-id={index}
                     data-row={item?.row}

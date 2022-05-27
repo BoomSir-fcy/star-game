@@ -74,7 +74,11 @@ const InfoPlane: React.FC<{
       </Flex>
       <Flex alignItems='flex-end' justifyContent='center'>
         <RightBox>
-          <Image width={54} height={54} src='/images/commons/icon/ore.png' />
+          <Image
+            width={54}
+            height={54}
+            src='/images/commons/icon/icon_minera.png'
+          />
           <Box>
             <Text color='textTips' fontSize='20px'>
               {t('Ore Capacity')}
@@ -102,7 +106,7 @@ const InfoPlane: React.FC<{
           <Image
             width={54}
             height={54}
-            src='/images/commons/icon/population.png'
+            src='/images/commons/icon/icon_spice.png'
           />
           <Box>
             <Text color='textTips' fontSize='20px'>
@@ -128,7 +132,11 @@ const InfoPlane: React.FC<{
       </Flex>
       <Flex alignItems='flex-end' justifyContent='center'>
         <RightBox>
-          <Image width={54} height={54} src='/images/commons/icon/energy.png' />
+          <Image
+            width={54}
+            height={54}
+            src='/images/commons/icon/icon_energy.png'
+          />
           <Box>
             <Text color='textTips' fontSize='20px'>
               {t('Energy Capacity')}

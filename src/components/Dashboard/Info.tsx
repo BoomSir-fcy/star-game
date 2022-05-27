@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Text, Image } from 'uikit';
 import { useStore } from 'state/util';
 import { TokenImage } from 'components/TokenImage';
-import { getDsgAddress } from 'utils/addressHelpers';
+import { getBoxAddress, getDsgAddress } from 'utils/addressHelpers';
 import StarCom from 'components/StarCom';
 import Modal from 'components/Modal';
 import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
@@ -73,7 +73,13 @@ const Info: React.FC<InfoProps> = ({
   return (
     <Box width='100%'>
       <Flex height='179px' width='100%'>
-        <Box width='312px' pl='20px' pt='28px'>
+        <Box
+          width='312px'
+          height='250px'
+          pl='20px'
+          pt='28px'
+          className='header_asset'
+        >
           <ButtonLeft
             onClick={() => {
               setActiveToken(DSGblance);
@@ -108,7 +114,7 @@ const Info: React.FC<InfoProps> = ({
                 <TokenImage
                   width={45}
                   height={48}
-                  tokenAddress={getDsgAddress()}
+                  tokenAddress={getBoxAddress()}
                 />
                 <Text fontSize='20px' mt='8px' ml='8px'>
                   {BOXblance?.amount}
@@ -156,22 +162,22 @@ const Info: React.FC<InfoProps> = ({
               </ButtonTag1>
             </Link>
           </Box>
-          <Box ml='22px'>
+          <Box ml='22px' className='header_resource'>
             <ButtonTag2 variant='custom'>
               <Flex pl='8px' alignItems='center' width='100%'>
                 <Box width={70}>
                   <Image
-                    src='/images/commons/dashboard/collect.png'
+                    src='/images/commons/icon/icon_minera.png'
                     width={70}
                     height={70}
                   />
                 </Box>
                 <Box ml='8px'>
                   <Text fontSize='20px' mb='20px' textAlign='left'>
-                    {t('Total Capacity')}: {Product.stone_product}/s
+                    {t('Capacity')}: {Product.stone_product}/s
                   </Text>
                   <Text fontSize='20px' textAlign='left'>
-                    {t('Total Ore')}: {Product.stone}
+                    {t('Ore ')}: {Product.stone}
                   </Text>
                 </Box>
               </Flex>
@@ -180,17 +186,17 @@ const Info: React.FC<InfoProps> = ({
               <Flex pl='8px' alignItems='center' width='100%'>
                 <Box width={70}>
                   <Image
-                    src='/images/commons/dashboard/p.png'
+                    src='/images/commons/icon/icon_spice.png'
                     width={70}
                     height={70}
                   />
                 </Box>
                 <Box ml='8px'>
                   <Text fontSize='20px' mb='20px' textAlign='left'>
-                    {t('Total Capacity')}: {Product.population_product}/s
+                    {t('Capacity')}: {Product.population_product}/s
                   </Text>
                   <Text fontSize='20px' textAlign='left'>
-                    {t('Total Population')}: {Product.population}
+                    {t('Population ')}: {Product.population}
                   </Text>
                 </Box>
               </Flex>
@@ -200,17 +206,17 @@ const Info: React.FC<InfoProps> = ({
                 <Flex pl='8px' alignItems='center' height='100%' width='100%'>
                   <Box width={70}>
                     <Image
-                      src='/images/commons/dashboard/item.png'
+                      src='/images/commons/icon/icon_spice.png'
                       width={70}
                       height={70}
                     />
                   </Box>
                   <Box ml='8px'>
                     <Text fontSize='20px' mb='20px' textAlign='left'>
-                      {t('Total Capacity')}: {Product.energy_product}/s
+                      {t('Capacity')}: {Product.energy_product}/s
                     </Text>
                     <Text fontSize='20px' textAlign='left'>
-                      {t('Total Energy')}: {Product.energy}
+                      {t('Energy ')}: {Product.energy}
                     </Text>
                   </Box>
                 </Flex>

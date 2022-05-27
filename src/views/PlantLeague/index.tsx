@@ -125,11 +125,13 @@ const PlantLeague = () => {
   }, [activeStep, dispatch, guides.guideFinish, setGuide]);
 
   React.useEffect(() => {
-    dispatch(storeAction.toggleVisible({ visible: false }));
+    return () => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    };
   }, [dispatch]);
 
   // React.useEffect(() => {
-  //   setGuide(0);
+  //   setGuide(4);
   // }, [destroy, guides, setGuide]);
 
   return (
@@ -138,32 +140,39 @@ const PlantLeague = () => {
         interactive={steps[activeStep]?.interactive && stepsEnabled}
         disabled={steps[activeStep]?.disabled}
       />
-      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
-        <Steps
-          enabled={stepsEnabled}
-          steps={steps}
-          initialStep={guides.step}
-          options={{
-            exitOnOverlayClick: false,
-          }}
-          ref={guideRef}
-          onBeforeChange={event => {
-            setActiveStep(event);
-          }}
-          onAfterChange={event => {}}
-          onChange={currentStep => {
-            if (currentStep === 3) return;
-            if (currentStep > guides.step) {
-              setGuide(currentStep);
-            }
-          }}
-          onExit={step => {
-            console.log(step, '中途离开页面', guides.step, activeStep);
-            setStepsEnabled(false);
-            dispatch(storeAction.toggleVisible({ visible: true }));
-          }}
-        />
-      )}
+      {!guides.guideFinish &&
+        guides.finish &&
+        steps.length - 1 > guides.step &&
+        guides.round < 2 && (
+          <Steps
+            enabled={stepsEnabled}
+            steps={steps}
+            initialStep={guides.step}
+            options={{
+              exitOnOverlayClick: false,
+            }}
+            ref={guideRef}
+            onBeforeChange={event => {
+              setActiveStep(event);
+            }}
+            onAfterChange={event => {}}
+            onChange={currentStep => {
+              if (currentStep === 3) return;
+              if (currentStep > guides.step) {
+                setGuide(currentStep);
+              }
+            }}
+            onExit={step => {
+              console.log(step, '中途离开页面', guides.step, activeStep);
+              setStepsEnabled(false);
+              if (step === 5) {
+                setGuide(0, false, 2);
+                return;
+              }
+              dispatch(storeAction.toggleVisible({ visible: true }));
+            }}
+          />
+        )}
       <Flex justifyContent='space-between' padding='0 30px'>
         <JoinTheAlliance callbackGuide={() => destroy()} />
         <LeagueInfo />

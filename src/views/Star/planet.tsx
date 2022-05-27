@@ -1,11 +1,11 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
-import 'intro.js/introjs.css';
+// import 'intro.js/introjs.css';
 
 import styled, { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -93,7 +93,6 @@ const Planet = () => {
   const { toastError, toastSuccess, toastWarning } = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
 
@@ -101,7 +100,7 @@ const Planet = () => {
   const [state, setState] = useState({
     page: 1,
     token: '',
-    race: 0,
+    race: 1,
   });
   const [pending, setpending] = useState(false);
   const [StarList, setStarList] = useState<Api.Planet.PlanetInfo[]>([]);
@@ -110,7 +109,9 @@ const Planet = () => {
   const workingList = useStore(p => p.alliance.workingPlanet);
   const { SetWorking } = useJoinAlliance();
 
-  const { guides, setGuide } = useGuide(location.pathname);
+  const { guides, setGuide } = useGuide(
+    choose ? '/star/planet&choose=' : '/star/planet',
+  );
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(false);
@@ -142,6 +143,29 @@ const Planet = () => {
     ],
     [t],
   );
+
+  const planetSteps = useMemo(() => {
+    return [
+      {
+        element: '.header_asset',
+        intro: t('This is your token asset.'),
+      },
+      {
+        element: '.header_resource',
+        intro: t(
+          'Here is the total capacity and resources of all your planets.',
+        ),
+      },
+      {
+        element: '.header_explore',
+        intro: t(
+          'Click to enter the Star Alliance to start interstellar exploration',
+        ),
+        interactive: true,
+        disabled: true,
+      },
+    ];
+  }, [t]);
 
   const destroy = React.useCallback(
     (n: number) => {
@@ -199,6 +223,7 @@ const Planet = () => {
         // 选择
         if (ChooseList.length >= 5) {
           // 满了
+          toastWarning(t('Alliance has 5 planets'));
           return;
         }
         list.push(id);
@@ -208,7 +233,7 @@ const Planet = () => {
       }
       setChooseList(list);
     },
-    [ChooseList, setChooseList],
+    [ChooseList, t, toastWarning, setChooseList],
   );
 
   const init = useCallback(() => {
@@ -253,7 +278,7 @@ const Planet = () => {
   }, [init]);
 
   React.useEffect(() => {
-    if (guides.finish && choose && !guides.guideFinish) {
+    if (guides.finish && !guides.guideFinish) {
       setStepsEnabled(true);
     }
   }, [choose, guides]);
@@ -275,12 +300,13 @@ const Planet = () => {
   // React.useEffect(() => {
   //   setGuide(0);
   // }, [destroy, guides, setGuide]);
+  const currentSteps = choose ? steps : planetSteps;
 
   return (
     <Box id='containerBox'>
       <GlobalStyle
-        interactive={steps[activeStep]?.interactive && stepsEnabled}
-        disabled={steps[activeStep]?.disabled}
+        interactive={currentSteps[activeStep]?.interactive && stepsEnabled}
+        disabled={currentSteps[activeStep]?.disabled}
       />
       {!guides.guideFinish &&
         guides.finish &&
@@ -289,7 +315,7 @@ const Planet = () => {
           <Steps
             ref={guideRef}
             enabled={stepsEnabled}
-            steps={steps}
+            steps={currentSteps}
             initialStep={guides.step}
             options={{
               exitOnOverlayClick: false,
@@ -304,9 +330,15 @@ const Planet = () => {
                 setGuide(currentStep);
               }
             }}
-            onExit={() => {
+            onExit={step => {
               setStepsEnabled(false);
-              dispatch(storeAction.toggleVisible({ visible: true }));
+              if (!choose) {
+                setGuide(step + 1);
+                return;
+              }
+              if (step === currentSteps.length) {
+                dispatch(storeAction.toggleVisible({ visible: true }));
+              }
             }}
           />
         )}

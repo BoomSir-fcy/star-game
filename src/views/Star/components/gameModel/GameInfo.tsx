@@ -249,7 +249,7 @@ export const GameInfo: React.FC<{
                   <ItemInfo bottomMargin>
                     <Box width={50} height={50} mr='5px'>
                       <Image
-                        src='/images/commons/icon/energy.png'
+                        src='/images/commons/icon/icon_energy.png'
                         width={50}
                         height={50}
                       />
@@ -266,7 +266,7 @@ export const GameInfo: React.FC<{
                   <ItemInfo bottomMargin>
                     <Box width={50} height={50} mr='5px'>
                       <Image
-                        src='/images/commons/icon/population.png'
+                        src='/images/commons/icon/icon_spice.png'
                         width={50}
                         height={50}
                       />

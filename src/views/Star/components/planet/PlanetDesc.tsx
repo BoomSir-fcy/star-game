@@ -8,19 +8,23 @@ export const PlanetDesc: React.FC<{
   const { t } = useTranslation();
 
   return (
-    <Flex width='100%' flexDirection='column'>
-      <Flex flex={1} margin='3px 0'>
+    <Flex width='80%' flexDirection='column'>
+      {/* <Flex flex={1} margin='3px 0'>
         <Text color='textSubtle' small>
-          {t('Looting Speed')}:{info?.plunder_speed}
+          {t('Looting Speed')}: {info?.plunder_speed}
         </Text>
         <Text color='textSubtle' ml='140px' small>
-          {t('Building Count')}:{info?.build_count}
+          {t('Building Count')}: {info?.build_count}
         </Text>
-      </Flex>
+      </Flex> */}
       <Flex justifyContent='space-between' flex={1}>
         <Flex alignItems='center'>
           <Box width={50} height={50} mr='5px'>
-            <Image src='/images/commons/icon/ore.png' width={50} height={50} />
+            <Image
+              src='/images/commons/icon/icon_minera.png'
+              width={50}
+              height={50}
+            />
           </Box>
           <Flex flexDirection='column' justifyContent='center'>
             <Text color='textTips' small>
@@ -32,7 +36,7 @@ export const PlanetDesc: React.FC<{
         <Flex alignItems='center'>
           <Box width={50} height={50} mr='5px'>
             <Image
-              src='/images/commons/icon/population.png'
+              src='/images/commons/icon/icon_spice.png'
               width={50}
               height={50}
             />
@@ -47,7 +51,7 @@ export const PlanetDesc: React.FC<{
         <Flex alignItems='center'>
           <Box width={50} height={50} mr='5px'>
             <Image
-              src='/images/commons/icon/energy.png'
+              src='/images/commons/icon/icon_energy.png'
               width={50}
               height={50}
             />

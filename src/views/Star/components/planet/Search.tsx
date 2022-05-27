@@ -63,6 +63,11 @@ export const PlanetSearch: React.FC<{
           <SearchInput
             ref={inputRef}
             autoComplete='off'
+            onBlur={e => {
+              if (!e.target.value) {
+                onEndCallback(value.trim());
+              }
+            }}
             onChange={e =>
               setState({
                 ...state,

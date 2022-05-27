@@ -18,5 +18,11 @@ declare namespace Api {
       timestamp: number;
       signature: string;
     }
+
+    interface Record {
+      address: string;
+      page: number;
+      page_size: number;
+    }
   }
 }

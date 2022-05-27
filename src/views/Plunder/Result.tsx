@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Box, Flex, Text, BorderCard } from 'uikit';
+import { Box, Flex, Text, BorderCard, Fringe } from 'uikit';
+import { useStore } from 'state';
 import {
   PeopleCard,
   Energy,
@@ -20,6 +21,8 @@ const VideoStyled = styled.video`
 `;
 
 const Result = () => {
+  const { state, matchUser, mineUser } = useStore(p => p.game);
+
   return (
     <Flex>
       <Box width={446} height={555}>
@@ -28,12 +31,15 @@ const Result = () => {
             transform: 'scale(1.7)',
             transformOrigin: '0 0',
           }}
+          {...mineUser}
         />
       </Box>
       <Box>
+        <Fringe position='relative' top={-19} zIndex={2} />
         <Box width={1427} height={238} overflow='hidden' position='relative'>
           <VideoStyled autoPlay muted src='/video/won.mp4' />
         </Box>
+
         <BorderCard
           pt='8px'
           pl='12px'
