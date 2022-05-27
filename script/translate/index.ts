@@ -3,8 +3,8 @@ const xlsx = require("node-xlsx");
 
 enum Race {
   "Spacemen" = 1,
-  "Zerg" = 2,
-  "Terran" = 3,
+  "Terran" = 2,
+  "Zerg" = 3,
 }
 
 const getTranslateData = (path: string) => {

@@ -240,7 +240,7 @@ const Upgrade = () => {
   }, [upgradeInfo]);
 
   return (
-    <BgCard variant='big' padding='40px 68px'>
+    <BgCard variant='big' padding='30px 68px'>
       {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
         <Steps
           enabled={stepsEnabled}

@@ -37,11 +37,11 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
           <StyledImage
             width={57}
             height={53}
-            src='/images/commons/icon/ore.png'
+            src='/images/commons/icon/icon_minera.png'
           />
           <ItemInfoFlex>
             <Text small color='textSubtle'>
-              {t('Stone')}
+              {t('Ore')}
             </Text>
             <Text fontSize='22px'>-100</Text>
           </ItemInfoFlex>
@@ -50,11 +50,11 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
           <StyledImage
             width={57}
             height={53}
-            src='/images/commons/icon/spices.png'
+            src='/images/commons/icon/icon_spice.png'
           />
           <ItemInfoFlex>
             <Text small color='textSubtle'>
-              {t('Spices')}
+              {t('Population')}
             </Text>
             <Text fontSize='22px'>-100</Text>
           </ItemInfoFlex>
@@ -63,7 +63,7 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
           <StyledImage
             width={57}
             height={53}
-            src='/images/commons/icon/energy.png'
+            src='/images/commons/icon/icon_energy.png'
           />
           <ItemInfoFlex>
             <Text small color='textSubtle'>

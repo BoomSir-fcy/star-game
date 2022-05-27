@@ -206,7 +206,7 @@ const Info: React.FC<InfoProps> = ({
                 <Flex pl='8px' alignItems='center' height='100%' width='100%'>
                   <Box width={70}>
                     <Image
-                      src='/images/commons/icon/icon_spice.png'
+                      src='/images/commons/icon/icon_energy.png'
                       width={70}
                       height={70}
                     />
