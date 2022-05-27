@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { LoadingIcon } from 'uikit';
+import { LoadingIcon } from '../Svg';
 import { Box, BoxProps } from '../Box';
 import { Image } from '../Image';
 import { SpinnerProps } from './types';

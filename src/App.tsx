@@ -62,7 +62,13 @@ function App() {
       <ResetCSS />
       <ScaleOrientContent>
         <ConnectWalletProvider>
-          <Suspense fallback='loading...'>
+          <Suspense
+            fallback={
+              <Box mt='36px'>
+                <Spinner />
+              </Box>
+            }
+          >
             <Routes>
               <Route path='/' element={<Login />} />
               {/* <Route path='/index' element={<Home />} /> */}
