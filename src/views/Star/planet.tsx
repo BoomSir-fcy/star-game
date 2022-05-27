@@ -1,11 +1,11 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
-import 'intro.js/introjs.css';
+// import 'intro.js/introjs.css';
 
 import styled, { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -93,7 +93,6 @@ const Planet = () => {
   const { toastError, toastSuccess, toastWarning } = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const parsedQs = useParsedQueryString();
   const { choose } = parsedQs;
 
@@ -101,7 +100,7 @@ const Planet = () => {
   const [state, setState] = useState({
     page: 1,
     token: '',
-    race: 0,
+    race: 1,
   });
   const [pending, setpending] = useState(false);
   const [StarList, setStarList] = useState<Api.Planet.PlanetInfo[]>([]);
@@ -111,7 +110,7 @@ const Planet = () => {
   const { SetWorking } = useJoinAlliance();
 
   const { guides, setGuide } = useGuide(
-    `${location.pathname}${location.search}`,
+    choose ? '/star/planet&choose=' : '/star/planet',
   );
 
   // 控制是否开启新手指导的

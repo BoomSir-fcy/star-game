@@ -19,6 +19,7 @@ declare namespace Api {
       history_hold_number: number; // 历史占领次数
       disapth_box: number; // 恒星收益分配比例
       nick_name: string;
+      product_box: number; // 产出box
     }
 
     interface OwnerInfo {

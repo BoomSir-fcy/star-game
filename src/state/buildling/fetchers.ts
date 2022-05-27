@@ -3,8 +3,11 @@ import { Api } from 'apis';
 
 export const fetchBuildingsListAsync = createAsyncThunk(
   'fetch/buildings/list',
-  async (type?: 1 | 2) => {
-    const response = await Api.BuildingApi.getBuildingList(type);
+  async (params: { type: number; race: number }) => {
+    const response = await Api.BuildingApi.getBuildingList(
+      params.type,
+      params.race,
+    );
     if (Api.isSuccess(response)) {
       return response.data?.data;
     }

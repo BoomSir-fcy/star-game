@@ -55,5 +55,19 @@ declare namespace Api {
       status: number; // 1星球升级 2星球强化 3建筑升级 4建筑恢复耐久
       status_countdown: number; // 倒计时
     }
+
+    interface UpgradePlanetInfo {
+      consume_population: number;
+      consume_star: number;
+      consume_stone: number;
+      estimate_max_building_level: number;
+      estimate_planet_info: PlanetInfo;
+      material_planet_num: number;
+      now_max_building_level: number;
+      now_planet_info: PlanetInfo;
+      space_utilization: string;
+      upgrade_time: number;
+      success?: boolean;
+    }
   }
 }

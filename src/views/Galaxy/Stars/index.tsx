@@ -40,6 +40,7 @@ const Stars = () => {
       history_hold_number: 0,
       disapth_box: 0,
       nick_name: '',
+      product_box: 0,
     };
   }, []);
   const [activeStar, setActiveStar] = useState<Api.Galaxy.StarInfo>(initState);

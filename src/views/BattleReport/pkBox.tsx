@@ -30,12 +30,12 @@ export const PkBox: React.FC<{
     const List = [
       {
         title: t('Get Ore'),
-        img: '/images/commons/icon/ore.png',
-        num: info.incomeStone,
+        img: '/images/commons/icon/icon_minera.png',
+        num: info.ore,
       },
       {
         title: t('Get Energy'),
-        img: '/images/commons/icon/energy.png',
+        img: '/images/commons/icon/icon_energy.png',
         num: info.incomeEnergy,
       },
       {

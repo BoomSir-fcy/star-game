@@ -3,8 +3,8 @@ const xlsx = require("node-xlsx");
 
 enum Race {
   "Spacemen" = 1,
-  "Zerg" = 2,
-  "Terran" = 3,
+  "Terran" = 2,
+  "Zerg" = 3,
 }
 
 const getTranslateData = (path: string) => {
@@ -105,7 +105,7 @@ const writeZhCNFile = (res: any) => {
 };
 const translateMain = async () => {
   // 从.xlsx文件中读取英文翻译
-  const rs = getTranslateData("E:\\游戏\\0509 种族描述翻译.xlsx");
+  const rs = getTranslateData("./0509 种族描述翻译.xlsx");
   // 写入raceConfig文件
   writeRaceConfigFile(rs);
   // 写入translation文件

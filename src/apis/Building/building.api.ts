@@ -15,9 +15,10 @@ export class BuildingApi extends Http {
 
   // 获取所有建筑
   async getBuildingList(
-    type?: 1 | 2,
+    type: number,
+    race: number,
   ): Promise<Api.Response<{ data: Api.Building.Building[] }>> {
-    const res = await this.get(`/buildings/list`, { type });
+    const res = await this.get(`/buildings/list`, { type, race });
     return res;
   }
 

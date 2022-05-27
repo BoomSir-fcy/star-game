@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { Api } from 'apis';
+import { getTimePeriod, useCountdownTime } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'contexts/ToastsContext';
 import dayjs from 'dayjs';
@@ -39,6 +40,17 @@ export const PlunderCard: React.FC<{
 
   const { handlePlunder } = usePlunder();
 
+  // 保护时间
+  const protect_timestamp = useMemo(() => {
+    return dayjs.unix(info.protect_timestamp).year() === dayjs().year()
+      ? info.protect_timestamp
+      : 0;
+  }, [info.protect_timestamp]);
+  const diffSeconds = useCountdownTime(protect_timestamp, dayjs().unix());
+  const timePeriod = useMemo(() => {
+    return getTimePeriod(diffSeconds);
+  }, [diffSeconds]);
+
   const getPlunderInfo = useCallback(async () => {
     const res = await Api.AllianceApi.alliancePlunderInfo(info.owner);
     if (Api.isSuccess(res)) {
@@ -54,6 +66,7 @@ export const PlunderCard: React.FC<{
 
   // 抢夺
   const handleAttckStar = useCallback(async () => {
+    // TODO: 掠夺保护期，按钮禁用样式
     if (info?.owner) {
       setPending(true);
       dispatch(setState(GamePkState.CONFIRMING));
@@ -101,7 +114,7 @@ export const PlunderCard: React.FC<{
               {t('Star')} Lv: {info.number}
             </Text>
             <Text shadow='primary' small bold>
-              {t('Output')} BOX: {info.disapth_box}
+              {t('Output')} BOX: {info.product_box}
             </Text>
             <Text shadow='primary' small bold>
               {t('Occupied Times')}: {info.history_hold_number}
@@ -110,13 +123,19 @@ export const PlunderCard: React.FC<{
           {hasOwner ? (
             <ButtonStyled
               disabled={
-                pending || hasOwner?.toLowerCase() === account?.toLowerCase()
+                diffSeconds > 0 ||
+                pending ||
+                hasOwner?.toLowerCase() === account?.toLowerCase()
               }
               scale='sm'
               ml='60px'
               onClick={handleAttckStar}
             >
-              {pending ? (
+              {diffSeconds > 0 ? (
+                `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
+                  timePeriod.seconds
+                }${t('s')}`
+              ) : pending ? (
                 <Dots>{t('Seize Star')}</Dots>
               ) : (
                 <Text fontSize='inherit'>{t('Seize Star')}</Text>

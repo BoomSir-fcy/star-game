@@ -4,232 +4,225 @@
       "id": 1,
       "name": "Mammoth",
       "desc": "1st generation mecha hunter, with high-speed fire bursting ability and thick armour, slow mobility is a weakness.",
-      "thumb1": "/assets/modal/3/1-1.png",
-      "thumb2": "/assets/modal/3/1-2.png"
+      "thumb1": "/assets/modal/2/1-1.png",
+      "thumb2": "/assets/modal/2/1-2.png"
     },
     {
       "id": 2,
       "name": "Cannon Tank",
       "desc": "The strongest combat unit of the Terran, with great long-range attack capability.",
-      "thumb1": "/assets/modal/3/2-1.png",
-      "thumb2": "/assets/modal/3/2-2.png"
+      "thumb1": "/assets/modal/2/2-1.png",
+      "thumb2": "/assets/modal/2/2-2.png"
     },
     {
       "id": 3,
       "name": "Ares",
       "desc": "As a single burst mecha, it can cause tons of damage, but energy overload will lead to a cooling state and cannot continue to attack.",
-      "thumb1": "/assets/modal/3/3-1.png",
-      "thumb2": "/assets/modal/3/3-2.png"
+      "thumb1": "/assets/modal/2/3-1.png",
+      "thumb2": "/assets/modal/2/3-2.png"
     },
     {
       "id": 4,
       "name": "Riot soldiers",
       "desc": "Shields are always the key to their survival against all kinds of attacks.",
-      "thumb1": "/assets/modal/3/4-1.png",
-      "thumb2": "/assets/modal/3/4-2.png"
+      "thumb1": "/assets/modal/2/4-1.png",
+      "thumb2": "/assets/modal/2/4-2.png"
     },
     {
       "id": 5,
       "name": "Dragon-Diamond",
       "desc": "The Terran melee mecha can break through any defense, but monotonous attack also makes it easy to become a meat shield.",
-      "thumb1": "/assets/modal/3/5-1.png",
-      "thumb2": "/assets/modal/3/5-2.png"
+      "thumb1": "/assets/modal/2/5-1.png",
+      "thumb2": "/assets/modal/2/5-2.png"
     },
     {
       "id": 6,
       "name": "Humanoid Mecha",
       "desc": "The optimized mecha move quickly and can cause precise damage to enemies continuously.",
-      "thumb1": "/assets/modal/3/6-1.png",
-      "thumb2": "/assets/modal/3/6-2.png"
+      "thumb1": "/assets/modal/2/6-1.png",
+      "thumb2": "/assets/modal/2/6-2.png"
     },
     {
       "id": 7,
       "name": "Death",
       "desc": "2nd generation mecha hunter, with serious damage and defense power, and increased air defense capability, red armor is their belief in victory.",
-      "thumb1": "/assets/modal/3/7-1.png",
-      "thumb2": "/assets/modal/3/7-2.png"
+      "thumb1": "/assets/modal/2/7-1.png",
+      "thumb2": "/assets/modal/2/7-2.png"
     },
     {
       "id": 8,
       "name": "King Kong",
       "desc": "It has a stronger defense and destructive power to tear enemies into pieces.",
-      "thumb1": "/assets/modal/3/8-1.png",
-      "thumb2": "/assets/modal/3/8-2.png"
+      "thumb1": "/assets/modal/2/8-1.png",
+      "thumb2": "/assets/modal/2/8-2.png"
     },
     {
       "id": 9,
       "name": "Berserker Mecha",
       "desc": "Roam through the battlefield with the blessing of special serum, and it can easily kill enemies. But the flesh is always flesh.",
-      "thumb1": "/assets/modal/3/9-1.png",
-      "thumb2": "/assets/modal/3/9-2.png"
+      "thumb1": "/assets/modal/2/9-1.png",
+      "thumb2": "/assets/modal/2/9-2.png"
     },
     {
       "id": 10,
       "name": "Destroyer",
       "desc": "Weird hexagonal combat machine, suit for long-range combat and flexible lineup.",
-      "thumb1": "/assets/modal/3/10-1.png",
-      "thumb2": "/assets/modal/3/10-2.png"
+      "thumb1": "/assets/modal/2/10-1.png",
+      "thumb2": "/assets/modal/2/10-2.png"
     },
     {
       "id": 11,
       "name": "Urgot",
       "desc": "360° attack, dead-zone free, adaptable to changes in the battlefield at any time, and its output ability is outstanding.",
-      "thumb1": "/assets/modal/3/11-1.png",
-      "thumb2": "/assets/modal/3/11-2.png"
+      "thumb1": "/assets/modal/2/11-1.png",
+      "thumb2": "/assets/modal/2/11-2.png"
     },
     {
       "id": 12,
       "name": "Gareth",
       "desc": "Gareth is definitely a game opener, it can clear any obstacles quickly and chase after victory.",
-      "thumb1": "/assets/modal/3/12-1.png",
-      "thumb2": "/assets/modal/3/12-2.png"
+      "thumb1": "/assets/modal/2/12-1.png",
+      "thumb2": "/assets/modal/2/12-2.png"
     },
     {
       "id": 13,
       "name": "Marauder",
       "desc": "The 3rd generation mecha hunter, it is closer to human form, with high mobility and mixed output, turning the enemy's position into ashes.",
-      "thumb1": "/assets/modal/3/13-1.png",
-      "thumb2": "/assets/modal/3/13-2.png"
+      "thumb1": "/assets/modal/2/13-1.png",
+      "thumb2": "/assets/modal/2/13-2.png"
     },
     {
       "id": "14--1~2",
       "name": "Blue Spider",
       "desc": "Ultra-mobility combat machine, it can quickly approach the enemy and cause confusion, but its damage power is extremely low.",
-      "thumb1": "/assets/modal/3/14--1~2-1.png",
-      "thumb2": "/assets/modal/3/14--1~2-2.png"
+      "thumb1": "/assets/modal/2/14--1~2-1.png",
+      "thumb2": "/assets/modal/2/14--1~2-2.png"
     },
     {
       "id": "14--3~4",
       "name": "Red Spider",
       "desc": "Ultra-mobility combat machine, it can quickly approach the enemy and cause confusion, but its damage power is extremely low.",
-      "thumb1": "/assets/modal/3/14--3~4-1.png",
-      "thumb2": "/assets/modal/3/14--3~4-2.png"
+      "thumb1": "/assets/modal/2/14--3~4-1.png",
+      "thumb2": "/assets/modal/2/14--3~4-2.png"
     },
     {
       "id": "14--5~6",
       "name": "Copper Spider",
       "desc": "Ultra-mobility combat machine, it can quickly approach the enemy and cause confusion, but its damage power is extremely low.",
-      "thumb1": "/assets/modal/3/14--5~6-1.png",
-      "thumb2": "/assets/modal/3/14--5~6-2.png"
+      "thumb1": "/assets/modal/2/14--5~6-1.png",
+      "thumb2": "/assets/modal/2/14--5~6-2.png"
     },
     {
       "id": "14--7~8",
       "name": "Yellow Spider",
       "desc": "Ultra-mobility combat machine, it can quickly approach the enemy and cause confusion, but its damage power is extremely low.",
-      "thumb1": "/assets/modal/3/14--7~8-1.png",
-      "thumb2": "/assets/modal/3/14--7~8-2.png"
+      "thumb1": "/assets/modal/2/14--7~8-1.png",
+      "thumb2": "/assets/modal/2/14--7~8-2.png"
     },
     {
       "id": 15,
       "name": "Punisher",
       "desc": "With high-precision tech weapons, it can make enemies lose their lives in front of the missile.",
-      "thumb1": "/assets/modal/3/15-1.png",
-      "thumb2": "/assets/modal/3/15-2.png"
+      "thumb1": "/assets/modal/2/15-1.png",
+      "thumb2": "/assets/modal/2/15-2.png"
     },
     {
       "id": 16,
       "name": "Double-headed flame",
       "desc": "It can spray ultra-hot flames with mixed blue and red fire, like a pleasant symphony.",
-      "thumb1": "/assets/modal/3/16-1.png",
-      "thumb2": "/assets/modal/3/16-2.png"
+      "thumb1": "/assets/modal/2/16-1.png",
+      "thumb2": "/assets/modal/2/16-2.png"
     },
     {
       "id": 17,
       "name": "Alpha",
       "desc": "The most mysterious fighting unit of Terran, no enemy can survive under his feet.",
-      "thumb1": "/assets/modal/3/17-1.png",
-      "thumb2": "/assets/modal/3/17-2.png"
+      "thumb1": "/assets/modal/2/17-1.png",
+      "thumb2": "/assets/modal/2/17-2.png"
     },
     {
       "id": 18,
       "name": "Humpback Whale",
       "desc": "The Terran aircraft carrier is the battle command ship, and it can resist small-scale attacks.",
-      "thumb1": "/assets/modal/3/18-1.png",
-      "thumb2": "/assets/modal/3/18-2.png"
+      "thumb1": "/assets/modal/2/18-1.png",
+      "thumb2": "/assets/modal/2/18-2.png"
     },
     {
       "id": 19,
       "name": "Cheetah",
       "desc": "First strike fighter, it can quickly approach the enemy's above to deliver harassment strikes.",
-      "thumb1": "/assets/modal/3/19-1.png",
-      "thumb2": "/assets/modal/3/19-2.png"
+      "thumb1": "/assets/modal/2/19-1.png",
+      "thumb2": "/assets/modal/2/19-2.png"
     },
     {
       "id": 20,
       "name": "Nightmare",
       "desc": "The enemy's sky nightmare, it can quickly flash to the enemy position to attack, but its defense capability is very weak.",
-      "thumb1": "/assets/modal/3/20-1.png",
-      "thumb2": "/assets/modal/3/20-2.png"
+      "thumb1": "/assets/modal/2/20-1.png",
+      "thumb2": "/assets/modal/2/20-2.png"
     },
     {
       "id": 21,
       "name": "Crow",
       "desc": "High-mobility fighters in the air with flexible attack methods, and strong to-air/to-ground capabilities, high-tech weapons are their only means of winning.",
-      "thumb1": "/assets/modal/3/21-1.png",
-      "thumb2": "/assets/modal/3/21-2.png"
+      "thumb1": "/assets/modal/2/21-1.png",
+      "thumb2": "/assets/modal/2/21-2.png"
     },
     {
       "id": 22,
       "name": "Shark",
       "desc": "The escort of human command ships, its task is to ensure the survival of the mothership.",
-      "thumb1": "/assets/modal/3/22-1.png",
-      "thumb2": "/assets/modal/3/22-2.png"
+      "thumb1": "/assets/modal/2/22-1.png",
+      "thumb2": "/assets/modal/2/22-2.png"
     },
     {
       "id": 23,
       "name": "Zealot MK1",
       "desc": "Infrared semi-automatic mecha warriors the best choice for the strike force.",
-      "thumb1": "/assets/modal/3/23-1.png",
-      "thumb2": "/assets/modal/3/23-2.png"
+      "thumb1": "/assets/modal/2/23-1.png",
+      "thumb2": "/assets/modal/2/23-2.png"
     },
     {
       "id": 24,
       "name": "Zealot MK2",
       "desc": "Infrared semi-automatic mecha warriors the best choice for the strike force.",
-      "thumb1": "/assets/modal/3/24-1.png",
-      "thumb2": "/assets/modal/3/24-2.png"
+      "thumb1": "/assets/modal/2/24-1.png",
+      "thumb2": "/assets/modal/2/24-2.png"
     },
     {
       "id": 25,
       "name": "Zealot MK3",
       "desc": "Infrared semi-automatic mecha warriors the best choice for the strike force.",
-      "thumb1": "/assets/modal/3/25-1.png",
-      "thumb2": "/assets/modal/3/25-2.png"
-    },
-    {
-      "id": 26,
-      "name": "Explorer",
-      "desc": "Ground reconnaissance unit, without any attack capability.",
-      "thumb1": "/assets/modal/3/26-1.png",
-      "thumb2": "/assets/modal/3/26-2.png"
+      "thumb1": "/assets/modal/2/25-1.png",
+      "thumb2": "/assets/modal/2/25-2.png"
     },
     {
       "id": 27,
       "name": "Victor",
       "desc": "The Aurora Cannon has a massive single-unit killing capability; its disadvantage is the long attack interval.",
-      "thumb1": "/assets/modal/3/27-1.png",
-      "thumb2": "/assets/modal/3/27-2.png"
+      "thumb1": "/assets/modal/2/27-1.png",
+      "thumb2": "/assets/modal/2/27-2.png"
     },
     {
       "id": 28,
       "name": "War Machine",
       "desc": "The oldest troop vanguard of Terran, it can clear the front lines of the battlefield and open up the route of attack. Although it is an old machine, it is battle-hardened.",
-      "thumb1": "/assets/modal/3/28-1.png",
-      "thumb2": "/assets/modal/3/28-2.png"
+      "thumb1": "/assets/modal/2/28-1.png",
+      "thumb2": "/assets/modal/2/28-2.png"
     },
     {
       "id": 29,
       "name": "Ranger",
       "desc": "It can investigate terrain and create better attack routes; its only attack method is the closely guided grenades.",
-      "thumb1": "/assets/modal/3/29-1.png",
-      "thumb2": "/assets/modal/3/29-2.png"
+      "thumb1": "/assets/modal/2/29-1.png",
+      "thumb2": "/assets/modal/2/29-2.png"
     },
     {
       "id": 30,
       "name": "Tango Wolf",
       "desc": "It can carry out single-unit continuous strafing with strong damage power and inexhaustible energy.",
-      "thumb1": "/assets/modal/3/30-1.png",
-      "thumb2": "/assets/modal/3/30-2.png"
+      "thumb1": "/assets/modal/2/30-1.png",
+      "thumb2": "/assets/modal/2/30-2.png"
     }
   ],
   "Zerg": [
@@ -237,211 +230,211 @@
       "id": 1,
       "name": "Crabworm",
       "desc": "It has a hard shell, and it can quickly shuttle through the battlefield, its damage is not enough but its attack speed is very fast.",
-      "thumb1": "/assets/modal/2/1-1.png",
-      "thumb2": "/assets/modal/2/1-2.png"
+      "thumb1": "/assets/modal/3/1-1.png",
+      "thumb2": "/assets/modal/3/1-2.png"
     },
     {
       "id": 2,
       "name": "Multi-eyed beast",
       "desc": "With multiple eyes and tentacles, it can quickly detect enemies and conduct sneak attacks.",
-      "thumb1": "/assets/modal/2/2-1.png",
-      "thumb2": "/assets/modal/2/2-2.png"
+      "thumb1": "/assets/modal/3/2-1.png",
+      "thumb2": "/assets/modal/3/2-2.png"
     },
     {
       "id": 3,
       "name": "Self-exploding Worm",
       "desc": "Its body is covered with explosive pulp, and once the enemy is identified, it will self-explode, causing huge and continuous damage.",
-      "thumb1": "/assets/modal/2/3-1.png",
-      "thumb2": "/assets/modal/2/3-2.png"
+      "thumb1": "/assets/modal/3/3-1.png",
+      "thumb2": "/assets/modal/3/3-2.png"
     },
     {
       "id": 4,
       "name": "Ground Bull",
       "desc": "With a large body and spongy skin, it can do huge damage, attack method: eat the enemy in one bite!",
-      "thumb1": "/assets/modal/2/4-1.png",
-      "thumb2": "/assets/modal/2/4-2.png"
+      "thumb1": "/assets/modal/3/4-1.png",
+      "thumb2": "/assets/modal/3/4-2.png"
     },
     {
       "id": 5,
       "name": "Armored Beetle",
       "desc": "It can curl into a ball close to the opponent, causing crash damage, its long fangs can pierce through the enemy.",
-      "thumb1": "/assets/modal/2/5-1.png",
-      "thumb2": "/assets/modal/2/5-2.png"
+      "thumb1": "/assets/modal/3/5-1.png",
+      "thumb2": "/assets/modal/3/5-2.png"
     },
     {
       "id": 6,
       "name": "Ant Spider",
       "desc": "The combination of ants and spiders can silently approach the enemy and apply deadly venom.",
-      "thumb1": "/assets/modal/2/6-1.png",
-      "thumb2": "/assets/modal/2/6-2.png"
+      "thumb1": "/assets/modal/3/6-1.png",
+      "thumb2": "/assets/modal/3/6-2.png"
     },
     {
       "id": 7,
       "name": "Winged Fish",
       "desc": "A fish variant that can fly low in the air, with amazing bite force, and its tail can release deadly poisonous gas.",
-      "thumb1": "/assets/modal/2/7-1.png",
-      "thumb2": "/assets/modal/2/7-2.png"
+      "thumb1": "/assets/modal/3/7-1.png",
+      "thumb2": "/assets/modal/3/7-2.png"
     },
     {
       "id": 8,
       "name": "Dragon-feet troll ",
       "desc": "A crawling troll with multiple dragon feet, covered with ore, and the suckers of its arms can hold the enemy firmly and choke it to death.",
-      "thumb1": "/assets/modal/2/8-1.png",
-      "thumb2": "/assets/modal/2/8-2.png"
+      "thumb1": "/assets/modal/3/8-1.png",
+      "thumb2": "/assets/modal/3/8-2.png"
     },
     {
       "id": 9,
       "name": "Abyssal Mouth",
       "desc": "A giant mouth in the shape of a piranha can swallow large enemies.",
-      "thumb1": "/assets/modal/2/9-1.png",
-      "thumb2": "/assets/modal/2/9-2.png"
+      "thumb1": "/assets/modal/3/9-1.png",
+      "thumb2": "/assets/modal/3/9-2.png"
     },
     {
       "id": 10,
       "name": "Pincer Beetle",
       "desc": "With two super-heavy pincers, it can give the enemy a fatal blow, to make the enemy faint if not dead.",
-      "thumb1": "/assets/modal/2/10-1.png",
-      "thumb2": "/assets/modal/2/10-2.png"
+      "thumb1": "/assets/modal/3/10-1.png",
+      "thumb2": "/assets/modal/3/10-2.png"
     },
     {
       "id": 11,
       "name": "Spiked Squid",
       "desc": "With the spiky tentacles, it can put enemies into its mouth and enjoy the taste of victory.",
-      "thumb1": "/assets/modal/2/11-1.png",
-      "thumb2": "/assets/modal/2/11-2.png"
+      "thumb1": "/assets/modal/3/11-1.png",
+      "thumb2": "/assets/modal/3/11-2.png"
     },
     {
       "id": 12,
       "name": "Nydus Worm",
       "desc": "It can suddenly spring from the tunnel, catch the opponent by surprise, and disrupte the opponent's position.",
-      "thumb1": "/assets/modal/2/12-1.png",
-      "thumb2": "/assets/modal/2/12-2.png"
+      "thumb1": "/assets/modal/3/12-1.png",
+      "thumb2": "/assets/modal/3/12-2.png"
     },
     {
       "id": 13,
       "name": "Ant Lord",
       "desc": "As mutated species from the void, it's the enemy's nightmare.",
-      "thumb1": "/assets/modal/2/13-1.png",
-      "thumb2": "/assets/modal/2/13-2.png"
+      "thumb1": "/assets/modal/3/13-1.png",
+      "thumb2": "/assets/modal/3/13-2.png"
     },
     {
       "id": 14,
       "name": "Bison",
       "desc": "The name has nothing to do with its figure. The crown on the single head has an incomparably stiff strength, which can repel the enemy.",
-      "thumb1": "/assets/modal/2/14-1.png",
-      "thumb2": "/assets/modal/2/14-2.png"
+      "thumb1": "/assets/modal/3/14-1.png",
+      "thumb2": "/assets/modal/3/14-2.png"
     },
     {
       "id": 15,
       "name": "Mammoth Spider",
       "desc": "Zerg's giant display, with a sharp blade, it can pierce through the enemy's thick armor, and its own defense is also within the top level of Zerg.",
-      "thumb1": "/assets/modal/2/15-1.png",
-      "thumb2": "/assets/modal/2/15-2.png"
+      "thumb1": "/assets/modal/3/15-1.png",
+      "thumb2": "/assets/modal/3/15-2.png"
     },
     {
       "id": 16,
       "name": "Flying Insect",
       "desc": "Aerial self-exploding warrior, it can harass the enemy in the air and cause continuous damage.",
-      "thumb1": "/assets/modal/2/16-1.png",
-      "thumb2": "/assets/modal/2/16-2.png"
+      "thumb1": "/assets/modal/3/16-1.png",
+      "thumb2": "/assets/modal/3/16-2.png"
     },
     {
       "id": 17,
       "name": "Stalker",
       "desc": "They can sneak underground to the enemy's camps and cause objective damage to the enemy.",
-      "thumb1": "/assets/modal/2/17-1.png",
-      "thumb2": "/assets/modal/2/17-2.png"
+      "thumb1": "/assets/modal/3/17-1.png",
+      "thumb2": "/assets/modal/3/17-2.png"
     },
     {
       "id": 18,
       "name": "Fearless Warrior",
       "desc": "Heroic and invincible Zerg display, cutting through the enemy queue with sharp dual ninjas.",
-      "thumb1": "/assets/modal/2/18-1.png",
-      "thumb2": "/assets/modal/2/18-2.png"
+      "thumb1": "/assets/modal/3/18-1.png",
+      "thumb2": "/assets/modal/3/18-2.png"
     },
     {
       "id": 19,
       "name": "Cyclops",
       "desc": "Air Scout.",
-      "thumb1": "/assets/modal/2/19-1.png",
-      "thumb2": "/assets/modal/2/19-2.png"
+      "thumb1": "/assets/modal/3/19-1.png",
+      "thumb2": "/assets/modal/3/19-2.png"
     },
     {
       "id": 20,
       "name": "Sandworm",
       "desc": "Ground scout, with a slowing effect.",
-      "thumb1": "/assets/modal/2/20-1.png",
-      "thumb2": "/assets/modal/2/20-2.png"
+      "thumb1": "/assets/modal/3/20-1.png",
+      "thumb2": "/assets/modal/3/20-2.png"
     },
     {
       "id": 21,
       "name": "Alien",
       "desc": "With hardshell on the back, it can withstand various attacks, and quickly dash to the enemy position for harvesting.",
-      "thumb1": "/assets/modal/2/21-1.png",
-      "thumb2": "/assets/modal/2/21-2.png"
+      "thumb1": "/assets/modal/3/21-1.png",
+      "thumb2": "/assets/modal/3/21-2.png"
     },
     {
       "id": 22,
       "name": "Carrier",
       "desc": "An evolved version of the self-exploding monster, with six feet, it can approach enemies faster and then explode, causing tons of damage.",
-      "thumb1": "/assets/modal/2/22-1.png",
-      "thumb2": "/assets/modal/2/22-2.png"
+      "thumb1": "/assets/modal/3/22-1.png",
+      "thumb2": "/assets/modal/3/22-2.png"
     },
     {
       "id": 23,
       "name": "Blackwater",
       "desc": "A fast-attacking unit on the ground, with its agility and sustained damage capabilities, collective damage is the enemy's nightmare.",
-      "thumb1": "/assets/modal/2/23-1.png",
-      "thumb2": "/assets/modal/2/23-2.png"
+      "thumb1": "/assets/modal/3/23-1.png",
+      "thumb2": "/assets/modal/3/23-2.png"
     },
     {
       "id": 24,
       "name": "Quantum Spider",
       "desc": "Made entirely of quantum energy, it can shoot deadly quantum venom.",
-      "thumb1": "/assets/modal/2/24-1.png",
-      "thumb2": "/assets/modal/2/24-2.png"
+      "thumb1": "/assets/modal/3/24-1.png",
+      "thumb2": "/assets/modal/3/24-2.png"
     },
     {
       "id": 25,
       "name": "antis",
       "desc": "A Zerg combat unit with a strong jumping ability, it can jump into the front of the enemy to perform powerful attacks.",
-      "thumb1": "/assets/modal/2/25-1.png",
-      "thumb2": "/assets/modal/2/25-2.png"
+      "thumb1": "/assets/modal/3/25-1.png",
+      "thumb2": "/assets/modal/3/25-2.png"
     },
     {
       "id": 26,
       "name": "ogue Beast",
       "desc": "With mutant cells, it can rampage in battle, and will never stop attacking until the end of life.",
-      "thumb1": "/assets/modal/2/26-1.png",
-      "thumb2": "/assets/modal/2/26-2.png"
+      "thumb1": "/assets/modal/3/26-1.png",
+      "thumb2": "/assets/modal/3/26-2.png"
     },
     {
       "id": 27,
       "name": "Dismembering Shark",
       "desc": "Zerg's flesh warriors can launch first attacks to withstand all damage, but slow mobility makes them not suitable for offensive role.",
-      "thumb1": "/assets/modal/2/27-1.png",
-      "thumb2": "/assets/modal/2/27-2.png"
+      "thumb1": "/assets/modal/3/27-1.png",
+      "thumb2": "/assets/modal/3/27-2.png"
     },
     {
       "id": 28,
       "name": "Crabworm II",
       "desc": "It has a hard shell, and it can quickly shuttle through the battlefield, its damage is not enough but its attack speed is very fast.",
-      "thumb1": "/assets/modal/2/28-1.png",
-      "thumb2": "/assets/modal/2/28-2.png"
+      "thumb1": "/assets/modal/3/28-1.png",
+      "thumb2": "/assets/modal/3/28-2.png"
     },
     {
       "id": 29,
       "name": "Crabworm III",
       "desc": "It has a hard shell, and it can quickly shuttle through the battlefield, its damage is not enough but its attack speed is very fast.",
-      "thumb1": "/assets/modal/2/29-1.png",
-      "thumb2": "/assets/modal/2/29-2.png"
+      "thumb1": "/assets/modal/3/29-1.png",
+      "thumb2": "/assets/modal/3/29-2.png"
     },
     {
       "id": 30,
       "name": "Horned Monkey",
       "desc": "With an extremely hard horn, it can stun enemies when approaching.",
-      "thumb1": "/assets/modal/2/30-1.png",
-      "thumb2": "/assets/modal/2/30-2.png"
+      "thumb1": "/assets/modal/3/30-1.png",
+      "thumb2": "/assets/modal/3/30-2.png"
     }
   ],
   "Spacemen": [

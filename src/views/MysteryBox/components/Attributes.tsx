@@ -25,9 +25,9 @@ const Attributes: React.FC<AttributesProps> = ({
         <Text mb='10px'>{t('Attributes')}</Text>
         <Flex>
           <LabelStyled>
-            <LabelText>{t('Grid')}: </LabelText>
-            <AttrText>
-              {info?.areaX ? `${info?.areaX}x${info?.areaY}` : ''}
+            <LabelText>{t('Rarity')}: </LabelText>
+            <AttrText color={QualityColor[rarity]}>
+              {rarity ? t(`rarity-${rarity}`) : ''}
             </AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
@@ -38,34 +38,28 @@ const Attributes: React.FC<AttributesProps> = ({
             </AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
-            <LabelText>{t('Rarity')}: </LabelText>
-            <AttrText color={QualityColor[rarity]}>
-              {rarity ? t(`rarity-${rarity}`) : ''}
+            <LabelText>{t('Grid')}: </LabelText>
+            <AttrText>
+              {info?.areaX ? `${info?.areaX}x${info?.areaY}` : ''}
             </AttrText>
           </LabelStyled>
+          <LabelStyled ml='15px'>
+            <LabelText>{t('Building Count')}: </LabelText>
+            <AttrText>{info?.build_count}</AttrText>
+          </LabelStyled>
         </Flex>
-        <Flex mt='13px'>
+        <Flex mt='11px'>
           <LabelStyled>
-            <LabelText>{t('Looting Speed')}: </LabelText>
-            <AttrText>{info?.plunder_speed}</AttrText>
+            <LabelText>{t('Population')}: </LabelText>
+            <AttrText>{info?.population}</AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
             <LabelText>{t('Ore')}: </LabelText>
             <AttrText>{info?.stone}</AttrText>
           </LabelStyled>
           <LabelStyled ml='15px'>
-            <LabelText>{t('Population')}: </LabelText>
-            <AttrText>{info?.population}</AttrText>
-          </LabelStyled>
-        </Flex>
-        <Flex mt='13px'>
-          <LabelStyled>
             <LabelText>{t('Energy')}: </LabelText>
             <AttrText>{info?.energy}</AttrText>
-          </LabelStyled>
-          <LabelStyled ml='15px'>
-            <LabelText>{t('Building Count')}: </LabelText>
-            <AttrText>{info?.build_count}</AttrText>
           </LabelStyled>
         </Flex>
       </Box>

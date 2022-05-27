@@ -10,6 +10,7 @@ import { getPlanetRarity } from 'utils/planetRarity';
 import { RaceTypeColor } from 'uikit/theme/colors';
 import { RaceAvatar } from 'components';
 import { RaceType } from 'uikit/theme/types';
+import ScoringPanel from 'components/ScoringPanel';
 import { RechargeAssets } from '../Modal';
 
 const CardStyled = styled(Card)`
@@ -77,12 +78,13 @@ const StarHeader = () => {
                   <Text color='legend'>
                     {t(getPlanetRarity(planetInfo?.rarity))}
                   </Text>
-                  <Text ml='13px' bold>
+                  <Text margin='0 13px' bold>
                     Lv{planetInfo?.level}
                   </Text>
-                  <TextStyled ml='52px' small>
+                  {/* <TextStyled ml='52px' small>
                     {planetInfo?.id}
-                  </TextStyled>
+                  </TextStyled> */}
+                  <ScoringPanel scale='sm' count={2} />
                 </Flex>
                 <TextStyled ml='10px' fontSize='20px' color='warning'>
                   {planetInfo?.status === 2
@@ -94,7 +96,7 @@ const StarHeader = () => {
               </Flex>
               <Flex justifyContent='space-between' alignItems='center'>
                 <Flex alignItems='center'>
-                  <ImageStyled src='/images/commons/icon/ore.png' />
+                  <ImageStyled src='/images/commons/icon/icon_minera.png' />
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
                       <TextStyled color='textTips' small>
@@ -115,7 +117,7 @@ const StarHeader = () => {
                   </Flex>
                 </Flex>
                 <Flex alignItems='center'>
-                  <ImageStyled src='/images/commons/icon/population.png' />
+                  <ImageStyled src='/images/commons/icon/icon_spice.png' />
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
                       <TextStyled color='textTips' small>
@@ -136,7 +138,7 @@ const StarHeader = () => {
                   </Flex>
                 </Flex>
                 <Flex alignItems='center'>
-                  <ImageStyled src='/images/commons/icon/energy.png' />
+                  <ImageStyled src='/images/commons/icon/icon_energy.png' />
                   <Flex flexDirection='column' ml='14px'>
                     <Flex>
                       <TextStyled color='textTips' small>

@@ -100,7 +100,7 @@ const GlobalVideo: React.FC<VideoGlobalProps> = ({
       <Box
         ref={box}
         position='absolute'
-        top={boxTop}
+        // top={boxTop}
         height={boxHeight}
         width='100%'
         style={{ display: show ? 'block' : 'none' }}
