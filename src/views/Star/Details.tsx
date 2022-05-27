@@ -49,6 +49,12 @@ const Details = () => {
         ),
       },
       {
+        element: '.energy_tank_0',
+        intro: t(
+          'This is the energy tank of the planet. It is the core building for resource management. It can supplement its resources and store the resources plundered by the stars.',
+        ),
+      },
+      {
         element: '.building_0',
         intro: t(
           'Start to create the first building of the planet and drag the building to the right place on the chessboard.',
@@ -108,7 +114,9 @@ const Details = () => {
   }, [planet, selfBuilding, updateGrid]);
 
   React.useEffect(() => {
-    dispatch(storeAction.toggleVisible({ visible: false }));
+    return () => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    };
   }, [dispatch]);
 
   return (

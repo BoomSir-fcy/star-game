@@ -222,6 +222,12 @@ const Login = () => {
   ]);
 
   useEffect(() => {
+    if (parsedQs.InviteAddress) {
+      localStorage.setItem('InviteAddress', String(parsedQs.InviteAddress));
+    }
+  }, [parsedQs.InviteAddress]);
+
+  useEffect(() => {
     if (!userInfoView.loading || !parsedQs.s) {
       if (account && !userInfoView.isActive) {
         navigate(`${pathname}?s=${1}`, { replace: true });

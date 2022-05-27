@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Text, Image } from 'uikit';
 import { useStore } from 'state/util';
 import { TokenImage } from 'components/TokenImage';
-import { getDsgAddress } from 'utils/addressHelpers';
+import { getBoxAddress, getDsgAddress } from 'utils/addressHelpers';
 import StarCom from 'components/StarCom';
 import Modal from 'components/Modal';
 import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
@@ -73,7 +73,13 @@ const Info: React.FC<InfoProps> = ({
   return (
     <Box width='100%'>
       <Flex height='179px' width='100%'>
-        <Box width='312px' pl='20px' pt='28px'>
+        <Box
+          width='312px'
+          height='250px'
+          pl='20px'
+          pt='28px'
+          className='header_asset'
+        >
           <ButtonLeft
             onClick={() => {
               setActiveToken(DSGblance);
@@ -108,7 +114,7 @@ const Info: React.FC<InfoProps> = ({
                 <TokenImage
                   width={45}
                   height={48}
-                  tokenAddress={getDsgAddress()}
+                  tokenAddress={getBoxAddress()}
                 />
                 <Text fontSize='20px' mt='8px' ml='8px'>
                   {BOXblance?.amount}
@@ -156,7 +162,7 @@ const Info: React.FC<InfoProps> = ({
               </ButtonTag1>
             </Link>
           </Box>
-          <Box ml='22px'>
+          <Box ml='22px' className='header_resource'>
             <ButtonTag2 variant='custom'>
               <Flex pl='8px' alignItems='center' width='100%'>
                 <Box width={70}>

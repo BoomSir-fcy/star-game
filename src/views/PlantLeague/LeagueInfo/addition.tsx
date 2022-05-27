@@ -80,10 +80,10 @@ const ItemRow: React.FC<{
         />
         <Box ml='24px'>
           <Text fontSize='22px'>
-            {info.name}:{info.total}
+            {info.name}: {info.total}
           </Text>
           <Text fontSize='22px'>
-            {t('Total Capacity')}:{info.capacity}%
+            {t('Total Capacity')}: {info.capacity}%
           </Text>
         </Box>
       </Flex>
