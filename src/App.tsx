@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ResetCSS } from 'uikit';
+import { Box, ResetCSS, Spinner } from 'uikit';
 import VConsole from 'vconsole';
 import ScaleOrientContent from 'components/ScaleOrientContent';
 import useEagerConnect from 'hooks/useEagerConnect';
@@ -62,7 +62,13 @@ function App() {
       <ResetCSS />
       <ScaleOrientContent>
         <ConnectWalletProvider>
-          <Suspense fallback='loading...'>
+          <Suspense
+            fallback={
+              <Box mt='36px'>
+                <Spinner />
+              </Box>
+            }
+          >
             <Routes>
               <Route path='/' element={<Login />} />
               {/* <Route path='/index' element={<Home />} /> */}
