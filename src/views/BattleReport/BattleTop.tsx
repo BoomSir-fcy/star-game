@@ -32,7 +32,15 @@ const RecordBox = styled(Flex)`
   margin-left: 20px;
 `;
 
-export const BattleTop: React.FC = () => {
+interface contInfo {
+  Cont: number;
+  WinCont: number;
+  FailedCont: number;
+}
+
+export const BattleTop: React.FC<{
+  cont: contInfo;
+}> = ({ cont }) => {
   const { t } = useTranslation();
 
   return (
@@ -51,7 +59,7 @@ export const BattleTop: React.FC = () => {
           {t('total number of battles')}
         </MarkText>
         <MarkText fontSize='28px' bold fontStyle='italic'>
-          10
+          {cont.Cont}
         </MarkText>
       </RecordBox>
       <RecordBox>
@@ -59,7 +67,7 @@ export const BattleTop: React.FC = () => {
           {t('Victories')}
         </MarkText>
         <MarkText fontSize='28px' bold fontStyle='italic'>
-          10
+          {cont.WinCont}
         </MarkText>
       </RecordBox>
       <RecordBox>
@@ -67,7 +75,7 @@ export const BattleTop: React.FC = () => {
           {t('Number of failed games')}
         </MarkText>
         <MarkText fontSize='28px' bold fontStyle='italic'>
-          10
+          {cont.FailedCont}
         </MarkText>
       </RecordBox>
     </Flex>

@@ -13,72 +13,11 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { PkBox } from './pkBox';
 import { BattleTop } from './BattleTop';
-
-const PkList = [
-  {
-    battle_result: true,
-    startingTime: 1652686766,
-    endTime: 1652686820,
-    ore: 10,
-    energy: 20,
-    attrition_combat: 2,
-    LoseDurability: 6,
-    id: 1,
-  },
-  {
-    battle_result: false,
-    startingTime: 1652686766,
-    endTime: 1652686820,
-    ore: 10,
-    energy: 20,
-    attrition_combat: 2,
-    LoseDurability: 6,
-    id: 1,
-  },
-  {
-    battle_result: false,
-    startingTime: 1652686766,
-    endTime: 1652686820,
-    ore: 10,
-    energy: 20,
-    attrition_combat: 2,
-    LoseDurability: 6,
-    id: 1,
-  },
-  {
-    battle_result: false,
-    startingTime: 1652686766,
-    endTime: 1652686820,
-    ore: 10,
-    energy: 20,
-    attrition_combat: 2,
-    LoseDurability: 6,
-    id: 1,
-  },
-  {
-    battle_result: false,
-    startingTime: 1652686766,
-    endTime: 1652686820,
-    ore: 10,
-    energy: 20,
-    attrition_combat: 2,
-    LoseDurability: 6,
-    id: 1,
-  },
-  {
-    battle_result: false,
-    startingTime: 1652686766,
-    endTime: 1652686820,
-    ore: 10,
-    energy: 20,
-    attrition_combat: 2,
-    LoseDurability: 6,
-    id: 1,
-  },
-];
+import { useFetchCombatRecord } from './hook';
 
 const ScrollBox = styled(Flex)`
-  height: 650px;
+  min-height: 400px;
+  max-height: 650px;
   margin-top: 22px;
   overflow-y: auto;
   flex-wrap: wrap;
@@ -105,13 +44,34 @@ const BattleReport = () => {
   const location = useLocation();
   const { t } = useTranslation();
   const { guides, setGuide } = useGuide(location.pathname);
-  const [pending, setpending] = useState(false);
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+
+  const {
+    list: RecordList,
+    page,
+    setPageNum,
+    loading,
+    end,
+    WinCont,
+    FailedCont,
+    Cont,
+  } = useFetchCombatRecord();
+
+  const loadMore = useCallback(
+    (e: any) => {
+      const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
+      if (offsetHeight + scrollTop === scrollHeight) {
+        if (loading || end) return; // 判断是否在请求状态或者已到最后一页
+        setPageNum(page + 1);
+      }
+    },
+    [loading, page, setPageNum, end],
+  );
 
   const onRefreshClick = useCallback(() => {
     dispatch(fetchAllianceViewAsync());
   }, [dispatch]);
 
-  const [stepsEnabled, setStepsEnabled] = useState(true);
   const steps = React.useMemo(
     () => [
       {
@@ -130,7 +90,7 @@ const BattleReport = () => {
     };
   }, [onRefreshClick]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       dispatch(storeAction.toggleVisible({ visible: false }));
     };
@@ -141,7 +101,7 @@ const BattleReport = () => {
       {!guides.guideFinish &&
         guides.finish &&
         steps.length - 1 >= guides.step &&
-        PkList.length > 0 && (
+        RecordList.length > 0 && (
           <Steps
             enabled={stepsEnabled}
             steps={steps}
@@ -156,11 +116,11 @@ const BattleReport = () => {
           />
         )}
 
-      <BattleTop />
+      <BattleTop cont={{ Cont, WinCont, FailedCont }} />
       <Flex flex={1}>
         <BgCard variant='Fullscreen' padding='40px 37px'>
-          <ScrollBox className='Pk_list'>
-            {(PkList ?? []).map((item, index) => (
+          <ScrollBox onScroll={loadMore} className='Pk_list'>
+            {(RecordList ?? []).map((item, index) => (
               <React.Fragment key={`${item.id}`}>
                 <ItemBox className={`battle-items-${index}`}>
                   <PkBox info={item} />
@@ -170,7 +130,7 @@ const BattleReport = () => {
           </ScrollBox>
         </BgCard>
       </Flex>
-      {pending && (
+      {loading && (
         <LoadingBox>
           <Spinner size={200} />
         </LoadingBox>
