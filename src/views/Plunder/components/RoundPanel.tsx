@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Box, BoxProps, Text, Flex, Button } from 'uikit';
 import Modal from 'components/Modal';
@@ -28,14 +28,23 @@ const ButtonStyled = styled(Button).attrs({ variant: 'vs' })`
 interface RoundPanelProps extends BoxProps {
   roundName?: string;
   isEnemy?: boolean;
+  onEnd?: () => void;
 }
 
 const RoundPanel: React.FC<RoundPanelProps> = ({
   roundName,
   isEnemy,
+  onEnd,
   ...props
 }) => {
   const [visible, setVisible] = useState(false);
+
+  const handleEnd = useCallback(() => {
+    setVisible(true);
+    if (onEnd) {
+      onEnd();
+    }
+  }, [setVisible, onEnd]);
 
   return (
     <BoxStyled {...props}>
@@ -46,15 +55,32 @@ const RoundPanel: React.FC<RoundPanelProps> = ({
         <Text shadow='primary' fontSize='22px' bold>
           {isEnemy ? 'Enemy actions' : 'Our actions'}
         </Text>
-        <ButtonStyled mt='26px'>
+        <ButtonStyled
+          onClick={() => {
+            setVisible(true);
+          }}
+          mt='26px'
+        >
           <Text shadow='primary' small bold>
-            跳过
+            End
           </Text>
         </ButtonStyled>
       </FlexStyled>
       <Modal title='温馨提示' visible={visible} setVisible={setVisible}>
-        <Text>是否跳过本轮战斗?</Text>
-        <Text>(跳过不会影响本次战斗结果)</Text>
+        <Flex
+          height='500px'
+          flexDirection='column'
+          justifyContent='space-around'
+        >
+          <Box>
+            <Text textAlign='center'>是否跳过本轮战斗?</Text>
+            <Text textAlign='center'>(跳过不会影响本次战斗结果)</Text>
+          </Box>
+          <Flex justifyContent='space-around'>
+            <Button onClick={() => setVisible(false)}>取消</Button>
+            <Button onClick={handleEnd}>确认</Button>
+          </Flex>
+        </Flex>
       </Modal>
     </BoxStyled>
   );

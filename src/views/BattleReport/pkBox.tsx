@@ -6,6 +6,7 @@ import { useTranslation } from 'contexts/Localization';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { Link } from 'react-router-dom';
+import { useWeb3React } from '@web3-react/core';
 import { PkResult } from './components/PkResult';
 
 dayjs.extend(utc);
@@ -23,6 +24,7 @@ export const PkBox: React.FC<{
   info: any;
 }> = ({ info }) => {
   const { t } = useTranslation();
+  const { account } = useWeb3React();
 
   const BoxList = useMemo(() => {
     const List = [
@@ -34,32 +36,33 @@ export const PkBox: React.FC<{
       {
         title: t('Get Energy'),
         img: '/images/commons/icon/icon_energy.png',
-        num: info.energy,
+        num: info.incomeEnergy,
       },
       {
         title: t('Attrition combat unit'),
         img: '/images/commons/star/HP.png',
-        num: info.attrition_combat,
+        num:
+          account?.toLocaleLowerCase() === info.fromAddress
+            ? info.blueLoseUnit
+            : info.redLoseUnit,
       },
       {
         title: t('Lose Building Durability'),
         img: '/images/commons/star/durability.png',
-        num: info.LoseDurability,
+        num: info.success ? 0 : info.lostDurability,
       },
     ];
     return List;
-  }, [t, info]);
+  }, [t, info, account]);
 
   return (
     <CardBox>
       <Flex>
-        <PkResult result={info.battle_result} />
+        <PkResult result={info.success} />
         <Flex ml='29px' flex='1' flexDirection='column'>
           <Flex alignItems='center' justifyContent='space-between'>
             <Text fontSize='20px'>
-              {dayjs.unix(info.startingTime).format('YY-MM-DD HH:mm:ss')}
-              &nbsp;~&nbsp;
-              {dayjs.unix(info.endTime).format('YY-MM-DD HH:mm:ss')}
+              {dayjs.unix(info.createTime).format('YY-MM-DD HH:mm:ss')}
             </Text>
             <Link to={`/plunder-pk?id=${info.id}`}>
               <PlayImg src='/images/battleReport/play.png' alt='' />
@@ -67,7 +70,7 @@ export const PkBox: React.FC<{
           </Flex>
           <Flex flexWrap='wrap' height='100%' alignItems='stretch'>
             {BoxList.map((item, index) => (
-              <Flex width='50%'>
+              <Flex width='50%' key={item.title}>
                 <Image src={item.img} width={54} height={55} />
                 <Box ml='24px'>
                   <Text fontSize='18px'>{item.title}</Text>

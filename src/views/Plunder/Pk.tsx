@@ -29,6 +29,7 @@ import Game from 'game/core/Game';
 import { useStore, storeAction } from 'state';
 import { RoundDescTotalHp } from 'game/types';
 import { useToast } from 'contexts/ToastsContext';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
 import { useGuide } from 'hooks/useGuide';
 import {
@@ -61,6 +62,7 @@ const Pk = () => {
   const { toastError } = useToast();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const parseQs = useParsedQueryString();
 
@@ -84,7 +86,7 @@ const Pk = () => {
 
   // TODO: 要干掉
   // useFetchGamePK(5000000000000004, 5000000000000002, 10);
-  useFetchGamePKTest(id, undefined, 30);
+  // useFetchGamePKTest(id, undefined, 30);
 
   const { initHandle, running } = usePK(game);
 
@@ -97,7 +99,8 @@ const Pk = () => {
   useEffect(() => {
     if (!mounted) {
       if (ref.current && game && PKInfo) {
-        setTotalInfo(PKInfo.init.show_hp);
+        console.log(PKInfo);
+        setTotalInfo(PKInfo[current].init.show_hp);
         setMounted(true);
         // 初始化
         if (current === 0) {
@@ -108,11 +111,11 @@ const Pk = () => {
           });
           loaders.addEventListener('complete', () => {
             setComplete(true);
-            initHandle(PKInfo);
+            initHandle(PKInfo[current]);
           });
         } else if (current <= 5) {
           setComplete(true);
-          initHandle(PKInfo);
+          initHandle(PKInfo[current]);
         }
       } else {
         setTimeout(() => {
@@ -171,6 +174,10 @@ const Pk = () => {
     setCurrent(prev => prev + 1);
   }, [setMounted, setTotalInfo, setCurrent, setOthers, setRoundInfos, game]);
 
+  const onEndHandle = useCallback(() => {
+    navigate('/plunder-result');
+  }, [navigate]);
+
   const onRunEnd = useCallback(() => {
     const res = Math.random() > 0.5;
     console.log('结束了 一切都结束了', res);
@@ -189,28 +196,28 @@ const Pk = () => {
       ];
     });
 
-    if (current < 4) {
-      // const timer = setInterval(() => {
-      //   setOthers(prev => {
-      //     const { length } = prev;
-      //     const index = 4 - length;
-      //     if (index === 0) {
-      //       clearInterval(timer);
-      //       newRoundHandle();
-      //       return prev;
-      //     }
-      //     return [
-      //       ...prev,
-      //       {
-      //         id: length,
-      //         text: `${index}`,
-      //         type: 2,
-      //       },
-      //     ];
-      //   });
-      // }, 1000);
+    if (current < PKInfo?.length) {
+      const timer = setInterval(() => {
+        setOthers(prev => {
+          const { length } = prev;
+          const index = 4 - length;
+          if (index === 0) {
+            clearInterval(timer);
+            newRoundHandle();
+            return prev;
+          }
+          return [
+            ...prev,
+            {
+              id: length,
+              text: `${index}`,
+              type: 2,
+            },
+          ];
+        });
+      }, 1000);
     }
-  }, [setOthers, current, setResult]);
+  }, [setOthers, current, setResult, PKInfo?.length, newRoundHandle]);
 
   useEffect(() => {
     if (running) {
@@ -305,7 +312,7 @@ const Pk = () => {
       <Flex mb='20px'>
         <Flex position='relative' zIndex={1}>
           <BackButton ml='19px' />
-          <RefreshButton ml='33px' />
+          {/* <RefreshButton ml='33px' /> */}
         </Flex>
         <Fringe ml='-192px' />
         <Box />
@@ -324,7 +331,7 @@ const Pk = () => {
           <Flex mt='-52px' justifyContent='space-between'>
             <PKProgress
               className='plunder-pk-step1'
-              total={PKInfo?.init?.show_hp?.blue_total_hp ?? 0}
+              total={PKInfo?.[current]?.init?.show_hp?.blue_total_hp ?? 0}
               current={totalInfo?.blue_total_hp ?? 0}
               result={result}
             />
@@ -332,12 +339,13 @@ const Pk = () => {
               mt='-45px'
               roundName={roundInfo?.id}
               isEnemy={roundInfo?.descInfo?.sender?.isEnemy}
+              onEnd={onEndHandle}
             />
             <PKProgress
               opponent
               result={result}
               isRed
-              total={PKInfo?.init?.show_hp?.red_total_hp ?? 0}
+              total={PKInfo?.[current]?.init?.show_hp?.red_total_hp ?? 0}
               current={totalInfo?.red_total_hp ?? 0}
             />
           </Flex>
@@ -361,7 +369,7 @@ const Pk = () => {
       )}
 
       <Flex
-        justifyContent='space-between'
+        justifyContent='center'
         position='absolute'
         bottom='-1000px'
         width='100%'
@@ -370,7 +378,7 @@ const Pk = () => {
           transition: 'all 0.5s',
         }}
       >
-        <WaitPlunderList />
+        {/* <WaitPlunderList /> */}
         <Flex flex={1}>
           <PlunderPanel
             className='plunder-pk-step3'
@@ -379,7 +387,7 @@ const Pk = () => {
             others={others}
           />
         </Flex>
-        <WaitPlunderList />
+        {/* <WaitPlunderList /> */}
       </Flex>
     </Layout>
   );

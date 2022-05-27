@@ -174,10 +174,10 @@ const Info: React.FC<InfoProps> = ({
                 </Box>
                 <Box ml='8px'>
                   <Text fontSize='20px' mb='20px' textAlign='left'>
-                    {t('Total Capacity')}: {Product.stone_product}/s
+                    {t('Capacity')}: {Product.stone_product}/s
                   </Text>
                   <Text fontSize='20px' textAlign='left'>
-                    {t('Total Ore')}: {Product.stone}
+                    {t('Ore ')}: {Product.stone}
                   </Text>
                 </Box>
               </Flex>
@@ -193,10 +193,10 @@ const Info: React.FC<InfoProps> = ({
                 </Box>
                 <Box ml='8px'>
                   <Text fontSize='20px' mb='20px' textAlign='left'>
-                    {t('Total Capacity')}: {Product.population_product}/s
+                    {t('Capacity')}: {Product.population_product}/s
                   </Text>
                   <Text fontSize='20px' textAlign='left'>
-                    {t('Total Population')}: {Product.population}
+                    {t('Population ')}: {Product.population}
                   </Text>
                 </Box>
               </Flex>
@@ -213,10 +213,10 @@ const Info: React.FC<InfoProps> = ({
                   </Box>
                   <Box ml='8px'>
                     <Text fontSize='20px' mb='20px' textAlign='left'>
-                      {t('Total Capacity')}: {Product.energy_product}/s
+                      {t('Capacity')}: {Product.energy_product}/s
                     </Text>
                     <Text fontSize='20px' textAlign='left'>
-                      {t('Total Energy')}: {Product.energy}
+                      {t('Energy ')}: {Product.energy}
                     </Text>
                   </Box>
                 </Flex>

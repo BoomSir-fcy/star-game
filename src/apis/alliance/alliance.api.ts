@@ -36,4 +36,10 @@ export class AllianceApi extends Http {
     const res = await this.post('buildings/store/extract');
     return res;
   }
+
+  // 获取掠夺战斗记录
+  async getMyCombatRecord(params: Api.Alliance.Record) {
+    const res = await this.get('alliance/combat/record', params);
+    return res;
+  }
 }
