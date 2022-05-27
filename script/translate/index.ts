@@ -13,15 +13,27 @@ const getTranslateData = (path: string) => {
   const races = {};
 
   sheets.forEach((sheet) => {
-    races[sheet["name"]] = [];
-    for (const rowId in sheet["data"]) {
-      const row = sheet["data"][rowId];
+    // 名称、描述、特点
+    const description = sheet["data"][0][2]?.replace(/\t/g, "").split("\r\n");
+    races[sheet["name"]] = {
+      name: `race-${Race[sheet["name"]]}`,
+      desc: description[2],
+      descCN: description[0],
+      features: description[3]?.substring(10),
+      featuresCN: description[1]?.substring(3),
+      children: [],
+    };
+
+    // 兵种
+    const data = sheet["data"].slice(2);
+    for (const rowId in data) {
+      const row = data[rowId];
       const newRow1 = row[1]?.replace(/\t/g, "");
       const newRow2 = row[2]?.replace(/\t/g, "");
       const nameSplit = newRow1?.indexOf("\r\n");
       const descSplit = newRow2?.indexOf("\r\n");
       if (newRow1 && newRow2) {
-        races[sheet["name"]].push({
+        races[sheet["name"]].children.push({
           id: row[0],
           nameCN: newRow1.substring(0, nameSplit),
           name: newRow1.substring(nameSplit + 2),
@@ -35,10 +47,10 @@ const getTranslateData = (path: string) => {
 };
 
 const writeRaceConfigFile = (res: any) => {
-  const raceObj = { ...res };
+  const raceObj = JSON.parse(JSON.stringify(res));
   for (const obj in raceObj) {
     const race = Race[obj as string];
-    const list = raceObj[obj].map((item) => {
+    const list = raceObj[obj].children.map((item) => {
       return {
         id: item.id,
         name: item.name,
@@ -47,7 +59,9 @@ const writeRaceConfigFile = (res: any) => {
         thumb2: `/assets/modal/${race}/${item.id}-2.png`,
       };
     });
-    raceObj[obj] = list;
+    raceObj[obj].children = list;
+    delete raceObj[obj].descCN;
+    delete raceObj[obj].featuresCN;
   }
 
   fs.writeFile(
@@ -65,12 +79,13 @@ const writeRaceConfigFile = (res: any) => {
 const writeTranslationFile = (res: any) => {
   const raceObj = {};
   for (const obj in res) {
-    res[obj].forEach((item) => {
+    raceObj[res[obj].desc] = res[obj].desc;
+    raceObj[res[obj].features] = res[obj].features;
+    res[obj].children.forEach((item) => {
       raceObj[item.name] = item.name;
       raceObj[item.desc] = item.desc;
     });
   }
-
   fs.writeFile(
     "./translate/translation.json",
     JSON.stringify(raceObj, null, 2),
@@ -86,7 +101,9 @@ const writeTranslationFile = (res: any) => {
 const writeZhCNFile = (res: any) => {
   const raceObj = {};
   for (const obj in res) {
-    res[obj].forEach((item) => {
+    raceObj[res[obj].desc] = res[obj].descCN;
+    raceObj[res[obj].features] = res[obj].featuresCN;
+    res[obj].children.forEach((item) => {
       raceObj[item.name] = item.nameCN;
       raceObj[item.desc] = item.descCN;
     });
