@@ -14,6 +14,7 @@ import {
 import ScoringPanel from 'components/ScoringPanel';
 import StarCom from 'components/StarCom';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import { useGuide } from 'hooks/useGuide';
 import { storeAction } from 'state';
 import { useDispatch } from 'react-redux';
 import InfoPlane from './components/grow/InfoPlane';
@@ -38,6 +39,7 @@ const Grow: React.FC = () => {
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
+  const { guides, setGuide } = useGuide('/star/grow');
   const { toastError, toastSuccess, toastWarning, toastInfo } = useToast();
   const [visible, setVisible] = useState(false);
   const [nowPlante, setNowPlante] = useState<StrengthenPlanetInfo>();
@@ -182,22 +184,22 @@ const Grow: React.FC = () => {
 
   return (
     <Box>
-      <Steps
-        enabled={stepsEnabled}
-        steps={steps}
-        initialStep={0}
-        options={{
-          exitOnOverlayClick: false,
-          tooltipPosition: 'top',
-        }}
-        onExit={step => {
-          if (step) {
-            console.log(step, 1111);
+      {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
+        <Steps
+          enabled={stepsEnabled}
+          steps={steps}
+          initialStep={0}
+          options={{
+            exitOnOverlayClick: false,
+            tooltipPosition: 'top',
+          }}
+          onExit={step => {
             setStepsEnabled(false);
-            dispatch(storeAction.toggleVisible({ visible: true }));
-          }
-        }}
-      />
+            setGuide(step + 1);
+            // dispatch(storeAction.toggleVisible({ visible: true }));
+          }}
+        />
+      )}
       <BgCard variant='big' padding='50px 33px'>
         <Flex>
           <MysteryBoxStyled>

@@ -149,7 +149,7 @@ export const GameInfo: React.FC<{
       {itemData?._id && (
         <>
           <CardContent>
-            <Flex>
+            <Flex alignItems='flex-start'>
               <GameThing
                 src={itemData?.picture}
                 level={itemData?.propterty?.levelEnergy}
@@ -281,11 +281,13 @@ export const GameInfo: React.FC<{
                     </Flex>
                   </ItemInfo>
                 </Consume>
+                <Box>
+                  <Text color='textSubtle' small mt='5px'>
+                    {t('planetResourcesProducedPlanetaryBuildings')}
+                  </Text>
+                </Box>
               </Box>
             </Flex>
-            <Text color='textSubtle' small mt='5px'>
-              {t('planetResourcesProducedPlanetaryBuildings')}
-            </Text>
           </CardContent>
           <CardInfo>
             <Flex
@@ -310,7 +312,7 @@ export const GameInfo: React.FC<{
                         height={40}
                       />
                     </Box>
-                    <Text shadow='primary' fontSize='33px'>
+                    <Text shadow='primary' fontSize='34px'>
                       Lv {itemData?.propterty?.levelEnergy + 1}
                     </Text>
                   </Flex>
