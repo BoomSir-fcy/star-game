@@ -16,10 +16,12 @@ import { ThingDestoryModal, ThingUpgradesModal } from '../Modal';
 
 const Container = styled(Box)`
   width: 852px;
-  min-height: 490px;
+  min-height: 470px;
+  max-height: 476px;
   padding: 13px;
   border: 4px solid #f9feff;
   box-shadow: 0px 0px 10px 2px #41b7ff;
+  overflow: auto;
 `;
 
 const CardContent = styled(Card)`
@@ -169,17 +171,16 @@ export const GameInfo: React.FC<{
                       <StyledImage
                         width={50}
                         height={50}
-                        src='/images/commons/star/HP.png'
+                        src='/images/commons/icon/icon_minera.png'
                       />
                     </Box>
                     <Box>
                       <Flex alignItems='center'>
                         <Text color='textSubtle' small>
-                          {t('planetHPValue')}
+                          {t('Ore Capacity')}
                         </Text>
-                        {/* <ThingaddBlood /> */}
                       </Flex>
-                      <Text small>{itemData?.propterty?.hp}</Text>
+                      <Text small>100/h</Text>
                     </Box>
                   </ItemInfo>
                   <ItemInfo>
@@ -210,42 +211,6 @@ export const GameInfo: React.FC<{
                       </Text>
                     </Box>
                   </ItemInfo>
-                  <ItemInfo>
-                    <Box width={50} height={50} mr='5px'>
-                      <StyledImage
-                        width={50}
-                        height={50}
-                        src='/images/commons/star/defense.png'
-                      />
-                    </Box>
-                    <Box>
-                      <Flex>
-                        <Text color='textSubtle' small>
-                          {t('planetDefenseValue')}
-                        </Text>
-                      </Flex>
-                      <Text small>{itemData?.propterty?.defence}</Text>
-                    </Box>
-                  </ItemInfo>
-                  <ItemInfo>
-                    <Box width={50} height={50} mr='5px'>
-                      <StyledImage
-                        width={50}
-                        height={50}
-                        src='/images/commons/star/attackValue.png'
-                      />
-                    </Box>
-                    <Box>
-                      <Flex>
-                        <Text color='textSubtle' small>
-                          {t('planetAttackValue')}
-                        </Text>
-                      </Flex>
-                      <Text small>{itemData?.propterty?.attack}</Text>
-                    </Box>
-                  </ItemInfo>
-                </Flex>
-                <Consume>
                   <ItemInfo bottomMargin>
                     <Box width={50} height={50} mr='5px'>
                       <Image
@@ -280,7 +245,7 @@ export const GameInfo: React.FC<{
                       </Text>
                     </Flex>
                   </ItemInfo>
-                </Consume>
+                </Flex>
                 <Box>
                   <Text color='textSubtle' small mt='5px'>
                     {t('planetResourcesProducedPlanetaryBuildings')}

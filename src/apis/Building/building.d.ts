@@ -103,5 +103,21 @@ declare namespace Api {
       area_x: number;
       area_y: number;
     }
+
+    interface GetPlanetBuildingParams {
+      planet_id: number;
+      building_id?: string;
+    }
+
+    interface BuildingBuffer {
+      attack: number;
+      build_id: string;
+      critical: number;
+      defense: number;
+      hit: number;
+      hp: number;
+      miss: number;
+      speed: number;
+    }
   }
 }

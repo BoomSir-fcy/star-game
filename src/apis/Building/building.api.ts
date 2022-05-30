@@ -113,4 +113,10 @@ export class BuildingApi extends Http {
     const res = await this.post(`buildings/destory`, params);
     return res;
   }
+
+  // 获取buff加成
+  async getBuff(params: Api.Building.GetPlanetBuildingParams) {
+    const res = await this.get('buildings/attack_buff', params);
+    return res;
+  }
 }

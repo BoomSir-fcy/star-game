@@ -13,6 +13,8 @@ import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 
 import { GameInfo, GameThing, Building } from './gameModel';
+import { BuffBonus } from './buff';
+import { useBuffer } from './hooks';
 
 polyfill({
   dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
@@ -115,8 +117,9 @@ const ActionButton = styled(Button)`
   height: 44px;
   padding: 0;
   font-size: 20px;
-  &:first-child {
-    margin-bottom: 10px;
+  margin-bottom: 5px;
+  &:last-child {
+    margin-bottom: 0;
   }
 `;
 
@@ -130,6 +133,7 @@ export const DragCompoents: React.FC<{
 }> = ({ planet_id, itemData, cols, rows, gridSize }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { getPlanetBuff } = useBuffer();
   const { toastSuccess, toastError } = useToast();
   const [state, setState] = React.useState({
     currentTab: 1,
@@ -148,6 +152,8 @@ export const DragCompoents: React.FC<{
   const [grid, setGrid] = React.useState<any[]>([]);
   const [gridBuilds, setGridBuilds] = React.useState<any[]>([]);
   const [currentBuild, setCurrentBuild] = React.useState<any>({});
+  const [currentBuffer, setCurrentBuffer] =
+    React.useState<Api.Building.BuildingBuffer>(null);
   const buildings = useStore(p => p.buildling.buildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
 
@@ -165,11 +171,41 @@ export const DragCompoents: React.FC<{
     setGridBuilds(currBuilds);
   }, []);
 
+  const getBuffer = React.useCallback(async () => {
+    const res = await getPlanetBuff({ planet_id });
+    const currentBuildBuff = res.find(
+      (row: any) => row.build_id === currentBuild._id,
+    );
+    if (!currentBuildBuff?.build_id) {
+      const obj: any = {};
+      // eslint-disable-next-line array-callback-return
+      res.map((value: any) => {
+        // eslint-disable-next-line array-callback-return
+        Object.keys(value).map((key: any) => {
+          if (obj[key]) {
+            obj[key] += value[key];
+          } else {
+            obj[key] = value[key];
+          }
+        });
+      });
+      setCurrentBuffer(obj);
+      return;
+    }
+    setCurrentBuffer(currentBuildBuff);
+  }, [currentBuild._id, getPlanetBuff, planet_id]);
+
   React.useEffect(() => {
     if (itemData.length > 0) {
       updateGrids(itemData);
     }
   }, [itemData, updateGrids]);
+
+  React.useEffect(() => {
+    if (planet_id) {
+      getBuffer();
+    }
+  }, [getBuffer, getPlanetBuff, planet_id]);
 
   // 计算绝对坐标
   const getAbsolutePosition = React.useCallback(
@@ -469,13 +505,23 @@ export const DragCompoents: React.FC<{
                 );
               })}
             </Container>
-            <Flex ml='10px' flexDirection='column'>
-              <ActionButton onClick={createGrid}>
-                {t('planetSave')}
-              </ActionButton>
-              <ActionButton onClick={destroyBuilding} variant='danger'>
-                {t('planetDestroy')}
-              </ActionButton>
+            <Flex
+              ml='10px'
+              flexDirection='column'
+              justifyContent='space-between'
+            >
+              <BuffBonus currentBuff={currentBuffer} />
+              <Flex flexDirection='column'>
+                <ActionButton onClick={destroyBuilding}>
+                  {t('One-clickRepair')} 3
+                </ActionButton>
+                <ActionButton onClick={createGrid}>
+                  {t('planetSave')}
+                </ActionButton>
+                <ActionButton onClick={destroyBuilding} variant='danger'>
+                  {t('planetDestroy')}
+                </ActionButton>
+              </Flex>
             </Flex>
           </Flex>
           <GameInfo

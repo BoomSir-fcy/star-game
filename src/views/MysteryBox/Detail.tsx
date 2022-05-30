@@ -84,7 +84,7 @@ const MysteryBoxDetail = () => {
     };
   }, [onRefreshClick]);
 
-  const { guides, setGuide } = useGuide('mystery-index');
+  const { guides, setGuide } = useGuide('mystery-box/detail');
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
@@ -102,12 +102,12 @@ const MysteryBoxDetail = () => {
           'Here is the attribute information of the planet. The quality determines the attribute, and the number of grids also determines the number of planets built.',
         ),
       },
-      {
-        element: '.mystery-detail-step2',
-        intro: t(
-          'The additional attribute information of the planet is closely related to the operation and combat of the whole planet, which can be improved through cultivation.',
-        ),
-      },
+      // {
+      //   element: '.mystery-detail-step2',
+      //   intro: t(
+      //     'The additional attribute information of the planet is closely related to the operation and combat of the whole planet, which can be improved through cultivation.',
+      //   ),
+      // },
       {
         element: '.mystery-detail-step3',
         intro: t("Now let's start running the planet~"),
