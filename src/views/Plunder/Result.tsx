@@ -37,7 +37,7 @@ const Result = () => {
       <Box>
         <Fringe position='relative' top={-19} zIndex={2} />
         <Box width={1427} height={238} overflow='hidden' position='relative'>
-          <VideoStyled autoPlay muted src='/video/won.mp4' />
+          <VideoStyled autoPlay muted src='/video/won.mp4' playsInline />
         </Box>
 
         <BorderCard

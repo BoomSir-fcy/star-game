@@ -176,11 +176,11 @@ const MysteryBoxState = () => {
       <BgCard margin='auto' variant='longMedium'>
         <Box
           className='mystery-state-step0'
-          width='100%'
-          height='90%'
+          width='98%'
+          height='94%'
           position='absolute'
           top='0%'
-          left='0%'
+          left='1%'
           zIndex={-1}
         />
         <Flex alignItems='center' justifyContent='center'>
