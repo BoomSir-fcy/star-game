@@ -11,10 +11,12 @@ interface PreviewSoldierProps extends BoxProps {
   src?: string;
   customDrag?: boolean;
   sid: number;
+  disableDrag?: boolean;
 }
 
-const SoldierImg = styled.img`
+const SoldierImg = styled.img<{ disableDrag?: boolean }>`
   ${layout}
+  ${({ disableDrag }) => disableDrag && `pointer-events: none`}
 `;
 
 const PreviewSoldier: React.FC<PreviewSoldierProps> = ({
@@ -22,11 +24,17 @@ const PreviewSoldier: React.FC<PreviewSoldierProps> = ({
   sid,
   game,
   customDrag,
+  disableDrag,
   ...props
 }) => {
   return (
     <Box width={122} height={122} {...props}>
-      <SoldierImg width={122} height={122} src={src} />
+      <SoldierImg
+        width={122}
+        height={122}
+        src={src}
+        disableDrag={disableDrag}
+      />
     </Box>
   );
 };

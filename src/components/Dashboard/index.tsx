@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -12,6 +12,7 @@ import {
   fetchUserBalanceAsync,
   fetchUserProductAsync,
 } from 'state/userInfo/reducer';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 import Avatar from './Avatar';
 import Info from './Info';
 import { ButtonGroupProps } from './ButtonGroup';
@@ -34,6 +35,7 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
   const dispatch = useDispatch();
   const location = useLocation();
   const { t } = useTranslation();
+  const params = useParsedQueryString();
 
   const onRefreshClick = () => {
     eventBus.dispatchEvent(new MessageEvent('onRefresh'));
@@ -46,9 +48,13 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
 
   const Product = useStore(p => p.userInfo.userProduct);
 
+  const hideHeader = useMemo(() => {
+    return getHideHeader(location.pathname) || params?.hide;
+  }, [location.pathname, params]);
+
   return (
     <>
-      {!getHideHeader(location.pathname) && (
+      {!hideHeader && (
         <FlexStyled>
           <Avatar />
           <Flex flex={1}>

@@ -116,7 +116,7 @@ const MysteryBox = () => {
         <Box
           className='mystery-index-step0'
           width='94%'
-          height='94%'
+          height='88%'
           position='absolute'
           top='0%'
           left='2%'
@@ -131,7 +131,7 @@ const MysteryBox = () => {
             <Box
               className='mystery-index-step1'
               width='94%'
-              height='94%'
+              height='88%'
               position='absolute'
               top='0%'
               left='2%'

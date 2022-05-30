@@ -173,17 +173,22 @@ const MysteryBoxState = () => {
           }}
         />
       )}
-      <BgCard
-        className='mystery-state-step0'
-        margin='auto'
-        variant='longMedium'
-      >
+      <BgCard margin='auto' variant='longMedium'>
+        <Box
+          className='mystery-state-step0'
+          width='100%'
+          height='90%'
+          position='absolute'
+          top='0%'
+          left='0%'
+          zIndex={-1}
+        />
         <Flex alignItems='center' justifyContent='center'>
           <MysteryBoxStyled>
             <MysteryBoxBaseStyled quality={quality} />
             <MysteryBoxBoxStyled quality={quality} />
           </MysteryBoxStyled>
-          <Box className='mystery-state-step0'>
+          <Box>
             <CardStyled>
               <Flex height='100%' alignItems='center'>
                 <Box width={100}>
