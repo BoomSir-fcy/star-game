@@ -94,7 +94,7 @@ const Galaxy = () => {
                       })}
                     </Text>
                     <Text mt='10px' fontSize='24px'>
-                      {t('Galaxy prize: 10,000 STAR (issue at 24:00 UTC)')}
+                      {t('Galaxy Prize: 10,000 STAR (issue at 24:00 UTC)')}
                     </Text>
                     <Text mt='10px' fontSize='24px'>
                       Token: {currentGalaxy?.id}

@@ -92,7 +92,7 @@ const JoinTheAlliance: React.FC<{
       return;
     }
     callbackGuide();
-    navigate(`/star/planet?choose=${id || 1}`);
+    navigate(`/star/planet?hide=true&choose=${id || 1}`);
   };
 
   useEffect(() => {

@@ -45,6 +45,7 @@ const OpenModal: React.FC<{
           <video
             autoPlay
             muted
+            playsInline
             src={`/video/mbox-${quality}.mp4`}
             style={{ mixBlendMode: 'screen' }}
           />

@@ -122,6 +122,7 @@ const GlobalVideo: React.FC<VideoGlobalProps> = ({
             autoPlay
             muted
             loop={loop}
+            playsInline
           />
           {children}
         </Box>

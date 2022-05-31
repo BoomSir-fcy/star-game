@@ -91,4 +91,4 @@ export const VIDEO_GLOBAL_CLASS_NAME = 'video-global-class__name';
 
 // app尺寸 1920 * 900
 export const APP_WIDTH = 1920;
-export const APP_HEIGHT = 900;
+export const APP_HEIGHT = 950;
