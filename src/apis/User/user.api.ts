@@ -41,4 +41,10 @@ export class UserApi extends Http {
     const res = await this.get('user/check', params);
     return res;
   }
+
+  // 能够购买的vip列表
+  async getVipList(): Promise<Api.Response<Api.User.SignIn>> {
+    const res = await this.get('user/can-buy-vip-list');
+    return res;
+  }
 }

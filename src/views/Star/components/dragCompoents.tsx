@@ -152,6 +152,7 @@ export const DragCompoents: React.FC<{
   const [grid, setGrid] = React.useState<any[]>([]);
   const [gridBuilds, setGridBuilds] = React.useState<any[]>([]);
   const [currentBuild, setCurrentBuild] = React.useState<any>({});
+  const [buffer, setBuffer] = React.useState<any>([]);
   const [currentBuffer, setCurrentBuffer] =
     React.useState<Api.Building.BuildingBuffer>(null);
   const buildings = useStore(p => p.buildling.buildings);
@@ -171,15 +172,23 @@ export const DragCompoents: React.FC<{
     setGridBuilds(currBuilds);
   }, []);
 
+  const changeBuff = (item: any) => {
+    const currentBuildBuff = buffer?.find(
+      (row: any) => row?.build_id === item?._id,
+    );
+    setCurrentBuffer(currentBuildBuff);
+  };
+
   const getBuffer = React.useCallback(async () => {
     const res = await getPlanetBuff({ planet_id });
-    const currentBuildBuff = res.find(
-      (row: any) => row.build_id === currentBuild._id,
+    setBuffer(res);
+    const currentBuildBuff = buffer?.find(
+      (row: any) => row?.build_id === currentBuild?._id,
     );
-    if (!currentBuildBuff?.build_id) {
+    if (!currentBuildBuff?._id) {
       const obj: any = {};
       // eslint-disable-next-line array-callback-return
-      res.map((value: any) => {
+      res?.map((value: any) => {
         // eslint-disable-next-line array-callback-return
         Object.keys(value).map((key: any) => {
           if (obj[key]) {
@@ -190,10 +199,8 @@ export const DragCompoents: React.FC<{
         });
       });
       setCurrentBuffer(obj);
-      return;
     }
-    setCurrentBuffer(currentBuildBuff);
-  }, [currentBuild._id, getPlanetBuff, planet_id]);
+  }, [buffer, currentBuild?._id, getPlanetBuff, planet_id]);
 
   React.useEffect(() => {
     if (itemData.length > 0) {
@@ -205,7 +212,8 @@ export const DragCompoents: React.FC<{
     if (planet_id) {
       getBuffer();
     }
-  }, [getBuffer, getPlanetBuff, planet_id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 计算绝对坐标
   const getAbsolutePosition = React.useCallback(
@@ -359,7 +367,6 @@ export const DragCompoents: React.FC<{
       area >= 2 ? getAbsolutePosition(index) : [Number(index)];
     // 查看所有点位是否被占领
     const canSave = currentSize?.every(item => !grid[item]?.isbuilding);
-
     setGrid(pre => {
       const next = pre?.map((row: any) => {
         if (!canSave) {
@@ -439,10 +446,12 @@ export const DragCompoents: React.FC<{
       return;
     }
     if (currentBuild?.isactive) {
-      const index = gridBuilds.findIndex(r => r.index === currentBuild?.index);
-      gridBuilds.splice(index, 1);
-      setGridBuilds([...gridBuilds]);
-      setCurrentBuild({});
+      console.log(grid, currentBuild);
+
+      // const index = gridBuilds.findIndex(r => r.index === currentBuild?.index);
+      // gridBuilds.splice(index, 1);
+      // setGridBuilds([...gridBuilds]);
+      // setCurrentBuild({});
       return;
     }
     dispatch(storeAction.destoryBuildingVisibleModal(true));
@@ -493,7 +502,10 @@ export const DragCompoents: React.FC<{
                     top={item.x * width}
                     left={item.y * height}
                     checked={currentBuild?.index === item?.index}
-                    onClick={() => setCurrentBuild(item)}
+                    onClick={() => {
+                      setCurrentBuild(item);
+                      changeBuff(item);
+                    }}
                   >
                     <Building
                       planet_id={planet_id}

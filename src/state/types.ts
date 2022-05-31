@@ -363,3 +363,16 @@ export enum PlanetStatus {
 export interface GuideState {
   visible: boolean;
 }
+
+export enum BuildingDetailType {
+  BuildDetailTypeNULL = 0,
+  BuildingDetailTypeStore = 1, // 存储
+  BuildingDetailTypeStone = 2, // 生成石头
+  BuildingDetailTypeEnergy = 3, // 生成能量
+  BuildingDetailTypePopulation = 4, // 生成人口
+  BuildingDetailTypeAk = 5, // 核心战斗buff加成
+  BuildingDetailTypeCellar = 6, // 地窖
+  BuildingDetailTypeFactory1 = 7, // 士兵培养皿
+  BuildingDetailTypeFactory2 = 8, // 士兵培养皿
+  BuildingDetailTypeFactory3 = 9, // 士兵培养皿
+}

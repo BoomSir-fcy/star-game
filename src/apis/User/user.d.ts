@@ -24,5 +24,11 @@ declare namespace Api {
     interface CheckParams {
       address: string;
     }
+
+    interface vipList {
+      id: number;
+      vipPrice: string;
+      vipDuration: number;
+    }
   }
 }

@@ -9,6 +9,7 @@ import { Api } from 'apis';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { useTranslation } from 'contexts/Localization';
 
+import { BuildingDetailType } from 'state/types';
 import { useBuildingUpgrade, useBuildingOperate } from './hooks';
 
 import { ThingaddBlood, GameThing, ThingRepair } from '..';
@@ -166,23 +167,75 @@ export const GameInfo: React.FC<{
                   </Text>
                 </Flex>
                 <Flex flex={1} justifyContent='space-between' flexWrap='wrap'>
-                  <ItemInfo>
-                    <Box width={50} height={50} mr='5px'>
-                      <StyledImage
-                        width={50}
-                        height={50}
-                        src='/images/commons/icon/icon_minera.png'
-                      />
-                    </Box>
-                    <Box>
-                      <Flex alignItems='center'>
-                        <Text color='textSubtle' small>
-                          {t('Ore Capacity')}
+                  {/* 矿石建筑 */}
+                  {BuildingDetailType.BuildingDetailTypeStone ===
+                    itemData?.detail_type && (
+                    <ItemInfo>
+                      <Box width={50} height={50} mr='5px'>
+                        <StyledImage
+                          width={50}
+                          height={50}
+                          src='/images/commons/icon/icon_minera.png'
+                        />
+                      </Box>
+                      <Box>
+                        <Flex alignItems='center'>
+                          <Text color='textSubtle' small>
+                            {t('Ore Capacity')}
+                          </Text>
+                        </Flex>
+                        <Text small>
+                          {itemData?.stone?.product?.per_sec_ouput_stone}/s
                         </Text>
-                      </Flex>
-                      <Text small>100/h</Text>
-                    </Box>
-                  </ItemInfo>
+                      </Box>
+                    </ItemInfo>
+                  )}
+                  {/* 生产能量 */}
+                  {BuildingDetailType.BuildingDetailTypeEnergy ===
+                    itemData?.detail_type && (
+                    <ItemInfo>
+                      <Box width={50} height={50} mr='5px'>
+                        <StyledImage
+                          width={50}
+                          height={50}
+                          src='/images/commons/icon/icon_energy.png'
+                        />
+                      </Box>
+                      <Box>
+                        <Flex alignItems='center'>
+                          <Text color='textSubtle' small>
+                            {t('Energy Capacity')}
+                          </Text>
+                        </Flex>
+                        <Text small>
+                          {itemData?.stone?.product?.per_sec_ouput_energy}/s
+                        </Text>
+                      </Box>
+                    </ItemInfo>
+                  )}
+                  {/* 生产香料 */}
+                  {BuildingDetailType.BuildingDetailTypePopulation ===
+                    itemData?.detail_type && (
+                    <ItemInfo>
+                      <Box width={50} height={50} mr='5px'>
+                        <StyledImage
+                          width={50}
+                          height={50}
+                          src='/images/commons/icon/icon_spice.png'
+                        />
+                      </Box>
+                      <Box>
+                        <Flex alignItems='center'>
+                          <Text color='textSubtle' small>
+                            {t('Population Capacity')}
+                          </Text>
+                        </Flex>
+                        <Text small>
+                          {itemData?.stone?.product?.per_sec_ouput_population}/s
+                        </Text>
+                      </Box>
+                    </ItemInfo>
+                  )}
                   <ItemInfo>
                     <Box width={50} height={50} mr='5px'>
                       <StyledImage
@@ -224,7 +277,7 @@ export const GameInfo: React.FC<{
                         {t('planetEnergyConsumption')}
                       </Text>
                       <Text small>
-                        {itemData?.propterty?.per_cost_energy}/h
+                        {itemData?.propterty?.per_cost_energy}/s
                       </Text>
                     </Flex>
                   </ItemInfo>
@@ -241,7 +294,7 @@ export const GameInfo: React.FC<{
                         {t('planetPopulationConsumption')}
                       </Text>
                       <Text small>
-                        {itemData?.propterty?.per_cost_population}/h
+                        {itemData?.propterty?.per_cost_population}/s
                       </Text>
                     </Flex>
                   </ItemInfo>
