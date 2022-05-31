@@ -180,7 +180,7 @@ const Pk = () => {
 
   const onRunEnd = useCallback(() => {
     const res = Math.random() > 0.5;
-    console.log('结束了 一切都结束了', res);
+    console.log('结束了 一切都结束了', PKInfo[current].success);
     setResult(prev => {
       return [...prev, res];
     });
@@ -196,7 +196,7 @@ const Pk = () => {
       ];
     });
 
-    if (current < PKInfo?.length) {
+    if (current < PKInfo?.length - 1) {
       const timer = setInterval(() => {
         setOthers(prev => {
           const { length } = prev;
@@ -217,7 +217,9 @@ const Pk = () => {
         });
       }, 1000);
     }
-  }, [setOthers, current, setResult, PKInfo?.length, newRoundHandle]);
+
+    // 游戏结束
+  }, [setOthers, current, setResult, PKInfo, newRoundHandle]);
 
   useEffect(() => {
     if (running) {

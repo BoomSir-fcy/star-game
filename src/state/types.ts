@@ -182,6 +182,7 @@ export interface GamePkInfo {
       [round: string]: RoundInitState[];
     };
   };
+  success: boolean; // 当场战斗输赢
 }
 
 export enum GamePkState {
@@ -213,6 +214,7 @@ export interface GameState {
       tag: string;
     };
   };
+  pkRes: boolean;
   process: any;
   PKInfo: null | GamePkInfo[];
   state: GamePkState;

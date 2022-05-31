@@ -137,8 +137,8 @@ const Upgrade = () => {
   // 星球升级信息
   const getStarUpgradeInfo = useCallback(async () => {
     try {
-      const [planetCanLevel, planetUpgradeInfo] = await Promise.all([
-        Api.PlanetApi.getUpgradePlanetInfo(planetId),
+      const [planetUpgradeInfo] = await Promise.all([
+        // Api.PlanetApi.getUpgradePlanetInfo(planetId),
         Api.PlanetApi.getPlanetUpgradeInfo(planetId),
       ]);
       if (Api.isSuccess(planetUpgradeInfo)) {
@@ -158,7 +158,7 @@ const Upgrade = () => {
             ...now_planet_info,
             build_level: now_max_building_level,
           },
-          success: planetCanLevel.code === 0,
+          success: true,
         });
       }
     } catch (error) {

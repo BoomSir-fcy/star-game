@@ -6,24 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setPKInfo } from 'state/game/reducer';
 import { signMessage } from 'utils/web3React';
-
-const parseZip = (key: string) => {
-  const charData = window
-    .atob(key)
-    .split('')
-    .map(item => item.charCodeAt(0));
-
-  const binData = new Uint8Array(charData);
-
-  try {
-    const data = pako.inflate(binData);
-
-    const res = new TextDecoder().decode(data);
-    return JSON.parse(res);
-  } catch (error) {
-    return [];
-  }
-};
+import { parseZip } from 'utils';
 
 const usePlunder = () => {
   const { account, library } = useActiveWeb3React();

@@ -19,6 +19,7 @@ export const initialState: GameState = {
   baseSkill: {},
   process: null,
   PKInfo: null,
+  pkRes: false,
   plunderPK: {},
   state: GamePkState.MATCHING,
   matchUser: null,
@@ -150,6 +151,10 @@ export const userInfoSlice = createSlice({
 
     setPKInfo: (state, { payload }) => {
       state.PKInfo = payload;
+    },
+
+    setPKRes: (state, { payload }) => {
+      state.pkRes = payload;
     },
 
     setMatchUser: (state, { payload }) => {
