@@ -44,6 +44,8 @@ const UpgradeList = React.lazy(
   () => import('./views/Star/components/upgrade/SelectPlanet'),
 );
 
+const VipPage = lazy(() => import('./views/vip'));
+
 // window.addEventListener('click', () => {
 //   console.log(Object.keys(document.documentElement));
 //   console.log((document as any).webkitRequestFullScreen);
@@ -102,6 +104,8 @@ function App() {
               <Route path='/plunder-test' element={<PlunderTest />} />
               <Route path='/plunder-pk' element={<PlunderPk />} />
               <Route path='/plunder-result' element={<PlunderResult />} />
+
+              <Route path='/vip' element={<VipPage />} />
 
               <Route path='/test' element={<Test />}>
                 <Route path='card' element={<TestCard />} />
