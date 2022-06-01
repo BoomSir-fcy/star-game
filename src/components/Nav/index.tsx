@@ -92,7 +92,11 @@ const Nav: React.FC<NavProps> = ({
                       onChangeNav({ ...item });
                     }
                     if (item.path) {
-                      navigate(item.path, { replace: true });
+                      if (item.external) {
+                        window.open(item.path, '_blank');
+                      } else {
+                        navigate(item.path, { replace: true });
+                      }
                     }
                   }
                 }}

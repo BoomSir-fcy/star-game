@@ -8,7 +8,7 @@ import utc from 'dayjs/plugin/utc';
 import { Link } from 'react-router-dom';
 import { parseZip } from 'utils';
 import { useDispatch } from 'react-redux';
-import { setPKInfo } from 'state/game/reducer';
+import { setPKInfo, setPKRes } from 'state/game/reducer';
 import { useWeb3React } from '@web3-react/core';
 import { PkResult } from './components/PkResult';
 
@@ -61,9 +61,11 @@ export const PkBox: React.FC<{
 
   const pkRes = useMemo(() => {
     return account?.toLocaleLowerCase() === info.fromAddress.toLocaleLowerCase()
-      ? info.success
+      ? !!info.success
       : !info.success;
   }, [account, info.fromAddress, info.success]);
+
+  console.log(pkRes, '==pkRes');
 
   return (
     <CardBox>
@@ -77,11 +79,13 @@ export const PkBox: React.FC<{
             <Link
               onClick={event => {
                 try {
-                  dispatch(setPKInfo(JSON.parse(parseZip(info.detail))));
+                  console.log(parseZip(info.detail), 'parseZip(info.detail)');
+                  dispatch(setPKInfo(parseZip(info.detail)));
                   dispatch(setPKRes(pkRes));
                 } catch (error) {
                   event.preventDefault();
                   console.log('解析报错');
+                  console.error(error);
                 }
               }}
               to={`/plunder-pk?id=${info.id}`}
@@ -111,6 +115,3 @@ export const PkBox: React.FC<{
     </CardBox>
   );
 };
-function setPKRes(detail: any): any {
-  throw new Error('Function not implemented.');
-}

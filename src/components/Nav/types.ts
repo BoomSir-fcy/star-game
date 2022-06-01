@@ -5,6 +5,7 @@ export interface NavConfig {
   label: string;
   id: string | number;
   path?: string;
+  external?: boolean;
   [key: string]: any;
 }
 

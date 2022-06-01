@@ -376,10 +376,10 @@ class Combat extends EventTarget {
 
       // 文字效果
       if (effect === descType.ATTACK_DODGE) {
-        const tipsText = new TipsText('[闪避]');
+        const tipsText = new TipsText('[DODGE]');
         tipsText.show(target.axisPoint);
       } else if (effect === descType.ATTACK_MISS) {
-        const tipsText = new TipsText('[未命中]');
+        const tipsText = new TipsText('[MISS]');
         tipsText.show(target.axisPoint);
       } else if (attackInfo) {
         let hp = attackInfo?.receive_sub_hp;
@@ -462,16 +462,20 @@ class Combat extends EventTarget {
     const bullet = new Bullet(this);
     const { container } = bullet;
     this.container.parent.addChild(container);
+    // bullet.addEventListener('attackEnd', () => {
+    //   this.onAttackEnd();
+    // });
+
     bullet.attack(effect, target);
-    bullet.addEventListener('moveEnd', () => {
-      // target.effectBuff.addEffect(EffectType.RESTORE);
-    });
-    bullet.addEventListener('attackEnd', () => {
-      this.onAttackEnd();
-      // setTimeout(() => {
-      // target.effectBuff.removeEffect(EffectType.BOMB);
-      // }, 5 * 1000);
-    });
+    // bullet.addEventListener('moveEnd', () => {
+    //   // target.effectBuff.addEffect(effect);
+    // });
+    // bullet.addEventListener('attackEnd', () => {
+    //   this.onAttackEnd();
+    //   setTimeout(() => {
+    //     target.effectBuff.removeEffect(EffectType.BOMB);
+    //   }, 5 * 1000);
+    // });
   }
 
   onBulletMoveEnd() {

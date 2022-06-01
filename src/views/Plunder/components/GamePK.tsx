@@ -293,6 +293,7 @@ const GamePK: React.FC<GamePKProps> = () => {
   );
 
   const testHandle = useCallback(() => {
+    game.loadResources();
     game.createSoldier(0, 7, {
       srcId: '3',
       race: 1,

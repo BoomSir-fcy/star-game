@@ -72,7 +72,7 @@ const Pk = () => {
 
   const { TerrainInfo } = useStore(p => p.game);
 
-  const PKInfo = useStore(p => p.game.PKInfo);
+  const { PKInfo, pkRes } = useStore(p => p.game);
 
   const [complete, setComplete] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -95,45 +95,6 @@ const Pk = () => {
   const [others, setOthers] = useState<OtherDetail[]>([]);
   const [totalInfo, setTotalInfo] = useState<RoundDescTotalHp | null>(null);
   const [result, setResult] = useState<boolean[]>([]);
-
-  useEffect(() => {
-    if (!mounted) {
-      if (ref.current && game && PKInfo) {
-        console.log(PKInfo);
-        setTotalInfo(PKInfo[current].init.show_hp);
-        setMounted(true);
-        // 初始化
-        if (current === 0) {
-          ref.current.appendChild(game.view);
-          const loaders = game.loadResources();
-          loaders.addEventListener('progress', event => {
-            setProgress((event as ProgressEvent).loaded);
-          });
-          loaders.addEventListener('complete', () => {
-            setComplete(true);
-            initHandle(PKInfo[current]);
-          });
-        } else if (current <= 5) {
-          setComplete(true);
-          initHandle(PKInfo[current]);
-        }
-      } else {
-        setTimeout(() => {
-          // alert('未查询到作战信息');
-        }, 1000);
-      }
-    }
-  }, [
-    ref,
-    game,
-    setProgress,
-    setMounted,
-    mounted,
-    setComplete,
-    PKInfo,
-    initHandle,
-    current,
-  ]);
 
   const onRunningUpdate = useCallback(
     (event: Event) => {
@@ -179,10 +140,9 @@ const Pk = () => {
   }, [navigate]);
 
   const onRunEnd = useCallback(() => {
-    const res = Math.random() > 0.5;
-    console.log('结束了 一切都结束了', PKInfo[current].success);
+    const { success } = PKInfo[current];
     setResult(prev => {
-      return [...prev, res];
+      return [...prev, success];
     });
     // descType
     setOthers(prev => {
@@ -190,8 +150,10 @@ const Pk = () => {
         ...prev,
         {
           id: 0,
-          text: '本场战斗结束',
+          text: `本场战斗结束`,
           type: 1,
+          success,
+          showResult: true,
         },
       ];
     });
@@ -216,10 +178,17 @@ const Pk = () => {
           ];
         });
       }, 1000);
+      return;
     }
+    // 游戏胜利
+    if (pkRes) {
+      navigate('/plunder-result');
+      return;
+    }
+    console.log('游戏失败');
 
     // 游戏结束
-  }, [setOthers, current, setResult, PKInfo, newRoundHandle]);
+  }, [setOthers, current, setResult, PKInfo, newRoundHandle, pkRes, navigate]);
 
   useEffect(() => {
     if (running) {
@@ -274,6 +243,101 @@ const Pk = () => {
     ],
     [t],
   );
+
+  const [loaders, setLoaders] = useState(null);
+
+  const loaderLoading = useCallback(
+    event => {
+      setProgress((event as ProgressEvent).loaded);
+    },
+    [setProgress],
+  );
+
+  const initPKHandle = useCallback(() => {
+    try {
+      initHandle(PKInfo[current]);
+    } catch (error) {
+      onRunEnd();
+    }
+  }, [initHandle, PKInfo, current, onRunEnd]);
+
+  const loaderLoaded = useCallback(
+    event => {
+      setProgress(100);
+
+      setComplete(true);
+      initPKHandle();
+    },
+    [setProgress, setComplete, initPKHandle],
+  );
+
+  const loaderAddEventListener = useCallback(() => {
+    const _loaders = game.loadResources();
+    setLoaders(_loaders);
+    _loaders.addEventListener('progress', loaderLoading);
+    _loaders.addEventListener('complete', loaderLoaded);
+  }, [loaderLoading, loaderLoaded, setLoaders, game]);
+
+  const loaderRemoveEventListener = useCallback(() => {
+    loaders?.removeEventListener('progress', loaderLoading);
+    loaders?.removeEventListener('complete', loaderLoaded);
+  }, [loaderLoading, loaderLoaded, loaders]);
+
+  useEffect(() => {
+    console.log(mounted);
+    if (!mounted) {
+      if (ref.current && game && PKInfo) {
+        console.log(PKInfo);
+        setTotalInfo(PKInfo[current].init.show_hp);
+        setMounted(true);
+        // 初始化
+        if (current === 0) {
+          ref.current.appendChild(game.view);
+          loaderAddEventListener();
+          // const loaders = game.loadResources();
+
+          // loaders.addEventListener('progress', event => {
+          //   console.log(
+          //     (event as ProgressEvent).loaded,
+          //     '(event as ProgressEvent).loaded',
+          //   );
+          //   setProgress((event as ProgressEvent).loaded);
+          // });
+          // loaders.addEventListener('complete', () => {
+          //   setProgress(100);
+
+          //   setComplete(true);
+          //   initHandle(PKInfo[current]);
+          // });
+        } else if (current <= 5) {
+          setComplete(true);
+          initPKHandle();
+        }
+      } else {
+        setTimeout(() => {
+          alert('未查询到作战信息');
+        }, 1000);
+      }
+    }
+
+    return () => {
+      if (!mounted) {
+        loaderRemoveEventListener();
+      }
+    };
+  }, [
+    ref,
+    game,
+    setProgress,
+    setMounted,
+    mounted,
+    setComplete,
+    PKInfo,
+    initPKHandle,
+    current,
+    loaderAddEventListener,
+    loaderRemoveEventListener,
+  ]);
 
   return (
     <Layout>
@@ -366,7 +430,7 @@ const Pk = () => {
           <Box width='900px'>
             <Progress width={`${progress}%`} />
           </Box>
-          <Text>{progress}</Text>
+          {/* <Text>{progress}</Text> */}
         </Flex>
       )}
 

@@ -201,27 +201,27 @@ const Info: React.FC<InfoProps> = ({
                 </Box>
               </Flex>
             </ButtonTag2>
-            <Link to='/test/card'>
-              <ButtonTag2 variant='custom' ml='8px'>
-                <Flex pl='8px' alignItems='center' height='100%' width='100%'>
-                  <Box width={70}>
-                    <Image
-                      src='/images/commons/icon/icon_energy.png'
-                      width={70}
-                      height={70}
-                    />
-                  </Box>
-                  <Box ml='8px'>
-                    <Text fontSize='20px' mb='20px' textAlign='left'>
-                      {t('Capacity')}: {Product.energy_product}/s
-                    </Text>
-                    <Text fontSize='20px' textAlign='left'>
-                      {t('Energy ')}: {Product.energy}
-                    </Text>
-                  </Box>
-                </Flex>
-              </ButtonTag2>
-            </Link>
+            {/* <Link to='/test/card'> */}
+            <ButtonTag2 variant='custom' ml='8px'>
+              <Flex pl='8px' alignItems='center' height='100%' width='100%'>
+                <Box width={70}>
+                  <Image
+                    src='/images/commons/icon/icon_energy.png'
+                    width={70}
+                    height={70}
+                  />
+                </Box>
+                <Box ml='8px'>
+                  <Text fontSize='20px' mb='20px' textAlign='left'>
+                    {t('Capacity')}: {Product.energy_product}/s
+                  </Text>
+                  <Text fontSize='20px' textAlign='left'>
+                    {t('Energy ')}: {Product.energy}
+                  </Text>
+                </Box>
+              </Flex>
+            </ButtonTag2>
+            {/* </Link> */}
           </Box>
         </Flex>
       </Flex>

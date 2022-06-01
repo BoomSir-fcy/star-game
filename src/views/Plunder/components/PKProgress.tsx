@@ -76,7 +76,7 @@ const Round = styled(Box)<{ win?: boolean; lose?: boolean }>`
     }
   `}
 `;
-const FlexStyled = styled(Flex)<{ rotate?: boolean }>`
+const FlexStyled = styled(Flex)<{ rotate?: number }>`
   flex-direction: column;
   ${({ rotate }) => rotate && `transform: rotateY(180deg)`}
 `;
@@ -116,15 +116,15 @@ const PKProgress: React.FC<PKProgressProps> = ({
       >
         {opponent ? t('Red Side') : t('Blue Side')}
       </Text>
-      <FlexStyled rotate={opponent}>
+      <FlexStyled rotate={opponent ? 1 : 0}>
         <ProgressBox step={`${progress}%`} />
         <Flex mt='14px'>
           {Array.from(new Array(totalRound)).map((item, index) => {
             if (index > result.length - 1) {
-              return <Round />;
+              return <Round key={index} />;
             }
             const win = isRed ? !result[index] : result[index];
-            return <Round win={win} lose={!win} />;
+            return <Round key={index} win={win} lose={!win} />;
           })}
         </Flex>
       </FlexStyled>
