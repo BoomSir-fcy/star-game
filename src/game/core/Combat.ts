@@ -114,7 +114,7 @@ class Combat extends EventTarget {
     this.container.addChild(this.hpGraphics);
     this.hpText.anchor.set(0.5);
     this.hpText.zIndex = 2;
-    this.hpGraphics.zIndex = 2;
+    // this.hpGraphics.zIndex = 2;
     this.hpGraphics.position.set(0, -80);
     this.hpText.position.set(0, -110);
     this.container.addChild(this.hpText);
@@ -238,6 +238,7 @@ class Combat extends EventTarget {
       linearMove.addEventListener('end', () => {
         this.setPosition(axisPoint);
         this.dispatchEvent(new Event('moveEnd'));
+        this.updateZIndex();
       });
       linearMove.move();
     }
@@ -455,6 +456,12 @@ class Combat extends EventTarget {
     }
   }
 
+  updateZIndex() {
+    if (this.axisPoint?.axisX && this.axisPoint?.axisY) {
+      this.container.zIndex = this.axisPoint?.axisX + this.axisPoint?.axisY;
+    }
+  }
+
   attackParabolaEffect(target: Combat, effect: BulletType) {
     // const loaders = new Loaders();
 
@@ -462,9 +469,9 @@ class Combat extends EventTarget {
     const bullet = new Bullet(this);
     const { container } = bullet;
     this.container.parent.addChild(container);
-    // bullet.addEventListener('attackEnd', () => {
-    //   this.onAttackEnd();
-    // });
+    bullet.addEventListener('attackEnd', () => {
+      this.changeEffect(descType.RESTORE, target);
+    });
 
     bullet.attack(effect, target);
     // bullet.addEventListener('moveEnd', () => {
