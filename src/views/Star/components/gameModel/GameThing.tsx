@@ -84,6 +84,7 @@ export const GameThing: React.FC<{
   active?: boolean;
   border?: boolean;
   draggable?: boolean;
+  onClick?: () => void;
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -98,6 +99,7 @@ export const GameThing: React.FC<{
   active,
   border,
   draggable,
+  onClick,
   onDragStart,
   onDrop,
   onDragOver,
@@ -117,6 +119,7 @@ export const GameThing: React.FC<{
         onDragEnd={onDragEnd}
         active={active}
         border={border}
+        onClick={onClick}
         data-item={JSON.stringify(itemData)}
       >
         {level && (

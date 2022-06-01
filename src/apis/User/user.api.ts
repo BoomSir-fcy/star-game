@@ -42,9 +42,26 @@ export class UserApi extends Http {
     return res;
   }
 
+  // vip权益
+  async getVipBenefits() {
+    const res = await this.get('user/vip-status');
+    return res;
+  }
+
+  async getVipConfig() {
+    const res = await this.get('user/vip-config');
+    return res;
+  }
+
   // 能够购买的vip列表
-  async getVipList(): Promise<Api.Response<Api.User.SignIn>> {
+  async getVipList() {
     const res = await this.get('user/can-buy-vip-list');
+    return res;
+  }
+
+  // 购买vip
+  async buyVip(vip_id: number) {
+    const res = await this.post('user/buy-vip', { vip_id });
     return res;
   }
 }

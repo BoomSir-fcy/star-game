@@ -12,6 +12,7 @@ import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 
+import { BuyVipModal } from 'components/Modal/buyVipModal';
 import { GameInfo, GameThing, Building } from './gameModel';
 import { BuffBonus } from './buff';
 import { useBuffer } from './hooks';
@@ -143,10 +144,10 @@ export const DragCompoents: React.FC<{
         index: 1,
         title: `${t('planetBuildingTypeBusinessClass')}`,
       },
-      // {
-      //   index: 2,
-      //   title: `${t('planetBuildingTypeCombatClass')}`,
-      // },
+      {
+        index: 2,
+        title: `建造/升级队列`,
+      },
     ],
   });
   const [grid, setGrid] = React.useState<any[]>([]);
@@ -446,12 +447,23 @@ export const DragCompoents: React.FC<{
       return;
     }
     if (currentBuild?.isactive) {
-      console.log(grid, currentBuild);
-
-      // const index = gridBuilds.findIndex(r => r.index === currentBuild?.index);
-      // gridBuilds.splice(index, 1);
-      // setGridBuilds([...gridBuilds]);
-      // setCurrentBuild({});
+      setCurrentBuild({});
+      setGrid(pre => {
+        const next = pre?.map((row: any) => {
+          if (row.index === currentBuild.index) {
+            return {
+              ...row,
+              isbuilding: false,
+            };
+          }
+          return { ...row };
+        });
+        return [...next];
+      });
+      setGridBuilds(r => {
+        const next = r.filter((row: any) => row.index !== currentBuild?.index);
+        return [...next];
+      });
       return;
     }
     dispatch(storeAction.destoryBuildingVisibleModal(true));
@@ -573,6 +585,9 @@ export const DragCompoents: React.FC<{
                   >
                     <GameThing
                       draggable
+                      onClick={() => {
+                        console.log(row);
+                      }}
                       onDragStart={dragStart}
                       onDrop={event => event.preventDefault()}
                       onDragEnter={event => event.preventDefault()}
@@ -589,6 +604,7 @@ export const DragCompoents: React.FC<{
             </BuildingsScroll>
           </Flex>
         </BgCard>
+        {/* <BuyVipModal visible onClose={() => {}} /> */}
       </Box>
     </>
   );
