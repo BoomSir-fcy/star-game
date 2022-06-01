@@ -22,6 +22,7 @@ export const variants = {
   VS_REFRESH: 'vsRefresh',
   BLACK: 'black',
   STOP: 'stop',
+  PURPLE: 'purple',
   TRANSPARENT: 'transparent',
 } as const;
 

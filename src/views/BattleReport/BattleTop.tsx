@@ -61,7 +61,7 @@ export const BattleTop: React.FC<{
       </Box>
       <TitleBox>
         <MarkText fontSize='18px' bold fontStyle='italic'>
-          {t('Battle report details')}
+          {t('Battle details')}
         </MarkText>
       </TitleBox>
       <RecordBox>
