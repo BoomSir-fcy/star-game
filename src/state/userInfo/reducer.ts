@@ -40,6 +40,7 @@ export const initialState: UserInfoState = {
     firstLoginAt: 0,
     addTime: 0,
     updatedAt: '',
+    vipBenefits: {},
   },
 
   allowance: {

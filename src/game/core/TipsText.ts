@@ -45,7 +45,7 @@ class TipsText extends EventTarget {
     this.scale -= 0.01;
     this.alpha -= 0.02;
 
-    if (this.alpha <= 0.1) {
+    if (this.alpha <= 0.5) {
       this.text.parent.removeChild(this.text);
       return;
     }
@@ -60,9 +60,9 @@ class TipsText extends EventTarget {
       // this.text.position.y -= 1;
       this.text.scale.set(this.scale);
     } else if (this.type === TipsTextType.RESTORE) {
-      this.scale -= 0.01;
+      this.scale += 0.01;
       this.text.alpha = this.alpha;
-      // this.text.position.y -= 1;
+      this.text.position.y -= 0.6;
       this.text.scale.set(this.scale);
     }
     requestAnimationFrame(() => {

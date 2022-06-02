@@ -190,6 +190,7 @@ export const {
   setState,
   setPlantUnitsTest,
   setTerrainInfo,
+  setPKRes,
 } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

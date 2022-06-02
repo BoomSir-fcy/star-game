@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Card, Flex, Box, Text, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 
-const ImgFlex = styled(Flex)<{ result: boolean }>`
+const ImgFlex = styled(Flex)`
   width: 133px;
   height: 166px;
-  background: ${({ result }) =>
-      `url('/images/battleReport/${result ? 'victory' : 'failed'}.png')`}
-    no-repeat;
+  background-repeat: no-repeat;
   background-size: 100% 100%;
   padding-top: 56px;
 `;
@@ -18,9 +16,13 @@ export const PkResult: React.FC<{
 }> = ({ result }) => {
   const { t } = useTranslation();
 
+  const background = useMemo(() => {
+    return `url('/images/battleReport/${result ? 'victory' : 'failed'}.png')`;
+  }, [result]);
+
   return (
     <Box>
-      <ImgFlex result={result} justifyContent='center'>
+      <ImgFlex justifyContent='center' backgroundImage={background}>
         {result ? (
           <Text fontSize='22px' bold fontStyle='italic' shadow='green'>
             {t('Victory')}

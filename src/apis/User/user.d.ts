@@ -9,6 +9,7 @@ declare namespace Api {
       firstLoginAt: number;
       addTime: number;
       updatedAt: string;
+      vipBenefits?: any;
     }
 
     interface ParamsSignIn {

@@ -101,7 +101,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
       <PanelText>
         {detail.descInfo?.receives.map((item, index) => {
           return (
-            <>
+            <PanelText key={`${item.pos.x}_${item.pos.y}`}>
               <PanelSide isEnemy={item.isEnemy} />
               <PanelAxis axis={item.pos} />
               建筑
@@ -111,7 +111,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
               )}
               {getEffectDescTypeText(detail.descInfo?.type)}
               {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
-            </>
+            </PanelText>
           );
         })}
       </PanelText>
@@ -149,12 +149,12 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
         发起进攻，对{' '}
         {detail.descInfo?.receives.map((item, index) => {
           return (
-            <>
+            <PanelText key={`${item.pos.x}_${item.pos.y}`}>
               <PanelSide isEnemy={item.isEnemy} />
               <PanelAxis axis={item.pos} />
               建筑
               {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
-            </>
+            </PanelText>
           );
         })}
         {}
@@ -181,12 +181,12 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
         发起进攻，对{' '}
         {detail.descInfo?.receives.map((item, index) => {
           return (
-            <>
+            <PanelText key={`${item.pos.x}_${item.pos.y}`}>
               <PanelSide isEnemy={item.isEnemy} />
               <PanelAxis axis={item.pos} />
               建筑
               {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
-            </>
+            </PanelText>
           );
         })}
         <PanelText
@@ -207,7 +207,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
         发起进攻，对{' '}
         {detail.descInfo?.receives.map((item, index) => {
           return (
-            <>
+            <PanelText key={`${item.pos.x}_${item.pos.y}`}>
               <PanelSide isEnemy={item.isEnemy} />
               <PanelAxis axis={item.pos} />
               建筑
@@ -217,7 +217,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
               )}
               {getEffectDescTypeText(detail.descInfo?.type)}
               {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
-            </>
+            </PanelText>
           );
         })}
       </PanelText>
@@ -231,6 +231,8 @@ export interface OtherDetail {
   id: number;
   type: number;
   text: string;
+  success?: boolean;
+  showResult?: boolean;
 }
 interface PlunderPanelProps extends BoxProps {
   details: TrackDetail[];
@@ -307,6 +309,15 @@ const PlunderPanel: React.FC<PlunderPanelProps> = ({
                 <Flex flexDirection='column' flex={1} pl='20px' mt='10px'>
                   <PanelText style={{ whiteSpace: 'nowrap' }}>
                     {item.text}
+                    {item.showResult && (
+                      <>
+                        <PanelText>
+                          ,{' '}
+                          {item.success ? <PanelSide /> : <PanelSide isEnemy />}
+                        </PanelText>
+                        <PanelText>胜利</PanelText>
+                      </>
+                    )}
                   </PanelText>
                 </Flex>
               </Flex>

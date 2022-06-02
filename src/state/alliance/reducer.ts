@@ -73,7 +73,7 @@ export const allianceSlice = createSlice({
     },
     setPkRecord: (state, action) => {
       const { payload } = action;
-      const pkRecord = state.pkRecord;
+      const { pkRecord } = state;
       if (payload) {
         const temp = payload.record;
         const nowList =

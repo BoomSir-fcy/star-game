@@ -15,11 +15,14 @@ class Loaders extends EventTarget {
   static progressEvent = new ProgressEvent('progress');
 
   load(items: LoadItem[]) {
+    console.log(this.loading, this.loaded, '==load');
     if (this.loading) {
       return;
     }
     if (this.loaded) {
-      this.dispatchEvent(new Event('complete'));
+      setTimeout(() => {
+        this.dispatchEvent(new Event('complete'));
+      }, 0);
       return;
     }
     this.loading = true;

@@ -58,11 +58,15 @@ export const fetchUserInfoById = async (
 };
 export const fetchUserInfoByAccount = async (
   account: string,
-): Promise<Api.User.UserInfo | null> => {
+): Promise<Api.User.UserInfo> => {
   try {
-    const res = await Api.UserApi.getUserInfoByAccount(account);
-    if (Api.isSuccess(res)) {
-      return res.data;
+    const [user, vip] = await Promise.all([
+      Api.UserApi.getUserInfoByAccount(account),
+      Api.UserApi.getVipBenefits(),
+    ]);
+    // const res = await Api.UserApi.getUserInfoByAccount(account);
+    if (Api.isSuccess(user) && Api.isSuccess(vip)) {
+      return { ...user.data, vipBenefits: vip.data };
     }
     return null;
   } catch (error) {

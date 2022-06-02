@@ -5,6 +5,7 @@ import { Box, Flex, BackButton, RefreshButton } from 'uikit';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useTranslation } from 'contexts/Localization';
+import { getPlanetAddress } from 'utils/addressHelpers';
 
 import Nav from 'components/Nav';
 import Layout from 'components/Layout';
@@ -65,6 +66,8 @@ const Star: React.FC<{
     }
   }, [dispatch, pathname]);
 
+  console.log(planet);
+
   return (
     <Layout>
       <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
@@ -104,9 +107,12 @@ const Star: React.FC<{
               path: `/star/embattle-test?id=${parsedQs.id}`,
             },
             {
-              id: 'search',
-              label: `${t('planetMenuLooting')}`,
-              path: `/star/search?id=${parsedQs.id}`,
+              id: 'Marketplace',
+              label: `${t('Marketplace')}`,
+              external: true,
+              path: `${
+                process.env.REACT_APP_WEB_LINK
+              }/nftdetail/bag/${getPlanetAddress()}/${parsedQs.id}`,
             },
           ]}
           activeId={activeNavId}

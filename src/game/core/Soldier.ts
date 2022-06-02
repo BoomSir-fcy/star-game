@@ -220,13 +220,7 @@ class Soldier extends Combat {
     this.container.filters = [];
     this.dragging = false;
     this.axisPoint?.chequer?.setState(stateType.DISABLE);
-    this.updateZindex();
-  }
-
-  updateZindex() {
-    if (this.axisPoint?.axisX && this.axisPoint?.axisY) {
-      this.container.zIndex = this.axisPoint?.axisX + this.axisPoint?.axisY;
-    }
+    this.updateZIndex();
   }
 
   setDragging(state: boolean) {
