@@ -49,5 +49,17 @@ const contracts = {
     [ChainId.BSC_MAINNET]: '',
     [ChainId.BSC_TESTNET]: '0x2bf6502a30Af3378ACb51F056F47fc5e24aB8961',
   },
+  EnergyToken: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0xf7562ba09a99635f1420df0652ec23aad2b8b718',
+  },
+  PopToken: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0xe0b773b980ec1de9d097b577124b35396aca532b',
+  },
+  OreToken: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0xcc1454d0e42c47e80baa532c08f81be3e136c6ea',
+  },
 };
 export default contracts;

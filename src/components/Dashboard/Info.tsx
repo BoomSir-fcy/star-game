@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Text, Image } from 'uikit';
@@ -49,26 +49,36 @@ const Info: React.FC<InfoProps> = ({
   const Balance = useStore(p => p.userInfo.userBalance);
   const Product = useStore(p => p.userInfo.userProduct);
 
-  const DSGblance = useMemo(() => {
-    const balance = Balance.filter(item => {
-      return item.symbol === 'DSG';
-    });
-    return balance[0];
-  }, [Balance]);
+  // const DSGblance = useMemo(() => {
+  //   const balance = Balance.filter(item => {
+  //     return item.symbol === 'DSG';
+  //   });
+  //   return balance[0];
+  // }, [Balance]);
 
-  const BOXblance = useMemo(() => {
-    const balance = Balance.filter(item => {
-      return item.symbol === 'BOX';
-    });
-    return balance[0];
-  }, [Balance]);
+  // const BOXblance = useMemo(() => {
+  //   const balance = Balance.filter(item => {
+  //     return item.symbol === 'BOX';
+  //   });
+  //   return balance[0];
+  // }, [Balance]);
 
-  const BNBblance = useMemo(() => {
-    const balance = Balance.filter(item => {
-      return item.symbol === 'BNB';
-    });
-    return balance[0];
-  }, [Balance]);
+  // const BNBblance = useMemo(() => {
+  //   const balance = Balance.filter(item => {
+  //     return item.symbol === 'BNB';
+  //   });
+  //   return balance[0];
+  // }, [Balance]);
+
+  const TokenBlance = useCallback(
+    (Token: string) => {
+      const balance = Balance.filter(item => {
+        return item.symbol === Token;
+      });
+      return balance[0];
+    },
+    [Balance],
+  );
 
   return (
     <Box width='100%'>
@@ -82,7 +92,7 @@ const Info: React.FC<InfoProps> = ({
         >
           <ButtonLeft
             onClick={() => {
-              setActiveToken(DSGblance);
+              setActiveToken(TokenBlance('DSG'));
               setVisible(true);
             }}
             variant='custom'
@@ -95,15 +105,15 @@ const Info: React.FC<InfoProps> = ({
                   tokenAddress={getDsgAddress()}
                 />
                 <Text fontSize='20px' mt='8px' ml='8px'>
-                  {DSGblance?.amount}
+                  {TokenBlance('DSG')?.amount}
                 </Text>
               </Flex>
-              <Text fontSize='20px'>{DSGblance?.symbol}</Text>
+              <Text fontSize='20px'>{TokenBlance('DSG')?.symbol}</Text>
             </Flex>
           </ButtonLeft>
           <ButtonLeft
             onClick={() => {
-              setActiveToken(BOXblance);
+              setActiveToken(TokenBlance('BOX'));
               setVisible(true);
             }}
             mt='18px'
@@ -117,17 +127,17 @@ const Info: React.FC<InfoProps> = ({
                   tokenAddress={getBoxAddress()}
                 />
                 <Text fontSize='20px' mt='8px' ml='8px'>
-                  {BOXblance?.amount}
+                  {TokenBlance('BOX')?.amount}
                 </Text>
               </Flex>
               <Text mt='-2px' fontSize='20px'>
-                {BOXblance?.symbol}
+                {TokenBlance('BOX')?.symbol}
               </Text>
             </Flex>
           </ButtonLeft>
           <ButtonLeft
             onClick={() => {
-              setActiveToken(BNBblance);
+              setActiveToken(TokenBlance('BNB'));
               setVisible(true);
             }}
             mt='18px'
@@ -137,11 +147,11 @@ const Info: React.FC<InfoProps> = ({
               <Flex flex={1}>
                 <TokenImage width={45} height={48} tokenAddress='BNB' />
                 <Text fontSize='20px' mt='8px' ml='8px'>
-                  {BNBblance?.amount}
+                  {TokenBlance('BNB')?.amount}
                 </Text>
               </Flex>
               <Text mt='-2px' fontSize='20px'>
-                {BNBblance?.symbol}
+                {TokenBlance('BNB')?.symbol}
               </Text>
             </Flex>
           </ButtonLeft>
@@ -163,7 +173,13 @@ const Info: React.FC<InfoProps> = ({
             </Link>
           </Box>
           <Box ml='22px' className='header_resource'>
-            <ButtonTag2 variant='custom'>
+            <ButtonTag2
+              variant='custom'
+              onClick={() => {
+                setActiveToken(TokenBlance('ORE'));
+                setVisible(true);
+              }}
+            >
               <Flex pl='8px' alignItems='center' width='100%'>
                 <Box width={70}>
                   <Image
@@ -182,7 +198,14 @@ const Info: React.FC<InfoProps> = ({
                 </Box>
               </Flex>
             </ButtonTag2>
-            <ButtonTag2 ml='8px' variant='custom'>
+            <ButtonTag2
+              ml='8px'
+              variant='custom'
+              onClick={() => {
+                setActiveToken(TokenBlance('POP'));
+                setVisible(true);
+              }}
+            >
               <Flex pl='8px' alignItems='center' width='100%'>
                 <Box width={70}>
                   <Image
@@ -202,7 +225,14 @@ const Info: React.FC<InfoProps> = ({
               </Flex>
             </ButtonTag2>
             {/* <Link to='/test/card'> */}
-            <ButtonTag2 variant='custom' ml='8px'>
+            <ButtonTag2
+              variant='custom'
+              ml='8px'
+              onClick={() => {
+                setActiveToken(TokenBlance('ENG'));
+                setVisible(true);
+              }}
+            >
               <Flex pl='8px' alignItems='center' height='100%' width='100%'>
                 <Box width={70}>
                   <Image
