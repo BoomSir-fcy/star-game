@@ -106,8 +106,6 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
       } catch (error) {
         toastError(t('Recharge failed'));
         console.error(error);
-      } finally {
-        setpending(false);
       }
     } else {
       try {
@@ -117,11 +115,10 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
       } catch (e) {
         toastError(t('Withdraw Failed'));
         console.error(e);
-      } finally {
-        setpending(false);
       }
     }
     dispatch(fetchUserBalanceAsync());
+    setpending(false);
   }, [
     t,
     close,
@@ -262,7 +259,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
             <ConnectWalletButton scale='ld' width='270px' padding='0 10px' />
           ) : (
             <Button
-              width='270px'
+              width='max-content'
               disabled={pending}
               onClick={() => {
                 if (OperationType === 2) {
