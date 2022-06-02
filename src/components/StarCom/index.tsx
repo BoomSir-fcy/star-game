@@ -7,7 +7,7 @@ import { StarProps } from './types';
 const ImageStyled = styled(Image)`
   position: absolute;
   top: 50%;
-  left: 56%;
+  left: 50%;
   transform: translate(-50%, -50%);
 `;
 
