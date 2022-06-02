@@ -52,6 +52,7 @@ const JoinTheAlliance: React.FC<{
   const [allianceList, setAllianceList] = useState<orderInfo[]>([]);
   const [newIds, setNewIds] = useState<number[]>([]);
   const { RemoveStar } = useRemoveAlliance();
+  const [Loading, setLoading] = useState(false);
 
   // 删除星球
   const Remove = useCallback(
@@ -70,6 +71,8 @@ const JoinTheAlliance: React.FC<{
 
   // 提交修改
   const SubmitList = useCallback(async () => {
+    if (Loading) return;
+    setLoading(true);
     const newIdsStr = newIds.join();
     const workingListStr = workingList.join();
     if (newIdsStr === workingListStr) {
@@ -84,7 +87,17 @@ const JoinTheAlliance: React.FC<{
       toastError(t('Remove Failed'));
     }
     dispatch(fetchAllianceViewAsync());
-  }, [RemoveStar, toastError, toastSuccess, dispatch, t, workingList, newIds]);
+    setLoading(false);
+  }, [
+    RemoveStar,
+    toastError,
+    toastSuccess,
+    dispatch,
+    t,
+    Loading,
+    workingList,
+    newIds,
+  ]);
 
   const addStar = (id: any) => {
     if (!account) {
@@ -154,6 +167,7 @@ const JoinTheAlliance: React.FC<{
         />
         <Box marginTop='76px'>
           <Button
+            disabled={Loading}
             variant='vsRefresh'
             width='100px'
             style={{ fontSize: '24px' }}
