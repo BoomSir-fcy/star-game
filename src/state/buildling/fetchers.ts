@@ -18,10 +18,15 @@ export const fetchBuildingsListAsync = createAsyncThunk(
 export const fetchPlanetBuildingsAsync = createAsyncThunk(
   'fetch/pleanet/biuldings',
   async (planet_id: number | string) => {
-    const response = await Api.BuildingApi.getPlanetBuildingList(planet_id);
-    if (Api.isSuccess(response)) {
-      return response.data;
+    // const response = await Api.BuildingApi.getPlanetBuildingList(planet_id);
+    const [planet, assets] = await Promise.all([
+      Api.BuildingApi.getPlanetBuildingList(planet_id),
+      Api.BuildingApi.getStore(planet_id),
+    ]);
+    console.log('planet', planet, assets);
+    if (Api.isSuccess(planet)) {
+      return { ...planet.data, assets: assets.data };
     }
-    return { data: [], upgradeInfo: [] };
+    return { data: [], upgradeInfo: [], assets: {} };
   },
 );

@@ -21,7 +21,7 @@ const Container = styled(Box)`
   max-height: 476px;
   padding: 13px;
   border: 4px solid #f9feff;
-  box-shadow: 0px 0px 10px 2px #41b7ff;
+  box-shadow: ${({ theme }) => theme.shadows.highlight};
   overflow: auto;
 `;
 
@@ -53,11 +53,6 @@ const StyledImage = styled(Image)`
   margin-right: 9px;
 `;
 
-const Consume = styled(Flex)`
-  padding-top: 10px;
-  border-top: 1px solid #2b2f39;
-`;
-
 const ActionButton = styled(Button)`
   width: 170px;
   height: 44px;
@@ -81,6 +76,7 @@ export const GameInfo: React.FC<{
   const { destory, upgrade: upgradeBuilding } = useBuildingOperate();
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
   const planetInfo = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
+  const planetAssets = useStore(p => p.buildling.planetAssets);
 
   const [state, setState] = React.useState({
     destoryVisible: false,
@@ -147,6 +143,7 @@ export const GameInfo: React.FC<{
     dispatch(fetchPlanetBuildingsAsync(planet_id));
   };
 
+  console.log('gameisbuilding', itemData.isbuilding, planetAssets);
   return (
     <Container>
       {itemData?._id && (
@@ -160,10 +157,21 @@ export const GameInfo: React.FC<{
                 border
               />
               <Box ml='36px' style={{ flex: 1 }}>
-                <Flex alignItems='flex-end' mb='10px'>
-                  <Text shadow='primary'>{itemData?.propterty?.name_cn}</Text>
-                  <Text ml='27px' small>
-                    {`${itemData?.propterty?.size.area_x}x${itemData?.propterty?.size.area_y}`}
+                <Flex
+                  alignItems='flex-end'
+                  justifyContent='space-between'
+                  mb='10px'
+                >
+                  <Flex alignItems='flex-end'>
+                    <Text bold shadow='primary'>
+                      {itemData?.propterty?.name_cn}
+                    </Text>
+                    <Text ml='27px' small>
+                      {`${itemData?.propterty?.size.area_x}x${itemData?.propterty?.size.area_y}`}
+                    </Text>
+                  </Flex>
+                  <Text bold small shadow='primary'>
+                    尚未建筑
                   </Text>
                 </Flex>
                 <Flex flex={1} justifyContent='space-between' flexWrap='wrap'>
@@ -308,65 +316,86 @@ export const GameInfo: React.FC<{
             </Flex>
           </CardContent>
           <CardInfo>
-            <Flex
-              justifyContent='space-between'
-              alignItems='center'
-              style={{
-                height: 138,
-              }}
-            >
-              {(itemData?.isactive ||
-                itemData?.propterty?.levelEnergy <
-                  state.upgrade?.max_building_level) && (
-                <Flex flexDirection='column'>
-                  <Flex alignItems='center'>
-                    <Text shadow='primary' fontSize='33px'>
-                      Lv {itemData?.propterty?.levelEnergy}
-                    </Text>
-                    <Box width='47px' height='40px' margin='0 44px'>
-                      <Image
-                        src='/images/commons/icon/icon-upgrade.png'
-                        width={47}
-                        height={40}
-                      />
-                    </Box>
-                    <Text shadow='primary' fontSize='34px'>
-                      Lv {itemData?.propterty?.levelEnergy + 1}
-                    </Text>
-                  </Flex>
-                  <Text color='textSubtle' small>
-                    {t('planetPopulationRequiredUpgrade%value%people', {
-                      value: state.upgrade?.cost_population,
-                    })}
+            {!itemData?.isbuilding && (
+              <>
+                <Flex mt='21px' mb='15px' alignItems='flex-end'>
+                  <Text bold fontSize='24px' shadow='primary'>
+                    建造要求
+                  </Text>
+                  <Text ml='16px' fontSize='16px' mb='2px'>
+                    建造耗时（5h:50m:15s）
                   </Text>
                 </Flex>
-              )}
-              <Flex flexDirection='column'>
-                {itemData?.propterty?.levelEnergy <
-                  state.upgrade?.max_building_level && (
+                <Text fontSize='16px' mb='5px'>
+                  建造所需香料：1000/{planetAssets?.population}
+                </Text>
+                <Text fontSize='16px'>
+                  建造所需矿石：3000/{planetAssets?.population}
+                </Text>
+              </>
+            )}
+
+            {itemData?.isbuilding && (
+              <Flex
+                justifyContent='space-between'
+                alignItems='center'
+                style={{
+                  height: 138,
+                }}
+              >
+                {(itemData?.isactive ||
+                  itemData?.propterty?.levelEnergy <
+                    state.upgrade?.max_building_level) && (
+                  <Flex flexDirection='column'>
+                    <Flex alignItems='center'>
+                      <Text shadow='primary' fontSize='33px'>
+                        Lv {itemData?.propterty?.levelEnergy}
+                      </Text>
+                      <Box width='47px' height='40px' margin='0 44px'>
+                        <Image
+                          src='/images/commons/icon/icon-upgrade.png'
+                          width={47}
+                          height={40}
+                        />
+                      </Box>
+                      <Text shadow='primary' fontSize='34px'>
+                        Lv {itemData?.propterty?.levelEnergy + 1}
+                      </Text>
+                    </Flex>
+                    <Text color='textSubtle' small>
+                      {t('planetPopulationRequiredUpgrade%value%people', {
+                        value: state.upgrade?.cost_population,
+                      })}
+                    </Text>
+                  </Flex>
+                )}
+                <Flex flexDirection='column'>
+                  {itemData?.propterty?.levelEnergy <
+                    state.upgrade?.max_building_level && (
+                    <ActionButton
+                      disabled={
+                        itemData?.propterty?.levelEnergy - planetInfo?.level >=
+                          1 || itemData?.isactive
+                      }
+                      onClick={() =>
+                        setState({ ...state, upgradesVisible: true })
+                      }
+                    >
+                      {t('planetBuildingUpgrades')}
+                    </ActionButton>
+                  )}
                   <ActionButton
-                    disabled={
-                      itemData?.propterty?.levelEnergy - planetInfo?.level >=
-                        1 || itemData?.isactive
-                    }
+                    disabled={itemData?.isactive}
+                    variant='danger'
                     onClick={() =>
-                      setState({ ...state, upgradesVisible: true })
+                      dispatch(storeAction.destoryBuildingVisibleModal(true))
                     }
                   >
-                    {t('planetBuildingUpgrades')}
+                    {t('planetDestroyBuilding')}
                   </ActionButton>
-                )}
-                <ActionButton
-                  disabled={itemData?.isactive}
-                  variant='danger'
-                  onClick={() =>
-                    dispatch(storeAction.destoryBuildingVisibleModal(true))
-                  }
-                >
-                  {t('planetDestroyBuilding')}
-                </ActionButton>
+                </Flex>
               </Flex>
-            </Flex>
+            )}
           </CardInfo>
         </>
       )}

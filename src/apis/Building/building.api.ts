@@ -30,6 +30,12 @@ export class BuildingApi extends Http {
     return res;
   }
 
+  // 获取星球储物罐资源
+  async getStore(planet_id) {
+    const res = await this.get(`planet/store/resource`, { planet_id });
+    return res;
+  }
+
   // 修复耐久度
   async setRepairBuilding(params: Api.Building.BuildingsOperateParams) {
     const res = await this.post(`buildings/repair`, params);
@@ -59,6 +65,12 @@ export class BuildingApi extends Http {
     params: Api.Building.CreateBuildingParams,
   ): Promise<Api.Response<{ data: Api.Building.CreateBuildingParams }>> {
     const res = await this.post(`buildings/create`, params);
+    return res;
+  }
+
+  // 创建建筑工作队列
+  async createQueueBuilding(params: Api.Building.CreateBuildingParams) {
+    const res = await this.post(`buildings/add_work_queue`, params);
     return res;
   }
 

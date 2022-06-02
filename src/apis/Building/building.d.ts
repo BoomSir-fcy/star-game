@@ -50,12 +50,22 @@ declare namespace Api {
 
     interface CreateBuildingParams {
       planet_id: number | string;
-      build_type: number;
-      building_setting: BuildingSetting[];
+      build_type?: number;
+      work_queue_params: CreateworkQueueParams;
+    }
+
+    interface CreateworkQueueParams {
+      work_type: 1 | 2; // 1-建造 2-升级
+      building_create_param?: BuildingSetting;
+      building_upgrade_param?: {
+        buildings_id: number;
+        building_number: number;
+      };
     }
 
     interface BuildingSetting {
       buildings_id: number;
+      building_number: number;
       position: any;
       index: number;
     }
