@@ -6,7 +6,9 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Api } from 'apis';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
+import { useDispatch } from 'react-redux';
 
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { StrengthenConsumeType } from './type';
 
 import { TextList } from '../Modal';
@@ -24,6 +26,7 @@ export const GrowPop: React.FC<{
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
   const { toastError, toastSuccess, toastWarning } = useToast();
+  const dispatch = useDispatch();
 
   const ToStrengthenPlante = async () => {
     try {
@@ -32,17 +35,10 @@ export const GrowPop: React.FC<{
       });
       if (Api.isSuccess(res)) {
         toastSuccess(t('Operate Succeeded'));
+        dispatch(fetchPlanetInfoAsync([Number(parsedQs.id)]));
         callBack();
       }
       onClose();
-      // if (res.code === 200007) {
-      //   toastError(t('The planet is under upgrading, cannot be upgraded now.'));
-      //   onClose();
-      // }
-      // if (res.code === 200017) {
-      //   toastError(t('Planet already has max strengthen grade'));
-      //   onClose();
-      // }
     } catch (error) {
       toastError(t('Operate Failed'));
       console.error(error);
@@ -73,19 +69,10 @@ export const GrowPop: React.FC<{
                 <TextList
                   imgWidth={50}
                   imgHeight={50}
-                  imgSrc='/images/commons/dsg-1.png'
-                  number={itemData?.stone_consume?.toString()}
-                  unit={t('Ore')}
+                  imgSrc='/images/tokens/BNB.svg'
+                  number={itemData?.consume_bnb?.toString()}
+                  unit={t('BNB')}
                 />
-                <Box mt='10px'>
-                  <TextList
-                    imgWidth={50}
-                    imgHeight={50}
-                    imgSrc='/images/commons/dsg-1.png'
-                    number={itemData?.population_consume?.toString()}
-                    unit={t('Population')}
-                  />
-                </Box>
               </Box>
             </Box>
             <Flex width='100%' justifyContent='center'>

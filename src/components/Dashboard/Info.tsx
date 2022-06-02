@@ -265,7 +265,7 @@ const Info: React.FC<InfoProps> = ({
         <ButtonGroup onRefresh={onRefresh} onBack={onBack} />
       </Flex>
       <Modal
-        title={`${ActiveToken?.symbol}钱包`}
+        title={`${ActiveToken?.symbol} ${t('Wallet')}`}
         visible={visible}
         setVisible={setVisible}
       >
