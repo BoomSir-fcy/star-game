@@ -76,6 +76,7 @@ const Details = () => {
   }, []);
 
   React.useEffect(() => {
+    console.log(planet?.areaX, planet?.areaY);
     if (planet?.areaX > 0 && planet?.areaY > 0) {
       const data: any = [];
       for (let i = 0; i < planet.areaX; i++) {
@@ -89,13 +90,13 @@ const Details = () => {
               ...buildings.building,
               x: i,
               y: j,
-              index: i * planet.areaY + j,
+              index: j * planet.areaX + i,
               isbuilding: true,
               isactive: false,
             });
           } else {
             data.push({
-              index: i * planet.areaY + j,
+              index: j * planet.areaX + i,
               isbuilding: false,
               propterty: {
                 size: {

@@ -4,7 +4,7 @@ import { Box, Flex, Text, Button, Image } from 'uikit';
 import Layout from 'components/Layout';
 import { useFetchAllianceView } from 'state/alliance/hooks';
 import { useDispatch } from 'react-redux';
-import { storeAction } from 'state';
+import { storeAction, useStore } from 'state';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import eventBus from 'utils/eventBus';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
@@ -15,6 +15,7 @@ import { useLocation } from 'react-router-dom';
 import JoinTheAlliance from './Join';
 import LeagueInfo from './LeagueInfo';
 import 'intro.js/introjs.css';
+import { RechargeAssets } from './RechargeAssets';
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -161,7 +162,38 @@ const PlantLeague = () => {
   //   setGuide(4);
   // }, [destroy, guides, setGuide]);
 
-  const [visible, setVisible] = React.useState(true);
+  const { userInfo } = useStore(p => p.userInfo);
+  const [visible, setVisible] = React.useState(false);
+  const [rechargeVisible, setRechargeVisible] = React.useState(false);
+  const [repairVisible, setRepairVisible] = React.useState(false);
+  const [modalTips, setModalTips] = React.useState('');
+
+  console.log(userInfo);
+
+  // 一键补充行星联盟充值
+  const rechargeHandle = React.useCallback(() => {
+    if (userInfo.vipBenefits?.isVip) {
+      setRechargeVisible(true);
+      return;
+    }
+    setModalTips('一键补充储存罐能量， 可以更快的部署资源。');
+    setVisible(true);
+  }, [
+    setVisible,
+    setRechargeVisible,
+    userInfo.vipBenefits?.isVip,
+    setModalTips,
+  ]);
+
+  // 行星联盟一键修复耐久
+  const repairHandle = React.useCallback(() => {
+    if (userInfo.vipBenefits?.isVip) {
+      setRepairVisible(true);
+      return;
+    }
+    setModalTips('一键修复耐久， 可以更快修复行星上所有建筑的耐久度。');
+    setVisible(true);
+  }, [setVisible, setRepairVisible, userInfo.vipBenefits?.isVip, setModalTips]);
 
   return (
     <Layout>
@@ -218,10 +250,21 @@ const PlantLeague = () => {
             />
             <Title>VIP</Title>
           </Flex>
-          <Button ml='10px' width={147} variant='purple'>
+          <Button
+            onClick={rechargeHandle}
+            ml='10px'
+            width={147}
+            variant='purple'
+          >
             补充资源
           </Button>
-          <Button ml='10px' mt='16px' width={147} variant='purple'>
+          <Button
+            onClick={repairHandle}
+            ml='10px'
+            mt='16px'
+            width={147}
+            variant='purple'
+          >
             修复耐久
           </Button>
         </VipBox>
@@ -229,11 +272,16 @@ const PlantLeague = () => {
         <LeagueInfo />
       </Flex>
       <BuyVipModal
-        tips='一键补充储存罐能量， 可以更快的部署资源。'
+        tips={modalTips}
         visible={visible}
         onClose={() => {
           setVisible(false);
         }}
+      />
+      <RechargeAssets
+        planet_id={5000000000000002}
+        visible={rechargeVisible}
+        onClose={() => setRechargeVisible(false)}
       />
     </Layout>
   );
