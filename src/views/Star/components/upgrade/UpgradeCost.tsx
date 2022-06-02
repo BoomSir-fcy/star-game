@@ -20,17 +20,21 @@ const StyledImage = styled(Image)`
 
 interface UpgradeCostProps extends FlexProps {
   stone?: number;
+  spices?: number;
+  energy?: number;
 }
 
 export const UpgradeCost: React.FC<UpgradeCostProps> = ({
   stone,
+  spices,
+  energy,
   ...props
 }) => {
   const { t } = useTranslation();
   return (
     <Flex flexDirection='column'>
       <Text bold fontSize='20px' shadow='primary'>
-        {t('升级消耗')}
+        {t('Upgrade consumption')}
       </Text>
       <Flex flexWrap='wrap'>
         <ItemFlex>
@@ -43,7 +47,7 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
             <Text small color='textSubtle'>
               {t('Ore')}
             </Text>
-            <Text fontSize='22px'>-100</Text>
+            <Text fontSize='22px'>-{stone}</Text>
           </ItemInfoFlex>
         </ItemFlex>
         <ItemFlex>
@@ -56,7 +60,7 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
             <Text small color='textSubtle'>
               {t('Population')}
             </Text>
-            <Text fontSize='22px'>-100</Text>
+            <Text fontSize='22px'>-{spices}</Text>
           </ItemInfoFlex>
         </ItemFlex>
         <ItemFlex>
@@ -69,7 +73,7 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
             <Text small color='textSubtle'>
               {t('Energy')}
             </Text>
-            <Text fontSize='22px'>-100</Text>
+            <Text fontSize='22px'>-{energy}</Text>
           </ItemInfoFlex>
         </ItemFlex>
       </Flex>

@@ -112,6 +112,10 @@
   "The buildings’ grade of the planet to be upgraded does not meet the standard": "升级星球的建筑等级不符合",
   "Attributes": "属性",
   "More Attributes": "额外",
+  "Lack of upgrade experience": "升级经验不足",
+  "Devour": "吞噬",
+  "Upgrade experience": "升级经验",
+  "Upgrade consumption": "升级消耗",
   "******种族翻译开始********": "******种族翻译开始********",
   "Mammoth": "猛犸",
   "1st generation mecha hunter, with high-speed fire bursting ability and thick armour, slow mobility is a weakness.": "1代机甲猎人，拥有高射速爆发厚甲，但行动缓慢是缺点。",
@@ -556,5 +560,6 @@
   "http-error-1000001": "游戏初始化失败",
   "http-error-1000002": "设置游戏单位失败",
   "http-error-400004": "BOX余额不足",
+  "http-error-200031": "升级所消耗的资源不足",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

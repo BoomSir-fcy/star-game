@@ -67,4 +67,9 @@ export class PlanetApi extends Http {
     const res = await this.post('planet/Strengthen_speed_up', params);
     return res;
   }
+
+  // 升级星球
+  async upgradePlanet(planet_id: number): Promise<Api.Response<any>> {
+    return this.post(`/planet/upgrade`, { planet_id });
+  }
 }
