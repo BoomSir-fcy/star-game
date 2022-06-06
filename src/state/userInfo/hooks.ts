@@ -2,6 +2,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useRefresh from 'hooks/useRefresh';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { useStore } from 'state/util';
 import {
   fetchAllowanceAsync,
@@ -63,6 +64,7 @@ export const useFetchUserBalance = () => {
   const dispatch = useDispatch();
   const { account } = useActiveWeb3React();
   const { slowRefresh } = useRefresh();
+  const location = useLocation();
 
   const fetch = useCallback(() => {
     if (account) {
@@ -72,7 +74,7 @@ export const useFetchUserBalance = () => {
 
   useEffect(() => {
     fetch();
-  }, [fetch, slowRefresh]);
+  }, [fetch, slowRefresh, location.pathname]);
 
   return {
     fetch,
@@ -83,6 +85,7 @@ export const useFetchUserProduct = () => {
   const dispatch = useDispatch();
   const { account } = useActiveWeb3React();
   const { slowRefresh } = useRefresh();
+  const location = useLocation();
 
   const fetch = useCallback(() => {
     if (account) {
@@ -92,7 +95,7 @@ export const useFetchUserProduct = () => {
 
   useEffect(() => {
     fetch();
-  }, [fetch, slowRefresh]);
+  }, [fetch, slowRefresh, location.pathname]);
 
   return {
     fetch,
