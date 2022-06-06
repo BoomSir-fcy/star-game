@@ -66,50 +66,12 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
               justifyContent='space-between'
               alignItems='center'
             >
-              <LevelText fontSize='22px'>Lv {info?.level}</LevelText>
+              <LevelText fontSize='22px'>
+                Lv {up?.now_max_building_level}
+              </LevelText>
             </Flex>
           </ItemInfoFlex>
         </ItemFlex>
-        {/* <ItemFlex>
-          <StyledImage
-            width={57}
-            height={53}
-            src='/images/commons/star/HP.png'
-          />
-          <ItemInfoFlex>
-            <Text small color='textSubtle'>
-              {t("All buildings' HP")}
-            </Text>
-            <Flex
-              width='130px'
-              justifyContent='space-between'
-              alignItems='center'
-            >
-              <LevelText fontSize='22px'>+{info?.hp}</LevelText>
-              {up && <UpBox value={up?.hp} />}
-            </Flex>
-          </ItemInfoFlex>
-        </ItemFlex>
-        <ItemFlex>
-          <StyledImage
-            width={57}
-            height={53}
-            src='/images/commons/star/defense.png'
-          />
-          <ItemInfoFlex>
-            <Text small color='textSubtle'>
-              {t("All buildings' defenses")}
-            </Text>
-            <Flex
-              width='130px'
-              justifyContent='space-between'
-              alignItems='center'
-            >
-              <LevelText fontSize='22px'>+{info?.defense}</LevelText>
-              {up && <UpBox value={up?.defense} />}
-            </Flex>
-          </ItemInfoFlex>
-        </ItemFlex> */}
       </Flex>
       <Flex mt='65px' flexDirection='column'>
         <Text bold fontSize='20px' shadow='primary'>
@@ -132,7 +94,9 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
               justifyContent='space-between'
               alignItems='center'
             >
-              <LevelText fontSize='22px'>Lv {upgradeInfo?.level}</LevelText>
+              <LevelText fontSize='22px'>
+                Lv {up?.estimate_max_building_level}
+              </LevelText>
               {up && <UpBox value={up?.build_level} />}
             </Flex>
           </ItemInfoFlex>

@@ -112,6 +112,10 @@
   "The buildings’ grade of the planet to be upgraded does not meet the standard": "The buildings’ grade of the planet to be upgraded does not meet the standard",
   "Attributes": "Attributes",
   "More Attributes": "More Attributes",
+  "Lack of upgrade experience": "Lack of upgrade experience",
+  "Devour": "Devour",
+  "Upgrade experience": "Upgrade experience",
+  "Upgrade consumption": "Upgrade consumption",
   "******种族翻译开始********": "******种族翻译开始********",
   "Mammoth": "Mammoth",
   "1st generation mecha hunter, with high-speed fire bursting ability and thick armour, slow mobility is a weakness.": "1st generation mecha hunter, with high-speed fire bursting ability and thick armour, slow mobility is a weakness.",
@@ -556,5 +560,6 @@
   "http-error-1000001": "Game initialization failed",
   "http-error-1000002": "Failed to set game units",
   "http-error-400004": "Insufficient BOX balance",
+  "http-error-200031": "Insufficient resources consumed by the upgrade",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

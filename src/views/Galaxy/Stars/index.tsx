@@ -81,7 +81,8 @@ const Stars = () => {
         <Spinner />
       ) : (
         <Flex alignItems='center' mt='16px'>
-          <Nav
+          {/* 隐藏左边菜单栏 */}
+          {/* <Nav
             nav={navList}
             mr='24px'
             activeId={currentStarPeriod?.id}
@@ -90,7 +91,7 @@ const Stars = () => {
               setVisible(false);
               setActiveStar(initState);
             }}
-          />
+          /> */}
           <StarBox>
             {currentStarPeriod?.levels &&
               currentStarPeriod?.levels.map((item, index) => (
