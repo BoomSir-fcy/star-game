@@ -54,6 +54,12 @@ const LoadingBox = styled(Box)`
   top: 50%;
   transform: translate(-50%, -50%);
 `;
+const LinkStyled = styled(Link)`
+  :hover {
+    text-decoration: underline;
+    text-decoration-color: #fff;
+  }
+`;
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -474,8 +480,22 @@ const Planet = () => {
                     )}
                   </React.Fragment>
                 ))}
+                {!(StarList ?? []).length && (
+                  <Flex
+                    mt='50px'
+                    width='100%'
+                    justifyContent='center'
+                    alignItems='center'
+                  >
+                    <LinkStyled to='/mystery-box'>
+                      <Text small>
+                        {t('No data, Go to open the blind box')} &gt;
+                      </Text>
+                    </LinkStyled>
+                  </Flex>
+                )}
               </ScrollBox>
-              {choose && (
+              {choose && StarList?.length && (
                 <Flex
                   justifyContent='center'
                   paddingTop='20px'

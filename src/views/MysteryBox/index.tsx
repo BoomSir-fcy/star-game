@@ -9,10 +9,11 @@ import Layout from 'components/Layout';
 import { MysteryBoxCom, mysteryBoxQualities } from 'components/MysteryBoxCom';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
 import { useGuide } from 'hooks/useGuide';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { storeAction } from 'state';
+import { storeAction, useStore } from 'state';
 import { useTranslation } from 'contexts/Localization';
+import BigNumber from 'bignumber.js';
 
 const GlobalStyle = createGlobalStyle<{ interactive?: boolean }>`
   ${({ interactive }) => {
@@ -29,6 +30,30 @@ const GlobalStyle = createGlobalStyle<{ interactive?: boolean }>`
   }};
   
 `;
+const VipBox = styled(Box)`
+  background: url(/images/commons/nav/left.png) no-repeat;
+  /* background-size: 100% 100%; */
+  width: 193px;
+  background-position: right top;
+`;
+const Title = styled(Text)`
+  font-weight: bold;
+  font-size: 22px;
+  color: #ffffff;
+  line-height: 1;
+  background: linear-gradient(
+    130deg,
+    #fbeeba 0%,
+    #f1d37e 14.990234375%,
+    #d1ab64 33.0078125%,
+    #d5c089 48.9990234375%,
+    #d5bf86 66.9921875%,
+    #f4d784 84.0087890625%,
+    #fbeeba 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`;
 
 const MysteryBox = () => {
   useFetchBoxView();
@@ -36,6 +61,8 @@ const MysteryBox = () => {
   const location = useLocation();
   const { guides, setGuide } = useGuide(location.pathname);
   const dispatch = useDispatch();
+
+  const { maxSales, sold } = useStore(p => p.mysteryBox.boxView);
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
@@ -115,44 +142,69 @@ const MysteryBox = () => {
           />
         </>
       )}
-      <Flex
-        margin='auto'
-        width='80%'
-        justifyContent='space-between'
-        position='relative'
-      >
-        <Box
-          className='mystery-index-step0'
-          width='94%'
-          height='94%'
-          position='absolute'
-          top='0%'
-          left='2%'
-          zIndex={-1}
-        />
-        <Link to={`/mystery-box/state?q=${mysteryBoxQualities.ORDINARY}`}>
-          <MysteryBoxCom
-            className='mystery-index-step'
-            position='relative'
-            quality={mysteryBoxQualities.ORDINARY}
+
+      <Flex>
+        <VipBox width={192}>
+          <Flex
+            width='80%'
+            mt='60px'
+            pl='10px'
+            flexWrap='wrap'
+            alignItems='center'
           >
-            <Box
-              className='mystery-index-step1'
-              width='94%'
-              height='94%'
-              position='absolute'
-              top='0%'
-              left='2%'
-              zIndex={-1}
-            />
-          </MysteryBoxCom>
-        </Link>
-        <Link to={`/mystery-box/state?q=${mysteryBoxQualities.ADVANCED}`}>
-          <MysteryBoxCom quality={mysteryBoxQualities.ADVANCED} />
-        </Link>
-        <Link to={`/mystery-box/state?q=${mysteryBoxQualities.SUPER}`}>
-          <MysteryBoxCom quality={mysteryBoxQualities.SUPER} />
-        </Link>
+            <Text small>{t('Max sales: ')}&nbsp;</Text>
+            <Title>{new BigNumber(maxSales).toNumber()}</Title>
+          </Flex>
+          <Flex
+            width='80%'
+            mt='15px'
+            pl='10px'
+            flexWrap='wrap'
+            alignItems='center'
+          >
+            <Text small>{t('Sold: ')}&nbsp;</Text>
+            <Title>{new BigNumber(sold).toNumber()}</Title>
+          </Flex>
+        </VipBox>
+        <Flex
+          margin='auto'
+          width='80%'
+          justifyContent='space-between'
+          position='relative'
+        >
+          <Box
+            className='mystery-index-step0'
+            width='94%'
+            height='94%'
+            position='absolute'
+            top='0%'
+            left='2%'
+            zIndex={-1}
+          />
+          <Link to={`/mystery-box/state?q=${mysteryBoxQualities.ORDINARY}`}>
+            <MysteryBoxCom
+              className='mystery-index-step'
+              position='relative'
+              quality={mysteryBoxQualities.ORDINARY}
+            >
+              <Box
+                className='mystery-index-step1'
+                width='94%'
+                height='94%'
+                position='absolute'
+                top='0%'
+                left='2%'
+                zIndex={-1}
+              />
+            </MysteryBoxCom>
+          </Link>
+          <Link to={`/mystery-box/state?q=${mysteryBoxQualities.ADVANCED}`}>
+            <MysteryBoxCom quality={mysteryBoxQualities.ADVANCED} />
+          </Link>
+          <Link to={`/mystery-box/state?q=${mysteryBoxQualities.SUPER}`}>
+            <MysteryBoxCom quality={mysteryBoxQualities.SUPER} />
+          </Link>
+        </Flex>
       </Flex>
     </Layout>
   );
