@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Box, Flex, Card, BgCard, Text, Button, Label } from 'uikit';
+import { Box, Flex, Image, BgCard, Text, Button, Label } from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
@@ -16,24 +16,36 @@ import StarCom from 'components/StarCom';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { useGuide } from 'hooks/useGuide';
 import { useLocation } from 'react-router-dom';
-import { storeAction } from 'state';
+import { storeAction, useStore } from 'state';
 import { useDispatch } from 'react-redux';
-import InfoPlane from './components/grow/InfoPlane';
-import Extra from './components/grow/Extra';
-import {
-  StrengthenPlanetInfo,
-  StrengthenConsumeType,
-} from './components/grow/type';
-import { GrowPop } from './components/grow/growPop';
-
 import 'intro.js/introjs.css';
+import { RaceTypeColor } from 'uikit/theme/colors';
+import Extra from './components/grow/Extra';
+import { StrengthenConsumeType } from './components/grow/type';
+import { GrowPop } from './components/grow/growPop';
 
 const MysteryBoxStarStyled = styled(MysteryBoxBoxStyled)`
   background: none;
 `;
 
-const TopBox = styled(Box)`
-  height: 81px;
+const TopBox = styled(Label)`
+  padding: 30px 48px;
+  height: max-content;
+  margin-bottom: 30px;
+`;
+const CardBox = styled(Flex)`
+  width: 200px;
+  height: 110px;
+  align-items: center;
+  justify-content: center;
+`;
+const TopBox1 = styled(CardBox)`
+  background: url('/images/grow/left.png') center left no-repeat;
+  text-align: left;
+`;
+const TopBox2 = styled(CardBox)`
+  background: url('/images/grow/right.png') center right no-repeat;
+  text-align: right;
 `;
 
 const Grow: React.FC = () => {
@@ -43,18 +55,33 @@ const Grow: React.FC = () => {
   const location = useLocation();
   const { guides, setGuide } = useGuide(location.pathname);
   const { toastError, toastSuccess, toastWarning, toastInfo } = useToast();
+  const id = Number(parsedQs.id);
+  const planetInfo = useStore(p => p.planet.planetInfo[id ?? 0]);
+
   const [visible, setVisible] = useState(false);
-  const [nowPlante, setNowPlante] = useState<StrengthenPlanetInfo>();
-  const [estimatePlante, setEstimatePlante] = useState<StrengthenPlanetInfo>();
-  // 预估强化升级消耗
+  // 培育信息
   const [estimateCost, setEstimateCost] = useState<StrengthenConsumeType>({
-    population_consume: 0,
-    speedup_consume: 0,
-    stone_consume: 0,
-    strengthen_time: 0,
-  });
-  const [state, setState] = React.useState({
-    time: 0,
+    consume_bnb: null,
+    estimate_buff: {
+      defense: null,
+      attack: null,
+      hp: null,
+      hit: null,
+      speed: null,
+      miss: null,
+      critical: null,
+    },
+    now_buff: {
+      defense: null,
+      attack: null,
+      hp: null,
+      hit: null,
+      speed: null,
+      miss: null,
+      critical: null,
+    },
+    now_level: null,
+    next_level: null,
   });
 
   const [stepsEnabled, setStepsEnabled] = useState(true);
@@ -69,114 +96,24 @@ const Grow: React.FC = () => {
     ],
     [t],
   );
-  let timer = null as any;
 
-  const ToStrengthenSpeedUp = async () => {
-    try {
-      const res = await Api.PlanetApi.StrengthenSpeedUp({
-        planet_id: Number(parsedQs.id),
-      });
-      if (Api.isSuccess(res)) {
-        setState({
-          ...state,
-          time: 0,
-        });
-        if (res?.data?.success) {
-          toastSuccess(t('Cultivate Succeeded'));
-        } else {
-          toastError(t('Cultivate Failed'));
-        }
-      }
-    } catch (error) {
-      toastError(t('Accelerate Failed'));
-      console.error(error);
-    }
-  };
-
-  const getStrengthenResult = async () => {
-    try {
-      const res = await Api.PlanetApi.StrengthenResult({
-        planet_id: Number(parsedQs.id),
-      });
-      if (Api.isSuccess(res)) {
-        const { data } = res;
-        if (data.strengthen_is_end) {
-          if (data.strengthen_is_success) {
-            toastSuccess(t('Cultivate Succeeded'));
-          } else {
-            toastInfo(t('Cultivate Failed'));
-          }
-        }
-        setState({
-          ...state,
-          time: data.strengthen_end_time,
-        });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    getPlanetStrengthen();
-  };
-
-  const getPlanetStrengthen = async () => {
+  const getPlanetStrengthen = useCallback(async () => {
     try {
       const res = await Api.PlanetApi.getPlanetStrengthen({
         PlanetID: Number(parsedQs.id),
       });
       if (Api.isSuccess(res)) {
         const { data } = res;
-        setNowPlante(data?.now_planet_info);
-        setEstimatePlante(data?.estimate_planet_info);
         setEstimateCost(data);
       }
-      // else if (res.code === 200016) {
-      //   toastWarning(
-      //     t('Planets in the Planet Alliance cannot be cultivated'),
-      //   );
-      // } else {
-      //   toastWarning(t('This planet cannot be cultivated'));
-      // }
     } catch (error) {
       console.error(error);
     }
-  };
-
-  // 倒计时
-  const countDown = () => {
-    timer = setInterval(() => {
-      const { time } = state;
-      if (time > 0) {
-        setState({
-          ...state,
-          time: time - 1,
-        });
-      } else {
-        clearInterval(timer);
-        getStrengthenResult();
-      }
-    }, 1000);
-  };
-
-  const formatTime = (time: number) => {
-    const hour = Math.floor(time / 3600);
-    const min = Math.floor((time % 3600) / 60);
-    const sec = time % 60;
-    return `${hour}h:${min}m:${sec}s`;
-  };
+  }, [parsedQs.id, setEstimateCost]);
 
   useEffect(() => {
-    countDown();
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-    // eslint-disable-next-line
-  }, [state]);
-
-  // useEffect(() => {
-  //   if (parsedQs.id) {
-  //     getStrengthenResult();
-  //   }
-  // }, [parsedQs.id]);
+    getPlanetStrengthen();
+  }, [getPlanetStrengthen]);
 
   React.useEffect(() => {
     return () => {
@@ -213,36 +150,59 @@ const Grow: React.FC = () => {
           <Flex className='planet'>
             <Box>
               <TopBox>
-                <ScoringPanel count={Number(nowPlante?.strengthenLevel) || 0} />
+                <Flex
+                  width='100%'
+                  justifyContent='space-between'
+                  alignItems='center'
+                >
+                  <Flex flexDirection='column' justifyContent='space-between'>
+                    <Text
+                      color={RaceTypeColor[planetInfo?.race]}
+                      mb='2px'
+                      fontSize='22px'
+                      bold
+                    >
+                      {planetInfo?.race ? t(`race-${planetInfo?.race}`) : ''}
+                    </Text>
+                    <ScoringPanel
+                      count={Number(estimateCost?.now_level) || 0}
+                    />
+                  </Flex>
+                  <Flex justifyContent='space-between' alignItems='center'>
+                    <TopBox1>
+                      <Text bold fontSize='24px' color='legendText'>
+                        {t('Strengthen')} +{estimateCost?.now_level}
+                      </Text>
+                    </TopBox1>
+                    <Box width={82}>
+                      <Image
+                        width={82}
+                        height={42}
+                        src='/images/commons/icon/upgrade.png'
+                      />
+                    </Box>
+                    <TopBox2>
+                      <Text bold fontSize='24px' color='legendText'>
+                        {t('Strengthen')} +{estimateCost?.next_level}
+                      </Text>
+                    </TopBox2>
+                  </Flex>
+                </Flex>
               </TopBox>
-              <InfoPlane
-                nowPlante={nowPlante}
-                estimatePlante={estimatePlante}
-              />
-            </Box>
-            <Box ml='27px'>
-              <TopBox>
+              <Extra info={estimateCost} />
+              <Flex
+                paddingTop='30px'
+                justifyContent='center'
+                alignItems='center'
+              >
                 <Button
                   onClick={() => {
-                    if (!nowPlante?.id) {
-                      toastWarning(t('This planet cannot be cultivated'));
-                      return;
-                    }
-                    if (state.time === 0) {
-                      setVisible(true);
-                      return;
-                    }
-                    if (state.time > 0) {
-                      ToStrengthenSpeedUp();
-                    }
+                    setVisible(true);
                   }}
                 >
-                  {state.time > 0
-                    ? formatTime(state.time)
-                    : t('Start Cultivating')}
+                  {t('Start Cultivating')}
                 </Button>
-              </TopBox>
-              <Extra />
+              </Flex>
             </Box>
           </Flex>
         </Flex>
@@ -251,7 +211,7 @@ const Grow: React.FC = () => {
         visible={visible}
         itemData={estimateCost}
         onClose={() => setVisible(false)}
-        callBack={() => getStrengthenResult()}
+        callBack={getPlanetStrengthen}
       />
     </Box>
   );

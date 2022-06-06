@@ -24,10 +24,27 @@ export interface StrengthenPlanetInfo {
   is_available: boolean;
 }
 
-// 预估消耗类型定义
+// 星球培育信息
 export interface StrengthenConsumeType {
-  population_consume: number;
-  speedup_consume: number;
-  stone_consume: number;
-  strengthen_time: number;
+  consume_bnb: number;
+  estimate_buff: {
+    defense: number;
+    attack: number;
+    hp: number;
+    hit: number;
+    speed: number;
+    miss: number;
+    critical: number;
+  };
+  now_buff: {
+    defense: number;
+    attack: number;
+    hp: number;
+    hit: number;
+    speed: number;
+    miss: number;
+    critical: number;
+  };
+  now_level: number;
+  next_level: number;
 }
