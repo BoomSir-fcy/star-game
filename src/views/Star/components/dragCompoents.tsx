@@ -14,9 +14,10 @@ import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 
 import { BuyVipModal } from 'components/Modal/buyVipModal';
+import { throttle } from 'lodash';
 import { GameInfo, GameThing, Building, Queue } from './gameModel';
 import { BuffBonus } from './buff';
-import { useBuffer } from './hooks';
+import { useBuffer, useWorkqueue } from './hooks';
 
 polyfill({
   dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
@@ -164,6 +165,7 @@ export const DragCompoents: React.FC<{
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { getPlanetBuff } = useBuffer();
+  const { refreshWorkQueue } = useWorkqueue();
   const { toastSuccess, toastError } = useToast();
   const [state, setState] = React.useState({
     currentTab: 1,
@@ -235,6 +237,18 @@ export const DragCompoents: React.FC<{
     }
   }, [buffer, currentBuild?._id, getPlanetBuff, planet_id]);
 
+  const getWorkQueue = React.useCallback(async () => {
+    try {
+      const res = await refreshWorkQueue(planet_id);
+      if (Api.isSuccess(res)) {
+        console.log(res.data.work_queue);
+        setCurrentQueue(res.data.work_queue);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [planet_id, refreshWorkQueue]);
+
   React.useEffect(() => {
     if (itemData.length > 0) {
       updateGrids(itemData);
@@ -244,6 +258,7 @@ export const DragCompoents: React.FC<{
   React.useEffect(() => {
     if (planet_id) {
       getBuffer();
+      getWorkQueue();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -288,28 +303,33 @@ export const DragCompoents: React.FC<{
   // 创建格子到九宫格中
   const saveWorkQueue = React.useCallback(async () => {
     const params = currentQueue?.reduce((current, next, index): any => {
-      if (next?.work_type === 3) {
-        const [from, to] = getMatrix(
-          next?.index,
-          next?.propterty?.size?.area_x,
-        );
-        current.push({
-          work_type: 1,
-          building_create_param: {
-            buildings_id: next._id,
-            building_number: next.buildings_number,
-            position: {
-              from: { x: from[0].x, y: from[1].y },
-              to: { x: to[0].x, y: to[1].y },
+      const [from, to] = getMatrix(next?.index, next?.propterty?.size?.area_x);
+      if (!next?.work_end_time) {
+        if (next?.work_type === 1) {
+          current.push({
+            work_type: 1,
+            building_create_param: {
+              buildings_id: next._id,
+              building_number: next.buildings_number,
+              position: {
+                from: { x: from[0].x, y: from[1].y },
+                to: { x: to[0].x, y: to[1].y },
+              },
+              index: next.index,
             },
-            index: next.index,
-          },
-        });
+          });
+        } else {
+          current.push({
+            work_type: 2,
+            building_upgrade_param: {
+              buildings_id: next._id,
+              building_number: next.buildings_number,
+            },
+          });
+        }
       }
       return current;
     }, []);
-
-    console.log(currentQueue, JSON.stringify(params));
 
     try {
       const res = await Api.BuildingApi.createQueueBuilding({
@@ -318,7 +338,8 @@ export const DragCompoents: React.FC<{
       });
       if (Api.isSuccess(res)) {
         toastSuccess(t('planetTipsSaveSuccess'));
-        setGridBuilds([]);
+        // setGridBuilds([]);
+        getWorkQueue();
         dispatch(fetchPlanetBuildingsAsync(planet_id));
       } else {
         toastError(res?.message);
@@ -330,6 +351,7 @@ export const DragCompoents: React.FC<{
     currentQueue,
     dispatch,
     getMatrix,
+    getWorkQueue,
     planet_id,
     t,
     toastError,
@@ -388,7 +410,7 @@ export const DragCompoents: React.FC<{
       if (canSave) {
         setCurrentQueue([
           ...currentQueue,
-          { ...draggedItem, work_type: 3, index: to },
+          { ...draggedItem, work_type: 1, work_status: 3, index: to },
         ]);
         for (let i = grid.length - 1; i >= 0; i--) {
           if (i === Number(to)) {
@@ -605,6 +627,15 @@ export const DragCompoents: React.FC<{
             planet_id={planet_id}
             building_id={currentBuild?._id}
             currentBuild={currentBuild}
+            diffTime={Number(
+              (currentBuild?.work_end_time - Date.now() / 1000).toFixed(0),
+            )}
+            onUpgradeLevel={() =>
+              setCurrentQueue([
+                ...currentQueue,
+                { ...currentBuild, work_type: 2, work_status: 4 },
+              ])
+            }
             callback={() => setCurrentBuild({})}
           />
         </Flex>
@@ -662,14 +693,25 @@ export const DragCompoents: React.FC<{
               </BuildingsScroll>
             ) : (
               <Queue
-                currentBuild={currentBuild}
                 currentQueue={currentQueue}
+                onSelectCurrent={(item: any) => {
+                  const currbuildings = buildings[1].find(
+                    ({ _id }) => item?.buildings_id === _id,
+                  );
+                  setCurrentBuild({
+                    ...item,
+                    ...currbuildings,
+                  });
+                }}
                 onSave={saveWorkQueue}
+                onComplete={() => {
+                  getWorkQueue();
+                  dispatch(fetchPlanetBuildingsAsync(planet_id));
+                }}
               />
             )}
           </Flex>
         </BgCard>
-        {/* <BuyVipModal visible onClose={() => {}} /> */}
       </Box>
     </>
   );

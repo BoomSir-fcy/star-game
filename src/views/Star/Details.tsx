@@ -76,7 +76,7 @@ const Details = () => {
   }, []);
 
   React.useEffect(() => {
-    console.log(selfBuilding);
+    console.log('selfBuilding:', selfBuilding);
     if (planet?.areaX > 0 && planet?.areaY > 0) {
       const data: any = [];
       for (let i = 0; i < planet.areaX; i++) {

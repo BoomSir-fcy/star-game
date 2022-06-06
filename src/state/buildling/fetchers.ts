@@ -23,9 +23,8 @@ export const fetchPlanetBuildingsAsync = createAsyncThunk(
       Api.BuildingApi.getPlanetBuildingList(planet_id),
       Api.BuildingApi.getStore(planet_id),
     ]);
-    console.log('planet', planet, assets);
     if (Api.isSuccess(planet)) {
-      return { ...planet.data, assets: assets.data };
+      return { ...planet?.data, assets: assets?.data };
     }
     return { data: [], upgradeInfo: [], assets: {} };
   },

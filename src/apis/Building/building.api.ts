@@ -74,6 +74,12 @@ export class BuildingApi extends Http {
     return res;
   }
 
+  // 刷新工作队列
+  async refreshQueue(planet_id: number) {
+    const res = await this.post(`buildings/refresh_work_queue`, { planet_id });
+    return res;
+  }
+
   // 预估建筑升级
   async estimateBuildingUpgrade(
     planet_id: number,

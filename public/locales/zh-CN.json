@@ -560,6 +560,7 @@
   "http-error-1000001": "游戏初始化失败",
   "http-error-1000002": "设置游戏单位失败",
   "http-error-400004": "BOX余额不足",
+  "http-error-400008": "BNB余额不足",
   "http-error-200031": "升级所消耗的资源不足",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }
