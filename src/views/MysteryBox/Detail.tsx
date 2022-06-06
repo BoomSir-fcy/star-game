@@ -22,6 +22,7 @@ import { useGuide } from 'hooks/useGuide';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useTranslation } from 'contexts/Localization';
 import eventBus from 'utils/eventBus';
+import { fetchUserProductAsync } from 'state/userInfo/reducer';
 import Attributes from './components/Attributes';
 import Extra from './components/Extra';
 import Race from './components/Race';
@@ -69,6 +70,8 @@ const MysteryBoxDetail = () => {
       setTimeout(() => {
         dispatch(fetchPlanetInfoAsync([id]));
       }, 10000);
+    } else {
+      dispatch(fetchUserProductAsync());
     }
   }, [info, id, dispatch]);
 

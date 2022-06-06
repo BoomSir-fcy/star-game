@@ -312,7 +312,7 @@ const Login = () => {
             onClick={handleEnter}
             variant='login'
           >
-            ENTER
+            {account ? 'ENTER' : t('Connect Wallet')}
           </Button>
         </EnterBoxMove>
       </Flex>
