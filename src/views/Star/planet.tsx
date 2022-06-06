@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
-// import 'intro.js/introjs.css';
+import 'intro.js/introjs.css';
 
 import styled, { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -193,7 +193,13 @@ const Planet = () => {
       navigate('/plant-league');
       setTimeout(() => {
         destroy(activeStep + 1);
-        dispatch(storeAction.toggleVisible({ visible: true }));
+        dispatch(
+          storeAction.toggleVisible({
+            visible: true,
+            lastStep: choose ? steps.length : planetSteps.length,
+            pathname: choose ? '/star/planet&choose=' : '/star/planet',
+          }),
+        );
       }, 100);
     } catch (e) {
       console.error(e);
@@ -213,6 +219,9 @@ const Planet = () => {
     destroy,
     activeStep,
     dispatch,
+    choose,
+    steps.length,
+    planetSteps.length,
   ]);
 
   const addPlanetToList = useCallback(
@@ -332,12 +341,18 @@ const Planet = () => {
             }}
             onExit={step => {
               setStepsEnabled(false);
-              if (!choose) {
-                setGuide(step + 1);
-                return;
-              }
-              if (step === currentSteps.length) {
-                dispatch(storeAction.toggleVisible({ visible: true }));
+              // if (!choose) {
+              //   setGuide(step + 1);
+              //   return;
+              // }
+              if (step < (choose ? steps.length : planetSteps.length) - 1) {
+                dispatch(
+                  storeAction.toggleVisible({
+                    visible: true,
+                    lastStep: choose ? steps.length : planetSteps.length,
+                    pathname: choose ? '/star/planet&choose=' : '/star/planet',
+                  }),
+                );
               }
             }}
           />

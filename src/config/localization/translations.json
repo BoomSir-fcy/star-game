@@ -515,7 +515,7 @@
   "planetModalPaymentBuildingUpgrades": "Payment for upgrading building",
   "GuideModalTips": "Warm tips",
   "GuideModalText": "Do you want to continue the last tutorial next time you log in?",
-  "GuideModalButtonConfirn": "OK",
+  "GuideModalButtonConfirn": "Skip this time",
   "GuideModalButtonClose": "Close permanently",
   "BuffBonus": "BUFF Bonus",
   "BuffBonustitle": "Planet breeding and building BUFF buildings can provide bonuses",

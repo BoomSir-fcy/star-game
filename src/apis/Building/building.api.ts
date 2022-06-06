@@ -8,9 +8,21 @@ export class BuildingApi extends Http {
     return this.get(`buildings/store/max_recharge`, { planet_id });
   }
 
+  // 获取行星联盟储物罐最大充值金额
+  async getAllianceMaxReCharge(): Promise<Api.Response<Api.Building.Store>> {
+    return this.get(`buildings/alliance_store/max_recharge`);
+  }
+
   // 储物罐充值
   async storeReCharge(params: Api.Building.StoreRechargeParams) {
     return this.post(`buildings/store/recharge`, params);
+  }
+
+  // 行星联盟储物罐充值
+  async storeAllianceReCharge(
+    params: Api.Building.AllianceStoreRechargeParams,
+  ) {
+    return this.post(`buildings/alliance_store/recharge`, params);
   }
 
   // 获取所有建筑

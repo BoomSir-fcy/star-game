@@ -10,7 +10,7 @@ import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
 
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Button, Text, Flex, Image } from 'uikit';
 import { useGuide } from 'hooks/useGuide';
 import { Api } from 'apis';
@@ -147,7 +147,8 @@ const Embattle = () => {
     }
   }, [plantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers, game]);
 
-  const { guides, setGuide } = useGuide('star-embattle');
+  const location = useLocation();
+  const { guides, setGuide } = useGuide(location.pathname);
 
   const stepRef = useRef(null);
   const [updaterStep, setUpdaterStep] = useState<Steps | null>(null);
@@ -189,12 +190,12 @@ const Embattle = () => {
         ),
         interactive: true,
       },
-      {
-        element: '.star-embattle-step6',
-        intro: t(
-          'All right, deployment is over! Here is the order of attack in combat.',
-        ),
-      },
+      // {
+      //   element: '.star-embattle-step6',
+      //   intro: t(
+      //     'All right, deployment is over! Here is the order of attack in combat.',
+      //   ),
+      // },
     ],
     [t],
   );
@@ -232,8 +233,13 @@ const Embattle = () => {
           }}
           onExit={index => {
             setStepsEnabled(false);
-            if (index < steps.length) {
-              dispatch(storeAction.toggleVisible({ visible: true }));
+            if (index < steps.length - 1) {
+              dispatch(
+                storeAction.toggleVisible({
+                  visible: true,
+                  lastStep: steps.length,
+                }),
+              );
             }
           }}
         />
@@ -257,10 +263,10 @@ const Embattle = () => {
         style={{ userSelect: 'none' }}
         position='absolute'
         top='0'
-        left='824px'
+        right='18px'
       >
         <Preview game={game} activeSoldier={activeSoldier} />
-        <SortBoard
+        {/* <SortBoard
           className='star-embattle-step6'
           sortSoldiers={gameSoldiers}
           activeSoldier={activeSoldier}
@@ -270,7 +276,7 @@ const Embattle = () => {
               game.setSolders(newItems);
             }
           }}
-        />
+        /> */}
       </Flex>
       <Box
         style={{ userSelect: 'none' }}
@@ -278,7 +284,7 @@ const Embattle = () => {
         top='490px'
         left='0'
       >
-        <Box position='absolute' top='-80px'>
+        {/* <Box position='absolute' top='-80px'>
           <Button
             onClick={() => navigate(`/plunder-pk?pid0=${planetId}`)}
             padding={0}
@@ -286,7 +292,7 @@ const Embattle = () => {
           >
             <Text fontSize='20px'>战斗测试</Text>
           </Button>
-        </Box>
+        </Box> */}
         <PreviewList
           race={race}
           game={game}

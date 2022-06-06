@@ -29,7 +29,7 @@ import Game from 'game/core/Game';
 import { useStore, storeAction } from 'state';
 import { RoundDescTotalHp } from 'game/types';
 import { useToast } from 'contexts/ToastsContext';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
 import { useGuide } from 'hooks/useGuide';
 import {
@@ -211,7 +211,8 @@ const Pk = () => {
     }
   }, [TerrainInfo, game]);
 
-  const { guides, setGuide } = useGuide('plunder-pk');
+  const location = useLocation();
+  const { guides, setGuide } = useGuide(location.pathname);
 
   const { t } = useTranslation();
 
@@ -360,8 +361,13 @@ const Pk = () => {
           }}
           onExit={index => {
             setStepsEnabled(false);
-            if (index < steps.length) {
-              dispatch(storeAction.toggleVisible({ visible: true }));
+            if (index < steps.length - 1) {
+              dispatch(
+                storeAction.toggleVisible({
+                  visible: true,
+                  lastStep: steps.length,
+                }),
+              );
             }
           }}
         />

@@ -4,7 +4,7 @@ import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
 
 import { Box, Text, BgCard, Flex, TweenText } from 'uikit';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Layout from 'components/Layout';
 import { MysteryBoxCom, mysteryBoxQualities } from 'components/MysteryBoxCom';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
@@ -33,7 +33,8 @@ const GlobalStyle = createGlobalStyle<{ interactive?: boolean }>`
 const MysteryBox = () => {
   useFetchBoxView();
 
-  const { guides, setGuide } = useGuide('mystery-index');
+  const location = useLocation();
+  const { guides, setGuide } = useGuide(location.pathname);
   const dispatch = useDispatch();
 
   // 控制是否开启新手指导的
@@ -101,8 +102,13 @@ const MysteryBox = () => {
           }}
           onExit={index => {
             setStepsEnabled(false);
-            if (index < steps.length) {
-              dispatch(storeAction.toggleVisible({ visible: true }));
+            if (index < steps.length - 1) {
+              dispatch(
+                storeAction.toggleVisible({
+                  visible: true,
+                  lastStep: steps.length,
+                }),
+              );
             }
           }}
         />

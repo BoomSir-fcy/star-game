@@ -310,7 +310,7 @@ const Upgrade = () => {
           }}
           onExit={step => {
             setStepsEnabled(false);
-            setGuide(step + 1);
+            setGuide(steps.length + 1);
             // dispatch(storeAction.toggleVisible({ visible: true }));
           }}
         />

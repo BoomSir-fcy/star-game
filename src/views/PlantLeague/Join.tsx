@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Flex, Text, Button } from 'uikit';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { StarAddBtn } from 'components';
 import { useStore } from 'state/util';
 import { qualities } from 'uikit/theme/types';
@@ -14,6 +14,15 @@ import { useConnectWallet } from 'contexts/ConnectWallet';
 import { orderInfo } from 'state/types';
 import { useRemoveAlliance } from './hook';
 
+const rotate = keyframes`
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+`;
+
 const GalaxyBg = styled(Box)`
   width: 60%;
   height: 80%;
@@ -21,9 +30,11 @@ const GalaxyBg = styled(Box)`
   z-index: -1;
   top: 84px;
   left: 150px;
+  transform: rotate(0);
   img {
     width: 100%;
     height: 100%;
+    animation: ${rotate} 60s infinite linear;
   }
 `;
 

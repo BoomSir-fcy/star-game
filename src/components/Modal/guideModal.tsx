@@ -8,8 +8,9 @@ import ModalWrapper from '.';
 
 export const GuideModal: React.FC<{
   visible: boolean;
+  lastStep?: number;
   onClose: () => void;
-}> = ({ visible, onClose }) => {
+}> = ({ visible, onClose, lastStep }) => {
   const location = useLocation();
   const { t } = useTranslation();
   const { setGuide } = useGuide(location.pathname);
@@ -28,7 +29,14 @@ export const GuideModal: React.FC<{
       <Box padding='80px 25px'>
         <Text>{t('GuideModalText')}</Text>
         <Flex justifyContent='space-between' mt='300px'>
-          <Button onClick={onClose}>{t('GuideModalButtonConfirn')}</Button>
+          <Button
+            onClick={() => {
+              setGuide(lastStep);
+              onClose();
+            }}
+          >
+            {t('GuideModalButtonConfirn')}
+          </Button>
           <Button onClick={closeGuide}>{t('GuideModalButtonClose')}</Button>
         </Flex>
       </Box>

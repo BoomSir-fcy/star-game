@@ -4,6 +4,8 @@ import { GuideState } from '../types';
 
 export const initialState: GuideState = {
   visible: false,
+  lastStep: 0,
+  pathname: '',
 };
 
 export const guide = createSlice({
@@ -13,6 +15,8 @@ export const guide = createSlice({
   extraReducers: builder => {
     builder.addCase(toggleVisible, (state, { payload }) => {
       state.visible = payload.visible;
+      state.lastStep = payload.lastStep || 0;
+      state.pathname = payload.pathname || '';
     });
   },
 });

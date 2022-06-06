@@ -168,11 +168,9 @@ const PlantLeague = () => {
   const [repairVisible, setRepairVisible] = React.useState(false);
   const [modalTips, setModalTips] = React.useState('');
 
-  console.log(userInfo);
-
   // 一键补充行星联盟充值
   const rechargeHandle = React.useCallback(() => {
-    if (userInfo.vipBenefits?.isVip) {
+    if (userInfo.vipBenefits?.is_vip) {
       setRechargeVisible(true);
       return;
     }
@@ -181,19 +179,24 @@ const PlantLeague = () => {
   }, [
     setVisible,
     setRechargeVisible,
-    userInfo.vipBenefits?.isVip,
+    userInfo.vipBenefits?.is_vip,
     setModalTips,
   ]);
 
   // 行星联盟一键修复耐久
   const repairHandle = React.useCallback(() => {
-    if (userInfo.vipBenefits?.isVip) {
+    if (userInfo.vipBenefits?.is_vip) {
       setRepairVisible(true);
       return;
     }
     setModalTips('一键修复耐久， 可以更快修复行星上所有建筑的耐久度。');
     setVisible(true);
-  }, [setVisible, setRepairVisible, userInfo.vipBenefits?.isVip, setModalTips]);
+  }, [
+    setVisible,
+    setRepairVisible,
+    userInfo.vipBenefits?.is_vip,
+    setModalTips,
+  ]);
 
   return (
     <Layout>
@@ -230,7 +233,14 @@ const PlantLeague = () => {
                 setGuide(0, false, 2);
                 return;
               }
-              dispatch(storeAction.toggleVisible({ visible: true }));
+              if (step < steps.length - 1) {
+                dispatch(
+                  storeAction.toggleVisible({
+                    visible: true,
+                    lastStep: steps.length,
+                  }),
+                );
+              }
             }}
           />
         )}
@@ -279,7 +289,6 @@ const PlantLeague = () => {
         }}
       />
       <RechargeAssets
-        planet_id={5000000000000002}
         visible={rechargeVisible}
         onClose={() => setRechargeVisible(false)}
       />

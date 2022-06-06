@@ -515,7 +515,7 @@
   "planetModalPaymentBuildingUpgrades": "建筑升级所需支付",
   "GuideModalTips": "温馨提示",
   "GuideModalText": "下次登录是否继续上次的教程？",
-  "GuideModalButtonConfirn": "确定",
+  "GuideModalButtonConfirn": "跳过本次",
   "GuideModalButtonClose": "永久关闭",
   "BuffBonus": "BUFF加成",
   "BuffBonustitle": "行星培育和建造BUFF 建筑都可以提供加成",

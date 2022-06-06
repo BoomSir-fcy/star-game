@@ -364,6 +364,8 @@ export enum PlanetStatus {
 
 export interface GuideState {
   visible: boolean;
+  lastStep: number;
+  pathname?: string;
 }
 
 export enum BuildingDetailType {

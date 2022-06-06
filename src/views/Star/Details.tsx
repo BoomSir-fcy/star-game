@@ -142,7 +142,14 @@ const Details = () => {
               navigate(`/star/upgrade?id=${id}`);
               return;
             }
-            dispatch(storeAction.toggleVisible({ visible: true }));
+            if (step < steps.length - 1) {
+              dispatch(
+                storeAction.toggleVisible({
+                  visible: true,
+                  lastStep: steps.length,
+                }),
+              );
+            }
           }}
         />
       )}

@@ -15,6 +15,7 @@ import ScoringPanel from 'components/ScoringPanel';
 import StarCom from 'components/StarCom';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { useGuide } from 'hooks/useGuide';
+import { useLocation } from 'react-router-dom';
 import { storeAction } from 'state';
 import { useDispatch } from 'react-redux';
 import InfoPlane from './components/grow/InfoPlane';
@@ -39,7 +40,8 @@ const Grow: React.FC = () => {
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
-  const { guides, setGuide } = useGuide('/star/grow');
+  const location = useLocation();
+  const { guides, setGuide } = useGuide(location.pathname);
   const { toastError, toastSuccess, toastWarning, toastInfo } = useToast();
   const [visible, setVisible] = useState(false);
   const [nowPlante, setNowPlante] = useState<StrengthenPlanetInfo>();

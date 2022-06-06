@@ -25,7 +25,7 @@ import {
   MysteryBoxQualities,
 } from 'components/MysteryBoxCom';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { TokenImage } from 'components/TokenImage';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { getDsgAddress, getWEtherAddress } from 'utils/addressHelpers';
@@ -137,8 +137,9 @@ const MysteryBoxState = () => {
     return Boolean(Number(seedBlocks[quality])) || bought;
   }, [seedBlocks, quality, bought]);
 
+  const location = useLocation();
   // 控制是否开启新手指导的
-  const { guides, setGuide } = useGuide('mystery-state');
+  const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const steps = React.useMemo(() => {
     return [
@@ -168,7 +169,8 @@ const MysteryBoxState = () => {
           onBeforeChange={event => {
             console.log(event);
           }}
-          onExit={() => {
+          onExit={currentStep => {
+            setGuide(1);
             setStepsEnabled(false);
           }}
         />

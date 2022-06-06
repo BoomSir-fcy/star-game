@@ -16,6 +16,12 @@ declare namespace Api {
       population?: number;
     }
 
+    interface AllianceStoreRechargeParams {
+      nonce: string;
+      timestamp: number;
+      signature: string;
+    }
+
     // 建筑
     interface Building {
       buildings_number: number;
