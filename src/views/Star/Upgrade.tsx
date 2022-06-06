@@ -221,6 +221,7 @@ const Upgrade = () => {
     if (!account) {
       return <ConnectWalletButton scale='ld' width='270px' padding='0 10px' />;
     }
+
     // 升级
     if (maxExp === 0 || (curExp && curExp >= maxExp)) {
       return (

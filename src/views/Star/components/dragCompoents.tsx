@@ -80,7 +80,7 @@ const BuildingBox = styled(Box)<{ checked: boolean }>`
   &::after {
     content: '';
     height: 100%;
-    display: inline-block;
+    display: none;
     width: 0px;
     vertical-align: middle;
   }
@@ -292,7 +292,9 @@ export const DragCompoents: React.FC<{
         toastError(t('planetTipsFail1'));
         return;
       }
-      const canSave = currentSize?.every(item => !grid[item]?.isbuilding);
+      const canSave = currentSize?.every(
+        item => !grid[grid.findIndex(row => row.index === item)]?.isbuilding,
+      );
       setGrid(pre => {
         const next = pre?.map((row: any) => {
           if (!canSave) {
@@ -399,7 +401,9 @@ export const DragCompoents: React.FC<{
     console.log(area, index, currentSize);
 
     // 查看所有点位是否被占领
-    const canSave = currentSize?.every(item => !grid[item]?.isbuilding);
+    const canSave = currentSize?.every(
+      item => !grid[grid.findIndex(row => row.index === item)]?.isbuilding,
+    );
     setGrid(pre => {
       const next = pre?.map((row: any) => {
         if (!canSave) {
