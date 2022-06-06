@@ -79,39 +79,41 @@ const MysteryBox = () => {
 
   return (
     <Layout>
-      <GlobalStyle
-        interactive={steps[activeStep]?.interactive && stepsEnabled}
-      />
       {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
-        <Steps
-          enabled={stepsEnabled}
-          steps={steps}
-          initialStep={guides.step}
-          options={{
-            exitOnOverlayClick: false,
-            tooltipPosition: 'top',
-            scrollPadding: 0,
-          }}
-          onChange={currentStep => {
-            if (currentStep > guides.step) {
-              setGuide(currentStep);
-            }
-          }}
-          onBeforeChange={event => {
-            setActiveStep(event);
-          }}
-          onExit={index => {
-            setStepsEnabled(false);
-            if (index < steps.length - 1) {
-              dispatch(
-                storeAction.toggleVisible({
-                  visible: true,
-                  lastStep: steps.length,
-                }),
-              );
-            }
-          }}
-        />
+        <>
+          <GlobalStyle
+            interactive={steps[activeStep]?.interactive && stepsEnabled}
+          />
+          <Steps
+            enabled={stepsEnabled}
+            steps={steps}
+            initialStep={guides.step}
+            options={{
+              exitOnOverlayClick: false,
+              tooltipPosition: 'top',
+              scrollPadding: 0,
+            }}
+            onChange={currentStep => {
+              if (currentStep > guides.step) {
+                setGuide(currentStep);
+              }
+            }}
+            onBeforeChange={event => {
+              setActiveStep(event);
+            }}
+            onExit={index => {
+              setStepsEnabled(false);
+              if (index < steps.length - 1) {
+                dispatch(
+                  storeAction.toggleVisible({
+                    visible: true,
+                    lastStep: steps.length,
+                  }),
+                );
+              }
+            }}
+          />
+        </>
       )}
       <Flex
         margin='auto'

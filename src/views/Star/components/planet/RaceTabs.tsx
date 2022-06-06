@@ -45,10 +45,10 @@ export const PlanetRaceTabs: React.FC<{
   const { t } = useTranslation();
 
   const raceArr = [
-    // {
-    //   id: 0,
-    //   label: t('All'),
-    // },
+    {
+      id: 0,
+      label: t('All'),
+    },
     {
       id: 1,
       label: t('race-1'),

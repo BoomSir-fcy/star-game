@@ -313,49 +313,55 @@ const Planet = () => {
 
   return (
     <Box id='containerBox'>
-      <GlobalStyle
-        interactive={currentSteps[activeStep]?.interactive && stepsEnabled}
-        disabled={currentSteps[activeStep]?.disabled}
-      />
       {!guides.guideFinish &&
         guides.finish &&
         steps.length - 1 > guides.step &&
         StarList.length > 0 && (
-          <Steps
-            ref={guideRef}
-            enabled={stepsEnabled}
-            steps={currentSteps}
-            initialStep={guides.step}
-            options={{
-              exitOnOverlayClick: false,
-            }}
-            onBeforeChange={event => {
-              setActiveStep(event);
-            }}
-            onChange={currentStep => {
-              console.log(currentStep, 'currentStep', guides.step);
-              if (currentStep === 3) return;
-              if (currentStep > guides.step) {
-                setGuide(currentStep);
+          <>
+            <GlobalStyle
+              interactive={
+                currentSteps[activeStep]?.interactive && stepsEnabled
               }
-            }}
-            onExit={step => {
-              setStepsEnabled(false);
-              // if (!choose) {
-              //   setGuide(step + 1);
-              //   return;
-              // }
-              if (step < (choose ? steps.length : planetSteps.length) - 1) {
-                dispatch(
-                  storeAction.toggleVisible({
-                    visible: true,
-                    lastStep: choose ? steps.length : planetSteps.length,
-                    pathname: choose ? '/star/planet&choose=' : '/star/planet',
-                  }),
-                );
-              }
-            }}
-          />
+              disabled={currentSteps[activeStep]?.disabled}
+            />
+            <Steps
+              ref={guideRef}
+              enabled={stepsEnabled}
+              steps={currentSteps}
+              initialStep={guides.step}
+              options={{
+                exitOnOverlayClick: false,
+              }}
+              onBeforeChange={event => {
+                setActiveStep(event);
+              }}
+              onChange={currentStep => {
+                console.log(currentStep, 'currentStep', guides.step);
+                if (currentStep === 3) return;
+                if (currentStep > guides.step) {
+                  setGuide(currentStep);
+                }
+              }}
+              onExit={step => {
+                setStepsEnabled(false);
+                // if (!choose) {
+                //   setGuide(step + 1);
+                //   return;
+                // }
+                if (step < (choose ? steps.length : planetSteps.length) - 1) {
+                  dispatch(
+                    storeAction.toggleVisible({
+                      visible: true,
+                      lastStep: choose ? steps.length : planetSteps.length,
+                      pathname: choose
+                        ? '/star/planet&choose='
+                        : '/star/planet',
+                    }),
+                  );
+                }
+              }}
+            />
+          </>
         )}
       <Layout>
         <Flex width='100%' position='relative'>

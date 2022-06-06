@@ -9,11 +9,12 @@ import ModalWrapper from '.';
 export const GuideModal: React.FC<{
   visible: boolean;
   lastStep?: number;
+  pathname?: string;
   onClose: () => void;
-}> = ({ visible, onClose, lastStep }) => {
+}> = ({ visible, onClose, lastStep, pathname }) => {
   const location = useLocation();
   const { t } = useTranslation();
-  const { setGuide } = useGuide(location.pathname);
+  const { setGuide } = useGuide(pathname || location.pathname);
 
   const closeGuide = async () => {
     await setGuide(-1, true);

@@ -116,6 +116,13 @@ const JoinTheAlliance: React.FC<{
     }
   }, [order]);
 
+  const gotoPlantDetail = useCallback(
+    (planetId: number) => {
+      navigate(`/star?id=${planetId}`);
+    },
+    [navigate],
+  );
+
   return (
     <Box
       position='relative'
@@ -132,6 +139,9 @@ const JoinTheAlliance: React.FC<{
         <StarAddBtn
           name={allianceList && allianceList[0]?.planet?.name}
           onRemove={() => Remove(allianceList[0]?.planetId)}
+          onPlantClick={() => {
+            gotoPlantDetail(allianceList[0]?.planetId);
+          }}
           showIcon
           callBack={() => addStar(allianceList && allianceList[0]?.planetId)}
           imgBorder={
@@ -150,6 +160,9 @@ const JoinTheAlliance: React.FC<{
         <StarAddBtn
           name={allianceList && allianceList[4]?.planet?.name}
           onRemove={() => Remove(allianceList[4]?.planetId)}
+          onPlantClick={() => {
+            gotoPlantDetail(allianceList[4]?.planetId);
+          }}
           showIcon
           callBack={() => addStar(allianceList && allianceList[4]?.planetId)}
           imgBorder={
@@ -177,6 +190,9 @@ const JoinTheAlliance: React.FC<{
         <StarAddBtn
           name={allianceList && allianceList[1]?.planet?.name}
           onRemove={() => Remove(allianceList[1]?.planetId)}
+          onPlantClick={() => {
+            gotoPlantDetail(allianceList[1]?.planetId);
+          }}
           showIcon
           callBack={() => addStar(allianceList && allianceList[1]?.planetId)}
           imgBorder={
@@ -195,6 +211,9 @@ const JoinTheAlliance: React.FC<{
         <StarAddBtn
           name={allianceList && allianceList[3]?.planet?.name}
           onRemove={() => Remove(allianceList[3]?.planetId)}
+          onPlantClick={() => {
+            gotoPlantDetail(allianceList[3]?.planetId);
+          }}
           showIcon
           callBack={() => addStar(allianceList && allianceList[3]?.planetId)}
           imgBorder={
@@ -211,6 +230,9 @@ const JoinTheAlliance: React.FC<{
         <StarAddBtn
           name={allianceList && allianceList[2]?.planet?.name}
           onRemove={() => Remove(allianceList[2]?.planetId)}
+          onPlantClick={() => {
+            gotoPlantDetail(allianceList[2]?.planetId);
+          }}
           showIcon
           callBack={() => addStar(allianceList && allianceList[2]?.planetId)}
           imgBorder={

@@ -204,45 +204,47 @@ const Embattle = () => {
 
   return (
     <Box className='star-embattle-step5' position='relative'>
-      <GlobalStyle
-        interactive={steps[activeStep]?.interactive && stepsEnabled}
-      />
       {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
-        <Steps
-          enabled={stepsEnabled}
-          steps={steps}
-          initialStep={guides.step}
-          ref={stepRef}
-          options={{
-            exitOnOverlayClick: false,
-            tooltipPosition: 'top',
-          }}
-          onChange={currentStep => {
-            if (currentStep === 5) {
-              setArrowShow(true);
-            } else if (currentStep > 5) {
-              setArrowShow(false);
-            }
-            console.log(currentStep, guides.step);
-            if (currentStep > guides.step) {
-              setGuide(currentStep);
-            }
-          }}
-          onBeforeChange={event => {
-            setActiveStep(event);
-          }}
-          onExit={index => {
-            setStepsEnabled(false);
-            if (index < steps.length - 1) {
-              dispatch(
-                storeAction.toggleVisible({
-                  visible: true,
-                  lastStep: steps.length,
-                }),
-              );
-            }
-          }}
-        />
+        <>
+          <GlobalStyle
+            interactive={steps[activeStep]?.interactive && stepsEnabled}
+          />
+          <Steps
+            enabled={stepsEnabled}
+            steps={steps}
+            initialStep={guides.step}
+            ref={stepRef}
+            options={{
+              exitOnOverlayClick: false,
+              tooltipPosition: 'top',
+            }}
+            onChange={currentStep => {
+              if (currentStep === 5) {
+                setArrowShow(true);
+              } else if (currentStep > 5) {
+                setArrowShow(false);
+              }
+              console.log(currentStep, guides.step);
+              if (currentStep > guides.step) {
+                setGuide(currentStep);
+              }
+            }}
+            onBeforeChange={event => {
+              setActiveStep(event);
+            }}
+            onExit={index => {
+              setStepsEnabled(false);
+              if (index < steps.length - 1) {
+                dispatch(
+                  storeAction.toggleVisible({
+                    visible: true,
+                    lastStep: steps.length,
+                  }),
+                );
+              }
+            }}
+          />
+        </>
       )}
       <Box position='absolute' top={0} left={0} width={200}>
         <Button onClick={() => game.clearSoldier()}>

@@ -200,49 +200,51 @@ const PlantLeague = () => {
 
   return (
     <Layout>
-      <GlobalStyle
-        interactive={steps[activeStep]?.interactive && stepsEnabled}
-        disabled={steps[activeStep]?.disabled}
-      />
       {!guides.guideFinish &&
         guides.finish &&
         steps.length - 1 > guides.step &&
         guides.round < 2 && (
-          <Steps
-            enabled={stepsEnabled}
-            steps={steps}
-            initialStep={guides.step}
-            options={{
-              exitOnOverlayClick: false,
-            }}
-            ref={guideRef}
-            onBeforeChange={event => {
-              setActiveStep(event);
-            }}
-            onAfterChange={event => {}}
-            onChange={currentStep => {
-              if (currentStep === 3) return;
-              if (currentStep > guides.step) {
-                setGuide(currentStep);
-              }
-            }}
-            onExit={step => {
-              console.log(step, '中途离开页面', guides.step, activeStep);
-              setStepsEnabled(false);
-              if (step === 5) {
-                setGuide(0, false, 2);
-                return;
-              }
-              if (step < steps.length - 1) {
-                dispatch(
-                  storeAction.toggleVisible({
-                    visible: true,
-                    lastStep: steps.length,
-                  }),
-                );
-              }
-            }}
-          />
+          <>
+            <GlobalStyle
+              interactive={steps[activeStep]?.interactive && stepsEnabled}
+              disabled={steps[activeStep]?.disabled}
+            />
+            <Steps
+              enabled={stepsEnabled}
+              steps={steps}
+              initialStep={guides.step}
+              options={{
+                exitOnOverlayClick: false,
+              }}
+              ref={guideRef}
+              onBeforeChange={event => {
+                setActiveStep(event);
+              }}
+              onAfterChange={event => {}}
+              onChange={currentStep => {
+                if (currentStep === 3) return;
+                if (currentStep > guides.step) {
+                  setGuide(currentStep);
+                }
+              }}
+              onExit={step => {
+                console.log(step, '中途离开页面', guides.step, activeStep);
+                setStepsEnabled(false);
+                if (step === 5) {
+                  setGuide(0, false, 2);
+                  return;
+                }
+                if (step < steps.length - 1) {
+                  dispatch(
+                    storeAction.toggleVisible({
+                      visible: true,
+                      lastStep: steps.length,
+                    }),
+                  );
+                }
+              }}
+            />
+          </>
         )}
       <Flex justifyContent='space-between' pr='30px'>
         <VipBox width={192}>
