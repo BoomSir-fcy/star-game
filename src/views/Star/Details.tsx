@@ -11,6 +11,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { DragCompoents } from './components/dragCompoents';
+import type { AreaDataItem } from './components/dragCompoents';
 
 const Details = () => {
   const parsedQs = useParsedQueryString();
@@ -19,7 +20,7 @@ const Details = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { guides, setGuide } = useGuide(location.pathname);
-  const [state, setState] = React.useState([]);
+  const [state, setState] = React.useState<AreaDataItem[]>([]);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
 
   const steps = React.useMemo(() => {
