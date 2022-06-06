@@ -39,11 +39,21 @@ const Normal = styled(Flex)<{ pre: boolean }>`
   transition: all 0.5s;
   background: ${({ pre }) => (pre ? 'rgba(0,0,0,0.5)' : 'transparent')};
   img {
+    width: 100%;
     max-width: 100%;
+    max-height: 100%;
     object-fit: cover;
     height: auto;
     vertical-align: middle;
     pointer-events: none;
+  }
+  line-height: 1;
+  &::after {
+    content: '';
+    height: 100%;
+    display: inline-block;
+    width: 0px;
+    vertical-align: middle;
   }
 `;
 
@@ -59,11 +69,20 @@ const BuildingBox = styled(Box)<{ checked: boolean }>`
       box-shadow: 0 0 5px 2px #41b7ff;
     `}
   img {
+    width: 100%;
     max-width: 100%;
+    max-height: 100%;
     object-fit: cover;
     height: auto;
     vertical-align: middle;
     pointer-events: none;
+  }
+  &::after {
+    content: '';
+    height: 100%;
+    display: inline-block;
+    width: 0px;
+    vertical-align: middle;
   }
 `;
 
@@ -159,12 +178,21 @@ export const DragCompoents: React.FC<{
   const buildings = useStore(p => p.buildling.buildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
 
+  console.log(gridSize, cols, cols, itemData);
+
+  // X, row, width 横
+  // Y, col, height 竖
   const { width, height } = React.useMemo(() => {
+    console.log(gridSize, rows, cols);
     return {
       width: gridSize / rows,
       height: gridSize / cols,
     };
   }, [rows, cols, gridSize]);
+
+  console.log(
+    `gridSize: ${gridSize}, rows: ${rows}, cols: ${cols}, width: ${width}, height: ${height}`,
+  );
 
   const updateGrids = React.useCallback(propsData => {
     const currBuilds = propsData?.filter((row: any) => row.isbuilding);
@@ -218,7 +246,7 @@ export const DragCompoents: React.FC<{
 
   // 计算绝对坐标
   const getAbsolutePosition = React.useCallback(
-    (index: number) => {
+    (index: number, area = 2) => {
       const row = Math.floor(index / cols);
       const col = Math.floor(index % rows);
       // 计算相邻的格子坐标
@@ -364,8 +392,12 @@ export const DragCompoents: React.FC<{
 
     const index = event.target?.dataset?.id;
     const area = draggedTarget?.propterty?.size?.area_x;
+
     const currentSize =
-      area >= 2 ? getAbsolutePosition(index) : [Number(index)];
+      area >= 2 ? getAbsolutePosition(index, area) : [Number(index)];
+
+    console.log(area, index, currentSize);
+
     // 查看所有点位是否被占领
     const canSave = currentSize?.every(item => !grid[item]?.isbuilding);
     setGrid(pre => {
@@ -469,6 +501,8 @@ export const DragCompoents: React.FC<{
     dispatch(storeAction.destoryBuildingVisibleModal(true));
   };
 
+  console.log(grid, 'grid');
+
   return (
     <>
       <Box>
@@ -486,20 +520,22 @@ export const DragCompoents: React.FC<{
                     key={`${item.index}_${item?._id}`}
                     className={`energy_tank_${index}`}
                     draggable={false}
-                    data-id={index}
+                    data-id={item.index}
                     data-row={item?.row}
                     data-item={JSON.stringify(item)}
                     pre={item?.pre}
                     width={width}
                     height={height}
-                    top={item.x * width}
-                    left={item.y * height}
+                    left={item.x * width}
+                    top={item.y * height}
                     onDragStart={dragStart}
                     onDragEnter={dragEnter}
                     onDragOver={dragOver}
                     onDrop={drop}
                     onDragEnd={dragEnd}
-                  />
+                  >
+                    {/* x{item.x}, y{item.y} ({item.index}) */}
+                  </Normal>
                 );
               })}
               {(gridBuilds ?? []).map((item, index) => {
@@ -511,8 +547,8 @@ export const DragCompoents: React.FC<{
                     data-item={JSON.stringify(item)}
                     width={item?.propterty?.size?.area_x * width}
                     height={item?.propterty?.size?.area_y * height}
-                    top={item.x * width}
-                    left={item.y * height}
+                    left={item.x * width}
+                    top={item.y * height}
                     checked={currentBuild?.index === item?.index}
                     onClick={() => {
                       setCurrentBuild(item);

@@ -2,12 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Box, Flex, BgCard, BackButton, RefreshButton } from 'uikit';
+import { Box, Flex, Text, BgCard, BackButton, RefreshButton } from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import Layout from 'components/Layout';
 import { Api } from 'apis';
 import { useStore } from 'state';
 import { setActiveMaterialMap } from 'state/planet/actions';
+import { useToast } from 'contexts/ToastsContext';
+import { useTranslation } from 'contexts/Localization';
 import { PlanetBox } from '../planet/PlanetBox';
 
 const ScrollBox = styled(Flex)`
@@ -21,16 +23,29 @@ const ScrollBox = styled(Flex)`
 `;
 
 const MaterialBox = styled(Box)<{ disabled?: boolean }>`
+  position: relative;
   margin-bottom: 20px;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
 `;
-
+const ChooseBox = styled(Flex)`
+  position: absolute;
+  right: 25px;
+  top: 22px;
+  width: 36px;
+  height: 36px;
+  justify-content: center;
+  align-items: center;
+  background: url('/images/commons/icon/choose.png') no-repeat;
+  background-size: 100% 100%;
+`;
 const SelectPlanet = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.i);
+  const { t } = useTranslation();
+  const { toastWarning } = useToast();
   const [starList, setStarList] = useState([]);
 
   const activeMaterialMap = useStore(p => p.planet.activeMaterialMap);
@@ -50,6 +65,25 @@ const SelectPlanet = () => {
     init();
   }, [init]);
 
+  // 可最多添加5个星球
+  const addMaterialPlanet = useCallback(
+    (item: any) => {
+      if (!activeMaterialMap[item?.id]) {
+        // 选择
+        if (Object.keys(activeMaterialMap).length >= 5) {
+          // 满了
+          toastWarning(t('Choose up to 5 planets'));
+          return;
+        }
+        dispatch(setActiveMaterialMap({ [item.id]: item }));
+      } else {
+        // 取消选择
+        dispatch(setActiveMaterialMap({ [item.id]: null }));
+      }
+    },
+    [activeMaterialMap, t, dispatch, toastWarning],
+  );
+
   return (
     <Layout>
       <Flex width='100%'>
@@ -65,17 +99,29 @@ const SelectPlanet = () => {
               {(starList ?? []).map((item: any) => (
                 <React.Fragment key={`${item.id}_${item.name}`}>
                   <MaterialBox
-                    disabled={!!activeMaterialMap[item.id]}
+                    // disabled={!!activeMaterialMap[item.id]}
                     mb='20px'
                     onClick={() => {
-                      if (activeMaterialMap[item.id]) {
-                        return;
-                      }
-                      dispatch(setActiveMaterialMap({ [item.id]: item }));
-                      navigate(-1);
+                      addMaterialPlanet(item);
+                      // if (activeMaterialMap[item.id]) {
+                      //   return;
+                      // }
+                      // dispatch(setActiveMaterialMap({ [item.id]: item }));
+                      // navigate(-1);
                     }}
                   >
                     <PlanetBox info={item} />
+                    <ChooseBox>
+                      <Text fontSize='22px'>
+                        {Object.keys(activeMaterialMap).indexOf(
+                          `${item.id}`,
+                        ) !== -1
+                          ? Object.keys(activeMaterialMap).indexOf(
+                              `${item.id}`,
+                            ) + 1
+                          : ''}
+                      </Text>
+                    </ChooseBox>
                   </MaterialBox>
                 </React.Fragment>
               ))}
@@ -84,6 +130,14 @@ const SelectPlanet = () => {
         </Flex>
       </Flex>
     </Layout>
+  );
+};
+
+const ChoosePlanet: React.FC<{ chooseIndex: number }> = ({ chooseIndex }) => {
+  return (
+    <ChooseBox>
+      <Text fontSize='22px'>{chooseIndex !== 0 ? chooseIndex + 1 : ''}</Text>
+    </ChooseBox>
   );
 };
 

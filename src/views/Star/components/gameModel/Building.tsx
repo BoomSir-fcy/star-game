@@ -119,7 +119,7 @@ export const Building: React.FC<{
   };
 
   return (
-    <Flex>
+    <Flex height='100%' alignItems='center'>
       {level && (
         <Level shadow='primary' small>
           Lv {level}

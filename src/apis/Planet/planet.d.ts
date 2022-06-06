@@ -54,12 +54,14 @@ declare namespace Api {
       max_population: number; // 最大储存人口
       status: number; // 1星球升级 2星球强化 3建筑升级 4建筑恢复耐久
       status_countdown: number; // 倒计时
+      exp: number; // 当前经验值
     }
 
     interface UpgradePlanetInfo {
       consume_population: number;
       consume_star: number;
       consume_stone: number;
+      consume_energy: number;
       estimate_max_building_level: number;
       estimate_planet_info: PlanetInfo;
       material_planet_num: number;
@@ -67,6 +69,7 @@ declare namespace Api {
       now_planet_info: PlanetInfo;
       space_utilization: string;
       upgrade_time: number;
+      upgrade_exp: number; // 最大经验值
       success?: boolean;
     }
   }

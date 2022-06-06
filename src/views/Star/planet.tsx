@@ -357,50 +357,50 @@ const Planet = () => {
                 {
                   id: 0,
                   label: t('All'),
-                  path: `/star/planet?t=0&choose=${choose || ''}${
-                    choose && '&hide=true'
+                  path: `/star/planet?t=0${
+                    choose ? `&hide=true&choose=${choose}` : ''
                   }`,
                 },
                 {
                   id: 1,
                   label: t('rarity-1'),
-                  path: `/star/planet?t=1&choose=${choose || ''}${
-                    choose && '&hide=true'
+                  path: `/star/planet?t=1${
+                    choose ? `&hide=true&choose=${choose}` : ''
                   }`,
                 },
                 {
                   id: 2,
                   label: t('rarity-2'),
-                  path: `/star/planet?t=2&choose=${choose || ''}${
-                    choose && '&hide=true'
+                  path: `/star/planet?t=2${
+                    choose ? `&hide=true&choose=${choose}` : ''
                   }`,
                 },
                 {
                   id: 3,
                   label: t('rarity-3'),
-                  path: `/star/planet?t=3&choose=${choose || ''}${
-                    choose && '&hide=true'
+                  path: `/star/planet?t=3${
+                    choose ? `&hide=true&choose=${choose}` : ''
                   }`,
                 },
                 {
                   id: 4,
                   label: t('rarity-4'),
-                  path: `/star/planet?t=4&choose=${choose || ''}${
-                    choose && '&hide=true'
+                  path: `/star/planet?t=4${
+                    choose ? `&hide=true&choose=${choose}` : ''
                   }`,
                 },
                 {
                   id: 5,
                   label: t('rarity-5'),
-                  path: `/star/planet?t=5&choose=${choose || ''}${
-                    choose && '&hide=true'
+                  path: `/star/planet?t=5${
+                    choose ? `&hide=true&choose=${choose}` : ''
                   }`,
                 },
                 {
                   id: 6,
                   label: t('rarity-6'),
-                  path: `/star/planet?t=6&choose=${choose || ''}${
-                    choose && '&hide=true'
+                  path: `/star/planet?t=6${
+                    choose ? `&hide=true&choose=${choose}` : ''
                   }`,
                 },
               ]}

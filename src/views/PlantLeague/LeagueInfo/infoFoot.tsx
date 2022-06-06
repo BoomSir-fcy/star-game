@@ -50,12 +50,12 @@ const InfoFoot = () => {
           {t('Combat Power')} {alliance.power}
         </Text>
         <Box>
-          <Text fontSize='22px'>
+          {/* <Text fontSize='22px'>
             *
             {t(
               'Alliance looting order: looting in sequence according to the serial number',
             )}
-          </Text>
+          </Text> */}
           <Text fontSize='22px'>*{t('20%+ can join the lootings')}</Text>
         </Box>
       </Flex>
@@ -65,7 +65,7 @@ const InfoFoot = () => {
           style={{ borderRadius: '20px' }}
           onClick={() => {}}
         >
-          {t('Battle report details')}
+          {t('Battle details')}
         </Button>
       </Link>
       <Button
