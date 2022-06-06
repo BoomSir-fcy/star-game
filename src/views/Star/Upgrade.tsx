@@ -32,6 +32,7 @@ import { setActiveMaterialMap, setUpgradePlanetId } from 'state/planet/actions';
 import { useToast } from 'contexts/ToastsContext';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { useGuide } from 'hooks/useGuide';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';
 import { useUpgrade } from './components/upgrade/hooks';
 
@@ -75,6 +76,7 @@ const Upgrade = () => {
     consume_population: 0,
     consume_star: 0,
     consume_stone: 0,
+    consume_energy: 0,
     estimate_max_building_level: 2,
     estimate_planet_info: {} as Api.Planet.PlanetInfo,
     material_planet_num: 5,
@@ -82,12 +84,7 @@ const Upgrade = () => {
     now_planet_info: {} as Api.Planet.PlanetInfo,
     space_utilization: '0',
     upgrade_time: 0,
-    success: false,
-  });
-  const [upgradeSuccess, setUpgradeSuccess] = useState({
-    upgrade_is_end: true,
-    upgrade_end_time: 0,
-    upgrade_is_success: false,
+    upgrade_exp: 0,
   });
 
   const [stepsEnabled, setStepsEnabled] = useState(true);
@@ -104,7 +101,9 @@ const Upgrade = () => {
   );
 
   const { upgrade } = useUpgrade();
-  const { activeMaterialMap, upgradePlanetId } = useStore(p => p.planet);
+  const { activeMaterialMap, upgradePlanetId, planetInfo } = useStore(
+    p => p.planet,
+  );
 
   // 升级星球不一致，清空选择的材料星球
   useEffect(() => {
@@ -114,31 +113,10 @@ const Upgrade = () => {
     }
   }, [upgradePlanetId, planetId, dispatch]);
 
-  // 星球是否升级成功
-  const getUpgradeSuccess = useCallback(async () => {
-    try {
-      const res = await Api.PlanetApi.getUpgradeSuccess(planetId);
-      if (Api.isSuccess(res)) {
-        const { now_planet_info, ...rest } = res.data;
-        setUpgradeInfo(p => {
-          return { ...p, now_planet_info };
-        });
-        setUpgradeSuccess(rest);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [planetId]);
-
-  useEffect(() => {
-    getUpgradeSuccess();
-  }, [getUpgradeSuccess]);
-
   // 星球升级信息
   const getStarUpgradeInfo = useCallback(async () => {
     try {
       const [planetUpgradeInfo] = await Promise.all([
-        // Api.PlanetApi.getUpgradePlanetInfo(planetId),
         Api.PlanetApi.getPlanetUpgradeInfo(planetId),
       ]);
       if (Api.isSuccess(planetUpgradeInfo)) {
@@ -158,7 +136,7 @@ const Upgrade = () => {
             ...now_planet_info,
             build_level: now_max_building_level,
           },
-          success: true,
+          material_planet_num: 5,
         });
       }
     } catch (error) {
@@ -167,19 +145,16 @@ const Upgrade = () => {
   }, [planetId]);
 
   useEffect(() => {
-    if (upgradeSuccess.upgrade_is_end) getStarUpgradeInfo();
-  }, [upgradeSuccess.upgrade_is_end, getStarUpgradeInfo]);
+    getStarUpgradeInfo();
+  }, [getStarUpgradeInfo]);
 
   const upInfo = useMemo(() => {
     return {
+      now_max_building_level: upgradeInfo.now_max_building_level,
+      estimate_max_building_level: upgradeInfo.estimate_max_building_level,
       build_level:
         upgradeInfo.estimate_max_building_level -
         upgradeInfo.now_max_building_level,
-      hp:
-        upgradeInfo.estimate_planet_info?.hp - upgradeInfo.now_planet_info?.hp,
-      defense:
-        upgradeInfo.estimate_planet_info?.defense -
-        upgradeInfo.now_planet_info?.defense,
     };
   }, [upgradeInfo]);
 
@@ -228,16 +203,100 @@ const Upgrade = () => {
   }, [dispatch]);
 
   // 升级经验
-  const getUpgradeExperience = useMemo(() => {
-    const value = Number(upgradeInfo.space_utilization);
-    if (!value || value <= 0) {
-      return 0;
+  const { expStep, curExp, maxExp } = useMemo(() => {
+    const maxValue = Number(upgradeInfo.upgrade_exp);
+    const currentValue = planetInfo[planetId]?.exp;
+    let rsVal = 0;
+    if (!currentValue || currentValue <= 0) {
+      rsVal = 0;
+    } else if (currentValue && currentValue > maxValue) {
+      rsVal = 100;
+    } else rsVal = Number((currentValue / maxValue).toFixed(2)) * 100;
+    console.log('当前经验值---', rsVal);
+
+    return { expStep: rsVal, curExp: currentValue, maxExp: maxValue };
+  }, [upgradeInfo, planetInfo, planetId]);
+
+  const rendeButton = useMemo(() => {
+    if (!account) {
+      return <ConnectWalletButton scale='ld' width='270px' padding='0 10px' />;
     }
-    if (value && value > 100) {
-      return 100;
+    // 升级
+    if (maxExp === 0 || (curExp && curExp >= maxExp)) {
+      return (
+        <Button
+          disabled={pending}
+          width='300px'
+          padding='0'
+          onClick={async () => {
+            try {
+              setPending(true);
+              const res = await Api.PlanetApi.upgradePlanet(planetId);
+              if (Api.isSuccess(res)) {
+                toastSuccess(t('Upgrade succeeded'));
+                getStarUpgradeInfo();
+                dispatch(fetchPlanetInfoAsync([planetId]));
+              }
+            } catch (error: any) {
+              console.log(error);
+            } finally {
+              setPending(false);
+            }
+          }}
+        >
+          {pending ? (
+            <Dots>{t('Upgrading')}</Dots>
+          ) : (
+            <Text fontSize='inherit'>{t('Upgrade Planet')}</Text>
+          )}
+        </Button>
+      );
     }
-    return value;
-  }, [upgradeInfo]);
+    // 吞噬
+    return (
+      <Button
+        disabled={pending || !usableMaterialIds.length}
+        width='300px'
+        padding='0'
+        onClick={async () => {
+          try {
+            setPending(true);
+            const isSuccess = await upgrade(planetId, usableMaterialIds);
+            dispatch(setActiveMaterialMap(null));
+            dispatch(fetchPlanetInfoAsync([planetId]));
+            // toastSuccess(t('Upgrade succeeded'));
+            setPending(false);
+          } catch (error: any) {
+            const msg = error?.data?.message;
+            const errorMsg = msg?.substring(
+              msg?.indexOf('execution reverted: ') + 20,
+            );
+            if (errorMsg) toastError(t(`There are ${errorMsg} planets`));
+            setPending(false);
+          }
+        }}
+      >
+        {pending ? (
+          <Dots>{t('Devour')}</Dots>
+        ) : (
+          <Text fontSize='inherit'>{t('Devour')}</Text>
+        )}
+      </Button>
+    );
+  }, [
+    account,
+    curExp,
+    maxExp,
+    dispatch,
+    planetId,
+    pending,
+    usableMaterialIds,
+    upgrade,
+    toastError,
+    toastSuccess,
+    t,
+    getStarUpgradeInfo,
+  ]);
 
   return (
     <BgCard variant='big' padding='30px 68px'>
@@ -257,104 +316,77 @@ const Upgrade = () => {
         />
       )}
 
-      {!upgradeSuccess.upgrade_is_end ? (
-        <Upgrading
-          timePeriod={upgradeSuccess.upgrade_end_time}
-          info={upgradeInfo.now_planet_info}
-          up={upInfo}
-        />
-      ) : (
-        <Flex justifyContent='space-between'>
-          <Flex
-            flexDirection='column'
-            alignItems='center'
-            className='planet_level_head'
-          >
-            <Flex width='320px' mr='50px' alignItems='center'>
-              <GradeBox>
-                <Text bold shadow='primary'>
-                  Lv {upgradeInfo.now_planet_info?.level}
-                </Text>
-              </GradeBox>
-              <Image
-                width={82}
-                height={42}
-                margin='0 28px'
-                src='/images/commons/icon/upgrade.png'
-              />
-              <GradeBox>
-                <Text bold color='up' shadow='secondary'>
-                  Lv {upgradeInfo.estimate_planet_info?.level}
-                </Text>
-              </GradeBox>
-            </Flex>
-            <Flex flexDirection='column' alignItems='center'>
-              <Text fontSize='20px'>升级经验</Text>
-              <StripedProgress step={`${getUpgradeExperience}%`} />
-            </Flex>
-            <MysteryBoxFlexStyled>
-              <MysteryBoxBaseNewStyled quality={mysteryBoxQualities.SUPER}>
-                <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
-                  <StarCom variant='none' scale='ld' />
-                </MysteryBoxStarStyled>
-              </MysteryBoxBaseNewStyled>
-            </MysteryBoxFlexStyled>
+      <Flex justifyContent='space-between'>
+        <Flex
+          flexDirection='column'
+          alignItems='center'
+          className='planet_level_head'
+        >
+          <Flex width='320px' mr='50px' alignItems='center'>
+            <GradeBox>
+              <Text bold shadow='primary'>
+                Lv {upgradeInfo.now_planet_info?.level}
+              </Text>
+            </GradeBox>
+            <Image
+              width={82}
+              height={42}
+              margin='0 28px'
+              src='/images/commons/icon/upgrade.png'
+            />
+            <GradeBox>
+              <Text bold color='up' shadow='secondary'>
+                Lv {upgradeInfo.estimate_planet_info?.level}
+              </Text>
+            </GradeBox>
           </Flex>
+          <Flex flexDirection='column' alignItems='center'>
+            <Text fontSize='20px'>{t('Upgrade experience')}</Text>
+            <StripedProgress step={`${expStep}%`} />
+          </Flex>
+          <MysteryBoxFlexStyled>
+            <MysteryBoxBaseNewStyled quality={mysteryBoxQualities.SUPER}>
+              <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
+                <StarCom variant='none' scale='ld' />
+              </MysteryBoxStarStyled>
+            </MysteryBoxBaseNewStyled>
+          </MysteryBoxFlexStyled>
+        </Flex>
 
-          <Flex flexDirection='column'>
-            <Flex>{StarAddBox}</Flex>
-            <Flex mb='10px' justifyContent='center'>
-              <Text small>{t('添加同稀有度且同等级或低一个等级的星球')}</Text>
-            </Flex>
-            <Flex>
-              <UpgradeCard
-                info={upgradeInfo.now_planet_info}
-                upgradeInfo={upgradeInfo.estimate_planet_info}
-                up={upInfo}
-                mr='33px'
-              />
-              <StyledCard>
-                <Flex flexDirection='column' justifyContent='space-between'>
-                  {/* <Flex flexDirection='column'>
-                    <Text small>
-                      *
-                      {t(
-                        'To upgrade, you need to sacrifice planets of the same quality and grade',
-                      )}
+        <Flex flexDirection='column'>
+          <Flex>{StarAddBox}</Flex>
+          {/* <Flex mb='10px' justifyContent='center'>
+            <Text small>{t('添加同稀有度且同等级或低一个等级的星球')}</Text>
+          </Flex> */}
+          <Flex>
+            <UpgradeCard
+              info={upgradeInfo.now_planet_info}
+              upgradeInfo={upgradeInfo.estimate_planet_info}
+              up={upInfo}
+              mr='33px'
+            />
+            <StyledCard>
+              <Flex flexDirection='column' justifyContent='space-between'>
+                <UpgradeCost
+                  stone={upgradeInfo.consume_stone}
+                  spices={upgradeInfo.consume_population}
+                  energy={upgradeInfo.consume_energy}
+                />
+                <Flex mt='30px' flexDirection='column' alignItems='center'>
+                  {rendeButton}
+                  {maxExp && curExp < maxExp ? (
+                    <Text mt='10px' fontSize='22px' color='failure'>
+                      *{t('Lack of upgrade experience')}
                     </Text>
-                    <Text small>
-                      *
-                      {t(
-                        "When all buildings' grade is 1 level above the planet grade, the planet can be upgraded",
-                      )}
-                    </Text>
-                  </Flex> */}
-                  <UpgradeCost />
-                  <Flex mt='30px' flexDirection='column' alignItems='center'>
-                    <Button
-                      disabled={
-                        !upgradeInfo.success || !usableMaterialIds.length
-                      }
-                      width='270px'
-                      padding='0'
-                      onClick={() => setVisible(true)}
-                    >
-                      {t('Upgrade Planet')}
-                    </Button>
-                    {!upgradeInfo.success && (
-                      <Text mt='10px' fontSize='22px' color='failure'>
-                        *{t('Energy building grade does not meet the standard')}
-                      </Text>
-                    )}
-                  </Flex>
+                  ) : null}
                 </Flex>
-              </StyledCard>
-            </Flex>
+              </Flex>
+            </StyledCard>
           </Flex>
         </Flex>
-      )}
+      </Flex>
 
-      <ModalWrapper
+      {/* <ModalWrapper
         title={t('Upgrade Planet')}
         visible={visible}
         setVisible={() => setVisible(false)}
@@ -381,10 +413,6 @@ const Upgrade = () => {
                       planetId,
                       usableMaterialIds,
                     );
-                    getUpgradeSuccess();
-                    setTimeout(() => {
-                      getUpgradeSuccess();
-                    }, 10000);
                     dispatch(setActiveMaterialMap(null));
                     toastSuccess(t('Upgrade succeeded'));
                     setPending(false);
@@ -409,7 +437,7 @@ const Upgrade = () => {
             )}
           </Flex>
         </Flex>
-      </ModalWrapper>
+      </ModalWrapper> */}
     </BgCard>
   );
 };
