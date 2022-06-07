@@ -66,8 +66,6 @@ const Star: React.FC<{
     }
   }, [dispatch, pathname]);
 
-  console.log(planet);
-
   return (
     <Layout>
       <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
