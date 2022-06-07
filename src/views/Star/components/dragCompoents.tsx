@@ -47,7 +47,7 @@ const Normal = styled(Flex)<{ pre: boolean; isbuilding?: boolean }>`
   border: 1px solid
     ${({ isbuilding }) => (isbuilding ? 'transparent' : '#30343d')};
   transition: all 0.5s;
-  background: ${({ pre }) => (pre ? 'rgba(0,0,0,0.8)' : 'transparent')};
+  background: ${({ pre }) => (pre ? '#30343d' : 'transparent')};
   img {
     width: 100%;
     max-width: 100%;
@@ -84,7 +84,7 @@ const BuildingBox = styled(Box)<{ checked: boolean }>`
     width: 100%;
     max-width: 100%;
     max-height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     height: auto;
     vertical-align: middle;
     pointer-events: none;
@@ -383,10 +383,7 @@ export const DragCompoents: React.FC<{
       if (canSave) {
         const startIndex = Math.min(...currentSize);
 
-        console.log(startIndex);
-
         for (let i = grid.length - 1; i >= 0; i--) {
-          console.log(grid);
           if (grid[i].index === startIndex) {
             setGridBuilds((prev: any) => {
               const next = [
@@ -400,7 +397,6 @@ export const DragCompoents: React.FC<{
                   isactive: true,
                 },
               ];
-              console.log(next);
               return next;
             });
             return;
@@ -411,43 +407,46 @@ export const DragCompoents: React.FC<{
     [getAbsolutePosition, grid, t, toastError],
   );
 
-  const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    // const img = new Image();
-    // img.src = e.target.getElementsByTagName('img')[0]?.src;
-    // img.style.width = '100px';
-    // img.style.height = '100px';
-    // console.log(img.naturalWidth);
-    // img.naturalWidth = 100;
+  const gradRef = React.useRef(null);
 
-    const divTarget = e.target as HTMLDivElement;
+  const dragStart = (
+    e: React.DragEvent<HTMLDivElement>,
+    row?: Api.Building.Building,
+  ) => {
+    try {
+      const divTarget = e.target as HTMLDivElement;
+      const { width: realWidth, height: realHeight } = (
+        gradRef.current || divTarget
+      ).getBoundingClientRect();
 
-    const img = document.createElement('img');
-    img.style.position = 'absolute';
-    img.style.top = '-9999px';
-    img.style.maxWidth = `${divTarget.clientWidth}px`;
-    img.style.maxHeight = `${divTarget.clientHeight}px`;
-    img.src = divTarget.getElementsByTagName('img')[0]?.src;
+      const realSize =
+        Math.min(realHeight, realWidth) * row.propterty.size.area_x;
 
-    const { clientHeight, clientWidth } = window.document.body;
-    if (clientWidth < clientHeight) {
-      img.style.transform = 'rotate(90deg)';
-    }
-    document.body.append(img);
+      const img = document.createElement('img');
+      img.style.position = 'absolute';
+      img.style.top = '-9999px';
+      img.style.maxWidth = `${realSize}px`;
+      img.style.maxHeight = `${realSize}px`;
+      img.src = divTarget.getElementsByTagName('img')[0]?.src;
 
-    if (isApp()) {
-      e.dataTransfer.setDragImage(img, 0, 0);
-    } else {
-      e.dataTransfer.setDragImage(
-        img,
-        divTarget.clientWidth / 2,
-        divTarget.clientHeight / 2,
-      );
+      const { clientHeight, clientWidth } = window.document.body;
+      if (clientWidth < clientHeight) {
+        img.style.transform = 'rotate(90deg)';
+      }
+      document.body.append(img);
+
+      if (isApp()) {
+        e.dataTransfer.setDragImage(img, 0, 0);
+      } else {
+        e.dataTransfer.setDragImage(img, realSize / 2, realSize / 2);
+      }
+    } catch (error) {
+      console.error(error);
     }
     dragged = e.target;
   };
 
   const dragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-    console.log('dragEnd');
     e.preventDefault();
     e.stopPropagation();
     setGrid(pre => {
@@ -459,7 +458,6 @@ export const DragCompoents: React.FC<{
   };
 
   const drop = (event: any) => {
-    console.log('drop');
     event.preventDefault();
     if (event.target.tagName !== 'DIV') {
       return;
@@ -468,7 +466,6 @@ export const DragCompoents: React.FC<{
   };
 
   const dragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    console.log('dragOver');
     e.preventDefault();
     e.stopPropagation();
   };
@@ -614,8 +611,9 @@ export const DragCompoents: React.FC<{
                 return (
                   <Normal
                     key={`${item.index}_${item?._id}`}
-                    className={`energy_tank_${index}`}
+                    className={`energy_tank_grid energy_tank_${index}`}
                     draggable={false}
+                    ref={gradRef}
                     data-id={item.index}
                     data-row={item?.row}
                     data-item={JSON.stringify(item)}
@@ -711,7 +709,7 @@ export const DragCompoents: React.FC<{
             </Flex>
             <BuildingsScroll ml='40px'>
               {(buildings[state?.currentTab] ?? []).map(
-                (row: any, index: number) => (
+                (row: Api.Building.Building, index: number) => (
                   <BuildingsItem
                     key={`${row.buildings_number}_${index}`}
                     className={`building_${index}`}
@@ -721,7 +719,7 @@ export const DragCompoents: React.FC<{
                       onClick={() => {
                         console.log(row);
                       }}
-                      onDragStart={dragStart}
+                      onDragStart={e => dragStart(e, row)}
                       onDrop={event => event.preventDefault()}
                       onDragEnter={event => event.preventDefault()}
                       onDragOver={dragOver}
