@@ -7,12 +7,8 @@ import { Flex, BgCard, Image, TweenText } from 'uikit';
 import eventBus from 'utils/eventBus';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'state';
-
-import {
-  fetchUserBalanceAsync,
-  fetchUserProductAsync,
-} from 'state/userInfo/reducer';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useFetchUserBalance, useFetchUserProduct } from 'state/userInfo/hooks';
 import Avatar from './Avatar';
 import Info from './Info';
 import { ButtonGroupProps } from './ButtonGroup';
@@ -37,14 +33,17 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
   const { t } = useTranslation();
   const params = useParsedQueryString();
 
+  const { fetch: FetchBlance } = useFetchUserBalance();
+  const { fetch: FetchProduct } = useFetchUserProduct();
+
   const onRefreshClick = () => {
     eventBus.dispatchEvent(new MessageEvent('onRefresh'));
   };
 
   useEffect(() => {
-    dispatch(fetchUserBalanceAsync());
-    dispatch(fetchUserProductAsync());
-  }, [dispatch]);
+    FetchBlance();
+    FetchProduct();
+  }, [location.pathname, FetchBlance, FetchProduct]);
 
   const Product = useStore(p => p.userInfo.userProduct);
 

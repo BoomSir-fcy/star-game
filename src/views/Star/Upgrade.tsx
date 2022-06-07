@@ -221,6 +221,7 @@ const Upgrade = () => {
     if (!account) {
       return <ConnectWalletButton scale='ld' width='270px' padding='0 10px' />;
     }
+
     // 升级
     if (maxExp === 0 || (curExp && curExp >= maxExp)) {
       return (
@@ -310,7 +311,7 @@ const Upgrade = () => {
           }}
           onExit={step => {
             setStepsEnabled(false);
-            setGuide(step + 1);
+            setGuide(steps.length + 1);
             // dispatch(storeAction.toggleVisible({ visible: true }));
           }}
         />

@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Flex, Text, Button } from 'uikit';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { StarAddBtn } from 'components';
 import { useStore } from 'state/util';
 import { qualities } from 'uikit/theme/types';
@@ -14,6 +14,15 @@ import { useConnectWallet } from 'contexts/ConnectWallet';
 import { orderInfo } from 'state/types';
 import { useRemoveAlliance } from './hook';
 
+const rotate = keyframes`
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+`;
+
 const GalaxyBg = styled(Box)`
   width: 60%;
   height: 80%;
@@ -21,9 +30,11 @@ const GalaxyBg = styled(Box)`
   z-index: -1;
   top: 84px;
   left: 150px;
+  transform: rotate(0);
   img {
     width: 100%;
     height: 100%;
+    animation: ${rotate} 60s infinite linear;
   }
 `;
 
@@ -52,6 +63,7 @@ const JoinTheAlliance: React.FC<{
   const [allianceList, setAllianceList] = useState<orderInfo[]>([]);
   const [newIds, setNewIds] = useState<number[]>([]);
   const { RemoveStar } = useRemoveAlliance();
+  const [Loading, setLoading] = useState(false);
 
   // 删除星球
   const Remove = useCallback(
@@ -70,6 +82,8 @@ const JoinTheAlliance: React.FC<{
 
   // 提交修改
   const SubmitList = useCallback(async () => {
+    if (Loading) return;
+    setLoading(true);
     const newIdsStr = newIds.join();
     const workingListStr = workingList.join();
     if (newIdsStr === workingListStr) {
@@ -84,7 +98,17 @@ const JoinTheAlliance: React.FC<{
       toastError(t('Remove Failed'));
     }
     dispatch(fetchAllianceViewAsync());
-  }, [RemoveStar, toastError, toastSuccess, dispatch, t, workingList, newIds]);
+    setLoading(false);
+  }, [
+    RemoveStar,
+    toastError,
+    toastSuccess,
+    dispatch,
+    t,
+    Loading,
+    workingList,
+    newIds,
+  ]);
 
   const addStar = (id: any) => {
     if (!account) {
@@ -105,6 +129,13 @@ const JoinTheAlliance: React.FC<{
     }
   }, [order]);
 
+  const gotoPlantDetail = useCallback(
+    (planetId: number) => {
+      navigate(`/star?id=${planetId}`);
+    },
+    [navigate],
+  );
+
   return (
     <Box
       position='relative'
@@ -121,6 +152,9 @@ const JoinTheAlliance: React.FC<{
         <StarAddBtn
           name={allianceList && allianceList[0]?.planet?.name}
           onRemove={() => Remove(allianceList[0]?.planetId)}
+          onPlantClick={() => {
+            gotoPlantDetail(allianceList[0]?.planetId);
+          }}
           showIcon
           callBack={() => addStar(allianceList && allianceList[0]?.planetId)}
           imgBorder={
@@ -139,6 +173,9 @@ const JoinTheAlliance: React.FC<{
         <StarAddBtn
           name={allianceList && allianceList[4]?.planet?.name}
           onRemove={() => Remove(allianceList[4]?.planetId)}
+          onPlantClick={() => {
+            gotoPlantDetail(allianceList[4]?.planetId);
+          }}
           showIcon
           callBack={() => addStar(allianceList && allianceList[4]?.planetId)}
           imgBorder={
@@ -154,6 +191,7 @@ const JoinTheAlliance: React.FC<{
         />
         <Box marginTop='76px'>
           <Button
+            disabled={Loading}
             variant='vsRefresh'
             width='100px'
             style={{ fontSize: '24px' }}
@@ -166,6 +204,9 @@ const JoinTheAlliance: React.FC<{
         <StarAddBtn
           name={allianceList && allianceList[1]?.planet?.name}
           onRemove={() => Remove(allianceList[1]?.planetId)}
+          onPlantClick={() => {
+            gotoPlantDetail(allianceList[1]?.planetId);
+          }}
           showIcon
           callBack={() => addStar(allianceList && allianceList[1]?.planetId)}
           imgBorder={
@@ -184,6 +225,9 @@ const JoinTheAlliance: React.FC<{
         <StarAddBtn
           name={allianceList && allianceList[3]?.planet?.name}
           onRemove={() => Remove(allianceList[3]?.planetId)}
+          onPlantClick={() => {
+            gotoPlantDetail(allianceList[3]?.planetId);
+          }}
           showIcon
           callBack={() => addStar(allianceList && allianceList[3]?.planetId)}
           imgBorder={
@@ -200,6 +244,9 @@ const JoinTheAlliance: React.FC<{
         <StarAddBtn
           name={allianceList && allianceList[2]?.planet?.name}
           onRemove={() => Remove(allianceList[2]?.planetId)}
+          onPlantClick={() => {
+            gotoPlantDetail(allianceList[2]?.planetId);
+          }}
           showIcon
           callBack={() => addStar(allianceList && allianceList[2]?.planetId)}
           imgBorder={

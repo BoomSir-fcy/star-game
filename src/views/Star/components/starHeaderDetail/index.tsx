@@ -85,7 +85,8 @@ const StarHeader = () => {
                     {planetInfo?.id}
                   </TextStyled> */}
                   <ScoringPanel
-                    scale='sm'
+                    scale='el'
+                    ellipsis
                     count={planetInfo?.strengthenLevel}
                   />
                 </Flex>

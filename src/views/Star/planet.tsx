@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
-// import 'intro.js/introjs.css';
+import 'intro.js/introjs.css';
 
 import styled, { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -53,6 +53,12 @@ const LoadingBox = styled(Box)`
   left: 56%;
   top: 50%;
   transform: translate(-50%, -50%);
+`;
+const LinkStyled = styled(Link)`
+  :hover {
+    text-decoration: underline;
+    text-decoration-color: #fff;
+  }
 `;
 
 const GlobalStyle = createGlobalStyle<{
@@ -193,7 +199,13 @@ const Planet = () => {
       navigate('/plant-league');
       setTimeout(() => {
         destroy(activeStep + 1);
-        dispatch(storeAction.toggleVisible({ visible: true }));
+        dispatch(
+          storeAction.toggleVisible({
+            visible: true,
+            lastStep: choose ? steps.length : planetSteps.length,
+            pathname: choose ? '/star/planet&choose=' : '/star/planet',
+          }),
+        );
       }, 100);
     } catch (e) {
       console.error(e);
@@ -213,6 +225,9 @@ const Planet = () => {
     destroy,
     activeStep,
     dispatch,
+    choose,
+    steps.length,
+    planetSteps.length,
   ]);
 
   const addPlanetToList = useCallback(
@@ -304,43 +319,55 @@ const Planet = () => {
 
   return (
     <Box id='containerBox'>
-      <GlobalStyle
-        interactive={currentSteps[activeStep]?.interactive && stepsEnabled}
-        disabled={currentSteps[activeStep]?.disabled}
-      />
       {!guides.guideFinish &&
         guides.finish &&
         steps.length - 1 > guides.step &&
         StarList.length > 0 && (
-          <Steps
-            ref={guideRef}
-            enabled={stepsEnabled}
-            steps={currentSteps}
-            initialStep={guides.step}
-            options={{
-              exitOnOverlayClick: false,
-            }}
-            onBeforeChange={event => {
-              setActiveStep(event);
-            }}
-            onChange={currentStep => {
-              console.log(currentStep, 'currentStep', guides.step);
-              if (currentStep === 3) return;
-              if (currentStep > guides.step) {
-                setGuide(currentStep);
+          <>
+            <GlobalStyle
+              interactive={
+                currentSteps[activeStep]?.interactive && stepsEnabled
               }
-            }}
-            onExit={step => {
-              setStepsEnabled(false);
-              if (!choose) {
-                setGuide(step + 1);
-                return;
-              }
-              if (step === currentSteps.length) {
-                dispatch(storeAction.toggleVisible({ visible: true }));
-              }
-            }}
-          />
+              disabled={currentSteps[activeStep]?.disabled}
+            />
+            <Steps
+              ref={guideRef}
+              enabled={stepsEnabled}
+              steps={currentSteps}
+              initialStep={guides.step}
+              options={{
+                exitOnOverlayClick: false,
+              }}
+              onBeforeChange={event => {
+                setActiveStep(event);
+              }}
+              onChange={currentStep => {
+                console.log(currentStep, 'currentStep', guides.step);
+                if (currentStep === 3) return;
+                if (currentStep > guides.step) {
+                  setGuide(currentStep);
+                }
+              }}
+              onExit={step => {
+                setStepsEnabled(false);
+                // if (!choose) {
+                //   setGuide(step + 1);
+                //   return;
+                // }
+                if (step < (choose ? steps.length : planetSteps.length) - 1) {
+                  dispatch(
+                    storeAction.toggleVisible({
+                      visible: true,
+                      lastStep: choose ? steps.length : planetSteps.length,
+                      pathname: choose
+                        ? '/star/planet&choose='
+                        : '/star/planet',
+                    }),
+                  );
+                }
+              }}
+            />
+          </>
         )}
       <Layout>
         <Flex width='100%' position='relative'>
@@ -453,8 +480,22 @@ const Planet = () => {
                     )}
                   </React.Fragment>
                 ))}
+                {!(StarList ?? []).length && (
+                  <Flex
+                    mt='50px'
+                    width='100%'
+                    justifyContent='center'
+                    alignItems='center'
+                  >
+                    <LinkStyled to='/mystery-box'>
+                      <Text small>
+                        {t('No data, Go to open the blind box')} &gt;
+                      </Text>
+                    </LinkStyled>
+                  </Flex>
+                )}
               </ScrollBox>
-              {choose && (
+              {choose && StarList?.length && (
                 <Flex
                   justifyContent='center'
                   paddingTop='20px'

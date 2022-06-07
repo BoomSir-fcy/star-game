@@ -22,6 +22,8 @@ export const fetchBoxView = async (
       totalVDsgDonated: res.totalVDsgDonated.toJSON().hex, // 总给vdsg的量dsg
       totalPoolSent: res.totalPoolSent.toJSON().hex, // 总给质押池的量dsg
       totalPoolSentBNB: res.totalPoolSentBNB.toJSON().hex, // 总给质押池的量bnb
+      maxSales: res.maxSales.toJSON().hex, // 最大可销售量
+      sold: res.sold.toJSON().hex, // 已销售量
     };
   } catch (error) {
     console.error(error);

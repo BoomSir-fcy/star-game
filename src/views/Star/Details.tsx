@@ -11,6 +11,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { DragCompoents } from './components/dragCompoents';
+import type { AreaDataItem } from './components/dragCompoents';
 
 const Details = () => {
   const parsedQs = useParsedQueryString();
@@ -19,7 +20,7 @@ const Details = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { guides, setGuide } = useGuide(location.pathname);
-  const [state, setState] = React.useState([]);
+  const [state, setState] = React.useState<AreaDataItem[]>([]);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
 
   const steps = React.useMemo(() => {
@@ -77,6 +78,7 @@ const Details = () => {
 
   React.useEffect(() => {
     console.log('selfBuilding:', selfBuilding);
+    console.log(planet?.areaX, planet?.areaY);
     if (planet?.areaX > 0 && planet?.areaY > 0) {
       const data: any = [];
       for (let i = 0; i < planet.areaX; i++) {
@@ -90,13 +92,13 @@ const Details = () => {
               ...buildings.building,
               x: i,
               y: j,
-              index: i * planet.areaY + j,
+              index: j * planet.areaX + i,
               isbuilding: true,
               isactive: false,
             });
           } else {
             data.push({
-              index: i * planet.areaY + j,
+              index: j * planet.areaX + i,
               isbuilding: false,
               propterty: {
                 size: {
@@ -142,7 +144,14 @@ const Details = () => {
               navigate(`/star/upgrade?id=${id}`);
               return;
             }
-            dispatch(storeAction.toggleVisible({ visible: true }));
+            if (step < steps.length - 1) {
+              dispatch(
+                storeAction.toggleVisible({
+                  visible: true,
+                  lastStep: steps.length,
+                }),
+              );
+            }
           }}
         />
       )}

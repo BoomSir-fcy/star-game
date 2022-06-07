@@ -291,11 +291,11 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
               />
             </Flex>
           </Flex>
-          <Divider margin='8px auto 27px' width={565} />
+          <Divider margin='8px auto 22px' width={565} />
           <Flex>
             <Box ml='22px' ref={ref} width={218} />
-            <Card overflow='auto' width={354} height={217} padding='16px'>
-              <Flex justifyContent='space-between'>
+            <Card overflow='auto' width={354} height={186} padding='16px'>
+              {/* <Flex justifyContent='space-between'>
                 <Text fontSize='20' color='textTips'>
                   {t('Attack distance')}
                 </Text>
@@ -315,7 +315,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                     {activeSoldier?.options?.unitInfo?.move_far}
                   </Text>
                 )}
-              </Flex>
+              </Flex> */}
               <Text mt='16px' fontSize='20' color='textTips'>
                 {soldierDesc}
               </Text>

@@ -4,7 +4,7 @@ import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
 
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, Text, Flex, BgCard, Label, Button } from 'uikit';
 import Layout from 'components/Layout';
 import Dashboard from 'components/Dashboard';
@@ -22,6 +22,7 @@ import { useGuide } from 'hooks/useGuide';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useTranslation } from 'contexts/Localization';
 import eventBus from 'utils/eventBus';
+import { fetchUserProductAsync } from 'state/userInfo/reducer';
 import Attributes from './components/Attributes';
 import Extra from './components/Extra';
 import Race from './components/Race';
@@ -69,6 +70,8 @@ const MysteryBoxDetail = () => {
       setTimeout(() => {
         dispatch(fetchPlanetInfoAsync([id]));
       }, 10000);
+    } else {
+      dispatch(fetchUserProductAsync());
     }
   }, [info, id, dispatch]);
 
@@ -84,7 +87,8 @@ const MysteryBoxDetail = () => {
     };
   }, [onRefreshClick]);
 
-  const { guides, setGuide } = useGuide('mystery-box/detail');
+  const location = useLocation();
+  const { guides, setGuide } = useGuide(location.pathname);
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
@@ -144,8 +148,13 @@ const MysteryBoxDetail = () => {
           }}
           onExit={index => {
             setStepsEnabled(false);
-            if (index < steps.length) {
-              dispatch(storeAction.toggleVisible({ visible: true }));
+            if (index < steps.length - 1) {
+              dispatch(
+                storeAction.toggleVisible({
+                  visible: true,
+                  lastStep: steps.length,
+                }),
+              );
             }
           }}
         />

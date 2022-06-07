@@ -1,19 +1,21 @@
 import React from 'react';
-import { createGlobalStyle, css } from 'styled-components';
-import { Box, Flex, Text } from 'uikit';
+import styled, { createGlobalStyle, css } from 'styled-components';
+import { Box, Flex, Text, Button, Image } from 'uikit';
 import Layout from 'components/Layout';
 import { useFetchAllianceView } from 'state/alliance/hooks';
 import { useDispatch } from 'react-redux';
-import { storeAction } from 'state';
+import { storeAction, useStore } from 'state';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import eventBus from 'utils/eventBus';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import { BuyVipModal } from 'components/Modal/buyVipModal';
 import { useTranslation } from 'contexts/Localization';
 import { useGuide } from 'hooks/useGuide';
 import { useLocation } from 'react-router-dom';
 import JoinTheAlliance from './Join';
 import LeagueInfo from './LeagueInfo';
 import 'intro.js/introjs.css';
+import { RechargeAssets } from './RechargeAssets';
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -45,6 +47,32 @@ const GlobalStyle = createGlobalStyle<{
       : '';
   }};
   
+`;
+
+const Title = styled(Text)`
+  font-weight: bold;
+  font-size: 22px;
+  color: #ffffff;
+  line-height: 1;
+  background: linear-gradient(
+    130deg,
+    #fbeeba 0%,
+    #f1d37e 14.990234375%,
+    #d1ab64 33.0078125%,
+    #d5c089 48.9990234375%,
+    #d5bf86 66.9921875%,
+    #f4d784 84.0087890625%,
+    #fbeeba 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`;
+
+const VipBox = styled(Box)`
+  background: url(/images/commons/nav/left.png) no-repeat;
+  /* background-size: 100% 100%; */
+  width: 193px;
+  background-position: right top;
 `;
 
 const PlantLeague = () => {
@@ -134,49 +162,138 @@ const PlantLeague = () => {
   //   setGuide(4);
   // }, [destroy, guides, setGuide]);
 
+  const { userInfo } = useStore(p => p.userInfo);
+  const [visible, setVisible] = React.useState(false);
+  const [rechargeVisible, setRechargeVisible] = React.useState(false);
+  const [repairVisible, setRepairVisible] = React.useState(false);
+  const [modalTips, setModalTips] = React.useState('');
+
+  // 一键补充行星联盟充值
+  const rechargeHandle = React.useCallback(() => {
+    if (userInfo.vipBenefits?.is_vip) {
+      setRechargeVisible(true);
+      return;
+    }
+    setModalTips('一键补充储存罐能量， 可以更快的部署资源。');
+    setVisible(true);
+  }, [
+    setVisible,
+    setRechargeVisible,
+    userInfo.vipBenefits?.is_vip,
+    setModalTips,
+  ]);
+
+  // 行星联盟一键修复耐久
+  const repairHandle = React.useCallback(() => {
+    if (userInfo.vipBenefits?.is_vip) {
+      setRepairVisible(true);
+      return;
+    }
+    setModalTips('一键修复耐久， 可以更快修复行星上所有建筑的耐久度。');
+    setVisible(true);
+  }, [
+    setVisible,
+    setRepairVisible,
+    userInfo.vipBenefits?.is_vip,
+    setModalTips,
+  ]);
+
   return (
     <Layout>
-      <GlobalStyle
-        interactive={steps[activeStep]?.interactive && stepsEnabled}
-        disabled={steps[activeStep]?.disabled}
-      />
       {!guides.guideFinish &&
         guides.finish &&
         steps.length - 1 > guides.step &&
         guides.round < 2 && (
-          <Steps
-            enabled={stepsEnabled}
-            steps={steps}
-            initialStep={guides.step}
-            options={{
-              exitOnOverlayClick: false,
-            }}
-            ref={guideRef}
-            onBeforeChange={event => {
-              setActiveStep(event);
-            }}
-            onAfterChange={event => {}}
-            onChange={currentStep => {
-              if (currentStep === 3) return;
-              if (currentStep > guides.step) {
-                setGuide(currentStep);
-              }
-            }}
-            onExit={step => {
-              console.log(step, '中途离开页面', guides.step, activeStep);
-              setStepsEnabled(false);
-              if (step === 5) {
-                setGuide(0, false, 2);
-                return;
-              }
-              dispatch(storeAction.toggleVisible({ visible: true }));
-            }}
-          />
+          <>
+            <GlobalStyle
+              interactive={steps[activeStep]?.interactive && stepsEnabled}
+              disabled={steps[activeStep]?.disabled}
+            />
+            <Steps
+              enabled={stepsEnabled}
+              steps={steps}
+              initialStep={guides.step}
+              options={{
+                exitOnOverlayClick: false,
+              }}
+              ref={guideRef}
+              onBeforeChange={event => {
+                setActiveStep(event);
+              }}
+              onAfterChange={event => {}}
+              onChange={currentStep => {
+                if (currentStep === 3) return;
+                if (currentStep > guides.step) {
+                  setGuide(currentStep);
+                }
+              }}
+              onExit={step => {
+                console.log(step, '中途离开页面', guides.step, activeStep);
+                setStepsEnabled(false);
+                if (step === 5) {
+                  setGuide(0, false, 2);
+                  return;
+                }
+                if (step < steps.length - 1) {
+                  dispatch(
+                    storeAction.toggleVisible({
+                      visible: true,
+                      lastStep: steps.length,
+                    }),
+                  );
+                }
+              }}
+            />
+          </>
         )}
-      <Flex justifyContent='space-between' padding='0 30px'>
+      <Flex justifyContent='space-between' pr='30px'>
+        <VipBox width={192}>
+          <Flex
+            margin='48px 0 15px'
+            justifyContent='center'
+            alignItems='center'
+            pr='32px'
+          >
+            <Image
+              src='/images/commons/icon/icon-vip.png'
+              width={42}
+              height={40}
+              mr='8px'
+            />
+            <Title>VIP</Title>
+          </Flex>
+          <Button
+            onClick={rechargeHandle}
+            ml='10px'
+            width={147}
+            variant='purple'
+          >
+            补充资源
+          </Button>
+          <Button
+            onClick={repairHandle}
+            ml='10px'
+            mt='16px'
+            width={147}
+            variant='purple'
+          >
+            修复耐久
+          </Button>
+        </VipBox>
         <JoinTheAlliance callbackGuide={() => destroy()} />
         <LeagueInfo />
       </Flex>
+      <BuyVipModal
+        tips={modalTips}
+        visible={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+      />
+      <RechargeAssets
+        visible={rechargeVisible}
+        onClose={() => setRechargeVisible(false)}
+      />
     </Layout>
   );
 };

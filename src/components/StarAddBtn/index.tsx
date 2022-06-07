@@ -96,6 +96,7 @@ interface StarAddBtnProps extends BoxProps {
   showIcon?: boolean;
   callBack?: () => void;
   onRemove?: () => void;
+  onPlantClick?: () => void;
   name?: string;
 }
 
@@ -111,6 +112,7 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
   showIcon,
   callBack,
   onRemove,
+  onPlantClick,
   name,
   ...props
 }) => {
@@ -163,7 +165,19 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
           )}
         </>
       )}
-      {url && <StarImage imgBorder={imgBorder} size={size} src={url} />}
+      {url && (
+        <StarImage
+          onClick={event => {
+            if (onPlantClick) {
+              event.stopPropagation();
+              onPlantClick();
+            }
+          }}
+          imgBorder={imgBorder}
+          size={size}
+          src={url}
+        />
+      )}
     </StyledStar>
   );
 };

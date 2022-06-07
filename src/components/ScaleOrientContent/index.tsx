@@ -210,6 +210,8 @@ const ScaleOrientContent: React.FC = ({ children }) => {
         {guideState.visible && (
           <GuideModal
             visible={guideState.visible}
+            lastStep={guideState.lastStep}
+            pathname={guideState.pathname}
             onClose={() =>
               dispatch(storeAction.toggleVisible({ visible: false }))
             }

@@ -177,13 +177,13 @@ const ProductionProgress = () => {
           <Text fontSize='20px' bold>
             {later_extract_time > 0
               ? formatTime(state.Extracttime)
-              : t('Extract resources')}
+              : t('Extract')}
           </Text>
         </Button>
         <Link to='/galaxy'>
           <Button variant='black'>
             <Text fontSize='20px' bold>
-              {t('Occupy Star')}
+              {t('Occupy')}
             </Text>
           </Button>
         </Link>

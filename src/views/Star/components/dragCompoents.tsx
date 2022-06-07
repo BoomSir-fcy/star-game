@@ -23,12 +23,21 @@ polyfill({
   dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
 });
 
+export interface AreaDataItem {
+  x: number;
+  y: number;
+  index: number;
+  isbuilding: boolean;
+  isactive: boolean;
+}
+
 const Container = styled(Flex)`
   position: relative;
   border: 1px solid #30343d;
+  background-color: ${({ theme }) => theme.colors.backgroundCard};
 `;
 
-const Normal = styled(Flex)<{ pre: boolean }>`
+const Normal = styled(Flex)<{ pre: boolean; isbuilding?: boolean }>`
   cursor: pointer;
   position: absolute;
   justify-content: center;
@@ -37,21 +46,34 @@ const Normal = styled(Flex)<{ pre: boolean }>`
   color: #ffffff;
   font-size: 40px;
   text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
-  border: 1px solid #30343d;
+  border: 1px solid
+    ${({ isbuilding }) => (isbuilding ? 'transparent' : '#30343d')};
   transition: all 0.5s;
-  background: ${({ pre }) => (pre ? 'rgba(0,0,0,0.5)' : 'transparent')};
+  background: ${({ pre }) => (pre ? 'rgba(0,0,0,0.8)' : 'transparent')};
   img {
+    width: 100%;
     max-width: 100%;
+    max-height: 100%;
     object-fit: cover;
     height: auto;
     vertical-align: middle;
     pointer-events: none;
+  }
+  line-height: 1;
+  &::after {
+    content: '';
+    height: 100%;
+    display: inline-block;
+    width: 0px;
+    vertical-align: middle;
   }
 `;
 
 const BuildingBox = styled(Box)<{ checked: boolean }>`
   position: absolute;
   cursor: pointer;
+  border: 1px solid #30343d;
+
   ${({ checked }) =>
     checked &&
     css`
@@ -70,11 +92,20 @@ const BuildingBox = styled(Box)<{ checked: boolean }>`
       }
     `}
   img {
+    width: 100%;
     max-width: 100%;
+    max-height: 100%;
     object-fit: cover;
     height: auto;
     vertical-align: middle;
     pointer-events: none;
+  }
+  &::after {
+    content: '';
+    height: 100%;
+    display: none;
+    width: 0px;
+    vertical-align: middle;
   }
 `;
 
@@ -157,7 +188,7 @@ const ActionButton = styled(Button)`
 let dragged = {} as any;
 export const DragCompoents: React.FC<{
   planet_id: number;
-  itemData: any;
+  itemData: any[];
   rows: number;
   cols: number;
   gridSize: number;
@@ -193,6 +224,8 @@ export const DragCompoents: React.FC<{
   // 升级建造队列
   const [currentQueue, setCurrentQueue] = React.useState([]);
 
+  // X, row, width 横
+  // Y, col, height 竖
   const { width, height } = React.useMemo(() => {
     return {
       width: gridSize / rows,
@@ -279,25 +312,82 @@ export const DragCompoents: React.FC<{
 
   // 计算绝对坐标
   const getAbsolutePosition = React.useCallback(
-    (index: number) => {
-      const row = Math.floor(index / cols);
-      const col = Math.floor(index % rows);
-      // 计算相邻的格子坐标
-      const bottomRow = row + 1;
-      const bottomCol = col;
-      // 当前格子右边坐标
-      const rightRow = row;
-      const rightCol = col + 1;
-      if (bottomRow > rows - 1 || rightCol > cols - 1) {
-        return [];
+    (index: number, area = 2): number[] => {
+      // const row = Math.floor(index / cols);
+      // const col = Math.floor(index % rows);
+      // // 计算相邻的格子坐标
+      // const bottomRow = row + 1;
+      // const bottomCol = col;
+      // // 当前格子右边坐标
+      // const rightRow = row;
+      // const rightCol = col + 1;
+      // if (bottomRow > rows - 1 || rightCol > cols - 1) {
+      //   return [];
+      // }
+      // // if (index ) {
+      // //   return []
+      // // }
+      // // 斜角点坐标
+      // const bottomRightRow = bottomRow - row + (rightRow - row) + row;
+      // const bottomRightCol = bottomCol - col + (rightCol - col) + col;
+      // const bevelIndex = bottomRightRow * rows + bottomRightCol;
+      // return [Number(index), Number(index) + 1, bevelIndex - 1, bevelIndex];
+
+      /**
+       * @dev 获取2*2建筑对应的坐标点
+       * @s1 根据当前index 获取坐标A
+       * @s2 根据当前坐标获取四个对角的坐标D E F G， 判断是否存在（一个点判断能不能在周围放2*2的建筑, 判断 左上、左下、右上、右下是否存在）
+       * @s3 根据四个坐标中存在的坐标点， 可以获取一个2*2的区域(设A的坐标为[x, y], 则令左上坐标为D, 可知D坐标为[x - 1, y - 1], 
+            则可知由A-D构成的2*2的区域
+            【D[x-1, y-1], B[x, y-1]
+              C[x-1, y], A[x, y]】)
+       * @s4 根据2*2区域对应的【D-B-C-A】四个坐标 判断四个坐标内是否存在建筑，若没有建筑，则可放置当前2*2的建筑
+       * @s5 若可放置 则返回4个坐标点, 若不可放置，则返回空数组
+       * 
+       */
+
+      /** @s1 */
+      const currentAxis = itemData.find(item => item.index === Number(index));
+      // TODO:
+      if (!currentAxis) return [];
+      /** @s2  根据用户习惯 筛选顺序为 右下 左下 右上 左上 */
+      const axisPoint = [
+        { x: currentAxis.x + 1, y: currentAxis.y + 1 }, // 右下
+        { x: currentAxis.x - 1, y: currentAxis.y + 1 }, // 左下
+        { x: currentAxis.x + 1, y: currentAxis.y - 1 }, // 右上
+        { x: currentAxis.x - 1, y: currentAxis.y - 1 }, // 左上
+      ];
+
+      for (let i = 0; i < axisPoint.length; i++) {
+        const axis = itemData.find(
+          item => item.x === axisPoint[i].x && item.y === axisPoint[i].y,
+        );
+        if (axis) {
+          /** @s3 */
+          const areaPoints = [
+            axis,
+            itemData.find(
+              item => item.x === axis.x && item.y === currentAxis.y,
+            ),
+            itemData.find(
+              item => item.x === currentAxis.x && item.y === axis.y,
+            ),
+            currentAxis,
+          ];
+
+          /** @s4 */
+          const canUseArea = areaPoints?.every(
+            item =>
+              !grid.find(subItem => subItem.index === item.index)?.isbuilding,
+          );
+          if (canUseArea) {
+            return areaPoints.map(item => item.index);
+          }
+        }
       }
-      // 斜角点坐标
-      const bottomRightRow = bottomRow - row + (rightRow - row) + row;
-      const bottomRightCol = bottomCol - col + (rightCol - col) + col;
-      const bevelIndex = bottomRightRow * rows + bottomRightCol;
-      return [Number(index), Number(index) + 1, bevelIndex - 1, bevelIndex];
+      return [];
     },
-    [cols, rows],
+    [itemData, grid],
   );
 
   // 创建格子到九宫格中
@@ -374,7 +464,7 @@ export const DragCompoents: React.FC<{
         draggedItem = JSON.parse(dragged?.dataset?.item) || {};
         targetItem = JSON.parse(afterTarget?.dataset?.item) || {};
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
       const area = draggedItem?.propterty?.size?.area_x;
       // 获取当前点的正方形下标
@@ -383,8 +473,9 @@ export const DragCompoents: React.FC<{
         toastError(t('planetTipsFail1'));
         return;
       }
-
-      const canSave = currentSize?.every(item => !grid[item]?.isbuilding);
+      const canSave = currentSize?.every(
+        item => !grid[grid.findIndex(row => row.index === item)]?.isbuilding,
+      );
       setGrid(pre => {
         const next = pre?.map((row: any) => {
           if (!canSave) {
@@ -393,13 +484,14 @@ export const DragCompoents: React.FC<{
               pre: false,
             };
           }
-          if (row.index === Number(to)) {
+          if (currentSize.includes(row.index)) {
             return {
               ...row,
-              ...targetItem,
-              ...draggedItem,
+              // ...targetItem,
+              // ...draggedItem,
               pre: false,
               isbuilding: true,
+              buildingId: (draggedItem as any)._id,
             };
           }
           return { ...row, pre: false };
@@ -412,20 +504,27 @@ export const DragCompoents: React.FC<{
           ...currentQueue,
           { ...draggedItem, work_type: 1, work_status: 3, index: to },
         ]);
+        const startIndex = Math.min(...currentSize);
+
+        console.log(startIndex);
+
         for (let i = grid.length - 1; i >= 0; i--) {
-          if (i === Number(to)) {
+          console.log(grid);
+          if (grid[i].index === startIndex) {
             setGridBuilds((prev: any) => {
-              return [
+              const next = [
                 ...prev,
                 {
+                  // ...targetItem,
                   ...grid[i],
-                  ...targetItem,
                   ...draggedItem,
-                  pre: false,
+                  pre: true,
                   isbuilding: true,
                   isactive: true,
                 },
               ];
+              console.log(next);
+              return next;
             });
             return;
           }
@@ -435,19 +534,43 @@ export const DragCompoents: React.FC<{
     [currentQueue, getAbsolutePosition, grid, t, toastError],
   );
 
-  const dragStart = (e: any) => {
-    if (isApp()) {
-      const img = new Image();
-      img.src = e.target.getElementsByTagName('img')[0]?.src;
+  const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    // const img = new Image();
+    // img.src = e.target.getElementsByTagName('img')[0]?.src;
+    // img.style.width = '100px';
+    // img.style.height = '100px';
+    // console.log(img.naturalWidth);
+    // img.naturalWidth = 100;
+
+    const divTarget = e.target as HTMLDivElement;
+
+    const img = document.createElement('img');
+    img.style.position = 'absolute';
+    img.style.top = '-9999px';
+    img.style.maxWidth = `${divTarget.clientWidth}px`;
+    img.style.maxHeight = `${divTarget.clientHeight}px`;
+    img.src = divTarget.getElementsByTagName('img')[0]?.src;
+
+    const { clientHeight, clientWidth } = window.document.body;
+    if (clientWidth < clientHeight) {
       img.style.transform = 'rotate(90deg)';
-      img.style.width = '100px';
-      img.style.height = '100px';
+    }
+    document.body.append(img);
+
+    if (isApp()) {
       e.dataTransfer.setDragImage(img, 0, 0);
+    } else {
+      e.dataTransfer.setDragImage(
+        img,
+        divTarget.clientWidth / 2,
+        divTarget.clientHeight / 2,
+      );
     }
     dragged = e.target;
   };
 
   const dragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log('dragEnd');
     e.preventDefault();
     e.stopPropagation();
     setGrid(pre => {
@@ -459,6 +582,7 @@ export const DragCompoents: React.FC<{
   };
 
   const drop = (event: any) => {
+    console.log('drop');
     event.preventDefault();
     if (event.target.tagName !== 'DIV') {
       return;
@@ -467,6 +591,7 @@ export const DragCompoents: React.FC<{
   };
 
   const dragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log('dragOver');
     e.preventDefault();
     e.stopPropagation();
   };
@@ -483,15 +608,19 @@ export const DragCompoents: React.FC<{
     try {
       draggedTarget = JSON.parse(dragged?.dataset?.item) || {};
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
 
     const index = event.target?.dataset?.id;
     const area = draggedTarget?.propterty?.size?.area_x;
+
     const currentSize =
-      area >= 2 ? getAbsolutePosition(index) : [Number(index)];
+      area >= 2 ? getAbsolutePosition(index, area) : [Number(index)];
+
     // 查看所有点位是否被占领
-    const canSave = currentSize?.every(item => !grid[item]?.isbuilding);
+    const canSave = currentSize?.every(
+      item => !grid[grid.findIndex(row => row.index === item)]?.isbuilding,
+    );
     setGrid(pre => {
       const next = pre?.map((row: any) => {
         if (!canSave) {
@@ -525,7 +654,7 @@ export const DragCompoents: React.FC<{
       setCurrentBuild({});
       setGrid(pre => {
         const next = pre?.map((row: any) => {
-          if (row.index === currentBuild.index) {
+          if (row.buildingId === currentBuild._id) {
             return {
               ...row,
               isbuilding: false,
@@ -561,20 +690,23 @@ export const DragCompoents: React.FC<{
                     key={`${item.index}_${item?._id}`}
                     className={`energy_tank_${index}`}
                     draggable={false}
-                    data-id={index}
+                    data-id={item.index}
                     data-row={item?.row}
                     data-item={JSON.stringify(item)}
                     pre={item?.pre}
+                    isbuilding={item?.isbuilding}
                     width={width}
                     height={height}
-                    top={item.x * width}
-                    left={item.y * height}
+                    left={item.x * width}
+                    top={item.y * height}
                     onDragStart={dragStart}
                     onDragEnter={dragEnter}
                     onDragOver={dragOver}
                     onDrop={drop}
                     onDragEnd={dragEnd}
-                  />
+                  >
+                    {/* x{item.x}, y{item.y} ({item.index}) */}
+                  </Normal>
                 );
               })}
               {(gridBuilds ?? []).map((item, index) => {
@@ -586,8 +718,8 @@ export const DragCompoents: React.FC<{
                     data-item={JSON.stringify(item)}
                     width={item?.propterty?.size?.area_x * width}
                     height={item?.propterty?.size?.area_y * height}
-                    top={item.x * width}
-                    left={item.y * height}
+                    left={item.x * width}
+                    top={item.y * height}
                     checked={currentBuild?.index === item?.index}
                     onClick={() => {
                       setCurrentBuild(item);

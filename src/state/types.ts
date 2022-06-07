@@ -79,6 +79,8 @@ export interface MysteryBoxView {
   totalVDsgDonated: string; // 总给vdsg的量dsg
   totalPoolSent: string; // 总给质押池的量dsg
   totalPoolSentBNB: string; // 总给质押池的量bnb
+  maxSales: string; // 最大可销售量
+  sold: string; // 已销售量
   loading?: boolean;
 }
 
@@ -369,6 +371,8 @@ export enum PlanetStatus {
 
 export interface GuideState {
   visible: boolean;
+  lastStep: number;
+  pathname?: string;
 }
 
 export enum BuildingDetailType {
