@@ -63,6 +63,8 @@ const StarHeader = () => {
             <StarCom
               scale='sm'
               quality={planetInfo?.rarity}
+              picture={planetInfo?.picture}
+              picture1={planetInfo?.picture1}
               mr='40px'
               showUnion
               style={{ flexShrink: 1 }}

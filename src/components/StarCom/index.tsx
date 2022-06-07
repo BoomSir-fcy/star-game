@@ -17,10 +17,15 @@ const IconUnion = styled(Image)`
   right: -12px;
 `;
 
-const StarCom: React.FC<StarProps> = ({ children, showUnion, ...props }) => {
+const StarCom: React.FC<StarProps> = ({
+  children,
+  showUnion,
+  picture = '/images/commons/36.png',
+  ...props
+}) => {
   return (
     <StyledStar {...props}>
-      <ImageStyled width={100} height={100} src='/images/star/btc.png' />
+      <ImageStyled width={100} height={100} src={picture} />
       {showUnion && (
         <IconUnion
           width={50}

@@ -39,6 +39,8 @@ declare namespace Api {
       strengthen_finish_time: number; // 强化结束时间
       build_count: number; // 建筑数量
       energy: number; // 能量
+      picture: string; // 星球地址
+      picture1: string; // 星球3d材质
       population: number; // 人口
       plunder_speed: number; // 掠夺速度
       race: number; // 种族  1-神族 2-人族 3-虫族

@@ -44,7 +44,13 @@ export const Upgrading: React.FC<{
       <MysteryBoxFlexStyled>
         <MysteryBoxBaseNewStyled quality={mysteryBoxQualities.SUPER}>
           <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
-            <StarCom variant='none' scale='ld' />
+            <StarCom
+              variant='none'
+              scale='ld'
+              picture1={info?.picture1}
+              picture={info?.picture}
+              quality={info?.rarity}
+            />
           </MysteryBoxStarStyled>
         </MysteryBoxBaseNewStyled>
       </MysteryBoxFlexStyled>
