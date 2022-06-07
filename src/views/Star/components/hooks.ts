@@ -32,7 +32,23 @@ export const useWorkqueue = () => {
     }
   }, []);
 
+  const cancelWorkQueue = React.useCallback(
+    async (planet_id, work_queue_id) => {
+      try {
+        const res = await Api.BuildingApi.cancelWorkQueue(
+          planet_id,
+          work_queue_id,
+        );
+        return res;
+      } catch (error: any) {
+        throw new Error(error);
+      }
+    },
+    [],
+  );
+
   return {
     refreshWorkQueue,
+    cancelWorkQueue,
   };
 };

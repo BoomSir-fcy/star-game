@@ -831,8 +831,10 @@ export const DragCompoents: React.FC<{
                     ({ _id }) => item?.buildings_id === _id,
                   );
                   setCurrentBuild({
-                    ...item,
                     ...currbuildings,
+                    ...item,
+                    iscreate: false,
+                    work_queue_id: item?._id,
                   });
                 }}
                 onSave={saveWorkQueue}

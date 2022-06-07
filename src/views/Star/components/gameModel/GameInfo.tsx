@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Flex, Box, Card, Text, Image, Button } from 'uikit';
+import { Flex, Box, Card, Text, Image, Button, Progress } from 'uikit';
 import { useToast } from 'contexts/ToastsContext';
 import { useStore, storeAction } from 'state';
 import { Api } from 'apis';
@@ -13,7 +13,9 @@ import { BuildingDetailType } from 'state/types';
 import { useBuildingUpgrade, useBuildingOperate } from './hooks';
 
 import { ThingaddBlood, GameThing, ThingRepair } from '..';
-import { ThingDestoryModal, ThingUpgradesModal } from '../Modal';
+import { ThingDestoryModal, ThingUpgradesModal, CancelModal } from '../Modal';
+
+import { useWorkqueue } from '../hooks';
 
 const Container = styled(Box)`
   width: 852px;
@@ -33,7 +35,7 @@ const CardContent = styled(Card)`
 const CardInfo = styled(Card)`
   border-radius: 0;
   padding: 0 36px;
-  height: 138px;
+  height: 175px;
   border: 1px solid #282a30;
 `;
 
@@ -83,6 +85,7 @@ export const GameInfo: React.FC<{
     const { t } = useTranslation();
     const { toastSuccess, toastError } = useToast();
     const { upgrade } = useBuildingUpgrade();
+    const { cancelWorkQueue } = useWorkqueue();
     const { destory, upgrade: upgradeBuilding } = useBuildingOperate();
     const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
     const planetInfo = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
@@ -90,20 +93,26 @@ export const GameInfo: React.FC<{
     let timer: any = null;
 
     const [state, setState] = React.useState({
-      destoryVisible: false,
       upgradesVisible: false,
+      cancelVisible: false,
       upgrade: {} as any,
       time: diffTime || 0,
     });
+
+    const [cancelVisible, setCancelVisible] = React.useState(false);
+    const { upgrade_need } = state.upgrade?.estimate_building_detail || {};
+
     const itemData =
       selfBuilding?.find((row: any) => row?.building?._id === building_id)
         ?.building || currentBuild;
 
     const init = useCallback(async () => {
+      // if (itemData?.isbuilding) {
       const res = await upgrade(planet_id, building_id);
       setState({ ...state, upgrade: res });
+      // }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [upgrade, planet_id, building_id]);
+    }, [upgrade, planet_id, building_id, itemData]);
 
     React.useEffect(() => {
       if (itemData?._id && !itemData?.isactive) {
@@ -162,6 +171,16 @@ export const GameInfo: React.FC<{
       return `${hour}h:${min}m:${sec}s`;
     };
 
+    // 取消建筑升级、建造
+    const cancelBuildingQueue = async () => {
+      try {
+        const res = await cancelWorkQueue(planet_id, itemData?.work_queue_id);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     // 倒计时
     const countDownNumber = () => {
       if (diffTime <= 0) {
@@ -191,7 +210,7 @@ export const GameInfo: React.FC<{
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [diffTime]);
 
-    console.log('gameisbuilding', itemData, diffTime);
+    console.log('gameisbuilding', itemData, itemData.isbuilding);
     return (
       <Container>
         {itemData?._id && (
@@ -218,9 +237,22 @@ export const GameInfo: React.FC<{
                         {`${itemData?.propterty?.size.area_x}x${itemData?.propterty?.size.area_y}`}
                       </Text>
                     </Flex>
-                    <Text bold small shadow='primary'>
-                      尚未建筑
-                    </Text>
+                    {!itemData.isbuilding && !itemData?.work_queue_id && (
+                      <Text bold small shadow='primary'>
+                        尚未建筑
+                      </Text>
+                    )}
+
+                    {itemData?.work_queue_id && (
+                      <Text bold small shadow='primary'>
+                        升级中
+                      </Text>
+                    )}
+                    {state.upgrade?.building_detail?._id && (
+                      <Text shadow='primary' bold fontSize='22px'>
+                        Lv {itemData?.propterty?.levelEnergy + 1} 预览
+                      </Text>
+                    )}
                   </Flex>
                   <Flex flex={1} justifyContent='space-between' flexWrap='wrap'>
                     {/* 矿石建筑 */}
@@ -365,102 +397,190 @@ export const GameInfo: React.FC<{
               </Flex>
             </CardContent>
             <CardInfo>
-              {/* {!itemData?.isbuilding && (
+              {!itemData?.isbuilding && !itemData?.work_queue_id && (
                 <>
                   <Flex mt='21px' mb='15px' alignItems='flex-end'>
                     <Text bold fontSize='24px' shadow='primary'>
                       建造要求
                     </Text>
                     <Text ml='16px' fontSize='16px' mb='2px'>
-                      建造耗时（{formatTime(state.time)}）
+                      建造耗时（
+                      {formatTime(itemData?.upgrade_need?.upgrade_time)}）
                     </Text>
                   </Flex>
-                  <Text fontSize='16px' mb='5px'>
-                    建造所需香料：1000/{planetAssets?.population}
+                  <Text
+                    fontSize='16px'
+                    mb='5px'
+                    color={`${
+                      planetAssets?.energy <
+                        itemData?.upgrade_need?.upgrade_energy && 'warning'
+                    }`}
+                  >
+                    建造所需能量：{itemData?.upgrade_need?.upgrade_energy}/
+                    {planetAssets?.energy}
                   </Text>
-                  <Text fontSize='16px'>
-                    建造所需矿石：3000/{planetAssets?.population}
+                  <Text
+                    fontSize='16px'
+                    mb='5px'
+                    color={`${
+                      planetAssets?.stone <
+                        itemData?.upgrade_need?.upgrade_stone && 'warning'
+                    }`}
+                  >
+                    建造所需矿石：{itemData?.upgrade_need?.upgrade_stone}/
+                    {planetAssets?.stone}
+                  </Text>
+                  <Text
+                    fontSize='16px'
+                    mb='5px'
+                    color={`${
+                      planetAssets?.population <
+                        itemData?.upgrade_need?.upgrade_population && 'warning'
+                    }`}
+                  >
+                    建造所需香料：{itemData?.upgrade_need?.upgrade_population}/
+                    {planetAssets?.population}
                   </Text>
                 </>
-              )} */}
+              )}
 
               {/* 取消升级、创建建筑 */}
-              <Flex>
-                <ActionButton
-                  disabled={itemData?.isactive}
-                  variant='danger'
-                  onClick={() =>
-                    dispatch(storeAction.destoryBuildingVisibleModal(true))
-                  }
+              {itemData?.work_queue_id && (
+                <Flex
+                  justifyContent='space-between'
+                  alignItems='center'
+                  style={{
+                    minHeight: 175,
+                  }}
                 >
-                  {t('planetDestroyBuilding')}
-                </ActionButton>
-              </Flex>
-
-              <Flex
-                justifyContent='space-between'
-                alignItems='center'
-                style={{
-                  height: 138,
-                }}
-              >
-                {(itemData?.isactive ||
-                  itemData?.propterty?.levelEnergy <
-                    state.upgrade?.max_building_level) && (
-                  <Flex flexDirection='column'>
-                    <Flex alignItems='center'>
-                      <Text shadow='primary' fontSize='33px'>
+                  <Flex flexDirection='column' width='388px'>
+                    <Flex alignItems='center' mb='27px'>
+                      <Text shadow='primary' bold fontSize='34px'>
                         Lv {itemData?.propterty?.levelEnergy}
                       </Text>
-                      <Box width='47px' height='40px' margin='0 44px'>
+                      <Box width='47px' height='40px' margin='0 40px'>
                         <Image
                           src='/images/commons/icon/icon-upgrade.png'
                           width={47}
                           height={40}
                         />
                       </Box>
-                      <Text shadow='primary' fontSize='34px'>
+                      <Text shadow='primary' bold fontSize='34px'>
                         Lv {itemData?.propterty?.levelEnergy + 1}
                       </Text>
                     </Flex>
-                    {/* <Text color='textSubtle' small>
-                      {t('planetPopulationRequiredUpgrade%value%people', {
-                        value: state.upgrade?.cost_population,
-                      })}
-                    </Text> */}
-                    <Text small>升级耗时（5h:50m:15s）</Text>
-                    <Text small>
-                      升级所需人口：1000/{state.upgrade?.cost_population}人
-                    </Text>
-                    <Text small>升级所需矿石：900/1000人</Text>
-                  </Flex>
-                )}
-                <Flex flexDirection='column'>
-                  {itemData?.propterty?.levelEnergy <
-                    state.upgrade?.max_building_level && (
-                    <ActionButton
-                      disabled={
-                        itemData?.propterty?.levelEnergy - planetInfo?.level >=
-                          1 || itemData?.isactive
+                    <Progress
+                      color='progressGreenBar'
+                      variant='round'
+                      scale='md'
+                      linear
+                      primaryStep={
+                        Math.round(
+                          ((diffTime - state.time) / diffTime) * 10000,
+                        ) / 100
                       }
+                    />
+                    <Text mt='17px' fontSize='17px'>
+                      剩余时间（{formatTime(state.time)}）
+                    </Text>
+                  </Flex>
+                  <ActionButton
+                    disabled={itemData?.isactive}
+                    variant='danger'
+                    onClick={() => setCancelVisible(true)}
+                  >
+                    取消升级
+                  </ActionButton>
+                </Flex>
+              )}
+
+              {state.upgrade?.building_detail?._id && (
+                <Flex
+                  justifyContent='space-between'
+                  alignItems='center'
+                  style={{
+                    minHeight: 175,
+                  }}
+                >
+                  <Flex flexDirection='column'>
+                    <Flex alignItems='center' mb='5px'>
+                      <Text shadow='primary' bold fontSize='34px'>
+                        Lv {itemData?.propterty?.levelEnergy}
+                      </Text>
+                      <Box width='47px' height='40px' margin='0 40px'>
+                        <Image
+                          src='/images/commons/icon/icon-upgrade.png'
+                          width={47}
+                          height={40}
+                        />
+                      </Box>
+                      <Text shadow='primary' bold fontSize='34px'>
+                        Lv {itemData?.propterty?.levelEnergy + 1}
+                      </Text>
+                    </Flex>
+                    <Text fontSize='17px'>
+                      升级耗时（
+                      {formatTime(upgrade_need?.upgrade_time)}）
+                    </Text>
+                    {upgrade_need?.upgrade_energy > 0 && (
+                      <Text
+                        fontSize='17px'
+                        color={`${
+                          planetAssets?.energy < upgrade_need?.upgrade_energy &&
+                          'warning'
+                        }`}
+                      >
+                        升级所需能量：
+                        {`${upgrade_need?.upgrade_energy} / ${planetAssets?.energy}`}
+                      </Text>
+                    )}
+                    {upgrade_need?.upgrade_population > 0 && (
+                      <Text
+                        fontSize='17px'
+                        color={`${
+                          planetAssets?.population <
+                            upgrade_need?.upgrade_population && 'warning'
+                        }`}
+                      >
+                        升级所需香料：
+                        {`${upgrade_need?.upgrade_population} / ${planetAssets?.population}`}
+                      </Text>
+                    )}
+                    {upgrade_need?.upgrade_stone > 0 && (
+                      <Text
+                        fontSize='17px'
+                        color={`${
+                          planetAssets?.stone < upgrade_need?.upgrade_stone &&
+                          'warning'
+                        }`}
+                      >
+                        升级所需矿石：
+                        {`${upgrade_need?.upgrade_stone} / ${planetAssets?.stone}`}
+                      </Text>
+                    )}
+                  </Flex>
+                  <Flex flexDirection='column'>
+                    <ActionButton
+                      disabled={!state.upgrade?.estimate_building_detail?._id}
                       onClick={() =>
                         setState({ ...state, upgradesVisible: true })
                       }
                     >
                       {t('planetBuildingUpgrades')}
                     </ActionButton>
-                  )}
-                  <ActionButton
-                    disabled={itemData?.isactive}
-                    variant='danger'
-                    onClick={() =>
-                      dispatch(storeAction.destoryBuildingVisibleModal(true))
-                    }
-                  >
-                    {t('planetDestroyBuilding')}
-                  </ActionButton>
+
+                    <ActionButton
+                      disabled={itemData?.isactive}
+                      variant='danger'
+                      onClick={() =>
+                        dispatch(storeAction.destoryBuildingVisibleModal(true))
+                      }
+                    >
+                      {t('planetDestroyBuilding')}
+                    </ActionButton>
+                  </Flex>
                 </Flex>
-              </Flex>
+              )}
             </CardInfo>
           </>
         )}
@@ -487,6 +607,16 @@ export const GameInfo: React.FC<{
             onUpgradeLevel();
           }}
           onClose={() => setState({ ...state, upgradesVisible: false })}
+        />
+
+        {/* 取消建筑升级&&建造 */}
+        <CancelModal
+          visible={cancelVisible}
+          title='取消升级'
+          content='将停止当前建筑的队列任务，并且无法收回已支出资源。
+是否取消当前建筑任务？'
+          onClose={() => setCancelVisible(false)}
+          onComplete={cancelBuildingQueue}
         />
       </Container>
     );
