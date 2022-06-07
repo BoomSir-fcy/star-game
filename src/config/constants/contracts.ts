@@ -31,7 +31,7 @@ const contracts = {
   },
   MysteryBox: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0xa9da2bFea47D45F0fe1809ea760CBd956EeC58cC',
+    [ChainId.BSC_TESTNET]: '0xBdbe5995d5C760247ABc32183D3be0ea41cE310b',
   },
   Galaxy: {
     [ChainId.BSC_MAINNET]: '',

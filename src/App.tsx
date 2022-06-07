@@ -25,6 +25,7 @@ const Login = lazy(() => import('./views/Login'));
 const MysteryBox = lazy(() => import('./views/MysteryBox'));
 const MysteryBoxDetail = lazy(() => import('./views/MysteryBox/Detail'));
 const MysteryBoxState = lazy(() => import('./views/MysteryBox/State'));
+const MysteryBoxList = lazy(() => import('./views/MysteryBox/List'));
 
 const PlantLeague = lazy(() => import('./views/PlantLeague'));
 const BattleReport = lazy(() => import('./views/BattleReport'));
@@ -82,6 +83,7 @@ function App() {
                 element={<MysteryBoxDetail />}
               />
               <Route path='/mystery-box/state' element={<MysteryBoxState />} />
+              <Route path='/mystery-box/list' element={<MysteryBoxList />} />
 
               {/* 升级星球背包 */}
               <Route path='/upgrade-list' element={<UpgradeList />} />
