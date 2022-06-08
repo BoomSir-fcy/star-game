@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useStore } from 'state';
 import { Flex, Box, Image, Text, Progress, Button } from 'uikit';
-// import Progress from 'components/Progress';
+import { useTranslation } from 'contexts/Localization';
 
 const QueueBox = styled(Box)`
   position: relative;
@@ -41,34 +41,38 @@ let timer: any = null;
 export const BuildlingStatus: React.FC<{
   type: number;
   status: number;
+  level?: number;
   endTime: number;
   diffTime?: number;
   onComplete: () => void;
-}> = ({ type, status, endTime, diffTime, onComplete }) => {
+}> = ({ type, status, level, endTime, diffTime, onComplete }) => {
   // 倒计时
+  const { t } = useTranslation();
   const [state, setState] = useState({
     time: diffTime,
     ratio: 0,
   });
 
-  const workInfo = {
-    1: {
-      src: 'images/commons/icon/icon-building-upgrade.png',
-      label: 'Building...',
-    },
-    2: {
-      src: 'images/commons/icon/icon-building-putup',
-      label: 'Building...',
-    },
-    3: {
-      src: 'images/commons/icon/icon-building-putup.png',
-      label: 'Preparing...',
-    },
-    4: {
-      src: 'images/commons/icon/icon-building-upgrade.png',
-      label: 'Preparing...',
-    },
-  };
+  const workInfo = React.useMemo(() => {
+    return {
+      1: {
+        src: 'images/commons/icon/icon-building-upgrade.png',
+        label: t('Building...'),
+      },
+      2: {
+        src: 'images/commons/icon/icon-building-putup',
+        label: t('Building...'),
+      },
+      3: {
+        src: 'images/commons/icon/icon-building-putup.png',
+        label: t('Preparing...'),
+      },
+      4: {
+        src: 'images/commons/icon/icon-building-upgrade.png',
+        label: t('Preparing...'),
+      },
+    };
+  }, [t]);
 
   // 倒计时
   const countDownNumber = () => {
@@ -115,7 +119,9 @@ export const BuildlingStatus: React.FC<{
       </Box>
       <Flex flexDirection='column' style={{ flex: 1 }}>
         <Text fontSize='13px' mb='4px'>
-          {workInfo[status]?.label}
+          {type === 2 && status === 3
+            ? `Lv${level}~Lv${level + 1}`
+            : workInfo[status]?.label}
         </Text>
         <Progress
           color='progressGreenBar'
@@ -137,6 +143,7 @@ export const Queue: React.FC<{
   onSelectCurrent: (item: any) => void;
   onComplete: () => void;
 }> = ({ currentQueue, onSave, onSelectCurrent, onComplete }) => {
+  const { t } = useTranslation();
   const vipBenefite = useStore(p => p.userInfo.userInfo.vipBenefits);
   const [state, setState] = useState({
     current: '' as string | number,
@@ -153,8 +160,10 @@ export const Queue: React.FC<{
           key={item}
           mr='40px'
           onClick={() => {
-            setState({ ...state, current: item });
-            onSelectCurrent(currentQueue[index]);
+            if (currentQueue[index]?._id) {
+              setState({ ...state, current: item });
+              onSelectCurrent(currentQueue[index]);
+            }
           }}
         >
           <QueueBox className={`${state.current === item && 'active'}`}>
@@ -176,6 +185,10 @@ export const Queue: React.FC<{
             <BuildlingStatus
               type={currentQueue[index]?.work_type}
               status={currentQueue[index]?.work_status}
+              level={
+                currentQueue[index]?.propterty?.levelEnergy ||
+                currentQueue[index]?.target_level - 1
+              }
               endTime={
                 currentQueue[index]?.work_end_time -
                 currentQueue[index]?.work_start_time
@@ -191,7 +204,7 @@ export const Queue: React.FC<{
           )}
         </Box>
       ))}
-      <SaveQueue onClick={onSave}>保存队列</SaveQueue>
+      <SaveQueue onClick={onSave}>{t('avequeue')}</SaveQueue>
     </Flex>
   );
 };

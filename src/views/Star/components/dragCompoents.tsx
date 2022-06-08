@@ -208,7 +208,7 @@ export const DragCompoents: React.FC<{
       },
       {
         index: 2,
-        title: `建造/升级队列`,
+        title: `${t('BuildUpgradeQueue')}`,
       },
     ],
   });
@@ -720,7 +720,7 @@ export const DragCompoents: React.FC<{
                     top={item.y * height}
                     checked={currentBuild?.index === item?.index}
                     onClick={() => {
-                      setCurrentBuild(item);
+                      setCurrentBuild({ ...item, iscreate: true });
                       changeBuff(item);
                     }}
                   >
@@ -741,7 +741,7 @@ export const DragCompoents: React.FC<{
             >
               <BuffBonus currentBuff={currentBuffer} />
               <Flex flexDirection='column'>
-                <ActionButton onClick={destroyBuilding}>
+                <ActionButton onClick={destroyBuilding} disabled>
                   {t('One-clickRepair')} 3
                 </ActionButton>
                 {/* <ActionButton onClick={createGrid}>
@@ -804,7 +804,10 @@ export const DragCompoents: React.FC<{
                       <GameThing
                         draggable
                         onClick={() => {
-                          setCurrentBuild({ ...row, isbuilding: false });
+                          setCurrentBuild({
+                            ...row,
+                            isbuilding: false,
+                          });
                         }}
                         onDragStart={e => dragStart(e, row)}
                         onDrop={event => event.preventDefault()}
