@@ -793,7 +793,7 @@ export const DragCompoents: React.FC<{
             {state.currentTab === 1 ? (
               <BuildingsScroll ml='40px'>
                 {(buildings[state?.currentTab] ?? []).map(
-                  (row: any, index: number) => (
+                  (row: Api.Building.Building, index: number) => (
                     <BuildingsItem
                       key={`${row.buildings_number}_${index}`}
                       className={classnames(
@@ -803,10 +803,10 @@ export const DragCompoents: React.FC<{
                     >
                       <GameThing
                         draggable
-                        onClick={() =>
-                          setCurrentBuild({ ...row, isbuilding: false })
-                        }
-                        onDragStart={dragStart}
+                        onClick={() => {
+                          setCurrentBuild({ ...row, isbuilding: false });
+                        }}
+                        onDragStart={e => dragStart(e, row)}
                         onDrop={event => event.preventDefault()}
                         onDragEnter={event => event.preventDefault()}
                         onDragOver={dragOver}
