@@ -81,7 +81,9 @@ export interface MysteryBoxView {
   totalPoolSentBNB: string; // 总给质押池的量bnb
   maxSales: string; // 最大可销售量
   sold: string; // 已销售量
+  maxHeld: string; // 每种盲盒最大可持有的数量
   loading?: boolean;
+  boxCount: string[]; // 用户持有的各盲盒数量
 }
 
 export interface MysteryBoxState {

@@ -199,13 +199,13 @@ const Planet = () => {
       navigate('/plant-league');
       setTimeout(() => {
         destroy(activeStep + 1);
-        dispatch(
-          storeAction.toggleVisible({
-            visible: true,
-            lastStep: choose ? steps.length : planetSteps.length,
-            pathname: choose ? '/star/planet&choose=' : '/star/planet',
-          }),
-        );
+        // dispatch(
+        //   storeAction.toggleVisible({
+        //     visible: true,
+        //     lastStep: choose ? steps.length : planetSteps.length,
+        //     pathname: choose ? '/star/planet&choose=' : '/star/planet',
+        //   }),
+        // );
       }, 100);
     } catch (e) {
       console.error(e);
@@ -224,10 +224,10 @@ const Planet = () => {
     toastError,
     destroy,
     activeStep,
-    dispatch,
-    choose,
-    steps.length,
-    planetSteps.length,
+    // dispatch,
+    // choose,
+    // steps.length,
+    // planetSteps.length,
   ]);
 
   const addPlanetToList = useCallback(

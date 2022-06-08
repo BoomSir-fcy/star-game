@@ -144,7 +144,14 @@ const Grow: React.FC = () => {
           <MysteryBoxStyled>
             <MysteryBoxBaseStyled quality={mysteryBoxQualities.SUPER} />
             <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
-              <StarCom variant='none' scale='ld' />
+              <StarCom
+                margin='auto'
+                variant='none'
+                scale='ld'
+                picture={planetInfo?.picture}
+                quality={planetInfo?.rarity}
+                picture1={planetInfo?.picture1}
+              />
             </MysteryBoxStarStyled>
           </MysteryBoxStyled>
           <Flex className='planet'>
@@ -209,6 +216,7 @@ const Grow: React.FC = () => {
       </BgCard>
       <GrowPop
         visible={visible}
+        planetInfo={planetInfo}
         itemData={estimateCost}
         onClose={() => setVisible(false)}
         callBack={getPlanetStrengthen}

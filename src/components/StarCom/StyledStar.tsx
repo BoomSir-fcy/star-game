@@ -2,7 +2,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { space, variant as variantStyled } from 'styled-system';
 import { qualities } from 'uikit/theme/types';
 import { styleVariants, scaleVariants } from './theme';
-import { scales, StarProps, variants } from './types';
+import { scales, StarProps, variants, Variant, Scale } from './types';
 
 interface StyledStarComProps extends StarProps {
   theme: DefaultTheme;
@@ -17,30 +17,32 @@ const getBoxShadow = ({ theme, quality, variant }: StyledStarComProps) => {
   return `0px 0px 8px 0px ${color}, 0px 0px 0px 0.5px #ffffff, inset 0px 0px 5px 1px ${color}`;
 };
 
-const getSize = ({
+export const getVariantsSize = (
+  variant: Variant = variants.SQUARE,
+  scale: Scale = scales.MD,
+) => {
+  if (variant === variants.SQUARE) {
+    const { width, height } = scaleVariants[scale];
+    return { width, height };
+  }
+  if (variant === variants.RING) {
+    const { rWidth: width, rHeight: height } = scaleVariants[scale];
+    return { width, height };
+  }
+  const { sWidth, sHeight } = scaleVariants[scale];
+  return { width: sWidth, height: sHeight };
+};
+
+export const getSize = ({
   theme,
   variant = variants.SQUARE,
   scale = scales.MD,
 }: StyledStarComProps) => {
-  if (variant === variants.SQUARE) {
-    const { width, height } = scaleVariants[scale];
-    return `
-      width: ${width};
-      height: ${height};
-    `;
-  }
-  if (variant === variants.RING) {
-    const { rWidth, rHeight } = scaleVariants[scale];
-    return `
-      width: ${rWidth};
-      height: ${rHeight};
-    `;
-  }
-  const { sWidth, sHeight } = scaleVariants[scale];
+  const { width, height } = getVariantsSize(variant, scale);
   return `
-    width: ${sWidth};
-    height: ${sHeight};
-  `;
+  width: ${width}px;
+  height: ${height}px;
+`;
 };
 
 const StyledStarCom = styled.div<StyledStarComProps>`

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Card, Flex, Box, Text, Image } from 'uikit';
-import StarCom from 'components/StarCom';
 import { useTranslation } from 'contexts/Localization';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

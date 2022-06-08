@@ -161,7 +161,7 @@ const Info: React.FC<InfoProps> = ({
             <Link to='/star/planet'>
               <ButtonTag1 variant='custom' className={className}>
                 <Flex pt='16px' alignItems='center' width='100%'>
-                  <StarCom variant='none' />
+                  <StarCom margin='0 16px' variant='none' scale='sm' />
                   <Box>
                     <Text fontSize='20px' textAlign='left'>
                       {t('Planet Count')}

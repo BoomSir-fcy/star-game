@@ -163,7 +163,7 @@ const MysteryBoxDetail = () => {
         <MysteryBox>
           <MysteryBoxBaseStyled quality={mysteryBoxQualities.ORDINARY} />
           <MysteryBoxStarStyled quality={mysteryBoxQualities.ORDINARY}>
-            <StarCom variant='none' scale='ld' />
+            <StarCom variant='none' scale='ld' picture={info?.picture} />
           </MysteryBoxStarStyled>
           <StarLabelStyled>
             <Flex flexDirection='column' alignItems='center'>

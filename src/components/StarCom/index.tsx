@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Image } from 'uikit';
-import StyledStar from './StyledStar';
-import { StarProps } from './types';
+import StyledStar, { getVariantsSize } from './StyledStar';
+import { StarProps, variants } from './types';
 
 const ImageStyled = styled(Image)`
   position: absolute;
@@ -17,10 +17,19 @@ const IconUnion = styled(Image)`
   right: -12px;
 `;
 
-const StarCom: React.FC<StarProps> = ({ children, showUnion, ...props }) => {
+const StarCom: React.FC<StarProps> = ({
+  children,
+  showUnion,
+  picture = '/images/commons/36.png',
+  ...props
+}) => {
+  const { scale } = props;
+  const { width, height } = React.useMemo(() => {
+    return getVariantsSize(variants.NONE, scale);
+  }, [scale]);
   return (
     <StyledStar {...props}>
-      <ImageStyled width={100} height={100} src='/images/star/btc.png' />
+      <ImageStyled width={width} height={height} src={picture} />
       {showUnion && (
         <IconUnion
           width={50}

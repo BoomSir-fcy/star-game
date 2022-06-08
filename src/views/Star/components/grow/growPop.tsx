@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Button, Text, Card, Image } from 'uikit';
 import ModalWrapper from 'components/Modal';
+import StarCom from 'components/StarCom';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Api } from 'apis';
 import { useToast } from 'contexts/ToastsContext';
@@ -19,10 +20,11 @@ const ImgCard = styled(Card)`
 
 export const GrowPop: React.FC<{
   visible: boolean;
+  planetInfo: Api.Planet.PlanetInfo;
   itemData: StrengthenConsumeType;
   onClose: () => void;
   callBack: () => void;
-}> = ({ visible, itemData, onClose, callBack }) => {
+}> = ({ visible, itemData, onClose, callBack, planetInfo }) => {
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
   const { toastError, toastSuccess, toastWarning } = useToast();
@@ -53,9 +55,16 @@ export const GrowPop: React.FC<{
     >
       <Box padding='30px 25px'>
         <Flex>
-          <ImgCard width={295} height={295}>
+          {/* <ImgCard width={295} height={295}>
             <Image width={295} height={295} src='/images/model/combat_01.png' />
-          </ImgCard>
+          </ImgCard> */}
+          <StarCom
+            scale='ld'
+            picture1={planetInfo?.picture1}
+            picture={planetInfo?.picture}
+            quality={planetInfo?.rarity}
+          />
+
           <Flex
             flex='1'
             ml='23px'
