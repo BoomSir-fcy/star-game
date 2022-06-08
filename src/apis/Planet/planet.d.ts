@@ -57,6 +57,7 @@ declare namespace Api {
       status: number; // 1星球升级 2星球强化 3建筑升级 4建筑恢复耐久
       status_countdown: number; // 倒计时
       exp: number; // 当前经验值
+      can_provided_exp: number; // 销毁产生经验值
     }
 
     interface UpgradePlanetInfo {

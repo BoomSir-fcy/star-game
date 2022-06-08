@@ -121,6 +121,9 @@ export const PlanetBox: React.FC<{
                 <Text small color='textSubtle' ml='40px'>
                   {t('Building Count')}: {info?.build_count}
                 </Text>
+                <Text small color='textSubtle' ml='40px'>
+                  {t('EXP')}: {info?.can_provided_exp}
+                </Text>
               </Flex>
             </Box>
             {info?.status_countdown > 0 && (

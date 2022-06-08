@@ -150,7 +150,7 @@ const JoinTheAlliance: React.FC<{
         className='join-union'
       >
         <StarAddBtn
-          name={allianceList && allianceList[0]?.planet?.name}
+          // name={allianceList && allianceList[0]?.planet?.name}
           onRemove={() => Remove(allianceList[0]?.planetId)}
           onPlantClick={() => {
             gotoPlantDetail(allianceList[0]?.planetId);
@@ -171,7 +171,7 @@ const JoinTheAlliance: React.FC<{
       </Flex>
       <Flex alignItems='center' justifyContent='space-between'>
         <StarAddBtn
-          name={allianceList && allianceList[4]?.planet?.name}
+          // name={allianceList && allianceList[4]?.planet?.name}
           onRemove={() => Remove(allianceList[4]?.planetId)}
           onPlantClick={() => {
             gotoPlantDetail(allianceList[4]?.planetId);
@@ -202,7 +202,7 @@ const JoinTheAlliance: React.FC<{
           </Button>
         </Box>
         <StarAddBtn
-          name={allianceList && allianceList[1]?.planet?.name}
+          // name={allianceList && allianceList[1]?.planet?.name}
           onRemove={() => Remove(allianceList[1]?.planetId)}
           onPlantClick={() => {
             gotoPlantDetail(allianceList[1]?.planetId);
@@ -223,7 +223,7 @@ const JoinTheAlliance: React.FC<{
       </Flex>
       <Flex alignItems='center' justifyContent='center'>
         <StarAddBtn
-          name={allianceList && allianceList[3]?.planet?.name}
+          // name={allianceList && allianceList[3]?.planet?.name}
           onRemove={() => Remove(allianceList[3]?.planetId)}
           onPlantClick={() => {
             gotoPlantDetail(allianceList[3]?.planetId);
@@ -242,7 +242,7 @@ const JoinTheAlliance: React.FC<{
           Leve={(allianceList && allianceList[3]?.planet?.level) || ''}
         />
         <StarAddBtn
-          name={allianceList && allianceList[2]?.planet?.name}
+          // name={allianceList && allianceList[2]?.planet?.name}
           onRemove={() => Remove(allianceList[2]?.planetId)}
           onPlantClick={() => {
             gotoPlantDetail(allianceList[2]?.planetId);
