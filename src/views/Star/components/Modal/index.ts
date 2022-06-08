@@ -4,3 +4,4 @@ export * from './ThingDestoryModal';
 export * from './ThingUpgradesModal';
 export * from './ThingHpModal';
 export * from './TextList';
+export * from './CancelModal';

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import classnames from 'classnames';
 import { polyfill } from 'mobile-drag-drop';
 import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour';
 import { useDispatch } from 'react-redux';
@@ -13,9 +14,10 @@ import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 
 import { BuyVipModal } from 'components/Modal/buyVipModal';
-import { GameInfo, GameThing, Building } from './gameModel';
+import { throttle } from 'lodash';
+import { GameInfo, GameThing, Building, Queue } from './gameModel';
 import { BuffBonus } from './buff';
-import { useBuffer } from './hooks';
+import { useBuffer, useWorkqueue } from './hooks';
 
 polyfill({
   dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
@@ -69,16 +71,25 @@ const Normal = styled(Flex)<{ pre: boolean; isbuilding?: boolean }>`
 
 const BuildingBox = styled(Box)<{ checked: boolean }>`
   position: absolute;
-  text-shadow: 1px 1px 5px #41b7ff, -1px -1px 5px #41b7ff;
-  z-index: 10;
   cursor: pointer;
   border: 1px solid #30343d;
 
   ${({ checked }) =>
     checked &&
     css`
-      border: 1px solid #fff;
-      box-shadow: 0 0 5px 2px #41b7ff;
+      &::after {
+        position: absolute;
+        display: block;
+        content: '';
+        top: 0;
+        left: 0;
+        right: 0;
+        width: calc(100% + 0px);
+        height: calc(100% + 0px);
+        border: 2px solid #ffffff;
+        box-shadow: ${({ theme }) => theme.shadows.highlight};
+        z-index: 15;
+      }
     `}
   img {
     width: 100%;
@@ -131,14 +142,33 @@ const TabsButton = styled(Button)<{ active?: boolean }>`
 
 const BuildingsScroll = styled(Flex)`
   max-width: 100%;
-  overflow-x: auto;
-  ::-webkit-scrollbar {
-    width: 1px;
-  }
+  padding-left: 5px;
+  padding-top: 5px;
+  overflow: auto;
 `;
 
 const BuildingsItem = styled(Box)`
+  position: relative;
   margin-right: 45px;
+  &.active {
+    .game-thing {
+      background-color: #000;
+      &::after {
+        position: absolute;
+        display: block;
+        content: '';
+        top: -2px;
+        left: -2px;
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        border-radius: 10px;
+        border: 2px solid #fff;
+        background-color: #fff;
+        box-shadow: ${({ theme }) => theme.shadows.highlight};
+        z-index: 5;
+      }
+    }
+  }
   &::last-child {
     margin-right: 0;
   }
@@ -166,6 +196,7 @@ export const DragCompoents: React.FC<{
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { getPlanetBuff } = useBuffer();
+  const { refreshWorkQueue } = useWorkqueue();
   const { toastSuccess, toastError } = useToast();
   const [state, setState] = React.useState({
     currentTab: 1,
@@ -189,6 +220,9 @@ export const DragCompoents: React.FC<{
     React.useState<Api.Building.BuildingBuffer>(null);
   const buildings = useStore(p => p.buildling.buildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
+
+  // 升级建造队列
+  const [currentQueue, setCurrentQueue] = React.useState([]);
 
   // X, row, width 横
   // Y, col, height 竖
@@ -236,6 +270,18 @@ export const DragCompoents: React.FC<{
     }
   }, [buffer, currentBuild?._id, getPlanetBuff, planet_id]);
 
+  const getWorkQueue = React.useCallback(async () => {
+    try {
+      const res = await refreshWorkQueue(planet_id);
+      if (Api.isSuccess(res)) {
+        console.log(res.data.work_queue);
+        setCurrentQueue(res.data.work_queue);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [planet_id, refreshWorkQueue]);
+
   React.useEffect(() => {
     if (itemData.length > 0) {
       updateGrids(itemData);
@@ -245,9 +291,24 @@ export const DragCompoents: React.FC<{
   React.useEffect(() => {
     if (planet_id) {
       getBuffer();
+      getWorkQueue();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 获取坐标点
+  const getMatrix = React.useCallback(
+    (index: number, currentSize = 1) => {
+      const row = Math.floor(index / cols);
+      const col = Math.floor(index % rows);
+
+      return [
+        [{ x: col }, { y: row + currentSize }],
+        [{ x: col + currentSize }, { y: row }],
+      ];
+    },
+    [cols, rows],
+  );
 
   // 计算绝对坐标
   const getAbsolutePosition = React.useCallback(
@@ -329,6 +390,64 @@ export const DragCompoents: React.FC<{
     [itemData, grid],
   );
 
+  // 创建格子到九宫格中
+  const saveWorkQueue = React.useCallback(async () => {
+    const params = currentQueue?.reduce((current, next, index): any => {
+      const [from, to] = getMatrix(next?.index, next?.propterty?.size?.area_x);
+      if (!next?.work_end_time) {
+        if (next?.work_type === 1) {
+          current.push({
+            work_type: 1,
+            building_create_param: {
+              buildings_id: next._id,
+              building_number: next.buildings_number,
+              position: {
+                from: { x: from[0].x, y: from[1].y },
+                to: { x: to[0].x, y: to[1].y },
+              },
+              index: next.index,
+            },
+          });
+        } else {
+          current.push({
+            work_type: 2,
+            building_upgrade_param: {
+              buildings_id: next._id,
+              building_number: next.buildings_number,
+            },
+          });
+        }
+      }
+      return current;
+    }, []);
+
+    try {
+      const res = await Api.BuildingApi.createQueueBuilding({
+        planet_id,
+        work_queue_params: params,
+      });
+      if (Api.isSuccess(res)) {
+        toastSuccess(t('planetTipsSaveSuccess'));
+        // setGridBuilds([]);
+        getWorkQueue();
+        dispatch(fetchPlanetBuildingsAsync(planet_id));
+      } else {
+        toastError(res?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [
+    currentQueue,
+    dispatch,
+    getMatrix,
+    getWorkQueue,
+    planet_id,
+    t,
+    toastError,
+    toastSuccess,
+  ]);
+
   const handleData = React.useCallback(
     (afterTarget: any) => {
       const from = Number(dragged?.dataset?.id);
@@ -381,6 +500,10 @@ export const DragCompoents: React.FC<{
       });
 
       if (canSave) {
+        setCurrentQueue([
+          ...currentQueue,
+          { ...draggedItem, work_type: 1, work_status: 3, index: to },
+        ]);
         const startIndex = Math.min(...currentSize);
 
         for (let i = grid.length - 1; i >= 0; i--) {
@@ -404,7 +527,7 @@ export const DragCompoents: React.FC<{
         }
       }
     },
-    [getAbsolutePosition, grid, t, toastError],
+    [currentQueue, getAbsolutePosition, grid, t, toastError],
   );
 
   const gradRef = React.useRef(null);
@@ -518,55 +641,6 @@ export const DragCompoents: React.FC<{
     });
   };
 
-  // 获取坐标点
-  const getMatrix = (index: number, currentSize = 1) => {
-    const row = Math.floor(index / cols);
-    const col = Math.floor(index % rows);
-
-    return [
-      [{ x: col }, { y: row + currentSize }],
-      [{ x: col + currentSize }, { y: row }],
-    ];
-  };
-
-  // 创建格子到九宫格中
-  const createGrid = async () => {
-    const params = gridBuilds?.reduce((current, next, index): any => {
-      if (next?.isactive) {
-        const [from, to] = getMatrix(
-          next?.index,
-          next?.propterty?.size?.area_x,
-        );
-        current.push({
-          buildings_id: next.buildings_number,
-          position: {
-            from: { x: from[0].x, y: from[1].y },
-            to: { x: to[0].x, y: to[1].y },
-          },
-          index: next.index,
-        });
-      }
-      return current;
-    }, []);
-
-    try {
-      const res = await Api.BuildingApi.createBuilding({
-        planet_id,
-        build_type: 1,
-        building_setting: params,
-      });
-      if (Api.isSuccess(res)) {
-        toastSuccess(t('planetTipsSaveSuccess'));
-        setGridBuilds([]);
-        dispatch(fetchPlanetBuildingsAsync(planet_id));
-      } else {
-        toastError(res?.message);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   // 销毁建筑
   const destroyBuilding = () => {
     if (!currentBuild?._id) {
@@ -661,7 +735,7 @@ export const DragCompoents: React.FC<{
               })}
             </Container>
             <Flex
-              ml='10px'
+              ml='25px'
               flexDirection='column'
               justifyContent='space-between'
             >
@@ -670,12 +744,12 @@ export const DragCompoents: React.FC<{
                 <ActionButton onClick={destroyBuilding}>
                   {t('One-clickRepair')} 3
                 </ActionButton>
-                <ActionButton onClick={createGrid}>
+                {/* <ActionButton onClick={createGrid}>
                   {t('planetSave')}
                 </ActionButton>
                 <ActionButton onClick={destroyBuilding} variant='danger'>
                   {t('planetDestroy')}
-                </ActionButton>
+                </ActionButton> */}
               </Flex>
             </Flex>
           </Flex>
@@ -683,12 +757,21 @@ export const DragCompoents: React.FC<{
             planet_id={planet_id}
             building_id={currentBuild?._id}
             currentBuild={currentBuild}
+            diffTime={Number(
+              (currentBuild?.work_end_time - Date.now() / 1000).toFixed(0),
+            )}
+            onUpgradeLevel={() =>
+              setCurrentQueue([
+                ...currentQueue,
+                { ...currentBuild, work_type: 2, work_status: 4 },
+              ])
+            }
             callback={() => setCurrentBuild({})}
           />
         </Flex>
         <BgCard variant='long' mt='12px' padding='40px'>
           <Flex className='buildings'>
-            <Flex flexDirection='column' width='230px'>
+            <Flex flexDirection='column' width='227px'>
               <CardTab>
                 {(state.tabs ?? []).map(row => (
                   <TabsButton
@@ -703,39 +786,64 @@ export const DragCompoents: React.FC<{
                   </TabsButton>
                 ))}
               </CardTab>
-              <Text mt='13px' small>
+              <Text bold mt='12px' textAlign='center' fontSize='15px'>
                 {t('planetDragBuildingDesiredGrid')}
               </Text>
             </Flex>
-            <BuildingsScroll ml='40px'>
-              {(buildings[state?.currentTab] ?? []).map(
-                (row: Api.Building.Building, index: number) => (
-                  <BuildingsItem
-                    key={`${row.buildings_number}_${index}`}
-                    className={`building_${index}`}
-                  >
-                    <GameThing
-                      draggable
-                      onClick={() => {
-                        console.log(row);
-                      }}
-                      onDragStart={e => dragStart(e, row)}
-                      onDrop={event => event.preventDefault()}
-                      onDragEnter={event => event.preventDefault()}
-                      onDragOver={dragOver}
-                      onDragEnd={dragEnd}
-                      scale='sm'
-                      itemData={row}
-                      src={row.picture}
-                      text={row?.propterty.name_cn}
-                    />
-                  </BuildingsItem>
-                ),
-              )}
-            </BuildingsScroll>
+            {state.currentTab === 1 ? (
+              <BuildingsScroll ml='40px'>
+                {(buildings[state?.currentTab] ?? []).map(
+                  (row: Api.Building.Building, index: number) => (
+                    <BuildingsItem
+                      key={`${row.buildings_number}_${index}`}
+                      className={classnames(
+                        `building_${index}`,
+                        row._id === currentBuild?._id && 'active',
+                      )}
+                    >
+                      <GameThing
+                        draggable
+                        onClick={() => {
+                          setCurrentBuild({ ...row, isbuilding: false });
+                        }}
+                        onDragStart={e => dragStart(e, row)}
+                        onDrop={event => event.preventDefault()}
+                        onDragEnter={event => event.preventDefault()}
+                        onDragOver={dragOver}
+                        onDragEnd={dragEnd}
+                        scale='sm'
+                        round
+                        itemData={row}
+                        src={row.picture}
+                        text={row?.propterty.name_cn}
+                      />
+                    </BuildingsItem>
+                  ),
+                )}
+              </BuildingsScroll>
+            ) : (
+              <Queue
+                currentQueue={currentQueue}
+                onSelectCurrent={(item: any) => {
+                  const currbuildings = buildings[1].find(
+                    ({ _id }) => item?.buildings_id === _id,
+                  );
+                  setCurrentBuild({
+                    ...currbuildings,
+                    ...item,
+                    iscreate: false,
+                    work_queue_id: item?._id,
+                  });
+                }}
+                onSave={saveWorkQueue}
+                onComplete={() => {
+                  getWorkQueue();
+                  dispatch(fetchPlanetBuildingsAsync(planet_id));
+                }}
+              />
+            )}
           </Flex>
         </BgCard>
-        {/* <BuyVipModal visible onClose={() => {}} /> */}
       </Box>
     </>
   );

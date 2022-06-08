@@ -13,6 +13,11 @@ export const initialState: BuildlingState = {
     planet_id: 0,
   },
   destroyBuilding: false,
+  planetAssets: {
+    energy: 0,
+    population: 0,
+    stone: 0,
+  },
 };
 
 export const buildling = createSlice({
@@ -36,7 +41,7 @@ export const buildling = createSlice({
         state.buildings = map;
       })
       .addCase(fetchPlanetBuildingsAsync.fulfilled, (state, action) => {
-        const { data, upgradeInfo } = action.payload;
+        const { data, upgradeInfo, assets } = action.payload;
         const self = data?.buildings?.reduce((current: any, row: any) => {
           const target = upgradeInfo?.find(
             (item: any) => item.building_id === row.building?._id,
@@ -53,6 +58,7 @@ export const buildling = createSlice({
         }, []);
         data.buildings = self;
         state.selfBuildings = data;
+        state.planetAssets = assets;
       })
       .addCase(destoryBuildingVisibleModal, (state, action) => {
         state.destroyBuilding = action.payload;

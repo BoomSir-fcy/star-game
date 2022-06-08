@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { space, variant as StyledSystemVariant } from 'styled-system';
 import getThemeValue from 'uikit/util/getThemeValue';
 import { styleVariants, styleScales } from './themes';
@@ -27,6 +27,7 @@ Bar.defaultProps = {
 interface StyledProgressProps {
   variant: ProgressProps['variant'];
   scale: ProgressProps['scale'];
+  linear?: boolean;
 }
 
 const StyledProgress = styled.div<StyledProgressProps>`
@@ -43,6 +44,25 @@ const StyledProgress = styled.div<StyledProgressProps>`
     /* border-bottom-left-radius: ${({ variant }) =>
       variant === variants.FLAT ? '0' : '32px'}; */
   }
+
+  ${({ linear }) => {
+    return linear
+      ? `
+      background: #161920;
+      background-size: 10px 10px;
+      background-image: linear-gradient(
+        45deg,
+        rgba(31, 34, 40, 0.5) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(31, 34, 40, 0.5) 50%,
+        rgba(31, 34, 40, 0.5) 75%,
+        transparent 75%,
+        transparent
+      );
+    `
+      : '';
+  }};
 
   ${StyledSystemVariant({
     variants: styleVariants,

@@ -122,6 +122,7 @@ export type Colors = {
   bronze: string;
   navy: string;
   missTxt: string;
+  progressGreenBar: string;
   // NFT Token Colors
   triangleDinosaur: string;
   meat: string;
