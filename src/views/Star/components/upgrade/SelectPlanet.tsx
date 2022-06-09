@@ -69,8 +69,8 @@ const SelectPlanet = () => {
     try {
       const res = await Api.PlanetApi.getMaterialList(planetId);
       if (Api.isSuccess(res)) {
-        // setStarList(res.data?.Data);
-        setStarList([]);
+        setStarList(res.data?.Data);
+        // setStarList([]);
       }
     } catch (error) {
       console.error(error);

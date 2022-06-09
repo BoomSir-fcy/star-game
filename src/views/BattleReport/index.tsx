@@ -124,7 +124,7 @@ const BattleReport = () => {
             }}
             onExit={step => {
               setStepsEnabled(false);
-              setGuide(step);
+              setGuide(step + 1);
             }}
           />
         )}
