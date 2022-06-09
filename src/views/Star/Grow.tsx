@@ -34,7 +34,7 @@ const TopBox = styled(Label)`
   margin-bottom: 30px;
 `;
 const CardBox = styled(Flex)`
-  width: 200px;
+  width: 235px;
   height: 110px;
   align-items: center;
   justify-content: center;
