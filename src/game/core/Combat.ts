@@ -469,9 +469,9 @@ class Combat extends EventTarget {
     const bullet = new Bullet(this);
     const { container } = bullet;
     this.container.parent.addChild(container);
-    bullet.addEventListener('attackEnd', () => {
-      this.changeEffect(descType.RESTORE, target);
-    });
+    // bullet.addEventListener('attackEnd', () => {
+    //   this.changeEffect(descType.RESTORE, target);
+    // });
 
     bullet.attack(effect, target);
     // bullet.addEventListener('moveEnd', () => {

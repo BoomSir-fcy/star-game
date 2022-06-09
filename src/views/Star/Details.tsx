@@ -77,14 +77,12 @@ const Details = () => {
   }, []);
 
   React.useEffect(() => {
-    console.log('selfBuilding:', selfBuilding);
-    console.log(planet?.areaX, planet?.areaY);
     if (planet?.areaX > 0 && planet?.areaY > 0) {
       const data: any = [];
       for (let i = 0; i < planet.areaX; i++) {
         for (let j = 0; j < planet.areaY; j++) {
           const buildings = selfBuilding?.find(
-            r => r.index === i * planet.areaY + j,
+            r => r.index === j * planet.areaX + i,
           );
           if (buildings?.building?._id) {
             data.push({
