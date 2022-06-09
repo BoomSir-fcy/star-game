@@ -153,6 +153,9 @@ export const Building: React.FC<{
                   itemData={itemData}
                   planet_id={planet_id}
                   building_id={itemData._id}
+                  onCallback={() => {
+                    dispatch(fetchPlanetBuildingsAsync(planet_id));
+                  }}
                 />
               </ToolBar>
             )}

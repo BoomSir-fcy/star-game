@@ -104,6 +104,7 @@ export const BuildlingStatus: React.FC<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diffTime, status]);
 
+  console.log(type, status);
   return (
     <Flex>
       <Box width='40px' height='40px'>
@@ -119,7 +120,7 @@ export const BuildlingStatus: React.FC<{
       </Box>
       <Flex flexDirection='column' style={{ flex: 1 }}>
         <Text fontSize='13px' mb='4px'>
-          {type === 2 && status === 3
+          {type === 2 && status !== 3
             ? `Lv${level}~Lv${level + 1}`
             : workInfo[status]?.label}
         </Text>
@@ -129,7 +130,9 @@ export const BuildlingStatus: React.FC<{
           scale='sm'
           linear
           primaryStep={
-            Math.round(((endTime - state.time) / endTime) * 10000) / 100
+            status === 3
+              ? 0
+              : Math.round(((endTime - state.time) / endTime) * 10000) / 100
           }
         />
       </Flex>
@@ -160,7 +163,10 @@ export const Queue: React.FC<{
           key={item}
           mr='40px'
           onClick={() => {
-            if (currentQueue[index]?._id) {
+            if (
+              currentQueue[index]?._id &&
+              currentQueue[index]?.work_add_time
+            ) {
               setState({ ...state, current: item });
               onSelectCurrent(currentQueue[index]);
             }

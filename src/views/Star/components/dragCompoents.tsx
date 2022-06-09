@@ -720,6 +720,7 @@ export const DragCompoents: React.FC<{
               <BuffBonus currentBuff={currentBuffer} />
               <Flex flexDirection='column'>
                 <ActionButton
+                  disabled={repairBuildings.length <= 0}
                   onClick={() => {
                     if (userVipinfo.is_vip) {
                       setState({ ...state, repairVisible: true });
@@ -845,7 +846,11 @@ export const DragCompoents: React.FC<{
             itemData={itemData}
             planet_id={[planet_id]}
             visible={state.repairVisible}
-            onChange={() => setBatchRepair([planet_id])}
+            onChange={async () => {
+              await setBatchRepair([planet_id]);
+              await dispatch(fetchPlanetBuildingsAsync(planet_id));
+              setState({ ...state, repairVisible: false });
+            }}
             onClose={() => setState({ ...state, repairVisible: false })}
           />
         )}
