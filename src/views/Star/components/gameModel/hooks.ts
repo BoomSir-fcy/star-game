@@ -38,6 +38,15 @@ export const useBuildingRepair = () => {
     [],
   );
 
+  const getBatcheCost = React.useCallback(async (params: number[]) => {
+    try {
+      const res = await Api.BuildingApi.getBatchRepairBuilding(params);
+      return res;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }, []);
+
   // 修复耐久
   const setRepair = React.useCallback(
     async (params: Api.Building.BuildingsOperateParams) => {
@@ -50,6 +59,16 @@ export const useBuildingRepair = () => {
     },
     [],
   );
+
+  // 批量修复耐久
+  const setBatchRepair = React.useCallback(async (planet_id: number[]) => {
+    try {
+      const res = await Api.BuildingApi.setBatchRepairBuilding(planet_id);
+      return res;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }, []);
 
   // 加速恢复耐久
   const setRepairQuick = React.useCallback(
@@ -77,7 +96,14 @@ export const useBuildingRepair = () => {
     [],
   );
 
-  return { getCose, setRepair, setRepairQuick, upgradeRepairComplete };
+  return {
+    getCose,
+    getBatcheCost,
+    setRepair,
+    setBatchRepair,
+    setRepairQuick,
+    upgradeRepairComplete,
+  };
 };
 
 // 操作建筑物

@@ -153,9 +153,6 @@ export const Building: React.FC<{
                   itemData={itemData}
                   planet_id={planet_id}
                   building_id={itemData._id}
-                  onCallback={(evnet?: number) => {
-                    setState({ ...state, time: evnet || 0 });
-                  }}
                 />
               </ToolBar>
             )}

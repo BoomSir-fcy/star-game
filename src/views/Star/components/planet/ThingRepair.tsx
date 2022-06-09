@@ -8,10 +8,10 @@ import { useBuildingRepair } from '../gameModel/hooks';
 export const ThingRepair: React.FC<{
   itemData: any;
   planet_id: number;
-  building_id: string | number;
-  onCallback: (time?: number) => void;
+  building_id?: string | number;
+  onCallback?: (time?: number) => void;
 }> = ({ itemData, planet_id, building_id, onCallback }) => {
-  const { setRepair } = useBuildingRepair();
+  const { setRepair, setBatchRepair } = useBuildingRepair();
   const [state, setState] = React.useState({
     visible: false,
   });
@@ -37,7 +37,11 @@ export const ThingRepair: React.FC<{
         style={{
           cursor: 'pointer',
         }}
-        onClick={() => setState({ ...state, visible: true })}
+        onClick={event => {
+          // event.preventDefault();
+          // event.stopPropagation();
+          setState({ ...state, visible: true });
+        }}
       >
         <Image src='/images/commons/icon/repair.png' width={30} height={30} />
       </Box>

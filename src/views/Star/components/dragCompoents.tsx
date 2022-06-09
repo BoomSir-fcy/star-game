@@ -4,18 +4,19 @@ import classnames from 'classnames';
 import { polyfill } from 'mobile-drag-drop';
 import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour';
 import { useDispatch } from 'react-redux';
-import { Box, Flex, BgCard, Card, Button, Text, Input } from 'uikit';
-import { useStore, storeAction } from 'state';
+import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
+import { useStore } from 'state';
 import { Api } from 'apis';
 import { isApp } from 'utils/client';
 
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
-
 import { BuyVipModal } from 'components/Modal/buyVipModal';
-import { throttle } from 'lodash';
+import { useBuildingRepair } from './gameModel/hooks';
+
 import { GameInfo, GameThing, Building, Queue } from './gameModel';
+import { ThingRepairModal } from './Modal';
 import { BuffBonus } from './buff';
 import { useBuffer, useWorkqueue } from './hooks';
 
@@ -198,6 +199,7 @@ export const DragCompoents: React.FC<{
   const { getPlanetBuff } = useBuffer();
   const { refreshWorkQueue } = useWorkqueue();
   const { toastSuccess, toastError } = useToast();
+  const { setBatchRepair } = useBuildingRepair();
   const [state, setState] = React.useState({
     currentTab: 1,
     currentBuilding: '',
@@ -211,6 +213,8 @@ export const DragCompoents: React.FC<{
         title: `${t('BuildUpgradeQueue')}`,
       },
     ],
+    visible: false,
+    repairVisible: false,
   });
   const [grid, setGrid] = React.useState<any[]>([]);
   const [gridBuilds, setGridBuilds] = React.useState<any[]>([]);
@@ -218,11 +222,15 @@ export const DragCompoents: React.FC<{
   const [buffer, setBuffer] = React.useState<any>([]);
   const [currentBuffer, setCurrentBuffer] =
     React.useState<Api.Building.BuildingBuffer>(null);
-  const buildings = useStore(p => p.buildling.buildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
+  const buildings = useStore(p => p.buildling.buildings);
+  const userVipinfo = useStore(p => p.userInfo?.userInfo?.vipBenefits);
 
   // 升级建造队列
   const [currentQueue, setCurrentQueue] = React.useState([]);
+  const repairBuildings = gridBuilds.filter(
+    ({ propterty }) => propterty?.now_durability !== propterty?.max_durability,
+  );
 
   // X, row, width 横
   // Y, col, height 竖
@@ -274,7 +282,6 @@ export const DragCompoents: React.FC<{
     try {
       const res = await refreshWorkQueue(planet_id);
       if (Api.isSuccess(res)) {
-        console.log(res.data.work_queue);
         setCurrentQueue(res.data.work_queue);
       }
     } catch (error) {
@@ -641,35 +648,6 @@ export const DragCompoents: React.FC<{
     });
   };
 
-  // 销毁建筑
-  const destroyBuilding = () => {
-    if (!currentBuild?._id) {
-      toastError(t('planetPleaseSelectbuilding'));
-      return;
-    }
-    if (currentBuild?.isactive) {
-      setCurrentBuild({});
-      setGrid(pre => {
-        const next = pre?.map((row: any) => {
-          if (row.buildingId === currentBuild._id) {
-            return {
-              ...row,
-              isbuilding: false,
-            };
-          }
-          return { ...row };
-        });
-        return [...next];
-      });
-      setGridBuilds(r => {
-        const next = r.filter((row: any) => row.index !== currentBuild?.index);
-        return [...next];
-      });
-      return;
-    }
-    dispatch(storeAction.destoryBuildingVisibleModal(true));
-  };
-
   return (
     <>
       <Box>
@@ -741,8 +719,16 @@ export const DragCompoents: React.FC<{
             >
               <BuffBonus currentBuff={currentBuffer} />
               <Flex flexDirection='column'>
-                <ActionButton onClick={destroyBuilding} disabled>
-                  {t('One-clickRepair')} 3
+                <ActionButton
+                  onClick={() => {
+                    if (userVipinfo.is_vip) {
+                      setState({ ...state, repairVisible: true });
+                    } else {
+                      setState({ ...state, visible: true });
+                    }
+                  }}
+                >
+                  {t('One-clickRepair')} {repairBuildings.length}
                 </ActionButton>
                 {/* <ActionButton onClick={createGrid}>
                   {t('planetSave')}
@@ -847,6 +833,22 @@ export const DragCompoents: React.FC<{
             )}
           </Flex>
         </BgCard>
+
+        <BuyVipModal
+          tips='一键修复耐久， 可以更快修复行星上所有建筑的耐久度。'
+          visible={state.visible}
+          onClose={() => setState({ ...state, visible: false })}
+        />
+
+        {state.repairVisible && (
+          <ThingRepairModal
+            itemData={itemData}
+            planet_id={[planet_id]}
+            visible={state.repairVisible}
+            onChange={() => setBatchRepair([planet_id])}
+            onClose={() => setState({ ...state, repairVisible: false })}
+          />
+        )}
       </Box>
     </>
   );

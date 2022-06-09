@@ -13,23 +13,26 @@ import { useBuildingRepair } from '../gameModel/hooks';
 export const ThingRepairModal: React.FC<{
   visible: boolean;
   itemData: any;
-  planet_id: number;
-  building_id: string | number;
+  planet_id: number | number[];
+  building_id?: string | number;
   onChange: () => void;
   onClose: () => void;
 }> = ({ visible, itemData, onChange, onClose, planet_id, building_id }) => {
   const { t } = useTranslation();
-  const { getCose } = useBuildingRepair();
+  const { getCose, getBatcheCost } = useBuildingRepair();
   const [state, setStae] = React.useState({
-    cost_population: '',
-    cost_stone: '',
-    quick_repair_cost_dsg: '',
+    population: '',
+    stone: '',
+    energy: '',
   });
 
   React.useEffect(() => {
     const init = async () => {
       try {
-        const res = await getCose({ planet_id, building_id });
+        const res =
+          typeof planet_id === 'object'
+            ? await getBatcheCost(planet_id)
+            : await getCose({ planet_id, building_id });
         if (Api.isSuccess(res)) {
           setStae(res.data);
         }
@@ -38,7 +41,7 @@ export const ThingRepairModal: React.FC<{
       }
     };
     init();
-  }, [building_id, planet_id, getCose]);
+  }, [building_id, planet_id, getCose, getBatcheCost]);
 
   return (
     <ModalWrapper
@@ -47,35 +50,55 @@ export const ThingRepairModal: React.FC<{
       setVisible={onClose}
     >
       <Box padding='30px 25px'>
-        <Flex>
-          <GameThing src={itemData?.picture} scale='lg' border />
+        <Flex alignItems='flex-start'>
+          {typeof planet_id !== 'object' && (
+            <GameThing src={itemData?.picture} scale='lg' border />
+          )}
           <Flex
             flex='1'
-            ml='23px'
+            ml={`${typeof planet_id === 'object' ? '0' : '23px'}`}
             justifyContent='space-between'
             alignItems='flex-start'
             flexDirection='column'
           >
-            <Box width='100%'>
-              <Text small>{t('planetModalRepairAllDurabilityFee')}</Text>
+            <Box width='100%' mb='20px'>
+              <Text small mb='10px'>
+                {t('planetModalRepairAllDurabilityFee')}
+              </Text>
               <Box mb='15px'>
                 <TextList
                   imgWidth={50}
                   imgHeight={50}
-                  imgSrc='/images/commons/dsg-1.png'
-                  number={state.quick_repair_cost_dsg}
-                  unit='DSG'
+                  imgSrc='/images/commons/icon/icon_spice.png'
+                  number={state.population}
+                  unit={t('Population')}
+                />
+              </Box>
+              <Box mb='15px'>
+                <TextList
+                  imgWidth={50}
+                  imgHeight={50}
+                  imgSrc='/images/commons/icon/icon_minera.png'
+                  number={state.stone}
+                  unit={t('Ore')}
                 />
               </Box>
               <TextList
                 imgWidth={50}
                 imgHeight={50}
-                imgSrc='/images/commons/star/durability.png'
-                number={state.cost_population}
-                unit={t('planetPopulation')}
+                imgSrc='/images/commons/icon/icon_energy.png'
+                number={state.energy}
+                unit={t('Energy')}
               />
             </Box>
-            <Button onClick={onChange}>{t('planetConfirmRepair')}</Button>
+            <Button
+              onClick={onChange}
+              style={{
+                margin: 'auto',
+              }}
+            >
+              {t('planetConfirmRepair')}
+            </Button>
           </Flex>
         </Flex>
       </Box>

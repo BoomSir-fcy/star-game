@@ -311,6 +311,7 @@ export const GameInfo: React.FC<{
                           itemData?.propterty?.max_durability
                         }
                         icon='/images/commons/star/durability.png'
+                        isRepair
                       />
                     </ItemInfo>
                     <ItemInfo bottomMargin>

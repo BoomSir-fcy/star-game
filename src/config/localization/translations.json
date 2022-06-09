@@ -572,6 +572,7 @@
   "http-error-200020": "Too few planetary alliances",
   "http-error-200022": "Planet stone does not meet the enhancement conditions ",
   "http-error-200032": "Planet strengthen fail by BNB insufficient",
+  "http-error-200036": "Insufficient resources",
   "http-error-300001": "Invalid building location, inconsistent location and size",
   "http-error-300002": "Only allowed to build buildings registered as 1",
   "http-error-300003": "Could not find building id",
@@ -590,6 +591,7 @@
   "http-error-1000002": "Failed to set game units",
   "http-error-400004": "Insufficient BOX balance",
   "http-error-400008": "Insufficient BNB balance",
+  "http-error-400010": "Insufficient resources",
   "http-error-200031": "Insufficient resources consumed by the upgrade",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

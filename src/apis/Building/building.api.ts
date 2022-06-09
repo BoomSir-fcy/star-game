@@ -54,9 +54,25 @@ export class BuildingApi extends Http {
     return res;
   }
 
+  // 修复耐久度
+  async setBatchRepairBuilding(planet_id: number[]) {
+    const res = await this.post(`buildings/repair_all_durability`, {
+      planet_id,
+    });
+    return res;
+  }
+
   // 获取建筑耐久恢复需要的资源
   async getRepairBuilding(params: Api.Building.BuildingsOperateParams) {
     const res = await this.get(`buildings/repair_cost`, params);
+    return res;
+  }
+
+  // 获取一键修复需要消耗的资源
+  async getBatchRepairBuilding(planet_id: number[]) {
+    const res = await this.get(`buildings/repair_all_durability_cost`, {
+      planet_id,
+    });
     return res;
   }
 

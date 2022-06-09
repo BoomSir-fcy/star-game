@@ -17,6 +17,7 @@ import { fetchUserInfoByAccountAsync } from 'state/userInfo/reducer';
 import { Api } from 'apis';
 import { useDispatch } from 'react-redux';
 import { useStore } from 'state';
+import { debounce } from 'lodash';
 
 const Container = styled(BgCard)`
   position: relative;
@@ -181,7 +182,8 @@ const VipPage = () => {
 
   React.useEffect(() => {
     getVipList();
-  }, [getVipList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box>
@@ -228,7 +230,7 @@ const VipPage = () => {
               <Image
                 width={300}
                 height={400}
-                src='/images/mystery-box/base-super1.png'
+                src='/images/mystery-box/base-super.png'
               />
             </VipBase>
           </IconBox>
@@ -320,7 +322,7 @@ const VipPage = () => {
               })}
             </Content>
             <Flex justifyContent='center'>
-              <Submit onClick={buyVip}>
+              <Submit onClick={debounce(() => buyVip(), 1000)}>
                 <SubmitText>Become VIP</SubmitText>
               </Submit>
             </Flex>
