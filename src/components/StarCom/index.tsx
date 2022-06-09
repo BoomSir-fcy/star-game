@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Image } from 'uikit';
-import StyledStar from './StyledStar';
-import { StarProps } from './types';
+import StyledStar, { getVariantsSize } from './StyledStar';
+import { StarProps, variants } from './types';
 
 const ImageStyled = styled(Image)`
   position: absolute;
@@ -23,9 +23,13 @@ const StarCom: React.FC<StarProps> = ({
   picture = '/images/commons/36.png',
   ...props
 }) => {
+  const { scale } = props;
+  const { width, height } = React.useMemo(() => {
+    return getVariantsSize(variants.NONE, scale);
+  }, [scale]);
   return (
     <StyledStar {...props}>
-      <ImageStyled width={100} height={100} src={picture} />
+      <ImageStyled width={width} height={height} src={picture} />
       {showUnion && (
         <IconUnion
           width={50}

@@ -375,6 +375,7 @@ const Upgrade = () => {
                 <StarCom
                   variant='none'
                   scale='ld'
+                  margin='auto'
                   picture1={upgradeInfo.now_planet_info?.picture1}
                   picture={upgradeInfo.now_planet_info?.picture}
                   quality={upgradeInfo.now_planet_info?.rarity}

@@ -5,14 +5,12 @@ export const useBuildingUpgrade = () => {
   const upgrade = React.useCallback(
     async (planet_id: number, building_id: number | string) => {
       try {
-        const [info, detail] = await Promise.all([
-          Api.BuildingApi.estimateBuildingUpgrade(planet_id, building_id),
+        const [info] = await Promise.all([
           Api.BuildingApi.estimateBuildingUpgradeDetail(planet_id, building_id),
         ]);
-        if (Api.isSuccess(info) && Api.isSuccess(detail)) {
+        if (Api.isSuccess(info)) {
           return {
             ...info.data,
-            ...detail.data,
           };
         }
         return {};

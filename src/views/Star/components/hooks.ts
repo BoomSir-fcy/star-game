@@ -1,5 +1,5 @@
-import { Api } from 'apis';
 import React from 'react';
+import { Api } from 'apis';
 
 export const useBuffer = () => {
   const getPlanetBuff = React.useCallback(
@@ -19,5 +19,36 @@ export const useBuffer = () => {
 
   return {
     getPlanetBuff,
+  };
+};
+
+export const useWorkqueue = () => {
+  const refreshWorkQueue = React.useCallback(async (planet_id: number) => {
+    try {
+      const res = await Api.BuildingApi.refreshQueue(planet_id);
+      return res;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }, []);
+
+  const cancelWorkQueue = React.useCallback(
+    async (planet_id, work_queue_id) => {
+      try {
+        const res = await Api.BuildingApi.cancelWorkQueue(
+          planet_id,
+          work_queue_id,
+        );
+        return res;
+      } catch (error: any) {
+        throw new Error(error);
+      }
+    },
+    [],
+  );
+
+  return {
+    refreshWorkQueue,
+    cancelWorkQueue,
   };
 };

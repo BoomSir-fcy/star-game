@@ -136,6 +136,11 @@ export interface BuildlingState {
   upgradeIds: string[];
   buildings: { [type: number]: Api.Building.Building[] };
   destroyBuilding: boolean;
+  planetAssets: {
+    energy: number;
+    population: number;
+    stone: number;
+  };
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<

@@ -34,7 +34,7 @@ const TopBox = styled(Label)`
   margin-bottom: 30px;
 `;
 const CardBox = styled(Flex)`
-  width: 200px;
+  width: 235px;
   height: 110px;
   align-items: center;
   justify-content: center;
@@ -145,6 +145,7 @@ const Grow: React.FC = () => {
             <MysteryBoxBaseStyled quality={mysteryBoxQualities.SUPER} />
             <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
               <StarCom
+                margin='auto'
                 variant='none'
                 scale='ld'
                 picture={planetInfo?.picture}
@@ -215,6 +216,7 @@ const Grow: React.FC = () => {
       </BgCard>
       <GrowPop
         visible={visible}
+        planetInfo={planetInfo}
         itemData={estimateCost}
         onClose={() => setVisible(false)}
         callBack={getPlanetStrengthen}

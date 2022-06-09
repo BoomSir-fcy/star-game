@@ -51,9 +51,14 @@ const scaleVariants = {
   },
 };
 
-const Container = styled(Card)<{ active?: boolean; border?: boolean }>`
+const Container = styled(Card)<{
+  active?: boolean;
+  border?: boolean;
+  round?: boolean;
+}>`
   cursor: pointer;
-  ${({ theme, active, border }) => {
+  overflow: visible;
+  ${({ theme, active, border, round }) => {
     if (border) {
       return css`
         border: 1px solid #373c45;
@@ -64,6 +69,13 @@ const Container = styled(Card)<{ active?: boolean; border?: boolean }>`
         box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.8);
       `;
     }
+
+    if (round) {
+      return css`
+        border-radius: 10px;
+      `;
+    }
+
     return css``;
   }}
   div {
@@ -83,6 +95,7 @@ export const GameThing: React.FC<{
   text?: string;
   active?: boolean;
   border?: boolean;
+  round?: boolean;
   draggable?: boolean;
   onClick?: () => void;
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -98,6 +111,7 @@ export const GameThing: React.FC<{
   text,
   active,
   border,
+  round,
   draggable,
   onClick,
   onDragStart,
@@ -119,8 +133,10 @@ export const GameThing: React.FC<{
         onDragEnd={onDragEnd}
         active={active}
         border={border}
+        round={round}
         onClick={onClick}
         data-item={JSON.stringify(itemData)}
+        className='game-thing'
       >
         {level && (
           <Level shadow='primary' style={sizeBox?.text}>
@@ -128,7 +144,18 @@ export const GameThing: React.FC<{
           </Level>
         )}
         {src && (
-          <Box width={sizeBox.width} height={sizeBox.height}>
+          <Box
+            width={sizeBox.width}
+            height={sizeBox.height}
+            style={
+              round && {
+                borderRadius: '10px',
+                overflow: 'hidden',
+                position: 'relative',
+                zIndex: 99,
+              }
+            }
+          >
             <Image width={sizeBox.width} height={sizeBox.height} src={src} />
           </Box>
         )}

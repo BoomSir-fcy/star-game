@@ -20,4 +20,5 @@ export interface ProgressProps {
   secondaryStep?: number;
   showProgressBunny?: boolean;
   color?: string;
+  linear?: boolean;
 }

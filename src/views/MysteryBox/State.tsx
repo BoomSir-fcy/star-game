@@ -163,6 +163,7 @@ const MysteryBoxState = () => {
       setHandleLoading(true);
       const res = await handleOpen(quality, '', buyNum);
       const ids = await getPlanetId(res?.blockHash);
+      dispatch(fetchUserKeysAsync(account));
       setHandleLoading(false);
       navigate(`/star/planet`);
       // navigate(`/mystery-box/list?q=${quality}&i=${ids?.join(',')}`);
@@ -170,7 +171,7 @@ const MysteryBoxState = () => {
       setHandleLoading(false);
       console.error(error);
     }
-  }, [buyNum, quality, handleOpen, navigate, getPlanetId]);
+  }, [account, buyNum, quality, handleOpen, navigate, getPlanetId, dispatch]);
 
   useEffect(() => {
     fetchHandle();
@@ -287,6 +288,7 @@ const MysteryBoxState = () => {
                     {existBox ? '开启数量' : '购买数量'}
                   </Text>
                   <InputNumber
+                    value={buyNum}
                     max={existBox ? ownedNum : maxNum}
                     onChangeNum={val => {
                       setBuyNum(val);
