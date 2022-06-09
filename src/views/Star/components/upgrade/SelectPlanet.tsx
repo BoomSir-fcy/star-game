@@ -1,8 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Box, Flex, Text, BgCard, BackButton, RefreshButton } from 'uikit';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Flex,
+  Text,
+  BgCard,
+  BackButton,
+  RefreshButton,
+  Button,
+} from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import Layout from 'components/Layout';
 import { Api } from 'apis';
@@ -15,7 +23,7 @@ import { PlanetBox } from '../planet/PlanetBox';
 const ScrollBox = styled(Flex)`
   margin-top: 22px;
   min-height: 550px;
-  max-height: 730px;
+  max-height: 672px;
   overflow-y: auto;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -39,6 +47,13 @@ const ChooseBox = styled(Flex)`
   background: url('/images/commons/icon/choose.png') no-repeat;
   background-size: 100% 100%;
 `;
+const LinkStyled = styled(Link)`
+  :hover {
+    text-decoration: underline;
+    text-decoration-color: #fff;
+  }
+`;
+
 const SelectPlanet = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -55,6 +70,7 @@ const SelectPlanet = () => {
       const res = await Api.PlanetApi.getMaterialList(planetId);
       if (Api.isSuccess(res)) {
         setStarList(res.data?.Data);
+        // setStarList([]);
       }
     } catch (error) {
       console.error(error);
@@ -125,19 +141,35 @@ const SelectPlanet = () => {
                   </MaterialBox>
                 </React.Fragment>
               ))}
+              {!starList.length && (
+                <Flex
+                  mt='50px'
+                  width='100%'
+                  justifyContent='center'
+                  alignItems='center'
+                >
+                  <LinkStyled to='/mystery-box'>
+                    <Text small>
+                      {t('No data, Go to open the blind box')} &gt;
+                    </Text>
+                  </LinkStyled>
+                </Flex>
+              )}
             </ScrollBox>
+            {starList.length && (
+              <Flex mt='10px' justifyContent='center'>
+                <Button
+                  disabled={!starList.length}
+                  onClick={() => navigate(-1)}
+                >
+                  {t('Join in')}
+                </Button>
+              </Flex>
+            )}
           </BgCard>
         </Flex>
       </Flex>
     </Layout>
-  );
-};
-
-const ChoosePlanet: React.FC<{ chooseIndex: number }> = ({ chooseIndex }) => {
-  return (
-    <ChooseBox>
-      <Text fontSize='22px'>{chooseIndex !== 0 ? chooseIndex + 1 : ''}</Text>
-    </ChooseBox>
   );
 };
 

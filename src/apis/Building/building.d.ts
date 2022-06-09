@@ -16,6 +16,12 @@ declare namespace Api {
       population?: number;
     }
 
+    interface AllianceStoreRechargeParams {
+      nonce: string;
+      timestamp: number;
+      signature: string;
+    }
+
     // 建筑
     interface Building {
       buildings_number: number;
@@ -33,7 +39,10 @@ declare namespace Api {
         count_down: number;
         upgrade_type: number; // 1-升级 2-恢复耐久
       };
+      work_queue_id?: number;
+      isbuilding?: boolean;
       isactive?: boolean; // 是否激活
+      iscreate?: boolean; // 是否已经保存创建建筑了
     }
 
     interface BuildingsOperateParams {
@@ -50,12 +59,22 @@ declare namespace Api {
 
     interface CreateBuildingParams {
       planet_id: number | string;
-      build_type: number;
-      building_setting: BuildingSetting[];
+      build_type?: number;
+      work_queue_params: CreateworkQueueParams;
+    }
+
+    interface CreateworkQueueParams {
+      work_type: 1 | 2; // 1-建造 2-升级
+      building_create_param?: BuildingSetting;
+      building_upgrade_param?: {
+        buildings_id: number;
+        building_number: number;
+      };
     }
 
     interface BuildingSetting {
       buildings_id: number;
+      building_number: number;
       position: any;
       index: number;
     }

@@ -8,6 +8,9 @@ import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import random from 'lodash/random';
+import { signMessage } from 'utils/web3React';
 
 const SelectBox = styled(Flex)`
   height: 65px;
@@ -19,6 +22,15 @@ const SelectBox = styled(Flex)`
   border-radius: ${({ theme }) => theme.radii.card};
 `;
 
+const RechargeFlex = styled(Flex)`
+  height: 65px;
+  padding: 8px 16px;
+  background: ${({ theme }) => theme.colors.input};
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
+  border-radius: ${({ theme }) => theme.radii.card};
+`;
+
 enum StoreType {
   STONE = 1,
   POPULATION = 2,
@@ -26,10 +38,9 @@ enum StoreType {
 }
 
 export const RechargeAssets: React.FC<{
-  planet_id: number;
   visible: boolean;
   onClose: () => void;
-}> = ({ planet_id, visible, onClose }) => {
+}> = ({ visible, onClose }) => {
   const dispatch = useDispatch();
   const { toastSuccess, toastError } = useToast();
   const { t } = useTranslation();
@@ -82,14 +93,14 @@ export const RechargeAssets: React.FC<{
     [StoreType.POPULATION]: { already: 0, max: 0 },
     [StoreType.ENERGY]: { already: 0, max: 0 },
   });
-  const [selectId, setSelectId] = useState(StoreType.STONE);
-  const [inputValue, setInputValue] = useState('');
   const [pending, setPending] = useState(false);
+
+  const { account, library } = useActiveWeb3React();
 
   // 获取储物罐最大充值金额
   const getStoreData = useCallback(async () => {
     try {
-      const res = await Api.BuildingApi.getMaxReCharge(planet_id);
+      const res = await Api.BuildingApi.getAllianceMaxReCharge();
       if (Api.isSuccess(res)) {
         const info: Api.Building.Store = res.data;
         setStore({
@@ -110,25 +121,30 @@ export const RechargeAssets: React.FC<{
     } catch (error) {
       console.error(error);
     }
-  }, [planet_id]);
+  }, []);
 
   // 充值
   const handleCharge = useCallback(
     async e => {
-      if (!inputValue) return;
-      const val = Number(inputValue);
+      if (!account) return;
+
       try {
         setPending(true);
-        const params: Api.Building.StoreRechargeParams = { planet_id };
-        if (selectId === StoreType.STONE) params.stone = val;
-        if (selectId === StoreType.POPULATION) params.population = val;
-        if (selectId === StoreType.ENERGY) params.energy = val;
-        const res = await Api.BuildingApi.storeReCharge(params);
+        const sign = {
+          nonce: `${random(0xffff, 0xffff_ffff_ffff)}`,
+          timestamp: new Date().getTime(),
+        };
+        const signature = await signMessage(
+          library,
+          account,
+          JSON.stringify(sign),
+        );
+        const params = { ...sign, signature };
+
+        const res = await Api.BuildingApi.storeAllianceReCharge(params);
         if (Api.isSuccess(res)) {
           toastSuccess(t('Recharge Succeeded'));
-          setInputValue('');
           getStoreData();
-          dispatch(fetchPlanetInfoAsync([planet_id]));
         }
         setPending(false);
       } catch (error) {
@@ -137,16 +153,7 @@ export const RechargeAssets: React.FC<{
         setPending(false);
       }
     },
-    [
-      planet_id,
-      selectId,
-      inputValue,
-      dispatch,
-      t,
-      getStoreData,
-      toastError,
-      toastSuccess,
-    ],
+    [account, library, t, getStoreData, toastError, toastSuccess],
   );
 
   useEffect(() => {
@@ -159,45 +166,41 @@ export const RechargeAssets: React.FC<{
       setVisible={onClose}
     >
       <Box padding='30px 25px'>
-        <Flex justifyContent='space-between'>
-          <Text small>{t('Planet storage tank')}</Text>
-          <Flex alignItems='center'>
+        <Flex mb={28} justifyContent='space-between'>
+          {/* <Text small>{t('Planet storage tank')}</Text> */}
+          {/* <Flex alignItems='center'>
             <Text fontSize='30px' bold>
               {store[selectId]?.already}
             </Text>
             <Text small color='textSubtle' ml='14px'>
               / {store[selectId]?.max}
             </Text>
-          </Flex>
+          </Flex> */}
         </Flex>
-        <Select
-          options={selectOptions}
-          mb='27px'
-          defaultId={selectId}
-          onChange={option => {
-            setSelectId(option.value);
-          }}
-        />
-        <PrimaryInput
-          width='100%'
-          height={65}
-          pattern='^[1-9]\d*$'
-          placeholder={t('Please enter the recharge amount')}
-          value={inputValue}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const val = e.target.value;
-            const valNum = Number(val);
-            const rechargeNum = store[selectId].max - store[selectId].already;
-            if (val === '' || e.currentTarget.validity.valid) {
-              if (selectId === StoreType.STONE && valNum > rechargeNum) return;
-              if (selectId === StoreType.POPULATION && valNum > rechargeNum)
-                return;
-              if (selectId === StoreType.ENERGY && valNum > rechargeNum) return;
-              setInputValue(val);
-            }
-          }}
-        />
-        <Flex justifyContent='center' mt='29px'>
+        {selectOptions.map(item => (
+          <RechargeFlex
+            key={item.value}
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
+          >
+            <Flex alignItems='center' flex={1}>
+              {item.icon}
+              <Text ellipsis color='textSubtle' small>
+                {item.label}
+              </Text>
+            </Flex>
+            <Flex alignItems='center'>
+              <Text fontSize='30px' bold>
+                {store[item.value]?.already}
+              </Text>
+              {/* <Text small color='textSubtle' ml='14px'>
+                / {store[item.value]?.max}
+              </Text> */}
+            </Flex>
+          </RechargeFlex>
+        ))}
+        <Flex justifyContent='center' mt='120px'>
           <Button disabled={pending} width={270} onClick={handleCharge}>
             {t('Confirm Recharge')}
           </Button>

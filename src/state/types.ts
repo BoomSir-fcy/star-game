@@ -79,7 +79,11 @@ export interface MysteryBoxView {
   totalVDsgDonated: string; // 总给vdsg的量dsg
   totalPoolSent: string; // 总给质押池的量dsg
   totalPoolSentBNB: string; // 总给质押池的量bnb
+  maxSales: string; // 最大可销售量
+  sold: string; // 已销售量
+  maxHeld: string; // 每种盲盒最大可持有的数量
   loading?: boolean;
+  boxCount: string[]; // 用户持有的各盲盒数量
 }
 
 export interface MysteryBoxState {
@@ -132,6 +136,11 @@ export interface BuildlingState {
   upgradeIds: string[];
   buildings: { [type: number]: Api.Building.Building[] };
   destroyBuilding: boolean;
+  planetAssets: {
+    energy: number;
+    population: number;
+    stone: number;
+  };
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -364,6 +373,8 @@ export enum PlanetStatus {
 
 export interface GuideState {
   visible: boolean;
+  lastStep: number;
+  pathname?: string;
 }
 
 export enum BuildingDetailType {

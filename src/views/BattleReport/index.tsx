@@ -103,9 +103,11 @@ const BattleReport = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(storeAction.toggleVisible({ visible: false }));
+      dispatch(
+        storeAction.toggleVisible({ visible: false, lastStep: steps.length }),
+      );
     };
-  }, [dispatch]);
+  }, [dispatch, steps.length]);
 
   return (
     <Box pt='20px'>
@@ -122,7 +124,7 @@ const BattleReport = () => {
             }}
             onExit={step => {
               setStepsEnabled(false);
-              setGuide(step);
+              setGuide(step + 1);
             }}
           />
         )}

@@ -99,6 +99,7 @@ const ResetCSS = createGlobalStyle`
   /* Scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-thumb {
     background: ${({ theme }) => theme.colors.textSubtle}; 

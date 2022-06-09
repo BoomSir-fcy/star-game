@@ -168,11 +168,9 @@ const PlantLeague = () => {
   const [repairVisible, setRepairVisible] = React.useState(false);
   const [modalTips, setModalTips] = React.useState('');
 
-  console.log(userInfo);
-
   // 一键补充行星联盟充值
   const rechargeHandle = React.useCallback(() => {
-    if (userInfo.vipBenefits?.isVip) {
+    if (userInfo.vipBenefits?.is_vip) {
       setRechargeVisible(true);
       return;
     }
@@ -181,58 +179,72 @@ const PlantLeague = () => {
   }, [
     setVisible,
     setRechargeVisible,
-    userInfo.vipBenefits?.isVip,
+    userInfo.vipBenefits?.is_vip,
     setModalTips,
   ]);
 
   // 行星联盟一键修复耐久
   const repairHandle = React.useCallback(() => {
-    if (userInfo.vipBenefits?.isVip) {
+    if (userInfo.vipBenefits?.is_vip) {
       setRepairVisible(true);
       return;
     }
     setModalTips('一键修复耐久， 可以更快修复行星上所有建筑的耐久度。');
     setVisible(true);
-  }, [setVisible, setRepairVisible, userInfo.vipBenefits?.isVip, setModalTips]);
+  }, [
+    setVisible,
+    setRepairVisible,
+    userInfo.vipBenefits?.is_vip,
+    setModalTips,
+  ]);
 
   return (
     <Layout>
-      <GlobalStyle
-        interactive={steps[activeStep]?.interactive && stepsEnabled}
-        disabled={steps[activeStep]?.disabled}
-      />
       {!guides.guideFinish &&
         guides.finish &&
         steps.length - 1 > guides.step &&
         guides.round < 2 && (
-          <Steps
-            enabled={stepsEnabled}
-            steps={steps}
-            initialStep={guides.step}
-            options={{
-              exitOnOverlayClick: false,
-            }}
-            ref={guideRef}
-            onBeforeChange={event => {
-              setActiveStep(event);
-            }}
-            onAfterChange={event => {}}
-            onChange={currentStep => {
-              if (currentStep === 3) return;
-              if (currentStep > guides.step) {
-                setGuide(currentStep);
-              }
-            }}
-            onExit={step => {
-              console.log(step, '中途离开页面', guides.step, activeStep);
-              setStepsEnabled(false);
-              if (step === 5) {
-                setGuide(0, false, 2);
-                return;
-              }
-              dispatch(storeAction.toggleVisible({ visible: true }));
-            }}
-          />
+          <>
+            <GlobalStyle
+              interactive={steps[activeStep]?.interactive && stepsEnabled}
+              disabled={steps[activeStep]?.disabled}
+            />
+            <Steps
+              enabled={stepsEnabled}
+              steps={steps}
+              initialStep={guides.step}
+              options={{
+                exitOnOverlayClick: false,
+              }}
+              ref={guideRef}
+              onBeforeChange={event => {
+                setActiveStep(event);
+              }}
+              onAfterChange={event => {}}
+              onChange={currentStep => {
+                if (currentStep === 3) return;
+                if (currentStep > guides.step) {
+                  setGuide(currentStep);
+                }
+              }}
+              onExit={step => {
+                console.log(step, '中途离开页面', guides.step, activeStep);
+                setStepsEnabled(false);
+                if (step === 5) {
+                  setGuide(0, false, 2);
+                  return;
+                }
+                if (step < steps.length - 1) {
+                  dispatch(
+                    storeAction.toggleVisible({
+                      visible: true,
+                      lastStep: steps.length,
+                    }),
+                  );
+                }
+              }}
+            />
+          </>
         )}
       <Flex justifyContent='space-between' pr='30px'>
         <VipBox width={192}>
@@ -279,7 +291,6 @@ const PlantLeague = () => {
         }}
       />
       <RechargeAssets
-        planet_id={5000000000000002}
         visible={rechargeVisible}
         onClose={() => setRechargeVisible(false)}
       />

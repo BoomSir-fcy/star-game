@@ -22,91 +22,91 @@ const Extra: React.FC<{
       <ExtraLabelStyled justifyContent='space-between'>
         <Flex>
           <Text fontSize='20px'>
-            {t('HP')} : {now_buff.hp}
+            {t('HP')}: {now_buff.hp}
           </Text>
         </Flex>
         <Flex width={100}>
           <Image width={33} height={33} src='/images/commons/icon/up.png' />
           <Text fontSize='20px' color='up'>
-            +{estimate_buff.hp}
+            +{estimate_buff.hp - now_buff.hp}
           </Text>
         </Flex>
       </ExtraLabelStyled>
       <ExtraLabelStyled justifyContent='space-between'>
         <Flex>
           <Text fontSize='20px'>
-            {t('Attack')} {now_buff.attack}
+            {t('Attack')}: {now_buff.attack}
           </Text>
         </Flex>
         <Flex width={100}>
           <Image width={33} height={33} src='/images/commons/icon/up.png' />
           <Text fontSize='20px' color='up'>
-            +{estimate_buff.attack}
+            +{estimate_buff.attack - now_buff.attack}
           </Text>
         </Flex>
       </ExtraLabelStyled>
       <ExtraLabelStyled justifyContent='space-between'>
         <Flex>
           <Text fontSize='20px'>
-            {t('Hit')} {now_buff.hit}
+            {t('Hit')}: {now_buff.hit}
           </Text>
         </Flex>
         <Flex width={100}>
           <Image width={33} height={33} src='/images/commons/icon/up.png' />
           <Text fontSize='20px' color='up'>
-            +{estimate_buff.hit}
+            +{estimate_buff.hit - now_buff.hit}
           </Text>
         </Flex>
       </ExtraLabelStyled>
       <ExtraLabelStyled justifyContent='space-between'>
         <Flex>
           <Text fontSize='20px'>
-            {t('Speed')} {now_buff.speed}
+            {t('Speed')}: {now_buff.speed}
           </Text>
         </Flex>
         <Flex width={100}>
           <Image width={33} height={33} src='/images/commons/icon/up.png' />
           <Text fontSize='20px' color='up'>
-            +{estimate_buff.speed}
+            +{estimate_buff.speed - now_buff.speed}
           </Text>
         </Flex>
       </ExtraLabelStyled>
       <ExtraLabelStyled justifyContent='space-between'>
         <Flex>
           <Text fontSize='20px'>
-            {t('Miss')} {now_buff.miss}
+            {t('Miss')}: {now_buff.miss}
           </Text>
         </Flex>
         <Flex width={100}>
           <Image width={33} height={33} src='/images/commons/icon/up.png' />
           <Text fontSize='20px' color='up'>
-            +{estimate_buff.miss}
+            +{estimate_buff.miss - now_buff.miss}
           </Text>
         </Flex>
       </ExtraLabelStyled>
       <ExtraLabelStyled justifyContent='space-between'>
         <Flex>
           <Text fontSize='20px'>
-            {t('Crit')} {now_buff.critical}
+            {t('Crit')}: {now_buff.critical}
           </Text>
         </Flex>
         <Flex width={100}>
           <Image width={33} height={33} src='/images/commons/icon/up.png' />
           <Text fontSize='20px' color='up'>
-            +{estimate_buff.critical}
+            +{estimate_buff.critical - now_buff.critical}
           </Text>
         </Flex>
       </ExtraLabelStyled>
       <ExtraLabelStyled justifyContent='space-between'>
         <Flex>
           <Text fontSize='20px'>
-            {t('Defense')} {now_buff.defense}
+            {t('Defense')}: {now_buff.defense}
           </Text>
         </Flex>
         <Flex width={100}>
           <Image width={33} height={33} src='/images/commons/icon/up.png' />
           <Text fontSize='20px' color='up'>
-            +{estimate_buff.defense}
+            +{estimate_buff.defense - now_buff.defense}
           </Text>
         </Flex>
       </ExtraLabelStyled>

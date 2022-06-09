@@ -83,7 +83,11 @@ export const PlanetBox: React.FC<{
   return (
     <CardBox className={className}>
       <Flex>
-        <StarCom quality={info?.rarity} />
+        <StarCom
+          quality={info?.rarity}
+          picture1={info?.picture1}
+          picture={info?.picture}
+        />
         <Flex ml='29px' flex='1' flexDirection='column'>
           <Desc justifyContent='space-between'>
             <Box>
@@ -116,6 +120,9 @@ export const PlanetBox: React.FC<{
                 </Text>
                 <Text small color='textSubtle' ml='40px'>
                   {t('Building Count')}: {info?.build_count}
+                </Text>
+                <Text small color='textSubtle' ml='40px'>
+                  {t('EXP')}: {info?.can_provided_exp}
                 </Text>
               </Flex>
             </Box>

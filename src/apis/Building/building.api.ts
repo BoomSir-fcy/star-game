@@ -8,9 +8,21 @@ export class BuildingApi extends Http {
     return this.get(`buildings/store/max_recharge`, { planet_id });
   }
 
+  // 获取行星联盟储物罐最大充值金额
+  async getAllianceMaxReCharge(): Promise<Api.Response<Api.Building.Store>> {
+    return this.get(`buildings/alliance_store/max_recharge`);
+  }
+
   // 储物罐充值
   async storeReCharge(params: Api.Building.StoreRechargeParams) {
     return this.post(`buildings/store/recharge`, params);
+  }
+
+  // 行星联盟储物罐充值
+  async storeAllianceReCharge(
+    params: Api.Building.AllianceStoreRechargeParams,
+  ) {
+    return this.post(`buildings/alliance_store/recharge`, params);
   }
 
   // 获取所有建筑
@@ -27,6 +39,12 @@ export class BuildingApi extends Http {
     planet_id: number | string,
   ): Promise<Api.Response<{ data: any; upgradeInfo: any }>> {
     const res = await this.get(`planet/buildings/list`, { planet_id });
+    return res;
+  }
+
+  // 获取星球储物罐资源
+  async getStore(planet_id) {
+    const res = await this.get(`planet/store/resource`, { planet_id });
     return res;
   }
 
@@ -59,6 +77,27 @@ export class BuildingApi extends Http {
     params: Api.Building.CreateBuildingParams,
   ): Promise<Api.Response<{ data: Api.Building.CreateBuildingParams }>> {
     const res = await this.post(`buildings/create`, params);
+    return res;
+  }
+
+  // 创建建筑工作队列
+  async createQueueBuilding(params: Api.Building.CreateBuildingParams) {
+    const res = await this.post(`buildings/add_work_queue`, params);
+    return res;
+  }
+
+  // 刷新工作队列
+  async refreshQueue(planet_id: number) {
+    const res = await this.post(`buildings/refresh_work_queue`, { planet_id });
+    return res;
+  }
+
+  // 刷新工作队列
+  async cancelWorkQueue(planet_id: number, work_queue_id: number) {
+    const res = await this.post(`buildings/cancel_work_queue`, {
+      planet_id,
+      work_queue_id,
+    });
     return res;
   }
 

@@ -15,6 +15,7 @@ import ScoringPanel from 'components/ScoringPanel';
 import StarCom from 'components/StarCom';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { useGuide } from 'hooks/useGuide';
+import { useLocation } from 'react-router-dom';
 import { storeAction, useStore } from 'state';
 import { useDispatch } from 'react-redux';
 import 'intro.js/introjs.css';
@@ -33,7 +34,7 @@ const TopBox = styled(Label)`
   margin-bottom: 30px;
 `;
 const CardBox = styled(Flex)`
-  width: 200px;
+  width: 235px;
   height: 110px;
   align-items: center;
   justify-content: center;
@@ -51,7 +52,8 @@ const Grow: React.FC = () => {
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
-  const { guides, setGuide } = useGuide('/star/grow');
+  const location = useLocation();
+  const { guides, setGuide } = useGuide(location.pathname);
   const { toastError, toastSuccess, toastWarning, toastInfo } = useToast();
   const id = Number(parsedQs.id);
   const planetInfo = useStore(p => p.planet.planetInfo[id ?? 0]);
@@ -142,7 +144,14 @@ const Grow: React.FC = () => {
           <MysteryBoxStyled>
             <MysteryBoxBaseStyled quality={mysteryBoxQualities.SUPER} />
             <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
-              <StarCom variant='none' scale='ld' />
+              <StarCom
+                margin='auto'
+                variant='none'
+                scale='ld'
+                picture={planetInfo?.picture}
+                quality={planetInfo?.rarity}
+                picture1={planetInfo?.picture1}
+              />
             </MysteryBoxStarStyled>
           </MysteryBoxStyled>
           <Flex className='planet'>
@@ -207,6 +216,7 @@ const Grow: React.FC = () => {
       </BgCard>
       <GrowPop
         visible={visible}
+        planetInfo={planetInfo}
         itemData={estimateCost}
         onClose={() => setVisible(false)}
         callBack={getPlanetStrengthen}

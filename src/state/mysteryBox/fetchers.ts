@@ -22,6 +22,29 @@ export const fetchBoxView = async (
       totalVDsgDonated: res.totalVDsgDonated.toJSON().hex, // 总给vdsg的量dsg
       totalPoolSent: res.totalPoolSent.toJSON().hex, // 总给质押池的量dsg
       totalPoolSentBNB: res.totalPoolSentBNB.toJSON().hex, // 总给质押池的量bnb
+      maxSales: res.maxSales.toJSON().hex, // 最大可销售量
+      sold: res.sold.toJSON().hex, // 已销售量
+      maxHeld: res.maxHeld.toJSON().hex, // 每种盲盒最大可持有的数量
+      boxCount: [],
+    };
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const fetchUserKeys = async (
+  account: string,
+): Promise<{ boxCount: string[] }> => {
+  try {
+    const contract = getMysteryBoxContract();
+    const res = await contract.getUserKeys(account);
+    return {
+      boxCount: [
+        res.box0Count.toJSON().hex,
+        res.box1Count.toJSON().hex,
+        res.box2Count.toJSON().hex,
+      ],
     };
   } catch (error) {
     console.error(error);

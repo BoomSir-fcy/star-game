@@ -168,7 +168,7 @@ const Upgrade = () => {
         <StarAddBtn
           key={i}
           showIcon
-          url={activeMaterialMap[id] ? '/images/star/01.jpg' : ''}
+          url={activeMaterialMap[id]?.picture}
           onRemove={() => {
             dispatch(setActiveMaterialMap({ [id]: null }));
           }}
@@ -203,7 +203,7 @@ const Upgrade = () => {
   }, [dispatch]);
 
   // 升级经验
-  const { expStep, curExp, maxExp } = useMemo(() => {
+  const { expStep, curExp, maxExp, preExpStep } = useMemo(() => {
     const maxValue = Number(upgradeInfo.upgrade_exp);
     const currentValue = planetInfo[planetId]?.exp;
     let rsVal = 0;
@@ -211,16 +211,33 @@ const Upgrade = () => {
       rsVal = 0;
     } else if (currentValue && currentValue > maxValue) {
       rsVal = 100;
-    } else rsVal = Number((currentValue / maxValue).toFixed(2)) * 100;
+    } else rsVal = Number((currentValue / maxValue).toFixed(4)) * 100;
     console.log('当前经验值---', rsVal);
+    console.log(activeMaterialMap);
+    const _exportExp = Object.values(activeMaterialMap).reduce((prev, item) => {
+      return prev + item.can_provided_exp;
+    }, currentValue);
 
-    return { expStep: rsVal, curExp: currentValue, maxExp: maxValue };
-  }, [upgradeInfo, planetInfo, planetId]);
+    const _preExpStep =
+      Number(
+        (_exportExp / maxValue > 1 ? 1 : _exportExp / maxValue).toFixed(4),
+      ) * 100;
+
+    console.log(_preExpStep, _exportExp, maxValue, '===');
+    return {
+      expStep: rsVal,
+      preExpStep: _preExpStep,
+      curExp: currentValue,
+      exportExp: _exportExp,
+      maxExp: maxValue,
+    };
+  }, [upgradeInfo, planetInfo, planetId, activeMaterialMap]);
 
   const rendeButton = useMemo(() => {
     if (!account) {
       return <ConnectWalletButton scale='ld' width='270px' padding='0 10px' />;
     }
+
     // 升级
     if (maxExp === 0 || (curExp && curExp >= maxExp)) {
       return (
@@ -310,7 +327,7 @@ const Upgrade = () => {
           }}
           onExit={step => {
             setStepsEnabled(false);
-            setGuide(step + 1);
+            setGuide(steps.length + 1);
             // dispatch(storeAction.toggleVisible({ visible: true }));
           }}
         />
@@ -320,6 +337,7 @@ const Upgrade = () => {
         <Flex
           flexDirection='column'
           alignItems='center'
+          width={537}
           className='planet_level_head'
         >
           <Flex width='320px' mr='50px' alignItems='center'>
@@ -340,21 +358,40 @@ const Upgrade = () => {
               </Text>
             </GradeBox>
           </Flex>
-          <Flex flexDirection='column' alignItems='center'>
-            <Text fontSize='20px'>{t('Upgrade experience')}</Text>
-            <StripedProgress step={`${expStep}%`} />
+          <Flex height={46} flexDirection='column' alignItems='center'>
+            {!!maxExp && (
+              <>
+                <Text fontSize='20px'>{t('Upgrade experience')}</Text>
+                <StripedProgress
+                  preStep={`${preExpStep}%`}
+                  step={`${expStep}%`}
+                />
+              </>
+            )}
           </Flex>
           <MysteryBoxFlexStyled>
             <MysteryBoxBaseNewStyled quality={mysteryBoxQualities.SUPER}>
               <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
-                <StarCom variant='none' scale='ld' />
+                <StarCom
+                  variant='none'
+                  scale='ld'
+                  margin='auto'
+                  picture1={upgradeInfo.now_planet_info?.picture1}
+                  picture={upgradeInfo.now_planet_info?.picture}
+                  quality={upgradeInfo.now_planet_info?.rarity}
+                />
               </MysteryBoxStarStyled>
             </MysteryBoxBaseNewStyled>
           </MysteryBoxFlexStyled>
         </Flex>
 
-        <Flex flexDirection='column'>
-          <Flex>{StarAddBox}</Flex>
+        <Flex
+          width={875}
+          flexDirection='column'
+          alignItems='center'
+          justifyContent='space-between'
+        >
+          <Flex>{!!maxExp && StarAddBox}</Flex>
           {/* <Flex mb='10px' justifyContent='center'>
             <Text small>{t('添加同稀有度且同等级或低一个等级的星球')}</Text>
           </Flex> */}

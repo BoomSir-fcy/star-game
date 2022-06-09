@@ -15,6 +15,7 @@ import {
   Button,
   Skeleton,
   Dots,
+  InputNumber,
 } from 'uikit';
 import Layout from 'components/Layout';
 import {
@@ -25,7 +26,7 @@ import {
   MysteryBoxQualities,
 } from 'components/MysteryBoxCom';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { TokenImage } from 'components/TokenImage';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { getDsgAddress, getWEtherAddress } from 'utils/addressHelpers';
@@ -35,14 +36,16 @@ import { mysteryConfig } from 'components/MysteryBoxCom/config';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
 import { useStore } from 'state';
 import { useTranslation } from 'contexts/Localization';
+import { useDispatch } from 'react-redux';
+import { fetchUserKeysAsync } from 'state/mysteryBox/reducer';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import OpenModal from './components/OpenModal';
 import { queryMintEvent } from './event';
 
-const CardStyled = styled(Card)`
-  width: 600px;
-  height: 145px;
-  padding-left: 35px;
+const CardStyled = styled(Card)<{ height?: string }>`
+  width: 696px;
+  height: ${({ height }) => height || '145px'};
+  padding: 0 35px;
 `;
 
 const MysteryBoxState = () => {
@@ -50,9 +53,12 @@ const MysteryBoxState = () => {
   const navigate = useNavigate();
 
   useFetchBoxView();
-  const { priceBNB, seedBlocks, loading } = useStore(p => p.mysteryBox.boxView);
+  const { priceBNB, seedBlocks, maxHeld, boxCount, loading } = useStore(
+    p => p.mysteryBox.boxView,
+  );
   const { account } = useWeb3React();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const quality = useMemo(() => {
     const q = Number(paramsQs.q) as MysteryBoxQualities;
@@ -64,13 +70,20 @@ const MysteryBoxState = () => {
     return getBalanceNumber(new BigNumber(priceBNB[quality]), 18);
   }, [priceBNB, quality]);
 
+  // 持有盲盒数量
+  const ownedNum = useMemo(() => {
+    return new BigNumber(boxCount[quality]).toNumber() || 0;
+  }, [boxCount, quality]);
+
+  const [buyNum, setBuyNum] = useState(1);
   const [bought, setBought] = useState(false);
   const [handleLoading, setHandleLoading] = useState(false);
   const { handleBuy } = useBuyMysteryBox();
   const onHandleBuy = useCallback(async () => {
     try {
       setHandleLoading(true);
-      const res = await handleBuy(quality, priceBNB[quality]);
+      const res = await handleBuy(quality, priceBNB[quality], buyNum);
+      dispatch(fetchUserKeysAsync(account));
       setHandleLoading(false);
       setBought(true);
     } catch (error) {
@@ -78,7 +91,16 @@ const MysteryBoxState = () => {
 
       console.error(error);
     }
-  }, [quality, handleBuy, priceBNB, setBought, setHandleLoading]);
+  }, [
+    buyNum,
+    account,
+    quality,
+    handleBuy,
+    priceBNB,
+    setBought,
+    setHandleLoading,
+    dispatch,
+  ]);
 
   const { handleOpen } = useOpenMysteryBox();
   const [visible, setVisible] = useState(false);
@@ -103,12 +125,18 @@ const MysteryBoxState = () => {
       if (index === -1) {
         getPlanetId(blockHash);
       }
-      const planetId = event[index]?.args?.planetId;
-      return new BigNumber(planetId.toJSON().hex).toNumber();
+      const eventArgs = event.filter(
+        item => item.blockHash?.toLowerCase() === blockHash.toLowerCase(),
+      );
+      const ids = eventArgs?.map(item =>
+        new BigNumber(item?.args?.planetId?.toJSON().hex).toNumber(),
+      );
+      return ids;
     },
     [fetchHandle],
   );
 
+  // 打开单个盲盒，能给星球命名（旧）
   const onHandleOpen = useCallback(
     async name => {
       try {
@@ -120,7 +148,7 @@ const MysteryBoxState = () => {
         setBought(false);
         setTimeout(() => {
           setVisible(false);
-          navigate(`/mystery-box/detail?i=${planetId}`);
+          navigate(`/mystery-box/detail?i=${planetId[0]}`);
         }, 3000);
       } catch (error) {
         console.error(error);
@@ -129,16 +157,35 @@ const MysteryBoxState = () => {
     [quality, handleOpen, setBought, navigate, getPlanetId],
   );
 
+  // 打开多个盲盒，使用默认命名（新）
+  const handleOpenBox = useCallback(async () => {
+    try {
+      setHandleLoading(true);
+      const res = await handleOpen(quality, '', buyNum);
+      const ids = await getPlanetId(res?.blockHash);
+      dispatch(fetchUserKeysAsync(account));
+      setHandleLoading(false);
+      navigate(`/star/planet`);
+      // navigate(`/mystery-box/list?q=${quality}&i=${ids?.join(',')}`);
+    } catch (error) {
+      setHandleLoading(false);
+      console.error(error);
+    }
+  }, [account, buyNum, quality, handleOpen, navigate, getPlanetId, dispatch]);
+
   useEffect(() => {
     fetchHandle();
   }, [fetchHandle]);
 
   const existBox = useMemo(() => {
-    return Boolean(Number(seedBlocks[quality])) || bought;
-  }, [seedBlocks, quality, bought]);
+    // return Boolean(Number(seedBlocks[quality])) || bought;
+    return !!ownedNum;
+    // }, [seedBlocks, quality, bought]);
+  }, [ownedNum]);
 
+  const location = useLocation();
   // 控制是否开启新手指导的
-  const { guides, setGuide } = useGuide('mystery-state');
+  const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const steps = React.useMemo(() => {
     return [
@@ -149,7 +196,9 @@ const MysteryBoxState = () => {
     ];
   }, [t]);
 
-  console.log(steps, steps.length, guides);
+  const maxNum = useMemo(() => {
+    return new BigNumber(maxHeld).toNumber();
+  }, [maxHeld]);
   return (
     <Layout>
       {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
@@ -168,7 +217,8 @@ const MysteryBoxState = () => {
           onBeforeChange={event => {
             console.log(event);
           }}
-          onExit={() => {
+          onExit={currentStep => {
+            setGuide(1);
             setStepsEnabled(false);
           }}
         />
@@ -189,7 +239,7 @@ const MysteryBoxState = () => {
             <MysteryBoxBoxStyled quality={quality} />
           </MysteryBoxStyled>
           <Box>
-            <CardStyled>
+            <CardStyled height='175px'>
               <Flex height='100%' alignItems='center'>
                 <Box width={100}>
                   <Image
@@ -203,18 +253,24 @@ const MysteryBoxState = () => {
                     {mysteryConfig[quality]?.label}
                   </Text>
                   <Text>{mysteryConfig[quality]?.tips}</Text>
+                  <Flex mt='14px' justifyContent='space-between'>
+                    <Text fontSize='24px' color='textTips'>
+                      {t('Maximum number: ')} {maxNum}
+                    </Text>
+                    <Text fontSize='24px' color='textTips'>
+                      {t('Owned: ')} {ownedNum}
+                    </Text>
+                  </Flex>
                 </Box>
               </Flex>
             </CardStyled>
             <CardStyled mt='23px'>
-              {existBox ? (
-                <Flex height='100%' justifyContent='center' alignItems='center'>
-                  <Text color='textTips'>
-                    {t('Purchase succeeded, try your luck now!')}
-                  </Text>
-                </Flex>
-              ) : (
-                <Flex height='100%' alignItems='center'>
+              <Flex
+                height='100%'
+                alignItems='center'
+                justifyContent='space-between'
+              >
+                <Flex alignItems='center'>
                   <Box width={100}>
                     <TokenImage
                       width={80}
@@ -227,14 +283,27 @@ const MysteryBoxState = () => {
                     {loading ? <Skeleton height={40} /> : <Text>{price} </Text>}
                   </Box>
                 </Flex>
-              )}
+                <Flex flexDirection='column' alignItems='flex-end'>
+                  <Text mb='10px' color='textTips'>
+                    {existBox ? '开启数量' : '购买数量'}
+                  </Text>
+                  <InputNumber
+                    value={buyNum}
+                    max={existBox ? ownedNum : maxNum}
+                    onChangeNum={val => {
+                      setBuyNum(val);
+                    }}
+                  />
+                </Flex>
+              </Flex>
             </CardStyled>
             <Flex mt='34px' justifyContent='center'>
               {existBox ? (
                 <Button
-                  disabled={handleLoading || loading}
+                  disabled={handleLoading || loading || !ownedNum}
                   onClick={() => {
-                    setVisible(true);
+                    // setVisible(true);
+                    handleOpenBox();
                   }}
                 >
                   {handleLoading ? (
@@ -245,7 +314,7 @@ const MysteryBoxState = () => {
                 </Button>
               ) : (
                 <Button
-                  disabled={handleLoading || loading}
+                  disabled={handleLoading || loading || !maxNum}
                   onClick={onHandleBuy}
                 >
                   {handleLoading ? (

@@ -24,4 +24,7 @@ export interface StarProps extends SpaceProps, HTMLAttributes<HTMLDivElement> {
   variant?: Variant;
   scale?: Scale;
   showUnion?: boolean;
+  picture?: string; // 渲染后材质
+  picture1?: string; // 渲染前材质
+  three?: boolean; // 是否3d渲染
 }

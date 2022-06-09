@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { AppThunk, MysteryBoxState } from 'state/types'
-import { fetchBoxView } from './fetchers'
+import { createSlice } from '@reduxjs/toolkit';
+import { AppThunk, MysteryBoxState } from 'state/types';
+import { fetchBoxView, fetchUserKeys } from './fetchers';
 
 export const initialState: MysteryBoxState = {
   boxView: {
@@ -12,43 +12,60 @@ export const initialState: MysteryBoxState = {
     bnbPoolRatio: '0', // 给bnb质押池的比例
     superiorRatio: '0', // 给邀请人的比例
     defaultSuperior: '', // 默认邀请人
-    miniDistributeAmount: '0', // 
+    miniDistributeAmount: '0', //
     totalBurnt: '0', // 总销毁量dsg
     totalVDsgDonated: '0', // 总给vdsg的量dsg
     totalPoolSent: '0', // 总给质押池的量dsg
     totalPoolSentBNB: '0', // 总给质押池的量bnb
+    maxSales: '0', // 最大可销售量
+    sold: '0', // 已销售量
+    maxHeld: '0', // 每种盲盒最大可持有的数量
+    boxCount: [], // 获取用户各盲盒持有的key数量
     loading: true,
   },
-}
+};
 
 export const fetchBoxViewAsync =
   (account: string): AppThunk =>
-  async (dispatch) => {
+  async dispatch => {
     const infoView = await fetchBoxView(account);
-    dispatch(setBoxView(infoView))
-}
+    dispatch(setBoxView(infoView));
+  };
+export const fetchUserKeysAsync =
+  (account: string): AppThunk =>
+  async dispatch => {
+    const infoView = await fetchUserKeys(account);
+    dispatch(setUserKeys(infoView));
+  };
 
 export const mysteryBoxSlice = createSlice({
   name: 'mysteryBox',
   initialState,
   reducers: {
     setBoxView: (state, action) => {
-      const { payload } = action
+      const { payload } = action;
+      if (payload) {
+        const { boxCount, ...rest } = state.boxView;
+        state.boxView = {
+          ...rest,
+          ...payload,
+          loading: false,
+        };
+      }
+    },
+    setUserKeys: (state, action) => {
+      const { payload } = action;
       if (payload) {
         state.boxView = {
           ...state.boxView,
           ...payload,
-          loading: false,
-        }
+        };
       }
     },
-  }
-})
+  },
+});
 
 // Actions
-export const {
-  setBoxView,
-} = mysteryBoxSlice.actions;
+export const { setBoxView, setUserKeys } = mysteryBoxSlice.actions;
 
-export default mysteryBoxSlice.reducer
-
+export default mysteryBoxSlice.reducer;
