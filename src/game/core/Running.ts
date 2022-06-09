@@ -23,6 +23,7 @@ import {
   RoundDescInset,
   MapBaseUnits,
   RoundDescPurify,
+  SoldierMoveType,
 } from 'game/types';
 import { orderBy } from 'lodash';
 import AxisPoint from './AxisPoint';
@@ -463,8 +464,7 @@ class Running extends EventTarget {
     soldier.once('moveEnd', () => {
       callback(soldier);
     });
-    soldier.flipTargetPointOrientation(axisPoint);
-    soldier.moveTo(axisPoint, t);
+    soldier.moveTo(axisPoint);
 
     return soldier;
   }
@@ -489,7 +489,7 @@ class Running extends EventTarget {
     soldier.once('moveEnd', () => {
       callback(soldier);
     });
-    soldier.moveTo(axisPoint, t);
+    soldier.moveTo(axisPoint, SoldierMoveType.BE_MOVED);
 
     return soldier;
   }

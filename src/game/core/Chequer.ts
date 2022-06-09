@@ -18,11 +18,12 @@ export const mapType = {
 } as const;
 
 export const stateType = {
-  PREVIEW: 1,
-  ACTIVE: 2,
-  DISABLE: 3,
-  PLACE: 4,
-  HOVER: 5,
+  PREVIEW: 'PREVIEW',
+  ACTIVE: 'ACTIVE',
+  DISABLE: 'DISABLE',
+  PLACE: 'PLACE',
+  HOVER: 'HOVER',
+  MOVED: 'MOVED', // 走过的路径
 } as const;
 
 export type MapType = typeof mapType[keyof typeof mapType];
@@ -100,6 +101,8 @@ class Chequer {
   static [stateType.PLACE] = Texture.from('/assets/map/state4.png');
 
   static [stateType.HOVER] = Texture.from('/assets/map/state5.png');
+
+  static [stateType.MOVED] = Texture.from('/assets/map/state6.png');
 
   textureButtonDown = Texture.from('/assets/map/map0.png');
 
