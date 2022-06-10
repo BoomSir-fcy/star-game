@@ -307,17 +307,20 @@ export const DragCompoents: React.FC<{
   // 获取坐标点
   const getMatrix = React.useCallback(
     (index: number, currentSize = 1) => {
-      const row = Math.round(index / cols);
-      const col = Math.round(index % rows);
+      // const row = Math.round(index / cols);
+      // const col = Math.round(index % rows);
 
-      console.log(row, col);
-
+      // console.log(row, col);
+      const currentAxis = itemData.find(item => item.index === Number(index));
       return [
-        [{ x: col }, { y: row + currentSize }],
-        [{ x: col + currentSize }, { y: row }],
+        [{ x: currentAxis.x }, { y: currentAxis.y }],
+        [
+          { x: currentAxis.x + currentSize },
+          { y: currentAxis.y + currentSize },
+        ],
       ];
     },
-    [cols, rows],
+    [itemData],
   );
 
   // 计算绝对坐标
@@ -685,7 +688,7 @@ export const DragCompoents: React.FC<{
                     onDrop={drop}
                     onDragEnd={dragEnd}
                   >
-                    {/* x{item.x}, y{item.y} ({item.index}) */}
+                    x{item.x}, y{item.y} ({item.index})
                   </Normal>
                 );
               })}
