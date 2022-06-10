@@ -13,13 +13,14 @@ import {
 } from 'components/MysteryBoxCom';
 import ScoringPanel from 'components/ScoringPanel';
 import StarCom from 'components/StarCom';
+import { Globe } from 'components';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { useGuide } from 'hooks/useGuide';
 import { useLocation } from 'react-router-dom';
 import { storeAction, useStore } from 'state';
 import { useDispatch } from 'react-redux';
 import 'intro.js/introjs.css';
-import { RaceTypeColor } from 'uikit/theme/colors';
+import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 import Extra from './components/grow/Extra';
 import { StrengthenConsumeType } from './components/grow/type';
 import { GrowPop } from './components/grow/growPop';
@@ -144,13 +145,19 @@ const Grow: React.FC = () => {
           <MysteryBoxStyled>
             <MysteryBoxBaseStyled quality={mysteryBoxQualities.SUPER} />
             <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
-              <StarCom
+              {/* <StarCom
                 margin='auto'
                 variant='none'
                 scale='ld'
                 picture={planetInfo?.picture}
                 quality={planetInfo?.rarity}
                 picture1={planetInfo?.picture1}
+              /> */}
+              <Globe
+                scale='ld'
+                margin='auto'
+                shadow={QualityColor[planetInfo?.rarity]}
+                url={planetInfo?.picture1}
               />
             </MysteryBoxStarStyled>
           </MysteryBoxStyled>

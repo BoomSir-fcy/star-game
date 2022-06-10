@@ -165,8 +165,8 @@ const MysteryBoxState = () => {
       const ids = await getPlanetId(res?.blockHash);
       dispatch(fetchUserKeysAsync(account));
       setHandleLoading(false);
-      navigate(`/star/planet`);
-      // navigate(`/mystery-box/list?q=${quality}&i=${ids?.join(',')}`);
+      // navigate(`/star/planet`);
+      navigate(`/mystery-box/list?q=${quality}&i=${ids?.join(',')}`);
     } catch (error) {
       setHandleLoading(false);
       console.error(error);
@@ -285,7 +285,7 @@ const MysteryBoxState = () => {
                 </Flex>
                 <Flex flexDirection='column' alignItems='flex-end'>
                   <Text mb='10px' color='textTips'>
-                    {existBox ? '开启数量' : '购买数量'}
+                    {existBox ? t('Open quantity') : t('Purchase quantity')}
                   </Text>
                   <InputNumber
                     value={buyNum}
