@@ -80,7 +80,7 @@ const Stars = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <Flex alignItems='center' mt='16px'>
+        <Flex justifyContent='center' alignItems='center' mt='16px'>
           {/* 隐藏左边菜单栏 */}
           {/* <Nav
             nav={navList}
@@ -111,17 +111,17 @@ const Stars = () => {
                   }}
                 />
               ))}
-
-            {visible && (
-              <PlunderCard
-                info={activeStar}
-                onClose={() => {
-                  dispatch(fetchGalaxyStarListAsync(galaxyId));
-                  setVisible(false);
-                }}
-              />
-            )}
           </StarBox>
+
+          {visible && (
+            <PlunderCard
+              info={activeStar}
+              onClose={() => {
+                dispatch(fetchGalaxyStarListAsync(galaxyId));
+                setVisible(false);
+              }}
+            />
+          )}
         </Flex>
       )}
     </Layout>
