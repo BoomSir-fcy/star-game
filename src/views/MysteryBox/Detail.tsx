@@ -15,6 +15,7 @@ import {
   mysteryBoxQualities,
 } from 'components/MysteryBoxCom';
 import StarCom from 'components/StarCom';
+import { Globe } from 'components';
 import { useStore, storeAction } from 'state';
 import { useDispatch } from 'react-redux';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -22,6 +23,7 @@ import { useGuide } from 'hooks/useGuide';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useTranslation } from 'contexts/Localization';
 import eventBus from 'utils/eventBus';
+import { QualityColor } from 'uikit/theme/colors';
 import { fetchUserProductAsync } from 'state/userInfo/reducer';
 import Attributes from './components/Attributes';
 import Extra from './components/Extra';
@@ -46,6 +48,12 @@ const StarLabelStyled = styled(Card)`
   margin: auto;
   padding: 10px 20px;
   z-index: 3;
+`;
+const GlobeStyled = styled(Globe)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const MysteryBoxDetail = () => {
@@ -163,7 +171,12 @@ const MysteryBoxDetail = () => {
         <MysteryBox>
           <MysteryBoxBaseStyled quality={mysteryBoxQualities.ORDINARY} />
           <MysteryBoxStarStyled quality={mysteryBoxQualities.ORDINARY}>
-            <StarCom variant='none' scale='ld' picture={info?.picture} />
+            {/* <StarComStyled variant='none' scale='ld' picture={info?.picture} /> */}
+            <GlobeStyled
+              scale='ld'
+              shadow={QualityColor[info?.rarity]}
+              url={info?.picture1}
+            />
           </MysteryBoxStarStyled>
           <StarLabelStyled>
             <Flex flexDirection='column' alignItems='center'>

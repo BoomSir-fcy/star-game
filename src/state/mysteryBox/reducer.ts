@@ -45,10 +45,10 @@ export const mysteryBoxSlice = createSlice({
     setBoxView: (state, action) => {
       const { payload } = action;
       if (payload) {
-        const { boxCount, ...rest } = state.boxView;
+        const { boxCount, ...rest } = payload;
         state.boxView = {
+          ...state.boxView,
           ...rest,
-          ...payload,
           loading: false,
         };
       }

@@ -356,6 +356,10 @@ export const bulletType = {
   TERRAIN_FIRING: 'terrain_firing', // 地形灼烧中
   RESTORE: 'restore', // 治疗
   PURIFY: 'purify', // 净化
+  LEIDIAN: 'leidian', // 雷电
+  CHUANTOU: 'chuantou', // 穿透
+  JINZHAN: 'jinzhan', // 穿透
+  TEST: 'test', // 穿透
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 

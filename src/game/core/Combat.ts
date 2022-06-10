@@ -523,6 +523,7 @@ class Combat extends EventTarget {
     //   this.changeEffect(descType.RESTORE, target);
     // });
 
+    console.log(effect, '===effect');
     bullet.attack(effect, target);
     // bullet.addEventListener('moveEnd', () => {
     //   // target.effectBuff.addEffect(effect);

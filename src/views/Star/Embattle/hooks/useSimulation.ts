@@ -13,6 +13,7 @@ const useSimulation = () => {
         speed: MAX - index, // 出手顺序
       };
     });
+
     const soldiers1 = temp.filter(item => !item.isEnemy);
     const soldiers2 = temp.filter(item => item.isEnemy);
     const from = soldiers1.map(item => {
@@ -36,7 +37,8 @@ const useSimulation = () => {
         unit_id: item.id,
       };
     });
-    await Api.GameApi.Gamemock({ from, to });
+    const { race } = soldiers?.[0]?.options || {};
+    await Api.GameApi.Gamemock({ from, to, race });
   }, []);
 
   // 获取模拟人物数据

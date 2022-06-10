@@ -169,7 +169,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 }}
               >
                 <Text shadow='primary' fontSize='22' ml='13px' mt='2px' bold>
-                  LV 1
+                  LV {item.level}
                 </Text>
                 <PreviewSoldier
                   src={getSoldierSrc(item)}

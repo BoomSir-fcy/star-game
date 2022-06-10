@@ -1,0 +1,55 @@
+
+test.png
+size: 220,220
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body_blur
+  rotate: false
+  xy: 94, 53
+  size: 108, 28
+  orig: 108, 28
+  offset: 0, 0
+  index: -1
+eff_blur
+  rotate: false
+  xy: 2, 53
+  size: 90, 163
+  orig: 90, 163
+  offset: 0, 0
+  index: -1
+eff_fog
+  rotate: false
+  xy: 94, 116
+  size: 71, 100
+  orig: 71, 100
+  offset: 0, 0
+  index: -1
+eff_pubLight
+  rotate: false
+  xy: 83, 16
+  size: 35, 35
+  orig: 35, 35
+  offset: 0, 0
+  index: -1
+poison
+  rotate: true
+  xy: 167, 121
+  size: 95, 50
+  orig: 95, 50
+  offset: 0, 0
+  index: -1
+poison_floor
+  rotate: false
+  xy: 94, 83
+  size: 72, 31
+  orig: 72, 31
+  offset: 0, 0
+  index: -1
+poison_pa
+  rotate: false
+  xy: 2, 2
+  size: 79, 49
+  orig: 79, 49
+  offset: 0, 0
+  index: -1

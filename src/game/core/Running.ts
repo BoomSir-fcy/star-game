@@ -223,6 +223,7 @@ class Running extends EventTarget {
     // setTimeout(() => {
     //   this.runningHandle();
     // }, 500);
+    console.log(21112);
     this.runTrack(track, () => {
       this.runningHandle();
     });

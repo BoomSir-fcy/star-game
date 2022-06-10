@@ -93,6 +93,36 @@ const effectConfig: EffectConfig = {
       label: '炸弹爆炸',
     },
     {
+      name: bulletType.LEIDIAN,
+      bombSpineSrc: '/assets/bullet/leidian/leidian.json',
+      bombSpine: bulletType.LEIDIAN,
+      moveSpine: bulletType.LEIDIAN,
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/bullet/leidian/leidian.json',
+      moveSpriteSrc: '',
+      label: '闪电',
+    },
+    {
+      name: bulletType.CHUANTOU,
+      bombSpineSrc: '/assets/bullet/chuantou/chuantou.json',
+      bombSpine: bulletType.CHUANTOU,
+      moveSpine: bulletType.CHUANTOU,
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/bullet/chuantou/chuantou.json',
+      moveSpriteSrc: '',
+      label: '穿透',
+    },
+    {
+      name: bulletType.JINZHAN,
+      bombSpineSrc: '/assets/bullet/leidian/leidian.json',
+      bombSpine: bulletType.LEIDIAN,
+      moveSpine: bulletType.JINZHAN,
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/bullet/jinzhan/jinzhan.json',
+      moveSpriteSrc: '',
+      label: '近战',
+    },
+    {
       name: bulletType.MISSILE,
       // resDir: '/assets/bullet/missile/head/dangt.json',
       // spriteRes: '/assets/bullet/missile/head/dangt.png',
@@ -103,6 +133,16 @@ const effectConfig: EffectConfig = {
       moveSpineSrc: '/assets/bullet/missile/head/dangt.json',
       moveSpriteSrc: '',
       label: '导弹',
+    },
+    {
+      name: bulletType.TEST,
+      bombSpineSrc: '/assets/bullet/test/test.json',
+      bombSpine: bulletType.TEST,
+      moveSpine: bulletType.TEST,
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/bullet/test/test.json',
+      moveSpriteSrc: '',
+      label: 'TEST',
     },
     {
       name: bulletType.STING,
@@ -414,5 +454,21 @@ export const spines = [
   {
     name: bulletType.PURIFY,
     src: '/assets/bullet/purify/jinghua.json',
+  },
+  {
+    name: bulletType.LEIDIAN,
+    src: '/assets/bullet/leidian/leidian.json',
+  },
+  {
+    name: bulletType.CHUANTOU,
+    src: '/assets/bullet/chuantou/chuantou.json',
+  },
+  {
+    name: bulletType.JINZHAN,
+    src: '/assets/bullet/jinzhan/jinzhan.json',
+  },
+  {
+    name: bulletType.TEST,
+    src: '/assets/bullet/test/test.json',
   },
 ];
