@@ -12,7 +12,7 @@ import { useTranslation } from 'contexts/Localization';
 import { BuildingDetailType } from 'state/types';
 import { useBuildingUpgrade, useBuildingOperate } from './hooks';
 
-import { ThingaddBlood, GameThing, ThingRepair } from '..';
+import { GameThing, BuildingValue } from '..';
 import { ThingDestoryModal, ThingUpgradesModal, CancelModal } from '../Modal';
 
 import { useWorkqueue } from '../hooks';
@@ -50,11 +50,6 @@ const ItemInfo = styled(Flex)<{ bottomMargin?: boolean }>`
     `}
 `;
 
-const StyledImage = styled(Image)`
-  flex-shrink: 0;
-  margin-right: 9px;
-`;
-
 const ActionButton = styled(Button)`
   width: 170px;
   height: 44px;
@@ -71,7 +66,7 @@ export const GameInfo: React.FC<{
   currentBuild: Api.Building.Building;
   diffTime?: number;
   callback: () => void;
-  onUpgradeLevel: () => void;
+  onUpgradeLevel: (currentBuilding: any) => void;
 }> = React.memo(
   ({
     building_id,
@@ -86,9 +81,8 @@ export const GameInfo: React.FC<{
     const { toastSuccess, toastError } = useToast();
     const { upgrade } = useBuildingUpgrade();
     const { cancelWorkQueue } = useWorkqueue();
-    const { destory, upgrade: upgradeBuilding } = useBuildingOperate();
+    const { destory } = useBuildingOperate();
     const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
-    const planetInfo = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
     const planetAssets = useStore(p => p.buildling.planetAssets);
     let timer: any = null;
 
@@ -96,29 +90,38 @@ export const GameInfo: React.FC<{
       upgradesVisible: false,
       cancelVisible: false,
       upgrade: {} as any,
-      time: diffTime || 0,
     });
-
-    const [cancelVisible, setCancelVisible] = React.useState(false);
+    const [currentTime, setCurrentTime] = React.useState(diffTime || 0);
+    // const [cancelVisible, setCancelVisible] = React.useState(false);
     const { upgrade_need } = state.upgrade?.estimate_building_detail || {};
+    const currentBuilding = selfBuilding?.find(
+      (row: any) => row?.building?._id === building_id,
+    )?.building;
 
-    const itemData =
-      selfBuilding?.find((row: any) => row?.building?._id === building_id)
-        ?.building || currentBuild;
+    const itemData = React.useMemo(() => {
+      return { ...currentBuilding, ...currentBuild };
+    }, [currentBuild, currentBuilding]);
 
-    const init = useCallback(async () => {
-      // if (itemData?.isbuilding) {
-      const res = await upgrade(planet_id, building_id);
-      setState({ ...state, upgrade: res });
-      // }
+    const currentAttributes = state.upgrade?.building_detail || itemData;
+    const progressTime = itemData?.work_end_time - itemData?.work_start_time;
+
+    const init = useCallback(
+      async (target_level?: number) => {
+        if (itemData?.work_queue_id) {
+          // eslint-disable-next-line no-param-reassign
+          target_level = itemData?.target_level;
+        }
+        const buildingsId = itemData?.work_queue_id
+          ? itemData?.buildings_id
+          : building_id;
+        if (itemData?.iscreate || itemData?.work_queue_id) {
+          const res = await upgrade(planet_id, buildingsId, target_level);
+          setState({ ...state, upgrade: res });
+        }
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [upgrade, planet_id, building_id, itemData]);
-
-    React.useEffect(() => {
-      if (itemData?._id && !itemData?.isactive) {
-        init();
-      }
-    }, [itemData, init]);
+      [upgrade, planet_id, building_id, itemData],
+    );
 
     // 销毁建筑
     const destoryBuilding = async () => {
@@ -141,25 +144,6 @@ export const GameInfo: React.FC<{
       }
     };
 
-    // 建筑等级提升
-    const upgradeLevelBuilding = async () => {
-      try {
-        const res = await upgradeBuilding({
-          planet_id,
-          building_id,
-        });
-        if (Api.isSuccess(res)) {
-          getSelfBuilding();
-          toastSuccess(t('planetBuildingBeingUpgraded'));
-          setState({ ...state, upgradesVisible: false });
-        } else {
-          toastError(res.message);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     const getSelfBuilding = () => {
       dispatch(fetchPlanetBuildingsAsync(planet_id));
     };
@@ -172,31 +156,25 @@ export const GameInfo: React.FC<{
     };
 
     // 取消建筑升级、建造
-    const cancelBuildingQueue = async () => {
-      try {
-        const res = await cancelWorkQueue(planet_id, itemData?.work_queue_id);
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    // const cancelBuildingQueue = async () => {
+    //   try {
+    //     const res = await cancelWorkQueue(planet_id, itemData?.work_queue_id);
+    //     console.log(res);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
 
     // 倒计时
     const countDownNumber = () => {
       if (diffTime <= 0) {
-        setState({
-          ...state,
-          time: 0,
-        });
+        setCurrentTime(0);
         clearTimeout(timer);
         return;
       }
       // eslint-disable-next-line no-param-reassign
       diffTime--;
-      setState({
-        ...state,
-        time: diffTime,
-      });
+      setCurrentTime(diffTime);
       timer = setTimeout(() => {
         countDownNumber();
       }, 1000);
@@ -210,7 +188,20 @@ export const GameInfo: React.FC<{
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [diffTime]);
 
-    console.log('gameisbuilding', itemData, itemData.isbuilding);
+    React.useEffect(() => {
+      if (itemData?._id && !itemData?.isactive) {
+        init();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [itemData, init]);
+
+    React.useEffect(() => {
+      if (!itemData?.iscreate) {
+        setState({ ...state, upgrade: {} });
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [itemData]);
+
     return (
       <Container>
         {itemData?._id && (
@@ -218,8 +209,8 @@ export const GameInfo: React.FC<{
             <CardContent>
               <Flex alignItems='flex-start'>
                 <GameThing
-                  src={itemData?.picture}
-                  level={itemData?.propterty?.levelEnergy}
+                  src={currentAttributes?.picture}
+                  level={currentAttributes?.propterty?.levelEnergy}
                   scale='md'
                   border
                 />
@@ -231,161 +222,127 @@ export const GameInfo: React.FC<{
                   >
                     <Flex alignItems='flex-end'>
                       <Text bold shadow='primary'>
-                        {itemData?.propterty?.name_cn}
+                        {currentAttributes?.propterty?.name_cn ||
+                          itemData?.propterty?.name_cn}
                       </Text>
                       <Text ml='27px' small>
-                        {`${itemData?.propterty?.size.area_x}x${itemData?.propterty?.size.area_y}`}
+                        {`${
+                          currentAttributes?.propterty?.size.area_x ||
+                          itemData?.propterty?.size.area_x
+                        }x${
+                          currentAttributes?.propterty?.size.area_y ||
+                          itemData?.propterty?.size.area_y
+                        }`}
                       </Text>
                     </Flex>
-                    {!itemData.isbuilding && !itemData?.work_queue_id && (
+                    {!itemData.iscreate &&
+                      !itemData?.building?._id &&
+                      !itemData?.work_queue_id && (
+                        <Text bold small shadow='primary'>
+                          {t('NotYetBuilt')}
+                        </Text>
+                      )}
+
+                    {itemData?.work_queue_id && itemData?.work_add_time && (
                       <Text bold small shadow='primary'>
-                        尚未建筑
+                        {t('DuringUpgrade')}
                       </Text>
                     )}
 
-                    {itemData?.work_queue_id && (
-                      <Text bold small shadow='primary'>
-                        升级中
-                      </Text>
-                    )}
-                    {state.upgrade?.building_detail?._id && (
-                      <Text shadow='primary' bold fontSize='22px'>
-                        Lv {itemData?.propterty?.levelEnergy + 1} 预览
-                      </Text>
-                    )}
+                    {(itemData?.building?._id ||
+                      state.upgrade?.building_detail?._id) &&
+                      !itemData?.work_queue_id && (
+                        <Text shadow='primary' bold fontSize='22px'>
+                          {t('LevelPreview', {
+                            level:
+                              state.upgrade?.estimate_building_detail?.propterty
+                                ?.levelEnergy,
+                          })}
+                        </Text>
+                      )}
                   </Flex>
                   <Flex flex={1} justifyContent='space-between' flexWrap='wrap'>
                     {/* 矿石建筑 */}
                     {BuildingDetailType.BuildingDetailTypeStone ===
-                      itemData?.detail_type && (
+                      currentAttributes?.detail_type && (
                       <ItemInfo>
-                        <Box width={50} height={50} mr='5px'>
-                          <StyledImage
-                            width={50}
-                            height={50}
-                            src='/images/commons/icon/icon_minera.png'
-                          />
-                        </Box>
-                        <Box>
-                          <Flex alignItems='center'>
-                            <Text color='textSubtle' small>
-                              {t('Ore Capacity')}
-                            </Text>
-                          </Flex>
-                          <Text small>
-                            {itemData?.stone?.product?.per_sec_ouput_stone}/s
-                          </Text>
-                        </Box>
+                        <BuildingValue
+                          itemData={itemData}
+                          planet_id={planet_id}
+                          title={t('Ore Capacity')}
+                          value={`${currentAttributes?.stone?.product?.per_sec_ouput_stone}/s`}
+                          icon='/images/commons/icon/icon_minera.png'
+                        />
                       </ItemInfo>
                     )}
                     {/* 生产能量 */}
                     {BuildingDetailType.BuildingDetailTypeEnergy ===
-                      itemData?.detail_type && (
+                      currentAttributes?.detail_type && (
                       <ItemInfo>
-                        <Box width={50} height={50} mr='5px'>
-                          <StyledImage
-                            width={50}
-                            height={50}
-                            src='/images/commons/icon/icon_energy.png'
-                          />
-                        </Box>
-                        <Box>
-                          <Flex alignItems='center'>
-                            <Text color='textSubtle' small>
-                              {t('Energy Capacity')}
-                            </Text>
-                          </Flex>
-                          <Text small>
-                            {itemData?.stone?.product?.per_sec_ouput_energy}/s
-                          </Text>
-                        </Box>
+                        <BuildingValue
+                          itemData={itemData}
+                          planet_id={planet_id}
+                          title={t('Energy Capacity')}
+                          value={`${currentAttributes?.stone?.product?.per_sec_ouput_energy}/s`}
+                          icon='/images/commons/icon/icon_energy.png'
+                        />
                       </ItemInfo>
                     )}
                     {/* 生产香料 */}
                     {BuildingDetailType.BuildingDetailTypePopulation ===
-                      itemData?.detail_type && (
+                      currentAttributes?.detail_type && (
                       <ItemInfo>
-                        <Box width={50} height={50} mr='5px'>
-                          <StyledImage
-                            width={50}
-                            height={50}
-                            src='/images/commons/icon/icon_spice.png'
-                          />
-                        </Box>
-                        <Box>
-                          <Flex alignItems='center'>
-                            <Text color='textSubtle' small>
-                              {t('Population Capacity')}
-                            </Text>
-                          </Flex>
-                          <Text small>
-                            {itemData?.stone?.product?.per_sec_ouput_population}
-                            /s
-                          </Text>
-                        </Box>
+                        <BuildingValue
+                          itemData={itemData}
+                          planet_id={planet_id}
+                          title={t('Population Capacity')}
+                          value={`${currentAttributes?.stone?.product?.per_sec_ouput_population}/s`}
+                          icon='/images/commons/icon/icon_spice.png'
+                        />
                       </ItemInfo>
                     )}
                     <ItemInfo>
-                      <Box width={50} height={50} mr='5px'>
-                        <StyledImage
-                          width={50}
-                          height={50}
-                          src='/images/commons/star/durability.png'
-                        />
-                      </Box>
-                      <Box>
-                        <Flex alignItems='center'>
-                          <Text color='textSubtle' small>
-                            {t('planetDurability')}
-                          </Text>
-                          {itemData?.propterty?.now_durability !==
-                            itemData?.propterty?.max_durability && (
-                            <ThingRepair
-                              itemData={itemData}
-                              planet_id={planet_id}
-                              building_id={building_id}
-                              onCallback={getSelfBuilding}
-                            />
-                          )}
-                        </Flex>
-                        <Text small>
-                          {`${itemData?.propterty?.now_durability}/${itemData?.propterty?.max_durability}`}
-                        </Text>
-                      </Box>
+                      <BuildingValue
+                        itemData={itemData}
+                        planet_id={planet_id}
+                        title={t('planetDurability')}
+                        value={`${currentAttributes?.propterty?.now_durability}/${currentAttributes?.propterty?.max_durability}`}
+                        addedValue={
+                          state.upgrade?.estimate_building_detail
+                            ?.max_durability -
+                          currentAttributes?.propterty?.max_durability
+                        }
+                        icon='/images/commons/star/durability.png'
+                        isRepair
+                      />
                     </ItemInfo>
                     <ItemInfo bottomMargin>
-                      <Box width={50} height={50} mr='5px'>
-                        <Image
-                          src='/images/commons/icon/icon_energy.png'
-                          width={50}
-                          height={50}
-                        />
-                      </Box>
-                      <Flex flexDirection='column' justifyContent='center'>
-                        <Text color='textTips' small>
-                          {t('planetEnergyConsumption')}
-                        </Text>
-                        <Text small>
-                          {itemData?.propterty?.per_cost_energy}/s
-                        </Text>
-                      </Flex>
+                      <BuildingValue
+                        itemData={itemData}
+                        planet_id={planet_id}
+                        title={t('planetEnergyConsumption')}
+                        value={`${currentAttributes?.propterty?.per_cost_energy}/s`}
+                        addedValue={
+                          state.upgrade?.estimate_building_detail?.propterty
+                            ?.per_cost_energy -
+                          currentAttributes?.propterty?.per_cost_energy
+                        }
+                        icon='/images/commons/icon/icon_energy.png'
+                      />
                     </ItemInfo>
                     <ItemInfo bottomMargin>
-                      <Box width={50} height={50} mr='5px'>
-                        <Image
-                          src='/images/commons/icon/icon_spice.png'
-                          width={50}
-                          height={50}
-                        />
-                      </Box>
-                      <Flex flexDirection='column' justifyContent='center'>
-                        <Text color='textTips' small>
-                          {t('planetPopulationConsumption')}
-                        </Text>
-                        <Text small>
-                          {itemData?.propterty?.per_cost_population}/s
-                        </Text>
-                      </Flex>
+                      <BuildingValue
+                        itemData={itemData}
+                        planet_id={planet_id}
+                        title={t('planetPopulationConsumption')}
+                        value={`${currentAttributes?.propterty?.per_cost_population}/s`}
+                        addedValue={
+                          state.upgrade?.estimate_building_detail?.propterty
+                            ?.per_cost_population -
+                          currentAttributes?.propterty?.per_cost_population
+                        }
+                        icon='/images/commons/icon/icon_spice.png'
+                      />
                     </ItemInfo>
                   </Flex>
                   <Box>
@@ -401,11 +358,12 @@ export const GameInfo: React.FC<{
                 <>
                   <Flex mt='21px' mb='15px' alignItems='flex-end'>
                     <Text bold fontSize='24px' shadow='primary'>
-                      建造要求
+                      {t('ConstructionRequirements')}
                     </Text>
                     <Text ml='16px' fontSize='16px' mb='2px'>
-                      建造耗时（
-                      {formatTime(itemData?.upgrade_need?.upgrade_time)}）
+                      {t('TimeCnsumingBuild', {
+                        time: formatTime(itemData?.upgrade_need?.upgrade_time),
+                      })}
                     </Text>
                   </Flex>
                   <Text
@@ -416,8 +374,9 @@ export const GameInfo: React.FC<{
                         itemData?.upgrade_need?.upgrade_energy && 'warning'
                     }`}
                   >
-                    建造所需能量：{itemData?.upgrade_need?.upgrade_energy}/
-                    {planetAssets?.energy}
+                    {t('EnergyRequiredBuild', {
+                      value: `${itemData?.upgrade_need?.upgrade_energy}/${planetAssets?.energy}`,
+                    })}
                   </Text>
                   <Text
                     fontSize='16px'
@@ -427,8 +386,9 @@ export const GameInfo: React.FC<{
                         itemData?.upgrade_need?.upgrade_stone && 'warning'
                     }`}
                   >
-                    建造所需矿石：{itemData?.upgrade_need?.upgrade_stone}/
-                    {planetAssets?.stone}
+                    {t('OreRequiredConstruction', {
+                      value: `${itemData?.upgrade_need?.upgrade_stone}/${planetAssets?.stone}`,
+                    })}
                   </Text>
                   <Text
                     fontSize='16px'
@@ -438,8 +398,9 @@ export const GameInfo: React.FC<{
                         itemData?.upgrade_need?.upgrade_population && 'warning'
                     }`}
                   >
-                    建造所需香料：{itemData?.upgrade_need?.upgrade_population}/
-                    {planetAssets?.population}
+                    {t('SpicesNeededToBuild', {
+                      value: `${itemData?.upgrade_need?.upgrade_population}/${planetAssets?.population}`,
+                    })}
                   </Text>
                 </>
               )}
@@ -456,7 +417,7 @@ export const GameInfo: React.FC<{
                   <Flex flexDirection='column' width='388px'>
                     <Flex alignItems='center' mb='27px'>
                       <Text shadow='primary' bold fontSize='34px'>
-                        Lv {itemData?.propterty?.levelEnergy}
+                        Lv {currentAttributes?.propterty?.levelEnergy}
                       </Text>
                       <Box width='47px' height='40px' margin='0 40px'>
                         <Image
@@ -466,7 +427,7 @@ export const GameInfo: React.FC<{
                         />
                       </Box>
                       <Text shadow='primary' bold fontSize='34px'>
-                        Lv {itemData?.propterty?.levelEnergy + 1}
+                        Lv {currentAttributes?.propterty?.levelEnergy + 1}
                       </Text>
                     </Flex>
                     <Progress
@@ -475,22 +436,25 @@ export const GameInfo: React.FC<{
                       scale='md'
                       linear
                       primaryStep={
-                        Math.round(
-                          ((diffTime - state.time) / diffTime) * 10000,
-                        ) / 100
+                        itemData?.work_status === 3
+                          ? 0
+                          : Math.round(
+                              ((progressTime - currentTime) / progressTime) *
+                                10000,
+                            ) / 100
                       }
                     />
                     <Text mt='17px' fontSize='17px'>
-                      剩余时间（{formatTime(state.time)}）
+                      {t('TimeLeft', { time: formatTime(currentTime) })}
                     </Text>
                   </Flex>
-                  <ActionButton
+                  {/* <ActionButton
                     disabled={itemData?.isactive}
                     variant='danger'
                     onClick={() => setCancelVisible(true)}
                   >
-                    取消升级
-                  </ActionButton>
+                    {t('CancelUpgrade')}
+                  </ActionButton> */}
                 </Flex>
               )}
 
@@ -505,7 +469,8 @@ export const GameInfo: React.FC<{
                   <Flex flexDirection='column'>
                     <Flex alignItems='center' mb='5px'>
                       <Text shadow='primary' bold fontSize='34px'>
-                        Lv {itemData?.propterty?.levelEnergy}
+                        Lv{' '}
+                        {state.upgrade?.building_detail?.propterty?.levelEnergy}
                       </Text>
                       <Box width='47px' height='40px' margin='0 40px'>
                         <Image
@@ -515,12 +480,15 @@ export const GameInfo: React.FC<{
                         />
                       </Box>
                       <Text shadow='primary' bold fontSize='34px'>
-                        Lv {itemData?.propterty?.levelEnergy + 1}
+                        Lv{' '}
+                        {state.upgrade?.building_detail?.propterty
+                          ?.levelEnergy + 1}
                       </Text>
                     </Flex>
                     <Text fontSize='17px'>
-                      升级耗时（
-                      {formatTime(upgrade_need?.upgrade_time)}）
+                      {t('TimeConsumingUpgrade', {
+                        time: formatTime(upgrade_need?.upgrade_time),
+                      })}
                     </Text>
                     {upgrade_need?.upgrade_energy > 0 && (
                       <Text
@@ -530,8 +498,9 @@ export const GameInfo: React.FC<{
                           'warning'
                         }`}
                       >
-                        升级所需能量：
-                        {`${upgrade_need?.upgrade_energy} / ${planetAssets?.energy}`}
+                        {t('EnergyRequiredUpgrade', {
+                          value: `${upgrade_need?.upgrade_energy} / ${planetAssets?.energy}`,
+                        })}
                       </Text>
                     )}
                     {upgrade_need?.upgrade_population > 0 && (
@@ -542,8 +511,9 @@ export const GameInfo: React.FC<{
                             upgrade_need?.upgrade_population && 'warning'
                         }`}
                       >
-                        升级所需香料：
-                        {`${upgrade_need?.upgrade_population} / ${planetAssets?.population}`}
+                        {t('SpiceRequiredUpgrade', {
+                          value: `${upgrade_need?.upgrade_population} / ${planetAssets?.population}`,
+                        })}
                       </Text>
                     )}
                     {upgrade_need?.upgrade_stone > 0 && (
@@ -554,14 +524,25 @@ export const GameInfo: React.FC<{
                           'warning'
                         }`}
                       >
-                        升级所需矿石：
-                        {`${upgrade_need?.upgrade_stone} / ${planetAssets?.stone}`}
+                        {t('OreRequiredUpgrade', {
+                          value: `${upgrade_need?.upgrade_stone} / ${planetAssets?.stone}`,
+                        })}
                       </Text>
                     )}
                   </Flex>
                   <Flex flexDirection='column'>
                     <ActionButton
-                      disabled={!state.upgrade?.estimate_building_detail?._id}
+                      disabled={
+                        !state.upgrade?.estimate_building_detail?._id ||
+                        (upgrade_need?.upgrade_energy > 0 &&
+                          planetAssets?.energy <
+                            upgrade_need?.upgrade_energy) ||
+                        (upgrade_need?.upgrade_population > 0 &&
+                          planetAssets?.population <
+                            upgrade_need?.upgrade_population) ||
+                        (upgrade_need?.upgrade_stone > 0 &&
+                          planetAssets?.stone < upgrade_need?.upgrade_stone)
+                      }
                       onClick={() =>
                         setState({ ...state, upgradesVisible: true })
                       }
@@ -602,22 +583,28 @@ export const GameInfo: React.FC<{
           planet_id={planet_id}
           itemData={itemData}
           upgrade={state.upgrade}
-          onChange={() => {
-            setState({ ...state, upgradesVisible: false });
-            onUpgradeLevel();
+          onChange={async () => {
+            const level =
+              state.upgrade?.building_detail?.propterty?.levelEnergy + 2;
+            const buildingsId = itemData?.work_queue_id
+              ? itemData?.buildings_id
+              : building_id;
+            const res: any = await upgrade(planet_id, buildingsId, level);
+            setState({ ...state, upgrade: res, upgradesVisible: false });
+            onUpgradeLevel(res?.building_detail);
           }}
           onClose={() => setState({ ...state, upgradesVisible: false })}
         />
 
         {/* 取消建筑升级&&建造 */}
-        <CancelModal
+        {/* <CancelModal
           visible={cancelVisible}
-          title='取消升级'
+          title={t('CancelUpgrade')}
           content='将停止当前建筑的队列任务，并且无法收回已支出资源。
 是否取消当前建筑任务？'
           onClose={() => setCancelVisible(false)}
           onComplete={cancelBuildingQueue}
-        />
+        /> */}
       </Container>
     );
   },

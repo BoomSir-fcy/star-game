@@ -342,18 +342,18 @@ const Planet = () => {
                 setActiveStep(event);
               }}
               onChange={currentStep => {
-                console.log(currentStep, 'currentStep', guides.step);
-                if (currentStep === 3) return;
+                // console.log(currentStep, 'currentStep', guides.step);
+                // if (currentStep === 3) return;
                 if (currentStep > guides.step) {
                   setGuide(currentStep);
                 }
               }}
               onExit={step => {
                 setStepsEnabled(false);
-                // if (!choose) {
-                //   setGuide(step + 1);
-                //   return;
-                // }
+                if (!choose) {
+                  setGuide(step + 1);
+                  return;
+                }
                 if (step < (choose ? steps.length : planetSteps.length) - 1) {
                   dispatch(
                     storeAction.toggleVisible({

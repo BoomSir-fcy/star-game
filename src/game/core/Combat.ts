@@ -7,6 +7,7 @@ import {
   Orientation,
   RoundDesc,
   RoundDescAttack,
+  SoldierMoveType,
   SpeederType,
   TipsTextType,
 } from 'game/types';
@@ -48,6 +49,19 @@ class Combat extends EventTarget {
     this.texture1 = Texture.from(getSpriteRes(options.race, options.srcId, 2));
 
     this.effectBuff = new EffectBuff(this);
+
+    const shadow = Texture.from('/assets/map/shadow.png');
+    this.sprite = new Sprite();
+    this.sprite.texture = shadow;
+    this.sprite.anchor.set(0.5);
+    this.sprite.position.set(0, 88);
+    this.sprite.zIndex = -20;
+    this.sprite.visible = false;
+
+    // this.shadowGraphics.beginFill(0xff0000);
+    // this.shadowGraphics.drawEllipse(0, 0, 20, 10);
+    // this.shadowGraphics.endFill();
+    // this.shadowGraphics.zIndex = -10;
   }
 
   x = 0;
@@ -78,11 +92,15 @@ class Combat extends EventTarget {
 
   hpGraphics = new Graphics();
 
+  shadowGraphics = new Graphics();
+
   hpText = new Text('', { fill: 0xff0000, fontSize: 32 });
 
   isEnemy = false;
 
   displaySprite = new Sprite();
+
+  sprite = new Sprite();
 
   texture0;
 
@@ -109,6 +127,8 @@ class Combat extends EventTarget {
   orientation = Orientation.TO_RIGHT_DOWN;
 
   effectBuff;
+
+  flying = true;
 
   renderPh() {
     this.container.addChild(this.hpGraphics);
@@ -224,13 +244,26 @@ class Combat extends EventTarget {
    * @param axisPoint 目标坐标
    * @param moveTime 移动时间(ms)
    */
-  moveTo(axisPoint: AxisPoint, moveTime?: number) {
+  moveTo(axisPoint: AxisPoint, moveType = SoldierMoveType.WALK) {
     this.targetAxisPoint = axisPoint;
+    const _axisPoint = axisPoint.clone();
+    const endAxisPoint = this.axisPoint.clone();
     if (this.axisPoint) {
+      if (moveType === SoldierMoveType.WALK) {
+        this.flipTargetPointOrientation(axisPoint);
+      }
+      if (moveType === SoldierMoveType.FLYING) {
+        this.flipTargetPointOrientation(axisPoint);
+        this.flyingStart();
+        endAxisPoint.y -= 50;
+        _axisPoint.y -= 50;
+        this.sprite.visible = true;
+      }
+
       const linearMove = new LinearMove(
         this.container,
-        this.axisPoint,
-        axisPoint,
+        endAxisPoint,
+        _axisPoint,
         {
           speed: SpeederType.SOLDIER_MOVE,
         },
@@ -239,7 +272,14 @@ class Combat extends EventTarget {
         this.setPosition(axisPoint);
         this.dispatchEvent(new Event('moveEnd'));
         this.updateZIndex();
+        if (moveType === SoldierMoveType.FLYING) {
+          this.flyingEnd();
+          this.sprite.visible = false;
+        }
       });
+      if (moveType === SoldierMoveType.FLYING) {
+        this.flyingStart();
+      }
       linearMove.move();
     }
   }
@@ -283,6 +323,16 @@ class Combat extends EventTarget {
     this.axisPoint = point;
     this.axisPoint?.chequer?.setState(stateType.DISABLE);
     this.axisPoint?.chequer?.displayState(false);
+  }
+
+  flyingStart() {
+    this.flying = true;
+    // this.container.position.y -= 50;
+  }
+
+  flyingEnd() {
+    this.flying = false;
+    // this.container.position.y += 50;
   }
 
   // 碰撞
@@ -469,9 +519,9 @@ class Combat extends EventTarget {
     const bullet = new Bullet(this);
     const { container } = bullet;
     this.container.parent.addChild(container);
-    bullet.addEventListener('attackEnd', () => {
-      this.changeEffect(descType.RESTORE, target);
-    });
+    // bullet.addEventListener('attackEnd', () => {
+    //   this.changeEffect(descType.RESTORE, target);
+    // });
 
     bullet.attack(effect, target);
     // bullet.addEventListener('moveEnd', () => {

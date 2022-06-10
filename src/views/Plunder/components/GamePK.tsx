@@ -24,6 +24,7 @@ import {
   RoundDescMove,
   RoundDescAttack,
   MapBaseUnits,
+  SoldierMoveType,
 } from 'game/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { fetchUnitListAsync } from 'state/game/reducer';
@@ -146,7 +147,7 @@ const GamePK: React.FC<GamePKProps> = () => {
     ) => {
       poses?.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          srcId: `${item.base_unit_id % 30}`,
+          srcId: `${base[item.base_unit_id]?.index}`,
           race: base[item.base_unit_id]?.race || 1,
           id: item.base_unit_id,
           sid: ids[`${item.pos.x}${item.pos.y}`],
@@ -274,7 +275,7 @@ const GamePK: React.FC<GamePKProps> = () => {
       game.clearSoldier();
       info.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          srcId: `${item.base_id % 30}`,
+          srcId: `${PKInfo?.[0]?.init.base_unit[item.base_id].index}`,
           race: PKInfo?.[0]?.init.base_unit[item.base_id].race || 1,
           id: item.base_id,
           hp: PKInfo?.[0]?.init.base_unit[item.base_id].hp,
@@ -338,8 +339,7 @@ const GamePK: React.FC<GamePKProps> = () => {
     // const [s1, s0] = game.soldiers;
     const [s0, s1] = game.soldiers;
     if (s1?.axisPoint && s0) {
-      s0.container.angle += Math.PI;
-      s0.moveTo(s1.axisPoint);
+      s0.moveTo(s1.axisPoint, SoldierMoveType.FLYING);
     }
   }, []);
 

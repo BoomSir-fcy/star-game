@@ -32,7 +32,7 @@ const UpgradeItem: React.FC<{
       <Box width={`${width}px`} height={`${height}px`}>
         <Image width={50} height={50} src={src} />
       </Box>
-      <Box ml='9px'>
+      <Box ml='9px' style={{ width: ' calc(100% - 55px)' }}>
         <Flex alignItems='center'>
           <Text color='textSubtle' small>
             {title}
@@ -40,13 +40,17 @@ const UpgradeItem: React.FC<{
           {moreButton}
         </Flex>
         <Flex alignItems='center'>
-          <Text small>{value}</Text>
+          <Text small ellipsis fontSize='18px' title={value.toString()}>
+            {value}
+          </Text>
           <Text
             ml='14px'
             color={`${extValue >= 0 ? 'textSuccess' : 'textDanger'}`}
-            small
+            fontSize='16px'
+            ellipsis
+            title={extValue.toString()}
           >
-            {extValue}
+            {extValue ? (extValue > 0 ? `+${extValue}` : `${extValue}`) : ''}
           </Text>
         </Flex>
       </Box>
@@ -63,7 +67,7 @@ export const ThingUpgradesModal: React.FC<{
   onClose: () => void;
 }> = ({ visible, planet_id, itemData, upgrade, onChange, onClose }) => {
   const { t } = useTranslation();
-  const upgradDiff = upgrade?.estimate_building_detail?.building || {};
+  const upgradDiff = upgrade?.estimate_building_detail || {};
 
   return (
     <ModalWrapper
@@ -79,32 +83,20 @@ export const ThingUpgradesModal: React.FC<{
           </Text>
         </Flex>
         <Flex flexWrap='wrap' pb='16px'>
-          {itemData?.type === 2 && (
-            <Item>
-              <UpgradeItem
-                width={50}
-                height={50}
-                src='/images/commons/star/HP.png'
-                title={t('planetHPValue')}
-                value={itemData?.propterty?.hp}
-                extValue={upgradDiff?.propterty?.hp - itemData?.propterty?.hp}
-              />
-            </Item>
-          )}
           <Item>
             <UpgradeItem
               width={50}
               height={50}
               src='/images/commons/star/durability.png'
               title={t('planetDurability')}
-              value={`${itemData?.propterty?.per_durability}/${itemData?.propterty?.max_durability}`}
+              value={`${itemData?.propterty?.now_durability}/${itemData?.propterty?.max_durability}`}
               extValue={
-                upgradDiff?.propterty?.per_durability -
-                itemData?.propterty?.per_durability
+                upgradDiff?.propterty?.now_durability -
+                itemData?.propterty?.now_durability
               }
               moreButton={
                 <>
-                  {itemData?.propterty?.per_durability !==
+                  {itemData?.propterty?.now_durability !==
                     itemData?.propterty?.max_durability && (
                     <ThingRepair
                       itemData={itemData}
@@ -132,36 +124,6 @@ export const ThingUpgradesModal: React.FC<{
               }
             />
           </Item>
-          {itemData?.type === 2 && (
-            <>
-              <Item>
-                <UpgradeItem
-                  width={50}
-                  height={50}
-                  src='/images/commons/star/defense.png'
-                  title={t('planetDefenseValue')}
-                  value={itemData?.propterty?.defence}
-                  extValue={
-                    upgradDiff?.propterty?.defence -
-                    itemData?.propterty?.defence
-                  }
-                />
-              </Item>
-
-              <Item>
-                <UpgradeItem
-                  width={50}
-                  height={50}
-                  src='/images/commons/star/attackValue.png'
-                  title={t('planetAttackValue')}
-                  value={itemData?.propterty?.attack}
-                  extValue={
-                    upgradDiff?.propterty?.attack - itemData?.propterty?.attack
-                  }
-                />
-              </Item>
-            </>
-          )}
           <Item>
             <UpgradeItem
               width={50}
@@ -187,9 +149,9 @@ export const ThingUpgradesModal: React.FC<{
             <TextList
               imgWidth={50}
               imgHeight={50}
-              imgSrc='/images/commons/dsg-1.png'
-              number={upgrade?.quick_upgrade_cost_star}
-              unit='DSG'
+              imgSrc='/images/tokens/0x2bf6502a30Af3378ACb51F056F47fc5e24aB8961.svg'
+              number={upgradDiff?.upgrade_need?.upgrade_box || 0}
+              unit='BOX'
             />
             <Button ml='34px' onClick={onChange}>
               {t('Confirm to upgrade')}

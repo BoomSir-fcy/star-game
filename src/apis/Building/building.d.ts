@@ -39,7 +39,10 @@ declare namespace Api {
         count_down: number;
         upgrade_type: number; // 1-升级 2-恢复耐久
       };
+      work_queue_id?: number;
+      isbuilding?: boolean;
       isactive?: boolean; // 是否激活
+      iscreate?: boolean; // 是否已经保存创建建筑了
     }
 
     interface BuildingsOperateParams {

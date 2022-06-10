@@ -92,7 +92,7 @@ const Embattle = () => {
     (poses: Api.Game.UnitPlanetPos[], isEnemy?: boolean) => {
       poses.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          srcId: `${item.base_unit_id % 30}`,
+          srcId: `${unitMaps?.[item.base_unit_id]?.index}`,
           race,
           id: item.base_unit_id,
           unique_id: item.base_unit_id,
@@ -138,16 +138,16 @@ const Embattle = () => {
   }, [activeTerrain, ref, TerrainInfo, game]);
 
   return (
-    <Box position='relative'>
+    <Box position='relative' width='100%'>
       <Box ref={ref} />
       <Flex
         style={{ userSelect: 'none' }}
         position='absolute'
         top='0'
-        left='824px'
+        right='18px'
       >
         <Preview game={game} activeSoldier={activeSoldier} />
-        <SortBoard
+        {/* <SortBoard
           sortSoldiers={gameSoldiers}
           activeSoldier={activeSoldier}
           setSortSoldiers={(newItems, update) => {
@@ -156,7 +156,7 @@ const Embattle = () => {
               game.setSolders(newItems);
             }
           }}
-        />
+        /> */}
       </Flex>
       <Box
         style={{ userSelect: 'none' }}
