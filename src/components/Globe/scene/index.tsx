@@ -44,7 +44,7 @@ const spotlightConfig: any = {
     max: 2,
   },
 };
-const Scene = function ({ ...props }) {
+const Scene = ({ ...props }) => {
   const earthGrounpRef = useRef(null);
   const spotLightRef = useRef<any>(null);
 

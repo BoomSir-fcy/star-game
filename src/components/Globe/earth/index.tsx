@@ -6,7 +6,7 @@ import { Color, Mesh } from 'three';
 
 import GlowMesh from './GlowMesh';
 
-const Earth = function ({ url, ...props }: any) {
+const Earth = ({ url, ...props }: any) => {
   const earthMesh = useRef<Mesh>(null);
 
   useEffect(() => {

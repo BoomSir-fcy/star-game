@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useThree } from '@react-three/fiber';
 import { Vector3 } from 'three';
 
-const CustomCamera = function (props: any) {
+const CustomCamera = (props: any) => {
   const cameraRef = useRef(null);
   const { set, size, viewport } = useThree();
   useEffect(() => {
