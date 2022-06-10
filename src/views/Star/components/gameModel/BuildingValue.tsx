@@ -57,14 +57,14 @@ export const BuildingValue: React.FC<{
               ml='5px'
               bold
               ellipsis
-              color='progressGreenBar'
+              color={`${addedValue >= 0 ? 'progressGreenBar' : 'textDanger'}`}
               fontSize='16px'
               title={addedValue?.toString()}
             >
               {addedValue
                 ? addedValue > 0
                   ? `+${addedValue}`
-                  : `-${addedValue}`
+                  : `${addedValue}`
                 : ''}
             </Text>
           </Flex>

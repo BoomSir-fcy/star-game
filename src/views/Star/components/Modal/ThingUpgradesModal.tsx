@@ -50,7 +50,7 @@ const UpgradeItem: React.FC<{
             ellipsis
             title={extValue.toString()}
           >
-            {extValue ? (extValue > 0 ? `+${extValue}` : `-${extValue}`) : ''}
+            {extValue ? (extValue > 0 ? `+${extValue}` : `${extValue}`) : ''}
           </Text>
         </Flex>
       </Box>

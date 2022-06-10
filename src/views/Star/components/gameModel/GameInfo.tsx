@@ -66,7 +66,7 @@ export const GameInfo: React.FC<{
   currentBuild: Api.Building.Building;
   diffTime?: number;
   callback: () => void;
-  onUpgradeLevel: () => void;
+  onUpgradeLevel: (currentBuilding: any) => void;
 }> = React.memo(
   ({
     building_id,
@@ -92,9 +92,8 @@ export const GameInfo: React.FC<{
       upgrade: {} as any,
     });
     const [currentTime, setCurrentTime] = React.useState(diffTime || 0);
-    const [cancelVisible, setCancelVisible] = React.useState(false);
+    // const [cancelVisible, setCancelVisible] = React.useState(false);
     const { upgrade_need } = state.upgrade?.estimate_building_detail || {};
-    const currentAttributes = state.upgrade?.building_detail || {};
     const currentBuilding = selfBuilding?.find(
       (row: any) => row?.building?._id === building_id,
     )?.building;
@@ -102,11 +101,12 @@ export const GameInfo: React.FC<{
     const itemData = React.useMemo(() => {
       return { ...currentBuilding, ...currentBuild };
     }, [currentBuild, currentBuilding]);
+
+    const currentAttributes = state.upgrade?.building_detail || itemData;
     const progressTime = itemData?.work_end_time - itemData?.work_start_time;
 
     const init = useCallback(
       async (target_level?: number) => {
-        console.log(itemData);
         if (itemData?.work_queue_id) {
           // eslint-disable-next-line no-param-reassign
           target_level = itemData?.target_level;
@@ -122,12 +122,6 @@ export const GameInfo: React.FC<{
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [upgrade, planet_id, building_id, itemData],
     );
-
-    React.useEffect(() => {
-      if (itemData?._id && !itemData?.isactive) {
-        init();
-      }
-    }, [itemData, init]);
 
     // 销毁建筑
     const destoryBuilding = async () => {
@@ -162,14 +156,14 @@ export const GameInfo: React.FC<{
     };
 
     // 取消建筑升级、建造
-    const cancelBuildingQueue = async () => {
-      try {
-        const res = await cancelWorkQueue(planet_id, itemData?.work_queue_id);
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    // const cancelBuildingQueue = async () => {
+    //   try {
+    //     const res = await cancelWorkQueue(planet_id, itemData?.work_queue_id);
+    //     console.log(res);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
 
     // 倒计时
     const countDownNumber = () => {
@@ -194,6 +188,20 @@ export const GameInfo: React.FC<{
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [diffTime]);
 
+    React.useEffect(() => {
+      if (itemData?._id && !itemData?.isactive) {
+        init();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [itemData, init]);
+
+    React.useEffect(() => {
+      if (!itemData?.iscreate) {
+        setState({ ...state, upgrade: {} });
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [itemData]);
+
     return (
       <Container>
         {itemData?._id && (
@@ -214,24 +222,35 @@ export const GameInfo: React.FC<{
                   >
                     <Flex alignItems='flex-end'>
                       <Text bold shadow='primary'>
-                        {currentAttributes?.propterty?.name_cn}
+                        {currentAttributes?.propterty?.name_cn ||
+                          itemData?.propterty?.name_cn}
                       </Text>
                       <Text ml='27px' small>
-                        {`${currentAttributes?.propterty?.size.area_x}x${currentAttributes?.propterty?.size.area_y}`}
+                        {`${
+                          currentAttributes?.propterty?.size.area_x ||
+                          itemData?.propterty?.size.area_x
+                        }x${
+                          currentAttributes?.propterty?.size.area_y ||
+                          itemData?.propterty?.size.area_y
+                        }`}
                       </Text>
                     </Flex>
-                    {!itemData.isbuilding && !itemData?.work_queue_id && (
-                      <Text bold small shadow='primary'>
-                        {t('NotYetBuilt')}
-                      </Text>
-                    )}
+                    {!itemData.iscreate &&
+                      !itemData?.building?._id &&
+                      !itemData?.work_queue_id && (
+                        <Text bold small shadow='primary'>
+                          {t('NotYetBuilt')}
+                        </Text>
+                      )}
 
-                    {itemData?.work_queue_id && itemData?.work_end_time && (
+                    {itemData?.work_queue_id && itemData?.work_add_time && (
                       <Text bold small shadow='primary'>
                         {t('DuringUpgrade')}
                       </Text>
                     )}
-                    {state.upgrade?.building_detail?._id &&
+
+                    {(itemData?.building?._id ||
+                      state.upgrade?.building_detail?._id) &&
                       !itemData?.work_queue_id && (
                         <Text shadow='primary' bold fontSize='22px'>
                           {t('LevelPreview', {
@@ -417,9 +436,12 @@ export const GameInfo: React.FC<{
                       scale='md'
                       linear
                       primaryStep={
-                        Math.round(
-                          ((progressTime - currentTime) / progressTime) * 10000,
-                        ) / 100
+                        itemData?.work_status === 3
+                          ? 0
+                          : Math.round(
+                              ((progressTime - currentTime) / progressTime) *
+                                10000,
+                            ) / 100
                       }
                     />
                     <Text mt='17px' fontSize='17px'>
@@ -510,7 +532,17 @@ export const GameInfo: React.FC<{
                   </Flex>
                   <Flex flexDirection='column'>
                     <ActionButton
-                      disabled={!state.upgrade?.estimate_building_detail?._id}
+                      disabled={
+                        !state.upgrade?.estimate_building_detail?._id ||
+                        (upgrade_need?.upgrade_energy > 0 &&
+                          planetAssets?.energy <
+                            upgrade_need?.upgrade_energy) ||
+                        (upgrade_need?.upgrade_population > 0 &&
+                          planetAssets?.population <
+                            upgrade_need?.upgrade_population) ||
+                        (upgrade_need?.upgrade_stone > 0 &&
+                          planetAssets?.stone < upgrade_need?.upgrade_stone)
+                      }
                       onClick={() =>
                         setState({ ...state, upgradesVisible: true })
                       }
@@ -554,22 +586,25 @@ export const GameInfo: React.FC<{
           onChange={async () => {
             const level =
               state.upgrade?.building_detail?.propterty?.levelEnergy + 2;
-            setState({ ...state, upgradesVisible: false });
-            await init(level);
-            onUpgradeLevel();
+            const buildingsId = itemData?.work_queue_id
+              ? itemData?.buildings_id
+              : building_id;
+            const res: any = await upgrade(planet_id, buildingsId, level);
+            setState({ ...state, upgrade: res, upgradesVisible: false });
+            onUpgradeLevel(res?.building_detail);
           }}
           onClose={() => setState({ ...state, upgradesVisible: false })}
         />
 
         {/* 取消建筑升级&&建造 */}
-        <CancelModal
+        {/* <CancelModal
           visible={cancelVisible}
-          title='取消升级'
+          title={t('CancelUpgrade')}
           content='将停止当前建筑的队列任务，并且无法收回已支出资源。
 是否取消当前建筑任务？'
           onClose={() => setCancelVisible(false)}
           onComplete={cancelBuildingQueue}
-        />
+        /> */}
       </Container>
     );
   },

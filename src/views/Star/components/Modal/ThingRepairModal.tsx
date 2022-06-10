@@ -12,7 +12,7 @@ import { useBuildingRepair } from '../gameModel/hooks';
 
 export const ThingRepairModal: React.FC<{
   visible: boolean;
-  itemData: any;
+  itemData?: any;
   planet_id: number | number[];
   building_id?: string | number;
   onChange: () => void;

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useStore } from 'state';
 import { Flex, Box, Image, Text, Progress, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
+import { TipsModal } from '../Modal';
 
 const QueueBox = styled(Box)`
   position: relative;
@@ -104,7 +105,6 @@ export const BuildlingStatus: React.FC<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diffTime, status]);
 
-  console.log(type, status);
   return (
     <Flex>
       <Box width='40px' height='40px'>
@@ -151,6 +151,7 @@ export const Queue: React.FC<{
   const [state, setState] = useState({
     current: '' as string | number,
   });
+  const [visible, setVisible] = useState(false);
   const queueArr = Array.from(
     { length: vipBenefite?.building_queue_capacity },
     (v, i) => i,
@@ -195,22 +196,26 @@ export const Queue: React.FC<{
                 currentQueue[index]?.propterty?.levelEnergy ||
                 currentQueue[index]?.target_level - 1
               }
-              endTime={
+              endTime={currentQueue[index]?.work_countdown}
+              diffTime={
                 currentQueue[index]?.work_end_time -
                 currentQueue[index]?.work_start_time
               }
-              diffTime={Number(
-                (
-                  currentQueue[index]?.work_end_time -
-                  Date.now() / 1000
-                ).toFixed(0),
-              )}
               onComplete={onComplete}
             />
           )}
         </Box>
       ))}
-      <SaveQueue onClick={onSave}>{t('avequeue')}</SaveQueue>
+      <SaveQueue onClick={() => setVisible(true)}>{t('avequeue')}</SaveQueue>
+
+      <TipsModal
+        visible={visible}
+        onConfirm={() => {
+          setVisible(false);
+          onSave();
+        }}
+        onClose={() => setVisible(false)}
+      />
     </Flex>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import {
   BgCard,
   Box,
@@ -14,8 +15,9 @@ import {
 } from 'uikit';
 import { useToast } from 'contexts/ToastsContext';
 import { fetchUserInfoByAccountAsync } from 'state/userInfo/reducer';
+import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
-import { useDispatch } from 'react-redux';
+
 import { useStore } from 'state';
 import { debounce } from 'lodash';
 
@@ -143,6 +145,7 @@ const SubmitText = styled(Text)`
 const VipPage = () => {
   const dispatch = useDispatch();
   const user = useStore(p => p.userInfo.userInfo);
+  const { t } = useTranslation();
   const { toastSuccess } = useToast();
   const [state, setState] = React.useState({
     list: [],
@@ -171,14 +174,13 @@ const VipPage = () => {
       const vip_id = state.list[0].id;
       const res = await Api.UserApi.buyVip(vip_id);
       if (Api.isSuccess(res)) {
-        toastSuccess('购买成功');
+        toastSuccess(t('successful purchase'));
         dispatch(fetchUserInfoByAccountAsync(user?.address));
-        console.log(res);
       }
     } catch (error) {
       console.log(error);
     }
-  }, [dispatch, state.list, toastSuccess, user?.address]);
+  }, [dispatch, state.list, t, toastSuccess, user?.address]);
 
   React.useEffect(() => {
     getVipList();
@@ -239,15 +241,22 @@ const VipPage = () => {
               <Title>VIP BENEFITS</Title>
               <Flex justifyContent='space-between' style={{ flex: 1 }}>
                 <TextBox small ml='43px'>
-                  你还不是VIP，升级VIP后可获得更多好处
+                  {t(
+                    'You are not yet a VIP, you can get more benefits after upgrading to VIP',
+                  )}
                 </TextBox>
                 <TextBox small>
-                  Expire on{` `}
-                  {dayjs(
-                    (Number((new Date().getTime() / 1000).toFixed(0)) +
-                      state.list[0]?.vipDuration) *
-                      1000,
-                  ).format('YYYY.MM.DD')}
+                  {t('Expire on')}
+                  {` `}
+                  {user?.vipBenefits?.is_vip
+                    ? dayjs(user?.vipBenefits?.expired_time * 1000).format(
+                        'YYYY.MM.DD',
+                      )
+                    : dayjs(
+                        (Number((new Date().getTime() / 1000).toFixed(0)) +
+                          state.list[0]?.vipDuration) *
+                          1000,
+                      ).format('YYYY.MM.DD')}
                 </TextBox>
               </Flex>
             </Flex>
@@ -255,32 +264,32 @@ const VipPage = () => {
               <GroupItem>
                 <Items>
                   <Text small color='textSubtle'>
-                    Benefit
+                    {t('Benefit')}
                   </Text>
                 </Items>
                 <Items>
                   <Text shadow='primary' small>
-                    补充储存罐{' '}
+                    {t('supplementary storage tank')}
                   </Text>
                 </Items>
                 <Items>
                   <Text shadow='primary' small>
-                    建筑队列位
+                    {t('building queue')}
                   </Text>
                 </Items>
                 <Items>
                   <Text shadow='primary' small>
-                    同时工作数(升级/建造)
+                    {t('Simultaneous jobs (upgrades/builds)')}
                   </Text>
                 </Items>
                 <Items>
                   <Text shadow='primary' small>
-                    建筑修复耐久度
+                    {t('Building Repair Durability')}
                   </Text>
                 </Items>
                 <Items>
                   <Text shadow='primary' small>
-                    星球探索次数
+                    {t('Planet Expeditions')}
                   </Text>
                 </Items>
               </GroupItem>
@@ -296,8 +305,8 @@ const VipPage = () => {
                     <Items>
                       <TView small>
                         {row?.oneclickSupplement === 2
-                          ? '单一补充'
-                          : '一键补充'}
+                          ? t('single supplement')
+                          : t('One-click supplement')}
                       </TView>
                     </Items>
                     <Items>
@@ -308,13 +317,23 @@ const VipPage = () => {
                     </Items>
                     <Items>
                       <TView small>
-                        {row?.oneclickRestore === 2 ? '单一修复' : '一键修复'}
+                        {row?.oneclickRestore === 2
+                          ? t('single fix')
+                          : t('One-click repair')}
                       </TView>
                     </Items>
                     <Items>
                       <TView small>{row?.planetExploreFrequency}</TView>
-                      <Text small color='textSubtle'>
-                        (收益:前3次100%最后1次50%)
+                      <Text
+                        fontSize='16px'
+                        color='textSubtle'
+                        textAlign='center'
+                      >
+                        (
+                        {t(
+                          'Income: 100% for the first 3 times and 50% for the last time',
+                        )}
+                        )
                       </Text>
                     </Items>
                   </GroupItem>
@@ -323,7 +342,7 @@ const VipPage = () => {
             </Content>
             <Flex justifyContent='center'>
               <Submit onClick={debounce(() => buyVip(), 1000)}>
-                <SubmitText>Become VIP</SubmitText>
+                <SubmitText>{t('Become VIP')}</SubmitText>
               </Submit>
             </Flex>
           </Box>

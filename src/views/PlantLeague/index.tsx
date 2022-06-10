@@ -10,12 +10,16 @@ import eventBus from 'utils/eventBus';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { BuyVipModal } from 'components/Modal/buyVipModal';
 import { useTranslation } from 'contexts/Localization';
+import { useToast } from 'contexts/ToastsContext';
 import { useGuide } from 'hooks/useGuide';
 import { useLocation } from 'react-router-dom';
 import JoinTheAlliance from './Join';
 import LeagueInfo from './LeagueInfo';
 import 'intro.js/introjs.css';
 import { RechargeAssets } from './RechargeAssets';
+import { ThingRepairModal } from '../Star/components/Modal';
+
+import { useBuildingRepair } from '../Star/components/gameModel/hooks';
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -82,11 +86,14 @@ const PlantLeague = () => {
   const guideRef = React.useRef(null);
 
   const { t } = useTranslation();
-
+  const { setBatchRepair } = useBuildingRepair();
+  const { toastSuccess } = useToast();
   const { guides, setGuide } = useGuide(location.pathname);
-
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(guides.step);
+
+  const workingList = useStore(p => p.alliance.workingPlanet);
+
   const steps = React.useMemo(
     () => [
       {
@@ -174,9 +181,14 @@ const PlantLeague = () => {
       setRechargeVisible(true);
       return;
     }
-    setModalTips('一键补充储存罐能量， 可以更快的部署资源。');
+    setModalTips(
+      t(
+        'One-click replenishment of storage tank energy, and resources can be deployed faster',
+      ),
+    );
     setVisible(true);
   }, [
+    t,
     setVisible,
     setRechargeVisible,
     userInfo.vipBenefits?.is_vip,
@@ -189,9 +201,14 @@ const PlantLeague = () => {
       setRepairVisible(true);
       return;
     }
-    setModalTips('一键修复耐久， 可以更快修复行星上所有建筑的耐久度。');
+    setModalTips(
+      t(
+        'One-click repair durability, you can repair the durability of all buildings on the planet faster',
+      ),
+    );
     setVisible(true);
   }, [
+    t,
     setVisible,
     setRepairVisible,
     userInfo.vipBenefits?.is_vip,
@@ -268,7 +285,7 @@ const PlantLeague = () => {
             width={147}
             variant='purple'
           >
-            补充资源
+            {t('Supplement Resources')}
           </Button>
           <Button
             onClick={repairHandle}
@@ -277,7 +294,7 @@ const PlantLeague = () => {
             width={147}
             variant='purple'
           >
-            修复耐久
+            {t('planetModalTitleRepairDurability')}
           </Button>
         </VipBox>
         <JoinTheAlliance callbackGuide={() => destroy()} />
@@ -294,6 +311,21 @@ const PlantLeague = () => {
         visible={rechargeVisible}
         onClose={() => setRechargeVisible(false)}
       />
+
+      {repairVisible && (
+        <ThingRepairModal
+          planet_id={workingList}
+          visible={repairVisible}
+          onChange={async () => {
+            const res = await setBatchRepair(workingList);
+            if (res) {
+              setRepairVisible(false);
+              toastSuccess(t('planetQuickFixSuccessful'));
+            }
+          }}
+          onClose={() => setRepairVisible(false)}
+        />
+      )}
     </Layout>
   );
 };

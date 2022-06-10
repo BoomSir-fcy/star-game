@@ -72,7 +72,10 @@ export const useBuildingRepair = () => {
   const setBatchRepair = React.useCallback(async (planet_id: number[]) => {
     try {
       const res = await Api.BuildingApi.setBatchRepairBuilding(planet_id);
-      return res;
+      if (Api.isSuccess(res)) {
+        return true;
+      }
+      return false;
     } catch (error: any) {
       throw new Error(error);
     }
