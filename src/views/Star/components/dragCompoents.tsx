@@ -165,7 +165,6 @@ const BuildingsItem = styled(Box)`
         height: calc(100% + 4px);
         border-radius: 10px;
         border: 2px solid #fff;
-        background-color: #fff;
         box-shadow: ${({ theme }) => theme.shadows.highlight};
         z-index: 5;
       }
