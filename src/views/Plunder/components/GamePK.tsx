@@ -24,6 +24,7 @@ import {
   RoundDescMove,
   RoundDescAttack,
   MapBaseUnits,
+  SoldierMoveType,
 } from 'game/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { fetchUnitListAsync } from 'state/game/reducer';
@@ -338,8 +339,7 @@ const GamePK: React.FC<GamePKProps> = () => {
     // const [s1, s0] = game.soldiers;
     const [s0, s1] = game.soldiers;
     if (s1?.axisPoint && s0) {
-      s0.container.angle += Math.PI;
-      s0.moveTo(s1.axisPoint);
+      s0.moveTo(s1.axisPoint, SoldierMoveType.FLYING);
     }
   }, []);
 

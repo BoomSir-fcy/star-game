@@ -439,3 +439,9 @@ export enum TipsTextType {
   CRIT, // 暴击
   RESTORE, // 治疗
 }
+
+export enum SoldierMoveType {
+  WALK, // 步行
+  FLYING, // 飞飞
+  BE_MOVED, // 被迫移动 如击退等
+}
