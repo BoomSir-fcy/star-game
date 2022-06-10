@@ -157,6 +157,8 @@ export const Queue: React.FC<{
     (v, i) => i,
   );
 
+  console.log(currentQueue);
+
   return (
     <Flex ml='40px'>
       {(queueArr ?? []).map((item, index) => (
@@ -174,7 +176,8 @@ export const Queue: React.FC<{
           }}
         >
           <QueueBox className={`${state.current === item && 'active'}`}>
-            {currentQueue[index]?.picture && (
+            {(currentQueue[index]?.work_build_picture ||
+              currentQueue[index]?.picture) && (
               <Box
                 width='123px'
                 height='123px'
@@ -183,7 +186,10 @@ export const Queue: React.FC<{
                 <Image
                   width={123}
                   height={123}
-                  src={currentQueue[index]?.picture}
+                  src={
+                    currentQueue[index]?.work_build_picture ||
+                    currentQueue[index]?.picture
+                  }
                 />
               </Box>
             )}
@@ -196,8 +202,13 @@ export const Queue: React.FC<{
                 currentQueue[index]?.propterty?.levelEnergy ||
                 currentQueue[index]?.target_level - 1
               }
-              endTime={currentQueue[index]?.work_countdown}
-              diffTime={
+              diffTime={Number(
+                (
+                  currentQueue[index]?.work_end_time -
+                  Date.now() / 1000
+                ).toFixed(0),
+              )}
+              endTime={
                 currentQueue[index]?.work_end_time -
                 currentQueue[index]?.work_start_time
               }

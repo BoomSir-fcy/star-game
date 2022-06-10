@@ -508,10 +508,6 @@ export const DragCompoents: React.FC<{
         return [...next];
       });
 
-      const positionArea = getMatrix(to);
-
-      console.log(positionArea);
-
       if (canSave) {
         setCurrentQueue([
           ...currentQueue,
@@ -540,7 +536,7 @@ export const DragCompoents: React.FC<{
         }
       }
     },
-    [currentQueue, getAbsolutePosition, getMatrix, grid, t, toastError],
+    [currentQueue, getAbsolutePosition, grid, t, toastError],
   );
 
   const gradRef = React.useRef(null);
@@ -686,9 +682,7 @@ export const DragCompoents: React.FC<{
                     onDragOver={dragOver}
                     onDrop={drop}
                     onDragEnd={dragEnd}
-                  >
-                    x{item.x}, y{item.y} ({item.index})
-                  </Normal>
+                  />
                 );
               })}
               {(gridBuilds ?? []).map((item, index) => {
@@ -737,12 +731,6 @@ export const DragCompoents: React.FC<{
                 >
                   {t('One-clickRepair')} {repairBuildings.length}
                 </ActionButton>
-                {/* <ActionButton onClick={createGrid}>
-                  {t('planetSave')}
-                </ActionButton>
-                <ActionButton onClick={destroyBuilding} variant='danger'>
-                  {t('planetDestroy')}
-                </ActionButton> */}
               </Flex>
             </Flex>
           </Flex>
@@ -750,13 +738,16 @@ export const DragCompoents: React.FC<{
             planet_id={planet_id}
             building_id={currentBuild?._id}
             currentBuild={currentBuild}
-            diffTime={currentBuild?.work_countdown}
+            diffTime={Number(
+              (currentBuild?.work_end_time - Date.now() / 1000).toFixed(0),
+            )}
             onUpgradeLevel={data => {
               setCurrentQueue([
                 ...currentQueue,
                 {
                   ...currentBuild,
                   propterty: data.propterty,
+                  work_build_picture: data.picture,
                   work_type: 2,
                   work_status: 4,
                 },
@@ -836,11 +827,16 @@ export const DragCompoents: React.FC<{
                   });
                 }}
                 onSave={saveWorkQueue}
-                onComplete={debounce(async () => {
-                  await getWorkQueue();
-                  dispatch(fetchPlanetBuildingsAsync(planet_id));
-                  setCurrentBuild({});
-                }, 100)}
+                onComplete={debounce(() => {
+                  setTimeout(() => {
+                    getWorkQueue();
+                    setCurrentBuild({});
+                  }, 500);
+
+                  setTimeout(() => {
+                    dispatch(fetchPlanetBuildingsAsync(planet_id));
+                  }, 100);
+                }, 1000)}
               />
             )}
           </Flex>
