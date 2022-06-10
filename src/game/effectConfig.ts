@@ -114,13 +114,33 @@ const effectConfig: EffectConfig = {
     },
     {
       name: bulletType.JINZHAN,
-      bombSpineSrc: '/assets/bullet/leidian/leidian.json',
-      bombSpine: bulletType.LEIDIAN,
-      moveSpine: bulletType.JINZHAN,
+      bombSpineSrc: '/assets/bullet/jinzhan/jinzhan.json',
+      bombSpine: bulletType.JINZHAN,
+      // moveSpine: bulletType.JINZHAN,
       bombSpriteSrc: '',
-      moveSpineSrc: '/assets/bullet/jinzhan/jinzhan.json',
+      moveSpineSrc: '',
       moveSpriteSrc: '',
       label: '近战',
+    },
+    {
+      name: bulletType.THROUGH,
+      bombSpineSrc: '/assets/bullet/chuantou1/chuantou.json',
+      bombSpine: bulletType.THROUGH,
+      moveSpine: bulletType.THROUGH,
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/bullet/chuantou1/chuantou.json',
+      moveSpriteSrc: '',
+      label: '穿透1',
+    },
+    {
+      name: bulletType.DAODAN,
+      bombSpineSrc: '/assets/bullet/chuantou1/chuantou.json',
+      bombSpine: bulletType.DAODAN,
+      moveSpine: bulletType.DAODAN,
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/bullet/daodan/daodan.json',
+      moveSpriteSrc: '',
+      label: '导弹落地',
     },
     {
       name: bulletType.MISSILE,
@@ -470,5 +490,13 @@ export const spines = [
   {
     name: bulletType.TEST,
     src: '/assets/bullet/test/test.json',
+  },
+  {
+    name: bulletType.THROUGH,
+    src: '/assets/bullet/chuantou1/chuantou.json',
+  },
+  {
+    name: bulletType.DAODAN,
+    src: '/assets/bullet/daodan/daodan.json',
   },
 ];

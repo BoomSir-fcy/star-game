@@ -48,6 +48,7 @@ declare namespace Api {
       skill_id: number; //
       index: number; // srcId
       level: number; // 等级
+      speed: number; // 出手速度
       tag: string;
       arms_attr: {
         ak: number;

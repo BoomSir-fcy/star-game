@@ -1,22 +1,28 @@
 {
   "skeleton": {
-    "hash": "C3awvEz9MmJmMntBNFbIR78JP1Y",
+    "hash": "Y5Kl9UYHjuI3fLKtL4v0wmx6Nm8",
     "spine": "3.8.75",
-    "x": 31.38,
-    "y": -134.89,
-    "width": 7.23,
-    "height": 21.35,
+    "x": -37.22,
+    "y": -205.49,
+    "width": 18.48,
+    "height": 55.55,
     "images": "",
     "audio": "G:/Star game box/素材/战斗/特效/穿透攻击3个"
   },
   "bones": [
-    { "name": "root", "scaleX": 0.0892, "scaleY": 0.0892 },
+    {
+      "name": "root",
+      "x": -142.2,
+      "y": 136.38,
+      "scaleX": 0.2313,
+      "scaleY": 0.2313
+    },
     {
       "name": "eff",
       "parent": "root",
-      "rotation": -45,
-      "x": 431.43,
-      "y": -1102.12
+      "rotation": -40.68,
+      "x": 513.22,
+      "y": -1066.49
     },
     { "name": "eff_blue laser01", "parent": "eff", "x": 211.98, "y": -95.83 },
     { "name": "eff_blue laser1", "parent": "eff", "x": 206.28, "y": -69.3 },
@@ -219,6 +225,17 @@
   "animations": {
     "play": {
       "slots": {
+        "eff_circle": {
+          "color": [
+            { "time": 0.4333, "color": "ffffff00" },
+            { "time": 0.5, "color": "fffffffe" },
+            { "time": 0.6667, "color": "ffffff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.4333, "name": "eff_circle" }
+          ]
+        },
         "eff_blue laser01": {
           "color": [
             { "time": 1.6, "color": "fffffffe" },
@@ -239,18 +256,43 @@
             { "time": 1.6667, "name": "eff_blue laser06" }
           ]
         },
-        "eff_pati2": {
+        "eff_pati3": {
           "color": [
-            { "time": 0.1333, "color": "14daff00" },
-            { "time": 0.1667, "color": "14dafffe" },
-            { "time": 0.3, "color": "008fff00" }
+            { "time": 0.1, "color": "14daff00" },
+            { "time": 0.1333, "color": "14dafffe" },
+            { "time": 0.2667, "color": "008fff00" }
           ],
           "attachment": [
             { "name": null },
-            { "time": 0.1333, "name": "eff_pati2" },
-            { "time": 0.1667, "name": "eff_pati3" },
-            { "time": 0.2, "name": "eff_pati4" },
-            { "time": 0.2333, "name": "eff_pati5" }
+            { "time": 0.1, "name": "eff_pati2" },
+            { "time": 0.1333, "name": "eff_pati3" },
+            { "time": 0.1667, "name": "eff_pati4" },
+            { "time": 0.2, "name": "eff_pati5" }
+          ]
+        },
+        "eff_pubLight2": {
+          "color": [
+            { "time": 0.1333, "color": "4dcafffe" },
+            { "time": 0.2667, "color": "007dfffe", "curve": 0.25, "c3": 0.75 },
+            { "time": 0.4, "color": "c3b4fffe", "curve": 0.25, "c3": 0.75 },
+            { "time": 0.5333, "color": "007dff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.1333, "name": "eff_pubLight" },
+            { "time": 0.5333, "name": null }
+          ]
+        },
+        "eff_circle2": {
+          "color": [
+            { "time": 0.4667, "color": "1bc4fffe" },
+            { "time": 0.5, "color": "84ecfffe" },
+            { "time": 0.6333, "color": "008eff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.1667, "name": null },
+            { "time": 0.4667, "name": "eff_circle2" }
           ]
         },
         "eff_pubLight": {
@@ -262,6 +304,17 @@
           "attachment": [
             { "name": null },
             { "time": 0.4667, "name": "eff_pubLight" }
+          ]
+        },
+        "eff_pubCir01": {
+          "color": [
+            { "time": 0.4333, "color": "fffffffe" },
+            { "time": 0.4667, "color": "e3eaff96" },
+            { "time": 0.6, "color": "008eff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.4333, "name": "eff_pubCir01" }
           ]
         },
         "eff_blue laser1": {
@@ -288,6 +341,20 @@
             { "time": 1.6, "name": "eff_blue laser06" }
           ]
         },
+        "eff_pati2": {
+          "color": [
+            { "time": 0.1333, "color": "14daff00" },
+            { "time": 0.1667, "color": "14dafffe" },
+            { "time": 0.3, "color": "008fff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.1333, "name": "eff_pati2" },
+            { "time": 0.1667, "name": "eff_pati3" },
+            { "time": 0.2, "name": "eff_pati4" },
+            { "time": 0.2333, "name": "eff_pati5" }
+          ]
+        },
         "eff_pati4": {
           "color": [
             { "time": 0.1667, "color": "14daff00" },
@@ -300,67 +367,6 @@
             { "time": 0.2, "name": "eff_pati3" },
             { "time": 0.2333, "name": "eff_pati4" },
             { "time": 0.2667, "name": "eff_pati5" }
-          ]
-        },
-        "eff_pubLight2": {
-          "color": [
-            { "time": 0.1333, "color": "4dcafffe" },
-            { "time": 0.2667, "color": "007dfffe", "curve": 0.25, "c3": 0.75 },
-            { "time": 0.4, "color": "c3b4fffe", "curve": 0.25, "c3": 0.75 },
-            { "time": 0.5333, "color": "007dff00" }
-          ],
-          "attachment": [
-            { "name": null },
-            { "time": 0.1333, "name": "eff_pubLight" },
-            { "time": 0.5333, "name": null }
-          ]
-        },
-        "eff_circle": {
-          "color": [
-            { "time": 0.4333, "color": "ffffff00" },
-            { "time": 0.5, "color": "fffffffe" },
-            { "time": 0.6667, "color": "ffffff00" }
-          ],
-          "attachment": [
-            { "name": null },
-            { "time": 0.4333, "name": "eff_circle" }
-          ]
-        },
-        "eff_circle2": {
-          "color": [
-            { "time": 0.4667, "color": "1bc4fffe" },
-            { "time": 0.5, "color": "84ecfffe" },
-            { "time": 0.6333, "color": "008eff00" }
-          ],
-          "attachment": [
-            { "name": null },
-            { "time": 0.1667, "name": null },
-            { "time": 0.4667, "name": "eff_circle2" }
-          ]
-        },
-        "eff_pubCir01": {
-          "color": [
-            { "time": 0.4333, "color": "fffffffe" },
-            { "time": 0.4667, "color": "e3eaff96" },
-            { "time": 0.6, "color": "008eff00" }
-          ],
-          "attachment": [
-            { "name": null },
-            { "time": 0.4333, "name": "eff_pubCir01" }
-          ]
-        },
-        "eff_pati3": {
-          "color": [
-            { "time": 0.1, "color": "14daff00" },
-            { "time": 0.1333, "color": "14dafffe" },
-            { "time": 0.2667, "color": "008fff00" }
-          ],
-          "attachment": [
-            { "name": null },
-            { "time": 0.1, "name": "eff_pati2" },
-            { "time": 0.1333, "name": "eff_pati3" },
-            { "time": 0.1667, "name": "eff_pati4" },
-            { "time": 0.2, "name": "eff_pati5" }
           ]
         }
       },

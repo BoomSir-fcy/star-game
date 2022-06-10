@@ -93,6 +93,7 @@ class Bullet extends EventTarget {
     super();
     this.combat = combat;
     this.text.anchor.set(0.5);
+    this.container.zIndex = 9999;
     this.container.addChild(this.text);
     const temp: Effects = {};
     effectConfig.bullet.forEach(item => {
@@ -184,7 +185,6 @@ class Bullet extends EventTarget {
     return new Promise<void>((resolve, rej) => {
       try {
         const { bombSpine, moveSpine } = this.effects[name];
-        console.log(loaders.loader.resources, 'loaders.loader.resources');
         if (bombSpine) {
           const bombLoaderRes = loaders.loader.resources[bombSpine];
           this.loadBombSpine(bombLoaderRes, name);
@@ -209,9 +209,9 @@ class Bullet extends EventTarget {
    * @param name 类型
    */
   loadMoveSpine(loaderResource: LoaderResource, name: BulletType) {
-    console.log(loaderResource, '==loaderResource');
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
+
       this.container.addChild(spine);
       this.effects[name].moveEffectSpine = spine;
       spine.scale.set(0.45);
@@ -536,7 +536,6 @@ class Bullet extends EventTarget {
       bulletType.RESTORE,
       bulletType.PURIFY,
       bulletType.CHUANTOU,
-      bulletType.JINZHAN,
       bulletType.TEST,
     ];
     if (linear.includes(name)) {
@@ -549,11 +548,15 @@ class Bullet extends EventTarget {
       bulletType.STING,
       bulletType.BUMP,
       bulletType.BOMB,
+      bulletType.JINZHAN,
       bulletType.LEIDIAN,
+      bulletType.THROUGH,
     ];
     if (space.includes(name)) {
       this.spaceAttack(name, attackTarget);
+      return;
     }
+    this.spaceAttack(name, attackTarget);
   }
 
   once(event: string, handle: any) {

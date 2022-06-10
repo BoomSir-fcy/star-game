@@ -169,7 +169,7 @@ const Upgrade = () => {
         <StarAddBtn
           key={i}
           showIcon
-          url={activeMaterialMap[id]?.picture || '/images/star/01.jpg'}
+          url={activeMaterialMap[id]?.picture}
           onRemove={() => {
             dispatch(setActiveMaterialMap({ [id]: null }));
           }}

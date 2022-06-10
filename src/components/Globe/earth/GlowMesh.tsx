@@ -21,6 +21,7 @@ const GlowMesh: React.FC<GlowMeshProps> = ({
   ...props
 }: any) => {
   const glowRef = useRef<any>(null);
+
   const color = getColor({ shadow, theme });
   if (!shadow) return null;
   return (

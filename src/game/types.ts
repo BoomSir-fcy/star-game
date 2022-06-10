@@ -360,6 +360,8 @@ export const bulletType = {
   CHUANTOU: 'chuantou', // 穿透
   JINZHAN: 'jinzhan', // 穿透
   TEST: 'test', // 穿透
+  THROUGH: 'through', // 穿透
+  DAODAN: 'daodan', // 穿透
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 
