@@ -92,7 +92,7 @@ const Embattle = () => {
     (poses: Api.Game.UnitPlanetPos[], isEnemy?: boolean) => {
       poses.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          srcId: `${item.base_unit_id % 30}`,
+          srcId: `${unitMaps?.[item.base_unit_id]?.index}`,
           race,
           id: item.base_unit_id,
           unique_id: item.base_unit_id,

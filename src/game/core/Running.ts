@@ -511,13 +511,11 @@ class Running extends EventTarget {
   // 空降添加小人
   insetUnitHandle(track: TrackDetail, callback: (soldier?: Soldier) => void) {
     const { active_unit_unique_id, receive_id, currentAxisPoint } = track;
-    console.log(this.base, active_unit_unique_id);
     if (
       this.base &&
       active_unit_unique_id &&
       this.base[active_unit_unique_id]
     ) {
-      console.log(6666);
       this.game.once('soldierCreated', () => {
         callback();
       });

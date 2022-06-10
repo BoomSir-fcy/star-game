@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useStore } from 'state';
 import { Flex, Box, Image, Text, Progress, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
+import { TipsModal } from '../Modal';
 
 const QueueBox = styled(Box)`
   position: relative;
@@ -119,7 +120,7 @@ export const BuildlingStatus: React.FC<{
       </Box>
       <Flex flexDirection='column' style={{ flex: 1 }}>
         <Text fontSize='13px' mb='4px'>
-          {type === 2 && status === 3
+          {type === 2 && status !== 3
             ? `Lv${level}~Lv${level + 1}`
             : workInfo[status]?.label}
         </Text>
@@ -129,7 +130,9 @@ export const BuildlingStatus: React.FC<{
           scale='sm'
           linear
           primaryStep={
-            Math.round(((endTime - state.time) / endTime) * 10000) / 100
+            status === 3
+              ? 0
+              : Math.round(((endTime - state.time) / endTime) * 10000) / 100
           }
         />
       </Flex>
@@ -148,6 +151,7 @@ export const Queue: React.FC<{
   const [state, setState] = useState({
     current: '' as string | number,
   });
+  const [visible, setVisible] = useState(false);
   const queueArr = Array.from(
     { length: vipBenefite?.building_queue_capacity },
     (v, i) => i,
@@ -160,7 +164,10 @@ export const Queue: React.FC<{
           key={item}
           mr='40px'
           onClick={() => {
-            if (currentQueue[index]?._id) {
+            if (
+              currentQueue[index]?._id &&
+              currentQueue[index]?.work_add_time
+            ) {
               setState({ ...state, current: item });
               onSelectCurrent(currentQueue[index]);
             }
@@ -189,22 +196,26 @@ export const Queue: React.FC<{
                 currentQueue[index]?.propterty?.levelEnergy ||
                 currentQueue[index]?.target_level - 1
               }
-              endTime={
+              endTime={currentQueue[index]?.work_countdown}
+              diffTime={
                 currentQueue[index]?.work_end_time -
                 currentQueue[index]?.work_start_time
               }
-              diffTime={Number(
-                (
-                  currentQueue[index]?.work_end_time -
-                  Date.now() / 1000
-                ).toFixed(0),
-              )}
               onComplete={onComplete}
             />
           )}
         </Box>
       ))}
-      <SaveQueue onClick={onSave}>{t('avequeue')}</SaveQueue>
+      <SaveQueue onClick={() => setVisible(true)}>{t('avequeue')}</SaveQueue>
+
+      <TipsModal
+        visible={visible}
+        onConfirm={() => {
+          setVisible(false);
+          onSave();
+        }}
+        onClose={() => setVisible(false)}
+      />
     </Flex>
   );
 };

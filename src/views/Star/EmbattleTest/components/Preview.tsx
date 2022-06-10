@@ -178,11 +178,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
   const getSoldierSrc = useCallback(() => {
     let img = '';
     if (activeSoldier?.race) {
-      img = getSpriteRes(
-        activeSoldier.race,
-        activeSoldier.unique_id.toString(),
-        2,
-      );
+      img = getSpriteRes(activeSoldier.race, activeSoldier.srcId.toString(), 2);
     }
     return img;
   }, [activeSoldier]);

@@ -2,7 +2,6 @@ import React from 'react';
 import { Flex, Box, Text, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { Link } from 'react-router-dom';
-import { Api } from 'apis';
 import ModalWrapper from '.';
 
 export const BuyVipModal: React.FC<{
@@ -58,11 +57,11 @@ export const BuyVipModal: React.FC<{
       <Flex flexDirection='column' alignItems='center' padding='80px 25px'>
         <Text fontSize='28px'>{tips}</Text>
         <Text fontSize='24px' mt='36px'>
-          该功能为VIP权益，请升级为VIP。
+          {t('This feature is a VIP benefit, please upgrade to VIP')}
         </Text>
         <Flex justifyContent='space-between' mt='210px'>
           <Link to='/vip'>
-            <Button>VIP BENEFITS</Button>
+            <Button>{t('Become VIP')}</Button>
           </Link>
         </Flex>
       </Flex>

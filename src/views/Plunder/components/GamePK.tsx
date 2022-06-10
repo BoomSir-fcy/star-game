@@ -147,7 +147,7 @@ const GamePK: React.FC<GamePKProps> = () => {
     ) => {
       poses?.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          srcId: `${item.base_unit_id % 30}`,
+          srcId: `${base[item.base_unit_id]?.index}`,
           race: base[item.base_unit_id]?.race || 1,
           id: item.base_unit_id,
           sid: ids[`${item.pos.x}${item.pos.y}`],
@@ -275,7 +275,7 @@ const GamePK: React.FC<GamePKProps> = () => {
       game.clearSoldier();
       info.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          srcId: `${item.base_id % 30}`,
+          srcId: `${PKInfo?.[0]?.init.base_unit[item.base_id].index}`,
           race: PKInfo?.[0]?.init.base_unit[item.base_id].race || 1,
           id: item.base_id,
           hp: PKInfo?.[0]?.init.base_unit[item.base_id].hp,

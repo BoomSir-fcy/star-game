@@ -228,7 +228,7 @@ const Login = () => {
   }, [parsedQs.InviteAddress]);
 
   useEffect(() => {
-    if (!userInfoView.loading || !parsedQs.s) {
+    if (!userInfoView.loading && !parsedQs.s) {
       if (account && !userInfoView.isActive) {
         navigate(`${pathname}?s=${1}`, { replace: true });
       } else {
