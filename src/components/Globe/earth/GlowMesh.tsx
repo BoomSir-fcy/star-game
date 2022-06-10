@@ -22,6 +22,7 @@ const GlowMesh: React.FC<GlowMeshProps> = ({
 }: any) => {
   const glowRef = useRef<any>(null);
   const color = getColor({ shadow, theme });
+  if (!shadow) return null;
   return (
     <mesh ref={glowRef} {...props}>
       <sphereGeometry args={[5, 40, 40]} />

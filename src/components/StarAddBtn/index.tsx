@@ -1,6 +1,8 @@
+import Globe from 'components/Globe';
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Text, BoxProps, Flex } from 'uikit';
+import { QualityColor } from 'uikit/theme/colors';
 import { Qualities, qualities } from 'uikit/theme/types';
 
 const StyledStar = styled.div<StarAddBtnProps>`
@@ -70,7 +72,12 @@ const StarImage = styled.img<StarAddBtnProps>`
       ? `2px solid ${theme.colors[imgBorder || qualities.ORDINARY]}}`
       : 'none'};
 `;
-
+const GlobeStyled = styled(Globe)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 const RemoveIcon = styled.img`
   position: absolute;
   top: 10px;
@@ -98,6 +105,8 @@ interface StarAddBtnProps extends BoxProps {
   onRemove?: () => void;
   onPlantClick?: () => void;
   name?: string;
+  ball?: boolean;
+  ballWorking?: boolean;
 }
 
 const StarAddBtn: React.FC<StarAddBtnProps> = ({
@@ -114,9 +123,41 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
   onRemove,
   onPlantClick,
   name,
+  ball,
+  ballWorking,
   ...props
 }) => {
   const { className, ...restProps } = props;
+
+  const renderChildren = useMemo(() => {
+    if (!url) {
+      return null;
+    }
+    if (url && ball) {
+      return (
+        <GlobeStyled
+          width='150px'
+          height='150px'
+          shadow={QualityColor[imgBorder]}
+          url={url}
+          rotate={ballWorking}
+        />
+      );
+    }
+    return (
+      <StarImage
+        onClick={event => {
+          if (onPlantClick) {
+            event.stopPropagation();
+            onPlantClick();
+          }
+        }}
+        imgBorder={imgBorder}
+        size={size}
+        src={url}
+      />
+    );
+  }, [url, size, imgBorder, ball, ballWorking, onPlantClick]);
 
   return (
     <StyledStar
@@ -165,19 +206,7 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
           )}
         </>
       )}
-      {url && (
-        <StarImage
-          onClick={event => {
-            if (onPlantClick) {
-              event.stopPropagation();
-              onPlantClick();
-            }
-          }}
-          imgBorder={imgBorder}
-          size={size}
-          src={url}
-        />
-      )}
+      {renderChildren}
     </StyledStar>
   );
 };

@@ -60,7 +60,7 @@ const Scene = function ({ ...props }) {
   // useHelper(spotLightRef, spotlightProps.showHelper ? SpotLightHelper : null);
 
   useFrame((state, delta) => {
-    if (earthGrounpRef.current) {
+    if (earthGrounpRef.current && props.rotate) {
       earthGrounpRef.current.rotation.y += 0.01;
     }
   });

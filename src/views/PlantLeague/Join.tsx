@@ -58,7 +58,7 @@ const JoinTheAlliance: React.FC<{
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toastError, toastSuccess, toastWarning } = useToast();
-  const { order } = useStore(p => p.alliance.allianceView);
+  const { order, alliance } = useStore(p => p.alliance.allianceView);
   const workingList = useStore(p => p.alliance.workingPlanet);
   const [allianceList, setAllianceList] = useState<orderInfo[]>([]);
   const [newIds, setNewIds] = useState<number[]>([]);
@@ -150,6 +150,8 @@ const JoinTheAlliance: React.FC<{
         className='join-union'
       >
         <StarAddBtn
+          ball
+          ballWorking={alliance.working > 0}
           name={allianceList && allianceList[0]?.planet?.name}
           onRemove={() => Remove(allianceList[0]?.planetId)}
           onPlantClick={() => {
@@ -171,6 +173,8 @@ const JoinTheAlliance: React.FC<{
       </Flex>
       <Flex alignItems='center' justifyContent='space-between'>
         <StarAddBtn
+          ball
+          ballWorking={alliance.working > 0}
           name={allianceList && allianceList[4]?.planet?.name}
           onRemove={() => Remove(allianceList[4]?.planetId)}
           onPlantClick={() => {
@@ -202,6 +206,8 @@ const JoinTheAlliance: React.FC<{
           </Button>
         </Box>
         <StarAddBtn
+          ball
+          ballWorking={alliance.working > 0}
           name={allianceList && allianceList[1]?.planet?.name}
           onRemove={() => Remove(allianceList[1]?.planetId)}
           onPlantClick={() => {
@@ -223,6 +229,8 @@ const JoinTheAlliance: React.FC<{
       </Flex>
       <Flex alignItems='center' justifyContent='center'>
         <StarAddBtn
+          ball
+          ballWorking={alliance.working > 0}
           name={allianceList && allianceList[3]?.planet?.name}
           onRemove={() => Remove(allianceList[3]?.planetId)}
           onPlantClick={() => {
@@ -242,6 +250,8 @@ const JoinTheAlliance: React.FC<{
           Leve={(allianceList && allianceList[3]?.planet?.level) || ''}
         />
         <StarAddBtn
+          ball
+          ballWorking={alliance.working > 0}
           name={allianceList && allianceList[2]?.planet?.name}
           onRemove={() => Remove(allianceList[2]?.planetId)}
           onPlantClick={() => {

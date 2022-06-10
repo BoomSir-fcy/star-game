@@ -1,27 +1,31 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Box, BoxProps } from 'uikit';
-import { DefaultTheme } from 'styled-components';
+import { getVariantsSize } from 'components/StarCom/StyledStar';
+import { Scale, variants } from 'components/StarCom/types';
 import Scene from './scene';
 
 export interface GlobeProps extends BoxProps {
-  width: string;
-  height: string;
   url: string;
+  scale?: Scale;
   shadow?: string;
+  rotate?: boolean;
 }
 
 const Globe: React.FC<GlobeProps> = ({
-  width,
-  height,
   shadow,
+  scale = 'md',
+  rotate = true,
   url,
   ...props
 }) => {
+  const { width, height } = React.useMemo(() => {
+    return getVariantsSize(variants.NONE, scale);
+  }, [scale]);
   return (
     <Box width={width} height={height} {...props}>
       <Canvas resize={{ offsetSize: true }}>
-        <Scene shadow={shadow} url={url} />
+        <Scene rotate={rotate} shadow={shadow} url={url} />
       </Canvas>
     </Box>
   );

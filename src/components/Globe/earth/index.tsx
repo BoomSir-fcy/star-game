@@ -17,8 +17,8 @@ const Earth = function ({ url, ...props }: any) {
     // earthMesh.current.rotation.y += 0.01
   });
 
-  const img = `${window.location.origin}/images/star${
-    url ? url?.substring(url?.lastIndexOf('/')) : '36.jpg'
+  const img = `${window.location.origin}/images/star/${
+    url ? url?.substring(url?.lastIndexOf('/') + 1) : '36.jpg'
   }`;
 
   const textureMap = useLoader(TextureLoader, img);

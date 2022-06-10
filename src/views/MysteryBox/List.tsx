@@ -6,7 +6,7 @@ import {
   MysteryBoxStyled,
 } from 'components/MysteryBoxCom';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { BgCard, Flex, Box } from 'uikit';
+import { BgCard, Flex, Spinner, Text } from 'uikit';
 import styled, { keyframes } from 'styled-components';
 import StarCom from 'components/StarCom';
 import { Globe } from 'components';
@@ -14,6 +14,8 @@ import { useDispatch } from 'react-redux';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useStore } from 'state';
 import { QualityColor } from 'uikit/theme/colors';
+import { useTranslation } from 'contexts/Localization';
+import { useNavigate } from 'react-router-dom';
 
 const frame0 = `
   left: 50%;
@@ -91,7 +93,7 @@ const starframes4 = keyframes`
 const StarStyled = styled.img<{ step: number }>`
   display: ${({ step }) => (step === 1 ? 'inline-block' : 'none')};
   position: absolute;
-  opacity: 0;
+  /* opacity: 0; */
   width: 165px;
   height: 165px;
   z-index: 2;
@@ -153,11 +155,14 @@ const VideoBox = styled(Flex)<{ show: boolean }>`
 const GlobeBox = styled(Globe)<{ step: number }>`
   opacity: ${({ step }) => (step > 1 ? 1 : 0)};
   transition: all 0.2s;
+  cursor: pointer;
 `;
 
 const List = () => {
   const paramsQs = useParsedQueryString();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const quality = Number(paramsQs.q) as MysteryBoxQualities;
 
   const planetInfo = useStore(p => p.planet.planetInfo);
@@ -165,51 +170,72 @@ const List = () => {
   // const [videoVisible, setVideoVisible] = useState(true);
   const [step, setStep] = useState(1);
 
+  const planetIds = useMemo(() => {
+    return String(paramsQs.i)
+      ?.split(',')
+      ?.map(v => Number(v));
+  }, [paramsQs.i]);
+
   const planetList = useMemo(() => {
-    return Object.values(planetInfo);
-  }, [planetInfo]);
+    return Object.values(planetInfo).filter(
+      item => planetIds.indexOf(item.id) !== -1,
+    );
+  }, [planetInfo, planetIds]);
 
   useEffect(() => {
-    if (paramsQs.i) {
-      const planetIds = String(paramsQs.i)
-        ?.split(',')
-        ?.map(v => Number(v));
+    if (planetIds) {
       dispatch(fetchPlanetInfoAsync(planetIds));
     }
-  }, [paramsQs.i, dispatch]);
+  }, [planetIds, dispatch]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setStep(p => p + 1);
-    }, 1200);
-    // setTimeout(() => {
-    //   setVideoVisible(false);
-    // }, 3000);
-  }, []);
+    if (!planetList.length) {
+      setTimeout(() => {
+        dispatch(fetchPlanetInfoAsync(planetIds));
+      }, 10000);
+    }
+  }, [planetList, planetIds, dispatch]);
+
+  useEffect(() => {
+    if (planetList.length) {
+      setTimeout(() => {
+        setStep(p => p + 1);
+      }, 1200);
+    }
+  }, [planetList]);
 
   return (
-    <BgCard margin='auto' variant='longMedium'>
-      {step && (
-        <Flex height='100%' alignItems='center'>
-          {planetList.length &&
-            planetList.map((item, index) => (
-              <BaseStyled key={item.id}>
-                <StarStyled
-                  step={step}
-                  className={`star-${index}`}
-                  src={item.picture}
-                />
-                <GlobeBox
-                  step={step}
-                  width='200px'
-                  height='200px'
-                  shadow={QualityColor[item.rarity]}
-                  url={item.picture1}
-                />
-              </BaseStyled>
-            ))}
-        </Flex>
-      )}
+    <BgCard margin='auto' variant='longMedium' fringe>
+      <Flex padding='30px' justifyContent='center'>
+        <Text>{t('Open quantity')}</Text>
+      </Flex>
+
+      <Flex alignItems='center'>
+        {!planetList.length && (
+          <Flex width='100%' alignItems='center' justifyContent='center'>
+            <Spinner />
+          </Flex>
+        )}
+        {planetList.length > 0 &&
+          planetList.map((item, index) => (
+            <BaseStyled key={item.id}>
+              <StarStyled
+                step={step}
+                className={`star-${index}`}
+                src={item.picture}
+              />
+              <GlobeBox
+                step={step}
+                scale='ld'
+                shadow={QualityColor[item.rarity]}
+                url={item.picture1}
+                onClick={() => {
+                  navigate(`/mystery-box/detail?i=${item.id}`);
+                }}
+              />
+            </BaseStyled>
+          ))}
+      </Flex>
 
       {/* <VideoBox show={videoVisible}>
         <video
