@@ -445,7 +445,11 @@ export const GameInfo: React.FC<{
                       }
                     />
                     <Text mt='17px' fontSize='17px'>
-                      {t('TimeLeft', { time: formatTime(currentTime) })}
+                      {t('TimeLeft', {
+                        time: formatTime(
+                          currentTime <= 0 ? progressTime : currentTime,
+                        ),
+                      })}
                     </Text>
                   </Flex>
                   {/* <ActionButton
