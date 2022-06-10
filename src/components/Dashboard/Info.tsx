@@ -5,6 +5,7 @@ import { Box, Button, Flex, Text, Image } from 'uikit';
 import { useStore } from 'state/util';
 import { TokenImage } from 'components/TokenImage';
 import { getBoxAddress, getDsgAddress } from 'utils/addressHelpers';
+import { useToast } from 'contexts/ToastsContext';
 import StarCom from 'components/StarCom';
 import Modal from 'components/Modal';
 import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
@@ -49,6 +50,8 @@ const Info: React.FC<InfoProps> = ({
   const Balance = useStore(p => p.userInfo.userBalance);
   const Product = useStore(p => p.userInfo.userProduct);
 
+  const { toastError } = useToast();
+
   // const DSGblance = useMemo(() => {
   //   const balance = Balance.filter(item => {
   //     return item.symbol === 'DSG';
@@ -80,6 +83,18 @@ const Info: React.FC<InfoProps> = ({
     [Balance],
   );
 
+  const openModalHandle = useCallback(
+    (userBalanceView: UserBalanceView) => {
+      if (userBalanceView) {
+        setActiveToken(userBalanceView);
+        setVisible(true);
+      } else {
+        toastError('Not support symbol');
+      }
+    },
+    [setActiveToken, setVisible, toastError],
+  );
+
   return (
     <Box width='100%'>
       <Flex height='179px' width='100%'>
@@ -92,8 +107,7 @@ const Info: React.FC<InfoProps> = ({
         >
           <ButtonLeft
             onClick={() => {
-              setActiveToken(TokenBlance('DSG'));
-              setVisible(true);
+              openModalHandle(TokenBlance('DSG'));
             }}
             variant='custom'
           >
@@ -113,8 +127,7 @@ const Info: React.FC<InfoProps> = ({
           </ButtonLeft>
           <ButtonLeft
             onClick={() => {
-              setActiveToken(TokenBlance('BOX'));
-              setVisible(true);
+              openModalHandle(TokenBlance('BOX'));
             }}
             mt='18px'
             variant='custom'
@@ -137,8 +150,7 @@ const Info: React.FC<InfoProps> = ({
           </ButtonLeft>
           <ButtonLeft
             onClick={() => {
-              setActiveToken(TokenBlance('BNB'));
-              setVisible(true);
+              openModalHandle(TokenBlance('BNB'));
             }}
             mt='18px'
             variant='custom'
@@ -176,8 +188,7 @@ const Info: React.FC<InfoProps> = ({
             <ButtonTag2
               variant='custom'
               onClick={() => {
-                setActiveToken(TokenBlance('ORE'));
-                setVisible(true);
+                openModalHandle(TokenBlance('ORE'));
               }}
             >
               <Flex pl='8px' alignItems='center' width='100%'>
@@ -202,8 +213,7 @@ const Info: React.FC<InfoProps> = ({
               ml='8px'
               variant='custom'
               onClick={() => {
-                setActiveToken(TokenBlance('POP'));
-                setVisible(true);
+                openModalHandle(TokenBlance('POP'));
               }}
             >
               <Flex pl='8px' alignItems='center' width='100%'>
@@ -229,8 +239,7 @@ const Info: React.FC<InfoProps> = ({
               variant='custom'
               ml='8px'
               onClick={() => {
-                setActiveToken(TokenBlance('ENG'));
-                setVisible(true);
+                openModalHandle(TokenBlance('ENG'));
               }}
             >
               <Flex pl='8px' alignItems='center' height='100%' width='100%'>

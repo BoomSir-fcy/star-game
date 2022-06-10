@@ -311,7 +311,7 @@ const Login = () => {
             data-disable-interaction={false}
             onClick={handleEnter}
             variant='login'
-            disabled={userInfoView.loading}
+            disabled={account && userInfoView.loading}
           >
             {account ? 'ENTER' : t('Connect Wallet')}
           </Button>
