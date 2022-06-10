@@ -1,0 +1,124 @@
+
+chuantou.png
+size: 451,261
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+0
+  rotate: true
+  xy: 59, 39
+  size: 220, 81
+  orig: 227, 86
+  offset: 6, 1
+  index: -1
+1
+  rotate: true
+  xy: 297, 4
+  size: 198, 70
+  orig: 205, 76
+  offset: 6, 2
+  index: -1
+2
+  rotate: true
+  xy: 2, 36
+  size: 223, 55
+  orig: 227, 60
+  offset: 3, 3
+  index: -1
+3
+  rotate: false
+  xy: 2, 6
+  size: 171, 28
+  orig: 174, 28
+  offset: 2, 0
+  index: -1
+4
+  rotate: true
+  xy: 142, 39
+  size: 220, 81
+  orig: 227, 86
+  offset: 6, 1
+  index: -1
+5
+  rotate: true
+  xy: 225, 2
+  size: 200, 70
+  orig: 207, 76
+  offset: 6, 2
+  index: -1
+6
+  rotate: false
+  xy: 225, 204
+  size: 201, 55
+  orig: 204, 60
+  offset: 3, 3
+  index: -1
+7
+  rotate: true
+  xy: 369, 36
+  size: 166, 80
+  orig: 169, 84
+  offset: 2, 0
+  index: -1
+
+chuantou2.png
+size: 451,261
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+images/0
+  rotate: true
+  xy: 59, 39
+  size: 220, 81
+  orig: 229, 88
+  offset: 7, 2
+  index: -1
+images/1
+  rotate: true
+  xy: 297, 4
+  size: 198, 70
+  orig: 207, 78
+  offset: 7, 3
+  index: -1
+images/2
+  rotate: true
+  xy: 2, 36
+  size: 223, 55
+  orig: 229, 62
+  offset: 4, 4
+  index: -1
+images/3
+  rotate: false
+  xy: 2, 6
+  size: 171, 28
+  orig: 176, 30
+  offset: 3, 1
+  index: -1
+images/4
+  rotate: true
+  xy: 142, 39
+  size: 220, 81
+  orig: 229, 88
+  offset: 7, 2
+  index: -1
+images/5
+  rotate: true
+  xy: 225, 2
+  size: 200, 70
+  orig: 209, 78
+  offset: 7, 3
+  index: -1
+images/6
+  rotate: false
+  xy: 225, 204
+  size: 201, 55
+  orig: 206, 62
+  offset: 4, 4
+  index: -1
+images/7
+  rotate: true
+  xy: 369, 36
+  size: 166, 80
+  orig: 171, 86
+  offset: 3, 1
+  index: -1

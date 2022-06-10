@@ -27,6 +27,7 @@ declare namespace Api {
       hp: number; // 血量
       ak: number; // 攻击力
       df: number; // 防御力
+      hit: number; // 命中率
       move_far: number; // 移动距离
       ak_range_min: number; // 攻击范围最小值
       ak_range_max: number; // 攻击范围最大值
@@ -45,7 +46,19 @@ declare namespace Api {
       unlock_level: 0; // 解锁等级
       skill: number; // 技能
       skill_id: number; //
+      index: number; // srcId
+      level: number; // 等级
       tag: string;
+      arms_attr: {
+        ak: number;
+        crit: number;
+        df: number;
+        hit: number;
+        hp: number;
+        miss: number;
+        move: number;
+        range: number;
+      };
       attack_effect?: {
         lock_move?: LockMoveEffect;
         firing?: FiringEffect;
@@ -138,6 +151,7 @@ declare namespace Api {
     interface gameMocksParams {
       from: ParamsUnit[];
       to: ParamsUnit[];
+      race: number;
     }
   }
 }

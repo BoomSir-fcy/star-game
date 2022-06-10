@@ -36,7 +36,9 @@ const useSimulation = () => {
         unit_id: item.id,
       };
     });
-    await Api.GameApi.Gamemock({ from, to });
+    const { race } = soldiers?.[0]?.options || {};
+
+    await Api.GameApi.Gamemock({ from, to, race });
   }, []);
 
   // 获取模拟人物数据

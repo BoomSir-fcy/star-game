@@ -59,6 +59,7 @@ const MiniRaceAni: React.FC<{
   const runGame = useCallback(
     (slot: RoundsProps) => {
       const run = new Running(game, slot);
+      console.log(run, '==_running.play();');
       run.play();
     },
     [game],

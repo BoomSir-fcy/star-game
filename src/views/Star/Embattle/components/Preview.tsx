@@ -45,6 +45,13 @@ const BorderCardStyled = styled(BorderCard)<{ show?: boolean }>`
   transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(120%)')};
 `;
 
+const CanvasBox = styled(Box)`
+  & > canvas {
+    margin: auto;
+    display: block;
+  }
+`;
+
 interface PreviewProps extends BorderCardProps {
   game: Game;
   activeSoldier: Soldier | null;
@@ -82,41 +89,59 @@ const StatusItem: React.FC<StatusItemProps> = ({
 
 const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
   const { t } = useTranslation();
+  const { arms_attr } = activeSoldier?.options?.unitInfo || {};
+
+  const radarData = useMemo(() => {
+    return [
+      {
+        attr: '生命',
+        value: arms_attr?.hp || 0,
+      },
+      {
+        attr: '攻击',
+        value: arms_attr?.ak || 0,
+      },
+      {
+        attr: '防御',
+        value: arms_attr?.df || 0,
+      },
+      {
+        attr: '命中',
+        value: arms_attr?.hit || 0,
+      },
+      {
+        attr: '暴击',
+        value: arms_attr?.crit || 0,
+      },
+      {
+        attr: '闪避',
+        value: arms_attr?.miss || 0,
+      },
+      {
+        attr: '范围',
+        value: arms_attr?.range || 0,
+      },
+      {
+        attr: '移动',
+        value: arms_attr?.move || 0,
+      },
+    ];
+  }, [arms_attr]);
   const [radarChart] = useState(
     new RadarChart({
-      width: 200,
-      height: 200,
+      width: 180,
+      height: 180,
       colorPolygon: '#FFFFFF',
       colorText: '#FFFFFF',
       fillColor: 'rgba(211, 95, 96, 0.5)',
-      data: [
-        {
-          attr: 'Burst',
-          value: 100,
-        },
-        {
-          attr: 'Defense',
-          value: 60,
-        },
-        {
-          attr: 'Treatment',
-          value: 50,
-        },
-        {
-          attr: 'Control',
-          value: 60,
-        },
-        {
-          attr: 'Auxiliary',
-          value: 30,
-        },
-        {
-          attr: 'Motility',
-          value: 70,
-        },
-      ],
+      data: radarData,
     }),
   );
+
+  useEffect(() => {
+    radarChart.updateDate(radarData);
+  }, [radarData, radarChart]);
+
   const [visible, setVisible] = useState(true);
   const [gameMock, setGameMock] = useState({});
   const ref = useRef<HTMLDivElement>(null);
@@ -228,9 +253,9 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                 {getSoldierName()}
               </Text>
               <Text mt='2px' ml='36px' fontSize='22px'>
-                LV 1
+                LV {activeSoldier?.options?.unitInfo?.level}
               </Text>
-              <Button width={40} height={40} padding='0' variant='text'>
+              {/* <Button width={40} height={40} padding='0' variant='text'>
                 <Image
                   width={40}
                   height={40}
@@ -249,9 +274,9 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                   height={40}
                   src='/images/commons/icon/delete.png'
                 />
-              </Button>
+              </Button> */}
             </Flex>
-            <Image width={40} height={40} src='/images/commons/icon/help.png' />
+            {/* <Image width={40} height={40} src='/images/commons/icon/help.png' /> */}
           </Flex>
           <Flex alignItems='center' padding='0 10px'>
             <PreviewSoldier
@@ -271,21 +296,20 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                 label={t('planetHPValue')}
                 value={activeSoldier?.options?.unitInfo?.hp || 0}
                 src='/images/commons/star/HP.png'
-                subSrc='/images/commons/icon/add_blood.png'
+                // subSrc='/images/commons/icon/add_blood.png'
               />
               <StatusItem
-                label={t('planetDurability')}
-                value={activeSoldier?.options?.unitInfo?.hp || 0}
+                label={t('hit')}
+                value={activeSoldier?.options?.unitInfo?.hit || 0}
                 src='/images/commons/star/durability.png'
-                subSrc='/images/commons/icon/repair.png'
               />
               <StatusItem
-                label={t('planetDefenseValue')}
+                label={t('Defense')}
                 value={activeSoldier?.options?.unitInfo?.df || 0}
                 src='/images/commons/star/defense.png'
               />
               <StatusItem
-                label={t('planetAttackValue')}
+                label={t('Attack')}
                 value={activeSoldier?.options?.unitInfo?.ak || 0}
                 src='/images/commons/star/attackValue.png'
               />
@@ -293,8 +317,8 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
           </Flex>
           <Divider margin='8px auto 22px' width={565} />
           <Flex>
-            <Box ml='22px' ref={ref} width={218} />
-            <Card overflow='auto' width={354} height={186} padding='16px'>
+            <CanvasBox ml='22px' ref={ref} width={238} />
+            <Card overflow='auto' width={334} height={186} padding='16px'>
               {/* <Flex justifyContent='space-between'>
                 <Text fontSize='20' color='textTips'>
                   {t('Attack distance')}

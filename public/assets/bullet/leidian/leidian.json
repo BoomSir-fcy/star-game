@@ -1,0 +1,95 @@
+{
+  "skeleton": {
+    "hash": "VBSfmBUDrg62ojmKZtw5aw+L6nY",
+    "spine": "3.8.0",
+    "x": -113.73,
+    "y": -207.6,
+    "width": 259,
+    "height": 415,
+    "images": "C:/Users/dell/Desktop/30-100组游戏技能序列帧/游戏技能序列特效04  (95)/images/",
+    "audio": "C:/Users/dell/Desktop/30-100组游戏技能序列帧/游戏技能序列特效04  (95)"
+  },
+  "bones": [{ "name": "root" }],
+  "slots": [
+    { "name": "image 7", "bone": "root", "attachment": "image 7" },
+    { "name": "image 6", "bone": "root", "attachment": "image 6" },
+    { "name": "image 5", "bone": "root", "attachment": "image 5" },
+    { "name": "image 4", "bone": "root", "attachment": "image 4" },
+    { "name": "image 3", "bone": "root", "attachment": "image 3" },
+    { "name": "image 2", "bone": "root", "attachment": "image 2" },
+    { "name": "image 1", "bone": "root", "attachment": "image 1" }
+  ],
+  "skins": [
+    {
+      "name": "default",
+      "attachments": {
+        "image 1": {
+          "image 1": { "x": -7.73, "y": 167.4, "width": 28, "height": 66 }
+        },
+        "image 2": {
+          "image 2": { "x": 15.77, "y": -0.1, "width": 259, "height": 415 }
+        },
+        "image 3": {
+          "image 3": { "x": 15.77, "y": -0.1, "width": 257, "height": 415 }
+        },
+        "image 4": {
+          "image 4": { "x": 15.27, "y": -0.1, "width": 256, "height": 415 }
+        },
+        "image 5": {
+          "image 5": { "x": 15.77, "y": -0.1, "width": 255, "height": 415 }
+        },
+        "image 6": {
+          "image 6": { "x": 15.77, "y": -134.1, "width": 233, "height": 147 }
+        },
+        "image 7": {
+          "image 7": { "x": 15.27, "y": -167.1, "width": 168, "height": 81 }
+        }
+      }
+    }
+  ],
+  "animations": {
+    "play": {
+      "slots": {
+        "image 2": {
+          "attachment": [
+            { "name": null },
+            { "time": 0.0667, "name": "image 2" },
+            { "time": 0.1333, "name": null }
+          ]
+        },
+        "image 5": {
+          "attachment": [
+            { "name": null },
+            { "time": 0.2667, "name": "image 5" },
+            { "time": 0.3333, "name": null }
+          ]
+        },
+        "image 4": {
+          "attachment": [
+            { "name": null },
+            { "time": 0.2, "name": "image 4" },
+            { "time": 0.2667, "name": null }
+          ]
+        },
+        "image 7": {
+          "attachment": [{ "name": null }, { "time": 0.4, "name": "image 7" }]
+        },
+        "image 3": {
+          "attachment": [
+            { "name": null },
+            { "time": 0.1333, "name": "image 3" },
+            { "time": 0.2, "name": null }
+          ]
+        },
+        "image 6": {
+          "attachment": [
+            { "name": null },
+            { "time": 0.3333, "name": "image 6" },
+            { "time": 0.4, "name": null }
+          ]
+        },
+        "image 1": { "attachment": [{ "time": 0.0667, "name": null }] }
+      }
+    }
+  }
+}
