@@ -538,6 +538,7 @@
   "TimeLeft": "Time remaining (%time%)",
   "NotYetBuilt": "Not yet built",
   "DuringUpgrade": "Upgrading",
+  "Cancel": "Cancel",
   "CancelUpgrade": "Cancel Upgrade",
   "LevelPreview": "Lv %level% preview",
   "ConstructionRequirements": "Construction Requirements",
@@ -568,6 +569,7 @@
   "Joining the task queue costs resources and cannot be cancelled. Whether to confirm to join the current task": "Joining the task queue costs resources and cannot be cancelled. Whether to confirm to join the current task",
   "This feature is a VIP benefit, please upgrade to VIP": "This feature is a VIP benefit, please upgrade to VIP.",
   "Become VIP": "Buy VIP",
+  "The current queue is full": "The current queue is full",
   "******end*****@kksam********": "@kksam翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",
@@ -605,6 +607,7 @@
   "http-error-300015": "Building failed to restore durability",
   "http-error-300016": "Building upgrade failed, max level reached",
   "http-error-300017": "Building upgrade failed, max level reached",
+  "http-error-300030": "The planet is in a planetary alliance, buildings cannot join the work queue",
   "http-error-400001": "Failed to get user information",
   "http-error-500001": "The galaxy star is still inside the protector",
   "http-error-500002": "The galaxy already owns",
@@ -613,6 +616,7 @@
   "http-error-400004": "Insufficient BOX balance",
   "http-error-400008": "Insufficient BNB balance",
   "http-error-400010": "Insufficient resources",
+  "http-error-400011": "Insufficient BOX balance",
   "http-error-200031": "Insufficient resources consumed by the upgrade",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }
