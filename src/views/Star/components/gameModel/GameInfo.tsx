@@ -64,6 +64,7 @@ export const GameInfo: React.FC<{
   building_id: string;
   planet_id: number;
   currentBuild: Api.Building.Building;
+  currentQueue: any[];
   diffTime?: number;
   callback: () => void;
   onCancelQueue: (currentBuilding?: any) => void;
@@ -73,6 +74,7 @@ export const GameInfo: React.FC<{
     building_id,
     planet_id,
     currentBuild,
+    currentQueue,
     diffTime,
     callback,
     onCancelQueue,
@@ -119,8 +121,26 @@ export const GameInfo: React.FC<{
           // eslint-disable-next-line no-param-reassign
           target_level = itemData?.target_level;
         }
+
         if ((itemData?.iscreate || itemData?.work_queue_id) && buildingsId) {
-          const res = await upgrade(planet_id, buildingsId, target_level);
+          // 已经创建建筑加入队列，获取加入队列的最高建筑信息
+          const taregtBuildings = currentQueue.filter(
+            ({ _id, buildings_id, work_type }) =>
+              (_id === itemData?._id || buildings_id === itemData?._id) &&
+              work_type === 2,
+          );
+          const taregtBuildingLevel = taregtBuildings?.sort(
+            (a, b) => b?.propterty?.levelEnergy - a?.propterty?.levelEnergy,
+          );
+
+          const res = await upgrade(
+            planet_id,
+            buildingsId,
+            target_level ||
+              (taregtBuildingLevel.length > 0 &&
+                (taregtBuildingLevel[0]?.propterty?.levelEnergy + 2 ||
+                  taregtBuildingLevel[0]?.target_level + 1)),
+          );
           setState({ ...state, upgrade: res });
         }
       },

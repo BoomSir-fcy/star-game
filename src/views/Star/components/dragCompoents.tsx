@@ -14,7 +14,6 @@ import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { BuyVipModal } from 'components/Modal/buyVipModal';
-import { debounce } from 'lodash';
 import { useBuildingRepair } from './gameModel/hooks';
 
 import { GameInfo, GameThing, Building, Queue } from './gameModel';
@@ -279,16 +278,23 @@ export const DragCompoents: React.FC<{
     }
   }, [buffer, currentBuild?._id, getPlanetBuff, planet_id]);
 
-  const getWorkQueue = React.useCallback(async () => {
-    try {
-      const res = await refreshWorkQueue(planet_id);
-      if (Api.isSuccess(res)) {
-        setCurrentQueue(res.data.work_queue);
+  const getWorkQueue = React.useCallback(
+    async (isSave?: boolean) => {
+      try {
+        const res = await refreshWorkQueue(planet_id);
+        if (Api.isSuccess(res)) {
+          let isQueue = [];
+          if (isSave) {
+            isQueue = currentQueue.filter((item: any) => !item.planet_id);
+          }
+          setCurrentQueue([...res.data.work_queue, ...isQueue]);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [planet_id, refreshWorkQueue]);
+    },
+    [currentQueue, planet_id, refreshWorkQueue],
+  );
 
   React.useEffect(() => {
     if (itemData.length > 0) {
@@ -307,10 +313,6 @@ export const DragCompoents: React.FC<{
   // 获取坐标点
   const getMatrix = React.useCallback(
     (index: number, currentSize = 1) => {
-      // const row = Math.round(index / cols);
-      // const col = Math.round(index % rows);
-
-      // console.log(row, col);
       const currentAxis = itemData.find(item => item.index === Number(index));
       return [
         [{ x: currentAxis.x }, { y: currentAxis.y }],
@@ -441,9 +443,9 @@ export const DragCompoents: React.FC<{
       });
       if (Api.isSuccess(res)) {
         toastSuccess(t('planetTipsSaveSuccess'));
-        // setGridBuilds([]);
         getWorkQueue();
         dispatch(fetchPlanetBuildingsAsync(planet_id));
+        dispatch(fetchPlanetInfoAsync([planet_id]));
       }
     } catch (error) {
       console.error(error);
@@ -699,7 +701,6 @@ export const DragCompoents: React.FC<{
     }
   };
 
-  console.log(currentQueue);
   return (
     <>
       <Box>
@@ -788,6 +789,7 @@ export const DragCompoents: React.FC<{
             planet_id={planet_id}
             building_id={currentBuild?._id}
             currentBuild={currentBuild}
+            currentQueue={currentQueue}
             diffTime={Number(
               (currentBuild?.work_end_time - Date.now() / 1000).toFixed(0),
             )}
@@ -883,16 +885,15 @@ export const DragCompoents: React.FC<{
                   });
                 }}
                 onSave={saveWorkQueue}
-                onComplete={debounce(() => {
+                onComplete={() => {
                   setTimeout(async () => {
-                    await getWorkQueue();
+                    await getWorkQueue(true);
                     setCurrentBuild({});
-                  }, 500);
+                  }, 1000);
                   setTimeout(() => {
                     dispatch(fetchPlanetBuildingsAsync(planet_id));
-                    dispatch(fetchPlanetInfoAsync([planet_id]));
-                  }, 1000);
-                }, 1000)}
+                  }, 1500);
+                }}
               />
             )}
           </Flex>
