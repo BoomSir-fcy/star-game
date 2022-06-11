@@ -666,9 +666,16 @@ export const DragCompoents: React.FC<{
 
   // 取消建筑&&队列建筑
   const destroyBuilding = () => {
-    console.log(currentBuild);
-    if (currentBuild?.isqueue) {
-      setCurrentBuild({});
+    console.log(currentBuild, currentQueue);
+
+    setCurrentBuild({});
+    // 如果删除升级中的建筑，则同个升级建筑全部销毁
+    if (currentBuild?.work_type === 2) {
+      const activeUpgrade = currentQueue.filter(
+        item => item._id !== currentBuild._id,
+      );
+      setCurrentQueue(activeUpgrade);
+    } else {
       setGrid(pre => {
         const next = pre?.map((row: any) => {
           if (row.index === currentBuild.index) {
@@ -692,6 +699,7 @@ export const DragCompoents: React.FC<{
     }
   };
 
+  console.log(currentQueue);
   return (
     <>
       <Box>
@@ -875,9 +883,11 @@ export const DragCompoents: React.FC<{
                   });
                 }}
                 onSave={saveWorkQueue}
-                onComplete={debounce(async () => {
-                  await getWorkQueue();
-                  setCurrentBuild({});
+                onComplete={debounce(() => {
+                  setTimeout(async () => {
+                    await getWorkQueue();
+                    setCurrentBuild({});
+                  }, 500);
                   setTimeout(() => {
                     dispatch(fetchPlanetBuildingsAsync(planet_id));
                     dispatch(fetchPlanetInfoAsync([planet_id]));

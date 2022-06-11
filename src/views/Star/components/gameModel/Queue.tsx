@@ -143,7 +143,7 @@ export const BuildlingStatus: React.FC<{
 export const Queue: React.FC<{
   currentQueue: any[];
   onSave: () => void;
-  onSelectCurrent: (item: any) => void;
+  onSelectCurrent: (item: any, index?: number) => void;
   onComplete: () => void;
 }> = ({ currentQueue, onSave, onSelectCurrent, onComplete }) => {
   const { t } = useTranslation();
@@ -157,6 +157,10 @@ export const Queue: React.FC<{
     (v, i) => i,
   );
 
+  React.useEffect(() => {
+    setState({ current: '' });
+  }, [currentQueue]);
+
   return (
     <Flex ml='40px'>
       {(queueArr ?? []).map((item, index) => (
@@ -166,15 +170,10 @@ export const Queue: React.FC<{
           onClick={() => {
             if (currentQueue[index]) {
               setState({ ...state, current: item });
-              onSelectCurrent(currentQueue[index]);
+              onSelectCurrent({
+                ...currentQueue[index],
+              });
             }
-            // if (
-            //   currentQueue[index]?._id &&
-            //   currentQueue[index]?.work_add_time
-            // ) {
-            //   setState({ ...state, current: item });
-            //   onSelectCurrent(currentQueue[index]);
-            // }
           }}
         >
           <QueueBox className={`${state.current === item && 'active'}`}>
