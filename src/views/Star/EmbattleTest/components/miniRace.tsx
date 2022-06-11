@@ -56,14 +56,7 @@ const MiniRaceAni: React.FC<{
     [game],
   );
 
-  const runGame = useCallback(
-    (slot: RoundsProps) => {
-      const run = new Running(game, slot);
-      console.log(run, '==_running.play();');
-      run.play();
-    },
-    [game],
-  );
+  const [running, setRunning] = React.useState(null);
 
   const initSoldiers = React.useCallback(
     soldier => {
@@ -72,6 +65,14 @@ const MiniRaceAni: React.FC<{
         Object.keys(soldier?.init?.ids).forEach(id => {
           const { x, y } = soldier?.init?.ids[id];
           ids[`${x}${y}`] = id;
+        });
+        game.once('lastSoldierCreated', (event: Event) => {
+          const _running = new Running(game, {
+            round: soldier.slot,
+            base: soldier.init.base_unit,
+          });
+          setRunning(_running);
+          _running.play();
         });
         createSoldiers(
           soldier.init.blue_units,
@@ -85,10 +86,10 @@ const MiniRaceAni: React.FC<{
           ids,
           true,
         );
-        runGame({ round: soldier.slot });
+        // runGame({ round: soldier.slot });
       }
     },
-    [createSoldiers, runGame],
+    [createSoldiers, game, setRunning],
   );
 
   const getCenterByAxis = useCallback(
@@ -105,7 +106,10 @@ const MiniRaceAni: React.FC<{
     if (ref.current) {
       ref.current.appendChild(game.view);
       game.creatTerrain();
-      initSoldiers(mock);
+      game.loadResources();
+      game.loaders.addEventListener('complete', () => {
+        initSoldiers(mock);
+      });
       getCenterByAxis(
         mock?.init?.blue_units[0].pos.x,
         mock?.init?.blue_units[0].pos.y,
@@ -113,11 +117,11 @@ const MiniRaceAni: React.FC<{
     }
   }, [ref, initSoldiers, game, getCenterByAxis, mock]);
 
-  React.useEffect(() => {
-    return () => {
-      game.clearSoldier();
-    };
-  });
+  // React.useEffect(() => {
+  //   return () => {
+  //     game.clearSoldier();
+  //   };
+  // }, [game]);
 
   return (
     <Container>

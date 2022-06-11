@@ -48,7 +48,6 @@ export const usePK = (game: Game) => {
       createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, ids, false);
       createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
       game.once('lastSoldierCreated', (event: Event) => {
-        console.log('lastSoldierCreated');
         const _running = new Running(game, {
           round: PKInfo.slot,
           base: PKInfo.init.base_unit,

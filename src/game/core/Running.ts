@@ -112,7 +112,7 @@ class Running extends EventTarget {
     this.init();
   }
 
-  game;
+  game: Game;
 
   base;
 
@@ -223,7 +223,6 @@ class Running extends EventTarget {
     // setTimeout(() => {
     //   this.runningHandle();
     // }, 500);
-    console.log(21112);
     this.runTrack(track, () => {
       this.runningHandle();
     });
@@ -873,7 +872,7 @@ class Running extends EventTarget {
   ): null | Soldier {
     const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
     if (!sendSoldier || !receiveSoldier) {
-      console.warn(`warn: ${attacks.id}`);
+      console.warn(`warn: ${attacks.id}`, attacks);
       event.onAttackEnd();
       return null;
     }
