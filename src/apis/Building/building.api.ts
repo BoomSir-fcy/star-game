@@ -103,8 +103,11 @@ export class BuildingApi extends Http {
   }
 
   // 刷新工作队列
-  async refreshQueue(planet_id: number) {
-    const res = await this.post(`buildings/refresh_work_queue`, { planet_id });
+  async refreshQueue(planet_id: number, params?: any) {
+    const res = await this.post(`buildings/refresh_work_queue`, {
+      planet_id,
+      ...params,
+    });
     return res;
   }
 

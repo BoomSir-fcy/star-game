@@ -132,7 +132,8 @@ export const BuildlingStatus: React.FC<{
           primaryStep={
             status === 3
               ? 0
-              : Math.round(((endTime - state.time) / endTime) * 10000) / 100
+              : Math.round(((endTime - state.time) / endTime) * 10000) / 100 ||
+                0
           }
         />
       </Flex>
@@ -157,8 +158,6 @@ export const Queue: React.FC<{
     (v, i) => i,
   );
 
-  console.log(currentQueue);
-
   return (
     <Flex ml='40px'>
       {(queueArr ?? []).map((item, index) => (
@@ -166,10 +165,7 @@ export const Queue: React.FC<{
           key={item}
           mr='40px'
           onClick={() => {
-            if (
-              currentQueue[index]?._id &&
-              currentQueue[index]?.work_add_time
-            ) {
+            if (currentQueue[index]) {
               setState({ ...state, current: item });
               onSelectCurrent(currentQueue[index]);
             }
@@ -202,15 +198,17 @@ export const Queue: React.FC<{
                 currentQueue[index]?.propterty?.levelEnergy ||
                 currentQueue[index]?.target_level - 1
               }
-              diffTime={Number(
-                (
-                  currentQueue[index]?.work_end_time -
-                  Date.now() / 1000
-                ).toFixed(0),
-              )}
+              diffTime={
+                Number(
+                  (
+                    currentQueue[index]?.work_end_time -
+                    Date.now() / 1000
+                  ).toFixed(0),
+                ) || 0
+              }
               endTime={
                 currentQueue[index]?.work_end_time -
-                currentQueue[index]?.work_start_time
+                  currentQueue[index]?.work_start_time || 0
               }
               onComplete={onComplete}
             />

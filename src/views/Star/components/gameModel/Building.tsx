@@ -14,8 +14,8 @@ import { useBuildingRepair, useBuildingOperate } from './hooks';
 const Level = styled(Text)`
   position: absolute;
   z-index: 99;
-  top: 12px;
-  left: 15px;
+  top: 0;
+  left: 10px;
 `;
 
 const ToolBar = styled(Box)`
