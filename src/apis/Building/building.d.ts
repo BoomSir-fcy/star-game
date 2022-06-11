@@ -9,17 +9,18 @@ declare namespace Api {
       already_energy: number;
       already_population: number;
     }
-    interface StoreRechargeParams {
-      planet_id: number;
-      energy?: number;
-      stone?: number;
-      population?: number;
-    }
 
     interface AllianceStoreRechargeParams {
       nonce: string;
       timestamp: number;
       signature: string;
+    }
+
+    interface StoreRechargeParams extends AllianceStoreRechargeParams {
+      planet_id: number;
+      energy?: number;
+      stone?: number;
+      population?: number;
     }
 
     // 建筑

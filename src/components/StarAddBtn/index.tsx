@@ -141,6 +141,12 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
           shadow={QualityColor[imgBorder]}
           url={url}
           rotate={ballWorking}
+          onClick={event => {
+            if (onPlantClick) {
+              event.stopPropagation();
+              onPlantClick();
+            }
+          }}
         />
       );
     }
