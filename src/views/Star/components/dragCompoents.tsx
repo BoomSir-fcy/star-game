@@ -12,6 +12,7 @@ import { isApp } from 'utils/client';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { BuyVipModal } from 'components/Modal/buyVipModal';
 import { debounce } from 'lodash';
 import { useBuildingRepair } from './gameModel/hooks';
@@ -475,6 +476,12 @@ export const DragCompoents: React.FC<{
       } catch (error) {
         console.error(error);
       }
+
+      if (currentQueue.length >= userVipinfo?.building_queue_capacity) {
+        toastError(t('planetTipsQueueCapacity'));
+        return;
+      }
+
       const area = draggedItem?.propterty?.size?.area_x;
       // 获取当前点的正方形下标
       const currentSize = area >= 2 ? getAbsolutePosition(to) : [Number(to)];
@@ -511,7 +518,13 @@ export const DragCompoents: React.FC<{
       if (canSave) {
         setCurrentQueue([
           ...currentQueue,
-          { ...draggedItem, work_type: 1, work_status: 3, index: to },
+          {
+            ...draggedItem,
+            isqueue: true,
+            work_type: 1,
+            work_status: 3,
+            index: to,
+          },
         ]);
         const startIndex = Math.min(...currentSize);
 
@@ -527,6 +540,7 @@ export const DragCompoents: React.FC<{
                   pre: true,
                   isbuilding: true,
                   isactive: true,
+                  isqueue: true,
                 },
               ];
               return next;
@@ -536,7 +550,7 @@ export const DragCompoents: React.FC<{
         }
       }
     },
-    [currentQueue, getAbsolutePosition, grid, t, toastError],
+    [currentQueue, getAbsolutePosition, grid, t, toastError, userVipinfo],
   );
 
   const gradRef = React.useRef(null);
@@ -650,6 +664,34 @@ export const DragCompoents: React.FC<{
     });
   };
 
+  // 取消建筑&&队列建筑
+  const destroyBuilding = () => {
+    console.log(currentBuild);
+    if (currentBuild?.isqueue) {
+      setCurrentBuild({});
+      setGrid(pre => {
+        const next = pre?.map((row: any) => {
+          if (row.index === currentBuild.index) {
+            return {
+              ...row,
+              isbuilding: false,
+            };
+          }
+          return { ...row };
+        });
+        return [...next];
+      });
+      setGridBuilds(r => {
+        const next = r.filter((row: any) => row.index !== currentBuild?.index);
+        return [...next];
+      });
+      setCurrentQueue(r => {
+        const next = r.filter((row: any) => row.index !== currentBuild?.index);
+        return [...next];
+      });
+    }
+  };
+
   return (
     <>
       <Box>
@@ -742,10 +784,15 @@ export const DragCompoents: React.FC<{
               (currentBuild?.work_end_time - Date.now() / 1000).toFixed(0),
             )}
             onUpgradeLevel={data => {
+              if (currentQueue.length >= userVipinfo?.building_queue_capacity) {
+                toastError(t('planetTipsQueueCapacity'));
+                return;
+              }
               setCurrentQueue([
                 ...currentQueue,
                 {
                   ...currentBuild,
+                  isqueue: true,
                   propterty: data.propterty,
                   work_build_picture: data.picture,
                   work_type: 2,
@@ -753,6 +800,7 @@ export const DragCompoents: React.FC<{
                 },
               ]);
             }}
+            onCancelQueue={destroyBuilding}
             callback={() => setCurrentBuild({})}
           />
         </Flex>
@@ -827,15 +875,13 @@ export const DragCompoents: React.FC<{
                   });
                 }}
                 onSave={saveWorkQueue}
-                onComplete={debounce(() => {
-                  setTimeout(() => {
-                    getWorkQueue();
-                    setCurrentBuild({});
-                  }, 500);
-
+                onComplete={debounce(async () => {
+                  await getWorkQueue();
+                  setCurrentBuild({});
                   setTimeout(() => {
                     dispatch(fetchPlanetBuildingsAsync(planet_id));
-                  }, 100);
+                    dispatch(fetchPlanetInfoAsync([planet_id]));
+                  }, 1000);
                 }, 1000)}
               />
             )}

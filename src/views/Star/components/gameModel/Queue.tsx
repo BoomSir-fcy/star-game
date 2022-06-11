@@ -77,7 +77,7 @@ export const BuildlingStatus: React.FC<{
 
   // 倒计时
   const countDownNumber = () => {
-    if (diffTime <= 0) {
+    if (diffTime < 0) {
       setState({
         ...state,
         time: 0,
@@ -157,8 +157,6 @@ export const Queue: React.FC<{
     (v, i) => i,
   );
 
-  console.log(currentQueue);
-
   return (
     <Flex ml='40px'>
       {(queueArr ?? []).map((item, index) => (
@@ -166,13 +164,17 @@ export const Queue: React.FC<{
           key={item}
           mr='40px'
           onClick={() => {
-            if (
-              currentQueue[index]?._id &&
-              currentQueue[index]?.work_add_time
-            ) {
+            if (currentQueue[index]) {
               setState({ ...state, current: item });
               onSelectCurrent(currentQueue[index]);
             }
+            // if (
+            //   currentQueue[index]?._id &&
+            //   currentQueue[index]?.work_add_time
+            // ) {
+            //   setState({ ...state, current: item });
+            //   onSelectCurrent(currentQueue[index]);
+            // }
           }}
         >
           <QueueBox className={`${state.current === item && 'active'}`}>

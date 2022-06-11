@@ -66,6 +66,7 @@ export const GameInfo: React.FC<{
   currentBuild: Api.Building.Building;
   diffTime?: number;
   callback: () => void;
+  onCancelQueue: (currentBuilding?: any) => void;
   onUpgradeLevel: (currentBuilding: any) => void;
 }> = React.memo(
   ({
@@ -74,6 +75,7 @@ export const GameInfo: React.FC<{
     currentBuild,
     diffTime,
     callback,
+    onCancelQueue,
     onUpgradeLevel,
   }) => {
     const dispatch = useDispatch();
@@ -84,6 +86,8 @@ export const GameInfo: React.FC<{
     const { destory } = useBuildingOperate();
     const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
     const planetAssets = useStore(p => p.buildling.planetAssets);
+    const planet = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
+
     let timer: any = null;
 
     const [state, setState] = React.useState({
@@ -107,14 +111,15 @@ export const GameInfo: React.FC<{
 
     const init = useCallback(
       async (target_level?: number) => {
+        const buildingsId = itemData?.work_queue_id
+          ? itemData?.buildings_id
+          : building_id;
+
         if (itemData?.work_queue_id) {
           // eslint-disable-next-line no-param-reassign
           target_level = itemData?.target_level;
         }
-        const buildingsId = itemData?.work_queue_id
-          ? itemData?.buildings_id
-          : building_id;
-        if (itemData?.iscreate || itemData?.work_queue_id) {
+        if ((itemData?.iscreate || itemData?.work_queue_id) && buildingsId) {
           const res = await upgrade(planet_id, buildingsId, target_level);
           setState({ ...state, upgrade: res });
         }
@@ -155,16 +160,6 @@ export const GameInfo: React.FC<{
       return `${hour}h:${min}m:${sec}s`;
     };
 
-    // 取消建筑升级、建造
-    // const cancelBuildingQueue = async () => {
-    //   try {
-    //     const res = await cancelWorkQueue(planet_id, itemData?.work_queue_id);
-    //     console.log(res);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-
     // 倒计时
     const countDownNumber = () => {
       if (diffTime <= 0) {
@@ -196,7 +191,7 @@ export const GameInfo: React.FC<{
     }, [itemData, init]);
 
     React.useEffect(() => {
-      if (!itemData?.iscreate) {
+      if (!itemData?.iscreate || itemData?.isqueue) {
         setState({ ...state, upgrade: {} });
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -406,7 +401,7 @@ export const GameInfo: React.FC<{
               )}
 
               {/* 取消升级、创建建筑 */}
-              {itemData?.work_queue_id && (
+              {itemData?.work_queue_id && !itemData?.isqueue && (
                 <Flex
                   justifyContent='space-between'
                   alignItems='center'
@@ -452,13 +447,6 @@ export const GameInfo: React.FC<{
                       })}
                     </Text>
                   </Flex>
-                  {/* <ActionButton
-                    disabled={itemData?.isactive}
-                    variant='danger'
-                    onClick={() => setCancelVisible(true)}
-                  >
-                    {t('CancelUpgrade')}
-                  </ActionButton> */}
                 </Flex>
               )}
 
@@ -545,7 +533,9 @@ export const GameInfo: React.FC<{
                           planetAssets?.population <
                             upgrade_need?.upgrade_population) ||
                         (upgrade_need?.upgrade_stone > 0 &&
-                          planetAssets?.stone < upgrade_need?.upgrade_stone)
+                          planetAssets?.stone < upgrade_need?.upgrade_stone) ||
+                        planet.level <=
+                          currentAttributes?.propterty?.levelEnergy
                       }
                       onClick={() =>
                         setState({ ...state, upgradesVisible: true })
@@ -564,6 +554,23 @@ export const GameInfo: React.FC<{
                       {t('planetDestroyBuilding')}
                     </ActionButton>
                   </Flex>
+                </Flex>
+              )}
+
+              {/* 未创建取消星球&&队列取消星球 */}
+              {itemData?.isqueue && (
+                <Flex
+                  alignItems='center'
+                  justifyContent='flex-end'
+                  flex={1}
+                  style={{ height: '100%' }}
+                >
+                  <ActionButton
+                    variant='danger'
+                    onClick={() => onCancelQueue(itemData)}
+                  >
+                    {t('Cancel')}
+                  </ActionButton>
                 </Flex>
               )}
             </CardInfo>
@@ -595,7 +602,7 @@ export const GameInfo: React.FC<{
               : building_id;
             const res: any = await upgrade(planet_id, buildingsId, level);
             setState({ ...state, upgrade: res, upgradesVisible: false });
-            onUpgradeLevel(res?.building_detail);
+            onUpgradeLevel(state.upgrade?.building_detail);
           }}
           onClose={() => setState({ ...state, upgradesVisible: false })}
         />
