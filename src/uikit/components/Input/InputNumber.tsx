@@ -42,12 +42,12 @@ const InputNumber: React.FC<InputNumberProps> = ({
   }, [val, onChangeNum]);
   return (
     <Flex width='147px' justifyContent='space-between' alignItems='center'>
-      <Btn disabled={disabled} onClick={handleAdd}>
-        +
-      </Btn>
-      <Text>{val}</Text>
       <Btn disabled={disabled} onClick={handleSub}>
         -
+      </Btn>
+      <Text>{val}</Text>
+      <Btn disabled={disabled} onClick={handleAdd}>
+        +
       </Btn>
     </Flex>
   );
