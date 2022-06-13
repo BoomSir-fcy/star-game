@@ -4,8 +4,9 @@ import { PeopleCard } from 'views/Plunder/components';
 
 export const StarBox = styled(Box)`
   position: relative;
+  width: 60%;
   height: 558px;
-  flex: 1;
+  /* flex: 1; */
   .star-1 {
     position: absolute;
     top: 30px;
@@ -65,7 +66,7 @@ export const ButtonStyled = styled(Button)`
 `;
 
 export const BgCardStyled = styled(BgCard)`
-  float: right;
+  /* float: right; */
 `;
 
 export const PkPeopleCard = styled(PeopleCard)`

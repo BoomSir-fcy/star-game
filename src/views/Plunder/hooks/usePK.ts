@@ -22,7 +22,7 @@ export const usePK = (game: Game) => {
       let soldier: Soldier | null = null;
       poses?.forEach(item => {
         soldier = game.createSoldier(item.pos.x, item.pos.y, {
-          srcId: `${item.base_unit_id}`,
+          srcId: `${base[item.base_unit_id]?.index}`,
           race: base[item.base_unit_id]?.race || 1,
           id: item.base_unit_id,
           sid: ids[`${item.pos.x}${item.pos.y}`],
@@ -48,7 +48,6 @@ export const usePK = (game: Game) => {
       createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, ids, false);
       createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
       game.once('lastSoldierCreated', (event: Event) => {
-        console.log('lastSoldierCreated');
         const _running = new Running(game, {
           round: PKInfo.slot,
           base: PKInfo.init.base_unit,

@@ -356,6 +356,12 @@ export const bulletType = {
   TERRAIN_FIRING: 'terrain_firing', // 地形灼烧中
   RESTORE: 'restore', // 治疗
   PURIFY: 'purify', // 净化
+  LEIDIAN: 'leidian', // 雷电
+  CHUANTOU: 'chuantou', // 穿透
+  JINZHAN: 'jinzhan', // 穿透
+  TEST: 'test', // 穿透
+  THROUGH: 'through', // 穿透
+  DAODAN: 'daodan', // 穿透
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 
@@ -438,4 +444,10 @@ export enum TipsTextType {
   NORMAL, // 普通
   CRIT, // 暴击
   RESTORE, // 治疗
+}
+
+export enum SoldierMoveType {
+  WALK, // 步行
+  FLYING, // 飞飞
+  BE_MOVED, // 被迫移动 如击退等
 }

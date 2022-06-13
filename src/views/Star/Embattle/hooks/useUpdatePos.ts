@@ -33,7 +33,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
             x: item?.axisPoint?.chequer?.axisX || 0,
             y: item?.axisPoint?.chequer?.axisY || 0,
           },
-          speed: MAX - index, // 出手顺序
+          speed: item?.options?.unitInfo?.speed, // 出手顺序
           unit_id: item.id,
         };
       });

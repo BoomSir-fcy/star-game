@@ -1,0 +1,104 @@
+
+chuantou.png
+size: 169,269
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+eff_blue laser02
+  rotate: true
+  xy: 24, 66
+  size: 201, 18
+  orig: 207, 18
+  offset: 5, 0
+  index: -1
+eff_blue laser03
+  rotate: true
+  xy: 82, 80
+  size: 187, 15
+  orig: 192, 15
+  offset: 3, 0
+  index: -1
+eff_blue laser04
+  rotate: true
+  xy: 64, 80
+  size: 187, 16
+  orig: 192, 16
+  offset: 3, 0
+  index: -1
+eff_blue laser05
+  rotate: true
+  xy: 44, 71
+  size: 196, 18
+  orig: 207, 18
+  offset: 3, 0
+  index: -1
+eff_blue laser06
+  rotate: true
+  xy: 99, 103
+  size: 164, 14
+  orig: 164, 14
+  offset: 0, 0
+  index: -1
+eff_bluelaser01
+  rotate: true
+  xy: 2, 41
+  size: 226, 20
+  orig: 234, 22
+  offset: 7, 1
+  index: -1
+eff_circle
+  rotate: false
+  xy: 115, 182
+  size: 39, 85
+  orig: 41, 86
+  offset: 0, 0
+  index: -1
+eff_circle2
+  rotate: true
+  xy: 115, 104
+  size: 76, 29
+  orig: 78, 29
+  offset: 1, 0
+  index: -1
+eff_pati2
+  rotate: true
+  xy: 64, 48
+  size: 30, 45
+  orig: 30, 46
+  offset: 0, 0
+  index: -1
+eff_pati3
+  rotate: true
+  xy: 88, 12
+  size: 34, 45
+  orig: 34, 46
+  offset: 0, 0
+  index: -1
+eff_pati4
+  rotate: true
+  xy: 2, 2
+  size: 37, 42
+  orig: 38, 42
+  offset: 0, 0
+  index: -1
+eff_pati5
+  rotate: false
+  xy: 46, 5
+  size: 40, 41
+  orig: 42, 42
+  offset: 1, 1
+  index: -1
+eff_pubCir01
+  rotate: false
+  xy: 111, 50
+  size: 51, 51
+  orig: 51, 51
+  offset: 0, 0
+  index: -1
+eff_pubLight
+  rotate: false
+  xy: 135, 16
+  size: 32, 32
+  orig: 34, 34
+  offset: 1, 1
+  index: -1

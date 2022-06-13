@@ -18,54 +18,58 @@ export const BuildingValue: React.FC<{
   value: string;
   addedValue?: number;
   icon: string;
-}> = React.memo(({ itemData, planet_id, title, value, addedValue, icon }) => {
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
+  isRepair?: boolean;
+}> = React.memo(
+  ({ itemData, planet_id, title, value, addedValue, icon, isRepair }) => {
+    const dispatch = useDispatch();
+    const { t } = useTranslation();
 
-  const getSelfBuilding = () => {
-    dispatch(fetchPlanetBuildingsAsync(planet_id));
-  };
+    // const getSelfBuilding = () => {
+    //   dispatch(fetchPlanetBuildingsAsync(planet_id));
+    // };
 
-  return (
-    <>
-      <Box width={50} height={50} mr='5px'>
-        <StyledImage width={50} height={50} src={icon} />
-      </Box>
-      <Flex flexDirection='column' style={{ width: ' calc(100% - 55px)' }}>
-        <Flex alignItems='center'>
-          <Text color='textSubtle' small>
-            {title}
-          </Text>
-          {itemData?.propterty?.now_durability !==
-            itemData?.propterty?.max_durability && (
-            <ThingRepair
-              itemData={itemData}
-              planet_id={planet_id}
-              building_id={itemData?._id}
-              onCallback={getSelfBuilding}
-            />
-          )}
+    return (
+      <>
+        <Box width={50} height={50} mr='5px'>
+          <StyledImage width={50} height={50} src={icon} />
+        </Box>
+        <Flex flexDirection='column' style={{ width: ' calc(100% - 55px)' }}>
+          <Flex alignItems='center'>
+            <Text color='textSubtle' small>
+              {title}
+            </Text>
+            {isRepair &&
+              itemData?.propterty?.now_durability !==
+                itemData?.propterty?.max_durability && (
+                <ThingRepair
+                  itemData={itemData}
+                  planet_id={planet_id}
+                  building_id={itemData?._id}
+                  // onCallback={getSelfBuilding}
+                />
+              )}
+          </Flex>
+          <Flex alignItems='center'>
+            <Text ellipsis fontSize='18px' title={value}>
+              {value}
+            </Text>
+            <Text
+              ml='5px'
+              bold
+              ellipsis
+              color={`${addedValue >= 0 ? 'progressGreenBar' : 'textDanger'}`}
+              fontSize='16px'
+              title={addedValue?.toString()}
+            >
+              {addedValue
+                ? addedValue > 0
+                  ? `+${addedValue}`
+                  : `${addedValue}`
+                : ''}
+            </Text>
+          </Flex>
         </Flex>
-        <Flex alignItems='center'>
-          <Text ellipsis fontSize='18px' title={value}>
-            {value}
-          </Text>
-          <Text
-            ml='5px'
-            bold
-            ellipsis
-            color='progressGreenBar'
-            fontSize='16px'
-            title={addedValue?.toString()}
-          >
-            {addedValue
-              ? addedValue > 0
-                ? `+${addedValue}`
-                : `-${addedValue}`
-              : ''}
-          </Text>
-        </Flex>
-      </Flex>
-    </>
-  );
-});
+      </>
+    );
+  },
+);

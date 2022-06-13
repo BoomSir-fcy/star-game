@@ -8,6 +8,9 @@ import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import random from 'lodash/random';
+import { signMessage } from 'utils/web3React';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 const SelectBox = styled(Flex)`
   height: 65px;
@@ -112,6 +115,8 @@ export const RechargeAssets: React.FC<{
     }
   }, [planet_id]);
 
+  const { account, library } = useActiveWeb3React();
+
   // 充值
   const handleCharge = useCallback(
     async e => {
@@ -119,7 +124,20 @@ export const RechargeAssets: React.FC<{
       const val = Number(inputValue);
       try {
         setPending(true);
-        const params: Api.Building.StoreRechargeParams = { planet_id };
+        const sign = {
+          nonce: `${random(0xffff, 0xffff_ffff_ffff)}`,
+          timestamp: new Date().getTime(),
+        };
+        const signature = await signMessage(
+          library,
+          account,
+          JSON.stringify(sign),
+        );
+        const params: Api.Building.StoreRechargeParams = {
+          planet_id,
+          ...sign,
+          signature,
+        };
         if (selectId === StoreType.STONE) params.stone = val;
         if (selectId === StoreType.POPULATION) params.population = val;
         if (selectId === StoreType.ENERGY) params.energy = val;
@@ -141,6 +159,8 @@ export const RechargeAssets: React.FC<{
       planet_id,
       selectId,
       inputValue,
+      account,
+      library,
       dispatch,
       t,
       getStoreData,

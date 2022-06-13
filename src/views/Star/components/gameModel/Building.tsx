@@ -14,8 +14,8 @@ import { useBuildingRepair, useBuildingOperate } from './hooks';
 const Level = styled(Text)`
   position: absolute;
   z-index: 99;
-  top: 12px;
-  left: 15px;
+  top: 0;
+  left: 10px;
 `;
 
 const ToolBar = styled(Box)`
@@ -153,8 +153,8 @@ export const Building: React.FC<{
                   itemData={itemData}
                   planet_id={planet_id}
                   building_id={itemData._id}
-                  onCallback={(evnet?: number) => {
-                    setState({ ...state, time: evnet || 0 });
+                  onCallback={() => {
+                    dispatch(fetchPlanetBuildingsAsync(planet_id));
                   }}
                 />
               </ToolBar>

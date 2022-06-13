@@ -1,0 +1,41 @@
+
+daodan.png
+size: 513,121
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+dust_after
+  rotate: false
+  xy: 239, 12
+  size: 107, 107
+  orig: 122, 135
+  offset: 6, 19
+  index: -1
+dust_after2
+  rotate: false
+  xy: 348, 11
+  size: 101, 108
+  orig: 110, 115
+  offset: 6, 3
+  index: -1
+eff_Light00
+  rotate: false
+  xy: 451, 19
+  size: 38, 38
+  orig: 42, 42
+  offset: 2, 2
+  index: -1
+eff_circle
+  rotate: false
+  xy: 451, 59
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+eff_paticle01
+  rotate: false
+  xy: 2, 2
+  size: 235, 117
+  orig: 235, 117
+  offset: 0, 0
+  index: -1

@@ -23,6 +23,7 @@ import {
   RoundDescInset,
   MapBaseUnits,
   RoundDescPurify,
+  SoldierMoveType,
 } from 'game/types';
 import { orderBy } from 'lodash';
 import AxisPoint from './AxisPoint';
@@ -111,7 +112,7 @@ class Running extends EventTarget {
     this.init();
   }
 
-  game;
+  game: Game;
 
   base;
 
@@ -463,8 +464,7 @@ class Running extends EventTarget {
     soldier.once('moveEnd', () => {
       callback(soldier);
     });
-    soldier.flipTargetPointOrientation(axisPoint);
-    soldier.moveTo(axisPoint, t);
+    soldier.moveTo(axisPoint);
 
     return soldier;
   }
@@ -489,7 +489,7 @@ class Running extends EventTarget {
     soldier.once('moveEnd', () => {
       callback(soldier);
     });
-    soldier.moveTo(axisPoint, t);
+    soldier.moveTo(axisPoint, SoldierMoveType.BE_MOVED);
 
     return soldier;
   }
@@ -510,13 +510,11 @@ class Running extends EventTarget {
   // 空降添加小人
   insetUnitHandle(track: TrackDetail, callback: (soldier?: Soldier) => void) {
     const { active_unit_unique_id, receive_id, currentAxisPoint } = track;
-    console.log(this.base, active_unit_unique_id);
     if (
       this.base &&
       active_unit_unique_id &&
       this.base[active_unit_unique_id]
     ) {
-      console.log(6666);
       this.game.once('soldierCreated', () => {
         callback();
       });
@@ -874,7 +872,7 @@ class Running extends EventTarget {
   ): null | Soldier {
     const { sendSoldier, receiveSoldier } = this.getSoldiersByTrack(attacks);
     if (!sendSoldier || !receiveSoldier) {
-      console.warn(`warn: ${attacks.id}`);
+      console.warn(`warn: ${attacks.id}`, attacks);
       event.onAttackEnd();
       return null;
     }

@@ -93,12 +93,14 @@ class Bullet extends EventTarget {
     super();
     this.combat = combat;
     this.text.anchor.set(0.5);
+    this.container.zIndex = 9999;
     this.container.addChild(this.text);
     const temp: Effects = {};
     effectConfig.bullet.forEach(item => {
       temp[item.name] = initEffectInfo(item);
     });
     this.effects = temp;
+    console.log(this.effects, 'this.effects');
   }
 
   combat;
@@ -209,6 +211,7 @@ class Bullet extends EventTarget {
   loadMoveSpine(loaderResource: LoaderResource, name: BulletType) {
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
+
       this.container.addChild(spine);
       this.effects[name].moveEffectSpine = spine;
       spine.scale.set(0.45);
@@ -257,6 +260,7 @@ class Bullet extends EventTarget {
 
     if (this.combat.axisPoint && attackTarget.axisPoint) {
       const display = moveEffectSprite || moveEffectSpine;
+      console.log(display, 'display', name);
       if (display) {
         display.position.set(this.combat.axisPoint.x, this.combat.axisPoint.y);
         display.visible = true;
@@ -531,16 +535,28 @@ class Bullet extends EventTarget {
       bulletType.SHIELD,
       bulletType.RESTORE,
       bulletType.PURIFY,
+      bulletType.CHUANTOU,
+      bulletType.TEST,
     ];
     if (linear.includes(name)) {
+      console.log(2112121221);
       this.linearAttack(name, attackTarget);
       return;
     }
 
-    const space = [bulletType.STING, bulletType.BUMP, bulletType.BOMB];
+    const space = [
+      bulletType.STING,
+      bulletType.BUMP,
+      bulletType.BOMB,
+      bulletType.JINZHAN,
+      bulletType.LEIDIAN,
+      bulletType.THROUGH,
+    ];
     if (space.includes(name)) {
       this.spaceAttack(name, attackTarget);
+      return;
     }
+    this.spaceAttack(name, attackTarget);
   }
 
   once(event: string, handle: any) {

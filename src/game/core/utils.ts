@@ -338,6 +338,9 @@ export const getTwoPointCenter = (p1: Point, p2: Point): Point => {
 export const getSpriteRes = (race: number, resId: string, index: number) => {
   const info = raceData[race].children.find(item => item.id === Number(resId));
   const img = index === 1 ? info?.thumb1 : info?.thumb2;
+  if (Number(resId) === 99) {
+    return `/assets/modal/${1}/${1}-${index}.png`;
+  }
   return img || `/assets/modal/${race}/${resId}-${index}.png`;
 };
 

@@ -23,7 +23,7 @@ import {
 import { Api } from 'apis';
 import { useStore, storeAction } from 'state';
 import { useWeb3React } from '@web3-react/core';
-import { ConnectWalletButton } from 'components';
+import { ConnectWalletButton, Globe } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -33,6 +33,7 @@ import { useToast } from 'contexts/ToastsContext';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { useGuide } from 'hooks/useGuide';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { QualityColor } from 'uikit/theme/colors';
 import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';
 import { useUpgrade } from './components/upgrade/hooks';
 
@@ -372,13 +373,19 @@ const Upgrade = () => {
           <MysteryBoxFlexStyled>
             <MysteryBoxBaseNewStyled quality={mysteryBoxQualities.SUPER}>
               <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
-                <StarCom
+                {/* <StarCom
                   variant='none'
                   scale='ld'
                   margin='auto'
                   picture1={upgradeInfo.now_planet_info?.picture1}
                   picture={upgradeInfo.now_planet_info?.picture}
                   quality={upgradeInfo.now_planet_info?.rarity}
+                /> */}
+                <Globe
+                  margin='auto'
+                  scale='ld'
+                  shadow={QualityColor[upgradeInfo.now_planet_info?.rarity]}
+                  url={upgradeInfo.now_planet_info?.picture1}
                 />
               </MysteryBoxStarStyled>
             </MysteryBoxBaseNewStyled>

@@ -1,0 +1,275 @@
+{
+  "skeleton": {
+    "hash": "nFoS87mfZ53QgFknX+2DFOajphI",
+    "spine": "3.8.75",
+    "x": -3.15,
+    "y": -207.99,
+    "width": 129.11,
+    "height": 127.21,
+    "images": "",
+    "audio": "G:/Star game box/素材/战斗/特效/导弹落地"
+  },
+  "bones": [
+    {
+      "name": "root",
+      "x": -0.33,
+      "y": -32.02,
+      "scaleX": 0.3181,
+      "scaleY": 0.3181
+    },
+    { "name": "eff_root", "parent": "root", "x": 263.23, "y": -85.69 },
+    { "name": "dust_after", "parent": "eff_root", "x": 21.52, "y": -435.15 },
+    { "name": "dust_after2", "parent": "eff_root", "x": 13.33, "y": -317.56 },
+    { "name": "dust_after3", "parent": "eff_root", "x": -95, "y": -430.6 },
+    { "name": "eff_Light00", "parent": "eff_root", "x": 35.76, "y": -92.54 },
+    { "name": "eff_Light0", "parent": "eff_root", "x": 74.81, "y": -92.54 },
+    { "name": "eff_Light1", "parent": "eff_root", "x": 112.49, "y": -89.21 },
+    { "name": "eff_circle", "parent": "eff_root", "x": -19.51, "y": -200.45 },
+    { "name": "eff_paticle01", "parent": "eff_root", "x": -156.9, "y": -307.62 }
+  ],
+  "slots": [
+    {
+      "name": "eff_circle",
+      "bone": "eff_circle",
+      "attachment": "eff_circle",
+      "blend": "additive"
+    },
+    { "name": "dust_after", "bone": "dust_after", "attachment": "dust_after" },
+    {
+      "name": "dust_after2",
+      "bone": "dust_after2",
+      "attachment": "dust_after2"
+    },
+    {
+      "name": "dust_after3",
+      "bone": "dust_after3",
+      "attachment": "dust_after2"
+    },
+    {
+      "name": "eff_paticle01",
+      "bone": "eff_paticle01",
+      "attachment": "eff_paticle01",
+      "blend": "additive"
+    },
+    {
+      "name": "eff_Light00",
+      "bone": "eff_Light00",
+      "attachment": "eff_Light00",
+      "blend": "additive"
+    },
+    {
+      "name": "eff_Light1",
+      "bone": "eff_Light1",
+      "attachment": "eff_Light00",
+      "blend": "additive"
+    },
+    {
+      "name": "eff_Light0",
+      "bone": "eff_Light0",
+      "attachment": "eff_Light00",
+      "blend": "additive"
+    }
+  ],
+  "skins": [
+    {
+      "name": "default",
+      "attachments": {
+        "dust_after2": {
+          "dust_after2": { "x": 15.89, "y": 40.53, "width": 110, "height": 115 }
+        },
+        "dust_after3": {
+          "dust_after2": {
+            "x": -24.93,
+            "y": 40.53,
+            "scaleX": -1,
+            "width": 110,
+            "height": 115
+          }
+        },
+        "dust_after": {
+          "dust_after": { "x": 14.28, "y": 35.13, "width": 122, "height": 135 }
+        },
+        "eff_Light0": {
+          "eff_Light00": { "x": 0.29, "y": 0.6, "width": 42, "height": 42 }
+        },
+        "eff_Light1": {
+          "eff_Light00": { "x": 0.29, "y": 0.6, "width": 42, "height": 42 }
+        },
+        "eff_Light00": {
+          "eff_Light00": { "x": 0.29, "y": 0.6, "width": 42, "height": 42 }
+        },
+        "eff_paticle01": {
+          "eff_paticle01": { "x": 2.3, "y": 64.37, "width": 235, "height": 117 }
+        },
+        "eff_circle": {
+          "eff_circle": { "x": -0.44, "y": 1.51, "width": 60, "height": 60 }
+        }
+      }
+    }
+  ],
+  "animations": {
+    "play": {
+      "slots": {
+        "dust_after3": {
+          "color": [
+            { "time": 0.0333, "color": "fffffffe" },
+            { "time": 0.5667, "color": "ffffff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.0333, "name": "dust_after2" }
+          ]
+        },
+        "eff_Light0": {
+          "attachment": [{ "name": null }, { "time": 1, "name": null }]
+        },
+        "dust_after2": {
+          "color": [
+            { "time": 0.0333, "color": "fffffffe" },
+            { "time": 0.5, "color": "ffffff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.0333, "name": "dust_after2" }
+          ]
+        },
+        "eff_paticle01": {
+          "color": [
+            { "time": 0.0333, "color": "fffffffe" },
+            { "time": 0.3, "color": "ffffff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.0333, "name": "eff_paticle01" }
+          ]
+        },
+        "eff_circle": {
+          "color": [
+            { "time": 0.0333, "color": "ffd700fe" },
+            { "time": 0.2, "color": "ff140000" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.0333, "name": "eff_circle" },
+            { "time": 1, "name": null }
+          ]
+        },
+        "eff_Light1": {
+          "attachment": [{ "name": null }, { "time": 1, "name": null }]
+        },
+        "eff_Light00": {
+          "color": [
+            { "time": 0.0333, "color": "ffef00fe" },
+            { "time": 0.1667, "color": "ff090000" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.0333, "name": "eff_Light00" },
+            { "time": 1, "name": null }
+          ]
+        },
+        "dust_after": {
+          "color": [
+            { "color": "ffffff00" },
+            { "time": 0.0667, "color": "fffffffe" },
+            { "time": 0.4, "color": "ffffff00" }
+          ],
+          "attachment": [{ "name": "dust_after" }]
+        }
+      },
+      "bones": {
+        "dust_after": {
+          "rotate": [{}],
+          "translate": [{ "x": -333.85, "y": 449.52 }],
+          "scale": [
+            { "x": 3.533, "y": 1.98 },
+            { "time": 0.0667, "x": 4.032, "y": 3.876 },
+            { "time": 0.4, "x": 7.358, "y": 5.515 }
+          ]
+        },
+        "dust_after2": {
+          "rotate": [{ "time": 0.0333 }],
+          "translate": [
+            { "time": 0.0333, "x": -175.72, "y": 369.24 },
+            { "time": 0.5, "x": -145.89, "y": 369.24 }
+          ],
+          "scale": [
+            {
+              "time": 0.0333,
+              "x": 2.446,
+              "y": 2.446,
+              "curve": 0.116,
+              "c2": 0.47,
+              "c3": 0.75
+            },
+            { "time": 0.5, "x": 4.468, "y": 3.571 }
+          ]
+        },
+        "dust_after3": {
+          "rotate": [{ "time": 0.0333 }],
+          "translate": [
+            { "time": 0.0333, "x": -182, "y": 466.58 },
+            { "time": 0.5667, "x": -240.09, "y": 491.7 }
+          ],
+          "scale": [
+            {
+              "time": 0.0333,
+              "x": 2.446,
+              "y": 2.446,
+              "curve": 0.116,
+              "c2": 0.47,
+              "c3": 0.75
+            },
+            { "time": 0.5667, "x": 4.468, "y": 3.571 }
+          ]
+        },
+        "eff_Light00": {
+          "rotate": [{ "time": 0.0333 }],
+          "translate": [{ "time": 0.0333, "x": -304.58, "y": 167.99 }],
+          "scale": [
+            { "time": 0.0333, "x": 14.15, "y": 14.15 },
+            { "time": 0.1667, "x": 20.562, "y": 20.562 }
+          ]
+        },
+        "eff_circle": {
+          "rotate": [{ "time": 0.0333 }],
+          "translate": [{ "time": 0.0333, "x": -244.92, "y": 274.75 }],
+          "scale": [
+            { "time": 0.0333, "x": 7.792, "y": 2.85 },
+            { "time": 0.2, "x": 12.248, "y": 5.625 }
+          ]
+        },
+        "eff_paticle01": {
+          "rotate": [{ "time": 0.0333 }],
+          "translate": [
+            {
+              "time": 0.0333,
+              "x": -100.48,
+              "y": 367.38,
+              "curve": 0.185,
+              "c2": 0.56,
+              "c3": 0.75
+            },
+            { "time": 0.3, "x": -105.19, "y": 436.46 }
+          ],
+          "scale": [
+            {
+              "time": 0.0333,
+              "x": 1.477,
+              "y": 1.176,
+              "curve": 0.185,
+              "c2": 0.56,
+              "c3": 0.75
+            },
+            { "time": 0.3, "x": 2.313, "y": 2.534 }
+          ]
+        },
+        "root": {
+          "rotate": [{ "curve": "stepped" }, { "time": 1 }],
+          "translate": [{ "curve": "stepped" }, { "time": 1 }],
+          "scale": [{ "curve": "stepped" }, { "time": 1 }]
+        }
+      }
+    }
+  }
+}

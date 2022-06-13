@@ -54,9 +54,25 @@ export class BuildingApi extends Http {
     return res;
   }
 
+  // 修复耐久度
+  async setBatchRepairBuilding(planet_id: number[]) {
+    const res = await this.post(`buildings/repair_all_durability`, {
+      planet_id,
+    });
+    return res;
+  }
+
   // 获取建筑耐久恢复需要的资源
   async getRepairBuilding(params: Api.Building.BuildingsOperateParams) {
     const res = await this.get(`buildings/repair_cost`, params);
+    return res;
+  }
+
+  // 获取一键修复需要消耗的资源
+  async getBatchRepairBuilding(planet_id: number[]) {
+    const res = await this.get(`buildings/repair_all_durability_cost`, {
+      planet_id,
+    });
     return res;
   }
 
@@ -87,8 +103,11 @@ export class BuildingApi extends Http {
   }
 
   // 刷新工作队列
-  async refreshQueue(planet_id: number) {
-    const res = await this.post(`buildings/refresh_work_queue`, { planet_id });
+  async refreshQueue(planet_id: number, params?: any) {
+    const res = await this.post(`buildings/refresh_work_queue`, {
+      planet_id,
+      ...params,
+    });
     return res;
   }
 
@@ -117,10 +136,12 @@ export class BuildingApi extends Http {
   async estimateBuildingUpgradeDetail(
     planet_id: number,
     building_id: number | string,
+    target_level?: number,
   ): Promise<Api.Response<{ data: Api.Building.CreateBuildingParams }>> {
     const res = await this.get(`buildings/upgrade_detail`, {
       planet_id,
       building_id,
+      target_level,
     });
     return res;
   }

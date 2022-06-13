@@ -19,7 +19,7 @@ class RadarChart {
 
   ctx: CanvasRenderingContext2D | null = null;
 
-  count = 6; // 属性数量
+  count = 8; // 属性数量
 
   centerX = 0; // x轴中心
 
@@ -60,11 +60,12 @@ class RadarChart {
     this.data = data;
     this.count = data.length;
     this.centerX = width / 2;
-    this.radius = this.centerX - 20;
+    this.radius = this.centerX - 28;
     this.angle = (Math.PI * 2) / this.count;
 
     this.draw();
   }
+  // （最高等级的兵种的属性值）当前兵种属性值/最大兵种属性值 0 - 1
 
   draw() {
     this.drawPolygon(); // 绘制多边形
@@ -78,10 +79,11 @@ class RadarChart {
     if (this.ctx) {
       this.ctx.save(); // save the default state
       this.ctx.strokeStyle = this.colorPolygon;
-      const r = this.radius / this.count;
-      for (let i = 0; i < this.count; i++) {
+      const rangCount = 4;
+      const r = this.radius / rangCount;
+      for (let i = 0; i < rangCount; i++) {
         this.ctx.beginPath(); // 开始路径
-        const currR = r * (i + 1);
+        const currR = r * (rangCount - i);
         for (let j = 0; j < this.count; j++) {
           const x =
             this.centerX + currR * Math.cos(this.angle * j + this.offsetAngle);
@@ -188,6 +190,11 @@ class RadarChart {
       this.ctx.fill();
       this.ctx.stroke();
     }
+  }
+
+  updateDate(data: AttrData) {
+    this.data = data;
+    this.draw();
   }
 }
 

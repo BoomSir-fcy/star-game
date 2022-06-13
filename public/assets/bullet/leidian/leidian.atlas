@@ -1,0 +1,55 @@
+
+leidian.png
+size: 1754,261
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+image 1
+  rotate: true
+  xy: 1226, 2
+  size: 21, 48
+  orig: 26, 64
+  offset: 3, 1
+  index: -1
+image 2
+  rotate: true
+  xy: 818, 18
+  size: 241, 406
+  orig: 257, 413
+  offset: 8, 1
+  index: -1
+image 3
+  rotate: true
+  xy: 2, 2
+  size: 257, 406
+  orig: 257, 416
+  offset: 0, 2
+  index: -1
+image 4
+  rotate: true
+  xy: 410, 13
+  size: 246, 406
+  orig: 257, 418
+  offset: 11, 4
+  index: -1
+image 5
+  rotate: true
+  xy: 1226, 25
+  size: 234, 406
+  orig: 257, 419
+  offset: 23, 5
+  index: -1
+image 6
+  rotate: true
+  xy: 1634, 63
+  size: 196, 99
+  orig: 231, 145
+  offset: 35, 1
+  index: -1
+image 7
+  rotate: false
+  xy: 1634, 10
+  size: 118, 51
+  orig: 166, 79
+  offset: 14, 2
+  index: -1

@@ -53,7 +53,11 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   );
 };
 
-const ButtonGroup: React.FC<ButtonGroupProps> = ({ onBack, onRefresh }) => {
+const ButtonGroup: React.FC<ButtonGroupProps> = ({
+  onBack,
+  onRefresh,
+  className,
+}) => {
   const { t } = useTranslation();
 
   return (

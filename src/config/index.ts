@@ -12,7 +12,7 @@ export const BASE_BSC_SCAN_URLS = {
 };
 
 export const storage = {
-  SSID: 'SSID',
+  SSID: 'SSID__galaxy',
   UserInfo: 'userInfo',
   systemCustom: 'systemCustom',
 };

@@ -103,20 +103,20 @@ const StarHeader = () => {
               <Flex justifyContent='space-between' alignItems='center'>
                 <Flex alignItems='center'>
                   <ImageStyled src='/images/commons/icon/icon_minera.png' />
-                  <Flex flexDirection='column' ml='14px'>
-                    <Flex>
+                  <Flex flexDirection='column' ml='10px'>
+                    <Flex alignItems='center'>
                       <TextStyled color='textTips' small>
                         {t('Total Capacity')}
                       </TextStyled>
-                      <TextStyled ml='20px' small>
+                      <TextStyled ml='20px' fontSize='18px'>
                         {planetInfo?.energyYield}/s
                       </TextStyled>
                     </Flex>
-                    <Flex>
+                    <Flex alignItems='center'>
                       <TextStyled color='textTips' small>
                         {t('Total Ore')}
                       </TextStyled>
-                      <TextStyled ml='20px' small>
+                      <TextStyled ml='20px' fontSize='18px'>
                         {planetInfo?.stone}/{planetInfo?.max_stone}
                       </TextStyled>
                     </Flex>
@@ -124,20 +124,20 @@ const StarHeader = () => {
                 </Flex>
                 <Flex alignItems='center'>
                   <ImageStyled src='/images/commons/icon/icon_spice.png' />
-                  <Flex flexDirection='column' ml='14px'>
-                    <Flex>
+                  <Flex flexDirection='column' ml='10px'>
+                    <Flex alignItems='center'>
                       <TextStyled color='textTips' small>
                         {t('Total Capacity')}
                       </TextStyled>
-                      <TextStyled ml='20px' small>
+                      <TextStyled ml='20px' fontSize='18px'>
                         {planetInfo?.populationYield}/s
                       </TextStyled>
                     </Flex>
-                    <Flex>
+                    <Flex alignItems='center'>
                       <TextStyled color='textTips' small>
                         {t('Total Population')}
                       </TextStyled>
-                      <TextStyled ml='20px' small>
+                      <TextStyled ml='20px' fontSize='18px'>
                         {planetInfo?.population}/{planetInfo?.max_population}
                       </TextStyled>
                     </Flex>
@@ -145,20 +145,20 @@ const StarHeader = () => {
                 </Flex>
                 <Flex alignItems='center'>
                   <ImageStyled src='/images/commons/icon/icon_energy.png' />
-                  <Flex flexDirection='column' ml='14px'>
-                    <Flex>
+                  <Flex flexDirection='column' ml='10px'>
+                    <Flex alignItems='center'>
                       <TextStyled color='textTips' small>
                         {t('Total Capacity')}
                       </TextStyled>
-                      <TextStyled ml='20px' small>
+                      <TextStyled ml='20px' fontSize='18px'>
                         {planetInfo?.energyYield}/s
                       </TextStyled>
                     </Flex>
-                    <Flex>
+                    <Flex alignItems='center'>
                       <TextStyled color='textTips' small>
                         {t('Total Energy')}
                       </TextStyled>
-                      <TextStyled ml='20px' small>
+                      <TextStyled ml='20px' fontSize='18px'>
                         {planetInfo?.energy}/{planetInfo?.max_energy}
                       </TextStyled>
                     </Flex>

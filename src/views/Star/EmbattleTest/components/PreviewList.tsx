@@ -53,7 +53,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
         x: 0,
         y: 0,
         race,
-        srcId: `${item.unique_id % 30}`,
+        srcId: `${item.index}`,
         enableDrag: true,
         id: item.unique_id,
         unique_id: item.unique_id,
@@ -76,7 +76,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   const handleGoIntoBattle = (item: Api.Game.UnitInfo) => {
     const options = {
       race,
-      srcId: `${item.unique_id % 30}`,
+      srcId: `${item.index}`,
       enableDrag: true,
       id: item.unique_id,
       unique_id: item.unique_id,
@@ -95,7 +95,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, [dragEndHandle]);
 
   const getSoldierSrc = useCallback((item: Api.Game.UnitInfo) => {
-    return getSpriteRes(item.race, item.unique_id.toString(), 2);
+    return getSpriteRes(item.race, item.index.toString(), 2);
   }, []);
 
   const getSoldierName = useCallback((item: Api.Game.UnitInfo) => {
@@ -130,7 +130,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 onClick={() => {
                   const soldier = new Soldier({
                     race,
-                    srcId: `${item.unique_id}`,
+                    srcId: `${item.index}`,
                     x: 0,
                     y: 0,
                     id: item.unique_id,

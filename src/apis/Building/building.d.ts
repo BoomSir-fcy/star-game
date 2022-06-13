@@ -9,17 +9,18 @@ declare namespace Api {
       already_energy: number;
       already_population: number;
     }
-    interface StoreRechargeParams {
-      planet_id: number;
-      energy?: number;
-      stone?: number;
-      population?: number;
-    }
 
     interface AllianceStoreRechargeParams {
       nonce: string;
       timestamp: number;
       signature: string;
+    }
+
+    interface StoreRechargeParams extends AllianceStoreRechargeParams {
+      planet_id: number;
+      energy?: number;
+      stone?: number;
+      population?: number;
     }
 
     // 建筑
@@ -43,6 +44,7 @@ declare namespace Api {
       isbuilding?: boolean;
       isactive?: boolean; // 是否激活
       iscreate?: boolean; // 是否已经保存创建建筑了
+      isqueue?: boolean; // 是否加入队列中，可以取消
     }
 
     interface BuildingsOperateParams {

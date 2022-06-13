@@ -1,0 +1,27 @@
+
+jinzhan.png
+size: 194,147
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body_blur
+  rotate: false
+  xy: 2, 6
+  size: 128, 34
+  orig: 130, 34
+  offset: 1, 0
+  index: -1
+eff_blur
+  rotate: true
+  xy: 2, 42
+  size: 103, 190
+  orig: 109, 196
+  offset: 2, 1
+  index: -1
+eff_pubLight
+  rotate: false
+  xy: 132, 2
+  size: 38, 38
+  orig: 42, 42
+  offset: 2, 2
+  index: -1

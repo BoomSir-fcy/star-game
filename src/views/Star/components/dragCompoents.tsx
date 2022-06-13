@@ -4,18 +4,20 @@ import classnames from 'classnames';
 import { polyfill } from 'mobile-drag-drop';
 import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour';
 import { useDispatch } from 'react-redux';
-import { Box, Flex, BgCard, Card, Button, Text, Input } from 'uikit';
-import { useStore, storeAction } from 'state';
+import { Box, Flex, BgCard, Card, Button, Text } from 'uikit';
+import { useStore } from 'state';
 import { Api } from 'apis';
 import { isApp } from 'utils/client';
 
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
-
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { BuyVipModal } from 'components/Modal/buyVipModal';
-import { throttle } from 'lodash';
+import { useBuildingRepair } from './gameModel/hooks';
+
 import { GameInfo, GameThing, Building, Queue } from './gameModel';
+import { ThingRepairModal } from './Modal';
 import { BuffBonus } from './buff';
 import { useBuffer, useWorkqueue } from './hooks';
 
@@ -163,7 +165,6 @@ const BuildingsItem = styled(Box)`
         height: calc(100% + 4px);
         border-radius: 10px;
         border: 2px solid #fff;
-        background-color: #fff;
         box-shadow: ${({ theme }) => theme.shadows.highlight};
         z-index: 5;
       }
@@ -198,6 +199,7 @@ export const DragCompoents: React.FC<{
   const { getPlanetBuff } = useBuffer();
   const { refreshWorkQueue } = useWorkqueue();
   const { toastSuccess, toastError } = useToast();
+  const { setBatchRepair } = useBuildingRepair();
   const [state, setState] = React.useState({
     currentTab: 1,
     currentBuilding: '',
@@ -211,6 +213,8 @@ export const DragCompoents: React.FC<{
         title: `${t('BuildUpgradeQueue')}`,
       },
     ],
+    visible: false,
+    repairVisible: false,
   });
   const [grid, setGrid] = React.useState<any[]>([]);
   const [gridBuilds, setGridBuilds] = React.useState<any[]>([]);
@@ -218,11 +222,15 @@ export const DragCompoents: React.FC<{
   const [buffer, setBuffer] = React.useState<any>([]);
   const [currentBuffer, setCurrentBuffer] =
     React.useState<Api.Building.BuildingBuffer>(null);
-  const buildings = useStore(p => p.buildling.buildings);
   const dragBox = React.useRef<HTMLDivElement>(null);
+  const buildings = useStore(p => p.buildling.buildings);
+  const userVipinfo = useStore(p => p.userInfo?.userInfo?.vipBenefits);
 
   // 升级建造队列
   const [currentQueue, setCurrentQueue] = React.useState([]);
+  const repairBuildings = gridBuilds.filter(
+    ({ propterty }) => propterty?.now_durability !== propterty?.max_durability,
+  );
 
   // X, row, width 横
   // Y, col, height 竖
@@ -270,17 +278,23 @@ export const DragCompoents: React.FC<{
     }
   }, [buffer, currentBuild?._id, getPlanetBuff, planet_id]);
 
-  const getWorkQueue = React.useCallback(async () => {
-    try {
-      const res = await refreshWorkQueue(planet_id);
-      if (Api.isSuccess(res)) {
-        console.log(res.data.work_queue);
-        setCurrentQueue(res.data.work_queue);
+  const getWorkQueue = React.useCallback(
+    async (isSave?: boolean) => {
+      try {
+        const res = await refreshWorkQueue(planet_id);
+        if (Api.isSuccess(res)) {
+          let isQueue = [];
+          if (isSave) {
+            isQueue = currentQueue.filter((item: any) => !item.planet_id);
+          }
+          setCurrentQueue([...res.data.work_queue, ...isQueue]);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [planet_id, refreshWorkQueue]);
+    },
+    [currentQueue, planet_id, refreshWorkQueue],
+  );
 
   React.useEffect(() => {
     if (itemData.length > 0) {
@@ -299,15 +313,16 @@ export const DragCompoents: React.FC<{
   // 获取坐标点
   const getMatrix = React.useCallback(
     (index: number, currentSize = 1) => {
-      const row = Math.floor(index / cols);
-      const col = Math.floor(index % rows);
-
+      const currentAxis = itemData.find(item => item.index === Number(index));
       return [
-        [{ x: col }, { y: row + currentSize }],
-        [{ x: col + currentSize }, { y: row }],
+        [{ x: currentAxis.x }, { y: currentAxis.y }],
+        [
+          { x: currentAxis.x + currentSize },
+          { y: currentAxis.y + currentSize },
+        ],
       ];
     },
-    [cols, rows],
+    [itemData],
   );
 
   // 计算绝对坐标
@@ -428,11 +443,9 @@ export const DragCompoents: React.FC<{
       });
       if (Api.isSuccess(res)) {
         toastSuccess(t('planetTipsSaveSuccess'));
-        // setGridBuilds([]);
         getWorkQueue();
         dispatch(fetchPlanetBuildingsAsync(planet_id));
-      } else {
-        toastError(res?.message);
+        dispatch(fetchPlanetInfoAsync([planet_id]));
       }
     } catch (error) {
       console.error(error);
@@ -444,7 +457,6 @@ export const DragCompoents: React.FC<{
     getWorkQueue,
     planet_id,
     t,
-    toastError,
     toastSuccess,
   ]);
 
@@ -466,6 +478,12 @@ export const DragCompoents: React.FC<{
       } catch (error) {
         console.error(error);
       }
+
+      if (currentQueue.length >= userVipinfo?.building_queue_capacity) {
+        toastError(t('planetTipsQueueCapacity'));
+        return;
+      }
+
       const area = draggedItem?.propterty?.size?.area_x;
       // 获取当前点的正方形下标
       const currentSize = area >= 2 ? getAbsolutePosition(to) : [Number(to)];
@@ -502,7 +520,13 @@ export const DragCompoents: React.FC<{
       if (canSave) {
         setCurrentQueue([
           ...currentQueue,
-          { ...draggedItem, work_type: 1, work_status: 3, index: to },
+          {
+            ...draggedItem,
+            isqueue: true,
+            work_type: 1,
+            work_status: 3,
+            index: to,
+          },
         ]);
         const startIndex = Math.min(...currentSize);
 
@@ -518,6 +542,7 @@ export const DragCompoents: React.FC<{
                   pre: true,
                   isbuilding: true,
                   isactive: true,
+                  isqueue: true,
                 },
               ];
               return next;
@@ -527,7 +552,7 @@ export const DragCompoents: React.FC<{
         }
       }
     },
-    [currentQueue, getAbsolutePosition, grid, t, toastError],
+    [currentQueue, getAbsolutePosition, grid, t, toastError, userVipinfo],
   );
 
   const gradRef = React.useRef(null);
@@ -641,17 +666,21 @@ export const DragCompoents: React.FC<{
     });
   };
 
-  // 销毁建筑
+  // 取消建筑&&队列建筑
   const destroyBuilding = () => {
-    if (!currentBuild?._id) {
-      toastError(t('planetPleaseSelectbuilding'));
-      return;
-    }
-    if (currentBuild?.isactive) {
-      setCurrentBuild({});
+    console.log(currentBuild, currentQueue);
+
+    setCurrentBuild({});
+    // 如果删除升级中的建筑，则同个升级建筑全部销毁
+    if (currentBuild?.work_type === 2) {
+      const activeUpgrade = currentQueue.filter(
+        item => item._id !== currentBuild._id,
+      );
+      setCurrentQueue(activeUpgrade);
+    } else {
       setGrid(pre => {
         const next = pre?.map((row: any) => {
-          if (row.buildingId === currentBuild._id) {
+          if (row.index === currentBuild.index) {
             return {
               ...row,
               isbuilding: false,
@@ -665,9 +694,11 @@ export const DragCompoents: React.FC<{
         const next = r.filter((row: any) => row.index !== currentBuild?.index);
         return [...next];
       });
-      return;
+      setCurrentQueue(r => {
+        const next = r.filter((row: any) => row.index !== currentBuild?.index);
+        return [...next];
+      });
     }
-    dispatch(storeAction.destoryBuildingVisibleModal(true));
   };
 
   return (
@@ -702,9 +733,7 @@ export const DragCompoents: React.FC<{
                     onDragOver={dragOver}
                     onDrop={drop}
                     onDragEnd={dragEnd}
-                  >
-                    {/* x{item.x}, y{item.y} ({item.index}) */}
-                  </Normal>
+                  />
                 );
               })}
               {(gridBuilds ?? []).map((item, index) => {
@@ -741,15 +770,18 @@ export const DragCompoents: React.FC<{
             >
               <BuffBonus currentBuff={currentBuffer} />
               <Flex flexDirection='column'>
-                <ActionButton onClick={destroyBuilding} disabled>
-                  {t('One-clickRepair')} 3
+                <ActionButton
+                  disabled={repairBuildings.length <= 0}
+                  onClick={() => {
+                    if (userVipinfo.is_vip) {
+                      setState({ ...state, repairVisible: true });
+                    } else {
+                      setState({ ...state, visible: true });
+                    }
+                  }}
+                >
+                  {t('One-clickRepair')} {repairBuildings.length}
                 </ActionButton>
-                {/* <ActionButton onClick={createGrid}>
-                  {t('planetSave')}
-                </ActionButton>
-                <ActionButton onClick={destroyBuilding} variant='danger'>
-                  {t('planetDestroy')}
-                </ActionButton> */}
               </Flex>
             </Flex>
           </Flex>
@@ -757,15 +789,28 @@ export const DragCompoents: React.FC<{
             planet_id={planet_id}
             building_id={currentBuild?._id}
             currentBuild={currentBuild}
+            currentQueue={currentQueue}
             diffTime={Number(
               (currentBuild?.work_end_time - Date.now() / 1000).toFixed(0),
             )}
-            onUpgradeLevel={() =>
+            onUpgradeLevel={data => {
+              if (currentQueue.length >= userVipinfo?.building_queue_capacity) {
+                toastError(t('planetTipsQueueCapacity'));
+                return;
+              }
               setCurrentQueue([
                 ...currentQueue,
-                { ...currentBuild, work_type: 2, work_status: 4 },
-              ])
-            }
+                {
+                  ...currentBuild,
+                  isqueue: true,
+                  propterty: data.propterty,
+                  work_build_picture: data.picture,
+                  work_type: 2,
+                  work_status: 4,
+                },
+              ]);
+            }}
+            onCancelQueue={destroyBuilding}
             callback={() => setCurrentBuild({})}
           />
         </Flex>
@@ -807,6 +852,7 @@ export const DragCompoents: React.FC<{
                           setCurrentBuild({
                             ...row,
                             isbuilding: false,
+                            iscreate: false,
                           });
                         }}
                         onDragStart={e => dragStart(e, row)}
@@ -840,13 +886,43 @@ export const DragCompoents: React.FC<{
                 }}
                 onSave={saveWorkQueue}
                 onComplete={() => {
-                  getWorkQueue();
-                  dispatch(fetchPlanetBuildingsAsync(planet_id));
+                  setTimeout(async () => {
+                    await getWorkQueue(true);
+                    setCurrentBuild({});
+                  }, 1000);
+                  setTimeout(() => {
+                    dispatch(fetchPlanetBuildingsAsync(planet_id));
+                  }, 1500);
                 }}
               />
             )}
           </Flex>
         </BgCard>
+
+        <BuyVipModal
+          tips={t(
+            'One-click repair durability, you can repair the durability of all buildings on the planet faster',
+          )}
+          visible={state.visible}
+          onClose={() => setState({ ...state, visible: false })}
+        />
+
+        {state.repairVisible && (
+          <ThingRepairModal
+            itemData={itemData}
+            planet_id={[planet_id]}
+            visible={state.repairVisible}
+            onChange={async () => {
+              const res = await setBatchRepair([planet_id]);
+              if (res) {
+                toastSuccess(t('planetQuickFixSuccessful'));
+              }
+              await dispatch(fetchPlanetBuildingsAsync(planet_id));
+              setState({ ...state, repairVisible: false });
+            }}
+            onClose={() => setState({ ...state, repairVisible: false })}
+          />
+        )}
       </Box>
     </>
   );

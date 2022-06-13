@@ -3,10 +3,18 @@ import { Api } from 'apis';
 
 export const useBuildingUpgrade = () => {
   const upgrade = React.useCallback(
-    async (planet_id: number, building_id: number | string) => {
+    async (
+      planet_id: number,
+      building_id: number | string,
+      target_level?: number,
+    ) => {
       try {
         const [info] = await Promise.all([
-          Api.BuildingApi.estimateBuildingUpgradeDetail(planet_id, building_id),
+          Api.BuildingApi.estimateBuildingUpgradeDetail(
+            planet_id,
+            building_id,
+            target_level,
+          ),
         ]);
         if (Api.isSuccess(info)) {
           return {
@@ -38,6 +46,15 @@ export const useBuildingRepair = () => {
     [],
   );
 
+  const getBatcheCost = React.useCallback(async (params: number[]) => {
+    try {
+      const res = await Api.BuildingApi.getBatchRepairBuilding(params);
+      return res;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }, []);
+
   // 修复耐久
   const setRepair = React.useCallback(
     async (params: Api.Building.BuildingsOperateParams) => {
@@ -50,6 +67,19 @@ export const useBuildingRepair = () => {
     },
     [],
   );
+
+  // 批量修复耐久
+  const setBatchRepair = React.useCallback(async (planet_id: number[]) => {
+    try {
+      const res = await Api.BuildingApi.setBatchRepairBuilding(planet_id);
+      if (Api.isSuccess(res)) {
+        return true;
+      }
+      return false;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }, []);
 
   // 加速恢复耐久
   const setRepairQuick = React.useCallback(
@@ -77,7 +107,14 @@ export const useBuildingRepair = () => {
     [],
   );
 
-  return { getCose, setRepair, setRepairQuick, upgradeRepairComplete };
+  return {
+    getCose,
+    getBatcheCost,
+    setRepair,
+    setBatchRepair,
+    setRepairQuick,
+    upgradeRepairComplete,
+  };
 };
 
 // 操作建筑物
