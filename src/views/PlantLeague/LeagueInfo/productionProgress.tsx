@@ -56,7 +56,7 @@ const ProductionProgress = () => {
       toastError(t('Stop working to claim'));
       return;
     }
-    if (alliance.laterExtractTime > 0) {
+    if (alliance.laterExtractTime <= 0) {
       toastError(t('Claim Freezing'));
       return;
     }

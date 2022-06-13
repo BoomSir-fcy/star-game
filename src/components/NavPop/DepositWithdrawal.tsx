@@ -10,7 +10,10 @@ import { UserBalanceView } from 'state/types';
 import { useGetBnbBalance, useTokenBalance } from 'hooks/useTokenBalance';
 import { getBalanceAmount } from 'utils/formatBalance';
 import { BIG_TEN } from 'config/constants/bigNumber';
-import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
+import {
+  fetchUserBalanceAsync,
+  fetchUserProductAsync,
+} from 'state/userInfo/reducer';
 import { useToast } from 'contexts/ToastsContext';
 import { ConnectWalletButton } from 'components';
 import { FetchApproveNum, useRWA } from './hook';
@@ -118,6 +121,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
       }
     }
     dispatch(fetchUserBalanceAsync());
+    dispatch(fetchUserProductAsync());
     setpending(false);
   }, [
     t,

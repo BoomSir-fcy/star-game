@@ -46,7 +46,7 @@ export const useRWA = (tokenAddress: string) => {
             nonce: `${random(0xffff_ffff, 0xffff_ffff_ffff)}`,
             timestamp: new Date().getTime(),
             coin: drawTokenAddress,
-            amount: Number(drawAmount),
+            amount: drawAmount,
           };
           const res = await signMessage(library, account, JSON.stringify(sign));
           const params = { ...sign, signature: res };
