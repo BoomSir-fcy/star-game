@@ -537,6 +537,8 @@ class Bullet extends EventTarget {
       bulletType.PURIFY,
       bulletType.CHUANTOU,
       bulletType.TEST,
+      bulletType.FENG,
+      bulletType.V_ATTACK,
     ];
     if (linear.includes(name)) {
       console.log(2112121221);

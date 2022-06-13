@@ -126,7 +126,7 @@ const SelectPlanet = () => {
                       // navigate(-1);
                     }}
                   >
-                    <PlanetBox info={item} />
+                    <PlanetBox info={item} providedExp />
                     <ChooseBox>
                       <Text fontSize='22px'>
                         {Object.keys(activeMaterialMap).indexOf(

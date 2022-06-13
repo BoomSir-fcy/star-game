@@ -58,7 +58,7 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
           <Avatar />
           <Flex flex={1}>
             <Info onRefresh={() => onRefreshClick()} className={className}>
-              {location.pathname === '/mystery-box' && !Product.planet_num && (
+              {/* {location.pathname === '/mystery-box' && !Product.planet_num && (
                 <BgCard variant='short'>
                   <Flex alignItems='center' height='100%' width='100%'>
                     <TweenText
@@ -72,7 +72,7 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
                     />
                   </Flex>
                 </BgCard>
-              )}
+              )} */}
               {children}
             </Info>
           </Flex>

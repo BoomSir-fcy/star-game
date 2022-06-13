@@ -36,7 +36,8 @@ export const PlanetBox: React.FC<{
   info: Api.Planet.PlanetInfo;
   ChooseList?: number[];
   className?: string;
-}> = ({ info, choose, ChooseList, className }) => {
+  providedExp?: boolean;
+}> = ({ info, choose, ChooseList, className, providedExp }) => {
   const { t } = useTranslation();
   const [state, setState] = useState({
     time: info?.status_countdown,
@@ -121,9 +122,11 @@ export const PlanetBox: React.FC<{
                 <Text small color='textSubtle' ml='40px'>
                   {t('Building Count')}: {info?.build_count}
                 </Text>
-                <Text small color='textSubtle' ml='40px'>
-                  {t('EXP')}: {info?.can_provided_exp}
-                </Text>
+                {providedExp && (
+                  <Text small color='textSubtle' ml='40px'>
+                    {t('EXP')}: {info?.can_provided_exp}
+                  </Text>
+                )}
               </Flex>
             </Box>
             {info?.status_countdown > 0 && (

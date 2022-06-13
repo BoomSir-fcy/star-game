@@ -1,0 +1,199 @@
+{
+  "skeleton": {
+    "hash": "dNKP0xoyeNc0r56boXNJeuZ756w",
+    "spine": "3.8.0",
+    "images": "",
+    "audio": "G:/Star game box/素材/战斗/特效/飞行落地"
+  },
+  "bones": [
+    { "name": "root", "y": -37.51, "scaleX": 0.2156, "scaleY": 0.2156 },
+    { "name": "eff", "parent": "root", "x": 222.89, "y": -229.17 },
+    {
+      "name": "dust1_1",
+      "parent": "eff",
+      "x": -274.99,
+      "y": -204.78,
+      "scaleX": 0.8595,
+      "scaleY": 0.8595
+    },
+    { "name": "dust1_2", "parent": "eff", "x": -274.99, "y": -255.58 },
+    { "name": "eff_Aexplosion01", "parent": "eff", "x": 224.31, "y": -169.65 }
+  ],
+  "slots": [
+    {
+      "name": "dust1_1",
+      "bone": "dust1_1",
+      "color": "ffffffae",
+      "blend": "additive"
+    },
+    {
+      "name": "dust1_2",
+      "bone": "dust1_2",
+      "color": "ffffffae",
+      "blend": "additive"
+    },
+    {
+      "name": "eff_Aexplosion01",
+      "bone": "eff_Aexplosion01",
+      "blend": "additive"
+    }
+  ],
+  "skins": [
+    {
+      "name": "default",
+      "attachments": {
+        "eff_Aexplosion01": {
+          "eff_Aexplosion01": {
+            "x": 0.4,
+            "y": -4.15,
+            "width": 38,
+            "height": 23
+          },
+          "eff_Aexplosion02": { "y": -6.55, "width": 41, "height": 27 },
+          "eff_Aexplosion03": { "y": -7.06, "width": 42, "height": 31 },
+          "eff_Aexplosion04": { "y": -9.26, "width": 46, "height": 30 }
+        },
+        "dust1_1": {
+          "dust1_1": { "x": 19.38, "y": 13.65, "width": 45, "height": 28 },
+          "dust1_2": { "x": 29.6, "y": 10.87, "width": 42, "height": 21 },
+          "dust1_3": { "x": 39.86, "y": 13.89, "width": 48, "height": 25 },
+          "dust1_4": { "x": 44.39, "y": 16.31, "width": 44, "height": 27 },
+          "dust1_5": {
+            "x": 63.12,
+            "y": 40.77,
+            "scaleX": 1.3106,
+            "scaleY": 1.3106,
+            "width": 34,
+            "height": 21
+          },
+          "dust1_41": {
+            "x": 60.4,
+            "y": 24.46,
+            "scaleX": 1.4263,
+            "scaleY": 1.4263,
+            "width": 25,
+            "height": 27
+          }
+        },
+        "dust1_2": {
+          "dust1_1": { "x": 19.38, "y": 13.65, "width": 45, "height": 28 },
+          "dust1_2": { "x": 29.6, "y": 10.87, "width": 42, "height": 21 },
+          "dust1_3": { "x": 39.86, "y": 13.89, "width": 48, "height": 25 },
+          "dust1_4": { "x": 44.39, "y": 16.31, "width": 44, "height": 27 },
+          "dust1_5": {
+            "x": 63.12,
+            "y": 40.77,
+            "scaleX": 1.3106,
+            "scaleY": 1.3106,
+            "width": 34,
+            "height": 21
+          },
+          "dust1_41": {
+            "x": 60.4,
+            "y": 24.46,
+            "scaleX": 1.4263,
+            "scaleY": 1.4263,
+            "width": 25,
+            "height": 27
+          }
+        }
+      }
+    }
+  ],
+  "animations": {
+    "play": {
+      "slots": {
+        "dust1_2": {
+          "color": [
+            { "time": 0.1333, "color": "ffffff84" },
+            { "time": 0.4667, "color": "ffffff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.1333, "name": "dust1_1" },
+            { "time": 0.1667, "name": "dust1_2" },
+            { "time": 0.2, "name": "dust1_3" },
+            { "time": 0.2667, "name": "dust1_4" },
+            { "time": 0.3333, "name": "dust1_41" },
+            { "time": 0.4, "name": "dust1_5" }
+          ]
+        },
+        "dust1_1": {
+          "color": [
+            { "time": 0.1333, "color": "ffffff5c" },
+            { "time": 0.4667, "color": "ffffff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.1333, "name": "dust1_1" },
+            { "time": 0.1667, "name": "dust1_2" },
+            { "time": 0.2, "name": "dust1_3" },
+            { "time": 0.2667, "name": "dust1_4" },
+            { "time": 0.3333, "name": "dust1_41" },
+            { "time": 0.4, "name": "dust1_5" }
+          ]
+        },
+        "eff_Aexplosion01": {
+          "color": [
+            { "time": 0.1333, "color": "ffffff64", "curve": "stepped" },
+            { "time": 0.3667, "color": "ffffff64" },
+            { "time": 0.5667, "color": "ffffff00" }
+          ],
+          "attachment": [
+            { "name": null },
+            { "time": 0.1333, "name": "eff_Aexplosion01" },
+            { "time": 0.1667, "name": "eff_Aexplosion02" },
+            { "time": 0.2333, "name": "eff_Aexplosion03" },
+            { "time": 0.3, "name": "eff_Aexplosion04" }
+          ]
+        }
+      },
+      "bones": {
+        "dust1_1": {
+          "translate": [
+            { "time": 0.1333, "x": 141.77, "y": 399.53 },
+            { "time": 0.2667, "x": 207.64, "y": 399.53 }
+          ],
+          "scale": [
+            { "time": 0.1333, "x": 4.093, "y": 5.349 },
+            { "time": 0.4667, "x": 3.934, "y": 5.538 }
+          ]
+        },
+        "dust1_2": {
+          "translate": [
+            { "time": 0.1333, "x": -4.3, "y": 455.38 },
+            { "time": 0.2667, "x": -100.85, "y": 451.64 }
+          ],
+          "scale": [
+            { "time": 0.1333, "x": -3.17, "y": 4.147 },
+            { "time": 0.4667, "x": -3.93, "y": 4.907 }
+          ]
+        },
+        "eff_Aexplosion01": {
+          "translate": [{ "time": 0.1333, "x": -449.65, "y": 433.9 }],
+          "scale": [
+            {
+              "time": 0.1333,
+              "x": 17.966,
+              "y": 10.162,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            { "time": 0.5667, "x": 24.081, "y": 9.722 }
+          ]
+        },
+        "eff": {
+          "rotate": [{}],
+          "translate": [{}],
+          "scale": [{}]
+        },
+        "root": {
+          "rotate": [{}],
+          "translate": [{}],
+          "scale": [{}]
+        }
+      },
+      "drawOrder": [{}]
+    }
+  }
+}
