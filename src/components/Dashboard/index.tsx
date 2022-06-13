@@ -40,10 +40,10 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
     eventBus.dispatchEvent(new MessageEvent('onRefresh'));
   };
 
-  useEffect(() => {
-    FetchBlance();
-    FetchProduct();
-  }, [location.pathname, FetchBlance, FetchProduct]);
+  // useEffect(() => {
+  //   FetchBlance();
+  //   FetchProduct();
+  // }, [location.pathname, FetchBlance, FetchProduct]);
 
   const Product = useStore(p => p.userInfo.userProduct);
 

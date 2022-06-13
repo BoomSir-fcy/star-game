@@ -145,23 +145,11 @@ const MysteryBox = () => {
 
       <Flex>
         <VipBox width={192}>
-          <Flex
-            width='80%'
-            mt='60px'
-            pl='10px'
-            flexWrap='wrap'
-            alignItems='center'
-          >
+          <Flex width='80%' mt='60px' pl='10px' flexDirection='column'>
             <Text small>{t('Max sales: ')}&nbsp;</Text>
             <Title>{new BigNumber(maxSales).toNumber()}</Title>
           </Flex>
-          <Flex
-            width='80%'
-            mt='15px'
-            pl='10px'
-            flexWrap='wrap'
-            alignItems='center'
-          >
+          <Flex width='80%' mt='15px' pl='10px' flexDirection='column'>
             <Text small>{t('Sold: ')}&nbsp;</Text>
             <Title>{new BigNumber(sold).toNumber()}</Title>
           </Flex>

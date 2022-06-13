@@ -213,7 +213,7 @@ const Info: React.FC<InfoProps> = ({
               ml='8px'
               variant='custom'
               onClick={() => {
-                openModalHandle(TokenBlance('POP'));
+                openModalHandle(TokenBlance('SPICES'));
               }}
             >
               <Flex pl='8px' alignItems='center' width='100%'>

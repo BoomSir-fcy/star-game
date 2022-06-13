@@ -213,18 +213,15 @@ const Upgrade = () => {
     } else if (currentValue && currentValue > maxValue) {
       rsVal = 100;
     } else rsVal = Number((currentValue / maxValue).toFixed(4)) * 100;
-    console.log('当前经验值---', rsVal);
-    console.log(activeMaterialMap);
+
     const _exportExp = Object.values(activeMaterialMap).reduce((prev, item) => {
       return prev + item.can_provided_exp;
     }, currentValue);
-
     const _preExpStep =
       Number(
         (_exportExp / maxValue > 1 ? 1 : _exportExp / maxValue).toFixed(4),
       ) * 100;
 
-    console.log(_preExpStep, _exportExp, maxValue, '===');
     return {
       expStep: rsVal,
       preExpStep: _preExpStep,
