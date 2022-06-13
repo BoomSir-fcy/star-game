@@ -361,7 +361,10 @@ export const bulletType = {
   JINZHAN: 'jinzhan', // 穿透
   TEST: 'test', // 穿透
   THROUGH: 'through', // 穿透
-  DAODAN: 'daodan', // 穿透
+  DAODAN: 'daodan', // 导弹
+  FENG: 'feng', // 水桶
+  V_ATTACK: 'vAttack', // v 字形攻击
+  V_ATTACK_2: 'vAttack2', // v 字形攻击
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 

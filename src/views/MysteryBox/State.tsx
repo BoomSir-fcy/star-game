@@ -288,6 +288,11 @@ const MysteryBoxState = () => {
                     {existBox ? t('Open quantity') : t('Purchase quantity')}
                   </Text>
                   <InputNumber
+                    disabled={
+                      handleLoading ||
+                      loading ||
+                      (existBox ? !ownedNum : !maxNum)
+                    }
                     value={buyNum}
                     max={existBox ? ownedNum : maxNum}
                     onChangeNum={val => {

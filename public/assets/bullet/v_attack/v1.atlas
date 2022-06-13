@@ -1,0 +1,83 @@
+
+v1.png
+size: 650,133
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+W_blade
+  rotate: true
+  xy: 2, 2
+  size: 39, 223
+  orig: 41, 225
+  offset: 1, 1
+  index: -1
+eff_Light01
+  rotate: false
+  xy: 227, 18
+  size: 38, 38
+  orig: 42, 42
+  offset: 2, 2
+  index: -1
+eff_magiccircle_harf
+  rotate: false
+  xy: 393, 2
+  size: 127, 129
+  orig: 131, 131
+  offset: 0, 0
+  index: -1
+eff_magiccircle_line
+  rotate: false
+  xy: 647, 19
+  size: 1, 112
+  orig: 9, 131
+  offset: 3, 9
+  index: -1
+eff_magigsircle_14
+  rotate: false
+  xy: 267, 2
+  size: 26, 54
+  orig: 28, 56
+  offset: 1, 1
+  index: -1
+eff_magigsircle_15
+  rotate: false
+  xy: 372, 73
+  size: 15, 26
+  orig: 17, 28
+  offset: 1, 1
+  index: -1
+eff_magigsircle_16
+  rotate: true
+  xy: 214, 58
+  size: 41, 82
+  orig: 44, 84
+  offset: 1, 1
+  index: -1
+eff_magigsircle_17
+  rotate: false
+  xy: 298, 29
+  size: 72, 70
+  orig: 74, 72
+  offset: 1, 1
+  index: -1
+eff_su
+  rotate: false
+  xy: 2, 43
+  size: 210, 88
+  orig: 210, 92
+  offset: 0, 4
+  index: -1
+eff_waveP3
+  rotate: false
+  xy: 522, 12
+  size: 123, 119
+  orig: 127, 125
+  offset: 3, 2
+  index: -1
+special_blade
+  rotate: true
+  xy: 214, 101
+  size: 30, 177
+  orig: 33, 180
+  offset: 2, 1
+  index: -1
