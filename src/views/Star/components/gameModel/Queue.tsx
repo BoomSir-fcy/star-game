@@ -77,7 +77,7 @@ export const BuildlingStatus: React.FC<{
 
   // 倒计时
   const countDownNumber = () => {
-    if (diffTime <= 0) {
+    if (diffTime < 0) {
       setState({
         ...state,
         time: 0,
@@ -143,10 +143,11 @@ export const BuildlingStatus: React.FC<{
 
 export const Queue: React.FC<{
   currentQueue: any[];
+  serverTime: number;
   onSave: () => void;
   onSelectCurrent: (item: any) => void;
   onComplete: () => void;
-}> = ({ currentQueue, onSave, onSelectCurrent, onComplete }) => {
+}> = ({ currentQueue, serverTime, onSave, onSelectCurrent, onComplete }) => {
   const { t } = useTranslation();
   const vipBenefite = useStore(p => p.userInfo.userInfo.vipBenefits);
   const [state, setState] = useState({
@@ -198,14 +199,7 @@ export const Queue: React.FC<{
                 currentQueue[index]?.propterty?.levelEnergy ||
                 currentQueue[index]?.target_level - 1
               }
-              diffTime={
-                Number(
-                  (
-                    currentQueue[index]?.work_end_time -
-                    Date.now() / 1000
-                  ).toFixed(0),
-                ) || 0
-              }
+              diffTime={currentQueue[index]?.work_end_time - serverTime || 0}
               endTime={
                 currentQueue[index]?.work_end_time -
                   currentQueue[index]?.work_start_time || 0
@@ -215,7 +209,7 @@ export const Queue: React.FC<{
           )}
         </Box>
       ))}
-      <SaveQueue onClick={() => setVisible(true)}>{t('avequeue')}</SaveQueue>
+      <SaveQueue onClick={() => setVisible(true)}>{t('savequeue')}</SaveQueue>
 
       <TipsModal
         visible={visible}
