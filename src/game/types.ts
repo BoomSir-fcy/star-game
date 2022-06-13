@@ -333,6 +333,18 @@ export enum Skill {
   SHIELD = 5,
 }
 
+export const commonSpineType = {
+  FLYING_END: 'flying_end',
+};
+
+export type CommonSpineType =
+  typeof commonSpineType[keyof typeof commonSpineType];
+
+export interface CommonSpineItem {
+  name: CommonSpineType;
+  spineResource: string;
+}
+
 export const bulletType = {
   ICE: 'ice', // 冰块
   ROCK: 'rock', // 岩石
