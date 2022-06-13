@@ -188,6 +188,14 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   }, [handleResize, onFocusout, onFocusin]);
 
   const bgType = useMemo(() => {
+    const secondList = [
+      '/mystery-box/state',
+      '/mystery-box',
+      '/mystery-box/list',
+      '/mystery-box/detail',
+      '/plant-league',
+    ];
+    if (secondList.includes(pathname)) return 2;
     if (pathname === '/plant-league') return 2;
     if (pathname === '/') return 1;
     return 0;

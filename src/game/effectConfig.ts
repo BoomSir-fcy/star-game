@@ -165,6 +165,26 @@ const effectConfig: EffectConfig = {
       label: 'TEST',
     },
     {
+      name: bulletType.FENG,
+      bombSpineSrc: '/assets/bullet/feng/feng.json',
+      bombSpine: bulletType.FENG,
+      // moveSpine: bulletType.FENG,
+      moveSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpriteSrc: '/assets/bullet/fireball/fireball.png',
+      label: '水桶',
+    },
+    {
+      name: bulletType.V_ATTACK,
+      bombSpineSrc: '/assets/bullet/v_attack/v1.json',
+      bombSpine: bulletType.V_ATTACK_2,
+      moveSpine: bulletType.V_ATTACK,
+      bombSpriteSrc: '',
+      moveSpineSrc: '/assets/bullet/v_attack/v2.json',
+      moveSpriteSrc: '',
+      label: 'v字形攻击',
+    },
+    {
       name: bulletType.STING,
       // resDir: '/assets/bullet/sting/jianc.json',
       // spriteRes: '/assets/bullet/sting/jianc.png',
@@ -498,5 +518,17 @@ export const spines = [
   {
     name: bulletType.DAODAN,
     src: '/assets/bullet/daodan/daodan.json',
+  },
+  {
+    name: bulletType.V_ATTACK_2,
+    src: '/assets/bullet/v_attack/v2.json',
+  },
+  {
+    name: bulletType.V_ATTACK,
+    src: '/assets/bullet/v_attack/v1.json',
+  },
+  {
+    name: bulletType.FENG,
+    src: '/assets/bullet/feng/feng.json',
   },
 ];
