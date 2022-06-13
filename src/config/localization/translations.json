@@ -532,7 +532,7 @@
   "BuffBonustitle": "Planet breeding and building BUFF buildings can provide bonuses",
   "One-clickRepair": "Repair",
   "BuildUpgradeQueue":"Build/Upgrade Queue",
-  "avequeue": "Save Queue",
+  "savequeue": "Save & Start",
   "Building...": "Building...",
   "Preparing...": "Preparing...",
   "TimeLeft": "Time remaining (%time%)",

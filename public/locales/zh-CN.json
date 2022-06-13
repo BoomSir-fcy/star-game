@@ -532,7 +532,7 @@
   "BuffBonustitle": "行星培育和建造BUFF 建筑都可以提供加成",
   "One-clickRepair": "一键修复",
   "BuildUpgradeQueue":"建造/升级队列",
-  "avequeue": "保存队列",
+  "savequeue": "保存并开始",
   "Building...": "建造中...",
   "Preparing...": "准备中...",
   "TimeLeft": "剩余时间（%time%）",
