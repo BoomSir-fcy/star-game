@@ -217,6 +217,11 @@ class Bullet extends EventTarget {
       spine.scale.set(0.45);
       spine.visible = false;
       this.effects[name].loaded = true;
+      spine.state.addListener({
+        complete: () => {
+          this.onAttackStartEnd(name);
+        },
+      });
     }
   }
 
@@ -371,6 +376,20 @@ class Bullet extends EventTarget {
   }
 
   /**
+   * @dev 攻击起始手势结束
+   * @param name 类型
+   */
+  onAttackStartEnd(name: BulletType) {
+    console.log(this);
+    // TODO:
+    // this.effects[name].completeBomb = true;
+    // // this.dispatchEvent(new Event('attackEnd'));
+    // this.container.parent.removeChild(this.container);
+    // this.effects[name].complete = true;
+    // this.onEnd(name);
+  }
+
+  /**
    *
    * @param name 类型
    * @param spine 播放spine
@@ -408,6 +427,32 @@ class Bullet extends EventTarget {
         this.onMoveEnd(name, new Point(display.position.x, display.position.y));
       });
       parabola.position().move();
+    }
+  }
+
+  // 空间魔法攻击起手
+  async startAttackEffect(name: BulletType, attackTarget: Combat) {
+    this.attackTarget = attackTarget;
+    const { moveEffectSpine, moveEffectSprite } = await this.loadEffect(name);
+    const display = moveEffectSpine || moveEffectSprite;
+    if (this.combat.axisPoint && attackTarget.axisPoint && display) {
+      display.position.set(this.combat.axisPoint.x, this.combat.axisPoint.y);
+      this.container.visible = true;
+      display.visible = true;
+      if (display === moveEffectSpine) {
+        display.state.setAnimation(0, 'play', true);
+      }
+      // const parabola = new Parabola(
+      //   display,
+      //   this.combat.axisPoint,
+      //   attackTarget.axisPoint,
+      // );
+      this.onMoveStart(name, new Point(display.position.x, display.position.y));
+
+      // parabola.addEventListener('end', () => {
+      //   this.onMoveEnd(name, new Point(display.position.x, display.position.y));
+      // });
+      // parabola.position().move();
     }
   }
 

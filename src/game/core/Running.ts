@@ -464,7 +464,12 @@ class Running extends EventTarget {
     soldier.once('moveEnd', () => {
       callback(soldier);
     });
-    soldier.moveTo(axisPoint);
+    soldier.moveTo(
+      axisPoint,
+      soldier.options?.unitInfo?.skip_barrir_move
+        ? SoldierMoveType.FLYING
+        : SoldierMoveType.WALK,
+    );
 
     return soldier;
   }

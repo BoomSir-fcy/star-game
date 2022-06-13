@@ -39,6 +39,12 @@ export default function AccountUpdater() {
     }
   }, [account, userInfo, handleReSetAccount]);
 
+  // useEffect(() => {
+  //   if (!account) {
+  //     handleReSetAccount();
+  //   }
+  // }, [account, handleReSetAccount]);
+
   useEffect(() => {
     if (account && !accountFlag) {
       setAccountFlag(account);
