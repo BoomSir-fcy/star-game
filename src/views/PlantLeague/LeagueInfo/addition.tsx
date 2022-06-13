@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useStore } from 'state/util';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'contexts/Localization';
+import { getFullDisplayBalance } from 'utils/formatBalance';
 
 const Addition = () => {
   const { t } = useTranslation();
@@ -12,30 +13,30 @@ const Addition = () => {
     const arr = [
       {
         type: 1,
-        name: t('Total Ore'),
+        name: t('Ore'),
         total: energy.total_stone,
         capacity: energy.per_stone,
-        speed: new BigNumber(energy.per_stone)
-          .minus(alliance.beforeStoneCap || 0)
-          .toString(),
+        speed: new BigNumber(energy.per_stone).minus(
+          alliance.beforeStoneCap || 0,
+        ),
       },
       {
         type: 2,
-        name: t('Total Population'),
+        name: t('Population'),
         total: energy.total_population,
         capacity: energy.per_population,
-        speed: new BigNumber(energy.per_population)
-          .minus(alliance.beforePopulationCap || 0)
-          .toString(),
+        speed: new BigNumber(energy.per_population).minus(
+          alliance.beforePopulationCap || 0,
+        ),
       },
       {
         type: 3,
-        name: t('Total Energy'),
+        name: t('Energy'),
         total: energy.total_energy,
         capacity: energy.per_energy,
-        speed: new BigNumber(energy.per_energy)
-          .minus(alliance.beforeEnergyCap || 0)
-          .toString(),
+        speed: new BigNumber(energy.per_energy).minus(
+          alliance.beforeEnergyCap || 0,
+        ),
       },
     ];
     return arr;
@@ -46,7 +47,7 @@ const Addition = () => {
       flex='1'
       flexDirection='column'
       justifyContent='space-between'
-      padding='30px'
+      padding='15px 10px'
     >
       {AdditionList.map(item => (
         <ItemRow key={item.type} info={item} />
@@ -60,7 +61,7 @@ interface AdditionInfo {
   name: string;
   total: number;
   capacity: number;
-  speed: string;
+  speed: BigNumber;
 }
 
 const ItemRow: React.FC<{
@@ -83,12 +84,13 @@ const ItemRow: React.FC<{
             {info.name}: {info.total}
           </Text>
           <Text fontSize='22px'>
-            {t('Total Capacity')}: {info.capacity}%
+            {t('Capacity')}: {info.capacity.toFixed(2)}%
           </Text>
         </Box>
       </Flex>
       <Text fontSize='22px' color='profit'>
-        +{info.speed}/s
+        {info.speed.toNumber() >= 0 && '+'}
+        {getFullDisplayBalance(info.speed, 0, 1)}/s
       </Text>
     </Flex>
   );

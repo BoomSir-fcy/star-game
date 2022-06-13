@@ -58,6 +58,7 @@ declare namespace Api {
       status_countdown: number; // 倒计时
       exp: number; // 当前经验值
       can_provided_exp: number; // 销毁产生经验值
+      in_queue: boolean; //星球是否有任务队列
     }
 
     interface UpgradePlanetInfo {

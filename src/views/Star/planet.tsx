@@ -31,6 +31,7 @@ import eventBus from 'utils/eventBus';
 import { useGuide } from 'hooks/useGuide';
 import { PlanetSearch, PlanetRaceTabs, PlanetBox } from './components';
 import { useJoinAlliance } from './hook';
+import ModalQueue from './components/planet/ModalQueue';
 
 const ScrollBox = styled(Flex)`
   margin-top: 22px;
@@ -113,6 +114,8 @@ const Planet = () => {
   const [ChooseList, setChooseList] = useState<number[]>([]);
   const mePlanet = useStore(p => p.planet.mePlanet);
   const workingList = useStore(p => p.alliance.workingPlanet);
+  const [visible, setVisible] = useState(false);
+  const [QueueId, setQueueId] = useState(0);
   const { SetWorking } = useJoinAlliance();
 
   const { guides, setGuide } = useGuide(
@@ -231,7 +234,7 @@ const Planet = () => {
   ]);
 
   const addPlanetToList = useCallback(
-    (id: number) => {
+    (id: number, queue: boolean) => {
       const list = ChooseList.concat([]);
       const index = list.indexOf(id);
       if (index === -1) {
@@ -241,6 +244,12 @@ const Planet = () => {
           toastWarning(t('Alliance has 5 planets'));
           return;
         }
+        if (queue) {
+          // 当前星球有任务队列
+          setQueueId(id);
+          setVisible(true);
+          return;
+        }
         list.push(id);
       } else {
         // 取消选择
@@ -248,7 +257,7 @@ const Planet = () => {
       }
       setChooseList(list);
     },
-    [ChooseList, t, toastWarning, setChooseList],
+    [ChooseList, t, setQueueId, setVisible, toastWarning, setChooseList],
   );
 
   const init = useCallback(() => {
@@ -455,7 +464,13 @@ const Planet = () => {
                       <Box
                         onClick={() => {
                           dispatch(setActivePlanet(item));
-                          addPlanetToList(item.id);
+                          addPlanetToList(item.id, item.in_queue);
+                          // if (item.in_queue) {
+                          //   // setQueueId(item.id);
+                          //   // setVisible(true);
+                          // } else {
+                          //   addPlanetToList(item.id);
+                          // }
                         }}
                       >
                         <PlanetBox
@@ -515,6 +530,15 @@ const Planet = () => {
           )}
         </Flex>
       </Layout>
+      <ModalQueue
+        plantId={QueueId}
+        visible={visible}
+        setVisible={setVisible}
+        callBack={e => {
+          setVisible(false);
+          addPlanetToList(e, false);
+        }}
+      />
     </Box>
   );
 };
