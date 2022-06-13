@@ -207,7 +207,7 @@ const List = () => {
   return (
     <BgCard margin='auto' variant='longMedium' fringe>
       <Flex padding='30px' justifyContent='center'>
-        <Text>{t('Open quantity')}</Text>
+        <Text>{t('CONGRATULATIONS')}</Text>
       </Flex>
 
       <Flex alignItems='center'>

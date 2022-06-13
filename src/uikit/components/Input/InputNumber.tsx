@@ -14,11 +14,13 @@ const Btn = styled(Button)`
 interface InputNumberProps extends FlexProps {
   max?: number;
   value?: number;
+  disabled?: boolean;
   onChangeNum?: (v: number) => void;
 }
 const InputNumber: React.FC<InputNumberProps> = ({
   max,
   value,
+  disabled,
   onChangeNum,
 }) => {
   const [val, setVal] = useState(value || 1);
@@ -40,9 +42,13 @@ const InputNumber: React.FC<InputNumberProps> = ({
   }, [val, onChangeNum]);
   return (
     <Flex width='147px' justifyContent='space-between' alignItems='center'>
-      <Btn onClick={handleAdd}>+</Btn>
+      <Btn disabled={disabled} onClick={handleAdd}>
+        +
+      </Btn>
       <Text>{val}</Text>
-      <Btn onClick={handleSub}>-</Btn>
+      <Btn disabled={disabled} onClick={handleSub}>
+        -
+      </Btn>
     </Flex>
   );
 };
