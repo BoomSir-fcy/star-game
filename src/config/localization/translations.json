@@ -618,6 +618,7 @@
   "http-error-400008": "Insufficient BNB balance",
   "http-error-400010": "Insufficient resources",
   "http-error-400011": "Insufficient BOX balance",
+  "http-error-400002": "Insufficient platform balance",
   "http-error-200031": "Insufficient resources consumed by the upgrade",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

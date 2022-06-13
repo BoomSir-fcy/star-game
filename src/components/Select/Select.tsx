@@ -174,7 +174,8 @@ export const Select: React.FunctionComponent<SelectProps> = ({
     if (defaultId) {
       options.forEach((item, index) => {
         if (
-          (item.value?.[idKey as string] || item.id) === defaultId &&
+          (item.value?.[idKey as string] || item.value || item.id) ===
+            defaultId &&
           index !== selectedOptionIndex
         ) {
           setSelectedOptionIndex(index);

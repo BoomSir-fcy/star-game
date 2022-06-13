@@ -12,14 +12,14 @@ import random from 'lodash/random';
 import { signMessage } from 'utils/web3React';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
-const SelectBox = styled(Flex)`
-  height: 65px;
-  padding: 8px 16px;
-  margin-bottom: 27px;
-  background: #161920;
-  border: 2px solid #282a2e;
-  box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
-  border-radius: ${({ theme }) => theme.radii.card};
+const ButtonStyled = styled(Button)`
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 80px;
+  height: 45px;
+  padding: 10px 15px;
+  font-size: 20px;
 `;
 
 enum StoreType {
@@ -198,25 +198,38 @@ export const RechargeAssets: React.FC<{
             setSelectId(option.value);
           }}
         />
-        <PrimaryInput
-          width='100%'
-          height={65}
-          pattern='^[1-9]\d*$'
-          placeholder={t('Please enter the recharge amount')}
-          value={inputValue}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const val = e.target.value;
-            const valNum = Number(val);
-            const rechargeNum = store[selectId].max - store[selectId].already;
-            if (val === '' || e.currentTarget.validity.valid) {
-              if (selectId === StoreType.STONE && valNum > rechargeNum) return;
-              if (selectId === StoreType.POPULATION && valNum > rechargeNum)
-                return;
-              if (selectId === StoreType.ENERGY && valNum > rechargeNum) return;
-              setInputValue(val);
-            }
-          }}
-        />
+        <Flex position='relative'>
+          <PrimaryInput
+            width='100%'
+            height={65}
+            pattern='^[1-9]\d*$'
+            placeholder={t('Please enter the recharge amount')}
+            value={inputValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const val = e.target.value;
+              const valNum = Number(val);
+              const rechargeNum = store[selectId].max - store[selectId].already;
+              if (val === '' || e.currentTarget.validity.valid) {
+                if (selectId === StoreType.STONE && valNum > rechargeNum)
+                  return;
+                if (selectId === StoreType.POPULATION && valNum > rechargeNum)
+                  return;
+                if (selectId === StoreType.ENERGY && valNum > rechargeNum)
+                  return;
+                setInputValue(val);
+              }
+            }}
+          />
+          <ButtonStyled
+            onClick={() => {
+              setInputValue(
+                (store[selectId]?.max - store[selectId]?.already).toString(),
+              );
+            }}
+          >
+            {t('MAX')}
+          </ButtonStyled>
+        </Flex>
         <Flex justifyContent='center' mt='29px'>
           <Button disabled={pending} width={270} onClick={handleCharge}>
             {t('Confirm Recharge')}

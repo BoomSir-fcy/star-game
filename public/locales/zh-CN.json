@@ -618,6 +618,7 @@
   "http-error-400008": "BNB余额不足",
   "http-error-400010": "资源不足",
   "http-error-400011": "BOX余额不足",
+  "http-error-400002": "平台余额不足",
   "http-error-200031": "升级所消耗的资源不足",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }
