@@ -505,11 +505,9 @@ class Combat extends EventTarget {
       descType.ATTACK_DODGE ||
       descType.ATTACK_MISS
     ) {
-      // bullet.attack(this.attackType, target);
-      bullet.attack(bulletType.BULLET, target);
+      bullet.attack(this.attackType, target);
     } else {
-      // bullet.attack(this.skillType, target);
-      bullet.attack(bulletType.PURIFY, target);
+      bullet.attack(this.skillType, target);
     }
     // bullet = null;
   }
