@@ -50,6 +50,8 @@ declare namespace Api {
       level: number; // 等级
       speed: number; // 出手速度
       tag: string;
+      attack_type: number; // 普通攻击类型
+      skill_type: number; // 技能攻击类型
       arms_attr: {
         ak: number;
         crit: number;

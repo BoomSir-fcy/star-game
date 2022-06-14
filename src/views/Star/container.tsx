@@ -16,6 +16,7 @@ import {
 } from 'state/buildling/fetchers';
 import { setActiveNavId } from 'state/planet/actions';
 import { useStore } from 'state';
+import eventBus from 'utils/eventBus';
 import { StarHeader } from './components';
 
 const Star: React.FC<{
@@ -71,7 +72,12 @@ const Star: React.FC<{
       <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
         <Box>
           <BackButton />
-          <RefreshButton ml='33px' />
+          <RefreshButton
+            onRefresh={() => {
+              eventBus.dispatchEvent(new MessageEvent('onRefresh'));
+            }}
+            ml='33px'
+          />
         </Box>
         <StarHeader />
       </Flex>

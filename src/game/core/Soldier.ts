@@ -41,6 +41,8 @@ class Soldier extends Combat {
     super({
       srcId: options.srcId,
       race: options.race,
+      attackType: options.unitInfo?.attack_type,
+      skillType: options.unitInfo?.skill_type,
     });
     this.init(options);
   }
@@ -182,7 +184,6 @@ class Soldier extends Combat {
     };
     const { srcId, race, x, y, axisPoint, enableDrag, id, unique_id } =
       newOptions;
-
     return new Soldier({
       ...this.options,
       srcId,

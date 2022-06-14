@@ -34,9 +34,9 @@ export const initialState: GameState = {
 };
 
 export const fetchUnitListAsync =
-  (race: number): AppThunk =>
+  (race: number, planet_id: number): AppThunk =>
   async dispatch => {
-    const data = await fetchUnitList(race);
+    const data = await fetchUnitList(race, planet_id);
     if (data) {
       dispatch(
         setUnits({

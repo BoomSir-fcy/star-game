@@ -333,38 +333,104 @@ export enum Skill {
   SHIELD = 5,
 }
 
+export enum bulletTypeIndex {
+  ICE = 0,
+  ROCK,
+  BULLET,
+  CURVE_BULLET,
+  FIREBALL,
+  FIRING,
+  MECHANICAL_BULLET,
+  MISSILE,
+  MISSILE_BOOM,
+  STING,
+  VENOM,
+  FIGHT,
+  DRAGON,
+  BUMP,
+  SHIELD,
+  STOP_MOVE,
+  BOMB,
+  ADD_BOMB,
+  ADD_TERRAIN_FIRING,
+  TERRAIN_FIRING,
+  RESTORE,
+  PURIFY,
+  LEIDIAN,
+  CHUANTOU,
+  JINZHAN,
+  TEST,
+  THROUGH,
+  DAODAN,
+  FENG,
+  V_ATTACK,
+  V_ATTACK_2,
+}
+
 export const bulletType = {
   ICE: 'ice', // 冰块
+  [bulletTypeIndex.ICE]: 'ice', // 冰块
   ROCK: 'rock', // 岩石
+  [bulletTypeIndex.ROCK]: 'rock', // 岩石
   BULLET: 'bullet', // 子弹
+  [bulletTypeIndex.BULLET]: 'bullet', // 子弹
   CURVE_BULLET: 'curve_bullet', // 曲线子弹
+  [bulletTypeIndex.CURVE_BULLET]: 'curve_bullet', // 曲线子弹
   FIREBALL: 'fireball', // 火球
+  [bulletTypeIndex.FIREBALL]: 'fireball', // 火球
   FIRING: 'firing', // 火焰灼烧
+  [bulletTypeIndex.FIRING]: 'firing', // 火焰灼烧
   MECHANICAL_BULLET: 'mechanical_bullet', // 机械子弹
+  [bulletTypeIndex.MECHANICAL_BULLET]: 'mechanical_bullet', // 机械子弹
   MISSILE: 'missile', // 导弹
+  [bulletTypeIndex.MISSILE]: 'missile', // 导弹
   MISSILE_BOOM: 'missile_boom', // 导弹爆炸
+  [bulletTypeIndex.MISSILE_BOOM]: 'missile_boom', // 导弹爆炸
   STING: 'sting', // 尖刺攻击
+  [bulletTypeIndex.STING]: 'sting', // 尖刺攻击
   VENOM: 'venom', // 毒液攻击
+  [bulletTypeIndex.VENOM]: 'venom', // 毒液攻击
   FIGHT: 'fight', // 肉搏
+  [bulletTypeIndex.FIGHT]: 'fight', // 肉搏
   DRAGON: 'dragon', // 岩石
+  [bulletTypeIndex.DRAGON]: 'dragon', // 岩石
   BUMP: 'bump', // 碰撞
+  [bulletTypeIndex.BUMP]: 'bump', // 碰撞
   SHIELD: 'shield', // 护盾
+  [bulletTypeIndex.SHIELD]: 'shield', // 护盾
   STOP_MOVE: 'stop_move', // 禁锢
+  [bulletTypeIndex.STOP_MOVE]: 'stop_move', // 禁锢
   BOMB: 'bomb', // 炸弹
+  [bulletTypeIndex.BOMB]: 'bomb', // 炸弹
   ADD_BOMB: 'add_bomb', // 添加炸弹
+  [bulletTypeIndex.ADD_BOMB]: 'add_bomb', // 添加炸弹
   ADD_TERRAIN_FIRING: 'add_terrain_firing', // 添加地形灼烧
+  [bulletTypeIndex.ADD_TERRAIN_FIRING]: 'add_terrain_firing', // 添加地形灼烧
   TERRAIN_FIRING: 'terrain_firing', // 地形灼烧中
+  [bulletTypeIndex.TERRAIN_FIRING]: 'terrain_firing', // 地形灼烧中
   RESTORE: 'restore', // 治疗
+  [bulletTypeIndex.RESTORE]: 'restore', // 治疗
   PURIFY: 'purify', // 净化
+  [bulletTypeIndex.PURIFY]: 'purify', // 净化
   LEIDIAN: 'leidian', // 雷电
+  [bulletTypeIndex.LEIDIAN]: 'leidian', // 雷电
   CHUANTOU: 'chuantou', // 穿透
+  [bulletTypeIndex.CHUANTOU]: 'chuantou', // 穿透
   JINZHAN: 'jinzhan', // 穿透
+  [bulletTypeIndex.JINZHAN]: 'jinzhan', // 穿透
   TEST: 'test', // 穿透
+  [bulletTypeIndex.TEST]: 'test', // 穿透
   THROUGH: 'through', // 穿透
+  [bulletTypeIndex.THROUGH]: 'through', // 穿透
   DAODAN: 'daodan', // 导弹
+  [bulletTypeIndex.DAODAN]: 'daodan', // 导弹
   FENG: 'feng', // 水桶
+  [bulletTypeIndex.FENG]: 'feng', // 水桶
+
   V_ATTACK: 'vAttack', // v 字形攻击
+  [bulletTypeIndex.V_ATTACK]: 'vAttack', // v 字形攻击
   V_ATTACK_2: 'vAttack2', // v 字形攻击
+  [bulletTypeIndex.V_ATTACK_2]: 'vAttack2', // v 字形攻击
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 

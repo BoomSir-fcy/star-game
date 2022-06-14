@@ -32,6 +32,7 @@ import { setActiveMaterialMap, setUpgradePlanetId } from 'state/planet/actions';
 import { useToast } from 'contexts/ToastsContext';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { useGuide } from 'hooks/useGuide';
+import eventBus from 'utils/eventBus';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { QualityColor } from 'uikit/theme/colors';
 import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';
@@ -148,6 +149,18 @@ const Upgrade = () => {
   useEffect(() => {
     getStarUpgradeInfo();
   }, [getStarUpgradeInfo]);
+
+  const onRefreshClick = React.useCallback(() => {
+    getStarUpgradeInfo();
+  }, [getStarUpgradeInfo]);
+
+  // 添加事件监听，用于更新状态
+  React.useEffect(() => {
+    eventBus.addEventListener('onRefresh', onRefreshClick);
+    return () => {
+      eventBus.removeEventListener('onRefresh', onRefreshClick);
+    };
+  }, [onRefreshClick]);
 
   const upInfo = useMemo(() => {
     return {
