@@ -151,8 +151,9 @@ const Upgrade = () => {
   }, [getStarUpgradeInfo]);
 
   const onRefreshClick = React.useCallback(() => {
+    dispatch(fetchPlanetInfoAsync([planetId]));
     getStarUpgradeInfo();
-  }, [getStarUpgradeInfo]);
+  }, [planetId, getStarUpgradeInfo, dispatch]);
 
   // 添加事件监听，用于更新状态
   React.useEffect(() => {

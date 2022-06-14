@@ -58,8 +58,8 @@ const StarHeader = () => {
   return (
     <Flex flex={1}>
       <CardStyled ml='82px'>
-        <Flex padding='14px 20px' justifyContent='space-between'>
-          <Flex flex={1}>
+        <Flex padding='14px 20px' justifyContent='space-between' width='100%'>
+          <Flex flex={1} width='100%'>
             <StarCom
               scale='sm'
               quality={planetInfo?.rarity}
@@ -75,7 +75,11 @@ const StarHeader = () => {
               flexDirection='column'
               justifyContent='space-between'
             >
-              <Flex justifyContent='space-between' alignItems='center'>
+              <Flex
+                justifyContent='space-between'
+                alignItems='center'
+                width='100%'
+              >
                 <Flex alignItems='center'>
                   <Text color='legend'>
                     {t(getPlanetRarity(planetInfo?.rarity))}
@@ -108,7 +112,12 @@ const StarHeader = () => {
                       <TextStyled color='textTips' small>
                         {t('Total Capacity')}
                       </TextStyled>
-                      <TextStyled ml='20px' fontSize='18px'>
+                      <TextStyled
+                        ml='10px'
+                        fontSize='16px'
+                        ellipsis
+                        style={{ width: '140px' }}
+                      >
                         {planetInfo?.energyYield}/s
                       </TextStyled>
                     </Flex>
@@ -116,7 +125,13 @@ const StarHeader = () => {
                       <TextStyled color='textTips' small>
                         {t('Total Ore')}
                       </TextStyled>
-                      <TextStyled ml='20px' fontSize='18px'>
+                      <TextStyled
+                        ml='10px'
+                        fontSize='16px'
+                        ellipsis
+                        style={{ width: '140px' }}
+                        title={`${planetInfo?.stone}/${planetInfo?.max_stone}`}
+                      >
                         {planetInfo?.stone}/{planetInfo?.max_stone}
                       </TextStyled>
                     </Flex>
@@ -129,7 +144,12 @@ const StarHeader = () => {
                       <TextStyled color='textTips' small>
                         {t('Total Capacity')}
                       </TextStyled>
-                      <TextStyled ml='20px' fontSize='18px'>
+                      <TextStyled
+                        ml='10px'
+                        fontSize='16px'
+                        ellipsis
+                        style={{ width: '140px' }}
+                      >
                         {planetInfo?.populationYield}/s
                       </TextStyled>
                     </Flex>
@@ -137,7 +157,13 @@ const StarHeader = () => {
                       <TextStyled color='textTips' small>
                         {t('Total Population')}
                       </TextStyled>
-                      <TextStyled ml='20px' fontSize='18px'>
+                      <TextStyled
+                        ml='10px'
+                        fontSize='16px'
+                        ellipsis
+                        style={{ width: '140px' }}
+                        title={`${planetInfo?.population}/${planetInfo?.max_population}`}
+                      >
                         {planetInfo?.population}/{planetInfo?.max_population}
                       </TextStyled>
                     </Flex>
@@ -150,7 +176,12 @@ const StarHeader = () => {
                       <TextStyled color='textTips' small>
                         {t('Total Capacity')}
                       </TextStyled>
-                      <TextStyled ml='20px' fontSize='18px'>
+                      <TextStyled
+                        ml='10px'
+                        fontSize='16px'
+                        ellipsis
+                        style={{ width: '140px' }}
+                      >
                         {planetInfo?.energyYield}/s
                       </TextStyled>
                     </Flex>
@@ -158,7 +189,13 @@ const StarHeader = () => {
                       <TextStyled color='textTips' small>
                         {t('Total Energy')}
                       </TextStyled>
-                      <TextStyled ml='20px' fontSize='18px'>
+                      <TextStyled
+                        ml='10px'
+                        fontSize='16px'
+                        ellipsis
+                        style={{ width: '140px' }}
+                        title={`${planetInfo?.energy}/${planetInfo?.max_energy}`}
+                      >
                         {planetInfo?.energy}/{planetInfo?.max_energy}
                       </TextStyled>
                     </Flex>
