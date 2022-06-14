@@ -302,7 +302,6 @@ const Embattle = () => {
           disableDrag={activeStep === 2 && stepsEnabled}
           activeSoldier={activeSoldier}
           onDrag={() => {
-            console.log(121221);
             setArrowShow(false);
           }}
         />

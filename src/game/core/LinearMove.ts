@@ -103,7 +103,7 @@ class LinearMove extends EventTarget {
       // this.cPoint0,
       // this.cPoint1,
     );
-    this.display.position.set(x, y);
+    this.display?.position?.set(x, y);
     if (t >= 1) {
       this.onMoveEnd();
     } else {

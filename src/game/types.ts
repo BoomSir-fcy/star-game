@@ -346,6 +346,17 @@ export enum Skill {
   SHIELD = 5,
 }
 
+export const commonSpineType = {
+  FLYING_END: 'flying_end',
+};
+
+export type CommonSpineType =
+  typeof commonSpineType[keyof typeof commonSpineType];
+
+export interface CommonSpineItem {
+  name: CommonSpineType;
+  spineResource: string;
+}
 export enum bulletTypeIndex {
   ICE = 0,
   ROCK,
@@ -452,7 +463,9 @@ export const bulletType = {
   [bulletTypeIndex.IMMUNITY_LOCK_MOVE]: 'immune', // v 字形攻击
   IMMUNITY_FIRING: 'immune', // 免疫灼烧
   [bulletTypeIndex.IMMUNITY_FIRING]: 'immune', // v 字形攻击
+  ATTACK_START: 'attack_start', // 魔法攻击的起手效果
 };
+
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 
 export interface BulletItemInfoOfConfig {
@@ -460,6 +473,7 @@ export interface BulletItemInfoOfConfig {
   bombSpriteSrc?: string;
   bombSpineSrc?: string;
   startSpineSrc?: string;
+  startSpine?: BulletType;
   bombSpine?: BulletType;
   moveSpine?: BulletType;
   moveSpriteSrc?: string;
@@ -491,6 +505,7 @@ export interface EffectConfig {
   effect: {
     [key in EffectType]: EffectItemInfoOfConfig;
   };
+  common: CommonSpineItem[];
 }
 
 export type DescType = typeof descType[keyof typeof descType];
@@ -541,4 +556,5 @@ export enum SoldierMoveType {
   WALK, // 步行
   FLYING, // 飞飞
   BE_MOVED, // 被迫移动 如击退等
+  SKY_FROM, // 从天而降
 }

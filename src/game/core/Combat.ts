@@ -1,6 +1,7 @@
 import {
   bulletType,
   BulletType,
+  commonSpineType,
   descType,
   DescType,
   bulletTypeIndex,
@@ -29,6 +30,7 @@ import EffectBuff from './EffectBuff';
 import { descOfEffect, spines } from '../effectConfig';
 import Loaders from './Loaders';
 import TipsText from './TipsText';
+import CommonEffect from './CommonEffect';
 
 export interface CombatOptions {
   // texture0: string;
@@ -56,12 +58,12 @@ class Combat extends EventTarget {
     this.effectBuff = new EffectBuff(this);
 
     const shadow = Texture.from('/assets/map/shadow.png');
-    this.sprite = new Sprite();
-    this.sprite.texture = shadow;
-    this.sprite.anchor.set(0.5);
-    this.sprite.position.set(0, 88);
-    this.sprite.zIndex = -20;
-    this.sprite.visible = false;
+    this.spriteShadow = new Sprite();
+    this.spriteShadow.texture = shadow;
+    this.spriteShadow.anchor.set(0.5);
+    this.spriteShadow.position.set(0, 88);
+    this.spriteShadow.zIndex = -20;
+    this.spriteShadow.visible = false;
 
     // this.shadowGraphics.beginFill(0xff0000);
     // this.shadowGraphics.drawEllipse(0, 0, 20, 10);
@@ -105,7 +107,7 @@ class Combat extends EventTarget {
 
   displaySprite = new Sprite();
 
-  sprite = new Sprite();
+  spriteShadow = new Sprite();
 
   texture0;
 
@@ -266,7 +268,7 @@ class Combat extends EventTarget {
         this.flyingStart();
         endAxisPoint.y -= 50;
         _axisPoint.y -= 50;
-        this.sprite.visible = true;
+        this.spriteShadow.visible = true;
       }
 
       const linearMove = new LinearMove(
@@ -281,10 +283,12 @@ class Combat extends EventTarget {
         this.setPosition(axisPoint);
         this.dispatchEvent(new Event('moveEnd'));
         this.updateZIndex();
-        if (moveType === SoldierMoveType.FLYING) {
-          // TODO: 落地加效果
+        if (
+          moveType === SoldierMoveType.FLYING ||
+          moveType === SoldierMoveType.SKY_FROM
+        ) {
           this.flyingEnd();
-          this.sprite.visible = false;
+          this.spriteShadow.visible = false;
         }
       });
       if (moveType === SoldierMoveType.FLYING) {
@@ -342,6 +346,11 @@ class Combat extends EventTarget {
 
   flyingEnd() {
     this.flying = false;
+    const effect = new CommonEffect(this.container.parent);
+    effect.playSpine(commonSpineType.FLYING_END, this.axisPoint);
+    effect.addEventListener('onPlayEnd', () => {
+      console.log('onPlayEnd');
+    });
     // this.container.position.y += 50;
   }
 

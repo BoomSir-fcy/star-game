@@ -111,7 +111,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
               style={{
                 cursor: 'pointer',
               }}
-              key={item.unique_id}
+              key={`${item.unique_id}_${item.level}`}
               margin='49px 20px 0'
               position='relative'
             >
@@ -145,7 +145,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 }}
               >
                 <Text shadow='primary' fontSize='22' ml='13px' mt='2px' bold>
-                  LV 1
+                  LV {item.level}
                 </Text>
                 <PreviewSoldier
                   src={getSoldierSrc(item)}

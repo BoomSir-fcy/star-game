@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
 import useGame from 'game/hooks/useGame';
@@ -6,7 +6,7 @@ import { MapBaseUnits } from 'game/types';
 
 import Running, { RoundsProps } from 'game/core/Running';
 
-const Container = styled(Box)`
+const Container = styled(Box)<{ show: boolean }>`
   position: absolute;
   border: 4px solid #f9feff;
   box-shadow: 0px 0px 10px 2px #41b7ff;
@@ -16,6 +16,7 @@ const Container = styled(Box)`
   top: 0;
   transition: 0.3s all;
   transform: translateX(-215px);
+  visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
 `;
 
 const GridWidth = 200;
@@ -23,7 +24,8 @@ const GridHeight = 200;
 
 const MiniRaceAni: React.FC<{
   mock: any;
-}> = ({ mock }) => {
+  show: boolean;
+}> = ({ mock, show }) => {
   const ref = React.useRef<HTMLDivElement>(null);
 
   const game = useGame({
@@ -31,6 +33,9 @@ const MiniRaceAni: React.FC<{
     height: GridHeight,
     enableDrag: false,
   });
+
+  const [running, setRunning] = useState(null);
+  const [loaded, setLoaded] = useState(false);
 
   const createSoldiers = React.useCallback(
     (
@@ -49,6 +54,8 @@ const MiniRaceAni: React.FC<{
           isEnemy,
           enableDrag: false,
           unique_id: item.base_unit_id,
+          unitInfo: base[item.base_unit_id],
+
           // attackId: base[item.base_unit_id].unique_id
         });
       });
@@ -59,9 +66,10 @@ const MiniRaceAni: React.FC<{
   const runGame = useCallback(
     (slot: RoundsProps) => {
       const run = new Running(game, slot);
+      setRunning(run);
       run.play();
     },
-    [game],
+    [game, setRunning],
   );
 
   const initSoldiers = React.useCallback(
@@ -72,6 +80,9 @@ const MiniRaceAni: React.FC<{
         Object.keys(soldier?.init?.ids).forEach(id => {
           const { x, y } = soldier?.init?.ids[id];
           ids[`${x}${y}`] = id;
+        });
+        game.addEventListener('lastSoldierCreated', () => {
+          runGame({ round: soldier.slot });
         });
         createSoldiers(
           soldier.init.blue_units,
@@ -85,10 +96,9 @@ const MiniRaceAni: React.FC<{
           ids,
           true,
         );
-        runGame({ round: soldier.slot });
       }
     },
-    [createSoldiers, runGame],
+    [createSoldiers, runGame, game],
   );
 
   const getCenterByAxis = useCallback(
@@ -101,26 +111,75 @@ const MiniRaceAni: React.FC<{
     [game],
   );
 
+  const initHandle = useCallback(() => {
+    // running?.pause();
+    game.clearSoldier();
+    initSoldiers(mock);
+    getCenterByAxis(
+      mock?.init?.blue_units[0].pos.x,
+      mock?.init?.blue_units[0].pos.y,
+    );
+  }, [mock, getCenterByAxis, initSoldiers, game]);
+
   React.useEffect(() => {
-    if (ref.current) {
+    if (ref.current && !loaded) {
       ref.current.appendChild(game.view);
       game.creatTerrain();
-      initSoldiers(mock);
-      getCenterByAxis(
-        mock?.init?.blue_units[0].pos.x,
-        mock?.init?.blue_units[0].pos.y,
-      );
+      setLoaded(true);
     }
-  }, [ref, initSoldiers, game, getCenterByAxis, mock]);
+  }, [ref, game, setLoaded, loaded]);
 
   React.useEffect(() => {
+    if (loaded && mock) {
+      initHandle();
+    }
+  }, [mock, loaded, initHandle]);
+
+  // 更新
+  const onRunningUpdate = useCallback(event => {
+    // console.log(event);
+    // if (event.detail?.currentAxisPoint) {
+    //   getCenterByAxis(
+    //     event.detail?.currentAxisPoint.x,
+    //     event.detail?.currentAxisPoint.y,
+    //   );
+    // }
+  }, []);
+  const [timer, setTimer] = useState(null);
+
+  // 结束
+  const onRunEnd = useCallback(() => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    setTimer(
+      setTimeout(() => {
+        initHandle();
+      }, 3000),
+    );
+  }, [initHandle, timer]);
+
+  React.useEffect(() => {
+    if (running) {
+      running.addEventListener('updateTrack', onRunningUpdate);
+      running.addEventListener('runEnd', onRunEnd);
+    }
     return () => {
-      game.clearSoldier();
+      if (running) {
+        running.removeEventListener('updateTrack', onRunningUpdate);
+        running.removeEventListener('runEnd', onRunEnd);
+      }
     };
-  });
+  }, [running, onRunningUpdate, onRunEnd]);
+
+  // React.useEffect(() => {
+  //   return () => {
+  //     game.clearSoldier();
+  //   };
+  // }, [mock, game]);
 
   return (
-    <Container className='star-embattle-step3'>
+    <Container show={show} className='star-embattle-step3'>
       <Box ref={ref} />
     </Container>
   );

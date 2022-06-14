@@ -1,4 +1,10 @@
-import { bulletType, EffectConfig, EffectType, descType } from './types';
+import {
+  bulletType,
+  EffectConfig,
+  EffectType,
+  descType,
+  commonSpineType,
+} from './types';
 
 const effectConfig: EffectConfig = {
   bullet: [
@@ -94,11 +100,13 @@ const effectConfig: EffectConfig = {
     },
     {
       name: bulletType.LEIDIAN,
+      startSpine: bulletType.ATTACK_START,
+      startSpineSrc: '/assets/bullet/space-start/kua1.json',
       bombSpineSrc: '/assets/bullet/leidian/leidian.json',
       bombSpine: bulletType.LEIDIAN,
-      moveSpine: bulletType.LEIDIAN,
+      moveSpine: '',
       bombSpriteSrc: '',
-      moveSpineSrc: '/assets/bullet/leidian/leidian.json',
+      moveSpineSrc: '',
       moveSpriteSrc: '',
       label: '闪电',
     },
@@ -312,6 +320,13 @@ const effectConfig: EffectConfig = {
       spriteSrc1: '',
     },
   },
+
+  common: [
+    {
+      name: commonSpineType.FLYING_END,
+      spineResource: '/assets/effects/feiluo/feiluo.json',
+    },
+  ],
 };
 
 export default effectConfig;
@@ -451,6 +466,10 @@ export const descOfEffect = {
 
 export const spines = [
   {
+    name: commonSpineType.FLYING_END,
+    src: '/assets/effects/feiluo/feiluo.json',
+  },
+  {
     name: bulletType.ICE,
     src: '/assets/bullet/ice/bindog.json',
   },
@@ -545,5 +564,9 @@ export const spines = [
   {
     name: bulletType.FENG,
     src: '/assets/bullet/feng/feng.json',
+  },
+  {
+    name: bulletType.ATTACK_START,
+    src: '/assets/bullet/space-start/kua1.json',
   },
 ];
