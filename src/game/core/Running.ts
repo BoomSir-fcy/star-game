@@ -1198,20 +1198,20 @@ class Running extends EventTarget {
       }
 
       // 免疫
-      if (
-        info.desc_type === descType.IMMUNITY_ICE ||
-        info.desc_type === descType.IMMUNITY_LOCK_MOVE ||
-        info.desc_type === descType.IMMUNITY_FIRING
-      ) {
-        details.push(
-          ...this.getAttackTracks(
-            info.immune,
-            info.desc_type,
-            `${round}-${_track}`,
-            true,
-          ),
-        );
-      }
+      // if (
+      //   info.desc_type === descType.IMMUNITY_ICE ||
+      //   info.desc_type === descType.IMMUNITY_LOCK_MOVE ||
+      //   info.desc_type === descType.IMMUNITY_FIRING
+      // ) {
+      //   details.push(
+      //     ...this.getAttackTracks(
+      //       info.immune,
+      //       info.desc_type,
+      //       `${round}-${_track}`,
+      //       true,
+      //     ),
+      //   );
+      // }
 
       // 移除
       if (info.desc_type === descType.REMOVE) {

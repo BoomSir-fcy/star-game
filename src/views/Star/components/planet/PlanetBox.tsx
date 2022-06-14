@@ -97,7 +97,7 @@ export const PlanetBox: React.FC<{
           <Desc justifyContent='space-between'>
             <Box>
               <Flex alignItems='center'>
-                <Text fontSize='24px' maxWidth='100px' ellipsis>
+                <Text fontSize='24px' maxWidth='140px' ellipsis>
                   {info.name}
                 </Text>
                 <Text ml='12px' color={QualityColor[info?.rarity]} bold small>
