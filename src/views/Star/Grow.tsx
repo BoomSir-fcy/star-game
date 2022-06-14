@@ -200,7 +200,9 @@ const Grow: React.FC = () => {
                       <Text bold fontSize='24px' color='legendText'>
                         {estimateCost?.now_level === 20
                           ? 'MAX'
-                          : `${t('Strengthen')} + ${estimateCost?.now_level}`}
+                          : `${t('Strengthen')} + ${
+                              estimateCost?.now_level || 0
+                            }`}
                       </Text>
                     </TopBox1>
                     <Box width={82}>
@@ -214,7 +216,9 @@ const Grow: React.FC = () => {
                       <Text bold fontSize='24px' color='legendText'>
                         {estimateCost?.next_level === 20
                           ? 'MAX'
-                          : `${t('Strengthen')} + ${estimateCost?.next_level}`}
+                          : `${t('Strengthen')} + ${
+                              estimateCost?.next_level || 0
+                            }`}
                       </Text>
                     </TopBox2>
                   </Flex>
