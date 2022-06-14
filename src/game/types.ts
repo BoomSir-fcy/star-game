@@ -464,6 +464,7 @@ export const bulletType = {
   IMMUNITY_FIRING: 'immune', // 免疫灼烧
   [bulletTypeIndex.IMMUNITY_FIRING]: 'immune', // v 字形攻击
 };
+
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 
 export interface BulletItemInfoOfConfig {

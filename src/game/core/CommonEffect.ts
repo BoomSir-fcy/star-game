@@ -112,7 +112,7 @@ class CommonEffect extends EventTarget {
 
   // 生命周期, 开始
   onStart(name: CommonSpineType) {
-    this.parent.addChild(this.container);
+    this.parent?.addChild(this.container);
     this.dispatchEvent(new Event('start'));
     this.effects[name].complete = false;
     // this.timTricker(name);
@@ -251,7 +251,7 @@ class CommonEffect extends EventTarget {
   onPlayEnd(name: CommonSpineType) {
     this.effects[name].complete = true;
     // this.dispatchEvent(new Event('attackEnd'));
-    this.container.parent.removeChild(this.container);
+    this.container.parent?.removeChild(this.container);
     this.onEnd(name);
   }
 
@@ -262,7 +262,7 @@ class CommonEffect extends EventTarget {
    */
   spineAnimation(name: CommonSpineType, spine: Spine) {
     if (spine && !this.effects[name].complete) {
-      spine.update(speeder.update);
+      spine?.update(speeder?.update);
       requestAnimationFrame(() => this.spineAnimation(name, spine));
     }
   }

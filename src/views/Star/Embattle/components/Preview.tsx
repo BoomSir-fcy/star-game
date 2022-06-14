@@ -344,7 +344,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
         </BorderCardStyled>
       </Box>
       {/* 种族动画预览 */}
-      {visible && !!activeSoldier && <MiniRaceAni mock={gameMock} />}
+      <MiniRaceAni mock={gameMock} show={visible && !!activeSoldier} />
     </Box>
   );
 };

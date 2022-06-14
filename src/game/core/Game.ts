@@ -81,7 +81,7 @@ class Game extends EventTarget {
 
   test?: boolean;
 
-  app;
+  app: Application;
 
   boards;
 

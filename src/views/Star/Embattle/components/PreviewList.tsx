@@ -133,7 +133,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
               style={{
                 cursor: 'pointer',
               }}
-              key={item.unique_id}
+              key={`${item.unique_id}_${item.level}`}
               margin='49px 20px 0'
               position='relative'
             >

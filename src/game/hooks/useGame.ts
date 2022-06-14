@@ -12,7 +12,9 @@ const useGame = (option?: GameOptionsProps) => {
 
   useEffect(() => {
     const destroy = () => {
-      game.app.destroy();
+      console.log('destroy, ==destroy');
+      game.app.destroy(true);
+      delete game.app;
     };
     return destroy;
   }, [game]);
