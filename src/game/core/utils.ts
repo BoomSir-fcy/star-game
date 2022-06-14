@@ -188,6 +188,9 @@ export const getEffectText = (effect?: DescType) => {
   if (effect === descType.RESTORE) return '治疗';
   if (effect === descType.ATTACK_DODGE) return '闪避';
   if (effect === descType.ATTACK_MISS) return '未命中';
+  if (effect === descType.IMMUNITY_ICE) return '冰冻免疫';
+  if (effect === descType.IMMUNITY_LOCK_MOVE) return '冰冻禁锢';
+  if (effect === descType.IMMUNITY_FIRING) return '冰冻灼烧';
   return '未知';
 };
 
@@ -209,6 +212,9 @@ export const getEffectDescText = (effect?: DescType) => {
   if (effect === descType.TERRAIN_FIRING) return '灼烧造成';
   if (effect === descType.ATTACK_DODGE) return '触发闪避';
   if (effect === descType.ATTACK_MISS) return '攻击未命中';
+  if (effect === descType.IMMUNITY_ICE) return '免疫冰冻';
+  if (effect === descType.IMMUNITY_LOCK_MOVE) return '冰冻禁锢';
+  if (effect === descType.IMMUNITY_FIRING) return '冰冻灼烧';
   return '未知';
 };
 export const getEffectDescTypeText = (effect?: DescType) => {
@@ -229,6 +235,9 @@ export const getEffectDescTypeText = (effect?: DescType) => {
   if (effect === descType.TERRAIN_FIRING) return '伤害';
   if (effect === descType.ATTACK_DODGE) return '效果';
   if (effect === descType.ATTACK_MISS) return '';
+  if (effect === descType.IMMUNITY_ICE) return '';
+  if (effect === descType.IMMUNITY_LOCK_MOVE) return '';
+  if (effect === descType.IMMUNITY_FIRING) return '';
   return '未知';
 };
 

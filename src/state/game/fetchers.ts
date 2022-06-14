@@ -2,9 +2,10 @@ import { Api } from 'apis';
 
 export const fetchUnitList = async (
   race: number,
+  planet_id: number,
 ): Promise<Api.Game.UnitListRes | null> => {
   try {
-    const res = await Api.GameApi.getGameUnitList(race);
+    const res = await Api.GameApi.getGameUnitList(race, planet_id);
     if (Api.isSuccess(res)) {
       return res.data;
     }

@@ -21,6 +21,7 @@ import { storeAction, useStore } from 'state';
 import { useDispatch } from 'react-redux';
 import 'intro.js/introjs.css';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
+import eventBus from 'utils/eventBus';
 import Extra from './components/grow/Extra';
 import { StrengthenConsumeType } from './components/grow/type';
 import { GrowPop } from './components/grow/growPop';
@@ -121,6 +122,18 @@ const Grow: React.FC = () => {
       dispatch(storeAction.toggleVisible({ visible: false }));
     };
   }, [dispatch]);
+
+  const onRefreshClick = React.useCallback(() => {
+    getPlanetStrengthen();
+  }, [getPlanetStrengthen]);
+
+  // 添加事件监听，用于更新状态
+  React.useEffect(() => {
+    eventBus.addEventListener('onRefresh', onRefreshClick);
+    return () => {
+      eventBus.removeEventListener('onRefresh', onRefreshClick);
+    };
+  }, [onRefreshClick]);
 
   return (
     <Box>

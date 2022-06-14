@@ -8,7 +8,7 @@ export const PlanetDesc: React.FC<{
   const { t } = useTranslation();
 
   return (
-    <Flex width='80%' flexDirection='column'>
+    <Flex width='100%' flexDirection='column'>
       {/* <Flex flex={1} margin='3px 0'>
         <Text color='textSubtle' small>
           {t('Looting Speed')}: {info?.plunder_speed}
@@ -17,8 +17,8 @@ export const PlanetDesc: React.FC<{
           {t('Building Count')}: {info?.build_count}
         </Text>
       </Flex> */}
-      <Flex justifyContent='space-between' flex={1}>
-        <Flex alignItems='center'>
+      <Flex justifyContent='space-between' style={{ minWidth: 0 }}>
+        <Flex alignItems='center' style={{ width: 'calc(100% / 3)' }}>
           <Box width={50} height={50} mr='5px'>
             <Image
               src='/images/commons/icon/icon_minera.png'
@@ -26,14 +26,20 @@ export const PlanetDesc: React.FC<{
               height={50}
             />
           </Box>
-          <Flex flexDirection='column' justifyContent='center'>
+          <Flex
+            flexDirection='column'
+            justifyContent='center'
+            style={{ width: 'calc(100% - 55px)' }}
+          >
             <Text color='textTips' small>
               {t('Ore')}
             </Text>
-            <Text small>{info?.stone}</Text>
+            <Text small ellipsis>
+              {info?.stone}
+            </Text>
           </Flex>
         </Flex>
-        <Flex alignItems='center'>
+        <Flex alignItems='center' style={{ width: 'calc(100% / 3)' }}>
           <Box width={50} height={50} mr='5px'>
             <Image
               src='/images/commons/icon/icon_spice.png'
@@ -41,14 +47,20 @@ export const PlanetDesc: React.FC<{
               height={50}
             />
           </Box>
-          <Flex flexDirection='column' justifyContent='center'>
+          <Flex
+            flexDirection='column'
+            justifyContent='center'
+            style={{ width: 'calc(100% - 55px)' }}
+          >
             <Text color='textTips' small>
               {t('Population')}
             </Text>
-            <Text small>{info?.population}</Text>
+            <Text small ellipsis>
+              {info?.population}
+            </Text>
           </Flex>
         </Flex>
-        <Flex alignItems='center'>
+        <Flex alignItems='center' style={{ width: 'calc(100% / 3)' }}>
           <Box width={50} height={50} mr='5px'>
             <Image
               src='/images/commons/icon/icon_energy.png'
@@ -56,11 +68,17 @@ export const PlanetDesc: React.FC<{
               height={50}
             />
           </Box>
-          <Flex flexDirection='column' justifyContent='center'>
+          <Flex
+            flexDirection='column'
+            justifyContent='center'
+            style={{ width: 'calc(100% - 55px)' }}
+          >
             <Text color='textTips' small>
               {t('Energy')}
             </Text>
-            <Text small>{info?.energy}</Text>
+            <Text small ellipsis>
+              {info?.energy}
+            </Text>
           </Flex>
         </Flex>
       </Flex>

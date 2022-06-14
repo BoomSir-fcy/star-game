@@ -44,10 +44,10 @@ const Plunder = () => {
 
   useEffect(() => {
     if (infoP0?.race && infoP1?.race) {
-      dispatch(fetchUnitListAsync(infoP0?.race));
-      dispatch(fetchUnitListAsync(infoP1?.race));
+      dispatch(fetchUnitListAsync(infoP0?.race, infoP0?.id));
+      dispatch(fetchUnitListAsync(infoP1?.race, infoP1?.id));
     }
-  }, [dispatch, infoP0?.race, infoP1?.race]);
+  }, [dispatch, infoP0?.race, infoP1?.race, infoP0?.id, infoP1?.id]);
 
   const startHandle = useCallback(() => {
     if (Number(pid0) && Number(pid1)) {

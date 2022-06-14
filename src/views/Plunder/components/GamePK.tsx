@@ -89,10 +89,10 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   useEffect(() => {
     if (infoP0?.race && infoP1?.race) {
-      dispatch(fetchUnitListAsync(infoP0?.race));
-      dispatch(fetchUnitListAsync(infoP1?.race));
+      dispatch(fetchUnitListAsync(infoP0?.race, infoP0?.id));
+      dispatch(fetchUnitListAsync(infoP1?.race, infoP1?.id));
     }
-  }, [dispatch, infoP0?.race, infoP1?.race]);
+  }, [dispatch, infoP0?.race, infoP1?.race, infoP0?.id, infoP1?.id]);
 
   useEffect(() => {
     if (parsedQs.terrain) {
@@ -155,6 +155,7 @@ const GamePK: React.FC<GamePKProps> = () => {
           isEnemy,
           enableDrag: false,
           unique_id: item.base_unit_id,
+          unitInfo: base[item.base_unit_id],
           // attackId: base[item.base_unit_id].unique_id
         });
       });

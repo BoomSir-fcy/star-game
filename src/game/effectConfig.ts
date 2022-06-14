@@ -445,6 +445,21 @@ export const descOfEffect = {
     add: false,
     remove: false,
   },
+  [descType.IMMUNITY_ICE]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
+  [descType.IMMUNITY_LOCK_MOVE]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
+  [descType.IMMUNITY_FIRING]: {
+    effect: null,
+    add: false,
+    remove: false,
+  },
 };
 
 export const spines = [

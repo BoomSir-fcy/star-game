@@ -100,7 +100,6 @@ class Bullet extends EventTarget {
       temp[item.name] = initEffectInfo(item);
     });
     this.effects = temp;
-    console.log(this.effects, 'this.effects');
   }
 
   combat;

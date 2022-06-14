@@ -12,8 +12,9 @@ export class GameApi extends Http {
   // 战斗基础单位列表 种族 1 神族 2 人族 3虫族
   async getGameUnitList(
     race: number,
+    planet_id: number,
   ): Promise<Api.Response<Api.Game.UnitListRes>> {
-    return this.get(`game/unit/list`, { race });
+    return this.get(`game/unit/list`, { race, planet_id });
   }
 
   async gameUnitSetting(params: Api.Game.ParamsUnitSetting) {

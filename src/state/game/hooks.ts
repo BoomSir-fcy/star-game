@@ -21,13 +21,13 @@ import {
   fetchGameMatchUserAsync,
 } from './reducer';
 
-export const useFetchUnitList = (race?: Api.Game.race) => {
+export const useFetchUnitList = (race?: Api.Game.race, planet_id?: number) => {
   const dispatch = useDispatch();
   const fetch = useCallback(() => {
     if (race) {
-      dispatch(fetchUnitListAsync(race));
+      dispatch(fetchUnitListAsync(race, planet_id));
     }
-  }, [dispatch, race]);
+  }, [dispatch, race, planet_id]);
 
   useEffect(() => {
     fetch();

@@ -4,6 +4,7 @@ import {
   commonSpineType,
   descType,
   DescType,
+  bulletTypeIndex,
   EffectType,
   Orientation,
   RoundDesc,
@@ -36,6 +37,8 @@ export interface CombatOptions {
   // texture1: string;
   srcId: string;
   race: number;
+  attackType?: number;
+  skillType?: number;
 }
 
 /**
@@ -46,6 +49,8 @@ class Combat extends EventTarget {
     super();
     this.race = options.race;
     this.srcId = options.srcId;
+    this.attackType = options.attackType;
+    this.skillType = options.skillType;
     this.textureRes = getSpriteRes(options.race, options.srcId, 1);
     this.texture0 = Texture.from(this.textureRes);
     this.texture1 = Texture.from(getSpriteRes(options.race, options.srcId, 2));
@@ -132,9 +137,9 @@ class Combat extends EventTarget {
 
   flying = true;
 
-  attackType: BulletType;
+  attackType: bulletTypeIndex;
 
-  skillType: BulletType;
+  skillType: bulletTypeIndex;
 
   renderPh() {
     this.container.addChild(this.hpGraphics);
@@ -446,6 +451,13 @@ class Combat extends EventTarget {
       } else if (effect === descType.ATTACK_MISS) {
         const tipsText = new TipsText('[MISS]');
         tipsText.show(target.axisPoint);
+      } else if (
+        effect === descType.IMMUNITY_ICE ||
+        effect === descType.IMMUNITY_LOCK_MOVE ||
+        effect === descType.IMMUNITY_FIRING
+      ) {
+        const tipsText = new TipsText('[IMMUNITY]');
+        tipsText.show(target.axisPoint);
       } else if (attackInfo) {
         let hp = attackInfo?.receive_sub_hp;
         if (attackInfo?.around?.length) {
@@ -466,15 +478,14 @@ class Combat extends EventTarget {
     });
 
     // console.log('effect=========', effect);
-
     if (
       effect === descType.ATTACK ||
       descType.ATTACK_DODGE ||
       descType.ATTACK_MISS
     ) {
-      bullet.attack(this.attackType, target);
+      bullet.attack(bulletType[this.attackType], target);
     } else {
-      bullet.attack(this.skillType, target);
+      bullet.attack(bulletType[this.skillType], target);
     }
 
     // if (effect === descType.ADD_BOOM) {
@@ -505,11 +516,13 @@ class Combat extends EventTarget {
     //   bullet.attack(bulletType.RESTORE, target);
     // } else if (effect === descType.PURIFY) {
     //   bullet.attack(bulletType.PURIFY, target);
-    // } else {
-    //   bullet.attack(bulletType.BULLET, target, effect);
+    // } else if (
+    //   effect === descType.IMMUNITY_ICE ||
+    //   effect === descType.IMMUNITY_LOCK_MOVE ||
+    //   effect === descType.IMMUNITY_FIRING
+    // ) {
+    //   bullet.attack(bulletType.BULLET, target);
     // }
-
-    // bullet = null;
   }
 
   /**

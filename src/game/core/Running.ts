@@ -1143,6 +1143,10 @@ class Running extends EventTarget {
     [descType.RESTORE]: 'restore',
     [descType.ATTACK_DODGE]: 'attack_dodge',
     [descType.ATTACK_MISS]: 'attack_miss',
+    [descType.IMMUNITY_ICE]: 'immune',
+    [descType.IMMUNITY_LOCK_MOVE]: 'immune',
+    [descType.IMMUNITY_FIRING]: 'immune',
+
     // [descType.REMOVE_BOMB]: 'restore',
     // [descType.ADD_TERRAIN_FIRING]: 'add_terrain_firing',
     // [descType.TERRAIN_FIRING]: 'terrain_firing',
@@ -1189,6 +1193,22 @@ class Running extends EventTarget {
           ...this.getMoveTracks(
             info.attack_dodge.detail[0].move,
             `${round}-${_track}-${1}`,
+          ),
+        );
+      }
+
+      // 免疫
+      if (
+        info.desc_type === descType.IMMUNITY_ICE ||
+        info.desc_type === descType.IMMUNITY_LOCK_MOVE ||
+        info.desc_type === descType.IMMUNITY_FIRING
+      ) {
+        details.push(
+          ...this.getAttackTracks(
+            info.immune,
+            info.desc_type,
+            `${round}-${_track}`,
+            true,
           ),
         );
       }

@@ -1,0 +1,62 @@
+
+kua1.png
+size: 233,89
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+eff_pubLight
+  rotate: false
+  xy: 200, 22
+  size: 27, 27
+  orig: 29, 29
+  offset: 1, 1
+  index: -1
+elec_dust_01
+  rotate: false
+  xy: 40, 7
+  size: 32, 80
+  orig: 32, 81
+  offset: 0, 1
+  index: -1
+elec_dust_02
+  rotate: false
+  xy: 2, 2
+  size: 36, 85
+  orig: 36, 85
+  offset: 0, 0
+  index: -1
+elec_dust_03
+  rotate: true
+  xy: 74, 45
+  size: 42, 93
+  orig: 42, 93
+  offset: 0, 0
+  index: -1
+elec_dust_04
+  rotate: true
+  xy: 74, 3
+  size: 40, 92
+  orig: 40, 92
+  offset: 0, 0
+  index: -1
+pati_01
+  rotate: false
+  xy: 169, 49
+  size: 27, 38
+  orig: 27, 39
+  offset: 0, 0
+  index: -1
+pati_02
+  rotate: false
+  xy: 168, 3
+  size: 30, 40
+  orig: 30, 40
+  offset: 0, 0
+  index: -1
+pati_03
+  rotate: false
+  xy: 198, 51
+  size: 33, 36
+  orig: 34, 36
+  offset: 0, 0
+  index: -1

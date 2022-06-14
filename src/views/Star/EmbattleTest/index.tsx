@@ -67,7 +67,7 @@ const Embattle = () => {
   }, [planetInfo, planetId]);
 
   const race = info?.race as Api.Game.race;
-  useFetchUnitList(race);
+  useFetchUnitList(race, info?.id);
 
   const baseUnits = useStore(p => p.game.baseUnits);
 
