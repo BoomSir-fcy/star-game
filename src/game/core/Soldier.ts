@@ -111,10 +111,8 @@ class Soldier extends Combat {
 
     this.startPoint.set(x, y);
 
-    this.container.addChild(this.sprite);
+    this.container.addChild(this.spriteShadow);
     this.container.addChild(this.displaySprite);
-    this.container.addChild(this.shadowGraphics);
-    this.container.addChild(this.shadowGraphics);
     this.shield = shield;
 
     this.hp = hp || unitInfo?.hp;

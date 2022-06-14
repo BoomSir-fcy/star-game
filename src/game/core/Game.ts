@@ -398,6 +398,7 @@ class Game extends EventTarget {
       speed: SpeederType.SOLDIER_CREATE,
     });
     linearMove.addEventListener('end', () => {
+      soldier.flyingEnd();
       soldier.container.position.set(axis.x, axis.y);
       soldier.startPoint = point1;
       soldier.changeState(stateType.DISABLE, false);

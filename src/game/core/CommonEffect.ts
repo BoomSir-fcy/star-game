@@ -10,7 +10,7 @@ import config from 'game/config';
 import effectConfig from 'game/effectConfig';
 import {
   bulletType,
-  BulletType,
+  CommonSpineType,
   CommonSpineItem,
   descType,
   DescType,
@@ -43,7 +43,7 @@ interface CommonSpineItemInfo extends CommonSpineItem {
 }
 
 type Effects = {
-  [effect in BulletType]: CommonSpineItemInfo;
+  [effect in CommonSpineType]: CommonSpineItemInfo;
 };
 
 /**
@@ -75,21 +75,22 @@ const initEffectInfo = (
 /**
  * 子弹
  */
-class Bullet extends EventTarget {
-  constructor(combat: Combat) {
+class CommonEffect extends EventTarget {
+  constructor(parent: Container) {
     super();
-    this.combat = combat;
+    this.parent = parent;
     this.text.anchor.set(0.5);
-    this.container.zIndex = 9999;
+    // this.container.zIndex = 9999;
     this.container.addChild(this.text);
     const temp: Effects = {};
-    Object.keys(commonSpineType).forEach(key => {
-      temp[commonSpineType[key].name] = initEffectInfo(commonSpineType[key]);
+
+    effectConfig.common.forEach(item => {
+      temp[item.name] = initEffectInfo(item);
     });
     this.effects = temp;
   }
 
-  combat;
+  parent;
 
   moving = true;
 
@@ -103,8 +104,6 @@ class Bullet extends EventTarget {
 
   text = new Text('', { fill: 0xffffff, fontSize: 22 });
 
-  attackTarget?: Combat;
-
   effect?: DescType;
 
   effects: Effects;
@@ -112,15 +111,14 @@ class Bullet extends EventTarget {
   loader = Loader.shared;
 
   // 生命周期, 开始
-  onStart(name: BulletType, attackTarget: Combat) {
-    this.attackTarget = attackTarget;
-    this.combat.container.parent.addChild(this.container);
+  onStart(name: CommonSpineType) {
+    this.parent.addChild(this.container);
     this.dispatchEvent(new Event('start'));
     // this.timTricker(name);
   }
 
   // 生命周期, 结束
-  onEnd(name: BulletType) {
+  onEnd(name: CommonSpineType) {
     const { complete } = this.effects[name];
     if (complete) {
       this.dispatchEvent(new Event('attackEnd'));
@@ -129,7 +127,7 @@ class Bullet extends EventTarget {
   }
 
   // 加载特效
-  async loadEffect(name: BulletType) {
+  async loadEffect(name: CommonSpineType) {
     return new Promise<CommonSpineItemInfo>((res, rej) => {
       try {
         if (this.effects[name].loaded) {
@@ -146,11 +144,13 @@ class Bullet extends EventTarget {
     });
   }
 
-  async loadSpine(name: BulletType) {
+  async loadSpine(name: CommonSpineType) {
     return new Promise<void>((resolve, rej) => {
       try {
-        const { spineResource } = this.effects[name];
-        const bombLoaderRes = loaders.loader.resources[spineResource];
+        // const { name } = this.effects[name];
+        console.log(name);
+        console.log(loaders.loader.resources);
+        const bombLoaderRes = loaders.loader.resources[name];
         this.loadBombSpine(bombLoaderRes, name);
 
         this.effects[name].loaded = true;
@@ -167,7 +167,7 @@ class Bullet extends EventTarget {
    * @param loaderResource 资源
    * @param name 类型
    */
-  loadBombSpine(loaderResource: LoaderResource, name: BulletType) {
+  loadBombSpine(loaderResource: LoaderResource, name: CommonSpineType) {
     if (loaderResource?.spineData) {
       const spine = new Spine(loaderResource.spineData);
       this.container.addChild(spine);
@@ -179,14 +179,14 @@ class Bullet extends EventTarget {
       this.effects[name].loaded = true;
       spine.state.addListener({
         complete: () => {
-          this.onBombEnd(name);
+          this.onPlayEnd(name);
         },
       });
     }
   }
 
   // 爆炸spine播放动画完成
-  onComplete(name: BulletType) {
+  onComplete(name: CommonSpineType) {
     this.effects[name].complete = true;
     this.dispatchEvent(new Event('complete'));
   }
@@ -196,8 +196,10 @@ class Bullet extends EventTarget {
    * @param name 类型
    * @param point 爆炸的终点
    */
-  async attackBomb(name: BulletType, point: Point) {
+  async playSpine(name: CommonSpineType, point: Point) {
     const { spine, flip } = await this.loadEffect(name);
+    this.onStart(name);
+    console.log(spine, '==spine');
     if (spine) {
       this.effects[name].complete = false;
       spine.position.set(point.x, point.y);
@@ -205,17 +207,17 @@ class Bullet extends EventTarget {
       spine.state.setAnimation(0, 'play', false);
 
       // 需要改变效果方位
-      if (flip) {
-        const { x, y } = this.flipTargetPointOrientation(
-          spine.scale.x,
-          spine.scale.y,
-        );
-        spine.scale.x = x; // Orientation.TO_LEFT_UP;
-        spine.scale.y = y; // Orientation.TO_RIGHT_DOWN;
-      }
+      // if (flip) {
+      //   const { x, y } = this.flipTargetPointOrientation(
+      //     spine.scale.x,
+      //     spine.scale.y,
+      //   );
+      //   spine.scale.x = x; // Orientation.TO_LEFT_UP;
+      //   spine.scale.y = y; // Orientation.TO_RIGHT_DOWN;
+      // }
       this.spineAnimation(name, spine);
     } else {
-      this.onBombEnd(name);
+      this.onPlayEnd(name);
     }
   }
 
@@ -225,31 +227,31 @@ class Bullet extends EventTarget {
    * @param y 子弹基础缩放y
    * @returns 子弹缩放基数
    */
-  flipTargetPointOrientation(x: number, y: number) {
-    if (this.attackTarget?.axisPoint && this.combat.axisPoint) {
-      const { axisX: x0, axisY: y0 } = this.attackTarget.axisPoint;
-      const { axisX: x1, axisY: y1 } = this.combat.axisPoint;
-      const rX = -Math.abs(x);
-      const rY = -Math.abs(y);
-      const aX = Math.abs(x);
-      const aY = Math.abs(y);
-      // Orientation.TO_RIGHT_DOWN;
-      if (y0 - y1 > 0) return { x: aX, y: rY };
-      // Orientation.TO_LEFT_UP;
-      if (y0 - y1 < 0) return { x: rX, y: aY };
-      // Orientation.TO_LEFT_DOWN;
-      if (x0 - x1 > 0) return { x: rX, y: rY };
-      // Orientation.TO_RIGHT_UP
-      if (x0 - x1 < 0) return { x: aX, y: aY };
-    }
-    return { x, y };
-  }
+  // flipTargetPointOrientation(x: number, y: number) {
+  //   if (this.attackTarget?.axisPoint && this.combat.axisPoint) {
+  //     const { axisX: x0, axisY: y0 } = this.attackTarget.axisPoint;
+  //     const { axisX: x1, axisY: y1 } = this.combat.axisPoint;
+  //     const rX = -Math.abs(x);
+  //     const rY = -Math.abs(y);
+  //     const aX = Math.abs(x);
+  //     const aY = Math.abs(y);
+  //     // Orientation.TO_RIGHT_DOWN;
+  //     if (y0 - y1 > 0) return { x: aX, y: rY };
+  //     // Orientation.TO_LEFT_UP;
+  //     if (y0 - y1 < 0) return { x: rX, y: aY };
+  //     // Orientation.TO_LEFT_DOWN;
+  //     if (x0 - x1 > 0) return { x: rX, y: rY };
+  //     // Orientation.TO_RIGHT_UP
+  //     if (x0 - x1 < 0) return { x: aX, y: aY };
+  //   }
+  //   return { x, y };
+  // }
 
   /**
    * @dev 子弹运动结束
    * @param name 类型
    */
-  onBombEnd(name: BulletType) {
+  onPlayEnd(name: CommonSpineType) {
     this.effects[name].complete = true;
     // this.dispatchEvent(new Event('attackEnd'));
     this.container.parent.removeChild(this.container);
@@ -262,7 +264,11 @@ class Bullet extends EventTarget {
    * @param name 类型
    * @param spine 播放spine
    */
-  spineAnimation(name: BulletType, spine: Spine) {
+  spineAnimation(name: CommonSpineType, spine: Spine) {
+    console.log(
+      spine && !this.effects[name].complete,
+      '==spine && !this.effects[name].complete',
+    );
     if (spine && !this.effects[name].complete) {
       spine.update(speeder.update);
       requestAnimationFrame(() => this.spineAnimation(name, spine));
@@ -278,4 +284,4 @@ class Bullet extends EventTarget {
   }
 }
 
-export default Bullet;
+export default CommonEffect;

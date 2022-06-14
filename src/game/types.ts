@@ -416,6 +416,7 @@ export interface EffectConfig {
   effect: {
     [key in EffectType]: EffectItemInfoOfConfig;
   };
+  common: CommonSpineItem[];
 }
 
 export type DescType = typeof descType[keyof typeof descType];
@@ -466,4 +467,5 @@ export enum SoldierMoveType {
   WALK, // 步行
   FLYING, // 飞飞
   BE_MOVED, // 被迫移动 如击退等
+  SKY_FROM, // 从天而降
 }
