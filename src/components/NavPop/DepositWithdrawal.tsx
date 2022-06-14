@@ -16,6 +16,7 @@ import {
 } from 'state/userInfo/reducer';
 import { useToast } from 'contexts/ToastsContext';
 import { ConnectWalletButton } from 'components';
+import { Api } from 'apis';
 import { FetchApproveNum, useRWA } from './hook';
 
 const ShaDowBox = styled(Flex)`
@@ -116,13 +117,10 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
         console.error(error);
       }
     } else {
-      try {
-        await drawCallback(val, TokenInfo?.coinId);
+      const res = await drawCallback(val, TokenInfo?.coinId);
+      if (Api.isSuccess(res)) {
         toastSuccess(t('Withdraw Succeeded'));
         close();
-      } catch (e) {
-        toastError(t('Withdraw Failed'));
-        console.error(e);
       }
     }
     dispatch(fetchUserBalanceAsync());

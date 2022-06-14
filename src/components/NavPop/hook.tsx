@@ -10,10 +10,14 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import random from 'lodash/random';
 import { signMessage } from 'utils/web3React';
 import { Api } from 'apis';
+import { useToast } from 'contexts/ToastsContext';
+import { useTranslation } from 'contexts/Localization';
 
 // 充值、提现、授权
 export const useRWA = (tokenAddress: string) => {
   const { account, chainId, library } = useActiveWeb3React();
+  const { toastError } = useToast();
+  const { t } = useTranslation();
 
   const TokenContract = useERC20(tokenAddress);
   const UserVaultAddress = getUserVaultAddress();
@@ -60,6 +64,7 @@ export const useRWA = (tokenAddress: string) => {
             }
           );
         } catch (error: any) {
+          toastError(t('Withdraw Failed'));
           return {
             code: error?.code || -1,
           };
@@ -69,7 +74,7 @@ export const useRWA = (tokenAddress: string) => {
         code: -1,
       };
     },
-    [library, account],
+    [library, account, toastError, t],
   );
 
   return {
