@@ -533,6 +533,7 @@ class Running extends EventTarget {
         isEnemy: false,
         enableDrag: false,
         unique_id: active_unit_unique_id,
+        unitInfo: this.base[active_unit_unique_id],
       });
     } else {
       callback();
