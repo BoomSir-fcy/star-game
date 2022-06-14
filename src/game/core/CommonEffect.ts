@@ -114,6 +114,7 @@ class CommonEffect extends EventTarget {
   onStart(name: CommonSpineType) {
     this.parent.addChild(this.container);
     this.dispatchEvent(new Event('start'));
+    this.effects[name].complete = false;
     // this.timTricker(name);
   }
 
@@ -122,7 +123,7 @@ class CommonEffect extends EventTarget {
     const { complete } = this.effects[name];
     if (complete) {
       this.dispatchEvent(new Event('attackEnd'));
-      this.effects[name].complete = false;
+      // this.effects[name].complete = false;
     }
   }
 
@@ -147,9 +148,6 @@ class CommonEffect extends EventTarget {
   async loadSpine(name: CommonSpineType) {
     return new Promise<void>((resolve, rej) => {
       try {
-        // const { name } = this.effects[name];
-        console.log(name);
-        console.log(loaders.loader.resources);
         const bombLoaderRes = loaders.loader.resources[name];
         this.loadBombSpine(bombLoaderRes, name);
 
@@ -199,7 +197,6 @@ class CommonEffect extends EventTarget {
   async playSpine(name: CommonSpineType, point: Point) {
     const { spine, flip } = await this.loadEffect(name);
     this.onStart(name);
-    console.log(spine, '==spine');
     if (spine) {
       this.effects[name].complete = false;
       spine.position.set(point.x, point.y);
@@ -255,7 +252,6 @@ class CommonEffect extends EventTarget {
     this.effects[name].complete = true;
     // this.dispatchEvent(new Event('attackEnd'));
     this.container.parent.removeChild(this.container);
-    this.effects[name].complete = true;
     this.onEnd(name);
   }
 
@@ -265,10 +261,6 @@ class CommonEffect extends EventTarget {
    * @param spine 播放spine
    */
   spineAnimation(name: CommonSpineType, spine: Spine) {
-    console.log(
-      spine && !this.effects[name].complete,
-      '==spine && !this.effects[name].complete',
-    );
     if (spine && !this.effects[name].complete) {
       spine.update(speeder.update);
       requestAnimationFrame(() => this.spineAnimation(name, spine));
