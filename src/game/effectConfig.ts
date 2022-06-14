@@ -6,16 +6,16 @@ const effectConfig: EffectConfig = {
       name: bulletType.ICE,
       bombSpine: bulletType.ICE,
       // moveSpine: ,
-      bombSpineSrc: '/assets/bullet/ice/bindog.json',
-      bombSpriteSrc: '',
+      bombSpineSrc: '/assets/bullet/ice/bindog.json', // 爆炸时使用动画
+      bombSpriteSrc: '', // 爆炸时使用图片
       moveSpineSrc: '',
       moveSpriteSrc: '/assets/bullet/ice/ice.png',
       label: '冰冻',
     },
     {
       name: bulletType.ROCK,
-      bombSpineSrc: '/assets/bullet/rock/yans.json',
-      bombSpine: bulletType.ROCK,
+      bombSpineSrc: '/assets/bullet/rock/yans.json', // (动画资源地址 value)
+      bombSpine: bulletType.ROCK, // 爆炸时动画类型 (动画命名 key)
       // moveSpine: ,
       bombSpriteSrc: '',
       moveSpineSrc: '',

@@ -130,6 +130,10 @@ class Combat extends EventTarget {
 
   flying = true;
 
+  attackType: BulletType;
+
+  skillType: BulletType;
+
   renderPh() {
     this.container.addChild(this.hpGraphics);
     this.hpText.anchor.set(0.5);
@@ -273,6 +277,7 @@ class Combat extends EventTarget {
         this.dispatchEvent(new Event('moveEnd'));
         this.updateZIndex();
         if (moveType === SoldierMoveType.FLYING) {
+          // TODO: 落地加效果
           this.flyingEnd();
           this.sprite.visible = false;
         }
@@ -460,44 +465,52 @@ class Combat extends EventTarget {
 
     // console.log('effect=========', effect);
 
-    if (effect === descType.ADD_BOOM) {
-      bullet.attack(bulletType.ADD_BOMB, target);
-    } else if (effect === descType.ADD_FIRING) {
-      bullet.attack(bulletType.FIRING, target);
-    } else if (effect === descType.ATTACK) {
-      bullet.attack(bulletType.BULLET, target);
-    } else if (effect === descType.ADD_SHIELD) {
-      bullet.attack(bulletType.SHIELD, target);
-    } else if (effect === descType.BEAT) {
-      bullet.attack(bulletType.ROCK, target);
-    } else if (effect === descType.BOOM) {
-      bullet.attack(bulletType.BOMB, target);
-    } else if (effect === descType.FIRING) {
-      bullet.attack(bulletType.FIRING, target);
-    } else if (effect === descType.ICE_END) {
-      bullet.attack(bulletType.BULLET, target);
-    } else if (effect === descType.ICE_START) {
-      bullet.attack(bulletType.ICE, target);
-    } else if (effect === descType.STOP_MOVE) {
-      bullet.attack(bulletType.STOP_MOVE, target);
-    } else if (effect === descType.ATTACK_DODGE) {
-      bullet.attack(bulletType.BULLET, target);
-    } else if (effect === descType.ATTACK_MISS) {
-      bullet.attack(bulletType.BULLET, target);
-    } else if (effect === descType.RESTORE) {
-      bullet.attack(bulletType.RESTORE, target);
-    } else if (effect === descType.PURIFY) {
-      bullet.attack(bulletType.PURIFY, target);
-    } else if (
-      effect === descType.IMMUNITY_ICE ||
-      effect === descType.IMMUNITY_LOCK_MOVE ||
-      effect === descType.IMMUNITY_FIRING
+    // if (effect === descType.ADD_BOOM) {
+    //   bullet.attack(bulletType.ADD_BOMB, target);
+    // } else if (effect === descType.ADD_FIRING) {
+    //   bullet.attack(bulletType.FIRING, target);
+    // } else if (effect === descType.ATTACK) {
+    //   bullet.attack(bulletType.BULLET, target);
+    // } else if (effect === descType.ADD_SHIELD) {
+    //   bullet.attack(bulletType.SHIELD, target);
+    // } else if (effect === descType.BEAT) {
+    //   bullet.attack(bulletType.ROCK, target);
+    // } else if (effect === descType.BOOM) {
+    //   bullet.attack(bulletType.BOMB, target);
+    // } else if (effect === descType.FIRING) {
+    //   bullet.attack(bulletType.FIRING, target);
+    // } else if (effect === descType.ICE_END) {
+    //   bullet.attack(bulletType.BULLET, target);
+    // } else if (effect === descType.ICE_START) {
+    //   bullet.attack(bulletType.ICE, target);
+    // } else if (effect === descType.STOP_MOVE) {
+    //   bullet.attack(bulletType.STOP_MOVE, target);
+    // } else if (effect === descType.ATTACK_DODGE) {
+    //   bullet.attack(bulletType.BULLET, target);
+    // } else if (effect === descType.ATTACK_MISS) {
+    //   bullet.attack(bulletType.BULLET, target);
+    // } else if (effect === descType.RESTORE) {
+    //   bullet.attack(bulletType.RESTORE, target);
+    // } else if (effect === descType.PURIFY) {
+    //   bullet.attack(bulletType.PURIFY, target);
+    // } else if (
+    //   effect === descType.IMMUNITY_ICE ||
+    //   effect === descType.IMMUNITY_LOCK_MOVE ||
+    //   effect === descType.IMMUNITY_FIRING
+    // ) {
+    //   bullet.attack(bulletType.BULLET, target);
+    // }
+    if (
+      effect === descType.ATTACK ||
+      descType.ATTACK_DODGE ||
+      descType.ATTACK_MISS
     ) {
+      // bullet.attack(this.attackType, target);
       bullet.attack(bulletType.BULLET, target);
     } else {
-      bullet.attack(bulletType.BULLET, target, effect);
+      // bullet.attack(this.skillType, target);
+      bullet.attack(bulletType.PURIFY, target);
     }
-
     // bullet = null;
   }
 
