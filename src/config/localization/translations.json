@@ -623,5 +623,6 @@
   "http-error-400002": "Insufficient platform balance",
   "http-error-400012": "Withdrawal amount is below the minimum limit",
   "http-error-200031": "Insufficient resources consumed by the upgrade",
+  "http-error-200037": "Planet upgrade fail in planetary alliance",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

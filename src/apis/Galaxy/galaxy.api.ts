@@ -25,6 +25,11 @@ export class GalaxyApi extends Http {
     return this.post('galaxy/attck', params);
   }
 
+  // 放弃占领
+  async giveupStar(params: Api.Galaxy.AttckStarParams) {
+    return this.post('galaxy/give_up', params);
+  }
+
   // 星系竞拍记录列表
   async getAuctionLogList(
     galaxyId: number,

@@ -40,9 +40,35 @@ const usePlunder = () => {
     },
     [account, library, dispatch],
   );
-
+  const handleGiveup = useCallback(
+    async (starInfo: any): Promise<boolean> => {
+      if (account) {
+        try {
+          const sign = {
+            nonce: `${random(0xffff, 0xffff_ffff_ffff)}`,
+            timestamp: new Date().getTime(),
+          };
+          const signature = await signMessage(
+            library,
+            account,
+            JSON.stringify(sign),
+          );
+          const params = { ...sign, signature, ...starInfo };
+          const res = await Api.GalaxyApi.giveupStar(params);
+          if (Api.isSuccess(res)) {
+            return true;
+          }
+        } catch (error) {
+          return false;
+        }
+      }
+      return false;
+    },
+    [account, library],
+  );
   return {
     handlePlunder,
+    handleGiveup,
   };
 };
 

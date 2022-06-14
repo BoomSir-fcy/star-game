@@ -36,9 +36,13 @@ export const PlunderCard: React.FC<{
     planet_count: 0,
     power: 0,
   });
-  const hasOwner = info.owner;
+  const hasOwner = info?.owner;
 
-  const { handlePlunder } = usePlunder();
+  const { handlePlunder, handleGiveup } = usePlunder();
+
+  const isOwner = useMemo(() => {
+    return hasOwner?.toLowerCase() === account?.toLowerCase();
+  }, [hasOwner, account]);
 
   // 保护时间
   const protect_timestamp = useMemo(() => {
@@ -55,6 +59,8 @@ export const PlunderCard: React.FC<{
     const res = await Api.AllianceApi.alliancePlunderInfo(info.owner);
     if (Api.isSuccess(res)) {
       setPkUser(res.data);
+    } else {
+      setPkUser({} as Api.Alliance.PlunderInfoMatchUser);
     }
   }, [info]);
 
@@ -66,7 +72,6 @@ export const PlunderCard: React.FC<{
 
   // 抢夺
   const handleAttckStar = useCallback(async () => {
-    // TODO: 掠夺保护期，按钮禁用样式
     if (info?.owner) {
       setPending(true);
       dispatch(setState(GamePkState.CONFIRMING));
@@ -100,6 +105,24 @@ export const PlunderCard: React.FC<{
     }
   }, [info, onClose, toastSuccess, toastError, t]);
 
+  // 放弃占领
+  const handleGiveupStar = useCallback(async () => {
+    if (info?.owner) {
+      setPending(true);
+      const res = await handleGiveup({
+        nft_id: info.token_id,
+        number: info.number,
+      });
+      if (res) {
+        toastSuccess(t('Give up Occupy Succeeded'));
+        onClose();
+      } else {
+        toastError(t('Give up Occupy Failed'));
+      }
+      setPending(false);
+    }
+  }, [info, handleGiveup, onClose, t, toastError, toastSuccess]);
+
   return (
     <BgCardStyled variant='small' fringe>
       <Flex flexDirection='column' alignItems='center'>
@@ -120,38 +143,53 @@ export const PlunderCard: React.FC<{
               {t('Occupied Times')}: {info.history_hold_number}
             </Text>
           </Flex>
-          {hasOwner ? (
-            <ButtonStyled
-              disabled={
-                diffSeconds > 0 ||
-                pending ||
-                hasOwner?.toLowerCase() === account?.toLowerCase()
-              }
-              scale='sm'
-              ml='60px'
-              onClick={handleAttckStar}
-            >
-              {diffSeconds > 0 ? (
-                `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
-                  timePeriod.seconds
-                }${t('s')}`
-              ) : pending ? (
-                <Dots>{t('Seize Star')}</Dots>
+          {!isOwner && (
+            <>
+              {hasOwner ? (
+                <ButtonStyled
+                  disabled={diffSeconds > 0 || pending || isOwner}
+                  scale='sm'
+                  ml='60px'
+                  onClick={handleAttckStar}
+                >
+                  {diffSeconds > 0 ? (
+                    `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
+                      timePeriod.seconds
+                    }${t('s')}`
+                  ) : pending ? (
+                    <Dots>{t('Seize Star')}</Dots>
+                  ) : (
+                    <Text fontSize='inherit'>{t('Seize Star')}</Text>
+                  )}
+                </ButtonStyled>
               ) : (
-                <Text fontSize='inherit'>{t('Seize Star')}</Text>
+                <ButtonStyled
+                  disabled={pending}
+                  scale='sm'
+                  ml='60px'
+                  onClick={handleHold}
+                >
+                  {pending ? (
+                    <Dots>{t('Occupy Star')}</Dots>
+                  ) : (
+                    <Text fontSize='inherit'>{t('Occupy Star')}</Text>
+                  )}
+                </ButtonStyled>
               )}
-            </ButtonStyled>
-          ) : (
+            </>
+          )}
+
+          {isOwner && (
             <ButtonStyled
               disabled={pending}
               scale='sm'
               ml='60px'
-              onClick={handleHold}
+              onClick={handleGiveupStar}
             >
               {pending ? (
-                <Dots>{t('Occupy Star')}</Dots>
+                <Dots>{t('Give up Occupy')}</Dots>
               ) : (
-                <Text fontSize='inherit'>{t('Occupy Star')}</Text>
+                <Text fontSize='inherit'>{t('Give up Occupy')}</Text>
               )}
             </ButtonStyled>
           )}
