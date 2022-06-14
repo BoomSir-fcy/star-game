@@ -64,10 +64,15 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
   const [LoadApprovedNum, setLoadApprovedNum] = useState(false);
 
   const TokenBalance = useMemo(() => {
+    let balance = getBalanceAmount(BigNumberBalance).toString();
     if (Token === 'BNB') {
-      return getBalanceAmount(bnbBalance).toString();
+      balance = getBalanceAmount(bnbBalance).toString();
     }
-    return getBalanceAmount(BigNumberBalance).toString();
+    if (balance.indexOf('-') >= 0) {
+      // 科学计数法转化
+      balance = `0${String(Number(balance) + 1).substring(1)}`;
+    }
+    return balance;
   }, [BigNumberBalance, Token, bnbBalance]);
 
   // 复制地址
@@ -179,7 +184,6 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
   useEffect(() => {
     const getApproveNum = async () => {
       const Num = await FetchApproveNum(String(account), TokenInfo?.coinId);
-      console.log(Num);
       if (Num) {
         setapprovedNum(Num);
       }

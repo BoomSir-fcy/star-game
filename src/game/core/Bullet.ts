@@ -42,8 +42,10 @@ interface EffectInfo extends BulletItemInfoOfConfig {
   moveEffectSpine: Spine | null;
   bombEffectSpine: Spine | null;
   bombEffectSprite: Sprite | null;
+  startEffectSpine: Spine | null;
   complete: boolean; // 是否完成整个攻击
   completeMove: boolean; // 是否移动完成
+  completeAttackStart: boolean; // 是否起手完成
   completeBomb: boolean; // 是否爆炸完成
   minTimeEnd: boolean; // 是否到达已经执行时间
   timer: number; // 计时器
@@ -76,8 +78,10 @@ const initEffectInfo = (configOptions: BulletItemInfoOfConfig) => {
     moveEffectSpine: null,
     bombEffectSpine: null,
     bombEffectSprite: null,
+    startEffectSpine: null,
     complete: false, // 是否完成整个攻击
     completeMove: false, // 是否移动完成
+    completeAttackStart: false, // 是否起手完成
     completeBomb: false, // 是否爆炸完成
     minTimeEnd: true, // 是否到达已经执行时间
     timer: 0,
@@ -183,12 +187,15 @@ class Bullet extends EventTarget {
   async loadSpine(name: BulletType) {
     return new Promise<void>((resolve, rej) => {
       try {
-        const { bombSpine, moveSpine } = this.effects[name];
+        const { startSpine, bombSpine, moveSpine } = this.effects[name];
+        if (startSpine) {
+          const bombLoaderRes = loaders.loader.resources[startSpine];
+          this.loadStartSpine(bombLoaderRes, name);
+        }
         if (bombSpine) {
           const bombLoaderRes = loaders.loader.resources[bombSpine];
           this.loadBombSpine(bombLoaderRes, name);
         }
-
         if (moveSpine) {
           const moveLoaderRes = loaders.loader.resources[moveSpine];
           this.loadMoveSpine(moveLoaderRes, name);
@@ -200,6 +207,22 @@ class Bullet extends EventTarget {
         rej(error);
       }
     });
+  }
+
+  loadStartSpine(loaderResource: LoaderResource, name: BulletType) {
+    if (loaderResource?.spineData) {
+      const spine = new Spine(loaderResource.spineData);
+      this.container.addChild(spine);
+      this.effects[name].startEffectSpine = spine;
+      spine.scale.set(0.45);
+      spine.visible = false;
+      this.effects[name].loaded = true;
+      spine.state.addListener({
+        complete: () => {
+          this.onAttackStartEnd(name);
+        },
+      });
+    }
   }
 
   /**
@@ -216,11 +239,6 @@ class Bullet extends EventTarget {
       spine.scale.set(0.45);
       spine.visible = false;
       this.effects[name].loaded = true;
-      spine.state.addListener({
-        complete: () => {
-          this.onAttackStartEnd(name);
-        },
-      });
     }
   }
 
@@ -264,7 +282,6 @@ class Bullet extends EventTarget {
 
     if (this.combat.axisPoint && attackTarget.axisPoint) {
       const display = moveEffectSprite || moveEffectSpine;
-      console.log(display, 'display', name);
       if (display) {
         display.position.set(this.combat.axisPoint.x, this.combat.axisPoint.y);
         display.visible = true;
@@ -379,13 +396,8 @@ class Bullet extends EventTarget {
    * @param name 类型
    */
   onAttackStartEnd(name: BulletType) {
-    console.log(this);
-    // TODO:
-    // this.effects[name].completeBomb = true;
-    // // this.dispatchEvent(new Event('attackEnd'));
-    // this.container.parent.removeChild(this.container);
-    // this.effects[name].complete = true;
-    // this.onEnd(name);
+    this.effects[name].completeAttackStart = true;
+    this.onMoveEnd(name, this.attackTarget.axisPoint);
   }
 
   /**
@@ -393,10 +405,12 @@ class Bullet extends EventTarget {
    * @param name 类型
    * @param spine 播放spine
    */
-  spineAnimation(name: BulletType, spine: Spine) {
-    if (spine && !this.effects[name].completeBomb) {
-      spine?.update(speeder.update);
-      requestAnimationFrame(() => this.spineAnimation(name, spine));
+  spineAnimation(name: BulletType, spine: Spine, completeKey = 'completeBomb') {
+    if (spine && !this.effects[name][completeKey]) {
+      spine.update(speeder.update);
+      requestAnimationFrame(() =>
+        this.spineAnimation(name, spine, completeKey),
+      );
     }
   }
 
@@ -432,36 +446,29 @@ class Bullet extends EventTarget {
   // 空间魔法攻击起手
   async startAttackEffect(name: BulletType, attackTarget: Combat) {
     this.attackTarget = attackTarget;
-    const { moveEffectSpine, moveEffectSprite } = await this.loadEffect(name);
-    const display = moveEffectSpine || moveEffectSprite;
+    const { startEffectSpine } = await this.loadEffect(name);
+    const display = startEffectSpine;
     if (this.combat.axisPoint && attackTarget.axisPoint && display) {
       display.position.set(this.combat.axisPoint.x, this.combat.axisPoint.y);
       this.container.visible = true;
       display.visible = true;
-      if (display === moveEffectSpine) {
+      if (display === startEffectSpine) {
         display.state.setAnimation(0, 'play', true);
+        this.spineAnimation(name, display, 'completeAttackStart');
       }
-      // const parabola = new Parabola(
-      //   display,
-      //   this.combat.axisPoint,
-      //   attackTarget.axisPoint,
-      // );
-      this.onMoveStart(name, new Point(display.position.x, display.position.y));
-
-      // parabola.addEventListener('end', () => {
-      //   this.onMoveEnd(name, new Point(display.position.x, display.position.y));
-      // });
-      // parabola.position().move();
+    } else {
+      this.onAttackStartEnd(name);
     }
   }
 
   // 空间魔法攻击 (就是没有弹道能直接对敌方释放技能)
   async spaceAttack(name: BulletType, attackTarget: Combat) {
     this.attackTarget = attackTarget;
-    const { loaded } = await this.loadEffect(name);
-    if (attackTarget.axisPoint && loaded) {
+    const { loaded, startEffectSpine } = await this.loadEffect(name);
+    if (startEffectSpine) {
+      this.startAttackEffect(name, attackTarget);
+    } else if (attackTarget.axisPoint && loaded) {
       this.onMoveEnd(name, attackTarget.axisPoint);
-      // this.attackBomb(name, attackTarget.axisPoint);
     }
   }
 
@@ -585,7 +592,6 @@ class Bullet extends EventTarget {
       bulletType.V_ATTACK,
     ];
     if (linear.includes(name)) {
-      console.log(2112121221);
       this.linearAttack(name, attackTarget);
       return;
     }

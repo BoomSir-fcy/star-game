@@ -22,15 +22,18 @@ interface UpgradeCostProps extends FlexProps {
   stone?: number;
   spices?: number;
   energy?: number;
+  planetInfo: Api.Planet.PlanetInfo;
 }
 
 export const UpgradeCost: React.FC<UpgradeCostProps> = ({
   stone,
   spices,
   energy,
+  planetInfo,
   ...props
 }) => {
   const { t } = useTranslation();
+
   return (
     <Flex flexDirection='column'>
       <Text bold fontSize='20px' shadow='primary'>
@@ -47,7 +50,12 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
             <Text small color='textSubtle'>
               {t('Ore')}
             </Text>
-            <Text fontSize='22px'>-{stone}</Text>
+            <Text
+              fontSize='22px'
+              color={planetInfo?.stone < stone ? 'warning' : ''}
+            >
+              -{stone}
+            </Text>
           </ItemInfoFlex>
         </ItemFlex>
         <ItemFlex>
@@ -60,7 +68,12 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
             <Text small color='textSubtle'>
               {t('Population')}
             </Text>
-            <Text fontSize='22px'>-{spices}</Text>
+            <Text
+              fontSize='22px'
+              color={planetInfo?.population < spices ? 'warning' : ''}
+            >
+              -{spices}
+            </Text>
           </ItemInfoFlex>
         </ItemFlex>
         <ItemFlex>
@@ -73,7 +86,12 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
             <Text small color='textSubtle'>
               {t('Energy')}
             </Text>
-            <Text fontSize='22px'>-{energy}</Text>
+            <Text
+              fontSize='22px'
+              color={planetInfo?.energy < energy ? 'warning' : ''}
+            >
+              -{energy}
+            </Text>
           </ItemInfoFlex>
         </ItemFlex>
       </Flex>

@@ -84,7 +84,7 @@ const ItemRow: React.FC<{
             {info.name}: {info.total}
           </Text>
           <Text fontSize='22px'>
-            {t('Capacity')}: {info.capacity.toFixed(2)}%
+            {t('Capacity')}: {info.capacity.toFixed(1)}/s
           </Text>
         </Box>
       </Flex>

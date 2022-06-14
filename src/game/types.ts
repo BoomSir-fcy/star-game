@@ -463,6 +463,7 @@ export const bulletType = {
   [bulletTypeIndex.IMMUNITY_LOCK_MOVE]: 'immune', // v 字形攻击
   IMMUNITY_FIRING: 'immune', // 免疫灼烧
   [bulletTypeIndex.IMMUNITY_FIRING]: 'immune', // v 字形攻击
+  ATTACK_START: 'attack_start', // 魔法攻击的起手效果
 };
 
 export type BulletType = typeof bulletType[keyof typeof bulletType];
@@ -472,6 +473,7 @@ export interface BulletItemInfoOfConfig {
   bombSpriteSrc?: string;
   bombSpineSrc?: string;
   startSpineSrc?: string;
+  startSpine?: BulletType;
   bombSpine?: BulletType;
   moveSpine?: BulletType;
   moveSpriteSrc?: string;
