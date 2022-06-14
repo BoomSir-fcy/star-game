@@ -89,7 +89,11 @@ export const PlanetBox: React.FC<{
           picture1={info?.picture1}
           picture={info?.picture}
         />
-        <Flex ml='29px' flex='1' flexDirection='column'>
+        <Flex
+          ml='29px'
+          flexDirection='column'
+          style={{ width: 'calc(100% - 195px)' }}
+        >
           <Desc justifyContent='space-between'>
             <Box>
               <Flex alignItems='center'>
@@ -189,7 +193,7 @@ export const PlanetBox: React.FC<{
                 </Flex>
               </> */}
           </Desc>
-          <Flex alignItems='center' height='auto' flex='1'>
+          <Flex alignItems='center' height='auto' flex={1}>
             <PlanetDesc info={info} />
             {/* <>
                 <Image

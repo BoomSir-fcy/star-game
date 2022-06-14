@@ -117,11 +117,6 @@ export const GameInfo: React.FC<{
           ? itemData?.buildings_id
           : building_id;
 
-        if (itemData?.work_queue_id) {
-          // eslint-disable-next-line no-param-reassign
-          target_level = itemData?.target_level;
-        }
-
         if ((itemData?.iscreate || itemData?.work_queue_id) && buildingsId) {
           // 已经创建建筑加入队列，获取加入队列的最高建筑信息
           const taregtBuildings = currentQueue.filter(
@@ -132,15 +127,16 @@ export const GameInfo: React.FC<{
           const taregtBuildingLevel = taregtBuildings?.sort(
             (a, b) => b?.propterty?.levelEnergy - a?.propterty?.levelEnergy,
           );
-
-          const res = await upgrade(
-            planet_id,
-            buildingsId,
+          // 获取当前建筑的最高等级
+          const selfLevel =
             target_level ||
-              (taregtBuildingLevel.length > 0 &&
-                (taregtBuildingLevel[0]?.propterty?.levelEnergy + 2 ||
-                  taregtBuildingLevel[0]?.target_level + 1)),
-          );
+            (itemData?.work_queue_id && itemData?.target_level) ||
+            (taregtBuildingLevel.length > 0 &&
+              (taregtBuildingLevel[0]?.propterty?.levelEnergy + 2 ||
+                taregtBuildingLevel[0]?.target_level + 1)) ||
+            itemData?.propterty?.levelEnergy + 1;
+
+          const res = await upgrade(planet_id, buildingsId, selfLevel);
           setState({ ...state, upgrade: res });
         }
       },
@@ -328,7 +324,10 @@ export const GameInfo: React.FC<{
                           currentAttributes?.propterty?.max_durability
                         }
                         icon='/images/commons/star/durability.png'
-                        isRepair
+                        isRepair={
+                          currentAttributes?.propterty?.now_durability <
+                          currentAttributes?.propterty?.max_durability
+                        }
                       />
                     </ItemInfo>
                     <ItemInfo bottomMargin>

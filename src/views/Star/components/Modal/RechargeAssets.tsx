@@ -8,6 +8,7 @@ import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import random from 'lodash/random';
 import { signMessage } from 'utils/web3React';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
@@ -32,6 +33,7 @@ export const RechargeAssets: React.FC<{
   planet_id: number;
   visible: boolean;
   onClose: () => void;
+  onFinish?: () => void;
 }> = ({ planet_id, visible, onClose }) => {
   const dispatch = useDispatch();
   const { toastSuccess, toastError } = useToast();
@@ -147,6 +149,7 @@ export const RechargeAssets: React.FC<{
           setInputValue('');
           getStoreData();
           dispatch(fetchPlanetInfoAsync([planet_id]));
+          dispatch(fetchPlanetBuildingsAsync(planet_id));
         }
         setPending(false);
       } catch (error) {
@@ -156,16 +159,16 @@ export const RechargeAssets: React.FC<{
       }
     },
     [
+      inputValue,
+      library,
+      account,
       planet_id,
       selectId,
-      inputValue,
-      account,
-      library,
-      dispatch,
+      toastSuccess,
       t,
       getStoreData,
+      dispatch,
       toastError,
-      toastSuccess,
     ],
   );
 
