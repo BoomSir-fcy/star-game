@@ -219,6 +219,8 @@ export const GameInfo: React.FC<{
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemData]);
 
+    console.log(itemData);
+
     return (
       <Container>
         {itemData?._id && (
@@ -578,7 +580,11 @@ export const GameInfo: React.FC<{
                           itemData?.detail_type ===
                             BuildingDetailType.BuildingDetailTypeStore
                         ) {
-                          toastError('储物罐不能被销毁');
+                          toastError(
+                            t(
+                              'Storage jars cannot be destroyed when they are unique',
+                            ),
+                          );
                           return;
                         }
                         dispatch(storeAction.destoryBuildingVisibleModal(true));

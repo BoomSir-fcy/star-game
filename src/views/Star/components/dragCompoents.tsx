@@ -334,6 +334,9 @@ export const DragCompoents: React.FC<{
           });
           return [...next];
         });
+
+        console.log(queueBuilding);
+
         setGridBuilds([...currentGridBuilds, ...queueBuilding]);
       }
     },
@@ -582,11 +585,12 @@ export const DragCompoents: React.FC<{
         const startIndex = Math.min(...currentSize);
         const gridIndex =
           grid[grid.findIndex(row => row.index === startIndex)] || {};
+
         setCurrentQueue([
           ...currentQueue,
           {
-            ...draggedItem,
             ...gridIndex,
+            ...draggedItem,
             isbuilding: true,
             isqueue: true,
             work_type: 1,

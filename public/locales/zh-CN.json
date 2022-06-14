@@ -572,6 +572,7 @@
   "This feature is a VIP benefit, please upgrade to VIP": "该功能为VIP权益，请升级为VIP。",
   "Become VIP": "购买Vip",
   "The current queue is full": "当前队列已经满了",
+  "Storage jars cannot be destroyed when they are unique": "储物罐唯一时不能被销毁",
   "******end*****@kksam********": "@kksam翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",
