@@ -442,6 +442,13 @@ class Combat extends EventTarget {
       } else if (effect === descType.ATTACK_MISS) {
         const tipsText = new TipsText('[MISS]');
         tipsText.show(target.axisPoint);
+      } else if (
+        effect === descType.IMMUNITY_ICE ||
+        effect === descType.IMMUNITY_LOCK_MOVE ||
+        effect === descType.IMMUNITY_FIRING
+      ) {
+        const tipsText = new TipsText('[IMMUNITY]');
+        tipsText.show(target.axisPoint);
       } else if (attackInfo) {
         let hp = attackInfo?.receive_sub_hp;
         if (attackInfo?.around?.length) {
@@ -500,11 +507,13 @@ class Combat extends EventTarget {
     //   bullet.attack(bulletType.RESTORE, target);
     // } else if (effect === descType.PURIFY) {
     //   bullet.attack(bulletType.PURIFY, target);
-    // } else {
-    //   bullet.attack(bulletType.BULLET, target, effect);
+    // } else if (
+    //   effect === descType.IMMUNITY_ICE ||
+    //   effect === descType.IMMUNITY_LOCK_MOVE ||
+    //   effect === descType.IMMUNITY_FIRING
+    // ) {
+    //   bullet.attack(bulletType.BULLET, target);
     // }
-
-    // bullet = null;
   }
 
   /**

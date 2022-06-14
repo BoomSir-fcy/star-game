@@ -24,9 +24,9 @@ export const BuildingValue: React.FC<{
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
-    // const getSelfBuilding = () => {
-    //   dispatch(fetchPlanetBuildingsAsync(planet_id));
-    // };
+    const getSelfBuilding = () => {
+      dispatch(fetchPlanetBuildingsAsync(planet_id));
+    };
 
     return (
       <>
@@ -45,7 +45,7 @@ export const BuildingValue: React.FC<{
                   itemData={itemData}
                   planet_id={planet_id}
                   building_id={itemData?._id}
-                  // onCallback={getSelfBuilding}
+                  onCallback={getSelfBuilding}
                 />
               )}
           </Flex>

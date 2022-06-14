@@ -307,7 +307,7 @@
   "******start*****@FCY********": "@FCY翻译开始",
   "Copy Succeeded": "Copy Succeeded",
   "Recharge Succeeded": "Recharge Succeeded",
-  "Recharge failed": "Recharge Succeeded",
+  "Recharge failed": "Recharge Failed",
   "Withdraw Succeeded": "Withdraw Succeeded",
   "Withdraw Failed": "Withdraw Failed",
   "Approve Succeeded": "Approve Succeeded",
@@ -533,8 +533,8 @@
   "BuffBonus": "BUFF Bonus",
   "BuffBonustitle": "Planet breeding and building BUFF buildings can provide bonuses",
   "One-clickRepair": "Repair",
-  "BuildUpgradeQueue": "Build/Upgrade Queue",
-  "avequeue": "Save Queue",
+  "BuildUpgradeQueue":"Build/Upgrade Queue",
+  "savequeue": "Save & Start",
   "Building...": "Building...",
   "Preparing...": "Preparing...",
   "TimeLeft": "Time remaining (%time%)",
@@ -620,6 +620,7 @@
   "http-error-400010": "Insufficient resources",
   "http-error-400011": "Insufficient BOX balance",
   "http-error-400002": "Insufficient platform balance",
+  "http-error-400012": "Withdrawal amount is below the minimum limit",
   "http-error-200031": "Insufficient resources consumed by the upgrade",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

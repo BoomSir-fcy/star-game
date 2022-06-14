@@ -5,7 +5,7 @@ declare namespace Api {
       timestamp: number; // 签名时间
       signature: string;
       coin: string;
-      amount: number;
+      amount: string;
     }
   }
 }

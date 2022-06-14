@@ -78,6 +78,14 @@ export interface RoundDescAttack extends SlotBaseInfo {
   sender_attack: number;
 }
 
+export interface RoundDescImmune extends SlotBaseInfo {
+  receive_df: number;
+  now_hp: number;
+  receive_sub_hp: number;
+  around: ReceiveChange[];
+  sender_attack: number;
+}
+
 // 添加地形灼烧
 export interface RoundDescAddTerrainFiring extends SlotBaseInfo {
   firing_hp: number;
@@ -238,7 +246,8 @@ export type RoundDesc =
   | RoundDescCarshHarm
   | RoundDescRemoveStopMove
   | RoundDescAddTerrainFiring
-  | RoundDescTerrainFiring;
+  | RoundDescTerrainFiring
+  | RoundDescImmune;
 
 export interface RoundInfo {
   desc_type: number;
@@ -268,6 +277,7 @@ export interface RoundInfo {
   restore: RoundDescIceRestore;
   attack_dodge: RoundDescMiss;
   attack_miss: RoundDescAttack;
+  immune: RoundDescImmune;
 }
 
 export enum Orientation {
@@ -321,6 +331,9 @@ export const descType = {
   RESTORE: 24, // 恢复生命值
   ATTACK_MISS: 25, // 攻击命中率
   ATTACK_DODGE: 26, // 攻击闪避
+  IMMUNITY_ICE: 27, // 免疫冰冻
+  IMMUNITY_LOCK_MOVE: 28, // 免疫禁锢
+  IMMUNITY_FIRING: 29, // 免疫灼烧
   INSERT_UNIT: 999, // 空降小人 被废弃
 };
 
@@ -365,6 +378,9 @@ export enum bulletTypeIndex {
   FENG,
   V_ATTACK,
   V_ATTACK_2,
+  IMMUNITY_ICE,
+  IMMUNITY_LOCK_MOVE,
+  IMMUNITY_FIRING,
 }
 
 export const bulletType = {
@@ -426,11 +442,16 @@ export const bulletType = {
   [bulletTypeIndex.DAODAN]: 'daodan', // 导弹
   FENG: 'feng', // 水桶
   [bulletTypeIndex.FENG]: 'feng', // 水桶
-
   V_ATTACK: 'vAttack', // v 字形攻击
   [bulletTypeIndex.V_ATTACK]: 'vAttack', // v 字形攻击
   V_ATTACK_2: 'vAttack2', // v 字形攻击
   [bulletTypeIndex.V_ATTACK_2]: 'vAttack2', // v 字形攻击
+  IMMUNITY_ICE: 'immune', // 免疫冰冻
+  [bulletTypeIndex.IMMUNITY_ICE]: 'immune', // v 字形攻击
+  IMMUNITY_LOCK_MOVE: 'immune', // 免疫禁锢
+  [bulletTypeIndex.IMMUNITY_LOCK_MOVE]: 'immune', // v 字形攻击
+  IMMUNITY_FIRING: 'immune', // 免疫灼烧
+  [bulletTypeIndex.IMMUNITY_FIRING]: 'immune', // v 字形攻击
 };
 export type BulletType = typeof bulletType[keyof typeof bulletType];
 

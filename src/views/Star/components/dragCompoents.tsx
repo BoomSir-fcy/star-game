@@ -14,6 +14,8 @@ import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { BuyVipModal } from 'components/Modal/buyVipModal';
+import dayjs from 'dayjs';
+import { Colon } from 'components/CountdownTime/style';
 import { useBuildingRepair } from './gameModel/hooks';
 
 import { GameInfo, GameThing, Building, Queue } from './gameModel';
@@ -71,10 +73,16 @@ const Normal = styled(Flex)<{ pre: boolean; isbuilding?: boolean }>`
   }
 `;
 
-const BuildingBox = styled(Box)<{ checked: boolean }>`
+const BuildingBox = styled(Box)<{ checked: boolean; opacity?: boolean }>`
   position: absolute;
   cursor: pointer;
   border: 1px solid #30343d;
+
+  ${({ opacity }) =>
+    opacity &&
+    css`
+      opacity: 0.5;
+    `}
 
   ${({ checked }) =>
     checked &&
@@ -222,7 +230,9 @@ export const DragCompoents: React.FC<{
   const [buffer, setBuffer] = React.useState<any>([]);
   const [currentBuffer, setCurrentBuffer] =
     React.useState<Api.Building.BuildingBuffer>(null);
+  const [serverTime, setServerTime] = React.useState<number>(0);
   const dragBox = React.useRef<HTMLDivElement>(null);
+  const gradRef = React.useRef(null);
   const buildings = useStore(p => p.buildling.buildings);
   const userVipinfo = useStore(p => p.userInfo?.userInfo?.vipBenefits);
 
@@ -240,13 +250,6 @@ export const DragCompoents: React.FC<{
       height: gridSize / cols,
     };
   }, [rows, cols, gridSize]);
-
-  const updateGrids = React.useCallback(propsData => {
-    const currBuilds = propsData?.filter((row: any) => row.isbuilding);
-    // const isactive = gridBuilds.filter((row: any) => row.isactive);
-    setGrid(propsData);
-    setGridBuilds(currBuilds);
-  }, []);
 
   const changeBuff = (item: any) => {
     const currentBuildBuff = buffer?.find(
@@ -283,17 +286,63 @@ export const DragCompoents: React.FC<{
       try {
         const res = await refreshWorkQueue(planet_id);
         if (Api.isSuccess(res)) {
+          const resWorkQueue = res.data.work_queue;
           let isQueue = [];
           if (isSave) {
             isQueue = currentQueue.filter((item: any) => !item.planet_id);
           }
-          setCurrentQueue([...res.data.work_queue, ...isQueue]);
+          setCurrentQueue([...resWorkQueue, ...isQueue]);
+          setServerTime(res.data.time);
         }
       } catch (error) {
         console.log(error);
       }
     },
     [currentQueue, planet_id, refreshWorkQueue],
+  );
+
+  // 新建建筑队列放入格子;
+  const refreshQueue = React.useCallback(
+    async (data: any) => {
+      const queueBuilding = currentQueue.filter(
+        ({ work_type }) => work_type === 1,
+      );
+      const currentGridBuilds = data.filter(
+        ({ _id, isbuilding, isqueue }) => _id && isbuilding && !isqueue,
+      );
+
+      if (queueBuilding.length > 0) {
+        setGrid(pre => {
+          const next = pre?.map((row: any, index: number) => {
+            if (queueBuilding[index]?._id) {
+              return {
+                ...queueBuilding[index],
+                ...row,
+                pre: false,
+                isbuilding: true,
+              };
+            }
+            return { ...row, pre: false };
+          });
+          return [...next];
+        });
+        setGridBuilds([...currentGridBuilds, ...queueBuilding]);
+      }
+    },
+    [currentQueue],
+  );
+
+  const updateGrids = React.useCallback(
+    propsData => {
+      const currBuilds = propsData?.filter((row: any) => row.isbuilding);
+      // const isactive = gridBuilds.filter((row: any) => row.isactive);
+      setGrid(propsData);
+      setGridBuilds(currBuilds);
+      if (currentQueue.length > 0) {
+        refreshQueue(currBuilds);
+      }
+    },
+    [currentQueue.length, refreshQueue],
   );
 
   React.useEffect(() => {
@@ -471,7 +520,10 @@ export const DragCompoents: React.FC<{
           },
         },
       };
-      let targetItem = {};
+      let targetItem = {
+        x: 0,
+        y: 0,
+      };
       try {
         draggedItem = JSON.parse(dragged?.dataset?.item) || {};
         targetItem = JSON.parse(afterTarget?.dataset?.item) || {};
@@ -494,6 +546,7 @@ export const DragCompoents: React.FC<{
       const canSave = currentSize?.every(
         item => !grid[grid.findIndex(row => row.index === item)]?.isbuilding,
       );
+
       setGrid(pre => {
         const next = pre?.map((row: any) => {
           if (!canSave) {
@@ -518,17 +571,22 @@ export const DragCompoents: React.FC<{
       });
 
       if (canSave) {
+        const startIndex = Math.min(...currentSize);
+        const gridIndex =
+          grid[grid.findIndex(row => row.index === startIndex)] || {};
         setCurrentQueue([
           ...currentQueue,
           {
             ...draggedItem,
+            isbuilding: true,
             isqueue: true,
             work_type: 1,
             work_status: 3,
             index: to,
+            x: gridIndex?.x,
+            y: gridIndex?.y,
           },
         ]);
-        const startIndex = Math.min(...currentSize);
 
         for (let i = grid.length - 1; i >= 0; i--) {
           if (grid[i].index === startIndex) {
@@ -542,7 +600,7 @@ export const DragCompoents: React.FC<{
                   pre: true,
                   isbuilding: true,
                   isactive: true,
-                  isqueue: true,
+                  isqueue: false,
                 },
               ];
               return next;
@@ -554,8 +612,6 @@ export const DragCompoents: React.FC<{
     },
     [currentQueue, getAbsolutePosition, grid, t, toastError, userVipinfo],
   );
-
-  const gradRef = React.useRef(null);
 
   const dragStart = (
     e: React.DragEvent<HTMLDivElement>,
@@ -643,6 +699,7 @@ export const DragCompoents: React.FC<{
     const canSave = currentSize?.every(
       item => !grid[grid.findIndex(row => row.index === item)]?.isbuilding,
     );
+
     setGrid(pre => {
       const next = pre?.map((row: any) => {
         if (!canSave) {
@@ -666,10 +723,13 @@ export const DragCompoents: React.FC<{
     });
   };
 
+  // 延迟请求
+  const sleep = (ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
   // 取消建筑&&队列建筑
   const destroyBuilding = () => {
-    console.log(currentBuild, currentQueue);
-
     setCurrentBuild({});
     // 如果删除升级中的建筑，则同个升级建筑全部销毁
     if (currentBuild?.work_type === 2) {
@@ -737,26 +797,41 @@ export const DragCompoents: React.FC<{
                 );
               })}
               {(gridBuilds ?? []).map((item, index) => {
+                // 通过队列查找建筑
+                let info: any = {};
+                if (item?.buildings_id) {
+                  info = buildings[1]?.find(
+                    ({ _id }) => _id === item?.buildings_id,
+                  );
+                  info = {
+                    ...info,
+                    x: item?.position?.from?.x,
+                    y: item?.position?.from?.y,
+                  };
+                }
+                const basic = { ...info, ...item };
                 return (
                   <BuildingBox
-                    key={`${item.index}_${item?._id}_${index}`}
+                    key={`${basic.index}_${basic?._id}_${index}`}
                     draggable={false}
-                    data-id={item.index}
-                    data-item={JSON.stringify(item)}
-                    width={item?.propterty?.size?.area_x * width}
-                    height={item?.propterty?.size?.area_y * height}
-                    left={item.x * width}
-                    top={item.y * height}
-                    checked={currentBuild?.index === item?.index}
+                    data-id={basic.index}
+                    data-item={JSON.stringify(basic)}
+                    width={basic?.propterty?.size?.area_x * width}
+                    height={basic?.propterty?.size?.area_y * height}
+                    left={basic.x * width}
+                    top={basic.y * height}
+                    checked={currentBuild?.index === basic?.index}
+                    opacity={basic?.work_add_time}
                     onClick={() => {
-                      setCurrentBuild({ ...item, iscreate: true });
-                      changeBuff(item);
+                      if (basic?.work_add_time) return;
+                      setCurrentBuild({ ...basic, iscreate: true });
+                      changeBuff(basic);
                     }}
                   >
                     <Building
                       planet_id={planet_id}
-                      level={item?.propterty?.levelEnergy}
-                      src={item?.picture}
+                      level={basic?.propterty?.levelEnergy}
+                      src={basic?.picture}
                       itemData={item}
                     />
                   </BuildingBox>
@@ -790,9 +865,7 @@ export const DragCompoents: React.FC<{
             building_id={currentBuild?._id}
             currentBuild={currentBuild}
             currentQueue={currentQueue}
-            diffTime={Number(
-              (currentBuild?.work_end_time - Date.now() / 1000).toFixed(0),
-            )}
+            diffTime={currentBuild?.work_end_time - serverTime}
             onUpgradeLevel={data => {
               if (currentQueue.length >= userVipinfo?.building_queue_capacity) {
                 toastError(t('planetTipsQueueCapacity'));
@@ -811,7 +884,7 @@ export const DragCompoents: React.FC<{
               ]);
             }}
             onCancelQueue={destroyBuilding}
-            callback={() => setCurrentBuild({})}
+            callback={destroyBuilding}
           />
         </Flex>
         <BgCard variant='long' mt='12px' padding='40px'>
@@ -872,6 +945,7 @@ export const DragCompoents: React.FC<{
               </BuildingsScroll>
             ) : (
               <Queue
+                serverTime={serverTime}
                 currentQueue={currentQueue}
                 onSelectCurrent={(item: any) => {
                   const currbuildings = buildings[1].find(
@@ -885,14 +959,21 @@ export const DragCompoents: React.FC<{
                   });
                 }}
                 onSave={saveWorkQueue}
-                onComplete={() => {
-                  setTimeout(async () => {
-                    await getWorkQueue(true);
-                    setCurrentBuild({});
-                  }, 1000);
-                  setTimeout(() => {
-                    dispatch(fetchPlanetBuildingsAsync(planet_id));
-                  }, 1500);
+                onComplete={async () => {
+                  await sleep(1000);
+                  console.log(
+                    '刷新队列：',
+                    dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+                  );
+                  await getWorkQueue(true);
+                  setCurrentBuild({});
+                  await sleep(1800);
+                  console.log(
+                    '刷新星球：',
+                    dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+                  );
+                  dispatch(fetchPlanetBuildingsAsync(planet_id));
+                  dispatch(fetchPlanetInfoAsync([planet_id]));
                 }}
               />
             )}
