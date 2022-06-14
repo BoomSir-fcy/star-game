@@ -16,6 +16,7 @@ import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { BuyVipModal } from 'components/Modal/buyVipModal';
 import dayjs from 'dayjs';
 import { debounce } from 'lodash';
+import eventBus from 'utils/eventBus';
 import { useBuildingRepair } from './gameModel/hooks';
 
 import { GameInfo, GameThing, Building, Queue } from './gameModel';
@@ -356,6 +357,12 @@ export const DragCompoents: React.FC<{
     [currentQueue.length, refreshQueue],
   );
 
+  const onRefreshClick = React.useCallback(() => {
+    dispatch(fetchPlanetBuildingsAsync(planet_id));
+    dispatch(fetchPlanetInfoAsync([planet_id]));
+    getWorkQueue();
+  }, [planet_id, getWorkQueue, dispatch]);
+
   React.useEffect(() => {
     if (itemData.length > 0) {
       updateGrids(itemData);
@@ -369,6 +376,14 @@ export const DragCompoents: React.FC<{
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 添加事件监听，用于更新状态
+  React.useEffect(() => {
+    eventBus.addEventListener('onRefresh', onRefreshClick);
+    return () => {
+      eventBus.removeEventListener('onRefresh', onRefreshClick);
+    };
+  }, [onRefreshClick]);
 
   // 获取坐标点
   const getMatrix = React.useCallback(
