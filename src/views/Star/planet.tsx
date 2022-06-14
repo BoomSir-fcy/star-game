@@ -107,7 +107,7 @@ const Planet = () => {
   const [state, setState] = useState({
     page: 1,
     token: '',
-    race: 1,
+    race: 0,
   });
   const [pending, setpending] = useState(false);
   const [StarList, setStarList] = useState<Api.Planet.PlanetInfo[]>([]);

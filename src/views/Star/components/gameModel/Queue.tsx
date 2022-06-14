@@ -38,7 +38,6 @@ const SaveQueue = styled(Button)`
   font-size: 20px;
 `;
 
-let timer: any = null;
 export const BuildlingStatus: React.FC<{
   type: number;
   status: number;
@@ -53,6 +52,7 @@ export const BuildlingStatus: React.FC<{
     time: diffTime,
     ratio: 0,
   });
+  let timer: any = null;
 
   const workInfo = React.useMemo(() => {
     return {
@@ -76,34 +76,31 @@ export const BuildlingStatus: React.FC<{
   }, [t]);
 
   // 倒计时
-  const countDownNumber = () => {
-    if (diffTime < 0) {
-      setState({
-        ...state,
-        time: 0,
-      });
+  const countDown = () => {
+    const { time } = state;
+    clearInterval(timer);
+    if (status !== 1) return;
+    if (time <= 0) {
       onComplete();
-      clearTimeout(timer);
-      return;
+    } else {
+      timer = setInterval(() => {
+        setState({
+          ...state,
+          time: (time || diffTime) - 1,
+        });
+      }, 1000);
     }
-    // eslint-disable-next-line no-param-reassign
-    diffTime--;
-    setState({
-      ...state,
-      time: diffTime,
-    });
-    timer = setTimeout(() => {
-      countDownNumber();
-    }, 1000);
   };
 
   React.useEffect(() => {
-    if (diffTime > 0 && status === 1) {
-      countDownNumber();
-    }
-    return () => clearTimeout(timer);
+    setState({ ...state, time: diffTime });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diffTime, status]);
+  }, [diffTime]);
+
+  React.useEffect(() => {
+    countDown();
+    return () => clearTimeout(timer);
+  });
 
   return (
     <Flex>

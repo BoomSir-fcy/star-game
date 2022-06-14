@@ -40,6 +40,9 @@ declare namespace Api {
         count_down: number;
         upgrade_type: number; // 1-升级 2-恢复耐久
       };
+      building: {
+        _id: number;
+      };
       work_queue_id?: number;
       isbuilding?: boolean;
       isactive?: boolean; // 是否激活
