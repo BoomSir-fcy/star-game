@@ -425,6 +425,7 @@ const Upgrade = () => {
                   stone={upgradeInfo.consume_stone}
                   spices={upgradeInfo.consume_population}
                   energy={upgradeInfo.consume_energy}
+                  planetInfo={planetInfo[planetId]}
                 />
                 <Flex mt='30px' flexDirection='column' alignItems='center'>
                   {rendeButton}

@@ -94,11 +94,13 @@ const effectConfig: EffectConfig = {
     },
     {
       name: bulletType.LEIDIAN,
+      startSpine: bulletType.ATTACK_START,
+      startSpineSrc: '/assets/bullet/space-start/kua1.json',
       bombSpineSrc: '/assets/bullet/leidian/leidian.json',
       bombSpine: bulletType.LEIDIAN,
-      moveSpine: bulletType.LEIDIAN,
+      moveSpine: '',
       bombSpriteSrc: '',
-      moveSpineSrc: '/assets/bullet/leidian/leidian.json',
+      moveSpineSrc: '',
       moveSpriteSrc: '',
       label: '闪电',
     },
@@ -545,5 +547,9 @@ export const spines = [
   {
     name: bulletType.FENG,
     src: '/assets/bullet/feng/feng.json',
+  },
+  {
+    name: bulletType.ATTACK_START,
+    src: '/assets/bullet/space-start/kua1.json',
   },
 ];
