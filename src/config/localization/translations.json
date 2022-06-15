@@ -572,6 +572,7 @@
   "This feature is a VIP benefit, please upgrade to VIP": "This feature is a VIP benefit, please upgrade to VIP.",
   "Become VIP": "Buy VIP",
   "The current queue is full": "The current queue is full",
+  "Storage jars cannot be destroyed when they are unique": "Storage jars cannot be destroyed when they are unique",
   "******end*****@kksam********": "@kksam翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",
@@ -611,6 +612,7 @@
   "http-error-300016": "Building upgrade failed, max level reached",
   "http-error-300017": "Building upgrade failed, max level reached",
   "http-error-300030": "The planet is in a planetary alliance, buildings cannot join the work queue",
+  "http-error-300031": "Planetary alliance is occupying the stars",
   "http-error-400001": "Failed to get user information",
   "http-error-500001": "The galaxy star is still inside the protector",
   "http-error-500002": "The galaxy already owns",
@@ -623,5 +625,6 @@
   "http-error-400002": "Insufficient platform balance",
   "http-error-400012": "Withdrawal amount is below the minimum limit",
   "http-error-200031": "Insufficient resources consumed by the upgrade",
+  "http-error-200037": "Planet upgrade fail in planetary alliance",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

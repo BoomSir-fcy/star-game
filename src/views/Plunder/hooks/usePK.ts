@@ -30,6 +30,7 @@ export const usePK = (game: Game) => {
           isEnemy,
           enableDrag: false,
           unique_id: item.base_unit_id,
+          unitInfo: base[item.base_unit_id],
         });
       });
       return soldier;

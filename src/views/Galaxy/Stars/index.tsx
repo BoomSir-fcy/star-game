@@ -57,11 +57,21 @@ const Stars = () => {
           : levelList[0],
       ),
     );
+    if (levelList.length) setVisible(true);
   }, [galaxyStarList, currentStarPeriod?.id, t, dispatch]);
 
   useEffect(() => {
     initList();
   }, [initList]);
+
+  useEffect(() => {
+    if (currentStarPeriod?.levels.length) {
+      const lastActiveStar = currentStarPeriod?.levels.find(
+        item => item.number === activeStar.number,
+      );
+      setActiveStar(p => lastActiveStar || currentStarPeriod?.levels[0]);
+    }
+  }, [currentStarPeriod?.levels, visible, activeStar]);
 
   const onRefreshClick = React.useCallback(() => {
     dispatch(fetchGalaxyStarListAsync(galaxyId));
@@ -107,7 +117,7 @@ const Stars = () => {
                   url={item?.ownerAvatar}
                   onClick={() => {
                     setActiveStar(item);
-                    setVisible(true);
+                    // setVisible(true);
                   }}
                 />
               ))}
@@ -118,7 +128,7 @@ const Stars = () => {
               info={activeStar}
               onClose={() => {
                 dispatch(fetchGalaxyStarListAsync(galaxyId));
-                setVisible(false);
+                // setVisible(false);
               }}
             />
           )}

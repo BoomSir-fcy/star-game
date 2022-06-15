@@ -65,6 +65,7 @@ export const GameInfo: React.FC<{
   planet_id: number;
   currentBuild: Api.Building.Building;
   currentQueue: any[];
+  gridBuilds: Api.Building.Building[];
   diffTime?: number;
   callback: () => void;
   onCancelQueue: (currentBuilding?: any) => void;
@@ -75,6 +76,7 @@ export const GameInfo: React.FC<{
     planet_id,
     currentBuild,
     currentQueue,
+    gridBuilds,
     diffTime,
     callback,
     onCancelQueue,
@@ -84,11 +86,15 @@ export const GameInfo: React.FC<{
     const { t } = useTranslation();
     const { toastSuccess, toastError } = useToast();
     const { upgrade } = useBuildingUpgrade();
-    const { cancelWorkQueue } = useWorkqueue();
     const { destory } = useBuildingOperate();
     const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
     const planetAssets = useStore(p => p.buildling.planetAssets);
     const planet = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
+
+    // 获取已经创建的所有储物罐
+    const storage = gridBuilds.filter(
+      ({ detail_type, building }) => detail_type === 1 && building?._id,
+    );
 
     let timer: any = null;
 
@@ -200,7 +206,7 @@ export const GameInfo: React.FC<{
     }, [diffTime]);
 
     React.useEffect(() => {
-      if (itemData?._id && !itemData?.isactive) {
+      if (itemData?._id && !itemData?.isactive && !itemData?.isqueue) {
         init();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -212,6 +218,8 @@ export const GameInfo: React.FC<{
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemData]);
+
+    console.log(itemData);
 
     return (
       <Container>
@@ -566,9 +574,21 @@ export const GameInfo: React.FC<{
                     <ActionButton
                       disabled={itemData?.isactive}
                       variant='danger'
-                      onClick={() =>
-                        dispatch(storeAction.destoryBuildingVisibleModal(true))
-                      }
+                      onClick={() => {
+                        if (
+                          storage.length <= 1 &&
+                          itemData?.detail_type ===
+                            BuildingDetailType.BuildingDetailTypeStore
+                        ) {
+                          toastError(
+                            t(
+                              'Storage jars cannot be destroyed when they are unique',
+                            ),
+                          );
+                          return;
+                        }
+                        dispatch(storeAction.destoryBuildingVisibleModal(true));
+                      }}
                     >
                       {t('planetDestroyBuilding')}
                     </ActionButton>

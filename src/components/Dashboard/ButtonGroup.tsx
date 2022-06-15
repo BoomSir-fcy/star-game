@@ -62,9 +62,9 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
 
   return (
     <Flex>
-      <SecondaryButton href='/plunder' tag='attack'>
+      {/* <SecondaryButton href='/plunder' tag='attack'>
         {t('Loot Resources').toLocaleUpperCase()}
-      </SecondaryButton>
+      </SecondaryButton> */}
       <SecondaryButton href='/galaxy' tag='flag'>
         {t('Occupy Star').toLocaleUpperCase()}
       </SecondaryButton>

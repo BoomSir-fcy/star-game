@@ -15,7 +15,8 @@ import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { BuyVipModal } from 'components/Modal/buyVipModal';
 import dayjs from 'dayjs';
-import { Colon } from 'components/CountdownTime/style';
+import { debounce } from 'lodash';
+import eventBus from 'utils/eventBus';
 import { useBuildingRepair } from './gameModel/hooks';
 
 import { GameInfo, GameThing, Building, Queue } from './gameModel';
@@ -230,11 +231,12 @@ export const DragCompoents: React.FC<{
   const [buffer, setBuffer] = React.useState<any>([]);
   const [currentBuffer, setCurrentBuffer] =
     React.useState<Api.Building.BuildingBuffer>(null);
-  const [serverTime, setServerTime] = React.useState<number>(0);
+  const [serverDiffTime, setServerDiffTime] = React.useState<number>(0);
   const dragBox = React.useRef<HTMLDivElement>(null);
   const gradRef = React.useRef(null);
   const buildings = useStore(p => p.buildling.buildings);
   const userVipinfo = useStore(p => p.userInfo?.userInfo?.vipBenefits);
+  const currentTime = Number((Date.now() / 1000).toFixed(0));
 
   // 升级建造队列
   const [currentQueue, setCurrentQueue] = React.useState([]);
@@ -292,13 +294,17 @@ export const DragCompoents: React.FC<{
             isQueue = currentQueue.filter((item: any) => !item.planet_id);
           }
           setCurrentQueue([...resWorkQueue, ...isQueue]);
-          setServerTime(res.data.time);
+          setServerDiffTime(
+            res.data.time - currentTime > 0
+              ? -(res.data.time - currentTime)
+              : res.data.time - currentTime,
+          );
         }
       } catch (error) {
         console.log(error);
       }
     },
-    [currentQueue, planet_id, refreshWorkQueue],
+    [currentQueue, currentTime, planet_id, refreshWorkQueue],
   );
 
   // 新建建筑队列放入格子;
@@ -313,10 +319,13 @@ export const DragCompoents: React.FC<{
 
       if (queueBuilding.length > 0) {
         setGrid(pre => {
-          const next = pre?.map((row: any, index: number) => {
-            if (queueBuilding[index]?._id) {
+          const next = pre?.map((row: any, i: number) => {
+            const currentRow = queueBuilding.find(
+              ({ index }) => row.index === index,
+            );
+            if (currentRow?._id) {
               return {
-                ...queueBuilding[index],
+                ...queueBuilding[i],
                 ...row,
                 pre: false,
                 isbuilding: true,
@@ -326,6 +335,9 @@ export const DragCompoents: React.FC<{
           });
           return [...next];
         });
+
+        console.log(queueBuilding);
+
         setGridBuilds([...currentGridBuilds, ...queueBuilding]);
       }
     },
@@ -345,6 +357,12 @@ export const DragCompoents: React.FC<{
     [currentQueue.length, refreshQueue],
   );
 
+  const onRefreshClick = React.useCallback(() => {
+    dispatch(fetchPlanetBuildingsAsync(planet_id));
+    dispatch(fetchPlanetInfoAsync([planet_id]));
+    getWorkQueue();
+  }, [planet_id, getWorkQueue, dispatch]);
+
   React.useEffect(() => {
     if (itemData.length > 0) {
       updateGrids(itemData);
@@ -358,6 +376,14 @@ export const DragCompoents: React.FC<{
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 添加事件监听，用于更新状态
+  React.useEffect(() => {
+    eventBus.addEventListener('onRefresh', onRefreshClick);
+    return () => {
+      eventBus.removeEventListener('onRefresh', onRefreshClick);
+    };
+  }, [onRefreshClick]);
 
   // 获取坐标点
   const getMatrix = React.useCallback(
@@ -574,17 +600,16 @@ export const DragCompoents: React.FC<{
         const startIndex = Math.min(...currentSize);
         const gridIndex =
           grid[grid.findIndex(row => row.index === startIndex)] || {};
+
         setCurrentQueue([
           ...currentQueue,
           {
+            ...gridIndex,
             ...draggedItem,
             isbuilding: true,
             isqueue: true,
             work_type: 1,
             work_status: 3,
-            index: to,
-            x: gridIndex?.x,
-            y: gridIndex?.y,
           },
         ]);
 
@@ -761,6 +786,13 @@ export const DragCompoents: React.FC<{
     }
   };
 
+  // console.log(
+  //   '当前时间',
+  //   currentTime,
+  //   currentTime + serverDiffTime,
+  //   dayjs(currentTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
+  // );
+
   return (
     <>
       <Box>
@@ -865,7 +897,10 @@ export const DragCompoents: React.FC<{
             building_id={currentBuild?._id}
             currentBuild={currentBuild}
             currentQueue={currentQueue}
-            diffTime={currentBuild?.work_end_time - serverTime}
+            gridBuilds={gridBuilds}
+            diffTime={
+              currentBuild?.work_end_time - (currentTime + serverDiffTime) || 0
+            }
             onUpgradeLevel={data => {
               if (currentQueue.length >= userVipinfo?.building_queue_capacity) {
                 toastError(t('planetTipsQueueCapacity'));
@@ -945,7 +980,7 @@ export const DragCompoents: React.FC<{
               </BuildingsScroll>
             ) : (
               <Queue
-                serverTime={serverTime}
+                serverTime={currentTime + serverDiffTime}
                 currentQueue={currentQueue}
                 onSelectCurrent={(item: any) => {
                   const currbuildings = buildings[1].find(
@@ -959,7 +994,7 @@ export const DragCompoents: React.FC<{
                   });
                 }}
                 onSave={saveWorkQueue}
-                onComplete={async () => {
+                onComplete={debounce(async () => {
                   await sleep(1000);
                   console.log(
                     '刷新队列：',
@@ -974,7 +1009,7 @@ export const DragCompoents: React.FC<{
                   );
                   dispatch(fetchPlanetBuildingsAsync(planet_id));
                   dispatch(fetchPlanetInfoAsync([planet_id]));
-                }}
+                }, 500)}
               />
             )}
           </Flex>

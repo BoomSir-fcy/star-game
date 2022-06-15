@@ -572,6 +572,7 @@
   "This feature is a VIP benefit, please upgrade to VIP": "该功能为VIP权益，请升级为VIP。",
   "Become VIP": "购买Vip",
   "The current queue is full": "当前队列已经满了",
+  "Storage jars cannot be destroyed when they are unique": "储物罐唯一时不能被销毁",
   "******end*****@kksam********": "@kksam翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",
@@ -611,6 +612,7 @@
   "http-error-300016": "建筑升级失败，已达到最大等级",
   "http-error-300017": "建筑升级失败，已达到最大等级",
   "http-error-300030": "行星处于行星联盟中，建筑不能加入工作队列",
+  "http-error-300031": "行星联盟正在占领恒星中, 无法开始工作",
   "http-error-400001": "获取用户信息失败",
   "http-error-500001": "星系恒星还在保护器内",
   "http-error-500002": "星系已经拥有者",
@@ -623,5 +625,6 @@
   "http-error-400011": "BOX余额不足",
   "http-error-400012": "提币数量低于最小限额",
   "http-error-200031": "升级所消耗的资源不足",
+  "http-error-200037": "星球升级失败，在星球联盟中",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }
