@@ -45,6 +45,8 @@ const config = {
     descType.STOP_MOVE,
     descType.REMOVE_FIRING,
   ],
+
+  MAX_SOLDIER_COUNT: 6,
 };
 
 export default config;

@@ -470,6 +470,7 @@ export type BulletType = typeof bulletType[keyof typeof bulletType];
 
 export interface BulletItemInfoOfConfig {
   name: BulletType;
+  id: bulletTypeIndex;
   bombSpriteSrc?: string;
   bombSpineSrc?: string;
   startSpineSrc?: string;

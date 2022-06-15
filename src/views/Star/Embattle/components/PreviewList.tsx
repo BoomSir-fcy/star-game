@@ -1,3 +1,4 @@
+import config from 'game/config';
 import { getAddActiveSoliderEvent } from 'game/core/event';
 import Game from 'game/core/Game';
 import Soldier from 'game/core/Soldier';
@@ -5,12 +6,15 @@ import { getSpriteName, getSpriteRes } from 'game/core/utils';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
 import { Box, Text, BgCard, Flex, BorderCard, BgCardProps } from 'uikit';
+import { useToast } from 'contexts/ToastsContext';
 import { isApp } from 'utils/client';
 import PreviewSoldier from './PreviewSoldier';
+import { SortSoldier } from './SortBoard';
 import { PlayBtn } from './styled';
 
 interface PreviewListProps extends BgCardProps {
   game: Game;
+  gameSoldiers: SortSoldier[];
   activeSoldier: Soldier | null;
   race?: Api.Game.race;
   disableClick?: boolean;
@@ -23,12 +27,15 @@ const PreviewList: React.FC<PreviewListProps> = ({
   race = 1,
   disableDrag,
   disableClick,
+  gameSoldiers,
   onDrag,
   ...props
 }) => {
   const units = useStore(p => p.game.baseUnits);
   const [disableDragSoilder, setdDisableDragSoilder] = useState(disableDrag);
   const [visibleBtn, setVisibleBtn] = useState(false);
+
+  const { toastError } = useToast();
 
   useEffect(() => {
     setdDisableDragSoilder(isApp() || disableDrag);
@@ -45,7 +52,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
 
   useEffect(() => {
     if (list.length) {
-      const [, item] = list;
+      const [item] = list;
       const soldier = new Soldier({
         x: 0,
         y: 0,
@@ -91,8 +98,17 @@ const PreviewList: React.FC<PreviewListProps> = ({
     [game, race],
   );
 
+  const checkCreateSoldier = useCallback(() => {
+    if (gameSoldiers.length >= config.MAX_SOLDIER_COUNT) {
+      toastError('当前放置数量已达到最大');
+      return false;
+    }
+    return true;
+  }, [gameSoldiers.length, toastError]);
+
   // 上阵
   const handleGoIntoBattle = (item: Api.Game.UnitInfo) => {
+    if (!checkCreateSoldier()) return;
     const options = {
       race,
       srcId: `${item.index}`,
@@ -151,6 +167,8 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 position='relative'
                 onClick={() => {
                   if (!disableClick) {
+                    if (!checkCreateSoldier()) return;
+
                     const soldier = new Soldier({
                       x: 0,
                       y: 0,
@@ -181,6 +199,8 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   customDrag
                   disableDrag={disableDragSoilder}
                   onPointerDown={e => {
+                    if (!checkCreateSoldier()) return;
+
                     if (!disableDragSoilder) {
                       onDrag();
                       dragStartHandle(e, item);

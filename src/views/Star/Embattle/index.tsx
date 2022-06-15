@@ -13,6 +13,7 @@ import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Button, Text, Flex, Image } from 'uikit';
 import { useGuide } from 'hooks/useGuide';
+import config from 'game/config';
 import { Api } from 'apis';
 import {
   useFetchGamePlanetUnits,
@@ -250,6 +251,12 @@ const Embattle = () => {
         <Button onClick={() => game.clearSoldier()}>
           <Text fontSize='20px'>Clear All</Text>
         </Button>
+        <Flex>
+          <Text>人口:</Text>
+          <Text>
+            {gameSoldiers.length}/{config.MAX_SOLDIER_COUNT}
+          </Text>
+        </Flex>
       </Box>
       <Box
         position='absolute'
@@ -298,6 +305,7 @@ const Embattle = () => {
         <PreviewList
           race={race}
           game={game}
+          gameSoldiers={gameSoldiers}
           disableClick={activeStep === 5 && stepsEnabled}
           disableDrag={activeStep === 2 && stepsEnabled}
           activeSoldier={activeSoldier}

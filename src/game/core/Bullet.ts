@@ -588,7 +588,6 @@ class Bullet extends EventTarget {
       bulletType.PURIFY,
       bulletType.CHUANTOU,
       bulletType.TEST,
-      bulletType.FENG,
       bulletType.V_ATTACK,
     ];
     if (linear.includes(name)) {
@@ -603,6 +602,7 @@ class Bullet extends EventTarget {
       bulletType.JINZHAN,
       bulletType.LEIDIAN,
       bulletType.THROUGH,
+      bulletType.FENG,
     ];
     if (space.includes(name)) {
       this.spaceAttack(name, attackTarget);

@@ -319,9 +319,10 @@ const GamePK: React.FC<GamePKProps> = () => {
   }, []);
 
   const bulletSelect: OptionProps[] = useMemo(() => {
+    console.log(effectConfig.bullet);
     return effectConfig.bullet.map((item, index) => ({
       value: item.name,
-      label: item.label || item.name,
+      label: `${item.label || item.name} ${item.id}`,
       id: index,
     }));
   }, []);
