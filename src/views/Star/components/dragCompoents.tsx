@@ -911,8 +911,8 @@ export const DragCompoents: React.FC<{
                 {
                   ...currentBuild,
                   isqueue: true,
-                  propterty: data.propterty,
-                  work_build_picture: data.picture,
+                  propterty: data?.propterty,
+                  work_build_picture: data?.picture,
                   work_type: 2,
                   work_status: 4,
                 },
@@ -1034,6 +1034,7 @@ export const DragCompoents: React.FC<{
                 toastSuccess(t('planetQuickFixSuccessful'));
               }
               await dispatch(fetchPlanetBuildingsAsync(planet_id));
+              dispatch(fetchPlanetInfoAsync([planet_id]));
               setState({ ...state, repairVisible: false });
             }}
             onClose={() => setState({ ...state, repairVisible: false })}

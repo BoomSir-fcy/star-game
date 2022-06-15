@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Flex, Box, Image, Text } from 'uikit';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { useTranslation } from 'contexts/Localization';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { ThingRepair } from '..';
 
 const StyledImage = styled(Image)`
@@ -26,6 +27,7 @@ export const BuildingValue: React.FC<{
 
     const getSelfBuilding = () => {
       dispatch(fetchPlanetBuildingsAsync(planet_id));
+      dispatch(fetchPlanetInfoAsync([planet_id]));
     };
 
     return (

@@ -45,15 +45,15 @@ const PreviewList: React.FC<PreviewListProps> = ({
 
   useEffect(() => {
     if (list.length) {
-      const [, item] = list;
+      const [item] = list;
       const soldier = new Soldier({
         x: 0,
         y: 0,
-        srcId: `${item.index}`,
+        srcId: `${item?.index}`,
         race,
-        id: item.unique_id,
-        unique_id: item.unique_id,
-        unitInfo: unitMaps?.[item.unique_id],
+        id: item?.unique_id,
+        unique_id: item?.unique_id,
+        unitInfo: unitMaps?.[item?.unique_id],
       });
       game.addActiveSolider(soldier);
     }

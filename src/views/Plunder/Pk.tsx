@@ -42,6 +42,7 @@ import { GamePkState } from 'state/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useDispatch } from 'react-redux';
 import { TrackDetail } from 'game/core/Running';
+import { useWeb3React } from '@web3-react/core';
 import {
   PeopleCard,
   Energy,
@@ -63,10 +64,11 @@ const Pk = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { account } = useWeb3React();
 
   const parseQs = useParsedQueryString();
 
-  const id = Number(parseQs.pid0) || 5000000000000040;
+  const matchAddress = String(parseQs.pid0);
 
   const { state, matchUser, mineUser } = useStore(p => p.game);
 
@@ -83,6 +85,10 @@ const Pk = () => {
 
   const game = useGame({ width: 1400, height: 600 });
   const [progress, setProgress] = useState(0);
+
+  // 蓝色方和红色方信息
+  useFetchGameMatchUser(account, 1);
+  useFetchGameMatchUser(matchAddress);
 
   // TODO: 要干掉
   // useFetchGamePK(5000000000000004, 5000000000000002, 10);
@@ -316,7 +322,7 @@ const Pk = () => {
         }
       } else {
         setTimeout(() => {
-          alert('未查询到作战信息');
+          alert(t('No combat information found'));
         }, 1000);
       }
     }
@@ -338,6 +344,7 @@ const Pk = () => {
     current,
     loaderAddEventListener,
     loaderRemoveEventListener,
+    t,
   ]);
 
   return (
