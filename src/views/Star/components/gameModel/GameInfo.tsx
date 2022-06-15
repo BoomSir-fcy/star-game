@@ -214,7 +214,7 @@ export const GameInfo: React.FC<{
 
     React.useEffect(() => {
       if (!itemData?.iscreate || itemData?.isqueue) {
-        setState({ ...state, upgrade: {} });
+        setState({ ...state, upgrade: {}, upgradesVisible: false });
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemData]);

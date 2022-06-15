@@ -199,13 +199,14 @@ export const RechargeAssets: React.FC<{
           defaultId={selectId}
           onChange={option => {
             setSelectId(option.value);
+            setInputValue('');
           }}
         />
         <Flex position='relative'>
           <PrimaryInput
             width='100%'
             height={65}
-            pattern='^[1-9]\d*$'
+            pattern='^[0-9]*[.,]?[0-9]{0,18}$'
             placeholder={t('Please enter the recharge amount')}
             value={inputValue}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

@@ -81,7 +81,7 @@ export const PlunderCard: React.FC<{
       });
       if (res) {
         dispatch(setState(GamePkState.START));
-        navigate('/plunder-pk');
+        navigate(`/plunder-pk?pid0=${info?.owner}`);
       } else {
         dispatch(setState(GamePkState.MATCHED));
       }
