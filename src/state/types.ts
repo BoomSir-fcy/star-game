@@ -262,41 +262,6 @@ export interface State {
   guide: GuideState;
 }
 
-export interface planetInfo {
-  id: number;
-  name: string;
-  owner: string;
-  oldOwner: string;
-  rarity: Qualities;
-  level: number;
-  strengthenLevel: number;
-  working: boolean;
-  workTime: number;
-  areaX: number;
-  areaY: number;
-  oreYield: number;
-  oreConsumption: number;
-  energyYield: number;
-  energyConsumption: number;
-  populationYield: number;
-  populationConsumption: number;
-  settleAt: number;
-  addTime: number;
-  update_finish_time: number;
-  strengthen_finish_time: number;
-  build_count: number;
-  energy: number;
-  attack: number;
-  build: number;
-  defense: number;
-  hp: number;
-  product: number;
-  is_available: boolean;
-  plunder_speed: number;
-  population: number;
-  race: number;
-  stone: number;
-}
 export interface allianceInfo {
   id: number;
   uid: number;
@@ -314,7 +279,7 @@ export interface orderInfo {
   planetId: number;
   order: number;
   uid: number;
-  planet: planetInfo;
+  planet: Api.Planet.PlanetInfo;
 }
 export interface energyInfo {
   total_population: number;

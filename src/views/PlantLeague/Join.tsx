@@ -165,7 +165,9 @@ const JoinTheAlliance: React.FC<{
           }
           size='200px'
           url={
-            allianceList && allianceList[0]?.planet ? '/images/star/01.jpg' : ''
+            allianceList && allianceList[0]?.planet
+              ? allianceList[0]?.planet.picture1
+              : ''
           }
           No={1}
           Leve={(allianceList && allianceList[0]?.planet?.level) || ''}
@@ -188,7 +190,9 @@ const JoinTheAlliance: React.FC<{
           }
           size='200px'
           url={
-            allianceList && allianceList[4]?.planet ? '/images/star/05.jpg' : ''
+            allianceList && allianceList[4]?.planet
+              ? allianceList[4]?.planet.picture1
+              : ''
           }
           No={5}
           Leve={(allianceList && allianceList[4]?.planet?.level) || ''}
@@ -221,7 +225,9 @@ const JoinTheAlliance: React.FC<{
           }
           size='200px'
           url={
-            allianceList && allianceList[1]?.planet ? '/images/star/02.jpg' : ''
+            allianceList && allianceList[1]?.planet
+              ? allianceList[1]?.planet.picture1
+              : ''
           }
           No={2}
           Leve={(allianceList && allianceList[1]?.planet?.level) || ''}
@@ -244,7 +250,9 @@ const JoinTheAlliance: React.FC<{
           }
           size='200px'
           url={
-            allianceList && allianceList[3]?.planet ? '/images/star/04.jpg' : ''
+            allianceList && allianceList[3]?.planet
+              ? allianceList[3]?.planet.picture1
+              : ''
           }
           No={4}
           Leve={(allianceList && allianceList[3]?.planet?.level) || ''}
@@ -265,7 +273,9 @@ const JoinTheAlliance: React.FC<{
           }
           size='200px'
           url={
-            allianceList && allianceList[2]?.planet ? '/images/star/03.jpg' : ''
+            allianceList && allianceList[2]?.planet
+              ? allianceList[2]?.planet.picture1
+              : ''
           }
           No={3}
           Leve={(allianceList && allianceList[2]?.planet?.level) || ''}
