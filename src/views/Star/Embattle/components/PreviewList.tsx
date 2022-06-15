@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
 import { Box, Text, BgCard, Flex, BorderCard, BgCardProps } from 'uikit';
 import { useToast } from 'contexts/ToastsContext';
+import { useTranslation } from 'contexts/Localization';
 import { isApp } from 'utils/client';
 import PreviewSoldier from './PreviewSoldier';
 import { SortSoldier } from './SortBoard';
@@ -34,6 +35,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   const units = useStore(p => p.game.baseUnits);
   const [disableDragSoilder, setdDisableDragSoilder] = useState(disableDrag);
   const [visibleBtn, setVisibleBtn] = useState(false);
+  const { t } = useTranslation();
 
   const { toastError } = useToast();
 
@@ -100,11 +102,11 @@ const PreviewList: React.FC<PreviewListProps> = ({
 
   const checkCreateSoldier = useCallback(() => {
     if (gameSoldiers.length >= config.MAX_SOLDIER_COUNT) {
-      toastError('当前放置数量已达到最大');
-      return false;
+      toastError(t('http-error-1000004'));
+      return true;
     }
     return true;
-  }, [gameSoldiers.length, toastError]);
+  }, [gameSoldiers.length, toastError, t]);
 
   // 上阵
   const handleGoIntoBattle = (item: Api.Game.UnitInfo) => {

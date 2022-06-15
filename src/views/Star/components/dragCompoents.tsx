@@ -465,6 +465,7 @@ export const DragCompoents: React.FC<{
             currentAxis,
           ];
 
+          console.log(grid);
           /** @s4 */
           const canUseArea = areaPoints?.every(
             item =>

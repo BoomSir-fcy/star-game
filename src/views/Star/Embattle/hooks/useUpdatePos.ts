@@ -42,10 +42,13 @@ const useUpdatePos = (planetId: number, game: Game) => {
         units,
         planet_id: planetId,
       });
-      // TODO:判断返回值
-      setSortSoldiers(game.soldiers);
+      if (Api.isSuccess(res)) {
+        setSortSoldiers(game.soldiers);
+      } else {
+        game.removeSoldier(game.soldiers[game.soldiers.length - 1]);
+      }
     },
-    [planetId, game.soldiers, setSortSoldiers],
+    [planetId, game, setSortSoldiers],
   );
 
   useEffect(() => {
