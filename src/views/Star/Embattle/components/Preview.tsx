@@ -257,7 +257,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                   height={40}
                   src='/images/commons/icon/Mecha_upgrade.png'
                 />
-              </Button>
+              </Button> */}
               <Button
                 onClick={removeHandle}
                 width={40}
@@ -270,7 +270,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                   height={40}
                   src='/images/commons/icon/delete.png'
                 />
-              </Button> */}
+              </Button>
             </Flex>
             {/* <Image width={40} height={40} src='/images/commons/icon/help.png' /> */}
           </Flex>
