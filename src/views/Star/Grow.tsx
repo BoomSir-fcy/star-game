@@ -198,7 +198,11 @@ const Grow: React.FC = () => {
                   <Flex justifyContent='space-between' alignItems='center'>
                     <TopBox1>
                       <Text bold fontSize='24px' color='legendText'>
-                        {t('Strengthen')} +{estimateCost?.now_level}
+                        {estimateCost?.now_level === 20
+                          ? 'MAX'
+                          : `${t('Strengthen')} + ${
+                              estimateCost?.now_level || 0
+                            }`}
                       </Text>
                     </TopBox1>
                     <Box width={82}>
@@ -210,7 +214,11 @@ const Grow: React.FC = () => {
                     </Box>
                     <TopBox2>
                       <Text bold fontSize='24px' color='legendText'>
-                        {t('Strengthen')} +{estimateCost?.next_level}
+                        {estimateCost?.next_level === 20
+                          ? 'MAX'
+                          : `${t('Strengthen')} + ${
+                              estimateCost?.next_level || 0
+                            }`}
                       </Text>
                     </TopBox2>
                   </Flex>

@@ -62,6 +62,10 @@ const StyledCard = styled(Card)`
   padding: 26px 20px;
 `;
 
+interface NowPlanetInfo extends Api.Planet.PlanetInfo {
+  max_level?: number;
+}
+
 const Upgrade = () => {
   const { toastSuccess, toastError } = useToast();
   const { account } = useWeb3React();
@@ -72,6 +76,7 @@ const Upgrade = () => {
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.id);
   const { guides, setGuide } = useGuide(location.pathname);
+  const [isHighestLevel, setIsHighestLevel] = useState(false);
   const [visible, setVisible] = useState(false);
   const [pending, setPending] = useState(false);
   const [upgradeInfo, setUpgradeInfo] = useState<Api.Planet.UpgradePlanetInfo>({
@@ -83,7 +88,7 @@ const Upgrade = () => {
     estimate_planet_info: {} as Api.Planet.PlanetInfo,
     material_planet_num: 5,
     now_max_building_level: 1,
-    now_planet_info: {} as Api.Planet.PlanetInfo,
+    now_planet_info: {} as NowPlanetInfo,
     space_utilization: '0',
     upgrade_time: 0,
     upgrade_exp: 0,
@@ -128,10 +133,13 @@ const Upgrade = () => {
           estimate_max_building_level,
           now_max_building_level,
         } = planetUpgradeInfo.data;
+        const isHighest =
+          now_planet_info?.max_level &&
+          now_planet_info.level === now_planet_info?.max_level;
         setUpgradeInfo({
           ...planetUpgradeInfo.data,
           estimate_planet_info: {
-            ...estimate_planet_info,
+            ...(isHighest ? now_planet_info : estimate_planet_info),
             build_level: estimate_max_building_level,
           },
           now_planet_info: {
@@ -140,6 +148,7 @@ const Upgrade = () => {
           },
           material_planet_num: 5,
         });
+        setIsHighestLevel(isHighest);
       }
     } catch (error) {
       console.error(error);
@@ -246,6 +255,9 @@ const Upgrade = () => {
   }, [upgradeInfo, planetInfo, planetId, activeMaterialMap]);
 
   const rendeButton = useMemo(() => {
+    if (isHighestLevel) {
+      return <Text color='warning'>{t('Raised to the highest level')}</Text>;
+    }
     if (!account) {
       return <ConnectWalletButton scale='ld' width='270px' padding='0 10px' />;
     }
@@ -319,6 +331,7 @@ const Upgrade = () => {
     dispatch,
     planetId,
     pending,
+    isHighestLevel,
     usableMaterialIds,
     upgrade,
     toastError,

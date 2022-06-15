@@ -17,6 +17,11 @@ export const storage = {
   systemCustom: 'systemCustom',
 };
 
+BigNumber.config({
+  EXPONENTIAL_AT: 1000,
+  DECIMAL_PLACES: 80,
+});
+
 export const DEFAULT_GAS_LIMIT = 2000000;
 export const DEFAULT_TOKEN_DECIMAL = BIG_TEN.pow(18);
 
