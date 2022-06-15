@@ -155,8 +155,8 @@ const effectConfig: EffectConfig = {
       // resDir: '/assets/bullet/missile/head/dangt.json',
       // spriteRes: '/assets/bullet/missile/head/dangt.png',
       bombSpineSrc: '/assets/bullet/missile/bom/daod.json',
-      bombSpine: bulletType.MISSILE,
-      moveSpine: bulletType.MISSILE_BOOM,
+      bombSpine: bulletType.MISSILE_BOOM,
+      moveSpine: bulletType.MISSILE,
       bombSpriteSrc: '',
       moveSpineSrc: '/assets/bullet/missile/head/dangt.json',
       moveSpriteSrc: '',
@@ -499,7 +499,7 @@ export const spines = [
   },
   {
     name: bulletType.MISSILE,
-    src: '/assets/bullet/missile/bom/dangt.json',
+    src: '/assets/bullet/missile/head/dangt.json',
   },
   {
     name: bulletType.MISSILE_BOOM,
