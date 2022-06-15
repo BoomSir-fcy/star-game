@@ -111,22 +111,22 @@ export const useFetchGamePKTest = (
   };
 };
 
-export const useFetchGameMatchUser = () => {
+export const useFetchGameMatchUser = (address?: string, our?: number) => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const fetch = useCallback(
-    (address?: string, our?: number) => {
-      dispatch(fetchGameMatchUserAsync(address, our));
+    (a?: string, o?: number) => {
+      dispatch(fetchGameMatchUserAsync(a, o));
     },
     [dispatch],
   );
 
   useEffect(() => {
     if (account) {
-      fetch(account, 1);
+      fetch(address, our);
     }
-    fetch();
-  }, [fetch, account]);
+    // fetch();
+  }, [fetch, account, address, our]);
 
   return {
     fetch,

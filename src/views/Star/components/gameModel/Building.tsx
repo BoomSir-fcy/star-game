@@ -5,6 +5,7 @@ import { Flex, Box, Text } from 'uikit';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { ThingRepair } from '../planet/ThingRepair';
@@ -155,6 +156,7 @@ export const Building: React.FC<{
                   building_id={itemData._id}
                   onCallback={() => {
                     dispatch(fetchPlanetBuildingsAsync(planet_id));
+                    dispatch(fetchPlanetInfoAsync([planet_id]));
                   }}
                 />
               </ToolBar>

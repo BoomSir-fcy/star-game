@@ -59,6 +59,7 @@ const MysteryBoxState = () => {
   const { account } = useWeb3React();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [buyNum, setBuyNum] = useState(1);
 
   const quality = useMemo(() => {
     const q = Number(paramsQs.q) as MysteryBoxQualities;
@@ -67,15 +68,14 @@ const MysteryBoxState = () => {
     return mysteryBoxQualities.ORDINARY;
   }, [paramsQs.q]);
   const price = useMemo(() => {
-    return getBalanceNumber(new BigNumber(priceBNB[quality]), 18);
-  }, [priceBNB, quality]);
+    return getBalanceNumber(new BigNumber(priceBNB[quality]).times(buyNum), 18);
+  }, [priceBNB, quality, buyNum]);
 
   // 持有盲盒数量
   const ownedNum = useMemo(() => {
     return new BigNumber(boxCount[quality]).toNumber() || 0;
   }, [boxCount, quality]);
 
-  const [buyNum, setBuyNum] = useState(1);
   const [bought, setBought] = useState(false);
   const [handleLoading, setHandleLoading] = useState(false);
   const { handleBuy } = useBuyMysteryBox();
