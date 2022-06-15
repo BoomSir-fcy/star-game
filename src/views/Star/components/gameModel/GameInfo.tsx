@@ -270,6 +270,7 @@ export const GameInfo: React.FC<{
 
                     {(itemData?.building?._id ||
                       state.upgrade?.building_detail?._id) &&
+                      state.upgrade?.estimate_building_detail &&
                       !itemData?.work_queue_id && (
                         <Text shadow='primary' bold fontSize='22px'>
                           {t('LevelPreview', {
@@ -486,29 +487,46 @@ export const GameInfo: React.FC<{
                   }}
                 >
                   <Flex flexDirection='column'>
-                    <Flex alignItems='center' mb='5px'>
-                      <Text shadow='primary' bold fontSize='34px'>
-                        Lv{' '}
-                        {state.upgrade?.building_detail?.propterty?.levelEnergy}
+                    {state.upgrade?.estimate_building_detail ? (
+                      <Flex alignItems='center' mb='5px'>
+                        <Text shadow='primary' bold fontSize='34px'>
+                          Lv{' '}
+                          {
+                            state.upgrade?.building_detail?.propterty
+                              ?.levelEnergy
+                          }
+                        </Text>
+                        {state.upgrade?.estimate_building_detail && (
+                          <>
+                            <Box width='47px' height='40px' margin='0 40px'>
+                              <Image
+                                src='/images/commons/icon/icon-upgrade.png'
+                                width={47}
+                                height={40}
+                              />
+                            </Box>
+                            <Text shadow='primary' bold fontSize='34px'>
+                              Lv{' '}
+                              {state.upgrade?.building_detail?.propterty
+                                ?.levelEnergy + 1}
+                            </Text>
+                          </>
+                        )}
+                      </Flex>
+                    ) : (
+                      <Text color='warning'>
+                        {t('Raised to the highest level')}
                       </Text>
-                      <Box width='47px' height='40px' margin='0 40px'>
-                        <Image
-                          src='/images/commons/icon/icon-upgrade.png'
-                          width={47}
-                          height={40}
-                        />
-                      </Box>
-                      <Text shadow='primary' bold fontSize='34px'>
-                        Lv{' '}
-                        {state.upgrade?.building_detail?.propterty
-                          ?.levelEnergy + 1}
+                    )}
+
+                    {state.upgrade?.estimate_building_detail && (
+                      <Text fontSize='17px'>
+                        {t('TimeConsumingUpgrade', {
+                          time: formatTime(upgrade_need?.upgrade_time),
+                        })}
                       </Text>
-                    </Flex>
-                    <Text fontSize='17px'>
-                      {t('TimeConsumingUpgrade', {
-                        time: formatTime(upgrade_need?.upgrade_time),
-                      })}
-                    </Text>
+                    )}
+
                     {upgrade_need?.upgrade_energy > 0 && (
                       <Text
                         fontSize='17px'

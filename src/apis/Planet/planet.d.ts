@@ -50,7 +50,8 @@ declare namespace Api {
       hp: number; // hp加成
       product: number; // 产能加成
       build: number; // 建筑成本
-      is_available: boolean; // 是否处于星球联盟 0不属于 1属于
+      in_alliance: number; // 是否处于星球联盟 0不属于 1属于
+      is_available: boolean; // 是否可用, 星球升级被吞噬后就不可用
       max_stone: number; // 最大储存矿石
       max_energy: number; // 最大储存能量
       max_population: number; // 最大储存人口
@@ -67,10 +68,10 @@ declare namespace Api {
       consume_stone: number;
       consume_energy: number;
       estimate_max_building_level: number;
-      estimate_planet_info: PlanetInfo;
+      estimate_planet_info: any;
       material_planet_num: number;
       now_max_building_level: number;
-      now_planet_info: PlanetInfo;
+      now_planet_info: any;
       space_utilization: string;
       upgrade_time: number;
       upgrade_exp: number; // 最大经验值

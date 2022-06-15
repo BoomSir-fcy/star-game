@@ -66,7 +66,7 @@ const StarHeader = () => {
               picture={planetInfo?.picture}
               picture1={planetInfo?.picture1}
               mr='40px'
-              showUnion
+              showUnion={planetInfo?.in_alliance !== 0}
               style={{ flexShrink: 1 }}
             />
             <Flex
@@ -96,13 +96,13 @@ const StarHeader = () => {
                     count={planetInfo?.strengthenLevel}
                   />
                 </Flex>
-                <TextStyled ml='10px' fontSize='20px' color='warning'>
+                {/* <TextStyled ml='10px' fontSize='20px' color='warning'>
                   {planetInfo?.status === 2
                     ? t(
                         'The planet is under cultivating, it has no capacity yet',
                       )
                     : null}
-                </TextStyled>
+                </TextStyled> */}
               </Flex>
               <Flex justifyContent='space-between' alignItems='center'>
                 <Flex alignItems='center'>

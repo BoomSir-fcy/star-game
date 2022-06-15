@@ -88,6 +88,7 @@ export const PlanetBox: React.FC<{
           quality={info?.rarity}
           picture1={info?.picture1}
           picture={info?.picture}
+          showUnion={info?.in_alliance !== 0}
         />
         <Flex
           ml='29px'
