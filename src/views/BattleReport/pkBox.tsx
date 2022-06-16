@@ -58,11 +58,15 @@ export const PkBox: React.FC<{
     return List;
   }, [t, info, account]);
 
+  const isFrom = useMemo(() => {
+    return (
+      account?.toLocaleLowerCase() === info.fromAddress.toLocaleLowerCase()
+    );
+  }, [account, info.fromAddress]);
+
   const pkRes = useMemo(() => {
-    return account?.toLocaleLowerCase() === info.fromAddress.toLocaleLowerCase()
-      ? !!info.success
-      : !info.success;
-  }, [account, info.fromAddress, info.success]);
+    return isFrom ? !!info.success : !info.success;
+  }, [isFrom, info.success]);
 
   console.log(pkRes, '==pkRes');
 
@@ -87,7 +91,9 @@ export const PkBox: React.FC<{
                   console.error(error);
                 }
               }}
-              to={`/plunder-pk?id=${info.id}`}
+              to={`/plunder-pk?id=${info.id}&pid0=${
+                !isFrom ? info.fromAddress : info.toAddress
+              }`}
             >
               <PlayImg src='/images/battleReport/play.png' alt='' />
             </Link>

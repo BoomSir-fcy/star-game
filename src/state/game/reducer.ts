@@ -94,7 +94,7 @@ export const fetchGameMatchUserAsync =
   (address?: string, our?: number): AppThunk =>
   async dispatch => {
     dispatch(setState(GamePkState.MATCHING));
-    const res = await fetchGameMatchUser(address);
+    const res = await fetchGameMatchUser(address?.toLowerCase());
     if (Api.isSuccess(res) && res.data) {
       if (our === 1) {
         dispatch(setMineUser(res.data));

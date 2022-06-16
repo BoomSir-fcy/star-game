@@ -62,7 +62,7 @@ const RoundPanel: React.FC<RoundPanelProps> = ({
           mt='26px'
         >
           <Text shadow='primary' small bold>
-            End
+            Skip
           </Text>
         </ButtonStyled>
       </FlexStyled>
