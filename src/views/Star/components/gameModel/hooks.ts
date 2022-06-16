@@ -6,7 +6,7 @@ export const useBuildingUpgrade = () => {
     async (
       planet_id: number,
       building_id: number | string,
-      target_level?: number,
+      target_level?: number | string,
     ) => {
       try {
         const [info] = await Promise.all([

@@ -119,11 +119,25 @@ export const GameInfo: React.FC<{
 
     const init = useCallback(
       async (target_level?: number) => {
-        const buildingsId = itemData?.work_queue_id
-          ? itemData?.buildings_id
-          : building_id;
+        const buildingsId =
+          itemData?.work_queue_id || itemData?.work_add_time
+            ? itemData?.buildings_id || itemData?._id
+            : building_id;
 
-        if ((itemData?.iscreate || itemData?.work_queue_id) && buildingsId) {
+        if (buildingsId) {
+          // 获取当前建筑的最高等级
+          let selfLevel = '';
+          // 已经成功创建队列
+          if (itemData?.work_queue_id && itemData?.target_level) {
+            selfLevel = itemData?.target_level;
+          }
+
+          // 为成功创建到队列里面
+          if (itemData?.work_queue_id && !itemData?.target_level) {
+            selfLevel = itemData?.propterty?.levelEnergy + 1;
+          }
+
+          // 队列有正在升级的建筑
           // 已经创建建筑加入队列，获取加入队列的最高建筑信息
           const taregtBuildings = currentQueue.filter(
             ({ _id, buildings_id, work_type }) =>
@@ -131,18 +145,26 @@ export const GameInfo: React.FC<{
               work_type === 2,
           );
           const taregtBuildingLevel = taregtBuildings?.sort(
-            (a, b) => b?.propterty?.levelEnergy - a?.propterty?.levelEnergy,
+            (a, b) =>
+              b?.propterty?.levelEnergy - a?.propterty?.levelEnergy ||
+              b?.target_level - a?.target_level,
           );
-          // 获取当前建筑的最高等级
-          const selfLevel =
-            target_level ||
-            (itemData?.work_queue_id && itemData?.target_level) ||
-            (taregtBuildingLevel.length > 0 &&
-              (taregtBuildingLevel[0]?.propterty?.levelEnergy + 2 ||
-                taregtBuildingLevel[0]?.target_level + 1)) ||
-            itemData?.propterty?.levelEnergy + 1;
+          if (
+            itemData?.building?._id &&
+            !itemData.isqueue &&
+            taregtBuildingLevel.length > 0
+          ) {
+            selfLevel =
+              taregtBuildingLevel[0]?.propterty?.levelEnergy + 2 ||
+              taregtBuildingLevel[0]?.target_level + 1;
+          }
 
-          const res = await upgrade(planet_id, buildingsId, selfLevel);
+          console.log(itemData, '建筑', selfLevel);
+          const res = await upgrade(
+            planet_id,
+            buildingsId,
+            target_level || selfLevel,
+          );
           setState({ ...state, upgrade: res });
         }
       },
@@ -206,10 +228,12 @@ export const GameInfo: React.FC<{
     }, [diffTime]);
 
     React.useEffect(() => {
-      if (itemData?._id && !itemData?.isactive && !itemData?.isqueue) {
+      if (
+        (itemData?.building?._id && !itemData.isqueue) ||
+        itemData?.buildings_id
+      ) {
         init();
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemData, init]);
 
     React.useEffect(() => {
@@ -303,7 +327,7 @@ export const GameInfo: React.FC<{
                           itemData={itemData}
                           planet_id={planet_id}
                           title={t('Energy Capacity')}
-                          value={`${currentAttributes?.stone?.product?.per_sec_ouput_energy}/s`}
+                          value={`${currentAttributes?.energy?.product?.per_sec_ouput_energy}/s`}
                           icon='/images/commons/icon/icon_energy.png'
                         />
                       </ItemInfo>
@@ -316,7 +340,7 @@ export const GameInfo: React.FC<{
                           itemData={itemData}
                           planet_id={planet_id}
                           title={t('Population Capacity')}
-                          value={`${currentAttributes?.stone?.product?.per_sec_ouput_population}/s`}
+                          value={`${currentAttributes?.population?.product?.per_sec_ouput_population}/s`}
                           icon='/images/commons/icon/icon_spice.png'
                         />
                       </ItemInfo>

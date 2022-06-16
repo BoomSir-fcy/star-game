@@ -150,7 +150,7 @@ const StarHeader = () => {
                         ellipsis
                         style={{ width: '140px' }}
                       >
-                        {planetInfo?.populationYield}/s
+                        {planetInfo?.oreYield}/s
                       </TextStyled>
                     </Flex>
                     <Flex alignItems='center'>
