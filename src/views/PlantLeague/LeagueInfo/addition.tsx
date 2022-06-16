@@ -69,6 +69,13 @@ const ItemRow: React.FC<{
 }> = ({ info }) => {
   const { t } = useTranslation();
 
+  const SubString_1 = (value, bit = 2) => {
+    let str = value.toString();
+    const strIndex = str.indexOf('.');
+    if (strIndex === -1) return str;
+    str = str.substring(0, strIndex + bit);
+    return str;
+  };
   return (
     <Flex alignItems='flex-end'>
       <Flex flex='1'>
@@ -84,14 +91,13 @@ const ItemRow: React.FC<{
             {info.name}: {info.total}
           </Text>
           <Text fontSize='22px'>
-            {t('Capacity')}:{' '}
-            {getFullDisplayBalance(new BigNumber(info.capacity), 0, 1)}/s
+            {t('Capacity')}: {SubString_1(info.capacity)}/s
           </Text>
         </Box>
       </Flex>
       <Text fontSize='22px' color='profit'>
         {info.speed.toNumber() >= 0 && '+'}
-        {getFullDisplayBalance(info.speed, 0, 1)}/s
+        {SubString_1(info.speed)}/s
       </Text>
     </Flex>
   );
