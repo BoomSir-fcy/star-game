@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import BigNumber from 'bignumber.js';
 import { useDispatch } from 'react-redux';
 import { Button, Text, Flex, Card, Box } from 'uikit';
 import { useStore } from 'state';
@@ -9,7 +10,6 @@ import { useTranslation } from 'contexts/Localization';
 import { getPlanetRarity } from 'utils/planetRarity';
 import { RaceTypeColor } from 'uikit/theme/colors';
 import { RaceAvatar } from 'components';
-import { RaceType } from 'uikit/theme/types';
 import ScoringPanel from 'components/ScoringPanel';
 import { RechargeAssets } from '../Modal';
 
@@ -118,7 +118,10 @@ const StarHeader = () => {
                         ellipsis
                         style={{ width: '140px' }}
                       >
-                        {planetInfo?.energyYield}/s
+                        {new BigNumber(planetInfo?.oreYield)
+                          .toFixed(6)
+                          .toString()}
+                        /s
                       </TextStyled>
                     </Flex>
                     <Flex alignItems='center'>
@@ -150,7 +153,7 @@ const StarHeader = () => {
                         ellipsis
                         style={{ width: '140px' }}
                       >
-                        {planetInfo?.oreYield}/s
+                        {planetInfo?.populationYield}/s
                       </TextStyled>
                     </Flex>
                     <Flex alignItems='center'>

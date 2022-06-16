@@ -7,15 +7,14 @@ import { useStore, storeAction } from 'state';
 import { Api } from 'apis';
 
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useTranslation } from 'contexts/Localization';
 
 import { BuildingDetailType } from 'state/types';
 import { useBuildingUpgrade, useBuildingOperate } from './hooks';
 
 import { GameThing, BuildingValue } from '..';
-import { ThingDestoryModal, ThingUpgradesModal, CancelModal } from '../Modal';
-
-import { useWorkqueue } from '../hooks';
+import { ThingDestoryModal, ThingUpgradesModal } from '../Modal';
 
 const Container = styled(Box)`
   width: 852px;
@@ -93,7 +92,15 @@ export const GameInfo: React.FC<{
 
     // 获取已经创建的所有储物罐
     const storage = gridBuilds.filter(
-      ({ detail_type, building }) => detail_type === 1 && building?._id,
+      ({ detail_type, building }) =>
+        detail_type === BuildingDetailType.BuildingDetailTypeStore &&
+        building?._id,
+    );
+    // 获取星球所有地窖
+    const cellar = gridBuilds.filter(
+      ({ detail_type, building }) =>
+        detail_type === BuildingDetailType.BuildingDetailTypeCellar &&
+        building?._id,
     );
 
     let timer: any = null;
@@ -194,6 +201,7 @@ export const GameInfo: React.FC<{
     };
 
     const getSelfBuilding = () => {
+      dispatch(fetchPlanetInfoAsync([planet_id]));
       dispatch(fetchPlanetBuildingsAsync(planet_id));
     };
 
@@ -242,8 +250,6 @@ export const GameInfo: React.FC<{
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemData]);
-
-    console.log(itemData);
 
     return (
       <Container>
@@ -306,6 +312,24 @@ export const GameInfo: React.FC<{
                       )}
                   </Flex>
                   <Flex flex={1} justifyContent='space-between' flexWrap='wrap'>
+                    <ItemInfo>
+                      <BuildingValue
+                        itemData={itemData}
+                        planet_id={planet_id}
+                        title={t('planetDurability')}
+                        value={`${currentAttributes?.propterty?.now_durability}/${currentAttributes?.propterty?.max_durability}`}
+                        addedValue={
+                          state.upgrade?.estimate_building_detail
+                            ?.max_durability -
+                          currentAttributes?.propterty?.max_durability
+                        }
+                        icon='/images/commons/star/durability.png'
+                        isRepair={
+                          currentAttributes?.propterty?.now_durability <
+                          currentAttributes?.propterty?.max_durability
+                        }
+                      />
+                    </ItemInfo>
                     {/* 矿石建筑 */}
                     {BuildingDetailType.BuildingDetailTypeStone ===
                       currentAttributes?.detail_type && (
@@ -345,24 +369,22 @@ export const GameInfo: React.FC<{
                         />
                       </ItemInfo>
                     )}
-                    <ItemInfo>
-                      <BuildingValue
-                        itemData={itemData}
-                        planet_id={planet_id}
-                        title={t('planetDurability')}
-                        value={`${currentAttributes?.propterty?.now_durability}/${currentAttributes?.propterty?.max_durability}`}
-                        addedValue={
-                          state.upgrade?.estimate_building_detail
-                            ?.max_durability -
-                          currentAttributes?.propterty?.max_durability
-                        }
-                        icon='/images/commons/star/durability.png'
-                        isRepair={
-                          currentAttributes?.propterty?.now_durability <
-                          currentAttributes?.propterty?.max_durability
-                        }
-                      />
-                    </ItemInfo>
+                    {currentAttributes?.propterty?.per_cost_stone > 0 && (
+                      <ItemInfo>
+                        <BuildingValue
+                          itemData={itemData}
+                          planet_id={planet_id}
+                          title={t('planetOreConsumption')}
+                          value={`${currentAttributes?.propterty?.per_cost_stone}/s`}
+                          addedValue={
+                            state.upgrade?.estimate_building_detail?.propterty
+                              ?.per_cost_stone -
+                            currentAttributes?.propterty?.per_cost_stone
+                          }
+                          icon='/images/commons/icon/icon_minera.png'
+                        />
+                      </ItemInfo>
+                    )}
                     <ItemInfo bottomMargin>
                       <BuildingValue
                         itemData={itemData}
@@ -392,11 +414,14 @@ export const GameInfo: React.FC<{
                       />
                     </ItemInfo>
                   </Flex>
-                  <Box>
-                    <Text color='textSubtle' small mt='5px'>
-                      {t('planetResourcesProducedPlanetaryBuildings')}
-                    </Text>
-                  </Box>
+                  {itemData.detail_type ===
+                    BuildingDetailType.BuildingDetailTypeStore && (
+                    <Box>
+                      <Text color='textSubtle' small mt='5px'>
+                        {t('planetResourcesProducedPlanetaryBuildings')}
+                      </Text>
+                    </Box>
+                  )}
                 </Box>
               </Flex>
             </CardContent>
@@ -629,6 +654,20 @@ export const GameInfo: React.FC<{
                           );
                           return;
                         }
+
+                        if (
+                          storage.length <= cellar.length &&
+                          itemData?.detail_type ===
+                            BuildingDetailType.BuildingDetailTypeStore
+                        ) {
+                          toastError(
+                            t(
+                              'The number of cellars must be less than or equal to storage tanks',
+                            ),
+                          );
+                          return;
+                        }
+
                         dispatch(storeAction.destoryBuildingVisibleModal(true));
                       }}
                     >

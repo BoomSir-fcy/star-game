@@ -65,8 +65,8 @@ export const BuildingValue: React.FC<{
             >
               {addedValue
                 ? addedValue > 0
-                  ? `+${addedValue}`
-                  : `${addedValue}`
+                  ? `+${addedValue.toFixed(6)}`
+                  : `${addedValue.toFixed(6)}`
                 : ''}
             </Text>
           </Flex>
