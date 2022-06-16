@@ -37,7 +37,9 @@ const Planet = styled(Box)<{ url: string }>`
   background-size: cover;
   background-image: url(${({ url }) => url});
   transform: rotate(0deg) scale(1.2);
-  animation: ${planetRotate} calc(153.3 * 0.1s) linear infinite;
+  &.rotate {
+    animation: ${planetRotate} calc(153.3 * 0.1s) linear infinite;
+  }
 `;
 export interface GlobeProps extends BoxProps {
   url: string;
@@ -64,7 +66,7 @@ const Globe: React.FC<GlobeProps> = ({
 
   return (
     <PlanetBox width={width} height={height} color={getColor} {...props}>
-      <Planet url={url} />
+      <Planet url={url} className={rotate ? 'rotate' : ''} />
       {/* <Canvas resize={{ offsetSize: true }}>
         <Scene rotate={rotate} shadow={shadow} url={url} />
       </Canvas> */}

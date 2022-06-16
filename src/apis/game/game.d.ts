@@ -52,6 +52,8 @@ declare namespace Api {
       tag: string;
       attack_type: number; // 普通攻击类型
       skill_type: number; // 技能攻击类型
+      number: number; // 兵种标识
+      build_id: string; // 培养皿id 建筑id
       arms_attr: {
         ak: number;
         crit: number;

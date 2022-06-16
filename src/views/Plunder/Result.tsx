@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text, BorderCard, Fringe } from 'uikit';
 import { useStore } from 'state';
+import { useWeb3React } from '@web3-react/core';
+import { useTranslation } from 'contexts/Localization';
+import { useFetchGameMatchUser } from 'state/game/hooks';
 import {
   PeopleCard,
   Energy,
@@ -21,6 +24,9 @@ const VideoStyled = styled.video`
 `;
 
 const Result = () => {
+  const { t } = useTranslation();
+  const { account } = useWeb3React();
+  useFetchGameMatchUser(account, 1);
   const { state, matchUser, mineUser } = useStore(p => p.game);
 
   return (
@@ -58,12 +64,17 @@ const Result = () => {
             padding='44px'
           >
             <Text fontSize='28px' bold mark>
+              {t(
+                'Plunder successful! Congratulations on taking ownership of the star.',
+              )}
+            </Text>
+            {/* <Text fontSize='28px' bold mark>
               获得资源
             </Text>
             <Flex mt='38px'>
               <Energy />
               <Energy ml='72px' />
-            </Flex>
+            </Flex> */}
           </Box>
         </BorderCard>
       </Box>

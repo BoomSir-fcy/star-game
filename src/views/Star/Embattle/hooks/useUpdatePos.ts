@@ -34,6 +34,8 @@ const useUpdatePos = (planetId: number, game: Game) => {
             y: item?.axisPoint?.chequer?.axisY || 0,
           },
           speed: item?.options?.unitInfo?.speed, // 出手顺序
+          unit_number: item?.options?.unitInfo?.number, // 兵种标识
+          attribution_building: item?.options?.unitInfo?.build_id, // 培养皿id 建筑id
           unit_id: item.id,
         };
       });
