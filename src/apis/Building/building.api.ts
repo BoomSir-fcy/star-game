@@ -136,7 +136,7 @@ export class BuildingApi extends Http {
   async estimateBuildingUpgradeDetail(
     planet_id: number,
     building_id: number | string,
-    target_level?: number,
+    target_level?: number | string,
   ): Promise<Api.Response<{ data: Api.Building.CreateBuildingParams }>> {
     const res = await this.get(`buildings/upgrade_detail`, {
       planet_id,
