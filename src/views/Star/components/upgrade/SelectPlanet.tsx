@@ -69,7 +69,7 @@ const SelectPlanet = () => {
     try {
       const res = await Api.PlanetApi.getMaterialList(planetId);
       if (Api.isSuccess(res)) {
-        setStarList(res.data?.Data);
+        setStarList(res.data?.Data || []);
         // setStarList([]);
       }
     } catch (error) {
@@ -141,7 +141,7 @@ const SelectPlanet = () => {
                   </MaterialBox>
                 </React.Fragment>
               ))}
-              {!starList.length && (
+              {!starList?.length && (
                 <Flex
                   mt='50px'
                   width='100%'
@@ -156,7 +156,7 @@ const SelectPlanet = () => {
                 </Flex>
               )}
             </ScrollBox>
-            {starList.length && (
+            {starList?.length && (
               <Flex mt='10px' justifyContent='center'>
                 <Button
                   disabled={!starList.length}

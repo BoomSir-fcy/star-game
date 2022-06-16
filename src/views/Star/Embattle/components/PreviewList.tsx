@@ -103,7 +103,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   const checkCreateSoldier = useCallback(() => {
     if (gameSoldiers.length >= config.MAX_SOLDIER_COUNT) {
       toastError(t('http-error-1000004'));
-      return true;
+      return false;
     }
     return true;
   }, [gameSoldiers.length, toastError, t]);

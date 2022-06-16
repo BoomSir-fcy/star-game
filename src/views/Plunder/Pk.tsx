@@ -43,6 +43,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useDispatch } from 'react-redux';
 import { TrackDetail } from 'game/core/Running';
 import { useWeb3React } from '@web3-react/core';
+import ModalWrapper from 'components/Modal';
 import {
   PeopleCard,
   Energy,
@@ -78,6 +79,7 @@ const Pk = () => {
 
   const [complete, setComplete] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [visibleGameFailed, setVisibleGameFailed] = useState(false);
 
   const [current, setCurrent] = useState(0);
 
@@ -142,8 +144,12 @@ const Pk = () => {
   }, [setMounted, setTotalInfo, setCurrent, setOthers, setRoundInfos, game]);
 
   const onEndHandle = useCallback(() => {
-    navigate('/plunder-result');
-  }, [navigate]);
+    if (pkRes) {
+      navigate('/plunder-result');
+    } else {
+      setVisibleGameFailed(true);
+    }
+  }, [pkRes, navigate]);
 
   const onRunEnd = useCallback(() => {
     const { success } = PKInfo[current];
@@ -186,15 +192,8 @@ const Pk = () => {
       }, 1000);
       return;
     }
-    // 游戏胜利
-    if (pkRes) {
-      navigate('/plunder-result');
-      return;
-    }
-    console.log('游戏失败');
-
-    // 游戏结束
-  }, [setOthers, current, setResult, PKInfo, newRoundHandle, pkRes, navigate]);
+    onEndHandle();
+  }, [setOthers, current, setResult, PKInfo, newRoundHandle, onEndHandle]);
 
   useEffect(() => {
     if (running) {
@@ -468,6 +467,19 @@ const Pk = () => {
         </Flex>
         {/* <WaitPlunderList /> */}
       </Flex>
+
+      <ModalWrapper
+        title={t('Game over')}
+        visible={visibleGameFailed}
+        setVisible={() => setVisibleGameFailed(false)}
+      >
+        <Flex pt='100px' flexDirection='column' alignItems='center'>
+          <Text color='warning'>{t('Failed to plunder the planet!')}</Text>
+          <Button mt='30px' onClick={() => navigate(-1)}>
+            {t('Confirm')}
+          </Button>
+        </Flex>
+      </ModalWrapper>
     </Layout>
   );
 };
