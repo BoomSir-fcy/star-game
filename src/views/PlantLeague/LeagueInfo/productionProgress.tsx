@@ -56,7 +56,7 @@ const ProductionProgress = () => {
       toastError(t('Stop working to claim'));
       return;
     }
-    if (alliance.laterExtractTime <= 0) {
+    if (later_extract_time > 0) {
       toastError(t('Claim Freezing'));
       return;
     }
@@ -71,7 +71,7 @@ const ProductionProgress = () => {
       toastError(t('Claim Failed'));
     }
     dispatch(fetchAllianceViewAsync());
-  }, [alliance, t, dispatch, toastError, toastSuccess]);
+  }, [alliance, t, dispatch, toastError, toastSuccess, later_extract_time]);
 
   // 倒计时
   const countDown = () => {
