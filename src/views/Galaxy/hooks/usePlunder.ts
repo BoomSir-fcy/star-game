@@ -7,10 +7,15 @@ import { useDispatch } from 'react-redux';
 import { setPKInfo } from 'state/game/reducer';
 import { signMessage } from 'utils/web3React';
 import { parseZip } from 'utils';
+import { fetchGalaxyStarListAsync } from 'state/galaxy/reducer';
+import { useToast } from 'contexts/ToastsContext';
+import { useTranslation } from 'contexts/Localization';
 
 const usePlunder = () => {
   const { account, library } = useActiveWeb3React();
   const dispatch = useDispatch();
+  const { toastSuccess } = useToast();
+  const { t } = useTranslation();
 
   const handlePlunder = useCallback(
     async (starInfo: any): Promise<boolean> => {
@@ -27,9 +32,17 @@ const usePlunder = () => {
           );
           const params = { ...sign, signature, ...starInfo };
           const res = await Api.GalaxyApi.plunderStar(params);
+          console.log(starInfo);
+          dispatch(fetchGalaxyStarListAsync(starInfo.nft_id));
           if (Api.isSuccess(res)) {
             // dispatch(setPKInfo(res.data.pk_result1[0]));
-            dispatch(setPKInfo(parseZip(res.data.pk_result)));
+            console.log(parseZip(res.data.pk_result));
+            const pkRes = parseZip(res.data.pk_result);
+            if (!pkRes) {
+              toastSuccess(t('Occupy Succeeded'));
+              return false;
+            }
+            dispatch(setPKInfo(pkRes));
             return true;
           }
         } catch (error) {
@@ -38,7 +51,7 @@ const usePlunder = () => {
       }
       return false;
     },
-    [account, library, dispatch],
+    [account, library, dispatch, t, toastSuccess],
   );
   const handleGiveup = useCallback(
     async (starInfo: any): Promise<boolean> => {
