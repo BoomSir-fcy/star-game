@@ -299,12 +299,14 @@ export const DragCompoents: React.FC<{
               ? -(res.data.time - currentTime)
               : res.data.time - currentTime,
           );
+          dispatch(fetchPlanetBuildingsAsync(planet_id));
+          dispatch(fetchPlanetInfoAsync([planet_id]));
         }
       } catch (error) {
         console.log(error);
       }
     },
-    [currentQueue, currentTime, planet_id, refreshWorkQueue],
+    [currentQueue, currentTime, dispatch, planet_id, refreshWorkQueue],
   );
 
   // 新建建筑队列放入格子;
@@ -371,8 +373,8 @@ export const DragCompoents: React.FC<{
 
   React.useEffect(() => {
     if (planet_id) {
-      getBuffer();
       getWorkQueue();
+      getBuffer();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -787,13 +789,6 @@ export const DragCompoents: React.FC<{
     }
   };
 
-  // console.log(
-  //   '当前时间',
-  //   currentTime,
-  //   currentTime + serverDiffTime,
-  //   dayjs(currentTime * 1000).format('YYYY-MM-DD HH:mm:ss'),
-  // );
-
   return (
     <>
       <Box>
@@ -1003,13 +998,6 @@ export const DragCompoents: React.FC<{
                   );
                   await getWorkQueue(true);
                   setCurrentBuild({});
-                  await sleep(1800);
-                  console.log(
-                    '刷新星球：',
-                    dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-                  );
-                  dispatch(fetchPlanetBuildingsAsync(planet_id));
-                  dispatch(fetchPlanetInfoAsync([planet_id]));
                 }, 500)}
               />
             )}

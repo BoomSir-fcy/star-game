@@ -522,6 +522,7 @@
   "planetAttackValue": "Attack Value",
   "planetEnergyConsumption": "Energy Loss",
   "planetPopulationConsumption": "Spice Loss",
+  "planetOreConsumption": "Ore Loss",
   "planetResourcesProducedPlanetaryBuildings": "Function: Store all resources produced by planet buildings",
   "planetPopulationRequiredUpgrade%value%people": "Spice required for upgrade: %value%",
   "planetModalTitleRepairDurability": "Repair Durability",
