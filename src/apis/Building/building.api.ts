@@ -18,6 +18,11 @@ export class BuildingApi extends Http {
     return this.post(`buildings/store/recharge`, params);
   }
 
+  // 储物罐提取
+  async storeExtract(params: Api.Building.StoreRechargeParams) {
+    return this.post(`planet/store/extract`, params);
+  }
+
   // 行星联盟储物罐充值
   async storeAllianceReCharge(
     params: Api.Building.AllianceStoreRechargeParams,

@@ -177,7 +177,7 @@ const Auction = () => {
                   <Flex justifyContent='space-between'>
                     <Text fontSize='22px'>{t('Bidding Reward')}</Text>
                     <Text fontSize='22px'>
-                      {t('Calculation Method:')} 2.5*(1+30%)
+                      {t('Calculation Method:')} {currentPrice}*(1+30%)
                     </Text>
                   </Flex>
                   <PriceText mt='10px'>

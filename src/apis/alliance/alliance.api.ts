@@ -32,8 +32,8 @@ export class AllianceApi extends Http {
   }
 
   // 行星联盟提取资源
-  async AllianceExtract() {
-    const res = await this.post('buildings/store/extract');
+  async AllianceExtract(params: Api.Building.AllianceStoreRechargeParams) {
+    const res = await this.post('buildings/store/extract', params);
     return res;
   }
 

@@ -11,7 +11,7 @@ import { getPlanetRarity } from 'utils/planetRarity';
 import { RaceTypeColor } from 'uikit/theme/colors';
 import { RaceAvatar } from 'components';
 import ScoringPanel from 'components/ScoringPanel';
-import { RechargeAssets } from '../Modal';
+import { RechargeAssets, ExtractAssets } from '../Modal';
 
 const CardStyled = styled(Card)`
   width: 1610px;
@@ -53,6 +53,7 @@ const StarHeader = () => {
   const planetInfo = useStore(p => p.planet.planetInfo[id ?? 0]);
   const [state, setState] = React.useState({
     visible: false,
+    visibleExtract: false,
   });
 
   return (
@@ -208,12 +209,21 @@ const StarHeader = () => {
             </Flex>
           </Flex>
           <Flex ml='20px' alignItems='flex-end'>
-            <ButtonStyled
-              scale='sm'
-              onClick={() => setState({ ...state, visible: true })}
-            >
-              {t('Supplement Resources')}
-            </ButtonStyled>
+            <Flex flexDirection='column'>
+              <ButtonStyled
+                scale='sm'
+                onClick={() => setState({ ...state, visible: true })}
+              >
+                {t('Supplement Resources')}
+              </ButtonStyled>
+              <ButtonStyled
+                mt='10px'
+                scale='sm'
+                onClick={() => setState({ ...state, visibleExtract: true })}
+              >
+                {t('Extract resources')}
+              </ButtonStyled>
+            </Flex>
             <RaceFlex ml='10px'>
               <img alt='' src='/images/commons/star/race-box.png' />
               <RaceImageFlex>
@@ -240,6 +250,11 @@ const StarHeader = () => {
         planet_id={id}
         visible={state.visible}
         onClose={() => setState({ ...state, visible: false })}
+      />
+      <ExtractAssets
+        planet_id={id}
+        visible={state.visibleExtract}
+        onClose={() => setState({ ...state, visibleExtract: false })}
       />
     </Flex>
   );
