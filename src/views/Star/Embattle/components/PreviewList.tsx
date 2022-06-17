@@ -137,6 +137,14 @@ const PreviewList: React.FC<PreviewListProps> = ({
     return getSpriteName(item.race, item.unique_id.toString()) || item.tag;
   }, []);
 
+  const activeNum = useCallback(
+    id => {
+      console.log(gameSoldiers, id);
+      return gameSoldiers.filter(item => item.soldier.id === id)?.length || 0;
+    },
+    [gameSoldiers],
+  );
+
   return (
     <BgCard padding='0 28px' variant='long' {...props}>
       <Flex
@@ -188,9 +196,14 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   // game.dispatchEvent(getAddActiveSoliderEvent(soldier));
                 }}
               >
-                <Text shadow='primary' fontSize='22' ml='13px' mt='2px' bold>
-                  LV {item.level}
-                </Text>
+                <Flex justifyContent='space-between'>
+                  <Text shadow='primary' fontSize='22' ml='13px' mt='2px' bold>
+                    LV {item.level}
+                  </Text>
+                  <Text shadow='primary' fontSize='22' mr='13px' mt='2px' bold>
+                    {activeNum(item.unique_id)}/{item.count || '∞'}
+                  </Text>
+                </Flex>
                 <PreviewSoldier
                   src={getSoldierSrc(item)}
                   game={game}
