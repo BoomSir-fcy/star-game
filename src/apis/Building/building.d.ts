@@ -143,5 +143,178 @@ declare namespace Api {
       miss: number;
       speed: number;
     }
+
+    interface upgradeDetailData {
+      building_detail: BuildingDetail;
+      estimate_building_detail: estimate_building_detail;
+    }
+
+    interface AkBonusMachine {
+      defense: number;
+      attack: number;
+      hp: number;
+      hit: number;
+      speed: number;
+      miss: number;
+      critical: number;
+    }
+
+    interface Arms {
+      unique_id: number;
+      number: number;
+      probability: number;
+      cost_energy: number;
+      cost_time: number;
+      cost_stone: number;
+      cost_pop: number;
+      count: number;
+      store_max: number;
+      game_base_unit: GameBaseUnit;
+    }
+
+    interface ArmsAttr {
+      hp: number;
+      ak: number;
+      df: number;
+      hit: number;
+      crit: number;
+      miss: number;
+      range: number;
+      move: number;
+    }
+
+    interface AttackEffect {
+      attack_effect_id: number;
+      beat_back: BeatBack;
+    }
+
+    interface BeatBack {
+      direction: number;
+      carsh_harm_percent: number;
+      around_units: any[];
+    }
+
+    interface BuildingDetail {
+      _id: string;
+      buildings_number: number;
+      race: number;
+      type: number;
+      propterty: Propterty;
+      last_max_durability_time: number;
+      detail_type: number;
+      build_type: number;
+      store: Store;
+      stone: Stone;
+      energy: Stone;
+      population: Stone;
+      ak_bonus_machine: AkBonusMachine;
+      petri_dish: PetriDish;
+      build_need_time: number;
+      picture: string;
+      upgrade_time: number;
+      restoring_durability_consume_stone: number;
+      restoring_durability_consume_population: number;
+      restoring_durability_consume_energy: number;
+      restoring_durability_time: number;
+      cellar: Cellar;
+      upgrade_need: UpgradeNeed;
+      exp: number;
+    }
+
+    interface Cellar {
+      protect_energy: number;
+      protect_stone: number;
+      protect_population: number;
+    }
+
+    interface GameBaseUnit {
+      unique_id: number;
+      number: number;
+      race: number;
+      level: number;
+      tag: string;
+      speed: number;
+      hp: number;
+      ak: number;
+      df: number;
+      move_far: number;
+      hit: number;
+      dodge: number;
+      crit: number;
+      crit_damage: number;
+      ak_range_min: number;
+      ak_range_max: number;
+      skip_barrir_move: boolean;
+      skip_barrir_atk: boolean;
+      move_rule: number;
+      attack_rule: number;
+      attack_effect: string;
+      immune_frozen: boolean;
+      immune_firing: boolean;
+      immune_lock_move: boolean;
+      action_nation: number;
+      power: number;
+      index: string;
+      arms_attr: ArmsAttr;
+      attack_type: number;
+      skill_type: number;
+      count: number;
+      build_id: string;
+    }
+
+    interface PetriDish {
+      arms: Arms[];
+    }
+
+    interface Propterty {
+      name_cn: string;
+      name_en: string;
+      size: Size;
+      levelEnergy: number;
+      max_durability: number;
+      now_durability: number;
+      per_durability: number;
+      per_cost_energy: number;
+      per_cost_stone: number;
+      per_cost_population: number;
+    }
+
+    interface RootInterface {
+      code: number;
+      message: string;
+      data: Data;
+    }
+
+    interface Size {
+      area_x: number;
+      area_y: number;
+    }
+
+    interface Stone {
+      product: string;
+    }
+
+    interface Store {
+      upper_if: string;
+      store_max_stone: number;
+      store_max_energy: number;
+      store_max_population: number;
+      store_stone: number;
+      store_energy: number;
+      store_population: number;
+      charge_stone: number;
+      charge_energy: number;
+      charge_population: number;
+      last_extract_time: number;
+    }
+
+    interface UpgradeNeed {
+      upgrade_box: number;
+      upgrade_energy: number;
+      upgrade_stone: number;
+      upgrade_population: number;
+      upgrade_time: number;
+      upgrade_start_time: number;
+    }
   }
 }
