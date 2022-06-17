@@ -122,7 +122,7 @@ const writeZhCNFile = (res: any) => {
 };
 const translateMain = async () => {
   // 从.xlsx文件中读取英文翻译
-  const rs = getTranslateData("./0509 种族描述翻译.xlsx");
+  const rs = getTranslateData("./0616 种族描述翻译.xlsx");
   // 写入raceConfig文件
   writeRaceConfigFile(rs);
   // 写入translation文件
