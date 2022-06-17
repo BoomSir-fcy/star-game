@@ -652,7 +652,6 @@ export const GameInfo: React.FC<{
                               'Storage jars cannot be destroyed when they are unique',
                             ),
                           );
-                          return;
                         }
 
                         if (
