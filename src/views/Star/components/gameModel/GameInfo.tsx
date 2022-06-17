@@ -435,14 +435,22 @@ export const GameInfo: React.FC<{
                       />
                     </ItemInfo>
                   </Flex>
-                  <Flex flex={1} justifyContent='space-between' flexWrap='wrap'>
-                    <Text>兵种：</Text>
-                    {(arms ?? []).map(row => (
-                      <Text key={row.unique_id} fontSize='16px' mt='10px'>
-                        {row?.game_base_unit?.tag}
+                  {arms.length > 0 && (
+                    <Flex
+                      flex={1}
+                      justifyContent='space-between'
+                      flexWrap='wrap'
+                    >
+                      <Text mt='10px' small>
+                        兵种：
                       </Text>
-                    ))}
-                  </Flex>
+                      {(arms ?? []).map(row => (
+                        <Text key={row.unique_id} fontSize='16px' mt='10px'>
+                          {row?.game_base_unit?.tag}
+                        </Text>
+                      ))}
+                    </Flex>
+                  )}
                   {itemData.detail_type ===
                     BuildingDetailType.BuildingDetailTypeStore && (
                     <Box>
