@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Card, Flex, Box, Text, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
@@ -29,46 +29,54 @@ export const PkBox: React.FC<{
   const { account } = useWeb3React();
   const dispatch = useDispatch();
 
-  const BoxList = useMemo(() => {
-    const List = [
-      {
-        title: t('Get Ore'),
-        img: '/images/commons/icon/icon_minera.png',
-        num: info.ore,
-      },
-      {
-        title: t('Get Energy'),
-        img: '/images/commons/icon/icon_energy.png',
-        num: info.incomeEnergy,
-      },
-      {
-        title: t('Attrition combat unit'),
-        img: '/images/commons/star/HP.png',
-        num:
-          account?.toLocaleLowerCase() === info.fromAddress.toLocaleLowerCase()
-            ? info.blueLoseUnit
-            : info.redLoseUnit,
-      },
-      {
-        title: t('Lose Building Durability'),
-        img: '/images/commons/star/durability.png',
-        num: info.success ? 0 : info.lostDurability,
-      },
-    ];
-    return List;
-  }, [t, info, account]);
-
   const isFrom = useMemo(() => {
     return (
       account?.toLocaleLowerCase() === info.fromAddress.toLocaleLowerCase()
     );
   }, [account, info.fromAddress]);
 
+  const GetValue = useCallback(
+    (loseNum: number, inComeNum: number) => {
+      let num = 0;
+      if (isFrom) {
+        num = info.success ? inComeNum : loseNum;
+      } else {
+        num = info.success ? loseNum : inComeNum;
+      }
+      return num;
+    },
+    [isFrom, info.success],
+  );
+
+  const BoxList = useMemo(() => {
+    const List = [
+      {
+        title: t('Get Ore'),
+        img: '/images/commons/icon/icon_minera.png',
+        num: GetValue(info.loseStone, info.incomeStone),
+      },
+      {
+        title: t('Get Energy'),
+        img: '/images/commons/icon/icon_energy.png',
+        num: GetValue(info.loseEnergy, info.incomeEnergy),
+      },
+      {
+        title: t('Attrition combat unit'),
+        img: '/images/commons/star/HP.png',
+        num: isFrom ? info.blueLoseUnit : info.redLoseUnit,
+      },
+      {
+        title: t('Lose Building Durability'),
+        img: '/images/commons/star/durability.png',
+        num: `- ${GetValue(info.lostDurability, 0)}`,
+      },
+    ];
+    return List;
+  }, [t, GetValue, info, isFrom]);
+
   const pkRes = useMemo(() => {
     return isFrom ? !!info.success : !info.success;
   }, [isFrom, info.success]);
-
-  console.log(pkRes, '==pkRes');
 
   return (
     <CardBox>
@@ -108,8 +116,8 @@ export const PkBox: React.FC<{
                     fontSize='20px'
                     shadow={index < 2 ? 'green' : 'secondary'}
                   >
-                    {index < 2 ? '+ ' : '- '}
-                    {item.num}
+                    {index < 2 ? '+ ' : ''}
+                    {item.num || 0}
                   </Text>
                 </Box>
               </Flex>

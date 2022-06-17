@@ -24,7 +24,8 @@ const ScrollBox = styled(Flex)`
   overflow-y: auto;
   flex-wrap: wrap;
   align-content: flex-start;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 0 30px;
 `;
 
 const ItemBox = styled(Box)`
@@ -89,9 +90,9 @@ const BattleReport = () => {
     [t],
   );
 
-  useEffect(() => {
-    setPageNum(StatePage);
-  }, [StatePage, setPageNum]);
+  // useEffect(() => {
+  //   setPageNum(StatePage);
+  // }, [StatePage, setPageNum]);
 
   // 添加事件监听，用于更新状态
   useEffect(() => {

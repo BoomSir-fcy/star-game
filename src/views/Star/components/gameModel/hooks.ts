@@ -9,19 +9,24 @@ export const useBuildingUpgrade = () => {
       target_level?: number | string,
     ) => {
       try {
-        const [info] = await Promise.all([
-          Api.BuildingApi.estimateBuildingUpgradeDetail(
-            planet_id,
-            building_id,
-            target_level,
-          ),
-        ]);
-        if (Api.isSuccess(info)) {
+        const res = await Api.BuildingApi.estimateBuildingUpgradeDetail(
+          planet_id,
+          building_id,
+          target_level,
+        );
+        if (Api.isSuccess(res)) {
           return {
-            ...info.data,
+            ...res.data,
           };
         }
-        return {};
+        return {
+          building_detail: {
+            petri_dish: {
+              arms: [],
+            },
+          },
+          estimate_building_detail: {},
+        };
       } catch (error: any) {
         throw new Error(error);
       }

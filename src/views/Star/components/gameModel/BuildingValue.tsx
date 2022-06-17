@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import BigNumber from 'bignumber.js';
 import { useDispatch } from 'react-redux';
 import { Flex, Box, Image, Text } from 'uikit';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { formatDisplayApr } from 'utils/formatBalance';
 import { ThingRepair } from '..';
 
 const StyledImage = styled(Image)`
@@ -61,12 +63,12 @@ export const BuildingValue: React.FC<{
               ellipsis
               color={`${addedValue >= 0 ? 'progressGreenBar' : 'textDanger'}`}
               fontSize='16px'
-              title={addedValue?.toString()}
+              title={formatDisplayApr(new BigNumber(addedValue).toNumber())}
             >
               {addedValue
                 ? addedValue > 0
-                  ? `+${addedValue.toFixed(6)}`
-                  : `${addedValue.toFixed(6)}`
+                  ? `+${formatDisplayApr(new BigNumber(addedValue).toNumber())}`
+                  : `${formatDisplayApr(new BigNumber(addedValue).toNumber())}`
                 : ''}
             </Text>
           </Flex>

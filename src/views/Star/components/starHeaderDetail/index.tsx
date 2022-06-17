@@ -11,6 +11,7 @@ import { getPlanetRarity } from 'utils/planetRarity';
 import { RaceTypeColor } from 'uikit/theme/colors';
 import { RaceAvatar } from 'components';
 import ScoringPanel from 'components/ScoringPanel';
+import { formatDisplayApr } from 'utils/formatBalance';
 import { RechargeAssets, ExtractAssets } from '../Modal';
 
 const CardStyled = styled(Card)`
@@ -119,9 +120,9 @@ const StarHeader = () => {
                         ellipsis
                         style={{ width: '140px' }}
                       >
-                        {new BigNumber(planetInfo?.oreYield)
-                          .toFixed(6)
-                          .toString()}
+                        {formatDisplayApr(
+                          new BigNumber(planetInfo?.oreYield).toNumber(),
+                        )}
                         /s
                       </TextStyled>
                     </Flex>
@@ -154,7 +155,10 @@ const StarHeader = () => {
                         ellipsis
                         style={{ width: '140px' }}
                       >
-                        {planetInfo?.populationYield}/s
+                        {formatDisplayApr(
+                          new BigNumber(planetInfo?.populationYield).toNumber(),
+                        )}
+                        /s
                       </TextStyled>
                     </Flex>
                     <Flex alignItems='center'>
@@ -186,7 +190,10 @@ const StarHeader = () => {
                         ellipsis
                         style={{ width: '140px' }}
                       >
-                        {planetInfo?.energyYield}/s
+                        {formatDisplayApr(
+                          new BigNumber(planetInfo?.energyYield).toNumber(),
+                        )}
+                        /s
                       </TextStyled>
                     </Flex>
                     <Flex alignItems='center'>
