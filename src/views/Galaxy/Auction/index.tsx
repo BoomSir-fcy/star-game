@@ -28,7 +28,11 @@ import {
 } from 'state/galaxy/reducer';
 import { getGalaxyIncoming } from 'state/galaxy/util';
 import { useStore } from 'state';
-import { getBalanceAmount, getFullDisplayBalance } from 'utils/formatBalance';
+import {
+  formatDisplayApr,
+  getBalanceAmount,
+  getFullDisplayBalance,
+} from 'utils/formatBalance';
 import { formatUTC } from 'utils/timeFormat';
 import BigNumber from 'bignumber.js';
 import { useToast } from 'contexts/ToastsContext';
@@ -177,7 +181,7 @@ const Auction = () => {
                   <Flex justifyContent='space-between'>
                     <Text fontSize='22px'>{t('Bidding Reward')}</Text>
                     <Text fontSize='22px'>
-                      {t('Calculation Method:')} {currentPrice}*(1+30%)
+                      {t('Calculation Method:')} {lastPrice}*(1+30%)
                     </Text>
                   </Flex>
                   <PriceText mt='10px'>
@@ -230,7 +234,9 @@ const Auction = () => {
                             {
                               time: formatUTC(item?.auctionAt, 'HH:mm'),
                               name: item?.nickname,
-                              price: new BigNumber(item?.price).toFixed(6),
+                              price: formatDisplayApr(
+                                new BigNumber(item?.price).toNumber(),
+                              ),
                             },
                           )}
                         </Text>

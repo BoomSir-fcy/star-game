@@ -12,6 +12,7 @@ import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import random from 'lodash/random';
 import { signMessage } from 'utils/web3React';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { formatDisplayApr } from 'utils/formatBalance';
 
 const ButtonStyled = styled(Button)`
   position: absolute;
@@ -232,13 +233,13 @@ export const ExtractAssets: React.FC<{
         <Flex mt='10px'>
           <Text color='textTips' small>
             {t('Expected to arrive %value%', {
-              value: (Number(inputValue) * 0.8).toFixed(6),
+              value: formatDisplayApr(Number(inputValue) * 0.8),
             })}
             ,&nbsp;
           </Text>
           <Text color='textTips' small>
             {t('Expected to destroy %value%', {
-              value: (Number(inputValue) * 0.2).toFixed(6),
+              value: formatDisplayApr(Number(inputValue) * 0.2),
             })}
           </Text>
         </Flex>

@@ -159,7 +159,7 @@ const SelectPlanet = () => {
             {starList?.length && (
               <Flex mt='10px' justifyContent='center'>
                 <Button
-                  disabled={!starList.length}
+                  disabled={!starList?.length}
                   onClick={() => navigate(-1)}
                 >
                   {t('Join in')}
