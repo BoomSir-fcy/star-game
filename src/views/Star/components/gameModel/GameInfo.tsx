@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import BigNumber from 'bignumber.js';
 import styled, { css } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Flex, Box, Card, Text, Image, Button, Progress } from 'uikit';
@@ -11,6 +12,7 @@ import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useTranslation } from 'contexts/Localization';
 
 import { BuildingDetailType } from 'state/types';
+import { formatDisplayApr } from 'utils/formatBalance';
 import { useBuildingUpgrade, useBuildingOperate } from './hooks';
 
 import { GameThing, BuildingValue } from '..';
@@ -111,6 +113,7 @@ export const GameInfo: React.FC<{
       upgrade: {} as any,
     });
     const [currentTime, setCurrentTime] = React.useState(diffTime || 0);
+    const [arms, setArms] = React.useState([]);
     // const [cancelVisible, setCancelVisible] = React.useState(false);
     const { upgrade_need } = state.upgrade?.estimate_building_detail || {};
     const currentBuilding = selfBuilding?.find(
@@ -173,6 +176,7 @@ export const GameInfo: React.FC<{
             target_level || selfLevel,
           );
           setState({ ...state, upgrade: res });
+          setArms(res?.building_detail?.petri_dish?.arms || []);
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -251,6 +255,7 @@ export const GameInfo: React.FC<{
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemData]);
 
+    console.log(arms);
     return (
       <Container>
         {itemData?._id && (
@@ -338,7 +343,11 @@ export const GameInfo: React.FC<{
                           itemData={itemData}
                           planet_id={planet_id}
                           title={t('Ore Capacity')}
-                          value={`${currentAttributes?.stone?.product?.per_sec_ouput_stone}/s`}
+                          value={`${formatDisplayApr(
+                            new BigNumber(
+                              currentAttributes?.stone?.product?.per_sec_ouput_stone,
+                            ).toNumber(),
+                          )}/s`}
                           icon='/images/commons/icon/icon_minera.png'
                         />
                       </ItemInfo>
@@ -375,7 +384,11 @@ export const GameInfo: React.FC<{
                           itemData={itemData}
                           planet_id={planet_id}
                           title={t('planetOreConsumption')}
-                          value={`${currentAttributes?.propterty?.per_cost_stone}/s`}
+                          value={`${formatDisplayApr(
+                            new BigNumber(
+                              currentAttributes?.propterty?.per_cost_stone,
+                            ).toNumber(),
+                          )}/s`}
                           addedValue={
                             state.upgrade?.estimate_building_detail?.propterty
                               ?.per_cost_stone -
@@ -390,7 +403,11 @@ export const GameInfo: React.FC<{
                         itemData={itemData}
                         planet_id={planet_id}
                         title={t('planetEnergyConsumption')}
-                        value={`${currentAttributes?.propterty?.per_cost_energy}/s`}
+                        value={`${formatDisplayApr(
+                          new BigNumber(
+                            currentAttributes?.propterty?.per_cost_energy,
+                          ).toNumber(),
+                        )}/s`}
                         addedValue={
                           state.upgrade?.estimate_building_detail?.propterty
                             ?.per_cost_energy -
@@ -404,7 +421,11 @@ export const GameInfo: React.FC<{
                         itemData={itemData}
                         planet_id={planet_id}
                         title={t('planetPopulationConsumption')}
-                        value={`${currentAttributes?.propterty?.per_cost_population}/s`}
+                        value={`${formatDisplayApr(
+                          new BigNumber(
+                            currentAttributes?.propterty?.per_cost_population,
+                          ).toNumber(),
+                        )}/s`}
                         addedValue={
                           state.upgrade?.estimate_building_detail?.propterty
                             ?.per_cost_population -
@@ -413,6 +434,14 @@ export const GameInfo: React.FC<{
                         icon='/images/commons/icon/icon_spice.png'
                       />
                     </ItemInfo>
+                  </Flex>
+                  <Flex flex={1} justifyContent='space-between' flexWrap='wrap'>
+                    <Text>兵种：</Text>
+                    {(arms ?? []).map(row => (
+                      <Text key={row.unique_id} fontSize='16px' mt='10px'>
+                        {row?.game_base_unit?.tag}
+                      </Text>
+                    ))}
                   </Flex>
                   {itemData.detail_type ===
                     BuildingDetailType.BuildingDetailTypeStore && (

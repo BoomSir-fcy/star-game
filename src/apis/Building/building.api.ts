@@ -137,7 +137,7 @@ export class BuildingApi extends Http {
     planet_id: number,
     building_id: number | string,
     target_level?: number | string,
-  ): Promise<Api.Response<{ data: Api.Building.CreateBuildingParams }>> {
+  ): Promise<Api.Response<{ data: Api.Building.upgradeDetailData }>> {
     const res = await this.get(`buildings/upgrade_detail`, {
       planet_id,
       building_id,
