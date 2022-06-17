@@ -87,8 +87,8 @@ const ItemRow: React.FC<{
           height={62}
         />
         <Box ml='24px'>
-          <Text fontSize='22px'>
-            {info.name}: {info.total}
+          <Text fontSize='22px' ellipsis>
+            {info.name}: {SubString_1(info.total, 3)}
           </Text>
           <Text fontSize='22px'>
             {t('Capacity')}: {SubString_1(info.capacity)}/s
