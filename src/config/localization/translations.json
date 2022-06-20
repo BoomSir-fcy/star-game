@@ -619,6 +619,7 @@
   "http-error-200032": "Planet strengthen fail by BNB insufficient",
   "http-error-200036": "Insufficient resources",
   "http-error-200038": "Planet cultivation level cannot be greater than planet level",
+  "http-error-200039": "Insufficient working hours for Planetary Alliance to cancel work",
   "http-error-300001": "Invalid building location, inconsistent location and size",
   "http-error-300002": "Only allowed to build buildings registered as 1",
   "http-error-300003": "Could not find building id",

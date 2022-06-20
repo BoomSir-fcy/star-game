@@ -154,14 +154,14 @@ const Details = () => {
           }}
         />
       )}
-      <DragV2 rows={planet?.areaX} cols={planet?.areaY} />
-      {/* <DragCompoents
+      {/* <DragV2 rows={planet?.areaX} cols={planet?.areaY} /> */}
+      <DragCompoents
         rows={planet?.areaX}
         cols={planet?.areaY}
         planet_id={id}
         gridSize={476}
         itemData={state}
-      /> */}
+      />
     </Box>
   );
 };
