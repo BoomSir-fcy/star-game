@@ -34,7 +34,7 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({
       isLoading={loading}
       onClick={handleClick}
     >
-      <Image width={50} height={50} src='/images/commons/btn/refresh.png' />
+      <Image width={36} height={36} src='/images/commons/btn/refresh.png' />
     </Button>
   );
 };
