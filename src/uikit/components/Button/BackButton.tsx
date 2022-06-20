@@ -25,7 +25,7 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({ onBack, ...props }) => {
   );
   return (
     <Button {...props} variant='tertiary' onClick={handleClick}>
-      <Image width={50} height={50} src='/images/commons/btn/back.png' />
+      <Image width={36} height={36} src='/images/commons/btn/back.png' />
     </Button>
   );
 };

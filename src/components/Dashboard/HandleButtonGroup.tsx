@@ -14,14 +14,14 @@ import {
 } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 
-export interface ButtonGroupProps {
+export interface HandleButtonGroupProps {
   onRefresh?: () => void;
   onBack?: ButtonOnBack;
   className?: string;
 }
 
 interface SecondaryButtonProps extends ButtonProps {
-  tag: 'attack' | 'flag' | 'm-box' | 'star';
+  tag: 'm-box1' | 'vip';
   href: string;
 }
 const SecondaryButton: React.FC<SecondaryButtonProps> = ({
@@ -35,16 +35,16 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
       <Link to={href}>
         <Button
           {...props}
-          variant='secondary'
+          variant='s2-long'
           startIcon={
             <Image
-              width={36}
-              height={36}
+              width={42}
+              height={42}
               src={`/images/commons/btn/${tag}.png`}
             />
           }
         >
-          <Text bold shadow='secondary'>
+          <Text fontSize='20px' bold shadow='secondary'>
             {children}
           </Text>
         </Button>
@@ -53,7 +53,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   );
 };
 
-const ButtonGroup: React.FC<ButtonGroupProps> = ({
+const HandleButtonGroup: React.FC<HandleButtonGroupProps> = ({
   onBack,
   onRefresh,
   className,
@@ -62,24 +62,16 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
 
   return (
     <Flex>
-      {/* <SecondaryButton href='/plunder' tag='attack'>
-        {t('Loot Resources').toLocaleUpperCase()}
-      </SecondaryButton> */}
-      <SecondaryButton
-        href='/plant-league'
-        tag='star'
-        className='header_explore'
-      >
-        {t('联盟').toLocaleUpperCase()}
+      <BackButton mr='22px' onBack={onBack} />
+      <RefreshButton mr='22px' onRefresh={onRefresh} />
+      <SecondaryButton href='/mystery-box' tag='m-box1'>
+        发现
       </SecondaryButton>
-      <SecondaryButton href='/galaxy' tag='flag'>
-        {t('星系').toLocaleUpperCase()}
+      <SecondaryButton href='/vip' tag='vip'>
+        VIP
       </SecondaryButton>
-
-      {/* <BackButton onBack={onBack} /> */}
-      {/* <RefreshButton mr='23px' onRefresh={onRefresh} /> */}
     </Flex>
   );
 };
 
-export default ButtonGroup;
+export default HandleButtonGroup;

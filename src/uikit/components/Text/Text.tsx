@@ -16,7 +16,7 @@ const getTextShadows = ({ shadow, theme }: ThemedProps) => {
 };
 
 const getFontSize = ({ fontSize, small }: TextProps) => {
-  return small ? '20px' : fontSize || '28px';
+  return small ? '14px' : fontSize || '16px';
 };
 
 const Text = styled.div<TextProps>`
