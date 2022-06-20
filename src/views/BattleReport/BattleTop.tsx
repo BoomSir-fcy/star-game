@@ -54,8 +54,8 @@ export const BattleTop: React.FC<{
         <RefreshButton
           ml='33px'
           onRefresh={() => {
-            upDate(0);
-            dispatch(setRefresh());
+            upDate(1);
+            // dispatch(setRefresh());
           }}
         />
       </Box>
@@ -66,7 +66,7 @@ export const BattleTop: React.FC<{
       </TitleBox>
       <RecordBox>
         <MarkText ml='20px' mt='10px' fontSize='22px' bold fontStyle='italic'>
-          {t('total number of battles')}
+          {t('Total number of battles')}
         </MarkText>
         <MarkText fontSize='28px' bold fontStyle='italic'>
           {cont.Cont}
