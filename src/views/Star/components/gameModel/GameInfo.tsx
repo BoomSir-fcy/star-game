@@ -378,26 +378,24 @@ export const GameInfo: React.FC<{
                         />
                       </ItemInfo>
                     )}
-                    {currentAttributes?.propterty?.per_cost_stone > 0 && (
-                      <ItemInfo>
-                        <BuildingValue
-                          itemData={itemData}
-                          planet_id={planet_id}
-                          title={t('planetOreConsumption')}
-                          value={`${formatDisplayApr(
-                            new BigNumber(
-                              currentAttributes?.propterty?.per_cost_stone,
-                            ).toNumber(),
-                          )}/s`}
-                          addedValue={
-                            state.upgrade?.estimate_building_detail?.propterty
-                              ?.per_cost_stone -
-                            currentAttributes?.propterty?.per_cost_stone
-                          }
-                          icon='/images/commons/icon/icon_minera.png'
-                        />
-                      </ItemInfo>
-                    )}
+                    <ItemInfo>
+                      <BuildingValue
+                        itemData={itemData}
+                        planet_id={planet_id}
+                        title={t('planetOreConsumption')}
+                        value={`${formatDisplayApr(
+                          new BigNumber(
+                            currentAttributes?.propterty?.per_cost_stone,
+                          ).toNumber(),
+                        )}/s`}
+                        addedValue={
+                          state.upgrade?.estimate_building_detail?.propterty
+                            ?.per_cost_stone -
+                          currentAttributes?.propterty?.per_cost_stone
+                        }
+                        icon='/images/commons/icon/icon_minera.png'
+                      />
+                    </ItemInfo>
                     <ItemInfo bottomMargin>
                       <BuildingValue
                         itemData={itemData}

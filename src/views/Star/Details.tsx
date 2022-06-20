@@ -11,6 +11,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { DragCompoents } from './components/dragCompoents';
+import { DragV2 } from './components/dragV2';
 import type { AreaDataItem } from './components/dragCompoents';
 
 const Details = () => {
@@ -153,13 +154,14 @@ const Details = () => {
           }}
         />
       )}
-      <DragCompoents
+      <DragV2 rows={planet?.areaX} cols={planet?.areaY} />
+      {/* <DragCompoents
         rows={planet?.areaX}
         cols={planet?.areaY}
         planet_id={id}
         gridSize={476}
         itemData={state}
-      />
+      /> */}
     </Box>
   );
 };
