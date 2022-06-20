@@ -6,6 +6,7 @@ import { getSpriteName, getSpriteRes } from 'game/core/utils';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
 import { Box, Text, BgCard, Flex, BorderCard, BgCardProps } from 'uikit';
+import orderBy from 'lodash/orderBy';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 import { isApp } from 'utils/client';
@@ -48,8 +49,16 @@ const PreviewList: React.FC<PreviewListProps> = ({
     return {};
   }, [units, race]);
 
+  const isBaseUnit = (item: Api.Game.UnitInfo) => {
+    return Number(`${item.race}3999`) === item.number;
+  };
+
   const list = useMemo(() => {
-    return Object.values(unitMaps);
+    return orderBy(
+      Object.values(unitMaps),
+      item => (isBaseUnit(item) ? 99999 : item.count),
+      'desc',
+    );
   }, [unitMaps]);
 
   useEffect(() => {
@@ -100,17 +109,31 @@ const PreviewList: React.FC<PreviewListProps> = ({
     [game, race],
   );
 
-  const checkCreateSoldier = useCallback(() => {
-    if (gameSoldiers.length >= config.MAX_SOLDIER_COUNT) {
-      toastError(t('http-error-1000004'));
-      return false;
-    }
-    return true;
-  }, [gameSoldiers.length, toastError, t]);
+  const activeNum = useCallback(
+    id => {
+      console.log(gameSoldiers, id);
+      return gameSoldiers.filter(item => item.soldier.id === id)?.length || 0;
+    },
+    [gameSoldiers],
+  );
+
+  const checkCreateSoldier = useCallback(
+    (item: Api.Game.UnitInfo) => {
+      if (gameSoldiers.length >= config.MAX_SOLDIER_COUNT) {
+        toastError(t('http-error-1000004'));
+        return false;
+      }
+      if (activeNum(item.unique_id) >= item.count && !isBaseUnit(item)) {
+        return false;
+      }
+      return true;
+    },
+    [gameSoldiers.length, toastError, t, activeNum],
+  );
 
   // 上阵
   const handleGoIntoBattle = (item: Api.Game.UnitInfo) => {
-    if (!checkCreateSoldier()) return;
+    if (!checkCreateSoldier(item)) return;
     const options = {
       race,
       srcId: `${item.index}`,
@@ -136,14 +159,6 @@ const PreviewList: React.FC<PreviewListProps> = ({
   const getSoldierName = useCallback((item: Api.Game.UnitInfo) => {
     return getSpriteName(item.race, item.unique_id.toString()) || item.tag;
   }, []);
-
-  const activeNum = useCallback(
-    id => {
-      console.log(gameSoldiers, id);
-      return gameSoldiers.filter(item => item.soldier.id === id)?.length || 0;
-    },
-    [gameSoldiers],
-  );
 
   return (
     <BgCard padding='0 28px' variant='long' {...props}>
@@ -177,7 +192,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 position='relative'
                 onClick={() => {
                   if (!disableClick) {
-                    if (!checkCreateSoldier()) return;
+                    if (!checkCreateSoldier(item)) return;
 
                     const soldier = new Soldier({
                       x: 0,
@@ -196,12 +211,17 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   // game.dispatchEvent(getAddActiveSoliderEvent(soldier));
                 }}
               >
-                <Flex justifyContent='space-between'>
+                <Flex
+                  position='relative'
+                  zIndex={2}
+                  justifyContent='space-between'
+                >
                   <Text shadow='primary' fontSize='22' ml='13px' mt='2px' bold>
                     LV {item.level}
                   </Text>
                   <Text shadow='primary' fontSize='22' mr='13px' mt='2px' bold>
-                    {activeNum(item.unique_id)}/{item.count || '∞'}
+                    {activeNum(item.unique_id)}/
+                    {isBaseUnit(item) ? '6' : item.count}
                   </Text>
                 </Flex>
                 <PreviewSoldier
@@ -214,7 +234,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   customDrag
                   disableDrag={disableDragSoilder}
                   onPointerDown={e => {
-                    if (!checkCreateSoldier()) return;
+                    if (!checkCreateSoldier(item)) return;
 
                     if (!disableDragSoilder) {
                       onDrag();
