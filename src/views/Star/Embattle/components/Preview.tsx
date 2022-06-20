@@ -213,10 +213,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
   const getSoldierName = useCallback(() => {
     let name = '';
     if (activeSoldier?.race) {
-      name = getSpriteName(
-        activeSoldier.race,
-        activeSoldier.unique_id.toString(),
-      );
+      name = getSpriteName(activeSoldier.race, activeSoldier.srcId);
     }
     return name || activeSoldier?.options?.unitInfo?.tag;
   }, [activeSoldier]);

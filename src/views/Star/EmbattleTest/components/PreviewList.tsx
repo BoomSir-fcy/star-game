@@ -99,7 +99,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, []);
 
   const getSoldierName = useCallback((item: Api.Game.UnitInfo) => {
-    return getSpriteName(item.race, item.unique_id.toString()) || item.tag;
+    return getSpriteName(item.race, item.index.toString()) || item.tag;
   }, []);
 
   return (
@@ -158,7 +158,13 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   onPointerDown={e => dragStartHandle(e, item)}
                 />
               </BorderCard>
-              <Text mt='8px' textAlign='center' fontSize='20' bold>
+              <Text
+                width='122px'
+                mt='8px'
+                textAlign='center'
+                fontSize='20'
+                bold
+              >
                 {getSoldierName(item)}
               </Text>
             </Box>
