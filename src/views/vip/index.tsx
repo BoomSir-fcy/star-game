@@ -33,7 +33,7 @@ const RecordBox = styled(Flex)`
   background-size: 100% 100%;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 0 34px;
   margin-left: 20px;
 `;
 
@@ -133,9 +133,10 @@ const Submit = styled(Button)`
   height: 64px;
   border: 1px solid;
   border-radius: 0;
-  background: linear-gradient(0deg, #25babe, #1c273d);
+  /* background: linear-gradient(0deg, #25babe, #1c273d); */
   border-image: linear-gradient(-29deg, #14f1fd, #1caaf4) 1 1;
   box-shadow: 0px 0px 43px 0px #512d58;
+  border: 1px solid #182e37;
 `;
 
 const SubmitText = styled(Text)`
@@ -184,8 +185,7 @@ const VipPage = () => {
 
   React.useEffect(() => {
     getVipList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return (
     <Box>
@@ -199,13 +199,7 @@ const VipPage = () => {
           <BackButton />
           <RefreshButton ml='33px' />
           <RecordBox>
-            <VipMarkText
-              ml='20px'
-              mt='10px'
-              fontSize='22px'
-              bold
-              fontStyle='italic'
-            >
+            <VipMarkText ml='10px' mt='10px' fontSize='24px' bold>
               VIP BENEFITS
             </VipMarkText>
             <Box width='58px' height='58px'>
@@ -239,13 +233,19 @@ const VipPage = () => {
           <Box ml='105px' style={{ flex: 1 }}>
             <Flex alignItems='flex-end' mb='20px'>
               <Title>VIP BENEFITS</Title>
-              <Flex justifyContent='space-between' style={{ flex: 1 }}>
-                <TextBox small ml='43px'>
+              <Flex
+                justifyContent='space-between'
+                alignItems='flex-end'
+                ml='25px'
+                mb='5px'
+                style={{ flex: 1 }}
+              >
+                <TextBox fontSize='16px'>
                   {t(
                     'You are not yet a VIP, you can get more benefits after upgrading to VIP',
                   )}
                 </TextBox>
-                <TextBox small>
+                <TextBox fontSize='16px'>
                   {t('Expire on')}
                   {` `}
                   {user?.vipBenefits?.is_vip
