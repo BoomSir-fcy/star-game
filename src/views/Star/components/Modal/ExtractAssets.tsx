@@ -12,6 +12,7 @@ import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import random from 'lodash/random';
 import { signMessage } from 'utils/web3React';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { formatDisplayApr } from 'utils/formatBalance';
 
 const ButtonStyled = styled(Button)`
   position: absolute;
@@ -29,7 +30,7 @@ enum StoreType {
   ENERGY = 3,
 }
 
-export const RechargeAssets: React.FC<{
+export const ExtractAssets: React.FC<{
   planet_id: number;
   visible: boolean;
   onClose: () => void;
@@ -143,9 +144,9 @@ export const RechargeAssets: React.FC<{
         if (selectId === StoreType.STONE) params.stone = val;
         if (selectId === StoreType.POPULATION) params.population = val;
         if (selectId === StoreType.ENERGY) params.energy = val;
-        const res = await Api.BuildingApi.storeReCharge(params);
+        const res = await Api.BuildingApi.storeExtract(params);
         if (Api.isSuccess(res)) {
-          toastSuccess(t('Recharge Succeeded'));
+          toastSuccess(t('Extract Succeeded'));
           setInputValue('');
           getStoreData();
           dispatch(fetchPlanetInfoAsync([planet_id]));
@@ -154,7 +155,7 @@ export const RechargeAssets: React.FC<{
         setPending(false);
       } catch (error) {
         console.error(error);
-        toastError(t('Recharge failed'));
+        toastError(t('Extract failed'));
         setPending(false);
       }
     },
@@ -177,7 +178,7 @@ export const RechargeAssets: React.FC<{
   }, [getStoreData, visible]);
   return (
     <ModalWrapper
-      title={t('Supplement Resources')}
+      title={t('Extract Resources')}
       visible={visible}
       setVisible={onClose}
     >
@@ -187,9 +188,6 @@ export const RechargeAssets: React.FC<{
           <Flex alignItems='center'>
             <Text fontSize='30px' bold>
               {store[selectId]?.already}
-            </Text>
-            <Text small color='textSubtle' ml='14px'>
-              / {store[selectId]?.max}
             </Text>
           </Flex>
         </Flex>
@@ -207,12 +205,12 @@ export const RechargeAssets: React.FC<{
             width='100%'
             height={65}
             pattern='^[0-9]*[.,]?[0-9]{0,18}$'
-            placeholder={t('Please enter the recharge amount')}
+            placeholder={t('Please enter the extract amount')}
             value={inputValue}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const val = e.target.value;
               const valNum = Number(val);
-              const rechargeNum = store[selectId].max - store[selectId].already;
+              const rechargeNum = store[selectId].already;
               if (val === '' || e.currentTarget.validity.valid) {
                 if (selectId === StoreType.STONE && valNum > rechargeNum)
                   return;
@@ -226,14 +224,26 @@ export const RechargeAssets: React.FC<{
           />
           <ButtonStyled
             onClick={() => {
-              setInputValue(
-                (store[selectId]?.max - store[selectId]?.already).toString(),
-              );
+              setInputValue(store[selectId]?.already?.toString());
             }}
           >
             {t('MAX')}
           </ButtonStyled>
         </Flex>
+        <Flex mt='10px'>
+          <Text color='textTips' small>
+            {t('Expected to arrive %value%', {
+              value: formatDisplayApr(Number(inputValue) * 0.8),
+            })}
+            ,&nbsp;
+          </Text>
+          <Text color='textTips' small>
+            {t('Expected to destroy %value%', {
+              value: formatDisplayApr(Number(inputValue) * 0.2),
+            })}
+          </Text>
+        </Flex>
+
         <Flex justifyContent='center' mt='29px'>
           <Button
             disabled={pending}
@@ -241,7 +251,7 @@ export const RechargeAssets: React.FC<{
             padding='0 10px'
             onClick={handleCharge}
           >
-            {t('Confirm Recharge')}
+            {t('Confirm Extract')}
           </Button>
         </Flex>
       </Box>

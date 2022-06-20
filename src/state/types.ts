@@ -315,18 +315,21 @@ export interface PkRecord {
 }
 
 export interface RecordInfo {
-  id: number;
+  detail: string;
   fromAddress: string;
-  toAddress: string;
-  incomeStone: number;
+  id: number;
   incomeEnergy: number;
   incomePopulation: number;
-  success: number;
-  createTime: number;
-  detail: string;
-  blueLoseUnit: number;
+  incomeStone: number;
+  loseEnergy: number;
+  losePopulation: number;
+  loseStone: number;
   lostDurability: number;
   redLoseUnit: number;
+  success: number;
+  toAddress: string;
+  blueLoseUnit: number;
+  createTime: number;
 }
 
 export enum PlanetStatus {

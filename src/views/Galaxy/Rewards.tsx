@@ -6,6 +6,8 @@ import { Card, Text, Flex, Button, CardProps } from 'uikit';
 import { Api } from 'apis';
 import utc from 'dayjs/plugin/utc';
 import { useToast } from 'contexts/ToastsContext';
+import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
+import { useDispatch } from 'react-redux';
 
 dayjs.extend(utc);
 
@@ -19,6 +21,7 @@ interface RewardsProps extends CardProps {
   galaxy_id: number;
 }
 export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
+  const dispatch = useDispatch();
   const { toastError, toastSuccess } = useToast();
   // 当天零点（utc时间）
   const endTimestamp = dayjs().utc(true).endOf('day').unix();
@@ -53,12 +56,13 @@ export const Rewards: React.FC<RewardsProps> = ({ t, galaxy_id, ...props }) => {
       if (Api.isSuccess(res)) {
         toastSuccess(t('Claim Succeeded'));
         getClaimMax();
+        dispatch(fetchUserBalanceAsync());
       }
     } catch (error) {
       console.error(error);
       toastError(t('Claim Failed'));
     }
-  }, [galaxy_id, toastSuccess, toastError, t, getClaimMax]);
+  }, [galaxy_id, toastSuccess, toastError, t, getClaimMax, dispatch]);
 
   useEffect(() => {
     if (galaxy_id) getClaimMax();

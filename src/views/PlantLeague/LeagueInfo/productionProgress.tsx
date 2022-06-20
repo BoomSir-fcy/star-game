@@ -9,6 +9,10 @@ import { useToast } from 'contexts/ToastsContext';
 import { Api } from 'apis';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'contexts/Localization';
+import random from 'lodash/random';
+import { signMessage } from 'utils/web3React';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useWeb3React } from '@web3-react/core';
 
 const ProgressBox = styled(Box)`
   position: relative;
@@ -32,6 +36,7 @@ const BtnFlex = styled(Flex)``;
 
 const ProductionProgress = () => {
   const { t } = useTranslation();
+  const { account, library } = useActiveWeb3React();
 
   const dispatch = useDispatch();
   const { toastError, toastSuccess, toastWarning } = useToast();
@@ -61,7 +66,20 @@ const ProductionProgress = () => {
       return;
     }
     try {
-      const res = await Api.AllianceApi.AllianceExtract();
+      const sign = {
+        nonce: `${random(0xffff, 0xffff_ffff_ffff)}`,
+        timestamp: new Date().getTime(),
+      };
+      const signature = await signMessage(
+        library,
+        account,
+        JSON.stringify(sign),
+      );
+      const params = {
+        ...sign,
+        signature,
+      };
+      const res = await Api.AllianceApi.AllianceExtract(params);
       if (Api.isSuccess(res)) {
         toastSuccess(t('Claim Succeeded'));
       } else {
@@ -71,7 +89,16 @@ const ProductionProgress = () => {
       toastError(t('Claim Failed'));
     }
     dispatch(fetchAllianceViewAsync());
-  }, [alliance, t, dispatch, toastError, toastSuccess, later_extract_time]);
+  }, [
+    alliance,
+    account,
+    library,
+    t,
+    dispatch,
+    toastError,
+    toastSuccess,
+    later_extract_time,
+  ]);
 
   // 倒计时
   const countDown = () => {

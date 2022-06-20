@@ -1,4 +1,5 @@
 export * from './RechargeAssets';
+export * from './ExtractAssets';
 export * from './ThingRepairModal';
 export * from './ThingDestoryModal';
 export * from './ThingUpgradesModal';
