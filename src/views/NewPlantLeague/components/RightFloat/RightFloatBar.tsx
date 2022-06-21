@@ -1,13 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Text, Flex, Box, MarkText } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
-
-const FloatBox = styled(Box)`
-  position: fixed;
-  right: 0;
-  top: 30%;
-`;
+import HowToPlay from './HowToPlay';
 
 const RecordBox = styled(Flex)`
   width: 200px;
@@ -19,6 +14,7 @@ const RecordBox = styled(Flex)`
   padding: 0 10px;
   margin-bottom: 20px;
   cursor: pointer;
+  position: relative;
 `;
 
 const ImgFlex = styled(Flex)`
@@ -38,12 +34,43 @@ const MessageBox = styled(Box)`
   border-radius: 50%;
 `;
 
+const BarFlex = styled(Flex)`
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
+`;
+
+const TipBox = styled(Box)`
+  width: 150px;
+  position: absolute;
+  background: #4b4b4b;
+  opacity: 0.5;
+  border-radius: 10px;
+  padding: 6px 16px;
+  left: -160px;
+  cursor: auto;
+`;
+
+const TipTriangle = styled(Box)`
+  width: 0px;
+  height: 0px;
+  border: 10px solid transparent;
+  border-top-color: #4b4b4b;
+  position: absolute;
+  right: -8px;
+  top: 0;
+`;
+
 const RightFloatBar: React.FC = () => {
   const { t } = useTranslation();
-
+  const [ShowPlay, setShowPlay] = useState(false);
   return (
-    <FloatBox>
-      <RecordBox>
+    <BarFlex>
+      <RecordBox
+        onMouseEnter={() => setShowPlay(true)}
+        onMouseLeave={() => setShowPlay(false)}
+      >
         <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
           {t('玩法介绍')}
         </MarkText>
@@ -58,6 +85,32 @@ const RightFloatBar: React.FC = () => {
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
           <img src='/images/commons/icon/icon-vip.png' alt='' />
         </ImgFlex>
+      </RecordBox>
+      <RecordBox>
+        <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
+          {t('充值资源')}
+        </MarkText>
+        <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
+          <img src='/images/commons/icon/icon-vip.png' alt='' />
+        </ImgFlex>
+      </RecordBox>
+      <RecordBox>
+        <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
+          {t('站内消息')}
+        </MarkText>
+        <Flex
+          justifyContent='center'
+          alignItems='center'
+          width='42px'
+          height='42px'
+          mr='8px'
+          position='relative'
+        >
+          <MarkText fontSize='18px' bold fontStyle='italic'>
+            3
+          </MarkText>
+          <MessageBox />
+        </Flex>
       </RecordBox>
       <RecordBox>
         <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
@@ -76,8 +129,13 @@ const RightFloatBar: React.FC = () => {
           </MarkText>
           <MessageBox />
         </Flex>
+        <TipBox>
+          <Text fontSize='14px'>{t('新的探索已完成')}</Text>
+          <TipTriangle />
+        </TipBox>
       </RecordBox>
-    </FloatBox>
+      <HowToPlay ShowPlay={ShowPlay} setShowPlay={e => setShowPlay(e)} />
+    </BarFlex>
   );
 };
 

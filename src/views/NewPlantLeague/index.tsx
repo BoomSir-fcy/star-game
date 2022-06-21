@@ -4,7 +4,7 @@ import Layout from 'components/Layout';
 import { useFetchAllianceView } from 'state/alliance/hooks';
 import AlliancePlanet from './components/AlliancePlanet';
 import Explore from './components/Explore';
-import RightFloatBar from './components/RightFloatBar';
+import RightFloatBox from './components/RightFloat';
 
 const NewPlantLeague: React.FC = () => {
   useFetchAllianceView();
@@ -13,7 +13,7 @@ const NewPlantLeague: React.FC = () => {
     <Layout>
       <AlliancePlanet />
       <Explore />
-      <RightFloatBar />
+      <RightFloatBox />
     </Layout>
   );
 };
