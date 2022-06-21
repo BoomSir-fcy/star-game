@@ -80,13 +80,15 @@ window.addEventListener(
 
 const Content = styled(Box)<{ scale: number }>`
   width: 1920px;
-  height: 900px;
+  height: calc(900px - 176px);
+  padding-top: ${({ scale }) => scale * 176}px;
   transform-origin: 0 0;
   position: absolute;
-  top: 2px;
+  top: 50%;
   left: 50%;
   /* background: pink; */
-  transform: ${({ scale }) => `translate(${-scale * 50}%) scale(${scale})`};
+  transform: ${({ scale }) =>
+    `translate(${-scale * 50}%, ${-scale * 50}%) scale(${scale})`};
   /* ${({ theme }) => theme.mediaQueries.sm} {
     top: ${({ scale }) => `${scale * 58}%`};
   }
@@ -210,8 +212,8 @@ const ScaleOrientContent: React.FC = ({ children }) => {
         scale={scale}
       />
       <div className={VIDEO_GLOBAL_CLASS_NAME} />
+      <Dashboard scale={scale} />
       <Content id='scale-content' scale={scale}>
-        <Dashboard />
         {children}
 
         {/* 引导提示框 */}

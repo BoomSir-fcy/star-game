@@ -16,6 +16,7 @@ export const variants = {
   PRIMARY: 'primary',
   DANGER: 'danger',
   SECONDARY: 'secondary',
+  S2_LONG: 's2-long',
   TERTIARY: 'tertiary',
   TEXT: 'text',
   VS: 'vs',
