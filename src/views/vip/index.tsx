@@ -247,7 +247,6 @@ const VipPage = () => {
                 </TextBox>
                 <TextBox fontSize='16px'>
                   {t('Expire on')}
-                  {` `}
                   {user?.vipBenefits?.is_vip
                     ? dayjs(user?.vipBenefits?.expired_time * 1000).format(
                         'YYYY.MM.DD',
