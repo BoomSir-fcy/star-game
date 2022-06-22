@@ -14,7 +14,10 @@ import { Ball, CenterBox, Content } from './AlliancePlanetStyle';
 import './AlliancePlanetAround.css';
 import { useRemoveAlliance } from '../hook';
 
-const AlliancePlanet: React.FC = () => {
+const AlliancePlanet: React.FC<{
+  setChoosePlant: (e) => void;
+  setPlantManageModule: (e) => void;
+}> = ({ setPlantManageModule, setChoosePlant }) => {
   const { t } = useTranslation();
   const { account } = useActiveWeb3React();
   const { onConnectWallet } = useConnectWallet();
@@ -111,13 +114,6 @@ const AlliancePlanet: React.FC = () => {
     }
   }, [order]);
 
-  const gotoPlantDetail = useCallback(
-    (planetId: number) => {
-      navigate(`/star?id=${planetId}`);
-    },
-    [navigate],
-  );
-
   return (
     <Content>
       <Box className='section3'>
@@ -135,7 +131,7 @@ const AlliancePlanet: React.FC = () => {
           <Box className='base u_p3d'>
             {/* <Box className='line1' /> */}
             <Box className='line2' />
-            {PlantList.map(item => (
+            {PlantList.map((item, index) => (
               <Box
                 key={item.className}
                 className={`ball_base u_p3d ${item.className}`}
@@ -146,11 +142,14 @@ const AlliancePlanet: React.FC = () => {
                   ballWorking={item.ballWorking}
                   name={item.name}
                   onRemove={() => Remove(item.planetId)}
-                  onPlantClick={() => gotoPlantDetail(item.planetId)}
-                  showIcon
+                  onPlantClick={() => {
+                    setPlantManageModule(true);
+                    setChoosePlant(allianceList[index]);
+                  }}
                   callBack={() => addStar(item.planetId)}
                   imgBorder={item.rarity}
                   size='200px'
+                  width_height='160px'
                   url={item.url}
                   No={item.No}
                   Leve={item.Leve}

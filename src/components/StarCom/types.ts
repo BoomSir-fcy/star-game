@@ -4,6 +4,7 @@ import { Qualities } from 'uikit/theme/types';
 
 export const scales = {
   LD: 'ld',
+  XL: 'xl',
   MD: 'md',
   SM: 'sm',
   XS: 'xs',

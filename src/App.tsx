@@ -95,8 +95,8 @@ function App() {
               <Route path='/star/*' element={<Start />} />
 
               {/* 星球联盟 */}
-              <Route path='/plant-league' element={<PlantLeague />} />
-              <Route path='/plantLeague' element={<NewPlantLeague />} />
+              {/* <Route path='/plant-league' element={<PlantLeague />} /> */}
+              <Route path='/plant-league' element={<NewPlantLeague />} />
 
               <Route path='/battleReport' element={<BattleReport />} />
               {/* 星系 */}
