@@ -52,7 +52,6 @@ const ManageModule: React.FC<{
           <Box position='relative'>
             <Globe
               scale='xl'
-              margin='auto'
               shadow={QualityColor[planetInfo?.rarity]}
               url={planetInfo?.picture1}
             />

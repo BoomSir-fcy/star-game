@@ -124,7 +124,7 @@ const AlliancePlanet: React.FC<{
                 {t('Combat Power')}
               </Text>
               <MarkText fontSize='20px' fontStyle='normal' bold>
-                {123123}
+                {alliance.power}
               </MarkText>
             </Flex>
           </CenterBox>

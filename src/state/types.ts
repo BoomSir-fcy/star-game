@@ -296,6 +296,9 @@ export interface AllianceView {
   later_extract_time: number;
   order: orderInfo[];
   energy: energyInfo;
+  max_work_count: number;
+  now_work_count: number;
+  unread_plunder_count: number;
 }
 export interface AllianceState {
   allianceView: AllianceView;

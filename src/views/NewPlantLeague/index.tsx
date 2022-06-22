@@ -28,6 +28,7 @@ const NewPlantLeague: React.FC = () => {
         }}
       />
       <Explore
+        Difficulty={Difficulty}
         ShowModule={ShowModule}
         setShowModule={e => {
           setPlantManageModule(false);

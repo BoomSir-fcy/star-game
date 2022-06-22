@@ -27,6 +27,9 @@ export const initialState: AllianceState = {
     end_time: 0,
     free_time: 0,
     later_extract_time: 0,
+    max_work_count: 0,
+    now_work_count: 0,
+    unread_plunder_count: 0,
   },
   workingPlanet: [],
   pkRecord: {
