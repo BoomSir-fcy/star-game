@@ -26,6 +26,7 @@ interface VideoSystem
     MarginProps,
     HTMLAttributes<HTMLVideoElement> {
   center?: boolean;
+  rotate?: number;
 }
 const VideoStyled = styled.video<VideoSystem>`
   /* position: absolute; */
@@ -33,16 +34,8 @@ const VideoStyled = styled.video<VideoSystem>`
   ${margin}
   object-fit: fill;
   mix-blend-mode: lighten;
+  transform: ${({ rotate }) => rotate && `rotate(${rotate}deg) scale(1.5)`};
   z-index: 999;
-  /* ${({ center }) =>
-    center
-      ? `
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  `
-      : position}
-  z-index: ${({ zIndex }) => zIndex}; */
 `;
 
 export interface VideoGlobalProps extends BoxProps {
@@ -50,12 +43,14 @@ export interface VideoGlobalProps extends BoxProps {
   height?: number;
   src?: string;
   loop?: boolean;
+  rotate?: number;
 }
 const GlobalVideo: React.FC<VideoGlobalProps> = ({
   width = 500,
   height = 500,
   src,
   loop,
+  rotate,
   children,
   ...props
 }) => {
@@ -109,7 +104,7 @@ const GlobalVideo: React.FC<VideoGlobalProps> = ({
           {...props}
           position='absolute'
           width={`${width * scale}px`}
-          height={`${height * scale}`}
+          height={`${height * scale}px`}
           top={typeof top === 'number' ? top * scale : top}
           left={typeof left === 'number' ? left * scale : left}
           bottom={typeof bottom === 'number' ? bottom * scale : bottom}
@@ -122,6 +117,7 @@ const GlobalVideo: React.FC<VideoGlobalProps> = ({
             autoPlay
             muted
             loop={loop}
+            rotate={rotate}
             playsInline
           />
           {children}

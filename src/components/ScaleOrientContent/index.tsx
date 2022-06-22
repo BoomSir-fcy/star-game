@@ -195,9 +195,8 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       '/mystery-box',
       '/mystery-box/list',
       '/mystery-box/detail',
-      '/plant-league',
     ];
-    if (secondList.includes(pathname)) return 2;
+    if (secondList.includes(pathname)) return 3;
     if (pathname === '/plant-league') return 2;
     if (pathname === '/') return 1;
     return 0;

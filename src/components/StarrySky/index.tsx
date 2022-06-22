@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
+import SkyBgCanvas from './skyCanvas';
 import './spiders.css';
 
 export const backgroundVariants = [
@@ -47,13 +48,19 @@ const StarrySky: React.FC<StarrySkyProps> = ({ bgType = 0 }) => {
     return bgType;
   }, [bgType]);
   return (
-    <StarrySkyBg bgType={type}>
-      <div className='spiders'>
-        <div className='spidersOne' />
-        <div className='spidersTwo' />
-        <div className='spidersThree' />
-      </div>
-    </StarrySkyBg>
+    <>
+      {type === 3 ? (
+        <SkyBgCanvas />
+      ) : (
+        <StarrySkyBg bgType={type}>
+          <div className='spiders'>
+            <div className='spidersOne' />
+            <div className='spidersTwo' />
+            <div className='spidersThree' />
+          </div>
+        </StarrySkyBg>
+      )}
+    </>
   );
 };
 
