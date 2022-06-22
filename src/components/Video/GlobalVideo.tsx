@@ -18,7 +18,7 @@ import {
   MarginProps,
 } from 'styled-system';
 import { useStore } from 'state';
-import { APP_HEIGHT, VIDEO_GLOBAL_CLASS_NAME } from 'config';
+import { APP_HEIGHT, APP_WIDTH, VIDEO_GLOBAL_CLASS_NAME } from 'config';
 
 interface VideoSystem
   extends PositionProps,
@@ -28,13 +28,22 @@ interface VideoSystem
   center?: boolean;
   rotate?: number;
 }
+
+const BoxStyled = styled(Box)`
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+`;
 const VideoStyled = styled.video<VideoSystem>`
   /* position: absolute; */
   ${layout}
   ${margin}
   object-fit: fill;
   mix-blend-mode: lighten;
-  transform: ${({ rotate }) => rotate && `rotate(${rotate}deg) scale(1.5)`};
+  transform: ${({ rotate }) =>
+    rotate ? `rotate(${rotate}deg) scale(1.5)` : 'scale(1.5)'};
   z-index: 999;
 `;
 
@@ -52,16 +61,19 @@ const GlobalVideo: React.FC<VideoGlobalProps> = ({
   loop,
   rotate,
   children,
+  style,
   ...props
 }) => {
   const { scale, client } = useStore(p => p.user);
   const [show, setShow] = useState(false);
 
-  const { boxHeight, boxTop } = useMemo(() => {
+  const { boxHeight, boxTop, boxWidth } = useMemo(() => {
     const _height = APP_HEIGHT * scale;
+    const _width = APP_WIDTH * scale;
     const _top = (client.height - _height) / 2;
     return {
       boxHeight: _height,
+      boxWidth: _width,
       boxTop: _top,
     };
   }, [client, scale]);
@@ -89,15 +101,15 @@ const GlobalVideo: React.FC<VideoGlobalProps> = ({
   }, [box]);
 
   const { top, left, right, bottom } = props;
-
   return (
-    <div>
-      <Box
+    <Box>
+      <BoxStyled
         ref={box}
         position='absolute'
         // top={boxTop}
         height={boxHeight}
-        width='100%'
+        width={boxWidth}
+        // width='100%'
         style={{ display: show ? 'block' : 'none' }}
       >
         <Box
@@ -119,11 +131,12 @@ const GlobalVideo: React.FC<VideoGlobalProps> = ({
             loop={loop}
             rotate={rotate}
             playsInline
+            style={style}
           />
           {children}
         </Box>
-      </Box>
-    </div>
+      </BoxStyled>
+    </Box>
   );
 };
 

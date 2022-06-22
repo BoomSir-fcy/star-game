@@ -1,58 +1,82 @@
 import React from 'react';
 import { Layout } from 'components';
-import { Flex, Text } from 'uikit';
-import styled from 'styled-components';
+import { Flex, Box } from 'uikit';
+import styled, { createGlobalStyle } from 'styled-components';
 import { GlobalVideo } from 'components/Video';
 import { useStore } from 'state';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  MysteryBoxCom,
+  mysteryBoxQualities,
+} from 'components/MysteryBoxComNew';
 
-const TextStyled = styled(Text)<{ scale?: number }>`
+// const GlobalStyle = createGlobalStyle`
+//   #scale-content {
+//     pointer-events: none;
+//   }
+// `;
+
+const ClickBox = styled(Box)`
+  background-color: pink;
+  opacity: 0.2;
+  width: 900px;
+  height: 300px;
+  transform: rotate(-45deg);
   position: absolute;
-  left: ${({ scale }) => `${405 * scale}px`};
-  top: ${({ scale }) => `${250 * scale}px`};
-  font-size: ${({ scale }) => `${16 * scale}px`};
+  top: 0;
+  bottom: 0;
+  margin: auto;
 `;
+
 const MysteryBoxNew = () => {
-  const { scale } = useStore(p => p.user);
+  const navigate = useNavigate();
   return (
     <Layout>
-      <Flex justifyContent='space-between'>
-        <GlobalVideo
-          width={900}
-          src='/video/mbox0.mp4'
-          loop
-          top={250}
+      {/* <GlobalStyle /> */}
+      <Flex
+        position='relative'
+        // background='skyblue'
+        width='100%'
+        height='100%'
+        id='test'
+        justifyContent='space-between'
+      >
+        <ClickBox
+          left={-100}
+          onClick={() => {
+            navigate(`/mystery-box/state?q=${mysteryBoxQualities.ORDINARY}`);
+          }}
+        />
+        <ClickBox
+          left={450}
+          onClick={() => {
+            navigate(`/mystery-box/state?q=${mysteryBoxQualities.ADVANCED}`);
+          }}
+        />
+        <ClickBox
+          left={1050}
+          onClick={() => {
+            navigate(`/mystery-box/state?q=${mysteryBoxQualities.SUPER}`);
+          }}
+        />
+        <MysteryBoxCom
           left={-50}
-          rotate={-30}
-        >
-          <TextStyled shadow='primary' scale={scale} bold>
-            破损的黑洞
-          </TextStyled>
-        </GlobalVideo>
-        {/* <VideoStyled src='/video/mbox.mp4' autoPlay muted loop /> */}
-        <GlobalVideo
-          width={900}
-          src='/video/mbox1.mp4'
-          loop
-          top={250}
+          top={0}
+          bottom={0}
+          quality={mysteryBoxQualities.ORDINARY}
+        />
+        <MysteryBoxCom
           left={500}
-          rotate={-30}
-        >
-          <TextStyled shadow='primary' scale={scale} bold>
-            健康的黑洞
-          </TextStyled>
-        </GlobalVideo>
-        <GlobalVideo
-          width={900}
-          src='/video/mbox2.mp4'
-          loop
-          top={250}
+          top={0}
+          bottom={0}
+          quality={mysteryBoxQualities.ADVANCED}
+        />
+        <MysteryBoxCom
           left={1100}
-          rotate={-30}
-        >
-          <TextStyled shadow='primary' scale={scale} bold>
-            闪耀的黑洞
-          </TextStyled>
-        </GlobalVideo>
+          top={0}
+          bottom={0}
+          quality={mysteryBoxQualities.SUPER}
+        />
       </Flex>
     </Layout>
   );
