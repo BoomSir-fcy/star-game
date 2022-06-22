@@ -80,7 +80,8 @@ window.addEventListener(
 
 const Content = styled(Box)<{ scale: number }>`
   width: 1920px;
-  height: 900px;
+  height: calc(900px - 176px);
+  padding-top: ${({ scale }) => scale * 176}px;
   transform-origin: 0 0;
   position: absolute;
   top: 50%;

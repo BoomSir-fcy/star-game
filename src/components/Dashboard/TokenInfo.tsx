@@ -148,10 +148,10 @@ const TokenInfo = () => {
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={30} height={32} tokenAddress='SPICES' />
                 <Text small ml='8px'>
-                  {TokenBlance('BOX')?.amount}
+                  {TokenBlance('SPICES')?.amount}
                 </Text>
               </Flex>
-              <Text small>{TokenBlance('BOX')?.symbol}</Text>
+              <Text small>{TokenBlance('SPICES')?.symbol}</Text>
             </Flex>
           </ButtonLeft>
           <ButtonLeft
