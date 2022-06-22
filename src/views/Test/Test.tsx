@@ -24,6 +24,11 @@ const Test: React.FC = () => {
           <Nav
             nav={[
               {
+                id: 'drag',
+                label: '拖动',
+                path: '/test/drag',
+              },
+              {
                 id: 'card',
                 label: '卡片',
                 path: '/test/card',
@@ -57,7 +62,7 @@ const Test: React.FC = () => {
           />
           <Flex ml='50px' flex={1}>
             <Outlet />
-            <Spinner />
+            {/* <Spinner /> */}
           </Flex>
         </Flex>
       </Flex>

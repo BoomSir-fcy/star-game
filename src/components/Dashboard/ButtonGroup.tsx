@@ -21,7 +21,7 @@ export interface ButtonGroupProps {
 }
 
 interface SecondaryButtonProps extends ButtonProps {
-  tag: 'attack' | 'flag' | 'm-box' | 'star';
+  tag: 'attack' | 'flag' | 'm-box' | 'star' | 'bag';
   href: string;
 }
 const SecondaryButton: React.FC<SecondaryButtonProps> = ({
@@ -62,9 +62,9 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
 
   return (
     <Flex>
-      {/* <SecondaryButton href='/plunder' tag='attack'>
-        {t('Loot Resources').toLocaleUpperCase()}
-      </SecondaryButton> */}
+      <SecondaryButton href='/star/planet' tag='bag'>
+        {t('行星').toLocaleUpperCase()}
+      </SecondaryButton>
       <SecondaryButton
         href='/plant-league'
         tag='star'
