@@ -99,6 +99,7 @@ interface StarAddBtnProps extends BoxProps {
   Leve?: string | number;
   url?: string;
   size?: string;
+  width_height?: string;
   imgBorder?: Qualities;
   showIcon?: boolean;
   callBack?: () => void;
@@ -117,6 +118,7 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
   children,
   url,
   size = '175px',
+  width_height = '120px',
   imgBorder,
   showIcon,
   callBack,
@@ -136,8 +138,8 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
     if (url && ball) {
       return (
         <GlobeStyled
-          width='120px'
-          height='120px'
+          width={width_height}
+          height={width_height}
           shadow={QualityColor[imgBorder]}
           url={url}
           rotate={ballWorking}
@@ -163,7 +165,7 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
         src={url}
       />
     );
-  }, [url, size, imgBorder, ball, ballWorking, onPlantClick]);
+  }, [width_height, url, size, imgBorder, ball, ballWorking, onPlantClick]);
 
   return (
     <StyledStar
@@ -193,7 +195,7 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
           <Text small>{owner}</Text>
         </OwnerFlex>
       )}
-      {No && (
+      {/* {No && (
         <>
           <NumberFlex>
             <Text fontSize='20px' shadow='primary'>
@@ -211,7 +213,7 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
             </Text>
           )}
         </>
-      )}
+      )} */}
       {renderChildren}
     </StyledStar>
   );

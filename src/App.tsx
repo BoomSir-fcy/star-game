@@ -17,12 +17,13 @@ import {
   TestStar,
   TestText,
   TestLabel,
+  TestDrag,
 } from './views/Test';
 
 const Home = lazy(() => import('./views/Home'));
 const Login = lazy(() => import('./views/Login'));
 
-const MysteryBox = lazy(() => import('./views/MysteryBox'));
+const MysteryBox = lazy(() => import('./views/MysteryBoxNew'));
 const MysteryBoxDetail = lazy(() => import('./views/MysteryBox/Detail'));
 const MysteryBoxState = lazy(() => import('./views/MysteryBox/State'));
 const MysteryBoxList = lazy(() => import('./views/MysteryBox/List'));
@@ -95,8 +96,8 @@ function App() {
               <Route path='/star/*' element={<Start />} />
 
               {/* 星球联盟 */}
-              <Route path='/plant-league' element={<PlantLeague />} />
-              <Route path='/plantLeague' element={<NewPlantLeague />} />
+              {/* <Route path='/plant-league' element={<PlantLeague />} /> */}
+              <Route path='/plant-league' element={<NewPlantLeague />} />
 
               <Route path='/battleReport' element={<BattleReport />} />
               {/* 星系 */}
@@ -113,6 +114,7 @@ function App() {
               <Route path='/vip' element={<VipPage />} />
 
               <Route path='/test' element={<Test />}>
+                <Route path='drag' element={<TestDrag />} />
                 <Route path='card' element={<TestCard />} />
                 <Route path='bg-card' element={<TestBgCard />} />
                 <Route path='button' element={<TestButton />} />
