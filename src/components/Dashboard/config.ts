@@ -6,7 +6,6 @@ export const getHideHeader = (url: string) => {
   return getHidePath(
     [
       '/',
-      '/star',
       '/star/upgrade',
       '/star/grow',
       '/star/embattle',
