@@ -47,6 +47,7 @@ const UpgradeList = React.lazy(
 );
 
 const VipPage = lazy(() => import('./views/vip'));
+const NewPlantLeague = lazy(() => import('./views/NewPlantLeague'));
 
 // window.addEventListener('click', () => {
 //   console.log(Object.keys(document.documentElement));
@@ -96,6 +97,8 @@ function App() {
 
               {/* 星球联盟 */}
               <Route path='/plant-league' element={<PlantLeague />} />
+              <Route path='/plantLeague' element={<NewPlantLeague />} />
+
               <Route path='/battleReport' element={<BattleReport />} />
               {/* 星系 */}
               <Route path='/galaxy' element={<Galaxy />} />

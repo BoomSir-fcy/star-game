@@ -78,6 +78,7 @@ export type Qualities = typeof qualities[keyof typeof qualities];
 export type Races = typeof RaceType[keyof typeof RaceType];
 
 export type Colors = {
+  redText: string;
   legendText: string;
   profit: string;
   failure: string;

@@ -48,4 +48,10 @@ export const styleVariants = {
     height: '768px',
     backgroundSize: '100% 100%',
   },
+  [variants.SL]: {
+    background: 'url(/images/commons/bg-card/medium.png)',
+    width: '678px',
+    height: '264px',
+    backgroundSize: '100% 100%',
+  },
 };
