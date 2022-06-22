@@ -146,7 +146,14 @@ const AlliancePlanet: React.FC<{
                     setPlantManageModule(true);
                     setChoosePlant(allianceList[index]);
                   }}
-                  callBack={() => addStar(item.planetId)}
+                  callBack={() => {
+                    if (!item.planetId) {
+                      addStar(item.planetId);
+                    } else {
+                      setPlantManageModule(true);
+                      setChoosePlant(allianceList[index]);
+                    }
+                  }}
                   imgBorder={item.rarity}
                   size='200px'
                   width_height='160px'

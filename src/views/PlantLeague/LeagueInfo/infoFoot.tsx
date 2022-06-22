@@ -30,7 +30,7 @@ const InfoFoot = () => {
 
   // 开始/停止工作
   const StartOrStopWorking = async (work: boolean) => {
-    await Api.AllianceApi[work ? 'AllianceWorking' : 'AllianceStopWork']()
+    await Api.AllianceApi[work ? 'AllianceWorking' : 'AllianceStopWork']({})
       .then(res => {
         if (Api.isSuccess(res)) {
           toastSuccess(t('Operate Succeeded'));

@@ -51,7 +51,7 @@ const Explore: React.FC<{
 
   // 开始工作
   const StartOrStopWorking = useCallback(async () => {
-    await Api.AllianceApi.AllianceWorking()
+    await Api.AllianceApi.AllianceWorking({ difficulty: Difficulty })
       .then(res => {
         if (Api.isSuccess(res)) {
           toastSuccess(t('Operate Succeeded'));
@@ -62,7 +62,7 @@ const Explore: React.FC<{
         toastError(t('Operate Failed'));
         console.error(err);
       });
-  }, [toastSuccess, toastError, t, dispatch]);
+  }, [toastSuccess, toastError, t, dispatch, Difficulty]);
 
   // 倒计时
   const countDown = () => {
