@@ -34,6 +34,14 @@ const ItemBox = styled(Box)`
   margin-bottom: 20px;
 `;
 
+const RowBox = styled(Box)`
+  min-width: 110vw;
+  height: 364px;
+  background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
+  border: 2px solid #4ffffb;
+  margin-bottom: 30px;
+`;
+
 const LoadingBox = styled(Box)`
   position: absolute;
   left: 56%;
@@ -135,17 +143,19 @@ const BattleReport = () => {
         upDate={e => setPageNum(e)}
       />
       <Flex flex={1}>
-        <BgCard variant='Fullscreen' padding='40px 37px'>
-          <ScrollBox onScroll={loadMore} className='Pk_list'>
-            {(RecordList ?? []).map((item, index) => (
-              <React.Fragment key={`${item.id}`}>
-                <ItemBox className={`battle-items-${index}`}>
+        {/* <BgCard variant='Fullscreen' padding='40px 37px'>
+          
+        </BgCard> */}
+        <ScrollBox onScroll={loadMore} className='Pk_list'>
+          {(RecordList ?? []).map((item, index) => (
+            <React.Fragment key={`${item.id}`}>
+              <RowBox>123</RowBox>
+              {/* <ItemBox className={`battle-items-${index}`}>
                   <PkBox info={item} />
-                </ItemBox>
-              </React.Fragment>
-            ))}
-          </ScrollBox>
-        </BgCard>
+                </ItemBox> */}
+            </React.Fragment>
+          ))}
+        </ScrollBox>
       </Flex>
       {loading && (
         <LoadingBox>
