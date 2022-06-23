@@ -8,7 +8,7 @@ export interface RaceAvatarProps extends BoxProps {
 }
 
 export const raceImage = {
-  [RaceType.PROTOSS]: '/images/commons/star/protoss.png', // 神族
-  [RaceType.HUMAN]: '/images/commons/star/human-race.png', // 人族
-  [RaceType.ZERG]: '/images/commons/star/zerg.png', // 虫族
+  [RaceType.PROTOSS]: '/images/commons/protoss.png', // 神族
+  [RaceType.HUMAN]: '/images/commons/human.png', // 人族
+  [RaceType.ZERG]: '/images/commons/zerg.png', // 虫族
 };
