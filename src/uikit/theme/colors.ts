@@ -2,7 +2,7 @@ import { Colors, qualities, RaceType } from './types';
 
 export const baseColors = {
   failure: '#FF3A3A',
-  warning: '#FF7272',
+  warning: '#EC3838',
   profit: '#52FF83',
   blueSide: '#2CCFFF',
   redSide: '#EB5231',

@@ -18,6 +18,7 @@ import {
   TestText,
   TestLabel,
   TestDrag,
+  TestDragAndPut,
 } from './views/Test';
 
 const Home = lazy(() => import('./views/Home'));
@@ -114,6 +115,7 @@ function App() {
               <Route path='/vip' element={<VipPage />} />
 
               <Route path='/test' element={<Test />}>
+                <Route path='drag-put' element={<TestDragAndPut />} />
                 <Route path='drag' element={<TestDrag />} />
                 <Route path='card' element={<TestCard />} />
                 <Route path='bg-card' element={<TestBgCard />} />
