@@ -10,14 +10,8 @@ import {
   mysteryBoxQualities,
 } from 'components/MysteryBoxComNew';
 
-// const GlobalStyle = createGlobalStyle`
-//   #scale-content {
-//     pointer-events: none;
-//   }
-// `;
-
 const ClickBox = styled(Box)`
-  background-color: pink;
+  /* background-color: pink; */
   opacity: 0.2;
   width: 900px;
   height: 300px;
@@ -32,10 +26,8 @@ const MysteryBoxNew = () => {
   const navigate = useNavigate();
   return (
     <Layout>
-      {/* <GlobalStyle /> */}
       <Flex
         position='relative'
-        // background='skyblue'
         width='100%'
         height='100%'
         id='test'

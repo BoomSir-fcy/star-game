@@ -24,7 +24,7 @@ const Home = lazy(() => import('./views/Home'));
 const Login = lazy(() => import('./views/Login'));
 
 const MysteryBox = lazy(() => import('./views/MysteryBoxNew'));
-const MysteryBoxDetail = lazy(() => import('./views/MysteryBox/Detail'));
+const MysteryBoxDetail = lazy(() => import('./views/MysteryBoxNew/Detail'));
 const MysteryBoxState = lazy(() => import('./views/MysteryBoxNew/State'));
 const MysteryBoxList = lazy(() => import('./views/MysteryBoxNew/List'));
 
