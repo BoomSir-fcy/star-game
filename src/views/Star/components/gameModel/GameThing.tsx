@@ -32,8 +32,8 @@ const scaleVariants = {
     },
   },
   [scales.MD]: {
-    width: 240,
-    height: 240,
+    width: 180,
+    height: 180,
     text: {
       top: 5,
       left: 13,

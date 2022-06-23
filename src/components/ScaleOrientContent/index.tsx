@@ -19,6 +19,8 @@ import detectOrient from 'utils/detectOrient';
 
 import Dashboard from 'components/Dashboard';
 import { GuideModal } from 'components/Modal/guideModal';
+import { getHideHeader } from 'components/Dashboard/config';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 // .introjs-tooltip{
 //   transform-origin: ${({ rotate }) => (rotate ? 'center' : '0  0')};
@@ -78,10 +80,10 @@ window.addEventListener(
   { once: true },
 );
 
-const Content = styled(Box)<{ scale: number }>`
+const Content = styled(Box)<{ scale: number; hideHeader?: boolean }>`
   width: 1920px;
-  height: calc(900px - 176px);
-  padding-top: ${({ scale }) => scale * 176}px;
+  /* height: ${({ scale, hideHeader }) => (hideHeader ? 900 - 176 : 900)}px; */
+  padding-top: ${({ scale, hideHeader }) => (hideHeader ? 0 : scale * 176)}px;
   transform-origin: 0 0;
   position: absolute;
   top: 50%;
@@ -201,6 +203,12 @@ const ScaleOrientContent: React.FC = ({ children }) => {
     if (pathname === '/') return 1;
     return 0;
   }, [pathname]);
+
+  const params = useParsedQueryString();
+  const hideHeader = useMemo(() => {
+    return getHideHeader(pathname) || params?.hide;
+  }, [pathname, params]);
+
   return (
     <Box position='relative' id='detect-orient' ref={ref}>
       <ResetCSS scale={scale} rotate={client?.width < client?.height} />
@@ -212,7 +220,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       />
       <div className={VIDEO_GLOBAL_CLASS_NAME} />
       <Dashboard scale={scale} />
-      <Content id='scale-content' scale={scale}>
+      <Content id='scale-content' scale={scale} hideHeader={!!hideHeader}>
         {children}
 
         {/* 引导提示框 */}

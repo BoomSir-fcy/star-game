@@ -378,26 +378,24 @@ export const GameInfo: React.FC<{
                         />
                       </ItemInfo>
                     )}
-                    {currentAttributes?.propterty?.per_cost_stone > 0 && (
-                      <ItemInfo>
-                        <BuildingValue
-                          itemData={itemData}
-                          planet_id={planet_id}
-                          title={t('planetOreConsumption')}
-                          value={`${formatDisplayApr(
-                            new BigNumber(
-                              currentAttributes?.propterty?.per_cost_stone,
-                            ).toNumber(),
-                          )}/s`}
-                          addedValue={
-                            state.upgrade?.estimate_building_detail?.propterty
-                              ?.per_cost_stone -
-                            currentAttributes?.propterty?.per_cost_stone
-                          }
-                          icon='/images/commons/icon/icon_minera.png'
-                        />
-                      </ItemInfo>
-                    )}
+                    <ItemInfo>
+                      <BuildingValue
+                        itemData={itemData}
+                        planet_id={planet_id}
+                        title={t('planetOreConsumption')}
+                        value={`${formatDisplayApr(
+                          new BigNumber(
+                            currentAttributes?.propterty?.per_cost_stone,
+                          ).toNumber(),
+                        )}/s`}
+                        addedValue={
+                          state.upgrade?.estimate_building_detail?.propterty
+                            ?.per_cost_stone -
+                          currentAttributes?.propterty?.per_cost_stone
+                        }
+                        icon='/images/commons/icon/icon_minera.png'
+                      />
+                    </ItemInfo>
                     <ItemInfo bottomMargin>
                       <BuildingValue
                         itemData={itemData}
@@ -435,14 +433,22 @@ export const GameInfo: React.FC<{
                       />
                     </ItemInfo>
                   </Flex>
-                  <Flex flex={1} justifyContent='space-between' flexWrap='wrap'>
-                    <Text>兵种：</Text>
-                    {(arms ?? []).map(row => (
-                      <Text key={row.unique_id} fontSize='16px' mt='10px'>
-                        {row?.game_base_unit?.tag}
+                  {arms.length > 0 && (
+                    <Flex
+                      flex={1}
+                      justifyContent='space-between'
+                      flexWrap='wrap'
+                    >
+                      <Text mt='10px' small>
+                        兵种：
                       </Text>
-                    ))}
-                  </Flex>
+                      {(arms ?? []).map(row => (
+                        <Text key={row.unique_id} fontSize='16px' mt='10px'>
+                          {row?.game_base_unit?.tag}
+                        </Text>
+                      ))}
+                    </Flex>
+                  )}
                   {itemData.detail_type ===
                     BuildingDetailType.BuildingDetailTypeStore && (
                     <Box>
