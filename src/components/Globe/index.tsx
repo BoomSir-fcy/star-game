@@ -50,7 +50,7 @@ export interface GlobeProps extends BoxProps {
 }
 
 const Globe: React.FC<GlobeProps> = ({
-  shadow,
+  shadow = '#FFF',
   scale = 'md',
   rotate = true,
   url,

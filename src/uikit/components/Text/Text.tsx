@@ -46,7 +46,6 @@ const Text = styled.div<TextProps>`
       font-style: italic;
 
       color: #ffffff;
-      text-shadow: 0px 3px 0.4em #79c6c4;
 
       background: linear-gradient(130deg, #FBEEBA 0%, #F1D37E 14.990234375%, #D1AB64 33.0078125%, #D5C089 48.9990234375%, #D5BF86 66.9921875%, #F4D784 84.0087890625%, #FBEEBA 100%);
       -webkit-background-clip: text;

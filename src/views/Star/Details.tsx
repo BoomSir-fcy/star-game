@@ -10,8 +10,22 @@ import 'intro.js/introjs.css';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
+import styled from 'styled-components';
 import { DragCompoents } from './components/dragCompoents';
+import { DragV2 } from './components/dragV2';
 import type { AreaDataItem } from './components/dragCompoents';
+
+import {
+  BarRight,
+  SideLeftContent,
+  SideRightBuildingInfo,
+} from './components/buildings';
+import { PlanetQueue } from './components/buildings/planetQueue';
+
+const Container = styled(Box)`
+  width: 100%;
+  min-height: 100vh;
+`;
 
 const Details = () => {
   const parsedQs = useParsedQueryString();
@@ -121,7 +135,7 @@ const Details = () => {
   }, [dispatch]);
 
   return (
-    <Box>
+    <Container>
       {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
@@ -153,14 +167,18 @@ const Details = () => {
           }}
         />
       )}
-      <DragCompoents
+
+      <PlanetQueue />
+      <BarRight />
+      <SideRightBuildingInfo planet_id={id} buildingsId={111} />
+      {/* <DragCompoents
         rows={planet?.areaX}
         cols={planet?.areaY}
         planet_id={id}
         gridSize={476}
         itemData={state}
-      />
-    </Box>
+      /> */}
+    </Container>
   );
 };
 

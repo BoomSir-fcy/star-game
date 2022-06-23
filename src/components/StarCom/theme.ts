@@ -10,6 +10,14 @@ export const scaleVariants = {
     rWidth: 230,
     rHeight: 230,
   },
+  [scales.XL]: {
+    height: 230,
+    width: 230,
+    sWidth: 180,
+    sHeight: 180,
+    rWidth: 180,
+    rHeight: 180,
+  },
   [scales.MD]: {
     height: 165,
     width: 165,

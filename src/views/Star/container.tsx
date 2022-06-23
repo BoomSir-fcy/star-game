@@ -18,6 +18,7 @@ import { setActiveNavId } from 'state/planet/actions';
 import { useStore } from 'state';
 import eventBus from 'utils/eventBus';
 import { StarHeader } from './components';
+import { SideRightBuildingInfo } from './components/buildings';
 
 const Star: React.FC<{
   children: React.ReactNode;
@@ -69,7 +70,7 @@ const Star: React.FC<{
 
   return (
     <Layout>
-      <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
+      {/* <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
         <Box>
           <BackButton />
           <RefreshButton
@@ -80,8 +81,10 @@ const Star: React.FC<{
           />
         </Box>
         <StarHeader />
-      </Flex>
-      <Flex width='100%'>
+      </Flex> */}
+      {/* <SideRightBuildingInfo planet_id={id} buildingsId={111} /> */}
+      <Flex width='100%'>{children}</Flex>
+      {/* <Flex width='100%'>
         <Nav
           className='common_nav'
           nav={[
@@ -127,7 +130,7 @@ const Star: React.FC<{
         <Flex ml='23px' flex={1}>
           {children}
         </Flex>
-      </Flex>
+      </Flex> */}
     </Layout>
   );
 };

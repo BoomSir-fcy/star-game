@@ -17,15 +17,16 @@ import {
   TestStar,
   TestText,
   TestLabel,
+  TestDrag,
 } from './views/Test';
 
 const Home = lazy(() => import('./views/Home'));
 const Login = lazy(() => import('./views/Login'));
 
-const MysteryBox = lazy(() => import('./views/MysteryBox'));
+const MysteryBox = lazy(() => import('./views/MysteryBoxNew'));
 const MysteryBoxDetail = lazy(() => import('./views/MysteryBox/Detail'));
-const MysteryBoxState = lazy(() => import('./views/MysteryBox/State'));
-const MysteryBoxList = lazy(() => import('./views/MysteryBox/List'));
+const MysteryBoxState = lazy(() => import('./views/MysteryBoxNew/State'));
+const MysteryBoxList = lazy(() => import('./views/MysteryBoxNew/List'));
 
 const PlantLeague = lazy(() => import('./views/PlantLeague'));
 const BattleReport = lazy(() => import('./views/BattleReport'));
@@ -46,6 +47,7 @@ const UpgradeList = React.lazy(
 );
 
 const VipPage = lazy(() => import('./views/vip'));
+const NewPlantLeague = lazy(() => import('./views/NewPlantLeague'));
 
 // window.addEventListener('click', () => {
 //   console.log(Object.keys(document.documentElement));
@@ -94,7 +96,9 @@ function App() {
               <Route path='/star/*' element={<Start />} />
 
               {/* 星球联盟 */}
-              <Route path='/plant-league' element={<PlantLeague />} />
+              {/* <Route path='/plant-league' element={<PlantLeague />} /> */}
+              <Route path='/plant-league' element={<NewPlantLeague />} />
+
               <Route path='/battleReport' element={<BattleReport />} />
               {/* 星系 */}
               <Route path='/galaxy' element={<Galaxy />} />
@@ -110,6 +114,7 @@ function App() {
               <Route path='/vip' element={<VipPage />} />
 
               <Route path='/test' element={<Test />}>
+                <Route path='drag' element={<TestDrag />} />
                 <Route path='card' element={<TestCard />} />
                 <Route path='bg-card' element={<TestBgCard />} />
                 <Route path='button' element={<TestButton />} />
