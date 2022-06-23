@@ -16,13 +16,18 @@ import Layout from 'components/Layout';
 const Test: React.FC = () => {
   return (
     <Layout>
-      <BackButton ml='16px' />
+      {/* <BackButton ml='16px' /> */}
       <Flex width='100%' flexDirection='column' alignItems='center'>
         <Heading>Test</Heading>
-        <Text>开发测试页面</Text>
+        {/* <Text>开发测试页面</Text> */}
         <Flex width='100%'>
           <Nav
             nav={[
+              {
+                id: 'drag-put',
+                label: '拖动放置',
+                path: '/test/drag-put',
+              },
               {
                 id: 'drag',
                 label: '拖动',
