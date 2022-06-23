@@ -24,6 +24,8 @@ const DragAndPut: React.FC = () => {
           onClick={() => {
             const bb = new Builder();
             building.addBuilder(bb);
+            bb.setPointAsXY(1, 2);
+            bb.setPointAsXY(3, 1);
           }}
         >
           创建

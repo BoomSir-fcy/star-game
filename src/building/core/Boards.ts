@@ -207,9 +207,6 @@ class Boards extends EventTarget {
           axisX: row,
           axisY: col,
           state: stateType.PREVIEW,
-          test,
-          offsetStartX: this.offsetStartX,
-          offsetStartY: this.offsetStartY,
         });
         chequer.displayState(true);
         this.chequers.push(chequer);

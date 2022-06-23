@@ -145,7 +145,6 @@ class Chequer {
     const { x, y, enemy } = this.getXY(this.axisY, this.axisX);
     this.bunny.x = x;
     this.bunny.y = y;
-    console.log(x, y, axisY, axisX);
 
     this.bunny.interactive = true;
     this.bunny.buttonMode = true;
@@ -186,7 +185,6 @@ class Chequer {
       -Chequer.WIDTH * Chequer.X_RATIO,
       Chequer.HEIGHT * Chequer.Y_RATIO,
     ];
-    const color = getRandomColor();
     this.graphics.lineStyle(1, 0x4ffffb, 1);
     this.graphics.beginFill(0x4ffffb, 0.3);
     this.graphics.drawPolygon(path);
@@ -198,7 +196,7 @@ class Chequer {
 
     this.graphics.interactive = true;
 
-    // this.centerPoint.set(x, y + 30);
+    this.centerPoint.set(x, y);
 
     return this.graphics;
   }
@@ -223,7 +221,6 @@ class Chequer {
       enemy = true;
     }
     const { width, height } = this.bunny.getBounds();
-    console.log(width, height);
     return {
       x:
         this.offsetStartX -
