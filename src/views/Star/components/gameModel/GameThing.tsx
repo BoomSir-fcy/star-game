@@ -37,7 +37,7 @@ const scaleVariants = {
     text: {
       top: 5,
       left: 13,
-      fontSize: 40,
+      fontSize: 18,
     },
   },
   [scales.SM]: {
@@ -61,7 +61,7 @@ const Container = styled(Card)<{
   ${({ theme, active, border, round }) => {
     if (border) {
       return css`
-        border: 1px solid #373c45;
+        border: 1px solid #4ffffb;
       `;
     }
     if (active) {
@@ -69,15 +69,24 @@ const Container = styled(Card)<{
         box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.8);
       `;
     }
-
     if (round) {
       return css`
         border-radius: 10px;
       `;
     }
-
     return css``;
   }}
+  background-image: linear-gradient(
+    45deg,
+    rgba(31, 34, 40, 1) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(16, 36, 38, 1) 50%,
+    rgba(16, 36, 38, 1) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 7px 7px;
   div {
     pointer-events: none;
   }
@@ -139,7 +148,7 @@ export const GameThing: React.FC<{
         className='game-thing'
       >
         {level && (
-          <Level shadow='primary' style={sizeBox?.text}>
+          <Level shadow='primary' bold style={sizeBox?.text}>
             Lv {level}
           </Level>
         )}

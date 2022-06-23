@@ -169,8 +169,11 @@ const Details = () => {
       )}
 
       <PlanetQueue />
-      <BarRight />
-      <SideRightBuildingInfo planet_id={id} buildingsId={111} />
+      <BarRight planet_id={id} />
+      <SideRightBuildingInfo
+        planet_id={id}
+        buildingsId='62aaa14252416b11acec4134'
+      />
       {/* <DragCompoents
         rows={planet?.areaX}
         cols={planet?.areaY}

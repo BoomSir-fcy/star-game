@@ -2,7 +2,7 @@ import { Colors, qualities, RaceType } from './types';
 
 export const baseColors = {
   failure: '#FF3A3A',
-  warning: '#FF7272',
+  warning: '#EC3838',
   profit: '#52FF83',
   blueSide: '#2CCFFF',
   redSide: '#EB5231',
@@ -67,6 +67,7 @@ export const lightColors: Colors = {
   raceHuman: '#3dcfff',
   raceZerg: '#8ac001',
   border: '#2B2F39',
+  borderPrimary: '#4ffffb',
   goldBorder: '#8ac001',
   lightBorder: '#f9feff',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
@@ -104,6 +105,7 @@ export const darkColors: Colors = {
   raceHuman: '#3dcfff',
   raceZerg: '#8ac001',
   border: '#2B2F39',
+  borderPrimary: '#4ffffb',
   goldBorder: '#EB9C12',
   lightBorder: '#f9feff',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
