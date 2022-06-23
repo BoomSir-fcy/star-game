@@ -15,7 +15,7 @@ const StyledImage = styled(Image)`
 `;
 
 export const BuildingValue: React.FC<{
-  itemData: Api.Building.Building;
+  itemData: Api.Building.BuildingDetail;
   planet_id?: number;
   title: string;
   value: string;

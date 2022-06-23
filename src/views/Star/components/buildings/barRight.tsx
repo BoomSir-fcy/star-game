@@ -4,24 +4,54 @@ import { useStore } from 'state';
 import { Flex, Box, MarkText } from 'uikit';
 
 import { useTranslation } from 'contexts/Localization';
-import useParsedQueryString from 'hooks/useParsedQueryString';
 import { BarCard } from './barCard';
 import { BarHead } from './barHead';
 import { PlanetAssets } from './planetAssets';
 import { PlanetBuff } from './planetBuff';
+import { useBuffer } from '../hooks';
 
 const BarLayout = styled(Box)`
   position: fixed;
   right: 0;
-  top: 0%;
+  top: 15%;
 `;
 
-export const BarRight = () => {
-  const { t } = useTranslation();
+const ImgFlex = styled(Flex)`
+  width: 38px;
+  img {
+    width: 100%;
+  }
+`;
 
-  const parsedQs = useParsedQueryString();
-  const id = Number(parsedQs.id);
-  const planetInfo = useStore(p => p.planet.planetInfo[id ?? 0]);
+export const BarRight: React.FC<{
+  planet_id: number;
+}> = ({ planet_id }) => {
+  const { t } = useTranslation();
+  const { getPlanetBuff } = useBuffer();
+  const [currentBufffer, setCurrentBuffer] = React.useState({});
+  const planetInfo = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
+
+  const getBuffer = React.useCallback(async () => {
+    const res = await getPlanetBuff({ planet_id });
+    const buffer = (res ?? []).reduce((current: any, next: any) => {
+      // eslint-disable-next-line array-callback-return
+      Object.keys(next).map((key: string) => {
+        if (current[key]) {
+          // eslint-disable-next-line no-param-reassign
+          current[key] += next[key];
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          current[key] = next[key];
+        }
+      });
+      return current;
+    }, {});
+    setCurrentBuffer(buffer);
+  }, [getPlanetBuff, planet_id]);
+
+  React.useEffect(() => {
+    getBuffer();
+  }, [getBuffer]);
 
   return (
     <BarLayout>
@@ -64,14 +94,14 @@ export const BarRight = () => {
             mr='8px'
             position='relative'
           >
-            <MarkText fontSize='18px' bold fontStyle='italic'>
-              3
-            </MarkText>
+            <ImgFlex justifyContent='center' alignItems='center'>
+              <img src='/images/commons/icon/icon-finish.png' alt='' />
+            </ImgFlex>
           </Flex>
         </BarCard>
-        <Box mt='50px'>
+        <Box mt='20px'>
           <PlanetAssets plant_info={planetInfo} />
-          <PlanetBuff />
+          <PlanetBuff current_buff={currentBufffer} />
         </Box>
       </Flex>
     </BarLayout>
