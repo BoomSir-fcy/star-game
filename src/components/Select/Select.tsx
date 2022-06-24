@@ -31,6 +31,14 @@ export const scaleVariants = {
   },
 };
 
+// 选择框打开方向
+export const directions = {
+  UP: 'up',
+  DOWN: 'down',
+} as const;
+
+export type Direction = typeof directions[keyof typeof directions];
+
 const DropDownHeader = styled.div`
   width: 100%;
   height: 65px;
@@ -63,6 +71,7 @@ const DropDownContainer = styled.div<{
   width?: string;
   scale?: Scale;
   childrenHeight?: string;
+  direction?: Direction;
 }>`
   position: relative;
   width: ${({ width }) => width};
@@ -97,15 +106,32 @@ const DropDownContainer = styled.div<{
   ${props =>
     props.isOpen &&
     props.childrenHeight &&
+    props.direction === directions.DOWN &&
     css`
       ${DropDownListContainer} {
-        height: ${props.childrenHeight};
+        max-height: ${props.childrenHeight};
         overflow-y: auto;
         transform: scaleY(1);
         opacity: 1;
         border: 1px solid ${({ theme }) => theme.colors.border};
         border-top-width: 0;
         border-radius: 0 0 16px 16px;
+      }
+    `}
+    ${props =>
+    props.isOpen &&
+    props.childrenHeight &&
+    props.direction === directions.UP &&
+    css`
+      ${DropDownListContainer} {
+        bottom: 60px;
+        max-height: ${props.childrenHeight};
+        overflow-y: auto;
+        transform: scaleY(1);
+        opacity: 1;
+        border: 1px solid ${({ theme }) => theme.colors.border};
+        border-bottom-width: 0;
+        border-radius: 16px 16px 0 0;
       }
     `}
     ${space}
@@ -121,7 +147,7 @@ const DropDownList = styled.ul`
 const ListItem = styled.li`
   display: flex;
   align-items: center;
-  padding: 8px 16px;
+  padding: 10px 16px;
   list-style: none;
   &:hover {
     background: ${({ theme }) => theme.colors.inputSelect};
@@ -137,6 +163,7 @@ export interface SelectProps extends SpaceProps {
   scale?: Scale;
   childrenHeight?: string;
   idKey?: string;
+  direction?: Direction; // 方向
 }
 
 export interface OptionProps {
@@ -156,6 +183,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
   scale,
   width,
   children,
+  direction = 'down',
   childrenHeight = '150px',
   ...props
 }) => {
@@ -214,6 +242,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
       scale={scale}
       isOpen={isOpen}
       width={width}
+      direction={direction}
       ref={containerRef}
       {...props}
     >
@@ -226,7 +255,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
           </Text>
           {children}
         </DropDownHeader>
-        <ArrowDropDownIcon />
+        <ArrowDropDownIcon direction={direction} />
       </Flex>
       <DropDownListContainer scale={scale}>
         <DropDownList ref={dropdownRef}>
@@ -246,13 +275,17 @@ export const Select: React.FunctionComponent<SelectProps> = ({
   );
 };
 
-const ArrowDropDownIcon = () => {
+const ArrowDropDownIcon: React.FC<{ direction: Direction }> = ({
+  direction,
+}) => {
   return (
     <Box
       width='22px'
       height='27px'
       style={{
-        transform: 'rotate(90deg)',
+        transform: `${
+          direction === 'down' ? 'rotate(90deg)' : 'rotate(-90deg)'
+        }`,
       }}
     >
       <Image
