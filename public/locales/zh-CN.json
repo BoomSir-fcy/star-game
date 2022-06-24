@@ -594,6 +594,7 @@
   "Storage jars cannot be destroyed when they are unique": "储物罐唯一时不能被销毁",
   "The number of cellars must be less than or equal to storage tanks": "The number of cellars must be less than or equal to storage tanks",
   "upgradeRequirements": "升级需求",
+  "Next Lv. ": "下个等级 %value%",
   "******end*****@kksam********": "@kksam翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",

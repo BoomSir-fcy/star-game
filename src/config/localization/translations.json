@@ -593,6 +593,7 @@
   "The current queue is full": "The current queue is full",
   "Storage jars cannot be destroyed when they are unique": "Storage jars cannot be destroyed when they are unique",
   "upgradeRequirements": "Upgrade",
+  "Next Lv. ": "Next Lv. %value%",
   "******end*****@kksam********": "@kksam翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",

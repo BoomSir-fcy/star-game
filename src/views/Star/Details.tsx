@@ -1,8 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction } from 'state';
 import { Box } from 'uikit';
+import { Api } from 'apis';
 
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
@@ -10,9 +12,6 @@ import 'intro.js/introjs.css';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
-import styled from 'styled-components';
-import { DragCompoents } from './components/dragCompoents';
-import { DragV2 } from './components/dragV2';
 import type { AreaDataItem } from './components/dragCompoents';
 
 import {
@@ -21,6 +20,7 @@ import {
   SideRightBuildingInfo,
 } from './components/buildings';
 import { PlanetQueue } from './components/buildings/planetQueue';
+import { useWorkqueue } from './components/hooks';
 
 const Container = styled(Box)`
   width: 100%;
@@ -33,9 +33,11 @@ const Details = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { refreshWorkQueue } = useWorkqueue();
   const { guides, setGuide } = useGuide(location.pathname);
   const [state, setState] = React.useState<AreaDataItem[]>([]);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
+  const [serverDiffTime, setServerDiffTime] = React.useState<number>(0);
 
   const steps = React.useMemo(() => {
     return [
@@ -85,10 +87,38 @@ const Details = () => {
   const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
+  const currentTime = Number((Date.now() / 1000).toFixed(0));
 
   const updateGrid = React.useCallback(data => {
     setState(data);
   }, []);
+
+  const getWorkQueue = React.useCallback(
+    async (isSave?: boolean) => {
+      try {
+        const res = await refreshWorkQueue(id);
+        if (Api.isSuccess(res)) {
+          const resWorkQueue = res.data.work_queue;
+          console.log(resWorkQueue);
+          // let isQueue = [];
+          // if (isSave) {
+          //   isQueue = currentQueue.filter((item: any) => !item.planet_id);
+          // }
+          // setCurrentQueue([...resWorkQueue, ...isQueue]);
+          setServerDiffTime(
+            res.data.time - currentTime > 0
+              ? -(res.data.time - currentTime)
+              : res.data.time - currentTime,
+          );
+          // dispatch(fetchPlanetBuildingsAsync(planet_id));
+          // dispatch(fetchPlanetInfoAsync([planet_id]));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [currentTime, id, refreshWorkQueue],
+  );
 
   React.useEffect(() => {
     if (planet?.areaX > 0 && planet?.areaY > 0) {
@@ -129,10 +159,11 @@ const Details = () => {
   }, [planet, selfBuilding, updateGrid]);
 
   React.useEffect(() => {
+    getWorkQueue();
     return () => {
       dispatch(storeAction.toggleVisible({ visible: false }));
     };
-  }, [dispatch]);
+  }, [dispatch, getWorkQueue]);
 
   return (
     <Container>
@@ -167,12 +198,14 @@ const Details = () => {
           }}
         />
       )}
-
-      <PlanetQueue />
-      <BarRight planet_id={id} />
+      <SideLeftContent />
+      <PlanetQueue
+        serverTime={currentTime + serverDiffTime}
+        currentQueue={[]}
+      />
       <SideRightBuildingInfo
         planet_id={id}
-        buildingsId='62aaa14252416b11acec4134'
+        buildingsId='62aaee6e52416bf5cfb3b178'
       />
       {/* <DragCompoents
         rows={planet?.areaX}

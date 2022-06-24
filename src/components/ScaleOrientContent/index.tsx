@@ -201,6 +201,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
     ];
     if (secondList.includes(pathname)) return 3;
     if (pathname === '/plant-league') return 2;
+    if (pathname === '/star') return 2;
     if (pathname === '/') return 1;
     return 0;
   }, [pathname]);
@@ -223,7 +224,6 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       <Dashboard scale={scale} />
       <Content id='scale-content' scale={scale} hideHeader={!!hideHeader}>
         {children}
-
         {/* 引导提示框 */}
         {guideState.visible && (
           <GuideModal

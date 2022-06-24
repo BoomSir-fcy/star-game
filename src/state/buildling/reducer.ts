@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { BuildlingState } from '../types';
 import { fetchBuildingsListAsync, fetchPlanetBuildingsAsync } from './fetchers';
-import { destoryBuildingVisibleModal } from './action';
+import { destoryBuildingVisibleModal, queueVisbleSide } from './action';
 
 export const initialState: BuildlingState = {
   buildings: [], // 所有基础建筑
@@ -17,6 +17,9 @@ export const initialState: BuildlingState = {
     energy: 0,
     population: 0,
     stone: 0,
+  },
+  queue: {
+    visible: false,
   },
 };
 
@@ -62,6 +65,9 @@ export const buildling = createSlice({
       })
       .addCase(destoryBuildingVisibleModal, (state, action) => {
         state.destroyBuilding = action.payload;
+      })
+      .addCase(queueVisbleSide, (state, action) => {
+        state.queue.visible = action.payload;
       });
   },
 });

@@ -44,6 +44,7 @@ export const BuildingUpgrade: React.FC<{
 }> = ({ currnet_building }) => {
   const { t } = useTranslation();
   const planetAssets = useStore(p => p.buildling.planetAssets);
+  const balanceList = useStore(p => p.userInfo.userBalance);
 
   const formatTime = (time: number) => {
     const hour = Math.floor(time / 3600);
@@ -51,6 +52,16 @@ export const BuildingUpgrade: React.FC<{
     const sec = time % 60;
     return `${hour}h:${min}m:${sec}s`;
   };
+
+  const TokenBlance = React.useCallback(
+    (Token: string) => {
+      const balance = balanceList.filter(item => {
+        return item.symbol === Token;
+      });
+      return balance[0];
+    },
+    [balanceList],
+  );
 
   return (
     <Container>
@@ -101,9 +112,9 @@ export const BuildingUpgrade: React.FC<{
                     : 'progressGreenBar'
                 }`}
               >
-                {planetAssets?.energy}
+                {currnet_building?.upgrade_need?.upgrade_energy}
               </Text>
-              <Text>/{currnet_building?.upgrade_need?.upgrade_energy}</Text>
+              <Text>/{planetAssets?.energy}</Text>
             </Items>
             <Items alignItems='center' justifyContent='flex-end'>
               <Text>{t('OreRequiredConstruction')}</Text>
@@ -115,9 +126,9 @@ export const BuildingUpgrade: React.FC<{
                     : 'progressGreenBar'
                 }`}
               >
-                {planetAssets?.stone}
+                {currnet_building?.upgrade_need?.upgrade_stone}
               </Text>
-              <Text>/{currnet_building?.upgrade_need?.upgrade_stone}</Text>
+              <Text>/{planetAssets?.stone}</Text>
             </Items>
           </Flex>
 
@@ -132,9 +143,9 @@ export const BuildingUpgrade: React.FC<{
                     : 'progressGreenBar'
                 }`}
               >
-                {planetAssets?.population}
+                {currnet_building?.upgrade_need?.upgrade_population}
               </Text>
-              <Text>/{currnet_building?.upgrade_need?.upgrade_population}</Text>
+              <Text>/{planetAssets?.population}</Text>
             </Items>
             <Items alignItems='center' justifyContent='flex-end'>
               <Text>{t('BuildRequiredBOX')}</Text>
@@ -146,9 +157,9 @@ export const BuildingUpgrade: React.FC<{
                     : 'progressGreenBar'
                 }`}
               >
-                0
+                {currnet_building?.upgrade_need?.upgrade_box}
               </Text>
-              <Text>/{currnet_building?.upgrade_need?.upgrade_box}</Text>
+              <Text>/{TokenBlance('BOX')?.amount}</Text>
             </Items>
           </Flex>
         </Flex>
