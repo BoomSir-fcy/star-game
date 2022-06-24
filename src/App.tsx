@@ -18,13 +18,14 @@ import {
   TestText,
   TestLabel,
   TestDrag,
+  TestDragAndPut,
 } from './views/Test';
 
 const Home = lazy(() => import('./views/Home'));
 const Login = lazy(() => import('./views/Login'));
 
 const MysteryBox = lazy(() => import('./views/MysteryBoxNew'));
-const MysteryBoxDetail = lazy(() => import('./views/MysteryBox/Detail'));
+const MysteryBoxDetail = lazy(() => import('./views/MysteryBoxNew/Detail'));
 const MysteryBoxState = lazy(() => import('./views/MysteryBoxNew/State'));
 const MysteryBoxList = lazy(() => import('./views/MysteryBoxNew/List'));
 
@@ -114,6 +115,7 @@ function App() {
               <Route path='/vip' element={<VipPage />} />
 
               <Route path='/test' element={<Test />}>
+                <Route path='drag-put' element={<TestDragAndPut />} />
                 <Route path='drag' element={<TestDrag />} />
                 <Route path='card' element={<TestCard />} />
                 <Route path='bg-card' element={<TestBgCard />} />

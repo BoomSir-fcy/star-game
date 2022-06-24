@@ -131,16 +131,6 @@ const Submit = styled(Button)`
   margin: 20px auto 0;
   width: 506px;
   height: 64px;
-  border: 1px solid;
-  border-radius: 0;
-  /* background: linear-gradient(0deg, #25babe, #1c273d); */
-  border-image: linear-gradient(-29deg, #14f1fd, #1caaf4) 1 1;
-  box-shadow: 0px 0px 43px 0px #512d58;
-  border: 1px solid #182e37;
-`;
-
-const SubmitText = styled(Text)`
-  color: #25babe;
 `;
 
 const VipPage = () => {
@@ -340,8 +330,10 @@ const VipPage = () => {
               })}
             </Content>
             <Flex justifyContent='center'>
-              <Submit onClick={debounce(() => buyVip(), 1000)}>
-                <SubmitText>{t('Become VIP')}</SubmitText>
+              <Submit variant='purple' onClick={debounce(() => buyVip(), 1000)}>
+                <Text bold fontSize='16px' color='#4FFFFB'>
+                  {t('Become VIP')}
+                </Text>
               </Submit>
             </Flex>
           </Box>

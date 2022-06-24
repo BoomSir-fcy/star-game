@@ -116,7 +116,13 @@ export const PlanetAssets: React.FC<{
           </Text>
         </Flex>
       </Group>
-      <Box position='absolute' left='34%' top='4px'>
+      <Box
+        position='absolute'
+        left='0'
+        right='0'
+        top='4px'
+        style={{ margin: 'auto', textAlign: 'center' }}
+      >
         <MarkText fontSize='14px' fontStyle='normal' bold>
           {t('当前行星资源')}
         </MarkText>

@@ -134,14 +134,14 @@ declare namespace Api {
     }
 
     interface BuildingBuffer {
-      attack: number;
-      build_id: string;
-      critical: number;
-      defense: number;
-      hit: number;
-      hp: number;
-      miss: number;
-      speed: number;
+      attack?: number;
+      build_id?: string;
+      critical?: number;
+      defense?: number;
+      hit?: number;
+      hp?: number;
+      miss?: number;
+      speed?: number;
     }
 
     interface upgradeDetailData {
@@ -291,7 +291,7 @@ declare namespace Api {
     }
 
     interface Stone {
-      product: string;
+      product: any;
     }
 
     interface Store {

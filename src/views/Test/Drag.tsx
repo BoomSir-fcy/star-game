@@ -121,6 +121,7 @@ const Drag = () => {
 
   return (
     <Flex width='100%' justifyContent='space-between'>
+      {/* 从天而降的星球 */}
       <AnimationStar className='star1'>
         <Globe scale='ld' rotate={false} url='/images/star/32.jpg' />
       </AnimationStar>
@@ -130,6 +131,7 @@ const Drag = () => {
       <AnimationStar className='star3'>
         <Globe scale='ld' rotate={false} url='/images/star/35.jpg' ml='20px' />
       </AnimationStar>
+      {/* 随意拖动 */}
       <ParentBox className={targetDrag.isDown ? 'no-select' : ''} ref={pageRef}>
         <ChilrdenBox>
           <Text>

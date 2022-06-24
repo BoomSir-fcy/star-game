@@ -4,3 +4,8 @@ export * from './barRight';
 export * from './barHead';
 export * from './planetAssets';
 export * from './queueBuilding';
+export * from './buildingProgress';
+export * from './buildingUpgrade';
+export * from './buildingCapacity';
+export * from './buildingResources';
+export * from './buildingArms';

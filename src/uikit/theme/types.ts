@@ -109,6 +109,7 @@ export type Colors = {
   raceHuman: string;
   raceZerg: string;
 
+  borderPrimary: string;
   border: string;
   goldBorder: string;
   lightBorder: string;

@@ -8,6 +8,7 @@ const TestStar = lazy(() => import('./Star'));
 const TestText = lazy(() => import('./Text'));
 const TestLabel = lazy(() => import('./Label'));
 const TestDrag = lazy(() => import('./Drag'));
+const TestDragAndPut = lazy(() => import('./DragAndPut'));
 
 export {
   TestBgCard,
@@ -18,4 +19,5 @@ export {
   TestText,
   TestLabel,
   TestDrag,
+  TestDragAndPut,
 };
