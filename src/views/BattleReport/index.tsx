@@ -77,7 +77,7 @@ const BattleReport = () => {
     new Date(new Date().toLocaleDateString()).getTime() / 1000,
   );
   const [End_time, setEnd_time] = useState<number>(
-    new Date(new Date().toLocaleDateString()).getTime() / 1000,
+    new Date(new Date().toLocaleDateString()).getTime() / 1000 + 86400,
   );
 
   useFetchCombatRecord(Start_time, End_time);
@@ -146,7 +146,7 @@ const BattleReport = () => {
         cont={{ Cont, WinCont, FailedCont }}
         upDate={e => {
           setStart_time(e);
-          setEnd_time(e);
+          setEnd_time(e + 86400);
         }}
       />
       {/* <Box>

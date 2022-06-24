@@ -113,10 +113,6 @@ export const BattleTop: React.FC<{
         <RefreshButton
           ml='33px'
           onRefresh={() => {
-            console.log(
-              new Date(new Date().toLocaleDateString()).getTime() / 1000,
-            );
-
             upDate(new Date(new Date().toLocaleDateString()).getTime() / 1000);
           }}
         />
