@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { variant } from 'styled-system';
-import { Card, Flex, Box, Image, Text } from 'uikit';
+import { GraphicsCard, Flex, Box, Image, Text, MarkText } from 'uikit';
 
 const scales = {
   LD: 'ld',
@@ -41,17 +41,17 @@ const scaleVariants = {
     },
   },
   [scales.SM]: {
-    width: 108,
-    height: 108,
+    width: 68,
+    height: 68,
     text: {
       top: 5,
       left: 13,
-      fontSize: 20,
+      fontSize: 14,
     },
   },
 };
 
-const Container = styled(Card)<{
+const Container = styled(GraphicsCard)<{
   active?: boolean;
   border?: boolean;
   round?: boolean;
@@ -76,17 +76,6 @@ const Container = styled(Card)<{
     }
     return css``;
   }}
-  background-image: linear-gradient(
-    45deg,
-    rgba(31, 34, 40, 1) 25%,
-    transparent 25%,
-    transparent 50%,
-    rgba(16, 36, 38, 1) 50%,
-    rgba(16, 36, 38, 1) 75%,
-    transparent 75%,
-    transparent
-  );
-  background-size: 7px 7px;
   div {
     pointer-events: none;
   }
@@ -134,6 +123,7 @@ export const GameThing: React.FC<{
   return (
     <Flex justifyContent='center' flexDirection='column'>
       <Container
+        radius
         draggable={draggable}
         onDragStart={onDragStart}
         onDrop={onDrop}
@@ -170,9 +160,9 @@ export const GameThing: React.FC<{
         )}
       </Container>
       {text && (
-        <Text mt='10' small textAlign='center'>
+        <MarkText mt='12px' bold small textAlign='center' fontStyle='normal'>
           {text}
-        </Text>
+        </MarkText>
       )}
     </Flex>
   );

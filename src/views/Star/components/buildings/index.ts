@@ -9,3 +9,4 @@ export * from './buildingUpgrade';
 export * from './buildingCapacity';
 export * from './buildingResources';
 export * from './buildingArms';
+export * from './buildingBuff';

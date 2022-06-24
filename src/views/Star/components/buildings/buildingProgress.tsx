@@ -1,20 +1,43 @@
 import React from 'react';
-import { Flex, Box, Progress, Text } from 'uikit';
+import BigNumber from 'bignumber.js';
+import { Flex, Progress, Text } from 'uikit';
 
+import { formatDisplayApr } from 'utils/formatBalance';
 import { TokenImage } from 'components/TokenImage';
+import { useTranslation } from 'contexts/Localization';
 
-export const BuildingProgress = () => {
+export const BuildingProgress: React.FC<{
+  token: string;
+  title: string;
+  value: number;
+  nextValue: number;
+  progressbar?: number;
+}> = ({ token, title, value, nextValue, progressbar }) => {
+  const { t } = useTranslation();
+
   return (
     <Flex flex={1}>
-      <TokenImage width={50} height={50} tokenAddress='ORE' />
+      <TokenImage width={50} height={50} tokenAddress={token} />
       <Flex ml='9px' flexDirection='column' flex={1}>
         <Flex width='100%' mb='7px'>
           <Flex justifyContent='space-between' alignItems='center' width='100%'>
             <Flex alignItems='center'>
-              <Text color='textSubtle'>矿石</Text>
-              <Text ml='12px'>100</Text>
+              <Text color='textSubtle'>{title}</Text>
+              <Text ml='12px'>{value}</Text>
             </Flex>
-            <Text color='progressGreenBar'>Next Lv. +100</Text>
+            <Text
+              color={`${nextValue >= 0 ? 'progressGreenBar' : 'textDanger'}`}
+            >
+              {t('Next Lv. ', {
+                value: nextValue
+                  ? nextValue > 0
+                    ? `+${formatDisplayApr(
+                        new BigNumber(nextValue).toNumber(),
+                      )}`
+                    : `${formatDisplayApr(new BigNumber(nextValue).toNumber())}`
+                  : '',
+              })}
+            </Text>
           </Flex>
         </Flex>
         <Progress
@@ -22,7 +45,7 @@ export const BuildingProgress = () => {
           variant='round'
           scale='sm'
           linear
-          primaryStep={20}
+          primaryStep={progressbar}
         />
       </Flex>
     </Flex>
