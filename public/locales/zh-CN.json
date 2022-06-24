@@ -434,6 +434,7 @@
   "Wallet": "钱包",
   "InQueueHint": "当前星球存在任务队列, 加入行星联盟将会取消此行星所有任务队列，是否确认选择此行星？",
   "planetTipsQueueCapacity": "队列已满",
+  "%num%th exploration": "第%num%次探索",
   "******end*****@FCY********": "@FCY翻译结束",
   "Connect Wallet": "链接钱包",
   "新手引导": "新手引导",

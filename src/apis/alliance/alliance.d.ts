@@ -23,8 +23,8 @@ declare namespace Api {
 
     interface Record {
       address: string;
-      page: number;
-      page_size: number;
+      start_time: number;
+      end_time: number;
     }
   }
 }

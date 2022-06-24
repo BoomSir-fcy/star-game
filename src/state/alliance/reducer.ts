@@ -50,9 +50,9 @@ export const fetchAllianceViewAsync = (): AppThunk => async dispatch => {
 };
 
 export const fetchCombatRecordAsync =
-  (address: string, page: number, page_size: number): AppThunk =>
+  (address: string, start_time: number, end_time: number): AppThunk =>
   async dispatch => {
-    const info = await fetchCombatRecord(address, page, page_size);
+    const info = await fetchCombatRecord(address, start_time, end_time);
     dispatch(setPkRecord(info));
   };
 
@@ -79,13 +79,13 @@ export const allianceSlice = createSlice({
       const { pkRecord } = state;
       if (payload) {
         const temp = payload.record;
-        const nowList =
-          payload.page === 1 ? temp : [...pkRecord.record, ...temp];
-
-        let isEnd = false;
-        if (payload.page * payload.page_size >= payload.count) {
-          isEnd = true;
-        }
+        // const nowList =
+        //   payload.page === 1 ? temp : [...pkRecord.record, ...temp];
+        const nowList = temp;
+        const isEnd = false;
+        // if (payload.page * payload.page_size >= payload.count) {
+        //   isEnd = true;
+        // }
         state.pkRecord = {
           ...payload,
           record: nowList,
@@ -94,9 +94,6 @@ export const allianceSlice = createSlice({
         };
       }
     },
-    setRefresh: state => {
-      state.pkRecord.record = [];
-    },
     setRecordLoad: state => {
       state.pkRecord.loading = true;
     },
@@ -104,7 +101,7 @@ export const allianceSlice = createSlice({
 });
 
 // Actions
-export const { setAllianceView, setPkRecord, setRefresh, setRecordLoad } =
+export const { setAllianceView, setPkRecord, setRecordLoad } =
   allianceSlice.actions;
 
 export default allianceSlice.reducer;

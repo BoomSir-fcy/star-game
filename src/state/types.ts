@@ -317,22 +317,41 @@ export interface PkRecord {
   loading: boolean;
 }
 
-export interface RecordInfo {
-  detail: string;
-  fromAddress: string;
+export interface PlunderInfo {
   id: number;
+  fromAddress: string;
+  toAddress: string;
+  incomeStone: number;
   incomeEnergy: number;
   incomePopulation: number;
-  incomeStone: number;
-  loseEnergy: number;
-  losePopulation: number;
-  loseStone: number;
+  success: number;
+  createTime: number;
+  detail: string;
+  blueLoseUnit: number;
   lostDurability: number;
   redLoseUnit: number;
-  success: number;
-  toAddress: string;
-  blueLoseUnit: number;
-  createTime: number;
+  loseStone: number;
+  loseEnergy: number;
+  losePopulation: number;
+}
+
+export interface RecordInfo {
+  id: number;
+  startTime: number;
+  endTime: number;
+  plunderCount: number;
+  workCount: number;
+  working: number;
+  lostDurability: number;
+  loseUnit: number;
+  loseEnergy: number;
+  loseStone: number;
+  losePopulation: number;
+  address: string;
+  getStone: number;
+  getEnergy: number;
+  getPopulation: number;
+  plunder: PlunderInfo[];
 }
 
 export enum PlanetStatus {

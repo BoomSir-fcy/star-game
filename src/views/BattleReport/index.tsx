@@ -16,16 +16,19 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { PkBox } from './pkBox';
 import { BattleTop } from './BattleTop';
+import { InProgress } from './components/inProgress';
 
-const ScrollBox = styled(Flex)`
-  min-height: 400px;
-  max-height: 650px;
+const ScrollBox = styled(Box)`
+  /* min-height: 400px;
+  max-height: 650px; */
+  height: 650px;
   margin-top: 22px;
   overflow-y: auto;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  justify-content: space-between;
-  padding: 0 30px;
+  overflow-x: hidden;
+  padding-left: 30px;
+  &::-webkit-scrollbar {
+    height: 0;
+  }
 `;
 
 const ItemBox = styled(Box)`
@@ -34,12 +37,15 @@ const ItemBox = styled(Box)`
   margin-bottom: 20px;
 `;
 
-const RowBox = styled(Box)`
-  min-width: 110vw;
+const RowFlex = styled(Flex)`
+  overflow-x: auto;
   height: 364px;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid #4ffffb;
   margin-bottom: 30px;
+  &::-webkit-scrollbar {
+    height: 0;
+  }
 `;
 
 const LoadingBox = styled(Box)`
@@ -63,26 +69,29 @@ const BattleReport = () => {
     count: Cont,
     isEnd: end,
     loading,
-    page: StatePage,
   } = pkRecord;
 
   const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = useState(true);
-  const [page, setPageNum] = useState<number>(1);
-  const [page_size, setPageSize] = useState<number>(10);
-
-  useFetchCombatRecord(page, page_size);
-
-  const loadMore = useCallback(
-    (e: any) => {
-      const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
-      if (offsetHeight + scrollTop === scrollHeight) {
-        if (loading || end) return; // 判断是否在请求状态或者已到最后一页
-        setPageNum(page + 1);
-      }
-    },
-    [loading, page, setPageNum, end],
+  const [Start_time, setStart_time] = useState<number>(
+    new Date(new Date().toLocaleDateString()).getTime() / 1000,
   );
+  const [End_time, setEnd_time] = useState<number>(
+    new Date(new Date().toLocaleDateString()).getTime() / 1000,
+  );
+
+  useFetchCombatRecord(Start_time, End_time);
+
+  // const loadMore = useCallback(
+  //   (e: any) => {
+  //     const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
+  //     if (offsetHeight + scrollTop === scrollHeight) {
+  //       if (loading || end) return; // 判断是否在请求状态或者已到最后一页
+  //       setEnd_time(Start_time + 1);
+  //     }
+  //   },
+  //   [loading, Start_time, setEnd_time, end],
+  // );
 
   const onRefreshClick = useCallback(() => {
     dispatch(fetchAllianceViewAsync());
@@ -97,11 +106,6 @@ const BattleReport = () => {
     ],
     [t],
   );
-
-  // useEffect(() => {
-  //   setPageNum(StatePage);
-  // }, [StatePage, setPageNum]);
-
   // 添加事件监听，用于更新状态
   useEffect(() => {
     eventBus.addEventListener('onRefresh', onRefreshClick);
@@ -140,23 +144,28 @@ const BattleReport = () => {
 
       <BattleTop
         cont={{ Cont, WinCont, FailedCont }}
-        upDate={e => setPageNum(e)}
+        upDate={e => {
+          setStart_time(e);
+          setEnd_time(e);
+        }}
       />
-      <Flex flex={1}>
-        {/* <BgCard variant='Fullscreen' padding='40px 37px'>
+      {/* <Box>
+        <BgCard variant='Fullscreen' padding='40px 37px'>
           
-        </BgCard> */}
-        <ScrollBox onScroll={loadMore} className='Pk_list'>
-          {(RecordList ?? []).map((item, index) => (
-            <React.Fragment key={`${item.id}`}>
-              <RowBox>123</RowBox>
-              {/* <ItemBox className={`battle-items-${index}`}>
-                  <PkBox info={item} />
-                </ItemBox> */}
-            </React.Fragment>
-          ))}
-        </ScrollBox>
-      </Flex>
+        </BgCard>
+      </Box> */}
+      <ScrollBox className='Pk_list'>
+        {(RecordList ?? []).map((item, index) => (
+          <RowFlex key={item.id}>
+            <InProgress info={item} />
+            {(item.plunder ?? []).map(info => (
+              <>
+                <PkBox key={info.createTime} info={info} />
+              </>
+            ))}
+          </RowFlex>
+        ))}
+      </ScrollBox>
       {loading && (
         <LoadingBox>
           <Spinner size={200} />

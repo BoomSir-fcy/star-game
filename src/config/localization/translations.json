@@ -434,6 +434,7 @@
   "Wallet": "Wallet",
   "InQueueHint": "There is a mission queue on the current planet. Joining the Planetary Alliance will cancel all mission queues for this planet. Are you sure you want to select this planet?",
   "planetTipsQueueCapacity": "Queue is full",
+  "%num%th exploration": "%num%th exploration",
   "******end*****@FCY********": "@FCY翻译结束",
   "Connect Wallet": "Connect Wallet",
   "新手引导": "新手引导",
