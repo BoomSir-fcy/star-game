@@ -1,18 +1,17 @@
 import React from 'react';
+import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction } from 'state';
 import { Box } from 'uikit';
+import { Api } from 'apis';
 
-import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
+import { Steps } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
-import styled from 'styled-components';
-import { DragCompoents } from './components/dragCompoents';
-import { DragV2 } from './components/dragV2';
 import type { AreaDataItem } from './components/dragCompoents';
 
 import {
@@ -21,8 +20,11 @@ import {
   SideRightBuildingInfo,
 } from './components/buildings';
 import { PlanetQueue } from './components/buildings/planetQueue';
+import { useWorkqueue } from './components/hooks';
+import { ThingDestoryModal, ThingUpgradesModal } from './components/Modal';
 
 const Container = styled(Box)`
+  position: relative;
   width: 100%;
   min-height: 100vh;
 `;
@@ -33,9 +35,11 @@ const Details = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { refreshWorkQueue } = useWorkqueue();
   const { guides, setGuide } = useGuide(location.pathname);
   const [state, setState] = React.useState<AreaDataItem[]>([]);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
+  const [serverDiffTime, setServerDiffTime] = React.useState<number>(0);
 
   const steps = React.useMemo(() => {
     return [
@@ -85,10 +89,40 @@ const Details = () => {
   const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
+  const upgrad = useStore(p => p.buildling.upgradesBuilding);
+  const destory = useStore(p => p.buildling.destroyBuilding);
+  const currentTime = Number((Date.now() / 1000).toFixed(0));
 
   const updateGrid = React.useCallback(data => {
     setState(data);
   }, []);
+
+  const getWorkQueue = React.useCallback(
+    async (isSave?: boolean) => {
+      try {
+        const res = await refreshWorkQueue(id);
+        if (Api.isSuccess(res)) {
+          const resWorkQueue = res.data.work_queue;
+          console.log(resWorkQueue);
+          // let isQueue = [];
+          // if (isSave) {
+          //   isQueue = currentQueue.filter((item: any) => !item.planet_id);
+          // }
+          // setCurrentQueue([...resWorkQueue, ...isQueue]);
+          setServerDiffTime(
+            res.data.time - currentTime > 0
+              ? -(res.data.time - currentTime)
+              : res.data.time - currentTime,
+          );
+          // dispatch(fetchPlanetBuildingsAsync(planet_id));
+          // dispatch(fetchPlanetInfoAsync([planet_id]));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [currentTime, id, refreshWorkQueue],
+  );
 
   React.useEffect(() => {
     if (planet?.areaX > 0 && planet?.areaY > 0) {
@@ -129,59 +163,87 @@ const Details = () => {
   }, [planet, selfBuilding, updateGrid]);
 
   React.useEffect(() => {
+    getWorkQueue();
     return () => {
       dispatch(storeAction.toggleVisible({ visible: false }));
     };
-  }, [dispatch]);
+  }, [dispatch, getWorkQueue]);
 
   return (
-    <Container>
-      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
-        <Steps
-          enabled={stepsEnabled}
-          steps={steps}
-          initialStep={guides.step}
-          options={{
-            exitOnOverlayClick: false,
-            disableInteraction: false,
-          }}
-          onChange={currentStep => {
-            if (currentStep > guides.step) {
-              setGuide(currentStep);
-            }
-          }}
-          onExit={step => {
-            setStepsEnabled(false);
-            if (step === steps.length - 1) {
-              navigate(`/star/upgrade?id=${id}`);
-              return;
-            }
-            if (step < steps.length - 1) {
-              dispatch(
-                storeAction.toggleVisible({
-                  visible: true,
-                  lastStep: steps.length,
-                }),
-              );
-            }
-          }}
+    <>
+      <Container>
+        {!guides.guideFinish &&
+          guides.finish &&
+          steps.length - 1 > guides.step && (
+            <Steps
+              enabled={stepsEnabled}
+              steps={steps}
+              initialStep={guides.step}
+              options={{
+                exitOnOverlayClick: false,
+                disableInteraction: false,
+              }}
+              onChange={currentStep => {
+                if (currentStep > guides.step) {
+                  setGuide(currentStep);
+                }
+              }}
+              onExit={step => {
+                setStepsEnabled(false);
+                if (step === steps.length - 1) {
+                  navigate(`/star/upgrade?id=${id}`);
+                  return;
+                }
+                if (step < steps.length - 1) {
+                  dispatch(
+                    storeAction.toggleVisible({
+                      visible: true,
+                      lastStep: steps.length,
+                    }),
+                  );
+                }
+              }}
+            />
+          )}
+        <SideLeftContent />
+        <PlanetQueue
+          serverTime={currentTime + serverDiffTime}
+          currentQueue={[]}
         />
-      )}
+        <SideRightBuildingInfo
+          planet={planet}
+          planet_id={id}
+          buildingsId='62a6dc0252416b0eec60e970'
+        />
+      </Container>
 
-      <PlanetQueue />
-      <BarRight planet_id={id} />
-      <SideRightBuildingInfo
+      {/* 建筑升级 */}
+      <ThingUpgradesModal
+        visible={upgrad.visible}
         planet_id={id}
-        buildingsId='62aaa14252416b11acec4134'
+        onChange={async () => {}}
+        onClose={() => {
+          dispatch(
+            storeAction.upgradesBuildingModal({
+              visible: false,
+              upgrad: {},
+            }),
+          );
+        }}
       />
-      {/* <DragCompoents
-        rows={planet?.areaX}
-        cols={planet?.areaY}
+
+      {/* 销毁建筑 */}
+      <ThingDestoryModal
+        visible={destory.visible}
         planet_id={id}
-        gridSize={476}
-        itemData={state}
-      /> */}
-    </Container>
+        onChange={() => {}}
+        onClose={() =>
+          dispatch(
+            storeAction.destoryBuildingModal({ visible: false, destory: {} }),
+          )
+        }
+      />
+    </>
   );
 };
 

@@ -9,8 +9,10 @@ import { BuildingDetailType } from 'state/types';
 import { formatDisplayApr } from 'utils/formatBalance';
 
 const GroupItems = styled(Flex)`
-  width: 50%;
+  width: 100%;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
 `;
 
 export const BuildingCapacity: React.FC<{
@@ -18,12 +20,10 @@ export const BuildingCapacity: React.FC<{
 }> = ({ currnet_building }) => {
   const { t } = useTranslation();
 
-  console.log(currnet_building);
-
   return (
-    <Box>
+    <Box pb='40px'>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>
-        产能详情
+        {t('Capacity details')}
       </MarkText>
       <Flex width='100%' flexDirection='column'>
         <Flex width='100%' justifyContent='space-between'>
@@ -31,8 +31,10 @@ export const BuildingCapacity: React.FC<{
             currnet_building?.detail_type && (
             <GroupItems>
               <TokenImage width={55} height={55} tokenAddress='ORE' />
-              <Flex ml='20px' flexDirection='column'>
-                <Text color='textSubtle'>{t('Ore Capacity')}</Text>
+              <Flex mt='15px' flexDirection='column' alignItems='center'>
+                <Text color='textSubtle' mb='15px'>
+                  {t('Ore Capacity')}
+                </Text>
                 <Text color='progressGreenBar'>{`${formatDisplayApr(
                   new BigNumber(
                     currnet_building?.stone?.product?.per_sec_ouput_stone,
@@ -45,8 +47,10 @@ export const BuildingCapacity: React.FC<{
             currnet_building?.detail_type && (
             <GroupItems>
               <TokenImage width={55} height={55} tokenAddress='SPICES' />
-              <Flex ml='20px' flexDirection='column'>
-                <Text color='textSubtle'>{t('Population Capacity')}</Text>
+              <Flex mt='15px' flexDirection='column' alignItems='center'>
+                <Text color='textSubtle' mb='15px'>
+                  {t('Population Capacity')}
+                </Text>
                 <Text color='progressGreenBar'>{`${currnet_building?.population?.product?.per_sec_ouput_population}/s`}</Text>
               </Flex>
             </GroupItems>
@@ -55,8 +59,10 @@ export const BuildingCapacity: React.FC<{
             currnet_building?.detail_type && (
             <GroupItems>
               <TokenImage width={55} height={55} tokenAddress='ENG' />
-              <Flex ml='20px' flexDirection='column'>
-                <Text color='textSubtle'>{t('Energy Capacity')}</Text>
+              <Flex mt='15px' flexDirection='column' alignItems='center'>
+                <Text color='textSubtle' mb='15px'>
+                  {t('Energy Capacity')}
+                </Text>
                 <Text color='progressGreenBar'>{`${currnet_building?.energy?.product?.per_sec_ouput_energy}/s`}</Text>
               </Flex>
             </GroupItems>

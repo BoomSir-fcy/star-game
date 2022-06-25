@@ -1,9 +1,11 @@
-import classNames from 'classnames';
 import React from 'react';
 import styled from 'styled-components';
+import classNames from 'classnames';
 import { Flex, Box, Button, Image, Text, MarkText } from 'uikit';
+import { useStore, storeAction } from 'state';
 import { useTranslation } from 'contexts/Localization';
 import { BuildingDetailType } from 'state/types';
+import { useDispatch } from 'react-redux';
 import { BuildingValue, GameThing } from '../gameModel';
 
 import { useBuildingUpgrade, useBuildingOperate } from '../gameModel/hooks';
@@ -11,19 +13,16 @@ import { BuildingUpgrade } from './buildingUpgrade';
 import { BuildingCapacity } from './buildingCapacity';
 import { BuildingResources } from './buildingResources';
 import { BuildingArms } from './buildingArms';
+import { BuildingBuff } from './buildingBuff';
 
 const Container = styled(Box)`
-  position: fixed;
-  top: 8%;
-  right: 0;
-  z-index: 999;
-`;
-
-const SideButton = styled(Box)`
   position: absolute;
   right: -15px;
   top: 0;
-  z-index: 8;
+`;
+const SideButton = styled(Box)`
+  position: absolute;
+  z-index: 9999;
 `;
 const SideCloseButton = styled(Button)`
   position: absolute;
@@ -34,43 +33,42 @@ const SideCloseButton = styled(Button)`
   z-index: 15;
   padding: 0;
   background-image: url('../images/commons/sideCloseButton.png');
+  &:active {
+    transform: rotate(0deg) !important;
+  }
 `;
 const Content = styled(Box)`
-  position: absolute;
-  right: -12px;
-  top: 0;
+  position: relative;
   width: 547px;
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid #4ffffb;
   opacity: 0;
-  z-index: 5;
-  transition: all ease;
+  transition: all 0.5s ease;
   &.active {
     opacity: 1;
     animation: bounceInRight 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
       alternate forwards;
   }
   &.removeActive {
-    animation: bounceInLeft 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
-      alternate forwards;
+    opacity: 0;
+    /* animation: bounceInLeft 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
+      alternate forwards; */
   }
   @keyframes bounceInRight {
     0% {
-      transform: translate3d(200px, 0, 0);
+      transform: translate(200px, 0);
     }
     100% {
-      transform: translate3d(0, 0, 0);
+      transform: translate(0, 0);
     }
   }
   @keyframes bounceInLeft {
     0% {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
+      transform: translate(0, 0);
     }
     100% {
-      opacity: 0;
-      transform: translate3d(550px, 0, 0);
+      transform: translate(200px, 0);
     }
   }
 `;
@@ -78,14 +76,23 @@ const InfoCard = styled(Flex)`
   width: 50%;
 `;
 
+const Destory = styled(Button)`
+  width: 30px;
+  height: 30px;
+  padding: 0;
+`;
+
 export const SideRightBuildingInfo: React.FC<{
+  planet: Api.Planet.PlanetInfo;
   planet_id: number;
   buildingsId: string;
   itemData?: Api.Building.BuildingDetail;
-}> = ({ planet_id, buildingsId, itemData }) => {
+}> = ({ planet, planet_id, buildingsId, itemData }) => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const { upgrade } = useBuildingUpgrade();
   const { destory } = useBuildingOperate();
+  const balance = useStore(p => p.userInfo.userBalance);
   const [state, setState] = React.useState({
     visible: false,
   });
@@ -97,15 +104,14 @@ export const SideRightBuildingInfo: React.FC<{
     },
     estimate_building_detail: {},
   });
-  const [arms, setArms] = React.useState([]);
   const currentAttributes = upgradeInfo?.building_detail || itemData;
+  const estimate = upgradeInfo?.estimate_building_detail || {};
 
   const init = React.useCallback(
     async (target_level?: number) => {
       try {
         const res = await upgrade(planet_id, buildingsId, target_level);
         setUpgradeInfo(res);
-        setArms(res?.building_detail?.petri_dish?.arms || []);
       } catch (error) {
         console.log('error: ', error);
       }
@@ -117,13 +123,11 @@ export const SideRightBuildingInfo: React.FC<{
     init();
   }, [init]);
 
-  console.log(currentAttributes);
   return (
     <Container>
       <SideButton>
         {!state.visible && (
           <Button
-            variant='text'
             onClick={() => setState({ ...state, visible: !state.visible })}
           >
             展开
@@ -146,23 +150,47 @@ export const SideRightBuildingInfo: React.FC<{
           </Box>
         </SideCloseButton>
         <Box padding='23px'>
-          <Flex mb='20px'>
+          <Flex mb='20px' alignItems='flex-start'>
             <GameThing
               src={currentAttributes?.picture}
               level={currentAttributes?.propterty?.levelEnergy}
               scale='md'
               border
             />
-            <Flex flexDirection='column' ml='19px'>
-              <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
-                {currentAttributes?.propterty?.name_cn}
-              </MarkText>
-              {currentAttributes.detail_type ===
-                BuildingDetailType.BuildingDetailTypeStore && (
-                <Text color='textSubtle'>
-                  {t('planetResourcesProducedPlanetaryBuildings')}
-                </Text>
-              )}
+            <Flex
+              flex={1}
+              justifyContent='space-between'
+              alignItems='flex-start'
+            >
+              <Flex flexDirection='column' ml='19px' flex={1}>
+                <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
+                  {currentAttributes?.propterty?.name_cn}
+                </MarkText>
+                {currentAttributes.detail_type ===
+                  BuildingDetailType.BuildingDetailTypeStore && (
+                  <Text color='textSubtle'>
+                    {t('planetResourcesProducedPlanetaryBuildings')}
+                  </Text>
+                )}
+              </Flex>
+              <Destory
+                variant='text'
+                onClick={() => {
+                  dispatch(
+                    storeAction.destoryBuildingModal({
+                      visible: true,
+                      destory: currentAttributes,
+                    }),
+                  );
+                  setState({ ...state, visible: false });
+                }}
+              >
+                <Image
+                  src='../images/commons/icon/icon-destory.png'
+                  width={30}
+                  height={30}
+                />
+              </Destory>
             </Flex>
           </Flex>
           <Box mb='20px'>
@@ -196,15 +224,45 @@ export const SideRightBuildingInfo: React.FC<{
               </InfoCard>
             </Flex>
           </Box>
+
           {currentAttributes.detail_type ===
             BuildingDetailType.BuildingDetailTypeStore && (
-            <BuildingResources currnet_building={currentAttributes} />
+            <BuildingResources
+              currnet_building={currentAttributes}
+              estimate={estimate}
+            />
           )}
-          {/* <BuildingCapacity currnet_building={currentAttributes} /> */}
-          <BuildingArms currnet_building={currentAttributes} />
+
+          {currentAttributes.detail_type ===
+            BuildingDetailType.BuildingDetailTypeAk && (
+            <BuildingBuff currnet_building={currentAttributes} />
+          )}
+
+          {(currentAttributes.detail_type ===
+            BuildingDetailType.BuildingDetailTypeStone ||
+            currentAttributes.detail_type ===
+              BuildingDetailType.BuildingDetailTypeEnergy ||
+            currentAttributes.detail_type ===
+              BuildingDetailType.BuildingDetailTypePopulation) && (
+            <BuildingCapacity currnet_building={currentAttributes} />
+          )}
+
+          {(currentAttributes.detail_type ===
+            BuildingDetailType.BuildingDetailTypeFactory1 ||
+            currentAttributes.detail_type ===
+              BuildingDetailType.BuildingDetailTypeFactory2 ||
+            currentAttributes.detail_type ===
+              BuildingDetailType.BuildingDetailTypeFactory3) && (
+            <BuildingArms currnet_building={currentAttributes} />
+          )}
         </Box>
 
-        <BuildingUpgrade currnet_building={currentAttributes} />
+        <BuildingUpgrade
+          planet={planet}
+          currnet_building={currentAttributes}
+          estimate={estimate}
+          onFinish={() => setState({ ...state, visible: false })}
+        />
       </Content>
     </Container>
   );

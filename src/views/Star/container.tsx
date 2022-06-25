@@ -18,7 +18,7 @@ import { setActiveNavId } from 'state/planet/actions';
 import { useStore } from 'state';
 import eventBus from 'utils/eventBus';
 import { StarHeader } from './components';
-import { SideRightBuildingInfo } from './components/buildings';
+import { BarRight, SideRightBuildingInfo } from './components/buildings';
 
 const Star: React.FC<{
   children: React.ReactNode;
@@ -82,7 +82,7 @@ const Star: React.FC<{
         </Box>
         <StarHeader />
       </Flex> */}
-      {/* <SideRightBuildingInfo planet_id={id} buildingsId={111} /> */}
+      <BarRight planet_id={id} />
       <Flex width='100%'>{children}</Flex>
       {/* <Flex width='100%'>
         <Nav

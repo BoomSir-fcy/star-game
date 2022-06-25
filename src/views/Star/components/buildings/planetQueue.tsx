@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useStore } from 'state';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useStore, storeAction } from 'state';
 import { Box, Flex, MarkText, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { QueueBuilding } from './queueBuilding';
@@ -8,7 +10,7 @@ import { QueueBuilding } from './queueBuilding';
 const Layout = styled(Box)`
   position: fixed;
   left: 30px;
-  top: 30%;
+  top: 23%;
 `;
 
 const QueueGroup = styled(Flex)`
@@ -49,7 +51,16 @@ const QueueBox = styled(Flex)`
   }
 `;
 
-export const PlanetQueue = () => {
+export const PlanetQueue: React.FC<{
+  serverTime: number;
+  currentQueue: any[];
+  onSave?: () => void;
+  onSelectCurrent?: (item: any) => void;
+  onComplete?: () => void;
+}> = ({ serverTime, currentQueue }) => {
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const vipBenefite = useStore(p => p.userInfo.userInfo.vipBenefits);
   const queueArr = Array.from(
@@ -64,34 +75,45 @@ export const PlanetQueue = () => {
       </MarkText>
       {(queueArr ?? []).map(item => (
         <QueueGroup key={item}>
-          <QueueBox>
-            <Image
-              src='http://192.168.101.106:9091/nfts/planet/33.png'
-              width={95}
-              height={95}
-            />
-          </QueueBox>
-          <QueueBuilding type={1} status={1} level={1} />
+          {currentQueue.length <= 0 ? (
+            <QueueBox
+              onClick={event => {
+                event.stopPropagation();
+                event.preventDefault();
+                dispatch(storeAction.queueVisbleSide(true));
+              }}
+            >
+              <Image
+                src='../images/commons/icon/icon-queue-add.png'
+                width={37}
+                height={37}
+              />
+            </QueueBox>
+          ) : (
+            <>
+              <QueueBox>
+                <Image
+                  src='http://192.168.101.106:9091/nfts/planet/33.png'
+                  width={95}
+                  height={95}
+                />
+              </QueueBox>
+              <QueueBuilding type={1} status={1} level={1} />
+            </>
+          )}
         </QueueGroup>
       ))}
-      <QueueGroup>
-        <QueueBox>
-          <Image
-            src='../images/commons/icon/icon-queue-add.png'
-            width={37}
-            height={37}
-          />
-        </QueueBox>
-      </QueueGroup>
-      <QueueGroup>
-        <QueueBox>
-          <Image
-            src='../images/commons/icon/icon-queue-lock.png'
-            width={37}
-            height={37}
-          />
-        </QueueBox>
-      </QueueGroup>
+      {!vipBenefite?.is_vip && (
+        <QueueGroup onClick={() => navigate('/vip')}>
+          <QueueBox>
+            <Image
+              src='../images/commons/icon/icon-queue-lock.png'
+              width={37}
+              height={37}
+            />
+          </QueueBox>
+        </QueueGroup>
+      )}
     </Layout>
   );
 };

@@ -135,11 +135,21 @@ export interface BuildlingState {
   selfBuildings: Api.Building.SelfBuildings;
   upgradeIds: string[];
   buildings: { [type: number]: Api.Building.Building[] };
-  destroyBuilding: boolean;
+  destroyBuilding: {
+    visible: boolean;
+    destory: any;
+  };
+  upgradesBuilding: {
+    visible: boolean;
+    upgrad: any;
+  };
   planetAssets: {
     energy: number;
     population: number;
     stone: number;
+  };
+  queue: {
+    visible: boolean;
   };
 }
 

@@ -63,6 +63,7 @@ export const lightColors: Colors = {
   textTips: '#7D879C',
   textSuccess: '#84FF59',
   textDanger: '#FF5353',
+  textPrimary: '#4ffffb',
   raceProtoss: '#DF7DFD',
   raceHuman: '#3dcfff',
   raceZerg: '#8ac001',
@@ -77,6 +78,7 @@ export const lightColors: Colors = {
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
     progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',
+    card: 'linear-gradient(270deg, #162D37, #0B1C22, #0A161B)',
   },
 };
 
@@ -101,6 +103,7 @@ export const darkColors: Colors = {
   textTips: '#7D879C',
   textSuccess: '#84FF59',
   textDanger: '#FF5353',
+  textPrimary: '#4ffffb',
   raceProtoss: '#DF7DFD',
   raceHuman: '#3dcfff',
   raceZerg: '#8ac001',
@@ -115,5 +118,6 @@ export const darkColors: Colors = {
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',
     progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',
+    card: 'linear-gradient(270deg, #162D37, #0B1C22, #0A161B)',
   },
 };

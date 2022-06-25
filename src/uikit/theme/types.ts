@@ -57,6 +57,7 @@ export type TextShadows = {
 export type Gradients = {
   bubblegum: string;
   progress: string;
+  card: string;
 };
 
 export const qualities = {
@@ -100,6 +101,7 @@ export type Colors = {
   textSecondary: string;
   textDisabled: string;
   textSubtle: string;
+  textPrimary: string;
   disabled: string;
   textTips: string;
   textSuccess: string;

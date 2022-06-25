@@ -7,7 +7,9 @@ const TestCard: React.FC = () => {
       {/* <Card padding='50px'>
         <Text>这是一个卡片</Text>
       </Card> */}
-      <GraphicsCard radius width='300px' height='300px' />
+      <GraphicsCard borderWidth={2} radius stripe width='300px' height='300px'>
+        <Text>dddddd</Text>
+      </GraphicsCard>
     </Box>
   );
 };

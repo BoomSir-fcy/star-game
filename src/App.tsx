@@ -42,7 +42,7 @@ const Auction = lazy(() => import('./views/Galaxy/Auction'));
 const Stars = lazy(() => import('./views/Galaxy/Stars'));
 
 const Start = lazy(() => import('./views/Star/Layout'));
-const StartPlanet = lazy(() => import('./views/Star/planet'));
+const StartPlanet = lazy(() => import('./views/Planet'));
 
 const UpgradeList = React.lazy(
   () => import('./views/Star/components/upgrade/SelectPlanet'),

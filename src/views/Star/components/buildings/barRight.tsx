@@ -13,7 +13,7 @@ import { useBuffer } from '../hooks';
 const BarLayout = styled(Box)`
   position: fixed;
   right: 0;
-  top: 15%;
+  top: 8%;
 `;
 
 const ImgFlex = styled(Flex)`
