@@ -1,7 +1,7 @@
 import Globe from 'components/Globe';
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Text, BoxProps, Flex } from 'uikit';
+import { Text, BoxProps, Flex, MarkText } from 'uikit';
 import { QualityColor } from 'uikit/theme/colors';
 import { Qualities, qualities } from 'uikit/theme/types';
 
@@ -195,6 +195,7 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
           <Text small>{owner}</Text>
         </OwnerFlex>
       )}
+      {Leve && <MarkText fontSize='20px'>LV {Leve}</MarkText>}
       {/* {No && (
         <>
           <NumberFlex>

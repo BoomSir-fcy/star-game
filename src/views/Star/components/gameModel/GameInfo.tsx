@@ -195,7 +195,7 @@ export const GameInfo: React.FC<{
           callback();
           getSelfBuilding();
           toastSuccess(t('planetDestroyedSuccessfully'));
-          dispatch(storeAction.destoryBuildingVisibleModal(false));
+          // dispatch(storeAction.destoryBuildingVisibleModal(false));
         } else {
           toastError(res.message);
         }
@@ -699,10 +699,9 @@ export const GameInfo: React.FC<{
                               'The number of cellars must be less than or equal to storage tanks',
                             ),
                           );
-                          return;
                         }
 
-                        dispatch(storeAction.destoryBuildingVisibleModal(true));
+                        // dispatch(storeAction.destoryBuildingVisibleModal(true));
                       }}
                     >
                       {t('planetDestroyBuilding')}
@@ -732,7 +731,7 @@ export const GameInfo: React.FC<{
         )}
 
         {/* 销毁建筑 */}
-        <ThingDestoryModal
+        {/* <ThingDestoryModal
           planet_id={planet_id}
           itemData={itemData}
           upgrade={state.upgrade}
@@ -740,14 +739,13 @@ export const GameInfo: React.FC<{
           onClose={() =>
             dispatch(storeAction.destoryBuildingVisibleModal(false))
           }
-        />
+        /> */}
 
         {/* 建筑升级 */}
         <ThingUpgradesModal
           visible={state.upgradesVisible}
           planet_id={planet_id}
           itemData={itemData}
-          upgrade={state.upgrade}
           onChange={async () => {
             const level =
               state.upgrade?.building_detail?.propterty?.levelEnergy + 2;

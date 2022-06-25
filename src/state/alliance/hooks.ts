@@ -26,15 +26,15 @@ export const useFetchAllianceView = () => {
   };
 };
 
-export const useFetchCombatRecord = (page: number, page_size: number) => {
+export const useFetchCombatRecord = (start_time: number, end_time: number) => {
   const dispatch = useDispatch();
   const { account } = useActiveWeb3React();
   const fetch = useCallback(() => {
-    if (account && page_size) {
+    if (account && start_time && end_time) {
       dispatch(setRecordLoad());
-      dispatch(fetchCombatRecordAsync(account, page || 1, page_size));
+      dispatch(fetchCombatRecordAsync(account, start_time || 1, end_time));
     }
-  }, [account, page, page_size, dispatch]);
+  }, [account, start_time, end_time, dispatch]);
 
   useEffect(() => {
     fetch();

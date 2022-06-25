@@ -124,7 +124,7 @@ export const PlanetAssets: React.FC<{
         style={{ margin: 'auto', textAlign: 'center' }}
       >
         <MarkText fontSize='14px' fontStyle='normal' bold>
-          {t('当前行星资源')}
+          {t('Current Planetary Resources')}
         </MarkText>
       </Box>
     </Container>

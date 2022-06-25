@@ -136,7 +136,14 @@ export interface BuildlingState {
   selfBuildings: Api.Building.SelfBuildings;
   upgradeIds: string[];
   buildings: { [type: number]: Api.Building.Building[] };
-  destroyBuilding: boolean;
+  destroyBuilding: {
+    visible: boolean;
+    destory: any;
+  };
+  upgradesBuilding: {
+    visible: boolean;
+    upgrad: any;
+  };
   planetAssets: {
     energy: number;
     population: number;
@@ -300,6 +307,9 @@ export interface AllianceView {
   later_extract_time: number;
   order: orderInfo[];
   energy: energyInfo;
+  max_work_count: number;
+  now_work_count: number;
+  unread_plunder_count: number;
 }
 export interface AllianceState {
   allianceView: AllianceView;
@@ -318,22 +328,41 @@ export interface PkRecord {
   loading: boolean;
 }
 
-export interface RecordInfo {
-  detail: string;
-  fromAddress: string;
+export interface PlunderInfo {
   id: number;
+  fromAddress: string;
+  toAddress: string;
+  incomeStone: number;
   incomeEnergy: number;
   incomePopulation: number;
-  incomeStone: number;
-  loseEnergy: number;
-  losePopulation: number;
-  loseStone: number;
+  success: number;
+  createTime: number;
+  detail: string;
+  blueLoseUnit: number;
   lostDurability: number;
   redLoseUnit: number;
-  success: number;
-  toAddress: string;
-  blueLoseUnit: number;
-  createTime: number;
+  loseStone: number;
+  loseEnergy: number;
+  losePopulation: number;
+}
+
+export interface RecordInfo {
+  id: number;
+  startTime: number;
+  endTime: number;
+  plunderCount: number;
+  workCount: number;
+  working: number;
+  lostDurability: number;
+  loseUnit: number;
+  loseEnergy: number;
+  loseStone: number;
+  losePopulation: number;
+  address: string;
+  getStone: number;
+  getEnergy: number;
+  getPopulation: number;
+  plunder: PlunderInfo[];
 }
 
 export enum PlanetStatus {

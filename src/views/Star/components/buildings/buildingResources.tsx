@@ -11,12 +11,10 @@ export const BuildingResources: React.FC<{
   const { t } = useTranslation();
   const { store } = currnet_building;
 
-  console.log('currnet_building: ', estimate);
-
   return (
     <Box>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>
-        储存资源
+        {t('store resources')}
       </MarkText>
       <Flex width='100%' flexDirection='column'>
         <Box mb='20px'>
@@ -69,12 +67,12 @@ export const BuildingResources: React.FC<{
       <Flex justifyContent='space-between'>
         <Button width='226px' height='53px' variant='purple'>
           <Text bold fontSize='16px' color='#4FFFFB'>
-            补充资源
+            {t('Supplement Resources')}
           </Text>
         </Button>
         <Button width='226px' height='53px' variant='purple'>
           <Text bold fontSize='16px' color='#4FFFFB'>
-            提取资源
+            {t('Extract Resources')}
           </Text>
         </Button>
       </Flex>

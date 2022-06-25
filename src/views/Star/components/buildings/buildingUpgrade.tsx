@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useStore } from 'state';
+import { useDispatch } from 'react-redux';
+import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, MarkText, Text, Image } from 'uikit';
 
 import { useTranslation } from 'contexts/Localization';
@@ -40,9 +41,13 @@ const Items = styled(Flex)`
 `;
 
 export const BuildingUpgrade: React.FC<{
+  planet: Api.Planet.PlanetInfo;
   currnet_building: Api.Building.BuildingDetail;
-}> = ({ currnet_building }) => {
+  estimate: Api.Building.BuildingDetail;
+  onFinish: () => void;
+}> = ({ planet, currnet_building, estimate, onFinish }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const planetAssets = useStore(p => p.buildling.planetAssets);
   const balanceList = useStore(p => p.userInfo.userBalance);
 
@@ -164,9 +169,26 @@ export const BuildingUpgrade: React.FC<{
           </Flex>
         </Flex>
         <Flex justifyContent='center' mt='34px'>
-          <Button width='226px' height='53px' variant='purple'>
+          <Button
+            width='226px'
+            height='53px'
+            variant='purple'
+            disabled={planet?.level <= currnet_building?.propterty?.levelEnergy}
+            onClick={() => {
+              dispatch(
+                storeAction.upgradesBuildingModal({
+                  visible: true,
+                  upgrad: {
+                    building_detail: currnet_building,
+                    estimate_building_detail: estimate,
+                  },
+                }),
+              );
+              onFinish();
+            }}
+          >
             <Text bold fontSize='16px' color='#4FFFFB'>
-              建筑升级
+              {t('planetBuildingUpgrades')}
             </Text>
           </Button>
         </Flex>

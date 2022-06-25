@@ -8,8 +8,8 @@ export class AllianceApi extends Http {
   }
 
   // 行星联盟开始工作
-  async AllianceWorking() {
-    const res = await this.post('alliance/worker/start');
+  async AllianceWorking(params: Api.Alliance.StartWorking) {
+    const res = await this.post('alliance/worker/start', params);
     return res;
   }
 

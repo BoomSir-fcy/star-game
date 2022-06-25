@@ -121,10 +121,10 @@ const AlliancePlanet: React.FC<{
           <CenterBox className='ball_c'>
             <Flex flexDirection='column' alignItems='center' height='100%'>
               <Text mt='18px' fontSize='14px'>
-                {t('Combat Power')}
+                {t('Power')}
               </Text>
               <MarkText fontSize='20px' fontStyle='normal' bold>
-                {123123}
+                {alliance.power}
               </MarkText>
             </Flex>
           </CenterBox>
@@ -146,7 +146,14 @@ const AlliancePlanet: React.FC<{
                     setPlantManageModule(true);
                     setChoosePlant(allianceList[index]);
                   }}
-                  callBack={() => addStar(item.planetId)}
+                  callBack={() => {
+                    if (!item.planetId) {
+                      addStar(item.planetId);
+                    } else {
+                      setPlantManageModule(true);
+                      setChoosePlant(allianceList[index]);
+                    }
+                  }}
                   imgBorder={item.rarity}
                   size='200px'
                   width_height='160px'
