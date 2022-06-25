@@ -1,7 +1,9 @@
 import { Sprite } from '@pixi/sprite';
+import { InteractionEvent, InteractionData } from '@pixi/interaction';
+import { Point } from '@pixi/math';
 import { Texture } from '@pixi/core';
 import { Container } from '@pixi/display';
-import Chequer from './Chequer';
+import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
 
 class Builder extends EventTarget {
@@ -17,19 +19,39 @@ class Builder extends EventTarget {
 
   sprite: Sprite = new Sprite();
 
-  texture = Texture.from('/assets/buildings/1/14.png');
+  texture = Texture.from('/assets/buildings/1/13.png');
 
   container = new Container();
 
   axisPoint?: AxisPoint;
 
+  startPoint = new Point();
+
+  id = '1';
+
+  moved = false; // 是否发生移动
+
   init() {
     this.sprite.texture = this.texture;
 
-    this.sprite.width = Chequer.WIDTH;
-    this.sprite.height = Chequer.HEIGHT;
+    this.sprite.width = 100;
+    this.sprite.height = 100;
+    this.sprite.anchor.set(0.5);
 
     this.container.addChild(this.sprite);
+
+    this.container.interactive = true;
+
+    this.container
+      .on('pointerdown', e => this.onDragStart(e))
+      .on('pointerup', () => this.onDragEnd())
+      .on('pointerupoutside', () => {
+        this.onDragEnd();
+        this.resetPosition();
+      })
+      .on('pointermove', () => this.onDragMove())
+      .on('pointerover', () => this.onDragOver())
+      .on('pointerout', () => this.onDragOut());
   }
 
   setPointAsXY(x: number, y: number) {
@@ -38,9 +60,97 @@ class Builder extends EventTarget {
       axisY: y,
     });
 
-    console.log(chequer);
+    const axisPoint = new AxisPoint(x, y, chequer);
+    this.setPosition(axisPoint);
+  }
 
-    this.axisPoint = new AxisPoint(x, y, chequer);
+  // 设置位置
+  setPosition(point: AxisPoint) {
+    this.container.position.set(point.x, point.y);
+    this.startPoint.set(point.x, point.y);
+    this.axisPoint?.chequer?.setState(stateType.PREVIEW);
+    this.axisPoint = point;
+    this.axisPoint?.chequer?.setState(stateType.DISABLE);
+    this.axisPoint?.chequer?.displayState(false);
+  }
+
+  // 重置位置 用于拖动的时候
+  resetPosition() {
+    const { x, y } = this.startPoint;
+
+    this.container.position.set(x, y);
+  }
+
+  dragData: InteractionData = new InteractionData();
+
+  dragging = false;
+
+  onDragStart(event: InteractionEvent) {
+    event.stopPropagation();
+    this.dragData = event.data;
+    this.container.alpha = 0.9;
+    this.container.filters = [];
+    this.dragging = true;
+    this.container.zIndex = 9999;
+    // this.axisPoint?.chequer?.setState(stateType.ACTIVE);
+    this.changeState(stateType.ACTIVE, true);
+  }
+
+  changeState(state: StateType, visible?: boolean) {
+    this.axisPoint?.chequer?.setState(state);
+    if (typeof visible === 'boolean') {
+      this.axisPoint?.chequer?.displayState(visible);
+    }
+  }
+
+  onDragEnd() {
+    this.container.alpha = 1;
+    this.container.filters = [];
+    this.dragging = false;
+    this.axisPoint?.chequer?.setState(stateType.DISABLE);
+    this.updateZIndex();
+  }
+
+  setDragging(state: boolean) {
+    this.dragging = state;
+  }
+
+  onDragOver() {
+    this.changeState(stateType.HOVER, true);
+  }
+
+  setMoved(moved: boolean) {
+    this.moved = moved;
+  }
+
+  clone() {
+    console.log(this);
+    return new Builder();
+  }
+
+  onDragOut() {
+    this.changeState(stateType.ACTIVE, false);
+  }
+
+  onDragMove(event?: InteractionEvent) {
+    this.dragData = event?.data || this.dragData;
+    if (this.dragging) {
+      const newPosition = this?.dragData?.getLocalPosition(
+        this.container.parent,
+      );
+      console.log(newPosition);
+      console.log(this.container.position);
+      if (newPosition) {
+        this.container.x = newPosition.x;
+        this.container.y = newPosition.y;
+      }
+    }
+  }
+
+  updateZIndex() {
+    if (this.axisPoint?.axisX && this.axisPoint?.axisY) {
+      this.container.zIndex = this.axisPoint?.axisX + this.axisPoint?.axisY;
+    }
   }
 }
 

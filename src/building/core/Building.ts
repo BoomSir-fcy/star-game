@@ -8,11 +8,10 @@ import config from '../config';
 import AxisPoint from './AxisPoint';
 import Boards from './Boards';
 import Chequer, { stateType } from './Chequer';
-import Soldier, { AttrSoldierOptions } from './Soldier';
 import {
-  getAddActiveSoliderEvent,
-  getRemoveActiveSoliderEvent,
-  getUpdateSoldierPosition,
+  getAddActiveBuilderEvent,
+  getRemoveActiveBuilderEvent,
+  getUpdateBuilderPosition,
 } from './event';
 import LinearMove from './LinearMove';
 import loaders from './Loaders';
@@ -51,8 +50,6 @@ class Building extends EventTarget {
       height,
       test,
       enableDrag,
-      offsetStartX,
-      offsetStartY,
     });
     this.app = new Application({
       width: _width,
@@ -64,14 +61,6 @@ class Building extends EventTarget {
     this.enableSoliderDrag = enableSoliderDrag;
     // 添加棋盘
     this.app.stage.addChild(this.boards.container);
-    // 绑定缩放
-    this.app.view.addEventListener(
-      'wheel',
-      this.boards.onHandleWheel.bind(this.boards),
-      {
-        passive: true,
-      },
-    );
     this.test = test;
 
     this.init();
@@ -91,21 +80,21 @@ class Building extends EventTarget {
 
   private axis: AxisPoint[][] = [];
 
-  soldiers: Soldier[] = []; // 小人
+  builders: Builder[] = []; // 小人
 
-  private dragPreSoldier?: Soldier; // 当前拖动小人
+  private dragPreBuilder?: Builder; // 当前拖动小人
 
-  private dragPreSoldierEvent?: InteractionEvent; // 当前拖动小人事件数据
+  private dragPreBuilderEvent?: InteractionEvent; // 当前拖动小人事件数据
 
   private enableSoliderDrag = false; // 是否启用小人拖动
 
-  activeSolider?: Soldier; // 当前选中小人
+  activeBuilder?: Builder; // 当前选中建筑
 
-  activeSoliderFlag?: boolean; // 表示事件触发源未activeSolider
+  activeBuilderFlag?: boolean; // 表示事件触发源未activeSolider
 
-  private lastCreateSoldierId = '';
+  private lastCreateBuilderId = '';
 
-  private enemyOfSoldierId: { [id: string]: boolean } = {};
+  private enemyOfBuilderId: { [id: string]: boolean } = {};
 
   init() {
     this.view = this.app.view;
@@ -116,13 +105,13 @@ class Building extends EventTarget {
     this.boards.container.on('pointermove', e => {
       if (
         this.enableSoliderDrag &&
-        this.dragPreSoldier &&
-        this.dragPreSoldier.container
+        this.dragPreBuilder &&
+        this.dragPreBuilder.container
       ) {
-        this.dragPreSoldier.container.visible = true;
-        this.dragPreSoldier.onDragMove(e);
-        this.dragPreSoldierEvent = e;
-        this.onDragStarSoldier();
+        this.dragPreBuilder.container.visible = true;
+        this.dragPreBuilder.onDragMove(e);
+        this.dragPreBuilderEvent = e;
+        this.onDragStarBuilder();
       }
     });
     this.addEventListenerOfWindow();
@@ -142,162 +131,94 @@ class Building extends EventTarget {
   // 取消选中
   addEventListenerOfWindow() {
     window.addEventListener('click', () => {
-      if (this.activeSoliderFlag) {
-        this.activeSoliderFlag = false;
+      if (this.activeBuilderFlag) {
+        this.activeBuilderFlag = false;
         return;
       }
       this.removeActiveSolider();
     });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
-      if (e.key === 'Delete' && this.activeSolider) {
-        this.removeSoldier(this.activeSolider);
+      if (e.key === 'Delete' && this.activeBuilder) {
+        this.removeBuilder(this.activeBuilder);
       }
-    });
-  }
-
-  // 添加小人
-  addSoldier(soldier: Soldier) {
-    this.soldiers.push(soldier);
-    this.boards.container.sortableChildren = true;
-    this.boards.container.zIndex = 1;
-    this.boards.container.addChild(soldier.container);
-    soldier.container
-      .on('pointerdown', () => {
-        this.showSameSoliderState(soldier);
-        soldier.setMoved(false);
-      })
-      .on('pointermove', event => {
-        if (soldier.dragging) {
-          this.onDrageMoveSoldier(event);
-          if (!soldier.moved) {
-            soldier.setMoved(true);
-            this.onDragStarSoldier(soldier);
-          }
-        }
-      })
-      .on('pointerup', event => {
-        if (soldier.moved) {
-          const res = this.onDragEndSoldier(event, soldier);
-          if (res) {
-            this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
-          }
-        }
-        this.activeSoliderFlag = true;
-        this.activeSolider = soldier;
-        soldier.changeState(stateType.ACTIVE, true);
-        this.dispatchEvent(getAddActiveSoliderEvent(soldier));
-      })
-      .on('click', (e: InteractionEvent) => {
-        this.activeSoliderFlag = true;
-      });
-    // 小人阵亡事件
-    soldier.addEventListener('death', () => {
-      setTimeout(() => {
-        this.removeSoldier(soldier);
-      }, 300);
-    });
-
-    // 小人叛变事件
-    soldier.addEventListener('enemyChange', () => {
-      // this.removeSoldier(soldier);
-      this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
     });
   }
 
   // 添加小人
   addBuilder(builder: Builder) {
-    // this.soldiers.push(soldier);
+    // this.builders.push(builder);
     this.boards.container.sortableChildren = true;
     this.boards.container.zIndex = 1;
     this.boards.container.addChild(builder.container);
     builder.container
-      .on('pointerdown', () => {
-        // this.showSameSoliderState(soldier);
-        // builder.setMoved(false);
-      })
       .on('pointermove', event => {
-        // if (soldier.dragging) {
-        //   this.onDrageMoveSoldier(event);
-        //   if (!soldier.moved) {
-        //     soldier.setMoved(true);
-        //     this.onDragStarSoldier(soldier);
-        //   }
-        // }
+        if (builder.dragging) {
+          this.onDrageMoveBuilder(event);
+        }
       })
       .on('pointerup', event => {
-        // if (soldier.moved) {
-        //   const res = this.onDragEndSoldier(event, soldier);
-        //   if (res) {
-        //     this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
-        //   }
-        // }
-        // this.activeSoliderFlag = true;
-        // this.activeSolider = soldier;
-        // soldier.changeState(stateType.ACTIVE, true);
-        // this.dispatchEvent(getAddActiveSoliderEvent(soldier));
+        console.log(12222222);
+        if (builder.moved) {
+          const res = this.onDragEndBuilder(event, builder);
+          if (res) {
+            this.dispatchEvent(getUpdateBuilderPosition(this.builders));
+          }
+        }
+        this.activeBuilderFlag = true;
+        this.activeBuilder = builder;
+        builder.changeState(stateType.ACTIVE, true);
+        this.dispatchEvent(getAddActiveBuilderEvent(builder));
       })
       .on('click', (e: InteractionEvent) => {
-        this.activeSoliderFlag = true;
+        this.activeBuilderFlag = true;
       });
-    // 小人阵亡事件
-    // soldier.addEventListener('death', () => {
-    //   setTimeout(() => {
-    //     this.removeSoldier(soldier);
-    //   }, 300);
-    // });
-
-    // 小人叛变事件
-    // soldier.addEventListener('enemyChange', () => {
-    //   // this.removeSoldier(soldier);
-    //   this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
-    // });
   }
 
   // 添加当前选中小人
-  addActiveSolider(activeSolider: Soldier) {
-    this.activeSolider = activeSolider;
-    this.activeSoliderFlag = true;
-    activeSolider.changeState(stateType.ACTIVE, true);
-    this.dispatchEvent(getAddActiveSoliderEvent(activeSolider));
+  addActiveSolider(activeBuilder: Builder) {
+    this.activeBuilder = activeBuilder;
+    this.activeBuilderFlag = true;
+    activeBuilder.changeState(stateType.ACTIVE, true);
+    this.dispatchEvent(getAddActiveBuilderEvent(activeBuilder));
   }
 
   // 移除当前选中小人
   removeActiveSolider() {
-    if (this.activeSolider) {
-      this.dispatchEvent(getRemoveActiveSoliderEvent());
-      delete this.activeSolider;
+    if (this.activeBuilder) {
+      this.dispatchEvent(getRemoveActiveBuilderEvent());
+      delete this.activeBuilder;
     }
   }
 
   // 设置小人们
-  setSolders(soldiers: Soldier[]) {
-    const newSoldiers: Soldier[] = [];
-    soldiers.forEach(soldier => {
-      if (this.soldiers.includes(soldier)) {
-        newSoldiers.push(soldier);
+  setBuilders(builders: Builder[]) {
+    const newBuilders: Builder[] = [];
+    builders.forEach(builder => {
+      if (this.builders.includes(builder)) {
+        newBuilders.push(builder);
       }
     });
-    this.soldiers = newSoldiers;
-    this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
+    this.builders = newBuilders;
+    this.dispatchEvent(getUpdateBuilderPosition(this.builders));
   }
 
   // 从棋盘上移除小人
-  removeSoldier(soldier: Soldier) {
-    this.soldiers = this.soldiers.filter(item => item !== soldier);
-    this.boards.container.removeChild(soldier.container);
-    soldier.changeState(stateType.PREVIEW, false);
-    this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
+  removeBuilder(builder: Builder) {
+    this.builders = this.builders.filter(item => item !== builder);
+    this.boards.container.removeChild(builder.container);
+    builder.changeState(stateType.PREVIEW, false);
+    this.dispatchEvent(getUpdateBuilderPosition(this.builders));
     this.removeActiveSolider();
   }
 
   // 清空所有小人
-  clearSoldier() {
-    this.soldiers.forEach(item => {
+  clearBuilder() {
+    this.builders.forEach(item => {
       item.changeState(stateType.PREVIEW, false);
       this.boards.container.removeChild(item.container);
     });
-    this.soldiers = [];
-    this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
+    this.builders = [];
+    this.dispatchEvent(getUpdateBuilderPosition(this.builders));
   }
 
   setEnableDrag(state: boolean) {
@@ -305,74 +226,63 @@ class Building extends EventTarget {
   }
 
   // 移动端, 棋盘外向棋盘内拖拽小人
-  addDragPreSoldierApp(options: AttrSoldierOptions) {
+  addDragPreBuilderApp(options: any) {
     const chequer = this.boards.chequers.find(
       item => item.state === stateType.PREVIEW,
     ) as Chequer;
     if (chequer) {
-      this.createSoldier(chequer.axisX, chequer.axisY, { ...options });
+      this.createBuilder(chequer.axisX, chequer.axisY);
     }
   }
 
   // PC端, 棋盘外向棋盘内拖拽小人
-  addDragPreSoldier(soldier: Soldier) {
+  addDragPreBuilder(builder: Builder) {
     this.setEnableDrag(true);
-    this.dragPreSoldier = soldier.clone({ enableDrag: true });
-    this.dragPreSoldier.setDragging(true);
-    this.dragPreSoldier.container.visible = false;
-    this.app.stage.addChild(this.dragPreSoldier.container);
-    this.dragPreSoldier.container.on('pointermove', event => {
-      this.onDrageMoveSoldier(event);
+    this.dragPreBuilder = builder.clone();
+    this.dragPreBuilder.setDragging(true);
+    this.dragPreBuilder.container.visible = false;
+    this.app.stage.addChild(this.dragPreBuilder.container);
+    this.dragPreBuilder.container.on('pointermove', event => {
+      this.onDrageMoveBuilder(event);
     });
   }
 
   // 关闭拖拽中的小人
-  offDragPreSoldier() {
+  offDragPreBuilder() {
     this.setEnableDrag(false);
-    if (this.dragPreSoldier && this.dragPreSoldierEvent) {
-      const soldier = this.dragPreSoldier.clone();
-      const res = this.onDragEndSoldier(this.dragPreSoldierEvent, soldier);
+    if (this.dragPreBuilder && this.dragPreBuilderEvent) {
+      const builder = this.dragPreBuilder.clone();
+      const res = this.onDragEndBuilder(this.dragPreBuilderEvent, builder);
       if (res) {
-        this.addSoldier(soldier);
+        this.addBuilder(builder);
         this.dispatchEvent(
-          new CustomEvent('updateSoldierPosition', {
-            detail: { soldiers: this.soldiers },
+          new CustomEvent('updateBuilderPosition', {
+            detail: { builders: this.builders },
           }),
         );
       }
-      this.dragPreSoldier.setDragging(false);
-      this.dragPreSoldier.container.visible = false;
-      this.app.stage.removeChild(this.dragPreSoldier.container);
-      delete this.dragPreSoldier;
-      delete this.dragPreSoldierEvent;
+      this.dragPreBuilder.setDragging(false);
+      this.dragPreBuilder.container.visible = false;
+      this.app.stage.removeChild(this.dragPreBuilder.container);
+      delete this.dragPreBuilder;
+      delete this.dragPreBuilderEvent;
     }
   }
 
-  // 显示相同的小人
-  showSameSoliderState(soldier?: Soldier) {
-    this.soldiers.forEach(item => {
-      if (soldier?.options?.unique_id === item.options?.unique_id) {
-        item.changeState(stateType.ACTIVE, true);
-      } else {
-        item.changeState(stateType.ACTIVE, false);
-      }
-    });
-  }
-
   // 拖拽小人开始生命周期
-  onDragStarSoldier(soldier?: Soldier) {
+  onDragStarBuilder(builder?: Builder) {
     this.boards.chequers.forEach(item => {
-      if (soldier?.axisPoint?.chequer === item) {
-        soldier.changeState(stateType.ACTIVE);
-      } else if (soldier) {
-        soldier.changeState(stateType.DISABLE);
+      if (builder?.axisPoint?.chequer === item) {
+        builder.changeState(stateType.ACTIVE);
+      } else if (builder) {
+        builder.changeState(stateType.DISABLE);
       }
       item.displayState(true);
     });
   }
 
   // 移动小人
-  onDrageMoveSoldier(event: InteractionEvent) {
+  onDrageMoveBuilder(event: InteractionEvent) {
     this.boards.chequers.forEach(item => {
       const point = new Point(
         event.data.global.x - 10,
@@ -388,7 +298,7 @@ class Building extends EventTarget {
   }
 
   // 拖拽小人结束生命周期
-  onDragEndSoldier(event: InteractionEvent, soldier: Soldier) {
+  onDragEndBuilder(event: InteractionEvent, builder: Builder) {
     let canDrag = false;
 
     this.boards.chequers.forEach(item => {
@@ -398,13 +308,14 @@ class Building extends EventTarget {
       );
       const collection = item.checkCollisionPoint(point);
       if (collection && item.state === stateType.PLACE) {
-        soldier.setPosition(new AxisPoint(item.axisX, item.axisY, item));
+        console.log(12112);
+        builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
         canDrag = true;
       }
       item.displayState(false);
     });
     if (!canDrag) {
-      soldier.resetPosition();
+      builder.resetPosition();
     }
     return canDrag;
   }
@@ -416,51 +327,44 @@ class Building extends EventTarget {
    * @param option 参数
    * @returns 小人
    */
-  createSoldier(_x: number, _y: number, option: AttrSoldierOptions) {
+  createBuilder(_x: number, _y: number) {
     const axis = this.getAxis(_x, _y);
     let zIndex = 0;
     if (axis) {
       zIndex = axis?.axisX + axis?.axisY;
     }
     if (!axis) return null;
-    const soldier = new Soldier({
-      ...option,
-      x: axis.x,
-      y: axis.y - 1000,
-      axisPoint: axis,
-      zIndex,
-    });
+    const builder = new Builder();
 
-    this.addSoldier(soldier);
+    this.addBuilder(builder);
 
     // 小人从天而降
-    soldier.changeState(stateType.PREVIEW, true);
+    builder.changeState(stateType.PREVIEW, true);
     const point0 = new Point(axis.x, axis.y - 1000) as AxisPoint;
     const point1 = new Point(axis.x, axis.y) as AxisPoint;
 
     const id = uniqueId();
-    this.lastCreateSoldierId = id;
+    this.lastCreateBuilderId = id;
 
-    const linearMove = new LinearMove(soldier.container, point0, point1, {
+    const linearMove = new LinearMove(builder.container, point0, point1, {
       speed: SpeederType.SOLDIER_CREATE,
     });
     linearMove.addEventListener('end', () => {
-      soldier.flyingEnd();
-      soldier.container.position.set(axis.x, axis.y);
-      soldier.startPoint = point1;
-      soldier.changeState(stateType.DISABLE, false);
+      builder.container.position.set(axis.x, axis.y);
+      builder.startPoint = point1;
+      builder.changeState(stateType.DISABLE, false);
       this.dispatchEvent(
-        new CustomEvent('soldierCreated', { detail: { soldier } }),
+        new CustomEvent('builderCreated', { detail: { builder } }),
       );
-      if (id === this.lastCreateSoldierId) {
+      if (id === this.lastCreateBuilderId) {
         this.dispatchEvent(
-          new CustomEvent('lastSoldierCreated', { detail: { soldier } }),
+          new CustomEvent('lastBuilderCreated', { detail: { builder } }),
         );
       }
     });
     // linearMove.speed = 100;
     linearMove.move();
-    return soldier;
+    return builder;
   }
 
   /**
@@ -481,32 +385,19 @@ class Building extends EventTarget {
   /**
    * @dev 根据坐标获取小人
    * @param axis
-   * @returns Soldier | null
+   * @returns Builder | null
    */
-  findSoldierByAxis(axis: AxisPoint) {
-    return this.soldiers.find(soldier => soldier.axisPoint === axis);
+  findBuilderByAxis(axis: AxisPoint) {
+    return this.builders.find(builder => builder.axisPoint === axis);
   }
 
   /**
-   * @dev 根据sid获取小人
-   * @param sid
-   * @returns Soldier | null
+   * @dev 根据id获取小人
+   * @param id
+   * @returns Builder | null
    */
-  findSoldierById(sid: string) {
-    return this.soldiers.find(soldier => soldier.sid === sid);
-  }
-
-  // 判断是敌是友
-  getSoliderEnemyById(sid: string) {
-    if (sid in this.enemyOfSoldierId) {
-      return this.enemyOfSoldierId[sid];
-    }
-    const soldier = this.findSoldierById(sid);
-    if (soldier) {
-      this.enemyOfSoldierId[sid] = soldier.isEnemy;
-      return soldier.isEnemy;
-    }
-    return false;
+  findBuilderById(id: string) {
+    return this.builders.find(builder => builder.id === id);
   }
 
   once(event: string, handle: any) {
