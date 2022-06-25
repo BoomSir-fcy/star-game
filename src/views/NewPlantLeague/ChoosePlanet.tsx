@@ -53,7 +53,6 @@ const ChoosePlanet: React.FC = () => {
     race: 0,
   });
   const [StarList, setStarList] = useState<Api.Planet.PlanetInfo[]>([]);
-  const [ChoosePlant, setChoosePlant] = useState<Api.Planet.PlanetInfo>();
   const [ShowListModule, setShowListModule] = useState(false);
   const [visible, setVisible] = useState(false);
   const [QueueId, setQueueId] = useState(0);
@@ -145,7 +144,6 @@ const ChoosePlanet: React.FC = () => {
                     <PlanetBox
                       info={item}
                       className={`${`planet_choose_${index}`}`}
-                      setChoosePlant={e => setChoosePlant(e)}
                       setShowListModule={e => {
                         if (item.in_queue) {
                           setVisible(true);
@@ -167,7 +165,6 @@ const ChoosePlanet: React.FC = () => {
           <AlliancePlanetList
             ShowListModule={ShowListModule}
             setShowListModule={e => setShowListModule(e)}
-            ChoosePlant={ChoosePlant}
           />
         </Flex>
       </Layout>

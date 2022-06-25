@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 import { useTranslation } from 'contexts/Localization';
 import { getPlanetRarity } from 'utils/planetRarity';
+import { useDispatch } from 'react-redux';
+import { setActivePlanet } from 'state/planet/actions';
 import { PlanetDesc } from './PlanetDesc';
 import { StartImg } from './StartImg';
 
@@ -24,12 +26,12 @@ const Desc = styled(Flex)`
 
 export const PlanetBox: React.FC<{
   setShowListModule: (e) => void;
-  setChoosePlant: (e: Api.Planet.PlanetInfo) => void;
   info: Api.Planet.PlanetInfo;
   className?: string;
-}> = ({ info, className, setChoosePlant, setShowListModule }) => {
+}> = ({ info, className, setShowListModule }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <CardBox className={className}>
@@ -105,7 +107,7 @@ export const PlanetBox: React.FC<{
               </Button>
               <Button
                 onClick={() => {
-                  setChoosePlant(info);
+                  dispatch(setActivePlanet(info));
                   setShowListModule(true);
                 }}
                 height='42px'
