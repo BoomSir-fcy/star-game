@@ -10,11 +10,13 @@ export interface BuilderOption {
   src?: string;
   id: string;
   race?: number;
+  areaY: number;
+  areaX: number;
 }
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
     super();
-    const { src, id, race = 1 } = option;
+    const { src, id, race = 1, areaX, areaY } = option;
     this.id = id;
 
     const img = `${window.location.origin}/assets/buildings/${race}/${
@@ -24,6 +26,8 @@ class Builder extends EventTarget {
     this.src = img;
     this.texture = Texture.from(img);
     this.option = { ...option };
+    this.areaX = areaX;
+    this.areaY = areaY;
 
     this.init();
   }
@@ -53,8 +57,8 @@ class Builder extends EventTarget {
   init() {
     this.sprite.texture = this.texture;
 
-    this.sprite.width = 100;
-    this.sprite.height = 100;
+    this.sprite.width = 200 * this.areaX;
+    this.sprite.height = 200 * this.areaY;
     this.sprite.anchor.set(0.5);
 
     this.container.addChild(this.sprite);

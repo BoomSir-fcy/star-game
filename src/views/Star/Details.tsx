@@ -111,6 +111,10 @@ const Details = () => {
   const destory = useStore(p => p.buildling.destroyBuilding);
   const currentTime = Number((Date.now() / 1000).toFixed(0));
 
+  React.useEffect(() => {
+    building.initBuilder(selfBuilding);
+  }, [selfBuilding, building]);
+
   const updateGrid = React.useCallback(data => {
     setState(data);
   }, []);
