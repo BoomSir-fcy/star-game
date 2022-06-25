@@ -15,7 +15,7 @@ const config = {
   BOARDS_COL_COUNT: 4,
 
   OFFSET_START_X: 0, // (0, 0) 坐标X轴偏移量
-  OFFSET_START_Y: -280, // (0, 0) 坐标Y轴偏移量
+  OFFSET_START_Y: -240, // (0, 0) 坐标Y轴偏移量
 
   BOARD_POSITION_SELF: BoardPositionSelf.TOP_LEFT, // 自己棋盘的位置
   TWO_BOARDS_OFFSET: 0,

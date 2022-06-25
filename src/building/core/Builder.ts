@@ -6,9 +6,24 @@ import { Container } from '@pixi/display';
 import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
 
+export interface BuilderOption {
+  src?: string;
+  id: string;
+  race?: number;
+}
 class Builder extends EventTarget {
-  constructor() {
+  constructor(option: BuilderOption) {
     super();
+    const { src, id, race = 1 } = option;
+    this.id = id;
+
+    const img = `${window.location.origin}/assets/buildings/${race}/${
+      src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
+    }`;
+
+    this.src = img;
+    this.texture = Texture.from(img);
+    this.option = { ...option };
 
     this.init();
   }
@@ -19,7 +34,7 @@ class Builder extends EventTarget {
 
   sprite: Sprite = new Sprite();
 
-  texture = Texture.from('/assets/buildings/1/13.png');
+  texture: Texture;
 
   container = new Container();
 
@@ -28,6 +43,10 @@ class Builder extends EventTarget {
   startPoint = new Point();
 
   id = '1';
+
+  src = '';
+
+  option: BuilderOption;
 
   moved = false; // 是否发生移动
 
@@ -124,8 +143,7 @@ class Builder extends EventTarget {
   }
 
   clone() {
-    console.log(this);
-    return new Builder();
+    return new Builder(this.option);
   }
 
   onDragOut() {
@@ -138,8 +156,6 @@ class Builder extends EventTarget {
       const newPosition = this?.dragData?.getLocalPosition(
         this.container.parent,
       );
-      console.log(newPosition);
-      console.log(this.container.position);
       if (newPosition) {
         this.container.x = newPosition.x;
         this.container.y = newPosition.y;

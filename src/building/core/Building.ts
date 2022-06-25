@@ -16,7 +16,7 @@ import {
 import LinearMove from './LinearMove';
 import loaders from './Loaders';
 import { SpeederType } from '../types';
-import Builder from './Builder';
+import Builder, { BuilderOption } from './Builder';
 
 export interface GameOptionsProps {
   height?: number;
@@ -226,12 +226,12 @@ class Building extends EventTarget {
   }
 
   // 移动端, 棋盘外向棋盘内拖拽小人
-  addDragPreBuilderApp(options: any) {
+  addDragPreBuilderApp(options: BuilderOption) {
     const chequer = this.boards.chequers.find(
       item => item.state === stateType.PREVIEW,
     ) as Chequer;
     if (chequer) {
-      this.createBuilder(chequer.axisX, chequer.axisY);
+      this.createBuilder(chequer.axisX, chequer.axisY, options);
     }
   }
 
@@ -327,14 +327,14 @@ class Building extends EventTarget {
    * @param option 参数
    * @returns 小人
    */
-  createBuilder(_x: number, _y: number) {
+  createBuilder(_x: number, _y: number, option: BuilderOption) {
     const axis = this.getAxis(_x, _y);
     let zIndex = 0;
     if (axis) {
       zIndex = axis?.axisX + axis?.axisY;
     }
     if (!axis) return null;
-    const builder = new Builder();
+    const builder = new Builder(option);
 
     this.addBuilder(builder);
 
