@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction } from 'state';
-import { Box } from 'uikit';
+import { Box, Button } from 'uikit';
 import { Api } from 'apis';
 
 import { Steps } from 'intro.js-react'; // 引入我们需要的组件
@@ -12,6 +12,7 @@ import 'intro.js/introjs.css';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
+import { useImmer } from 'use-immer';
 import type { AreaDataItem } from './components/dragCompoents';
 
 import {
@@ -92,6 +93,10 @@ const Details = () => {
   const upgrad = useStore(p => p.buildling.upgradesBuilding);
   const destory = useStore(p => p.buildling.destroyBuilding);
   const currentTime = Number((Date.now() / 1000).toFixed(0));
+
+  const [stateBuilding, setStateBuilding] = useImmer({
+    visible: false,
+  });
 
   const updateGrid = React.useCallback(data => {
     setState(data);
@@ -205,15 +210,31 @@ const Details = () => {
               }}
             />
           )}
+        <Button
+          style={{ position: 'absolute', top: '35%', left: '20%' }}
+          onClick={() =>
+            setStateBuilding(p => {
+              p.visible = true;
+            })
+          }
+        >
+          展开
+        </Button>
         <SideLeftContent />
         <PlanetQueue
           serverTime={currentTime + serverDiffTime}
           currentQueue={[]}
         />
         <SideRightBuildingInfo
+          visible={stateBuilding.visible}
           planet={planet}
           planet_id={id}
           buildingsId='62a6dc0252416b0eec60e970'
+          onClose={() =>
+            setStateBuilding(p => {
+              p.visible = false;
+            })
+          }
         />
       </Container>
 

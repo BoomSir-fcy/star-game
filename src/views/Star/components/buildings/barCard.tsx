@@ -18,9 +18,10 @@ const RecordBox = styled(Flex)`
 export const BarCard: React.FC<{
   title: string;
   children: React.ReactNode;
-}> = ({ title, children }) => {
+  onClick: () => void;
+}> = ({ title, children, onClick }) => {
   return (
-    <RecordBox>
+    <RecordBox onClick={onClick}>
       <MarkText ml='24px' mt='10px' fontSize='16px' bold fontStyle='normal'>
         {title}
       </MarkText>

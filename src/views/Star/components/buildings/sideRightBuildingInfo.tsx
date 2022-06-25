@@ -19,10 +19,7 @@ const Container = styled(Box)`
   position: absolute;
   right: -15px;
   top: 0;
-`;
-const SideButton = styled(Box)`
-  position: absolute;
-  z-index: 9999;
+  z-index: 99;
 `;
 const SideCloseButton = styled(Button)`
   position: absolute;
@@ -44,9 +41,11 @@ const Content = styled(Box)`
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid #4ffffb;
   opacity: 0;
+  display: none;
   transition: all 0.5s ease;
   &.active {
     opacity: 1;
+    display: block;
     animation: bounceInRight 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
       alternate forwards;
   }
@@ -86,16 +85,14 @@ export const SideRightBuildingInfo: React.FC<{
   planet: Api.Planet.PlanetInfo;
   planet_id: number;
   buildingsId: string;
+  visible: boolean;
   itemData?: Api.Building.BuildingDetail;
-}> = ({ planet, planet_id, buildingsId, itemData }) => {
+  onClose: () => void;
+}> = ({ visible, planet, planet_id, buildingsId, itemData, onClose }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { upgrade } = useBuildingUpgrade();
   const { destory } = useBuildingOperate();
-  const balance = useStore(p => p.userInfo.userBalance);
-  const [state, setState] = React.useState({
-    visible: false,
-  });
   const [upgradeInfo, setUpgradeInfo] = React.useState<any>({
     building_detail: {
       petri_dish: {
@@ -125,22 +122,8 @@ export const SideRightBuildingInfo: React.FC<{
 
   return (
     <Container>
-      <SideButton>
-        {!state.visible && (
-          <Button
-            onClick={() => setState({ ...state, visible: !state.visible })}
-          >
-            展开
-          </Button>
-        )}
-      </SideButton>
-      <Content
-        className={classNames(state.visible ? 'active' : 'removeActive')}
-      >
-        <SideCloseButton
-          variant='text'
-          onClick={() => setState({ ...state, visible: false })}
-        >
+      <Content className={classNames(visible ? 'active' : 'removeActive')}>
+        <SideCloseButton variant='text' onClick={onClose}>
           <Box width='34px' height='42px'>
             <Image
               src='../images/commons/icon/icon-back.png'
@@ -176,13 +159,13 @@ export const SideRightBuildingInfo: React.FC<{
               <Destory
                 variant='text'
                 onClick={() => {
+                  onClose();
                   dispatch(
                     storeAction.destoryBuildingModal({
                       visible: true,
                       destory: currentAttributes,
                     }),
                   );
-                  setState({ ...state, visible: false });
                 }}
               >
                 <Image
@@ -195,7 +178,7 @@ export const SideRightBuildingInfo: React.FC<{
           </Flex>
           <Box mb='20px'>
             <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
-              基本属性
+              {t('Basic properties')}
             </MarkText>
             <Flex justifyContent='space-between' width='100%'>
               <InfoCard>
@@ -217,7 +200,7 @@ export const SideRightBuildingInfo: React.FC<{
                 <BuildingValue
                   itemData={itemData}
                   planet_id={planet_id}
-                  title={t('吞噬价值')}
+                  title={t('devour value')}
                   value={currentAttributes?.exp}
                   icon='/images/commons/star/attackValue.png'
                 />
@@ -261,7 +244,7 @@ export const SideRightBuildingInfo: React.FC<{
           planet={planet}
           currnet_building={currentAttributes}
           estimate={estimate}
-          onFinish={() => setState({ ...state, visible: false })}
+          onFinish={onClose}
         />
       </Content>
     </Container>
