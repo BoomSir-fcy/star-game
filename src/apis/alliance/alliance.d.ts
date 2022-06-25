@@ -11,7 +11,9 @@ declare namespace Api {
       planet_count: number;
       power: number;
     }
-
+    interface StartWorking {
+      difficulty?: number;
+    }
     interface Plunder {
       to_address: string;
       nonce: string;
@@ -21,8 +23,8 @@ declare namespace Api {
 
     interface Record {
       address: string;
-      page: number;
-      page_size: number;
+      start_time: number;
+      end_time: number;
     }
   }
 }

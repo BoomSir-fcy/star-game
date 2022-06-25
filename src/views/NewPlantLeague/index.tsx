@@ -17,7 +17,7 @@ const NewPlantLeague: React.FC = () => {
   const [ChoosePlant, setChoosePlant] = useState<orderInfo>();
 
   return (
-    <Layout>
+    <Layout height='75vh'>
       <AlliancePlanet
         setChoosePlant={e => {
           setChoosePlant(e);
@@ -28,6 +28,7 @@ const NewPlantLeague: React.FC = () => {
         }}
       />
       <Explore
+        Difficulty={Difficulty}
         ShowModule={ShowModule}
         setShowModule={e => {
           setPlantManageModule(false);

@@ -30,7 +30,7 @@ const InfoFoot = () => {
 
   // 开始/停止工作
   const StartOrStopWorking = async (work: boolean) => {
-    await Api.AllianceApi[work ? 'AllianceWorking' : 'AllianceStopWork']()
+    await Api.AllianceApi[work ? 'AllianceWorking' : 'AllianceStopWork']({})
       .then(res => {
         if (Api.isSuccess(res)) {
           toastSuccess(t('Operate Succeeded'));
@@ -47,7 +47,7 @@ const InfoFoot = () => {
     <ShaDowBox alignItems='center'>
       <Flex flex='1' flexDirection='column' justifyContent='space-between'>
         <Text mb='10px' shadow='primary' fontSize='28px' bold>
-          {t('Combat Power')} {alliance.power}
+          {t('Power')} {alliance.power}
         </Text>
         <Box>
           {/* <Text fontSize='22px'>
