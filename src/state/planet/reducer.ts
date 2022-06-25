@@ -11,6 +11,7 @@ import { fetchMePlanetAsync, fetchPlanetInfoAsync } from './fetchers';
 
 export const initialState: PlanetState = {
   mePlanet: [],
+  mePlanetLoading: true,
   planetInfo: {},
   activeMaterialMap: {},
   upgradePlanetId: null,
@@ -26,6 +27,7 @@ export const planet = createSlice({
     builder
       .addCase(fetchMePlanetAsync.fulfilled, (state, action) => {
         state.mePlanet = action.payload;
+        state.mePlanetLoading = false;
       })
       .addCase(setActivePlanet, (state, { payload }) => {
         state.activePlanet = payload;

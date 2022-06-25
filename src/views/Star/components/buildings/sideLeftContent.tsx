@@ -1,6 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
+import Building from 'building/core/Building';
+import Builder from 'building/core/Builder';
 import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, Image, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
@@ -97,7 +99,14 @@ const BuildingsItem = styled(Box)`
   }
 `;
 
-export const SideLeftContent = () => {
+interface SideLeftContentProps {
+  building: Building;
+  race: number;
+}
+export const SideLeftContent: React.FC<SideLeftContentProps> = ({
+  building,
+  race,
+}) => {
   const dispatch = useDispatch();
   const queueStore = useStore(p => p.buildling.queue);
   const buildings = useStore(p => p.buildling.buildings);
@@ -112,6 +121,43 @@ export const SideLeftContent = () => {
       window.removeEventListener('click', close);
     };
   }, [close]);
+
+  const [moving, setMoving] = React.useState(false);
+
+  const dragEndHandle = React.useCallback(
+    (event: PointerEvent) => {
+      event.preventDefault();
+      if (moving) {
+        setMoving(false);
+        building?.offDragPreBuilder();
+      }
+    },
+    [building, moving, setMoving],
+  );
+
+  const dragStartHandle = React.useCallback(
+    (
+      event: React.PointerEvent<HTMLDivElement>,
+      item: Api.Building.Building,
+    ) => {
+      event.preventDefault();
+      const builder = new Builder({
+        src: item.picture,
+        id: `${item._id}`,
+        race,
+      });
+      setMoving(true);
+      building?.addDragPreBuilder(builder);
+    },
+    [building, race],
+  );
+
+  React.useEffect(() => {
+    window.addEventListener('pointerup', dragEndHandle);
+    return () => {
+      window.removeEventListener('pointerup', dragEndHandle);
+    };
+  }, [dragEndHandle]);
 
   return (
     <Container>
@@ -142,6 +188,9 @@ export const SideLeftContent = () => {
                     level={row.propterty.levelEnergy}
                     src={row.picture}
                     text={row?.propterty.name_cn}
+                    onPointerDown={e => {
+                      dragStartHandle(e, row);
+                    }}
                   />
                 </BuildingsItem>
               ),

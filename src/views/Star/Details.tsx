@@ -10,6 +10,7 @@ import { Steps } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import useBuilding from 'building/hooks/useBuilding';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { useImmer } from 'use-immer';
@@ -23,6 +24,7 @@ import {
 import { PlanetQueue } from './components/buildings/planetQueue';
 import { useWorkqueue } from './components/hooks';
 import { ThingDestoryModal, ThingUpgradesModal } from './components/Modal';
+import { useActiveBuilder } from './detailHooks';
 
 const Container = styled(Box)`
   position: relative;
@@ -86,6 +88,22 @@ const Details = () => {
       },
     ];
   }, [t]);
+
+  const building = useBuilding({
+    width: 1920,
+    height: 900,
+  });
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current.appendChild(building.view);
+      building.creatTerrain([]);
+      // createHandle();
+    }
+  }, [building, ref]);
+
+  const activeBuilder = useActiveBuilder(building);
 
   const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
@@ -220,7 +238,7 @@ const Details = () => {
         >
           展开
         </Button>
-        <SideLeftContent />
+        <SideLeftContent race={planet?.race} building={building} />
         <PlanetQueue
           serverTime={currentTime + serverDiffTime}
           currentQueue={[]}
@@ -236,6 +254,7 @@ const Details = () => {
             })
           }
         />
+        <Box ref={ref} />
       </Container>
 
       {/* 建筑升级 */}

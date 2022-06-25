@@ -79,6 +79,10 @@ export const lightColors: Colors = {
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
     progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',
     card: 'linear-gradient(270deg, #162D37, #0B1C22, #0A161B)',
+    stripe:
+      'linear-gradient(45deg, #29595b 25%, #275253 0, #275253 50%, #29595b 0, #29595b 75%, #275253 0 )',
+    stripeBg:
+      'linear-gradient(to bottom, rgb(16 36 38 / 70%) 0%, rgb(31 87 88 / 0%) 100% )',
   },
 };
 
@@ -119,5 +123,9 @@ export const darkColors: Colors = {
     bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',
     progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',
     card: 'linear-gradient(270deg, #162D37, #0B1C22, #0A161B)',
+    stripe:
+      'linear-gradient(45deg, #29595b 25%, #275253 0, #275253 50%, #29595b 0, #29595b 75%, #275253 0 )',
+    stripeBg:
+      'linear-gradient(to bottom, rgb(16 36 38 / 70%) 0%, rgb(31 87 88 / 0%) 100% )',
   },
 };
