@@ -60,6 +60,8 @@ declare namespace Api {
       exp: number; // 当前经验值
       can_provided_exp: number; // 销毁产生经验值
       in_queue: boolean; //星球是否有任务队列
+      power: number; // 战斗力
+      arm_count: number; // 兵种总数
     }
 
     interface UpgradePlanetInfo {

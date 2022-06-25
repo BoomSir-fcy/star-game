@@ -121,7 +121,7 @@ const AlliancePlanet: React.FC<{
           <CenterBox className='ball_c'>
             <Flex flexDirection='column' alignItems='center' height='100%'>
               <Text mt='18px' fontSize='14px'>
-                {t('Combat Power')}
+                {t('Power')}
               </Text>
               <MarkText fontSize='20px' fontStyle='normal' bold>
                 {alliance.power}

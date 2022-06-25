@@ -17,7 +17,7 @@ const NewPlantLeague: React.FC = () => {
   const [ChoosePlant, setChoosePlant] = useState<orderInfo>();
 
   return (
-    <Layout height='60vh'>
+    <Layout height='75vh'>
       <AlliancePlanet
         setChoosePlant={e => {
           setChoosePlant(e);

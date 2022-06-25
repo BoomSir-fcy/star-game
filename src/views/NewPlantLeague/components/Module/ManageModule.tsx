@@ -35,7 +35,7 @@ const ManageModule: React.FC<{
     //   return;
     // }
     // callbackGuide();
-    navigate(`/star/planet?hide=true&choose=${id || 1}`);
+    navigate('/choose-planet');
   };
 
   const gotoPlantDetail = useCallback(
