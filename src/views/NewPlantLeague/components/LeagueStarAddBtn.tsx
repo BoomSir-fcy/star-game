@@ -1,7 +1,7 @@
 import Globe from 'components/Globe';
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Text, BoxProps, Flex } from 'uikit';
+import { Text, BoxProps, Flex, MarkText, Box } from 'uikit';
 import { QualityColor } from 'uikit/theme/colors';
 import { Qualities, qualities } from 'uikit/theme/types';
 
@@ -92,6 +92,13 @@ const RemoveIcon = styled.img`
   /* font-size: 60px; */
   z-index: 2;
 `;
+
+const LeveBox = styled(Box)`
+  position: relative;
+  z-index: 1;
+  padding-top: 40px;
+`;
+
 interface StarAddBtnProps extends BoxProps {
   active?: boolean;
   owner?: string;
@@ -108,9 +115,10 @@ interface StarAddBtnProps extends BoxProps {
   name?: string;
   ball?: boolean;
   ballWorking?: boolean;
+  resources?: boolean;
 }
 
-const StarAddBtn: React.FC<StarAddBtnProps> = ({
+const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
   active,
   owner,
   No,
@@ -127,6 +135,7 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
   name,
   ball,
   ballWorking,
+  resources,
   ...props
 }) => {
   const { className, ...restProps } = props;
@@ -195,27 +204,15 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
           <Text small>{owner}</Text>
         </OwnerFlex>
       )}
-      {/* {No && (
-        <>
-          <NumberFlex>
-            <Text fontSize='20px' shadow='primary'>
-              No.{No}
-            </Text>
-            {Leve && (
-              <Text ml='6px' fontSize='20px' shadow='primary'>
-                LV {Leve}
-              </Text>
-            )}
-          </NumberFlex>
-          {name && (
-            <Text ml='6px' fontSize='20px' shadow='primary'>
-              {name}
-            </Text>
-          )}
-        </>
-      )} */}
+      {Leve && (
+        <LeveBox>
+          <MarkText fontStyle='normal' fontSize='20px' bold>
+            LV {Leve}
+          </MarkText>
+        </LeveBox>
+      )}
       {renderChildren}
     </StyledStar>
   );
 };
-export default StarAddBtn;
+export default LeagueStarAddBtn;

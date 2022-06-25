@@ -40,7 +40,11 @@ export const InProgress: React.FC<{
   const dispatch = useDispatch();
 
   return (
-    <GraphicsCard style={{ padding: 0, border: 'none' }}>
+    <GraphicsCard
+      style={{ padding: 0, border: 'none' }}
+      width='max-content'
+      height='max-content'
+    >
       <CardBox>
         <Box>
           <Flex mb='10px' justifyContent='space-between' alignItems='baseline'>

@@ -101,7 +101,7 @@ const AlliancePlanet: React.FC<{
       return;
     }
     // callbackGuide();
-    navigate(`/star/planet?hide=true&choose=${id || 1}`);
+    navigate('/choose-planet');
   };
 
   useEffect(() => {
@@ -160,6 +160,11 @@ const AlliancePlanet: React.FC<{
                   url={item.url}
                   No={item.No}
                   Leve={item.Leve}
+                  resources={
+                    !item.stone_enough ||
+                    !item.population_enough ||
+                    !item.energy_enough
+                  }
                 />
               </Box>
             ))}
