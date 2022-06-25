@@ -9,21 +9,31 @@ import { parseZip } from 'utils';
 import { useDispatch } from 'react-redux';
 import { setPKInfo, setPKRes } from 'state/game/reducer';
 import { useWeb3React } from '@web3-react/core';
+import { PlunderInfo } from 'state/types';
 import { PkResult } from './components/PkResult';
 
 dayjs.extend(utc);
 
-const CardBox = styled(Card)`
-  width: 820px;
-  height: 240px;
+const CardBox = styled(Flex)`
+  min-width: 490px;
+  height: 100%;
   padding: 22px 30px;
-  margin-bottom: 20px;
+  border-right: 1px solid #4ffffb;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const PlayImg = styled.img``;
 
+const TextStyle = styled(Text)`
+  font-size: 16px;
+  width: 33%;
+`;
+
+const FlexStyle = styled(Flex)``;
+
 export const PkBox: React.FC<{
-  info: any;
+  info: PlunderInfo;
 }> = ({ info }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
@@ -82,7 +92,42 @@ export const PkBox: React.FC<{
     <CardBox>
       <Flex>
         <PkResult result={pkRes} />
-        <Flex ml='29px' flex='1' flexDirection='column'>
+        <Flex
+          ml='46px'
+          mr='80px'
+          flexDirection='column'
+          justifyContent='space-around'
+        >
+          <Box>
+            <Text>{t('战斗星球编号')}</Text>
+            <Text>NO.{info.id}</Text>
+          </Box>
+          <Box>
+            <Text>{t('结束时间')}</Text>
+            <Text>
+              {dayjs.unix(info.createTime).format('YY-MM-DD HH:mm:ss')}
+            </Text>
+          </Box>
+        </Flex>
+        <Link
+          onClick={event => {
+            try {
+              console.log(parseZip(info.detail), 'parseZip(info.detail)');
+              dispatch(setPKInfo(parseZip(info.detail)));
+              dispatch(setPKRes(pkRes));
+            } catch (error) {
+              event.preventDefault();
+              console.log('解析报错');
+              console.error(error);
+            }
+          }}
+          to={`/plunder-pk?id=${info.id}&pid0=${
+            !isFrom ? info.fromAddress : info.toAddress
+          }`}
+        >
+          <PlayImg src='/images/battleReport/play.png' alt='' />
+        </Link>
+        {/* <Flex ml='29px' flex='1' flexDirection='column'>
           <Flex alignItems='center' justifyContent='space-between'>
             <Text fontSize='20px'>
               {dayjs.unix(info.createTime).format('YY-MM-DD HH:mm:ss')}
@@ -123,8 +168,44 @@ export const PkBox: React.FC<{
               </Flex>
             ))}
           </Flex>
-        </Flex>
+        </Flex> */}
       </Flex>
+      <Box>
+        <TextStyle mb='8px'>{t('战斗损耗 ')}:</TextStyle>
+        <FlexStyle mb='8px'>
+          <TextStyle>
+            -{isFrom ? info.blueLoseUnit : info.redLoseUnit} {t('战斗单位')}
+          </TextStyle>
+          <TextStyle>
+            -{isFrom ? info.lostDurability : 0} {t('建筑耐久度')}
+          </TextStyle>
+        </FlexStyle>
+        <FlexStyle>
+          <TextStyle>
+            -{GetValue(0, info.incomeEnergy)} {t('Energy')}
+          </TextStyle>
+          <TextStyle>
+            -{GetValue(0, info.incomeStone)} {t('Ore')}
+          </TextStyle>
+          <TextStyle>
+            -{GetValue(0, info.incomePopulation)} {t('Population')}
+          </TextStyle>
+        </FlexStyle>
+      </Box>
+      <Box>
+        <TextStyle mb='8px'>{t('获得资源 ')}:</TextStyle>
+        <FlexStyle>
+          <TextStyle>
+            +{GetValue(0, info.incomeEnergy)} {t('Energy')}
+          </TextStyle>
+          <TextStyle>
+            +{GetValue(0, info.incomeEnergy)} {t('Ore')}
+          </TextStyle>
+          <TextStyle>
+            +{GetValue(0, info.incomeEnergy)} {t('Population')}
+          </TextStyle>
+        </FlexStyle>
+      </Box>
     </CardBox>
   );
 };

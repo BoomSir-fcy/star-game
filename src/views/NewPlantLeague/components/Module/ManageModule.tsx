@@ -35,7 +35,7 @@ const ManageModule: React.FC<{
     //   return;
     // }
     // callbackGuide();
-    navigate(`/star/planet?hide=true&choose=${id || 1}`);
+    navigate('/choose-planet');
   };
 
   const gotoPlantDetail = useCallback(
@@ -52,7 +52,6 @@ const ManageModule: React.FC<{
           <Box position='relative'>
             <Globe
               scale='xl'
-              margin='auto'
               shadow={QualityColor[planetInfo?.rarity]}
               url={planetInfo?.picture1}
             />

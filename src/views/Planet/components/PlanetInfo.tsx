@@ -1,7 +1,13 @@
+import BigNumber from 'bignumber.js';
+import { RaceAvatar } from 'components';
 import StarCom from 'components/StarCom';
+import { useTranslation } from 'contexts/Localization';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Text, Flex, Box, GraphicsCard, Image } from 'uikit';
+import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
+import { formatDisplayApr } from 'utils/formatBalance';
 
 const InfoFlex = styled(Flex)`
   margin-top: 13px;
@@ -20,27 +26,35 @@ const ImageStyled = styled.img`
 const TextStyled = styled(Text)`
   width: max-content;
 `;
-const PlanetInfo = () => {
+const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <GraphicsCard padding='29px 37px' borderWidth={2}>
       <Flex justifyContent='space-between'>
         <Box>
           <Flex mb='17px' justifyContent='center' alignItems='center'>
-            <Text fontSize='24px' bold>
-              传说
+            <Text color={QualityColor[info?.rarity]} fontSize='24px' bold>
+              {info?.rarity ? t(`rarity-${info?.rarity}`) : ''}
             </Text>
             <Text ml='17px' fontSize='18px' bold>
-              Lv1
+              Lv{info?.level}
             </Text>
           </Flex>
-          <StarCom showUnion />
+          <StarCom
+            quality={info?.rarity}
+            picture={info?.picture}
+            picture1={info?.picture1}
+            showUnion={info?.in_alliance !== 0}
+            style={{ flexShrink: 1 }}
+          />
         </Box>
 
         <Box ml='45px'>
           <Flex justifyContent='flex-end' alignItems='center'>
             <Text>战斗力</Text>
             <Text ml='20px' mark fontStyle='normal' fontSize='20px' bold>
-              6,633,962
+              {info?.power}
             </Text>
             <Image
               ml='10px'
@@ -58,15 +72,20 @@ const PlanetInfo = () => {
                     产能
                   </TextStyled>
                   <TextStyled ml='10px' small ellipsis>
-                    0.32/s
+                    {formatDisplayApr(new BigNumber(info?.oreYield).toNumber())}
+                    /s
                   </TextStyled>
                 </Flex>
                 <Flex alignItems='center'>
-                  <TextStyled color='textTips' small>
+                  <TextStyled
+                    color='textTips'
+                    small
+                    title={`${info?.stone}/${info?.max_stone}`}
+                  >
                     矿石
                   </TextStyled>
                   <TextStyled ml='10px' ellipsis small>
-                    10/100
+                    {info?.stone}/{info?.max_stone}
                   </TextStyled>
                 </Flex>
               </Box>
@@ -79,15 +98,23 @@ const PlanetInfo = () => {
                     产能
                   </TextStyled>
                   <TextStyled ml='10px' ellipsis small>
-                    0.32/s
+                    {formatDisplayApr(
+                      new BigNumber(info?.populationYield).toNumber(),
+                    )}
+                    /s
                   </TextStyled>
                 </Flex>
                 <Flex alignItems='center'>
                   <TextStyled color='textTips' small>
                     香料
                   </TextStyled>
-                  <TextStyled ml='10px' small ellipsis>
-                    10/100
+                  <TextStyled
+                    ml='10px'
+                    small
+                    ellipsis
+                    title={`${info?.population}/${info?.max_population}`}
+                  >
+                    {info?.population}/{info?.max_population}
                   </TextStyled>
                 </Flex>
               </Box>
@@ -100,15 +127,23 @@ const PlanetInfo = () => {
                     产能
                   </TextStyled>
                   <TextStyled ml='10px' ellipsis small>
-                    0.32/s
+                    {formatDisplayApr(
+                      new BigNumber(info?.energyYield).toNumber(),
+                    )}
+                    /s
                   </TextStyled>
                 </Flex>
                 <Flex alignItems='center'>
                   <TextStyled color='textTips' small>
                     能量
                   </TextStyled>
-                  <TextStyled ml='10px' ellipsis small>
-                    10/100
+                  <TextStyled
+                    ml='10px'
+                    ellipsis
+                    small
+                    title={`${info?.energy}/${info?.max_energy}`}
+                  >
+                    {info?.energy}/{info?.max_energy}
                   </TextStyled>
                 </Flex>
               </Box>
@@ -119,7 +154,7 @@ const PlanetInfo = () => {
                   建筑数
                 </Text>
                 <Text ml='8px' small>
-                  20
+                  {info?.build_count}
                 </Text>
               </Flex>
               <Flex>
@@ -127,22 +162,34 @@ const PlanetInfo = () => {
                   兵种总数
                 </Text>
                 <Text ml='8px' small>
-                  20
+                  {info?.arm_count}
                 </Text>
               </Flex>
             </InfoValueFlex>
             <InfoValueFlex alignItems='center'>
-              <Image
+              <RaceAvatar
                 ml='4px'
-                width={46}
-                height={46}
-                src='/images/commons/human.png'
+                width='46px'
+                height='46px'
+                race={info?.race}
               />
-              <Text fontSize='18px' ml='15px' bold>
-                人族
+              <Text
+                color={RaceTypeColor[info?.race]}
+                fontSize='18px'
+                ml='15px'
+                bold
+              >
+                {info?.race ? t(`race-${info?.race}`) : ''}
               </Text>
             </InfoValueFlex>
-            <Button width='212px' height='53px' variant='purple'>
+            <Button
+              width='212px'
+              height='53px'
+              variant='purple'
+              onClick={() => {
+                navigate(`/star?id=${info?.id}`);
+              }}
+            >
               <Text color='textPrimary' bold>
                 管理
               </Text>

@@ -62,9 +62,9 @@ const StyledCard = styled(Card)`
   padding: 26px 20px;
 `;
 
-interface NowPlanetInfo extends Api.Planet.PlanetInfo {
-  max_level?: number;
-}
+// interface NowPlanetInfo extends Api.Planet.PlanetInfo {
+//   max_level?: number;
+// }
 
 const Upgrade = () => {
   const { toastSuccess, toastError } = useToast();
@@ -88,7 +88,7 @@ const Upgrade = () => {
     estimate_planet_info: {} as Api.Planet.PlanetInfo,
     material_planet_num: 5,
     now_max_building_level: 1,
-    now_planet_info: {} as NowPlanetInfo,
+    now_planet_info: {} as Api.Planet.PlanetInfo,
     space_utilization: '0',
     upgrade_time: 0,
     upgrade_exp: 0,

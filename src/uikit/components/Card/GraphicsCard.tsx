@@ -15,19 +15,11 @@ const GraphicsBox = styled(Box)<GraphicsCardProps>`
   box-shadow: inset 0px 4px 18px 0px rgba(0, 0, 0, 0.31);
   ${({ theme, radius }) => radius && `border-radius: ${theme.radii.card};`}
   z-index: 1;
-  ${({ stripe }) =>
+  ${({ theme, stripe }) =>
     stripe &&
     `
-      background: linear-gradient(
-      45deg,
-      #29595b 25%,
-      #275253 0,
-      #275253 50%,
-      #29595b 0,
-      #29595b 75%,
-      #275253 0
-    );
-    background-size: 10px 10px;
+      background: ${theme.colors.gradients.stripe};
+      background-size: 10px 10px;
     `}
 
   ::before {
@@ -41,13 +33,7 @@ const GraphicsBox = styled(Box)<GraphicsCardProps>`
     height: 100%;
     margin: auto;
     background: ${({ theme, stripe }) =>
-      stripe
-        ? `linear-gradient(
-      to bottom,
-      rgb(16 36 38 / 70%) 0%,
-      rgb(31 87 88 / 0%) 100%
-    )`
-        : theme.colors.gradients.card};
+      stripe ? theme.colors.gradients.stripeBg : theme.colors.gradients.card};
     ${({ theme, radius }) => radius && `border-radius: ${theme.radii.card};`}
     z-index: -1;
   }

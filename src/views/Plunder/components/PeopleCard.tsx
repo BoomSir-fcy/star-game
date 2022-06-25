@@ -78,7 +78,7 @@ const PeopleCard: React.FC<PeopleCardProps> = ({
         </Text>
         <PlunderAvatar src={avatar} />
         <TipText mt='6px' textAlign='center'>
-          {t('Combat Power')}
+          {t('Power')}
         </TipText>
         <Flex mt='-5px' justifyContent='center' alignItems='center'>
           <Image src='/images/plunder/fc.png' width={18} height={18} />

@@ -60,6 +60,12 @@ declare namespace Api {
       exp: number; // 当前经验值
       can_provided_exp: number; // 销毁产生经验值
       in_queue: boolean; //星球是否有任务队列
+      max_level: number; // 最大等级
+      stone_enough: boolean; // 矿石是否足够
+      energy_enough: boolean; // 能量是否足够
+      population_enough: boolean; // 香料是否足够
+      power: number; // 战斗力
+      arm_count: number; // 兵种数量
     }
 
     interface UpgradePlanetInfo {

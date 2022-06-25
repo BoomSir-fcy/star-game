@@ -69,6 +69,7 @@ const DropDownListContainer = styled.div<{ scale?: Scale }>`
 const DropDownContainer = styled.div<{
   isOpen: boolean;
   width?: string;
+  height?: string;
   scale?: Scale;
   childrenHeight?: string;
   direction?: Direction;
@@ -76,31 +77,63 @@ const DropDownContainer = styled.div<{
   position: relative;
   width: ${({ width }) => width};
   min-width: ${({ scale }) => scale && scaleVariants[scale].minWidth};
-  height: 65px;
+  height: ${({ height }) => height};
 
   padding: 8px 16px;
-  background: ${({ theme }) => theme.colors.input};
-  border: 2px solid ${({ theme }) => theme.colors.border};
+  /* background: ${({ theme }) => theme.colors.input}; */
+  border: 1px solid ${({ theme }) => theme.colors.borderPrimary};
   box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
-  border-radius: ${({ theme }) => theme.radii.card};
-
+  /* border-radius: ${({ theme }) => theme.radii.card}; */
+  background: ${({ theme }) => theme.colors.gradients.stripe};
+  background-size: 10px 10px;
   user-select: none;
   cursor: pointer;
+  z-index: 1;
+
+  ::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    background: ${({ theme }) => theme.colors.gradients.stripeBg};
+    z-index: -1;
+  }
   ${props =>
     props.isOpen &&
     css`
       ${DropDownHeader} {
-        border-bottom: 1px solid ${({ theme }) => theme.colors.input};
-        border-radius: 16px 16px 0 0;
+        /* border-bottom: 1px solid ${({ theme }) => theme.colors.input};
+        border-radius: 16px 16px 0 0; */
       }
 
       ${DropDownListContainer} {
         height: auto;
         transform: scaleY(1);
         opacity: 1;
-        border: 1px solid ${({ theme }) => theme.colors.border};
-        border-top-width: 0;
-        border-radius: 0 0 16px 16px;
+        border: 1px solid ${({ theme }) => theme.colors.borderPrimary};
+        background: ${({ theme }) => theme.colors.gradients.stripe};
+        background-size: 10px 10px;
+        z-index: 1;
+        /* border-top-width: 0;
+        border-radius: 0 0 16px 16px; */
+        ::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          margin: auto;
+          background: ${({ theme }) => theme.colors.gradients.stripeBg};
+          z-index: -1;
+        }
       }
     `}
   ${props =>
@@ -113,7 +146,7 @@ const DropDownContainer = styled.div<{
         overflow-y: auto;
         transform: scaleY(1);
         opacity: 1;
-        border: 1px solid ${({ theme }) => theme.colors.border};
+        border: 1px solid ${({ theme }) => theme.colors.borderPrimary};
         border-top-width: 0;
         border-radius: 0 0 16px 16px;
       }
@@ -124,14 +157,14 @@ const DropDownContainer = styled.div<{
     props.direction === directions.UP &&
     css`
       ${DropDownListContainer} {
-        bottom: 60px;
+        bottom: 55px;
         max-height: ${props.childrenHeight};
         overflow-y: auto;
         transform: scaleY(1);
         opacity: 1;
-        border: 1px solid ${({ theme }) => theme.colors.border};
-        border-bottom-width: 0;
-        border-radius: 16px 16px 0 0;
+        border: 1px solid ${({ theme }) => theme.colors.borderPrimary};
+        /* border-bottom-width: 0;
+        border-radius: 16px 16px 0 0; */
       }
     `}
     ${space}
@@ -150,7 +183,8 @@ const ListItem = styled.li`
   padding: 10px 16px;
   list-style: none;
   &:hover {
-    background: ${({ theme }) => theme.colors.inputSelect};
+    /* background: ${({ theme }) => theme.colors.gradients.card}; */
+    background: #34a6a8;
   }
 `;
 
@@ -164,6 +198,7 @@ export interface SelectProps extends SpaceProps {
   childrenHeight?: string;
   idKey?: string;
   direction?: Direction; // 方向
+  height?: string;
 }
 
 export interface OptionProps {
@@ -183,6 +218,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
   scale,
   width,
   children,
+  height = '50px',
   direction = 'down',
   childrenHeight = '150px',
   ...props
@@ -242,6 +278,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
       scale={scale}
       isOpen={isOpen}
       width={width}
+      height={height}
       direction={direction}
       ref={containerRef}
       {...props}
@@ -250,7 +287,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
         <DropDownHeader className='select-header' onClick={toggling}>
           {options[selectedOptionIndex]?.icon &&
             options[selectedOptionIndex]?.icon}
-          <Text ellipsis color='textSubtle' small>
+          <Text ellipsis small>
             {options[selectedOptionIndex]?.label}
           </Text>
           {children}
@@ -263,7 +300,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
             index !== selectedOptionIndex ? (
               <ListItem onClick={onOptionClicked(index)} key={option.label}>
                 {option?.icon && option.icon}
-                <Text ellipsis color='textSubtle' small>
+                <Text ellipsis small>
                   {option.label}
                 </Text>
               </ListItem>
