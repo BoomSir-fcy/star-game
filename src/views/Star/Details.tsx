@@ -192,6 +192,8 @@ const Details = () => {
     };
   }, [dispatch, getWorkQueue]);
 
+  console.log(activeBuilder);
+
   return (
     <>
       <Container>
@@ -232,7 +234,7 @@ const Details = () => {
           style={{ position: 'absolute', top: '35%', left: '20%' }}
           onClick={() =>
             setStateBuilding(p => {
-              p.visible = true;
+              p.visible = !stateBuilding.visible;
             })
           }
         >
