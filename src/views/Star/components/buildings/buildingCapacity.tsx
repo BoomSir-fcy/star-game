@@ -23,7 +23,7 @@ export const BuildingCapacity: React.FC<{
   return (
     <Box pb='40px'>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>
-        产能详情
+        {t('Capacity details')}
       </MarkText>
       <Flex width='100%' flexDirection='column'>
         <Flex width='100%' justifyContent='space-between'>
