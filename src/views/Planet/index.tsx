@@ -1,12 +1,51 @@
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { Globe } from 'components';
-import React, { useEffect, useRef, useCallback } from 'react';
 import { Box, Flex, Spinner, Text, Image } from 'uikit';
 import { useImmer } from 'use-immer';
+import { fetchMePlanetAsync } from 'state/planet/fetchers';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'contexts/Localization';
+import { useStore } from 'state';
 import { PlanetInfo, Search } from './components';
 import { DragBox, PlanetBox, GlobeFlex, Desc, LeftBox } from './styled';
+import GlobeFlexList from './components/GlobeFlexList';
 
 const PlanetList = () => {
   const pageRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [visibleInfo, setVisibleInfo] = useState(false);
+  const [activePlanet, setActivePlanet] =
+    useState<Api.Planet.PlanetInfo | null>(null);
+  const [state, setState] = useImmer({
+    page: 1,
+    page_size: 10,
+    token: '',
+    race: 0,
+    rarity: 0,
+    level: 0,
+  });
+  const [planetList, setPlanetList] = useState([]);
+  const mePlanet = useStore(p => p.planet.mePlanet);
+  useEffect(() => {
+    setPlanetList(mePlanet);
+  }, [mePlanet]);
+
+  const init = useCallback(() => {
+    dispatch(
+      fetchMePlanetAsync({
+        ...state,
+      }),
+    );
+  }, [dispatch, state]);
+
+  useEffect(() => {
+    init();
+  }, [state.race, state.rarity, state.token, state.level, init]);
+
+  // 列表左右拖动
   const [targetDrag, setTargetDrag] = useImmer({
     isDown: false,
     coord: {
@@ -65,61 +104,31 @@ const PlanetList = () => {
     };
   }, [pageRef, scrollPointerdown, scrollPointerup, scrollPointermove]);
 
-  const planetList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // 测试用
+  // const [planetList] = React.useState(
+  //   Array.from(new Array(20)).map((item, index) => index),
+  // );
 
   return (
     <DragBox className={targetDrag.isDown ? 'no-select' : ''} ref={pageRef}>
       <PlanetBox>
-        <GlobeFlex>
-          {!planetList.length && (
-            <Flex width='100%' alignItems='center' justifyContent='center'>
-              <Spinner />
-            </Flex>
-          )}
-          {planetList.length > 0 &&
-            planetList.map((item, index) => (
-              <Box className={`star star-${index} `} key={item}>
-                {/* <Text
-                  className='star-desc'
-                  mb='6px'
-                  textAlign='center'
-                  fontSize='26px'
-                  bold
-                >
-                  传说
-                </Text> */}
-                <Box className='ball animation'>
-                  <Desc>
-                    <Text textAlign='center' fontSize='26px' bold>
-                      {index}
-                    </Text>
-                  </Desc>
-                  <Globe rotate={false} url='/images/star/32.jpg' />
-                </Box>
-
-                {/* <Flex className='star-desc' mt='30px' alignItems='center'>
-                  <Image
-                    width={44}
-                    height={44}
-                    src='/images/commons/zerg.png'
-                  />
-                  <Box ml='9px'>
-                    <Text fontSize='18px' bold>
-                      虫族
-                    </Text>
-                    <Text mt='10px' small>
-                      Token: 2650....26x226
-                    </Text>
-                  </Box>
-                </Flex> */}
-              </Box>
-            ))}
-        </GlobeFlex>
+        <GlobeFlexList
+          setVisibleInfo={setVisibleInfo}
+          setActivePlanet={setActivePlanet}
+          planetList={planetList}
+          activePlanet={activePlanet}
+        />
       </PlanetBox>
 
       <LeftBox>
-        <Search />
-        <PlanetInfo />
+        <Search
+          onSearchCallback={params => {
+            setState(p => {
+              return { ...p, ...params };
+            });
+          }}
+        />
+        {visibleInfo && <PlanetInfo info={activePlanet} />}
       </LeftBox>
     </DragBox>
   );

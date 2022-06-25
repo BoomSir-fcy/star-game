@@ -102,6 +102,7 @@ export const GameThing: React.FC<{
   onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragEnter?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragEnd?: (e: React.DragEvent<HTMLDivElement>) => void;
+  onPointerDown?: (e: React.PointerEvent<HTMLDivElement>) => void;
 }> = ({
   scale = scales.SM,
   itemData,
@@ -118,6 +119,7 @@ export const GameThing: React.FC<{
   onDragOver,
   onDragEnter,
   onDragEnd,
+  onPointerDown,
 }) => {
   const sizeBox = scaleVariants[scale];
 
@@ -133,6 +135,7 @@ export const GameThing: React.FC<{
         onDragOver={onDragOver}
         onDragEnter={onDragEnter}
         onDragEnd={onDragEnd}
+        onPointerDown={onPointerDown}
         active={active}
         border={border}
         round={round}

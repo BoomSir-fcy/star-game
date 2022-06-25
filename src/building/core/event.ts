@@ -1,27 +1,27 @@
-import Soldier from './Soldier';
+import Builder from './Builder';
 
-export type SoldierCustomEvent = CustomEvent<{
-  soldier: Soldier;
+export type BuilderCustomEvent = CustomEvent<{
+  builder: Builder;
 }>;
 
 export const eventsType = {
-  REMOVE_ACTIVE_SOLDIER: 'removeActiveSoldier',
-  ADD_ACTIVE_SOLDIER: 'addActiveSoldier',
-  UPDATE_SOLDIER_POSITION: 'updateSoldierPosition',
+  REMOVE_ACTIVE_SOLDIER: 'removeActiveBuilder',
+  ADD_ACTIVE_SOLDIER: 'addActiveBuilder',
+  UPDATE_SOLDIER_POSITION: 'updateBuilderPosition',
 };
 
-export const getSoliderEvent = (
+export const getBuilderEvent = (
   type: string,
-  soldier: Soldier,
-): SoldierCustomEvent => {
-  return new CustomEvent(type, { detail: { soldier } });
+  builder: Builder,
+): BuilderCustomEvent => {
+  return new CustomEvent(type, { detail: { builder } });
 };
 
-export const getRemoveActiveSoliderEvent = () =>
+export const getRemoveActiveBuilderEvent = () =>
   new CustomEvent(eventsType.REMOVE_ACTIVE_SOLDIER);
 
-export const getAddActiveSoliderEvent = (soldier: Soldier) =>
-  getSoliderEvent(eventsType.ADD_ACTIVE_SOLDIER, soldier);
+export const getAddActiveBuilderEvent = (builder: Builder) =>
+  getBuilderEvent(eventsType.ADD_ACTIVE_SOLDIER, builder);
 
-export const getUpdateSoldierPosition = (soldiers: Soldier[]) =>
-  new CustomEvent(eventsType.UPDATE_SOLDIER_POSITION, { detail: { soldiers } });
+export const getUpdateBuilderPosition = (builders: Builder[]) =>
+  new CustomEvent(eventsType.UPDATE_SOLDIER_POSITION, { detail: { builders } });

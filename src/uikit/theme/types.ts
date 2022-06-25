@@ -58,6 +58,8 @@ export type Gradients = {
   bubblegum: string;
   progress: string;
   card: string;
+  stripe: string;
+  stripeBg: string;
 };
 
 export const qualities = {
