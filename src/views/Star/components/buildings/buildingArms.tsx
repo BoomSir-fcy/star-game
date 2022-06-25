@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Flex, Box, GraphicsCard, MarkText, Text, Image } from 'uikit';
 import { getSpriteRes } from 'game/core/utils';
 import { useImmer } from 'use-immer';
+import { useTranslation } from 'contexts/Localization';
 import { ArmsInfo } from '../arms';
 
 const ArmsContent = styled(Box)`
@@ -58,6 +59,7 @@ const ArmsPreview: React.FC<{
 export const BuildingArms: React.FC<{
   currnet_building: Api.Building.BuildingDetail;
 }> = ({ currnet_building }) => {
+  const { t } = useTranslation();
   const [state, setState] = useImmer({
     visible: false,
     index: '' as number | string,
@@ -67,7 +69,7 @@ export const BuildingArms: React.FC<{
   return (
     <Box style={{ position: 'relative' }}>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
-        兵种详情
+        {t('Arm details')}
       </MarkText>
       <Flex flexWrap='wrap'>
         {(currnet_building?.petri_dish?.arms ?? []).map((item, index) => (

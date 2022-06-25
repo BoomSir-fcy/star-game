@@ -41,8 +41,8 @@ const scaleVariants = {
     },
   },
   [scales.SM]: {
-    width: 68,
-    height: 68,
+    width: 110,
+    height: 110,
     text: {
       top: 5,
       left: 13,
@@ -58,6 +58,7 @@ const Container = styled(GraphicsCard)<{
 }>`
   cursor: pointer;
   overflow: visible;
+  padding: 0;
   ${({ theme, active, border, round }) => {
     if (border) {
       return css`
@@ -124,6 +125,8 @@ export const GameThing: React.FC<{
     <Flex justifyContent='center' flexDirection='column'>
       <Container
         radius
+        width={`${sizeBox.width}px`}
+        height={`${sizeBox.height}px`}
         draggable={draggable}
         onDragStart={onDragStart}
         onDrop={onDrop}
@@ -135,7 +138,6 @@ export const GameThing: React.FC<{
         round={round}
         onClick={onClick}
         data-item={JSON.stringify(itemData)}
-        className='game-thing'
       >
         {level && (
           <Level shadow='primary' bold style={sizeBox?.text}>

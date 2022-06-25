@@ -34,7 +34,7 @@ const Content = styled(Box)`
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid #4ffffb;
   opacity: 0;
-  transition: all ease;
+  transition: all 0.5s ease;
   &.active {
     opacity: 1;
     left: 0;
@@ -47,20 +47,18 @@ const Content = styled(Box)`
   }
   @keyframes bounceSideInLeft {
     0% {
-      transform: translate3d(-200px, 0, 0);
+      transform: translate(-200px, 0);
     }
     100% {
-      transform: translate3d(0, 0, 0);
+      transform: translate(0, 0);
     }
   }
   @keyframes bounceSideInRight {
     0% {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
+      transform: translate(0, 0);
     }
     100% {
-      opacity: 0;
-      transform: translate3d(-500px, 0, 0);
+      transform: translate(-500px, 0);
     }
   }
 `;

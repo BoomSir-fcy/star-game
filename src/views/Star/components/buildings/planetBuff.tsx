@@ -37,7 +37,7 @@ export const PlanetBuff: React.FC<{
         style={{ margin: 'auto', textAlign: 'center' }}
       >
         <MarkText fontSize='14px' fontStyle='normal' bold>
-          {t('BUFF加成')}
+          {t('buff bonus')}
         </MarkText>
       </Box>
       <Warp flexWrap='wrap'>
