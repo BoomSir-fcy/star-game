@@ -124,6 +124,7 @@ export interface GalaxyState {
 }
 export interface PlanetState {
   mePlanet: Api.Planet.PlanetInfo[];
+  mePlanetLoading: boolean;
   planetInfo: { [x: number]: Api.Planet.PlanetInfo };
   activePlanet: Api.Planet.PlanetInfo;
   activeMaterialMap: { [x: number]: Api.Planet.PlanetInfo | null };

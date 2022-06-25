@@ -5,7 +5,9 @@ import { useTranslation } from 'contexts/Localization';
 import SearchInput from './SearchInput';
 import SearchSelect from './SearchSelect';
 
-const Search = () => {
+const Search: React.FC<{ onSearchCallback: (params: any) => void }> = ({
+  onSearchCallback,
+}) => {
   const { t } = useTranslation();
   const [showSelectSearch, setShowSelectSearch] = useState(false);
 
@@ -17,20 +19,33 @@ const Search = () => {
       justifyContent='space-between'
     >
       {showSelectSearch ? (
-        <SearchSelect />
+        <SearchSelect
+          onSelectCallback={obj => {
+            onSearchCallback(obj);
+          }}
+        />
       ) : (
         <SearchInput
           onEndCallback={value => {
-            console.log('value', value);
+            onSearchCallback({ token: value });
           }}
         />
       )}
 
       <Button
+        ml='10px'
         width='107px'
         height='50px'
         variant='purple'
-        onClick={() => setShowSelectSearch(p => !p)}
+        onClick={() => {
+          setShowSelectSearch(p => !p);
+          onSearchCallback({
+            token: '',
+            race: 0,
+            rarity: 0,
+            level: 0,
+          });
+        }}
       >
         <Text color='textPrimary' bold>
           切换
