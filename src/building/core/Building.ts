@@ -157,11 +157,12 @@ class Building extends EventTarget {
         }
       })
       .on('pointerup', event => {
-        console.log(12222222);
         if (builder.moved) {
           const res = this.onDragEndBuilder(event, builder);
           if (res) {
             this.dispatchEvent(getUpdateBuilderPosition(this.builders));
+            this.dispatchEvent(getAddActiveBuilderEvent(builder));
+            console.log('getAddActiveBuilderEvent', builder)
           }
         }
         this.activeBuilderFlag = true;
@@ -260,6 +261,7 @@ class Building extends EventTarget {
             detail: { builders: this.builders },
           }),
         );
+        this.dispatchEvent(getAddActiveBuilderEvent(builder));
       }
       this.dragPreBuilder.setDragging(false);
       this.dragPreBuilder.container.visible = false;

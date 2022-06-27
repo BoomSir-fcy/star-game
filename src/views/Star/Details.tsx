@@ -104,6 +104,7 @@ const Details = () => {
   }, [building, ref]);
 
   const activeBuilder = useActiveBuilder(building);
+  console.log(activeBuilder, 'activeBuilder')
 
   const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
@@ -263,7 +264,7 @@ const Details = () => {
       <ThingUpgradesModal
         visible={upgrad.visible}
         planet_id={id}
-        onChange={async () => {}}
+        onChange={async () => { }}
         onClose={() => {
           dispatch(
             storeAction.upgradesBuildingModal({
@@ -278,7 +279,7 @@ const Details = () => {
       <ThingDestoryModal
         visible={destory.visible}
         planet_id={id}
-        onChange={() => {}}
+        onChange={() => { }}
         onClose={() =>
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),
