@@ -35,66 +35,55 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
   const { t } = useTranslation();
 
   return (
-    <Flex flexDirection='column'>
-      <Text bold fontSize='20px' shadow='primary'>
-        {t('Upgrade consumption')}
-      </Text>
-      <Flex flexWrap='wrap'>
-        <ItemFlex>
-          <StyledImage
-            width={57}
-            height={53}
-            src='/images/commons/icon/icon_minera.png'
-          />
-          <ItemInfoFlex>
-            <Text small color='textSubtle'>
-              {t('Ore')}
-            </Text>
-            <Text
-              fontSize='22px'
-              color={planetInfo?.stone < stone ? 'warning' : ''}
-            >
-              -{stone}
-            </Text>
-          </ItemInfoFlex>
-        </ItemFlex>
-        <ItemFlex>
-          <StyledImage
-            width={57}
-            height={53}
-            src='/images/commons/icon/icon_spice.png'
-          />
-          <ItemInfoFlex>
-            <Text small color='textSubtle'>
-              {t('Population')}
-            </Text>
-            <Text
-              fontSize='22px'
-              color={planetInfo?.population < spices ? 'warning' : ''}
-            >
-              -{spices}
-            </Text>
-          </ItemInfoFlex>
-        </ItemFlex>
-        <ItemFlex>
-          <StyledImage
-            width={57}
-            height={53}
-            src='/images/commons/icon/icon_energy.png'
-          />
-          <ItemInfoFlex>
-            <Text small color='textSubtle'>
-              {t('Energy')}
-            </Text>
-            <Text
-              fontSize='22px'
-              color={planetInfo?.energy < energy ? 'warning' : ''}
-            >
-              -{energy}
-            </Text>
-          </ItemInfoFlex>
-        </ItemFlex>
-      </Flex>
+    <Flex>
+      <ItemFlex>
+        <StyledImage
+          width={35}
+          height={39}
+          src='/images/commons/icon/icon_minera.png'
+        />
+        <ItemInfoFlex>
+          <Text small color='textSubtle'>
+            {t('Ore')}
+          </Text>
+          <Text bold color={planetInfo?.stone < stone ? 'warning' : 'white'}>
+            -{stone}
+          </Text>
+        </ItemInfoFlex>
+      </ItemFlex>
+      <ItemFlex>
+        <StyledImage
+          width={35}
+          height={39}
+          src='/images/commons/icon/icon_spice.png'
+        />
+        <ItemInfoFlex>
+          <Text small color='textSubtle'>
+            {t('Population')}
+          </Text>
+          <Text
+            bold
+            color={planetInfo?.population < spices ? 'warning' : 'white'}
+          >
+            -{spices}
+          </Text>
+        </ItemInfoFlex>
+      </ItemFlex>
+      <ItemFlex>
+        <StyledImage
+          width={35}
+          height={39}
+          src='/images/commons/icon/icon_energy.png'
+        />
+        <ItemInfoFlex>
+          <Text small color='textSubtle'>
+            {t('Energy')}
+          </Text>
+          <Text bold color={planetInfo?.energy < energy ? 'warning' : 'white'}>
+            -{energy}
+          </Text>
+        </ItemInfoFlex>
+      </ItemFlex>
     </Flex>
   );
 };

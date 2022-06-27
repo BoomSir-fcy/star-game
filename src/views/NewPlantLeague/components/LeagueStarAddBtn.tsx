@@ -1,7 +1,7 @@
 import Globe from 'components/Globe';
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Text, BoxProps, Flex } from 'uikit';
+import { Text, BoxProps, Flex, MarkText, Box } from 'uikit';
 import { QualityColor } from 'uikit/theme/colors';
 import { Qualities, qualities } from 'uikit/theme/types';
 
@@ -9,7 +9,8 @@ const StyledStar = styled.div<StarAddBtnProps>`
   position: relative;
   width: ${({ size }) => size};
   height: ${({ size }) => size};
-  background: url('/images/commons/star/add.png') no-repeat;
+  background: ${({ url }) =>
+    url ? 'none' : `url('/images/commons/star/add.png') no-repeat`};
   background-size: 100%;
   border: 0;
   box-shadow: none;
@@ -20,7 +21,8 @@ const StyledStar = styled.div<StarAddBtnProps>`
   &:hover,
   &:active,
   &.star-active {
-    background: url('/images/commons/star/add-active.png') no-repeat;
+    background: ${({ url }) =>
+      url ? 'none' : `url('/images/commons/star/add-active.png') no-repeat`};
     background-size: 100%;
     width: ${({ size }) => size};
     height: ${({ size }) => size};
@@ -84,14 +86,31 @@ const RemoveIcon = styled.img`
   right: 18px;
   width: 37px;
   height: 37px;
-  /* line-height: 30px; */
-  /* text-align: center; */
-  /* background: red; */
-  /* border-radius: 50%; */
-  /* color: red; */
-  /* font-size: 60px; */
   z-index: 2;
 `;
+
+const LeveBox = styled(Box)`
+  position: relative;
+  z-index: 1;
+  padding-top: 40px;
+`;
+
+const MaskBox = styled(Flex)<{ height: string; width: string }>`
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  border-radius: 50%;
+  height: ${({ height }) => height};
+  width: ${({ width }) => width};
+  justify-content: center;
+  align-items: center;
+`;
+
 interface StarAddBtnProps extends BoxProps {
   active?: boolean;
   owner?: string;
@@ -108,9 +127,11 @@ interface StarAddBtnProps extends BoxProps {
   name?: string;
   ball?: boolean;
   ballWorking?: boolean;
+  resources?: boolean;
+  resourcesText?: string;
 }
 
-const StarAddBtn: React.FC<StarAddBtnProps> = ({
+const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
   active,
   owner,
   No,
@@ -127,6 +148,8 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
   name,
   ball,
   ballWorking,
+  resources,
+  resourcesText,
   ...props
 }) => {
   const { className, ...restProps } = props;
@@ -195,27 +218,22 @@ const StarAddBtn: React.FC<StarAddBtnProps> = ({
           <Text small>{owner}</Text>
         </OwnerFlex>
       )}
-      {/* {No && (
-        <>
-          <NumberFlex>
-            <Text fontSize='20px' shadow='primary'>
-              No.{No}
-            </Text>
-            {Leve && (
-              <Text ml='6px' fontSize='20px' shadow='primary'>
-                LV {Leve}
-              </Text>
-            )}
-          </NumberFlex>
-          {name && (
-            <Text ml='6px' fontSize='20px' shadow='primary'>
-              {name}
-            </Text>
-          )}
-        </>
-      )} */}
+      {resources && (
+        <MaskBox height={width_height} width={width_height}>
+          <MarkText fontStyle='normal' fontSize='16px' bold>
+            {resourcesText}
+          </MarkText>
+        </MaskBox>
+      )}
+      {Leve && (
+        <LeveBox>
+          <MarkText fontStyle='normal' fontSize='20px' bold>
+            LV {Leve}
+          </MarkText>
+        </LeveBox>
+      )}
       {renderChildren}
     </StyledStar>
   );
 };
-export default StarAddBtn;
+export default LeagueStarAddBtn;

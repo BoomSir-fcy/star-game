@@ -144,7 +144,7 @@ export const ArmsInfo: React.FC<{
           </Flex>
         </Head>
         <Body>
-          <Preview radius>
+          <Preview isRadius>
             <PreviewNumber>{armsData.count}</PreviewNumber>
             <Image src={getSoldierSrc()} width={180} height={180} />
           </Preview>

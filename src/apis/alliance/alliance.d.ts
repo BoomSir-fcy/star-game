@@ -26,5 +26,10 @@ declare namespace Api {
       start_time: number;
       end_time: number;
     }
+
+    interface News {
+      page: number;
+      page_size: number;
+    }
   }
 }
