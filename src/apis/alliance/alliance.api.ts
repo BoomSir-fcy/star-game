@@ -42,4 +42,10 @@ export class AllianceApi extends Http {
     const res = await this.get('alliance/combat/record', params);
     return res;
   }
+
+  // 获取消息列表
+  async getMyMessage(params: Api.Alliance.News) {
+    const res = await this.get('message/list', params);
+    return res;
+  }
 }

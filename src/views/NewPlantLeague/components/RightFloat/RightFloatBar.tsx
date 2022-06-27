@@ -180,7 +180,7 @@ const RightFloatBar: React.FC = () => {
           <img src='/images/commons/icon/icon-vip.png' alt='' />
         </ImgFlex>
       </RecordBox>
-      <Link to='/BattleReport'>
+      <Link to='/platform-News'>
         <RecordBox>
           <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
             {t('站内消息')}

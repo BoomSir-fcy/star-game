@@ -19,6 +19,7 @@ import {
   Box,
   Dots,
   StripedProgress,
+  GraphicsCard,
 } from 'uikit';
 import { Api } from 'apis';
 import { useStore, storeAction } from 'state';
@@ -42,11 +43,11 @@ import 'intro.js/introjs.css';
 import { UpgradeCost } from './components/upgrade/UpgradeCost';
 
 const MysteryBoxFlexStyled = styled(MysteryBoxStyled)`
-  width: 320px;
-  height: 366px;
-  margin-right: 100px;
+  width: 374px;
+  height: 500px;
+  /* margin-right: 100px;
   margin-left: -40px;
-  margin-top: 50px;
+  margin-top: 50px; */
 `;
 
 const MysteryBoxBaseNewStyled = styled(MysteryBoxBaseStyled)`
@@ -54,17 +55,8 @@ const MysteryBoxBaseNewStyled = styled(MysteryBoxBaseStyled)`
 `;
 const MysteryBoxStarStyled = styled(MysteryBoxBoxStyled)`
   background: none;
-  top: 0;
+  top: -40px;
 `;
-const StyledCard = styled(Card)`
-  width: 448px;
-  /* height: 366px; */
-  padding: 26px 20px;
-`;
-
-// interface NowPlanetInfo extends Api.Planet.PlanetInfo {
-//   max_level?: number;
-// }
 
 const Upgrade = () => {
   const { toastSuccess, toastError } = useToast();
@@ -227,7 +219,7 @@ const Upgrade = () => {
   }, [dispatch]);
 
   // 升级经验
-  const { expStep, curExp, maxExp, preExpStep } = useMemo(() => {
+  const { expStep, curExp, maxExp, preExpStep, exportExp } = useMemo(() => {
     const maxValue = Number(upgradeInfo.upgrade_exp);
     const currentValue = planetInfo[planetId]?.exp;
     let rsVal = 0;
@@ -259,15 +251,24 @@ const Upgrade = () => {
       return <Text color='warning'>{t('Raised to the highest level')}</Text>;
     }
     if (!account) {
-      return <ConnectWalletButton scale='ld' width='270px' padding='0 10px' />;
+      return (
+        <ConnectWalletButton
+          scale='ld'
+          width='277px'
+          height='45px'
+          padding='0 10px'
+        />
+      );
     }
 
     // 升级
     if (maxExp === 0 || (curExp && curExp >= maxExp)) {
       return (
         <Button
+          variant='purple'
           disabled={pending}
-          width='300px'
+          width='277px'
+          height='45px'
           padding='0'
           onClick={async () => {
             try {
@@ -285,19 +286,20 @@ const Upgrade = () => {
             }
           }}
         >
-          {pending ? (
-            <Dots>{t('Upgrading')}</Dots>
-          ) : (
-            <Text fontSize='inherit'>{t('Upgrade Planet')}</Text>
-          )}
+          <Text color='textPrimary' fontSize='16px' bold>
+            {t('Upgrade Planet')}
+            {pending ? <Dots>{t('Upgrading')}</Dots> : t('Upgrade Planet')}
+          </Text>
         </Button>
       );
     }
     // 吞噬
     return (
       <Button
+        variant='purple'
         disabled={pending || !usableMaterialIds.length}
-        width='300px'
+        width='277px'
+        height='45px'
         padding='0'
         onClick={async () => {
           try {
@@ -317,11 +319,9 @@ const Upgrade = () => {
           }
         }}
       >
-        {pending ? (
-          <Dots>{t('Devour')}</Dots>
-        ) : (
-          <Text fontSize='inherit'>{t('Devour')}</Text>
-        )}
+        <Text color='textPrimary' fontSize='16px' bold>
+          {pending ? <Dots>{t('Devour')}</Dots> : t('Devour')}
+        </Text>
       </Button>
     );
   }, [
@@ -341,7 +341,12 @@ const Upgrade = () => {
   ]);
 
   return (
-    <BgCard variant='big' padding='30px 68px'>
+    <GraphicsCard
+      width='1582px'
+      height='626px'
+      borderWidth={2}
+      padding='30px 68px'
+    >
       {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
         <Steps
           enabled={stepsEnabled}
@@ -362,49 +367,13 @@ const Upgrade = () => {
         <Flex
           flexDirection='column'
           alignItems='center'
-          width={537}
+          justifyContent='flex-end'
+          width={475}
           className='planet_level_head'
         >
-          <Flex width='320px' mr='50px' alignItems='center'>
-            <GradeBox>
-              <Text bold shadow='primary'>
-                Lv {upgradeInfo.now_planet_info?.level}
-              </Text>
-            </GradeBox>
-            <Image
-              width={82}
-              height={42}
-              margin='0 28px'
-              src='/images/commons/icon/upgrade.png'
-            />
-            <GradeBox>
-              <Text bold color='up' shadow='secondary'>
-                Lv {upgradeInfo.estimate_planet_info?.level}
-              </Text>
-            </GradeBox>
-          </Flex>
-          <Flex height={46} flexDirection='column' alignItems='center'>
-            {!!maxExp && (
-              <>
-                <Text fontSize='20px'>{t('Upgrade experience')}</Text>
-                <StripedProgress
-                  preStep={`${preExpStep}%`}
-                  step={`${expStep}%`}
-                />
-              </>
-            )}
-          </Flex>
           <MysteryBoxFlexStyled>
             <MysteryBoxBaseNewStyled quality={mysteryBoxQualities.SUPER}>
               <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
-                {/* <StarCom
-                  variant='none'
-                  scale='ld'
-                  margin='auto'
-                  picture1={upgradeInfo.now_planet_info?.picture1}
-                  picture={upgradeInfo.now_planet_info?.picture}
-                  quality={upgradeInfo.now_planet_info?.rarity}
-                /> */}
                 <Globe
                   margin='auto'
                   scale='ld'
@@ -417,41 +386,105 @@ const Upgrade = () => {
         </Flex>
 
         <Flex
-          width={875}
+          flex={1}
           flexDirection='column'
           alignItems='center'
           justifyContent='space-between'
         >
-          <Flex>{!!maxExp && StarAddBox}</Flex>
-          {/* <Flex mb='10px' justifyContent='center'>
-            <Text small>{t('添加同稀有度且同等级或低一个等级的星球')}</Text>
-          </Flex> */}
-          <Flex>
-            <UpgradeCard
-              info={upgradeInfo.now_planet_info}
-              upgradeInfo={upgradeInfo.estimate_planet_info}
-              up={upInfo}
-              mr='33px'
-            />
-            <StyledCard>
-              <Flex flexDirection='column' justifyContent='space-between'>
+          <Flex mt='15px' justifyContent='center' alignItems='center'>
+            <Flex width='301px' mr='20px' alignItems='center'>
+              <GradeBox>
+                <Text fontSize='31px' bold shadow='primary'>
+                  Lv {upgradeInfo.now_planet_info?.level}
+                </Text>
+              </GradeBox>
+              <Image
+                width={75}
+                height={40}
+                margin='0 26px'
+                src='/images/commons/icon/upgrade.png'
+              />
+              <GradeBox>
+                <Text fontSize='31px' bold color='up' shadow='secondary'>
+                  Lv {upgradeInfo.estimate_planet_info?.level}
+                </Text>
+              </GradeBox>
+            </Flex>
+            <Flex flexDirection='column' alignItems='center'>
+              {!!maxExp && (
+                <>
+                  <Flex
+                    width='100%'
+                    justifyContent='space-between'
+                    alignItems='center'
+                  >
+                    <Text fontSize='24px' fontStyle='normal' mark bold>
+                      {t('Upgrade experience')}
+                    </Text>
+                    <Text fontSize='20px'>{t('升级需要吞噬同种族星球')}</Text>
+                  </Flex>
+                  <StripedProgress
+                    preStep={`${preExpStep}%`}
+                    step={`${expStep}%`}
+                  />
+                  <Flex
+                    width='100%'
+                    justifyContent='space-between'
+                    alignItems='center'
+                  >
+                    <Text fontSize='20px'>{`${curExp} / ${maxExp}`}</Text>
+                    {Object.keys(activeMaterialMap).length > 0 && (
+                      <Text fontSize='20px' color='#31E152'>
+                        {t('Expected +%value%', { value: exportExp })}
+                      </Text>
+                    )}
+                  </Flex>
+                </>
+              )}
+            </Flex>
+          </Flex>
+          <Flex mt='10px'>{!!maxExp && StarAddBox}</Flex>
+          <GraphicsCard mt='47px' width='853px' height='178px' stripe isRadius>
+            <Flex justifyContent='space-between' alignItems='flex-end'>
+              <Box>
+                <Flex>
+                  <Image
+                    width={31}
+                    height={35}
+                    src='/images/commons/star/LV.png'
+                  />
+                  <Box ml='10px'>
+                    <Text bold mark fontStyle='normal'>
+                      {t('After the upgrade')}
+                    </Text>
+                    <Flex justifyContent='space-between' alignItems='center'>
+                      <Text small color='textSubtle'>
+                        {t('Building grade up limit')}
+                      </Text>
+                      <Text small>
+                        +{upInfo?.build_level}(Lv.
+                        {upInfo?.estimate_max_building_level + 1})
+                      </Text>
+                    </Flex>
+                  </Box>
+                </Flex>
                 <UpgradeCost
                   stone={upgradeInfo.consume_stone}
                   spices={upgradeInfo.consume_population}
                   energy={upgradeInfo.consume_energy}
                   planetInfo={planetInfo[planetId]}
                 />
-                <Flex mt='30px' flexDirection='column' alignItems='center'>
-                  {rendeButton}
-                  {maxExp && curExp < maxExp ? (
-                    <Text mt='10px' fontSize='22px' color='failure'>
-                      *{t('Lack of upgrade experience')}
-                    </Text>
-                  ) : null}
-                </Flex>
+              </Box>
+              <Flex mt='30px' flexDirection='column' alignItems='center'>
+                {maxExp && curExp < maxExp ? (
+                  <Text mb='4px' fontSize='16px' color='failure'>
+                    *{t('Lack of upgrade experience')}
+                  </Text>
+                ) : null}
+                {rendeButton}
               </Flex>
-            </StyledCard>
-          </Flex>
+            </Flex>
+          </GraphicsCard>
         </Flex>
       </Flex>
 
@@ -507,7 +540,7 @@ const Upgrade = () => {
           </Flex>
         </Flex>
       </ModalWrapper> */}
-    </BgCard>
+    </GraphicsCard>
   );
 };
 

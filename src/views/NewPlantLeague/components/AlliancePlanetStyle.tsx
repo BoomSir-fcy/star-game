@@ -1,5 +1,6 @@
-import { StarAddBtn } from 'components';
 import styled from 'styled-components';
+import { Box } from 'uikit';
+import LeagueStarAddBtn from './LeagueStarAddBtn';
 
 export const Content = styled.div`
   width: 100%;
@@ -21,4 +22,4 @@ export const Base = styled.div``;
 
 export const BallBase = styled.div``;
 
-export const Ball = styled(StarAddBtn)``;
+export const Ball = styled(LeagueStarAddBtn)``;

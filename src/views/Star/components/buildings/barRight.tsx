@@ -62,7 +62,7 @@ export const BarRight: React.FC<{
         <BarHead plant_info={planetInfo} />
         <BarCard
           title={t('planetMenuUpgrade')}
-          onClick={() => navigate(`star/upgrade?id=${planet_id}`)}
+          onClick={() => navigate(`/star/upgrade?id=${planet_id}`)}
         >
           <Flex
             justifyContent='center'

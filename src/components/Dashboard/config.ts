@@ -17,6 +17,7 @@ export const getHideHeader = (url: string) => {
       '/BattleReport',
       '/vip',
       '/choose-planet',
+      '/platform-News',
     ],
     url,
   );

@@ -5,5 +5,6 @@ export { default as Dashboard } from './Dashboard';
 export { default as Layout } from './Layout';
 export { default as RaceAvatar } from './RaceAvatar';
 export { default as Globe } from './Globe';
+export { default as TooltipTrigger } from './Tooltip';
 export * from './ConnectWallet/ConnectWalletButton';
 export * from './CountdownTime/hooks';

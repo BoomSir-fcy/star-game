@@ -14,10 +14,30 @@ import { useDispatch } from 'react-redux';
 
 const OutModule = styled(Box)<{ ShowListModule: boolean }>`
   display: ${({ ShowListModule }) => (ShowListModule ? 'block' : 'none')};
-  position: fixed;
-  width: 100%;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  /* width: 100%; */
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  z-index: 2;
+`;
+
+const CloseBox = styled(Flex)`
+  width: 43px;
+  height: 173px;
+  background: url('/images/commons/sideCloseButton.png');
+  background-size: 100% 100%;
+  cursor: pointer;
+  position: absolute;
+  right: -43px;
+  top: 40%;
+  transform: rotate(180deg);
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+const CloseImg = styled.img`
+  width: 80%;
+  height: 50px;
 `;
 
 const ListBox = styled(Box)`
@@ -26,12 +46,22 @@ const ListBox = styled(Box)`
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
   padding: 16px;
+  position: relative;
 `;
 
 const ScrollBox = styled(Box)`
   min-height: calc(100% - 60px);
   max-height: calc(100% - 60px);
   overflow-y: auto;
+`;
+
+const LeveFlex = styled(Flex)`
+  position: absolute;
+  top: -15px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 `;
 
 const BtnFlex = styled(Flex)`
@@ -49,8 +79,8 @@ const ReplaceBtn = styled(Button)`
 `;
 
 const UpDownImg = styled.img`
-  width: 33px;
-  height: 33px;
+  width: 24px;
+  height: 24px;
   display: inline-block;
   margin-right: 4px;
 `;
@@ -173,6 +203,8 @@ const AlliancePlanetList: React.FC<{
         list.push(i);
       }
       setAddBtnList(list);
+    } else {
+      setAddBtnList([]);
     }
   }, [StarList]);
 
@@ -181,16 +213,11 @@ const AlliancePlanetList: React.FC<{
   }, [workingList]);
 
   return (
-    <OutModule
-      ShowListModule={ShowListModule}
-      onClick={() => setShowListModule(false)}
-    >
-      <ListBox
-        onClick={e => {
-          e.stopPropagation();
-          e.preventDefault();
-        }}
-      >
+    <OutModule ShowListModule={ShowListModule}>
+      <ListBox>
+        <CloseBox onClick={() => setShowListModule(false)}>
+          <CloseImg src='/images/commons/icon/back.png' alt='' />
+        </CloseBox>
         <Flex mb='20px' justifyContent='space-between' alignItems='flex-end'>
           <MarkText fontSize='18px' bold fontStyle='normal'>
             {t('行星联盟更换')}
@@ -209,6 +236,11 @@ const AlliancePlanetList: React.FC<{
                 height='156px'
               >
                 <Box position='relative'>
+                  <LeveFlex>
+                    <MarkText fontStyle='normal' fontSize='18px' bold>
+                      Lv {item.level}
+                    </MarkText>
+                  </LeveFlex>
                   <Globe
                     scale='md'
                     shadow={QualityColor[item?.rarity]}
@@ -235,6 +267,7 @@ const AlliancePlanetList: React.FC<{
                   flexDirection='column'
                   justifyContent='space-between'
                   height='100%'
+                  width='40%'
                 >
                   <Flex alignItems='baseline'>
                     <Text mr='10px' color='textSubtle'>
@@ -301,6 +334,7 @@ const AlliancePlanetList: React.FC<{
                   flexDirection='column'
                   justifyContent='space-between'
                   height='100%'
+                  width='26%'
                 >
                   <Flex alignItems='baseline'>
                     <Text mr='10px'>{t('Power')}</Text>
@@ -361,7 +395,7 @@ const AlliancePlanetList: React.FC<{
               padding='0 20px'
               justifyContent='center'
               alignItems='center'
-              height='156px'
+              height='150px'
             >
               <Button
                 onClick={() => {
@@ -377,12 +411,7 @@ const AlliancePlanetList: React.FC<{
         </ScrollBox>
       </ListBox>
       {pending && (
-        <LoadingBox
-          onClick={e => {
-            e.stopPropagation();
-            e.preventDefault();
-          }}
-        >
+        <LoadingBox>
           <Spinner size={200} />
         </LoadingBox>
       )}

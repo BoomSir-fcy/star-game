@@ -50,6 +50,8 @@ const UpgradeList = React.lazy(
 
 const VipPage = lazy(() => import('./views/vip'));
 const NewPlantLeague = lazy(() => import('./views/NewPlantLeague'));
+const PlatformNews = lazy(() => import('./views/PlatformNews'));
+const NewGalaxy = lazy(() => import('./views/NewGalaxy'));
 
 // window.addEventListener('click', () => {
 //   console.log(Object.keys(document.documentElement));
@@ -101,12 +103,14 @@ function App() {
               {/* <Route path='/plant-league' element={<PlantLeague />} /> */}
               <Route path='/plant-league' element={<NewPlantLeague />} />
               <Route path='/choose-planet' element={<ChoosePlanet />} />
+              <Route path='/platform-News' element={<PlatformNews />} />
 
               <Route path='/battleReport' element={<BattleReport />} />
               {/* 星系 */}
-              <Route path='/galaxy' element={<Galaxy />} />
+              {/* <Route path='/galaxy' element={<Galaxy />} />
               <Route path='/galaxy/auction' element={<Auction />} />
-              <Route path='/galaxy/stars' element={<Stars />} />
+              <Route path='/galaxy/stars' element={<Stars />} /> */}
+              <Route path='/galaxy' element={<NewGalaxy />} />
 
               {/* 掠夺 */}
               <Route path='/plunder' element={<Plunder />} />
