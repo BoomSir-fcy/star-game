@@ -4,7 +4,7 @@ export const RaceOptions = (t: any) => {
   return [
     {
       value: 0,
-      label: t('所有种族'),
+      label: t('All race'),
     },
     {
       value: RaceType.PROTOSS,
@@ -25,7 +25,7 @@ export const RarityOptions = (t: any) => {
   return [
     {
       value: 0,
-      label: t('所有稀有度'),
+      label: t('All rarity'),
     },
     {
       value: Qualities.ORDINARY,
@@ -54,11 +54,11 @@ export const RarityOptions = (t: any) => {
   ];
 };
 
-export const LevelOptions = (maxLevel = 20) => {
+export const LevelOptions = (t: any, maxLevel = 20) => {
   const LevelList = [
     {
       value: 0,
-      label: '所有等级',
+      label: t('All level'),
     },
   ];
   for (let i = 1; i <= maxLevel; i++) {

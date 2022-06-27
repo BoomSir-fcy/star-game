@@ -75,6 +75,8 @@ export const lightColors: Colors = {
   missTxt: '#5af3eb',
   progressGreenBar: '#64E06D',
   redText: '#FF3939',
+  textUp: '#3ED450',
+  white_black: '#000',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
     progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',
@@ -119,6 +121,8 @@ export const darkColors: Colors = {
   missTxt: '#5af3eb',
   progressGreenBar: '#64E06D',
   redText: '#FF3939',
+  textUp: '#3ED450',
+  white_black: '#FFF',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',
     progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',

@@ -30,9 +30,6 @@ export const DragBox = styled(Box)`
   /* border: 5px solid black; */
   overflow: auto;
 
-  &.no-select {
-    user-select: none;
-  }
   ::-webkit-scrollbar {
     height: 12px;
   }
@@ -46,6 +43,9 @@ export const PlanetBox = styled(Box)`
   position: relative;
   width: 3000px;
   height: 100%;
+  &.no-select {
+    user-select: none;
+  }
   /* border: 5px solid red; */
 `;
 

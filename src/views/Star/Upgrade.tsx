@@ -287,7 +287,6 @@ const Upgrade = () => {
           }}
         >
           <Text color='textPrimary' fontSize='16px' bold>
-            {t('Upgrade Planet')}
             {pending ? <Dots>{t('Upgrading')}</Dots> : t('Upgrade Planet')}
           </Text>
         </Button>
@@ -375,6 +374,7 @@ const Upgrade = () => {
             <MysteryBoxBaseNewStyled quality={mysteryBoxQualities.SUPER}>
               <MysteryBoxStarStyled quality={mysteryBoxQualities.SUPER}>
                 <Globe
+                  rotate
                   margin='auto'
                   scale='ld'
                   shadow={QualityColor[upgradeInfo.now_planet_info?.rarity]}
@@ -434,7 +434,7 @@ const Upgrade = () => {
                   >
                     <Text fontSize='20px'>{`${curExp} / ${maxExp}`}</Text>
                     {Object.keys(activeMaterialMap).length > 0 && (
-                      <Text fontSize='20px' color='#31E152'>
+                      <Text fontSize='20px' color='textUp'>
                         {t('Expected +%value%', { value: exportExp })}
                       </Text>
                     )}

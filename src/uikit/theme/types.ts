@@ -132,6 +132,8 @@ export type Colors = {
   // NFT Token Colors
   triangleDinosaur: string;
   meat: string;
+  textUp: string;
+  white_black: string;
 
   // quality
   [qualities.ORDINARY]: string;

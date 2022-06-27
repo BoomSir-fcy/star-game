@@ -5,6 +5,7 @@ declare namespace Api {
       race?: number;
       token?: string;
       rarity?: number;
+      level?: number;
       page: number;
       page_size: number;
     }
@@ -82,6 +83,13 @@ declare namespace Api {
       upgrade_time: number;
       upgrade_exp: number; // 最大经验值
       success?: boolean;
+    }
+
+    interface MaterialParams {
+      planet_id: number;
+      find_planet_id?: number;
+      race?: number;
+      rarity?: number;
     }
   }
 }

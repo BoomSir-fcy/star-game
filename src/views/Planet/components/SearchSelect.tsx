@@ -26,8 +26,8 @@ const SearchSelect: React.FC<{ onSelectCallback: (values: any) => void }> = ({
   }, [t]);
 
   const LevelOption = useMemo(() => {
-    return LevelOptions(20);
-  }, []);
+    return LevelOptions(t, 20);
+  }, [t]);
 
   const handleSelect = useCallback(
     (key, value) => {
