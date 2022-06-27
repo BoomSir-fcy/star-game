@@ -18,9 +18,8 @@ class Builder extends EventTarget {
     const { src, id, race = 1 } = option;
     this.id = id;
 
-    const img = `${window.location.origin}/assets/buildings/${race}/${
-      src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
-    }`;
+    const img = `${window.location.origin}/assets/buildings/${race}/${src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
+      }`;
 
     this.src = img;
     this.texture = Texture.from(img);
@@ -51,11 +50,31 @@ class Builder extends EventTarget {
 
   moved = false; // 是否发生移动
 
+  position: {
+    from: {
+      x: number;
+      y: number;
+    },
+    to: {
+      x: number;
+      y: number;
+    }
+  } = {
+      from: {
+        x: 0,
+        y: 0,
+      },
+      to: {
+        x: 0,
+        y: 0,
+      },
+    }
+
   init() {
     this.sprite.texture = this.texture;
 
-    this.sprite.width = 100;
-    this.sprite.height = 100;
+    this.sprite.width = 200 * this.areaX;
+    this.sprite.height = 200 * this.areaY;
     this.sprite.anchor.set(0.5);
 
     this.container.addChild(this.sprite);
@@ -92,6 +111,14 @@ class Builder extends EventTarget {
     this.axisPoint = point;
     this.axisPoint?.chequer?.setState(stateType.DISABLE);
     this.axisPoint?.chequer?.displayState(false);
+    this.position.from = {
+      x: point.axisX,
+      y: point.axisY,
+    }
+    this.position.to = {
+      x: point.axisX + this.areaX,
+      y: point.axisY + this.areaY,
+    }
   }
 
   // 重置位置 用于拖动的时候

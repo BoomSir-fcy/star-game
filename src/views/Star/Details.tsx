@@ -97,14 +97,6 @@ const Details = () => {
   });
   const ref = React.useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
-    if (ref.current) {
-      ref.current.appendChild(building.view);
-      building.creatTerrain([]);
-      // createHandle();
-    }
-  }, [building, ref]);
-
   const activeBuilder = useActiveBuilder(building);
 
   const id = Number(parsedQs.id);
@@ -113,6 +105,21 @@ const Details = () => {
   const upgrad = useStore(p => p.buildling.upgradesBuilding);
   const destory = useStore(p => p.buildling.destroyBuilding);
   const currentTime = Number((Date.now() / 1000).toFixed(0));
+
+  const [areaX, areaY] = React.useMemo(() => {
+    // if (planet?.areaX) {
+    //   return [3, 2]
+    // }
+    return [planet?.areaX, planet?.areaY]
+  }, [planet])
+
+  React.useEffect(() => {
+    if (ref.current && areaX && areaY) {
+      ref.current.appendChild(building.view);
+      building.creatTerrain(areaX, areaY);
+      // createHandle();
+    }
+  }, [building, ref, areaX, areaY]);
 
   const [stateBuilding, setStateBuilding] = useImmer({
     visible: false,
