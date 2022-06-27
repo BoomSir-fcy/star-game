@@ -122,8 +122,8 @@ class Building extends EventTarget {
     return this.loaders;
   }
 
-  creatTerrain(TerrainInfo?: Api.Game.TerrainInfo[]) {
-    this.boards.drawChequers(this.test, TerrainInfo);
+  creatTerrain(areaX: number, areaY: number) {
+    this.boards.drawChequers(areaX, areaY);
     this.boardsCreated = true;
     this.dispatchEvent(new Event('boardsCreated'));
   }
@@ -157,11 +157,12 @@ class Building extends EventTarget {
         }
       })
       .on('pointerup', event => {
-        console.log(12222222);
         if (builder.moved) {
           const res = this.onDragEndBuilder(event, builder);
           if (res) {
             this.dispatchEvent(getUpdateBuilderPosition(this.builders));
+            this.dispatchEvent(getAddActiveBuilderEvent(builder));
+            console.log('getAddActiveBuilderEvent', builder)
           }
         }
         this.activeBuilderFlag = true;
@@ -260,6 +261,7 @@ class Building extends EventTarget {
             detail: { builders: this.builders },
           }),
         );
+        this.dispatchEvent(getAddActiveBuilderEvent(builder));
       }
       this.dragPreBuilder.setDragging(false);
       this.dragPreBuilder.container.visible = false;
@@ -308,7 +310,6 @@ class Building extends EventTarget {
       );
       const collection = item.checkCollisionPoint(point);
       if (collection && item.state === stateType.PLACE) {
-        console.log(12112);
         builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
         canDrag = true;
       }

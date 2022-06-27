@@ -61,9 +61,9 @@ class Chequer {
 
   static X_RATIO = 0.5;
 
-  static WIDTH = 100 * 2;
+  static WIDTH = 100 * 2.8;
 
-  static HEIGHT = 79 * 2;
+  static HEIGHT = 79 * 2.8;
 
   offsetStartX;
 
