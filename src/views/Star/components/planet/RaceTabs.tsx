@@ -65,7 +65,11 @@ export const PlanetRaceTabs: React.FC<{
   ];
 
   return (
-    <GraphicsCard style={{ padding: 0 }}>
+    <GraphicsCard
+      style={{ padding: 0 }}
+      width='max-content'
+      height='max-content'
+    >
       <Container>
         {raceArr.map(({ id, label }) => (
           <TabsButton

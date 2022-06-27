@@ -41,7 +41,7 @@ const RowFlex = styled(Flex)`
   overflow-x: auto;
   height: 364px;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
-  border: 2px solid #4ffffb;
+  border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
   margin-bottom: 30px;
   &::-webkit-scrollbar {
     height: 0;
