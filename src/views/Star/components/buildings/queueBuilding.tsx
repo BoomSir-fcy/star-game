@@ -70,7 +70,6 @@ export const QueueBuilding: React.FC<{
     };
   });
 
-  console.log(diffTime, 123, state.time);
   return (
     <Flex width='250px'>
       <Flex flexDirection='column' style={{ flex: 1 }}>

@@ -284,15 +284,13 @@ class Building extends EventTarget {
 
   // 移动小人
   onDrageMoveBuilder(event: InteractionEvent, builder: Builder) {
-
     if (builder.areaX === 2) {
       const matrix4 = this.boards.checkCollisionPointOfTow(event);
       matrix4?.setState(stateType.PLACE);
-      return
+      return;
     }
     const chequer = this.boards.checkCollisionPoint(event);
     chequer?.setState(stateType.PLACE);
-
 
     // this.boards.chequers.forEach(item => {
     //   const point = new Point(
@@ -310,16 +308,21 @@ class Building extends EventTarget {
 
   // 拖拽小人结束生命周期
   onDragEndBuilder(event: InteractionEvent, builder: Builder) {
-    
     if (builder.areaX === 2) {
       const matrix4 = this.boards.checkCollisionPointOfTow(event);
       if (matrix4) {
-        builder.setPosition(new AxisPoint(matrix4.chequers[0].axisX, matrix4.chequers[0].axisY, matrix4.chequers[0]));
-        matrix4.setState(stateType.ACTIVE)
-      } else{
+        builder.setPosition(
+          new AxisPoint(
+            matrix4.chequers[0].axisX,
+            matrix4.chequers[0].axisY,
+            matrix4.chequers[0],
+          ),
+        );
+        matrix4.setState(stateType.ACTIVE);
+      } else {
         builder.resetPosition();
       }
-      return !!matrix4
+      return !!matrix4;
       // builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
     }
     const chequer = this.boards.checkCollisionPoint(event);
@@ -328,7 +331,7 @@ class Building extends EventTarget {
     } else {
       builder.resetPosition();
     }
-    return !!chequer
+    return !!chequer;
   }
 
   /**
