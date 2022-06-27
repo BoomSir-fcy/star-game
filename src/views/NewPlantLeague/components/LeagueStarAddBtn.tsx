@@ -9,7 +9,8 @@ const StyledStar = styled.div<StarAddBtnProps>`
   position: relative;
   width: ${({ size }) => size};
   height: ${({ size }) => size};
-  background: url('/images/commons/star/add.png') no-repeat;
+  background: ${({ url }) =>
+    url ? 'none' : `url('/images/commons/star/add.png') no-repeat`};
   background-size: 100%;
   border: 0;
   box-shadow: none;
@@ -20,7 +21,8 @@ const StyledStar = styled.div<StarAddBtnProps>`
   &:hover,
   &:active,
   &.star-active {
-    background: url('/images/commons/star/add-active.png') no-repeat;
+    background: ${({ url }) =>
+      url ? 'none' : `url('/images/commons/star/add-active.png') no-repeat`};
     background-size: 100%;
     width: ${({ size }) => size};
     height: ${({ size }) => size};

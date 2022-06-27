@@ -41,7 +41,7 @@ const AlliancePlanet: React.FC<{
         name: allianceList[i]?.planet?.name,
         planetId: allianceList[i]?.planetId,
         rarity: allianceList[i]?.planet?.rarity || qualities.ORDINARY,
-        url: allianceList[i]?.planet?.picture1,
+        url: allianceList[i]?.planet?.picture1 || '',
         No: i + 1,
         Leve: allianceList[i]?.planet?.level || '',
       };
