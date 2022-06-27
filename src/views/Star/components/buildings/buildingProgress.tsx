@@ -35,7 +35,7 @@ export const BuildingProgress: React.FC<{
                         new BigNumber(nextValue).toNumber(),
                       )}`
                     : `${formatDisplayApr(new BigNumber(nextValue).toNumber())}`
-                  : '',
+                  : 0,
               })}
             </Text>
           </Flex>

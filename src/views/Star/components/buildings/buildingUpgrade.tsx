@@ -204,9 +204,6 @@ export const BuildingUpgrade: React.FC<{
               width='226px'
               height='53px'
               variant='purple'
-              disabled={
-                planet?.level <= currnet_building?.propterty?.levelEnergy
-              }
               onClick={() => {
                 onCreateBuilding(currnet_building);
                 onFinish();
