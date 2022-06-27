@@ -45,7 +45,7 @@ const ArmsPreview: React.FC<{
 
   return (
     <ArmsContent onClick={onClick}>
-      <Preview radius>
+      <Preview isRadius>
         <PreviewNumber>{data?.count}</PreviewNumber>
         <Image src={getSoldierSrc()} width={92} height={92} />
       </Preview>

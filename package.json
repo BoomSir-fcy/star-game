@@ -50,6 +50,7 @@
     "pixi-spine": "^3.0.13",
     "pixi.js": "^6.3.0",
     "prettier": "^2.5.0",
+    "rc-tooltip": "^5.1.1",
     "react": "^17.0.2",
     "react-countup": "^6.1.0",
     "react-dates": "^21.8.0",

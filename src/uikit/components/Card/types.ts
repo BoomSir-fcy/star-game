@@ -53,7 +53,7 @@ export interface BorderCardProps
 export interface GraphicsCardProps extends CardProps {
   width?: string;
   height?: string;
-  radius?: boolean;
+  isRadius?: boolean;
   stripe?: boolean;
   borderWidth?: number;
 }
