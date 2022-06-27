@@ -144,7 +144,10 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       const builder = new Builder({
         src: item.picture,
         id: `${item._id}`,
+        building: item,
         race,
+        areaX: item.propterty.size.area_x,
+        areaY: item.propterty.size.area_y,
       });
       setMoving(true);
       building?.addDragPreBuilder(builder);
@@ -181,6 +184,8 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                   key={row.buildings_number}
                   className={classNames(`building_${index}`)}
                 >
+                  <Text>{row.propterty
+                  .size.area_x}</Text>
                   <GameThing
                     scale='sm'
                     round

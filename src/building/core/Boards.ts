@@ -38,8 +38,6 @@ class Boards extends EventTarget {
     // this.aaa = 1;
     const { width, height, test, enableDrag } = options || {};
 
-    console.log(width, height);
-
     this.width = width || config.WIDTH;
     this.height = height || config.HEIGHT;
     this.enableDrag = enableDrag || false;
@@ -174,13 +172,12 @@ class Boards extends EventTarget {
       this.axis[s.axisX][s.axisY] = new AxisPoint(s.axisX, s.axisY, s);
     });
 
-    console.log(this.axis)
+    this.getAllTowArea();
     this.created = true;
   }
 
   // 找1*1建筑的碰撞检测
   checkCollisionPoint(event: InteractionEvent) {
-    let canDrag = false;
 
     this.chequers.forEach(item => {
       const point = new Point(
@@ -188,47 +185,76 @@ class Boards extends EventTarget {
         event.data.global.y + 5,
       );
       const collection = item.checkCollisionPoint(point);
-      if (collection && item.state === stateType.PLACE) {
-        canDrag = true;
+      if (collection && item.state === stateType.PREVIEW) {
+        item.setState(stateType.PLACE);
+      } else if (!collection && item.state === stateType.PLACE) {
+        item.setState(stateType.PREVIEW);
+      }
+    });
+
+    return this.chequers.find(item => {
+      const point = new Point(
+        event.data.global.x - 10,
+        event.data.global.y + 5,
+      );
+      const collection = item.checkCollisionPoint(point);
+      if (collection && item.state === stateType.PREVIEW) {
+        item.setState(stateType.PLACE);
+      } else if (!collection && item.state === stateType.PLACE) {
+        item.setState(stateType.PREVIEW);
       }
       item.displayState(false);
+      if (collection && item.state === stateType.PLACE) {
+        return true
+      }
+      return false;
     });
-    return canDrag;
   }
 
   // 获取所有2*2的格子 2*2的格子由4个1*1的格子组成
   getAllTowArea() {
 
-    this.axis.forEach((yArea, xIndex) => {
-      yArea.forEach((item, yIndex) => {
-        if (xIndex < this.axisX - 2 && yIndex < this.axisY - 2) {
-          // TODO: 添加左边点
-          // this.matrix4s.push(new Matrix4(
-          //   item,
-
-          // ))
-        }
-      })
+    this.chequers.forEach(item => {
+      const { axisX, axisY } = item;
+      if (axisX < this.axisX - 1 && axisY < this.axisY - 1) {
+        this.matrix4s.push(new Matrix4(
+          this.axis[axisX][axisY].chequer,
+          this.axis[axisX][axisY+1].chequer,
+          this.axis[axisX+1][axisY+1].chequer,
+          this.axis[axisX+1][axisY].chequer,
+        ))
+      }
     })
-    this.matrix4s = []
+    // this.matrix4s[5].displayState(true)
   }
 
   // 找2*2建筑的碰撞检测
-  checkCollisionPointOfTow(event: InteractionEvent) {
-    let canDrag = false;
-
-    this.chequers.forEach(item => {
+  checkCollisionPointOfTow(event: InteractionEvent, dargEnd?: boolean) {
+    let res: Matrix4 = null;
+    this.matrix4s.forEach(item => {
       const point = new Point(
         event.data.global.x - 10,
         event.data.global.y + 5,
       );
       const collection = item.checkCollisionPoint(point);
-      if (collection && item.state === stateType.PLACE) {
-        canDrag = true;
-      }
       item.displayState(false);
+
+      if (collection && item.chequers.every((chequer) => chequer.state === stateType.PLACE)) {
+        res = item;
+      }
+      if (collection && item.chequers.every((chequer) => chequer.state === stateType.PREVIEW)) {
+        item.setState(stateType.PLACE);
+        res = item;
+      }
+      if (!collection && item.chequers.every((chequer) => chequer.state === stateType.PLACE)) {
+        item.setState(stateType.PREVIEW);
+      }
+      if (item.chequers.every((chequer) => chequer.state !== stateType.PLACE && chequer.state !== stateType.PREVIEW)) {
+        item.setState(stateType.DISABLE);
+      }
     });
-    return canDrag;
+
+    return res;
   }
 }
 

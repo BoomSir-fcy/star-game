@@ -86,9 +86,18 @@ export const SideRightBuildingInfo: React.FC<{
   planet_id: number;
   buildingsId: string;
   visible: boolean;
-  itemData?: Api.Building.BuildingDetail;
+  itemData?: any;
+  onCreateBuilding: (building: Api.Building.Building) => void;
   onClose: () => void;
-}> = ({ visible, planet, planet_id, buildingsId, itemData, onClose }) => {
+}> = ({
+  visible,
+  planet,
+  planet_id,
+  buildingsId,
+  itemData,
+  onCreateBuilding,
+  onClose,
+}) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { upgrade } = useBuildingUpgrade();
@@ -101,7 +110,7 @@ export const SideRightBuildingInfo: React.FC<{
     },
     estimate_building_detail: {},
   });
-  const currentAttributes = upgradeInfo?.building_detail || itemData;
+  const currentAttributes = upgradeInfo?.building_detail?._id || itemData;
   const estimate = upgradeInfo?.estimate_building_detail || {};
 
   const init = React.useCallback(
@@ -117,8 +126,12 @@ export const SideRightBuildingInfo: React.FC<{
   );
 
   React.useEffect(() => {
-    init();
-  }, [init]);
+    if (itemData?.isbuilding) {
+      init();
+    }
+  }, [init, itemData]);
+
+  // console.log(currentAttributes);
 
   return (
     <Container>
@@ -156,24 +169,26 @@ export const SideRightBuildingInfo: React.FC<{
                   </Text>
                 )}
               </Flex>
-              <Destory
-                variant='text'
-                onClick={() => {
-                  onClose();
-                  dispatch(
-                    storeAction.destoryBuildingModal({
-                      visible: true,
-                      destory: currentAttributes,
-                    }),
-                  );
-                }}
-              >
-                <Image
-                  src='../images/commons/icon/icon-destory.png'
-                  width={30}
-                  height={30}
-                />
-              </Destory>
+              {currentAttributes.isbuilding && (
+                <Destory
+                  variant='text'
+                  onClick={() => {
+                    onClose();
+                    dispatch(
+                      storeAction.destoryBuildingModal({
+                        visible: true,
+                        destory: currentAttributes,
+                      }),
+                    );
+                  }}
+                >
+                  <Image
+                    src='../images/commons/icon/icon-destory.png'
+                    width={30}
+                    height={30}
+                  />
+                </Destory>
+              )}
             </Flex>
           </Flex>
           <Box mb='20px'>
@@ -245,6 +260,7 @@ export const SideRightBuildingInfo: React.FC<{
           currnet_building={currentAttributes}
           estimate={estimate}
           onFinish={onClose}
+          onCreateBuilding={onCreateBuilding}
         />
       </Content>
     </Container>

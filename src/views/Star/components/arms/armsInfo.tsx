@@ -144,7 +144,7 @@ export const ArmsInfo: React.FC<{
           </Flex>
         </Head>
         <Body>
-          <Preview isRadius>
+          <Preview isRadius stripe width='180px' height='180px'>
             <PreviewNumber>{armsData.count}</PreviewNumber>
             <Image src={getSoldierSrc()} width={180} height={180} />
           </Preview>
@@ -209,7 +209,7 @@ export const ArmsInfo: React.FC<{
             <MarkText bold fontSize='18px' mb='20px' fontStyle='normal'>
               能力评级：SS
             </MarkText>
-            <GraphicsCard height='110px'>
+            <GraphicsCard stripe width='490px' height='110px'>
               <Text color='textSubtle'>
                 提高角色最终命中率，同时处于反击状态。每提升1级，
                 最终命中率提高3%，同时每提升1级，反击的为例提高。
