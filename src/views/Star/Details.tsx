@@ -96,7 +96,6 @@ const Details = () => {
   const ref = React.useRef<HTMLDivElement>(null);
 
   const activeBuilder = useActiveBuilder(building);
-  console.log(activeBuilder)
 
   const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
@@ -106,9 +105,9 @@ const Details = () => {
   const currentTime = Number((Date.now() / 1000).toFixed(0));
 
   const [areaX, areaY] = React.useMemo(() => {
-    if (planet?.areaX) {
-      return [3, 2]
-    }
+    // if (planet?.areaX) {
+    //   return [3, 2]
+    // }
     return [planet?.areaX, planet?.areaY]
   }, [planet])
 
