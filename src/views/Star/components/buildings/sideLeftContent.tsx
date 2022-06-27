@@ -144,6 +144,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       const builder = new Builder({
         src: item.picture,
         id: `${item._id}`,
+        building: item,
         race,
       });
       setMoving(true);

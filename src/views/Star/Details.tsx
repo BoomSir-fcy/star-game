@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useStore, storeAction } from 'state';
+import { useStore, storeAction, AppDispatch } from 'state';
 import { Box, Button } from 'uikit';
 import { Api } from 'apis';
 
@@ -11,6 +11,7 @@ import 'intro.js/introjs.css';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import useBuilding from 'building/hooks/useBuilding';
+import { useToast } from 'contexts/ToastsContext';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { useImmer } from 'use-immer';
@@ -38,6 +39,7 @@ const Details = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { toastSuccess, toastError } = useToast();
   const { refreshWorkQueue } = useWorkqueue();
   const { guides, setGuide } = useGuide(location.pathname);
   const [state, setState] = React.useState<AreaDataItem[]>([]);
@@ -104,7 +106,6 @@ const Details = () => {
   }, [building, ref]);
 
   const activeBuilder = useActiveBuilder(building);
-  console.log(activeBuilder, 'activeBuilder')
 
   const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
@@ -115,11 +116,60 @@ const Details = () => {
 
   const [stateBuilding, setStateBuilding] = useImmer({
     visible: false,
+    building: {} as Api.Building.Building,
   });
 
   const updateGrid = React.useCallback(data => {
     setState(data);
   }, []);
+
+  const saveWorkQueue = React.useCallback(
+    async (val: Api.Building.Building) => {
+      // const params = currentQueue?.reduce((current, next, index): any => {
+      //   const [from, to] = getMatrix(
+      //     next?.index,
+      //     next?.propterty?.size?.area_x,
+      //   );
+      //   if (!next?.work_end_time) {
+      //     if (next?.work_type === 1) {
+      //       current.push({
+      //         work_type: 1,
+      //         building_create_param: {
+      //           buildings_id: next._id,
+      //           building_number: next.buildings_number,
+      //           position: {
+      //             from: { x: from[0].x, y: from[1].y },
+      //             to: { x: to[0].x, y: to[1].y },
+      //           },
+      //           index: next.index,
+      //         },
+      //       });
+      //     } else {
+      //       current.push({
+      //         work_type: 2,
+      //         building_upgrade_param: {
+      //           buildings_id: next._id,
+      //           building_number: next.buildings_number,
+      //         },
+      //       });
+      //     }
+      //   }
+      //   return current;
+      // }, []);
+      // try {
+      //   const res = await Api.BuildingApi.createQueueBuilding({
+      //     id,
+      //     work_queue_params: params,
+      //   });
+      //   if (Api.isSuccess(res)) {
+      //     toastSuccess(t('planetTipsSaveSuccess'));
+      //   }
+      // } catch (error) {
+      //   console.error(error);
+      // }
+    },
+    [],
+  );
 
   const getWorkQueue = React.useCallback(
     async (isSave?: boolean) => {
@@ -147,6 +197,16 @@ const Details = () => {
     },
     [currentTime, id, refreshWorkQueue],
   );
+
+  React.useEffect(() => {
+    if (activeBuilder?.option?.id) {
+      console.log('activeBuilder?.option: ', activeBuilder);
+      setStateBuilding(p => {
+        p.visible = true;
+        p.building = { ...activeBuilder?.option?.building, isbuilding: false };
+      });
+    }
+  }, [activeBuilder, setStateBuilding]);
 
   React.useEffect(() => {
     if (planet?.areaX > 0 && planet?.areaY > 0) {
@@ -188,12 +248,13 @@ const Details = () => {
 
   React.useEffect(() => {
     getWorkQueue();
+  }, [getWorkQueue]);
+
+  React.useEffect(() => {
     return () => {
       dispatch(storeAction.toggleVisible({ visible: false }));
     };
-  }, [dispatch, getWorkQueue]);
-
-  console.log(activeBuilder);
+  }, [dispatch]);
 
   return (
     <>
@@ -231,32 +292,27 @@ const Details = () => {
               }}
             />
           )}
-        <Button
-          style={{ position: 'absolute', top: '35%', left: '20%' }}
-          onClick={() =>
-            setStateBuilding(p => {
-              p.visible = !stateBuilding.visible;
-            })
-          }
-        >
-          展开
-        </Button>
         <SideLeftContent race={planet?.race} building={building} />
         <PlanetQueue
           serverTime={currentTime + serverDiffTime}
           currentQueue={[]}
         />
-        <SideRightBuildingInfo
-          visible={stateBuilding.visible}
-          planet={planet}
-          planet_id={id}
-          buildingsId='62a6dc0252416b0eec60e970'
-          onClose={() =>
-            setStateBuilding(p => {
-              p.visible = false;
-            })
-          }
-        />
+        {stateBuilding.visible && (
+          <SideRightBuildingInfo
+            visible={stateBuilding.visible}
+            planet={planet}
+            planet_id={id}
+            buildingsId={stateBuilding.building?._id}
+            itemData={stateBuilding?.building}
+            onCreateBuilding={saveWorkQueue}
+            onClose={() =>
+              setStateBuilding(p => {
+                p.visible = false;
+              })
+            }
+          />
+        )}
+
         <Box ref={ref} />
       </Container>
 
@@ -264,7 +320,7 @@ const Details = () => {
       <ThingUpgradesModal
         visible={upgrad.visible}
         planet_id={id}
-        onChange={async () => { }}
+        onChange={async () => {}}
         onClose={() => {
           dispatch(
             storeAction.upgradesBuildingModal({
@@ -279,7 +335,7 @@ const Details = () => {
       <ThingDestoryModal
         visible={destory.visible}
         planet_id={id}
-        onChange={() => { }}
+        onChange={() => {}}
         onClose={() =>
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),

@@ -42,10 +42,11 @@ const Items = styled(Flex)`
 
 export const BuildingUpgrade: React.FC<{
   planet: Api.Planet.PlanetInfo;
-  currnet_building: Api.Building.BuildingDetail;
+  currnet_building: Api.Building.Building;
   estimate: Api.Building.BuildingDetail;
+  onCreateBuilding: (building: Api.Building.Building) => void;
   onFinish: () => void;
-}> = ({ planet, currnet_building, estimate, onFinish }) => {
+}> = ({ planet, currnet_building, estimate, onCreateBuilding, onFinish }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const planetAssets = useStore(p => p.buildling.planetAssets);
@@ -74,25 +75,29 @@ export const BuildingUpgrade: React.FC<{
         <Flex width='100%' justifyContent='space-between' alignItems='center'>
           <Flex alignItems='center'>
             <MarkText bold fontSize='18px' fontStyle='normal'>
-              {t('upgradeRequirements')}
+              {currnet_building?.isbuilding
+                ? t('upgradeRequirements')
+                : t('construction needs')}
             </MarkText>
-            <Flex alignItems='center' ml='30px' mt='4px'>
-              <Text shadow='primary' bold fontSize='14px'>
-                Lv {currnet_building?.propterty?.levelEnergy}
-              </Text>
-              <>
-                <Box width='21px' height='17px' margin='0 5px'>
-                  <Image
-                    src='/images/commons/icon/icon-upgrade.png'
-                    width={47}
-                    height={40}
-                  />
-                </Box>
+            {currnet_building?.isbuilding && (
+              <Flex alignItems='center' ml='30px' mt='4px'>
                 <Text shadow='primary' bold fontSize='14px'>
-                  Lv {currnet_building?.propterty?.levelEnergy + 1}
+                  Lv {currnet_building?.propterty?.levelEnergy}
                 </Text>
-              </>
-            </Flex>
+                <>
+                  <Box width='21px' height='17px' margin='0 5px'>
+                    <Image
+                      src='/images/commons/icon/icon-upgrade.png'
+                      width={47}
+                      height={40}
+                    />
+                  </Box>
+                  <Text shadow='primary' bold fontSize='14px'>
+                    Lv {currnet_building?.propterty?.levelEnergy + 1}
+                  </Text>
+                </>
+              </Flex>
+            )}
           </Flex>
           <Text textAlign='right'>
             {t('TimeCnsumingBuild', {
@@ -169,28 +174,49 @@ export const BuildingUpgrade: React.FC<{
           </Flex>
         </Flex>
         <Flex justifyContent='center' mt='34px'>
-          <Button
-            width='226px'
-            height='53px'
-            variant='purple'
-            disabled={planet?.level <= currnet_building?.propterty?.levelEnergy}
-            onClick={() => {
-              dispatch(
-                storeAction.upgradesBuildingModal({
-                  visible: true,
-                  upgrad: {
-                    building_detail: currnet_building,
-                    estimate_building_detail: estimate,
-                  },
-                }),
-              );
-              onFinish();
-            }}
-          >
-            <Text bold fontSize='16px' color='#4FFFFB'>
-              {t('planetBuildingUpgrades')}
-            </Text>
-          </Button>
+          {currnet_building?.isbuilding ? (
+            <Button
+              width='226px'
+              height='53px'
+              variant='purple'
+              disabled={
+                planet?.level <= currnet_building?.propterty?.levelEnergy
+              }
+              onClick={() => {
+                dispatch(
+                  storeAction.upgradesBuildingModal({
+                    visible: true,
+                    upgrad: {
+                      building_detail: currnet_building,
+                      estimate_building_detail: estimate,
+                    },
+                  }),
+                );
+                onFinish();
+              }}
+            >
+              <Text bold fontSize='16px' color='#4FFFFB'>
+                {t('planetBuildingUpgrades')}
+              </Text>
+            </Button>
+          ) : (
+            <Button
+              width='226px'
+              height='53px'
+              variant='purple'
+              disabled={
+                planet?.level <= currnet_building?.propterty?.levelEnergy
+              }
+              onClick={() => {
+                onCreateBuilding(currnet_building);
+                onFinish();
+              }}
+            >
+              <Text bold fontSize='16px' color='#4FFFFB'>
+                {t('build buildings')}
+              </Text>
+            </Button>
+          )}
         </Flex>
       </Content>
     </Container>

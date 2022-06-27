@@ -34,7 +34,7 @@ declare namespace Api {
       type: number;
       extra: BuildingExtra;
       propterty: BuildingPropterty;
-      _id: string | number;
+      _id: string;
       status?: {
         building_id: string | number;
         count_down: number;
@@ -43,6 +43,7 @@ declare namespace Api {
       building: {
         _id: number;
       };
+      upgrade_need: UpgradeNeed;
       work_queue_id?: number;
       isbuilding?: boolean;
       isactive?: boolean; // 是否激活

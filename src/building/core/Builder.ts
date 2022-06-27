@@ -10,6 +10,7 @@ export interface BuilderOption {
   src?: string;
   id: string;
   race?: number;
+  building: Api.Building.Building;
 }
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
