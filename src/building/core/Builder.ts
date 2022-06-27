@@ -10,17 +10,21 @@ export interface BuilderOption {
   src?: string;
   id: string;
   race?: number;
+  areaY: number;
+  areaX: number;
 }
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
     super();
-    const { src, id, race = 1 } = option;
+    const { src, id, race = 1, areaX, areaY } = option;
     this.id = id;
 
     const img = `${window.location.origin}/assets/buildings/${race}/${src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
       }`;
 
     this.src = img;
+    this.areaY = areaY;
+    this.areaX = areaX;
     this.texture = Texture.from(img);
     this.option = { ...option };
 
