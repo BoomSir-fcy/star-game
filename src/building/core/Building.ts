@@ -122,8 +122,8 @@ class Building extends EventTarget {
     return this.loaders;
   }
 
-  creatTerrain(TerrainInfo?: Api.Game.TerrainInfo[]) {
-    this.boards.drawChequers(this.test, TerrainInfo);
+  creatTerrain(areaX: number, areaY: number) {
+    this.boards.drawChequers(areaX, areaY);
     this.boardsCreated = true;
     this.dispatchEvent(new Event('boardsCreated'));
   }
@@ -310,7 +310,6 @@ class Building extends EventTarget {
       );
       const collection = item.checkCollisionPoint(point);
       if (collection && item.state === stateType.PLACE) {
-        console.log(12112);
         builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
         canDrag = true;
       }
