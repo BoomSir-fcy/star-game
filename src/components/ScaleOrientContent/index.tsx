@@ -80,7 +80,7 @@ window.addEventListener(
   { once: true },
 );
 
-const Content = styled(Box) <{ scale: number; hideHeader?: boolean }>`
+const Content = styled(Box)<{ scale: number; hideHeader?: boolean }>`
   width: 1920px;
   /* height: ${({ scale, hideHeader }) => (hideHeader ? 900 - 176 : 900)}px; */
   /* padding-top: ${({ scale, hideHeader }) =>
@@ -199,6 +199,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
     if (pathname === '/plant-league') return 2;
     if (pathname === '/star') return 2;
     if (pathname === '/') return 1;
+    if (pathname === '/galaxy') return 4;
     return 0;
   }, [pathname]);
 

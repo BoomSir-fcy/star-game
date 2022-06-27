@@ -121,7 +121,22 @@ export interface GalaxyState {
   loadingGalaxy: boolean;
   loading: boolean;
   auctionRecordList: any[];
+  AllLogs: AllLogsInfo[];
 }
+
+export interface AllLogsInfo {
+  id: number;
+  galaxyId: number;
+  nickname: string;
+  oldOwner: string;
+  newOwner: string;
+  price: number;
+  auctionAt: number;
+  addTime: number;
+  avatar: string;
+  name: string;
+}
+
 export interface PlanetState {
   mePlanet: Api.Planet.PlanetInfo[];
   mePlanetLoading: boolean;

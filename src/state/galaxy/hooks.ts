@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GalaxyState } from 'state/types';
 import {
+  fetchAllLogsAsync,
   fetchGalaxyListAsync,
   fetchGalaxyStarListAsync,
   fetchGetNftViewAsync,
@@ -67,4 +68,22 @@ export const useAuction = () => {
   );
 
   return { onAuction };
+};
+
+export const useFetchAllLogsView = () => {
+  const dispatch = useDispatch();
+  const { account } = useActiveWeb3React();
+  const fetch = useCallback(() => {
+    if (account) {
+      dispatch(fetchAllLogsAsync());
+    }
+  }, [account, dispatch]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return {
+    fetch,
+  };
 };

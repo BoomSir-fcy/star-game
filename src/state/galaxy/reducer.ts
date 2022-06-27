@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppThunk, GalaxyState } from 'state/types';
 import {
+  fetchAllLogs,
   fetchAuctionRecordList,
   fetchGalaxyList,
   fetchGalaxyStarList,
@@ -30,12 +31,18 @@ export const initialState: GalaxyState = {
     lastTimestamp: '0',
   },
   auctionRecordList: [],
+  AllLogs: [],
 };
 
 export const fetchGalaxyListAsync = (): AppThunk => async dispatch => {
   dispatch(setLoadingGalaxy(true));
   const list = await fetchGalaxyList();
   dispatch(setGalaxyList(list));
+};
+
+export const fetchAllLogsAsync = (): AppThunk => async dispatch => {
+  const list = await fetchAllLogs();
+  dispatch(setAllLogsList(list));
 };
 
 export const fetchGalaxyStarListAsync =
@@ -111,6 +118,12 @@ export const galaxySlice = createSlice({
       const { payload } = action;
       state.auctionRecordList = payload;
     },
+    setAllLogsList: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        state.AllLogs = payload;
+      }
+    },
   },
 });
 
@@ -124,6 +137,7 @@ export const {
   setCurrentStarPeriod,
   setGalaxyNft,
   setAuctionRecordList,
+  setAllLogsList,
 } = galaxySlice.actions;
 
 export default galaxySlice.reducer;
