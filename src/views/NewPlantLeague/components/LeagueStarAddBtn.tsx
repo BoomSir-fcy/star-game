@@ -84,12 +84,6 @@ const RemoveIcon = styled.img`
   right: 18px;
   width: 37px;
   height: 37px;
-  /* line-height: 30px; */
-  /* text-align: center; */
-  /* background: red; */
-  /* border-radius: 50%; */
-  /* color: red; */
-  /* font-size: 60px; */
   z-index: 2;
 `;
 
@@ -97,6 +91,22 @@ const LeveBox = styled(Box)`
   position: relative;
   z-index: 1;
   padding-top: 40px;
+`;
+
+const MaskBox = styled(Flex)<{ height: string; width: string }>`
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  border-radius: 50%;
+  height: ${({ height }) => height};
+  width: ${({ width }) => width};
+  justify-content: center;
+  align-items: center;
 `;
 
 interface StarAddBtnProps extends BoxProps {
@@ -116,6 +126,7 @@ interface StarAddBtnProps extends BoxProps {
   ball?: boolean;
   ballWorking?: boolean;
   resources?: boolean;
+  resourcesText?: string;
 }
 
 const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
@@ -136,6 +147,7 @@ const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
   ball,
   ballWorking,
   resources,
+  resourcesText,
   ...props
 }) => {
   const { className, ...restProps } = props;
@@ -203,6 +215,13 @@ const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
         <OwnerFlex>
           <Text small>{owner}</Text>
         </OwnerFlex>
+      )}
+      {resources && (
+        <MaskBox height={width_height} width={width_height}>
+          <MarkText fontStyle='normal' fontSize='16px' bold>
+            {resourcesText}
+          </MarkText>
+        </MaskBox>
       )}
       {Leve && (
         <LeveBox>
