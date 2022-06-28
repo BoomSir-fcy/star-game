@@ -314,7 +314,6 @@ class Building extends EventTarget {
   onDragEndBuilder(event: InteractionEvent, builder: Builder) {
     if (builder.areaX === 2) {
       const matrix4 = this.boards.checkCollisionPointOfTow(event, true);
-      console.log(matrix4, 'matrix4')
       if (matrix4) {
         builder.setPosition(
           new AxisPoint(
@@ -332,7 +331,6 @@ class Building extends EventTarget {
       // builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
     }
     const chequer = this.boards.checkCollisionPoint(event);
-    console.log(chequer, 'chequer')
 
     if (chequer) {
       builder.setPosition(new AxisPoint(chequer.axisX, chequer.axisY, chequer));
