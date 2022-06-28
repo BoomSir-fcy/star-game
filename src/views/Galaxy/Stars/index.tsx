@@ -42,6 +42,10 @@ const Stars = () => {
       nick_name: '',
       product_box: 0,
       power: 0,
+      cost_star: 0, // 挑战门票
+      destroy_star: 0, // 销毁
+      staking_pool_star: 0, // 分配质押池
+      planet_owner_star: 0, // 恒星主获得
     };
   }, []);
   const [activeStar, setActiveStar] = useState<Api.Galaxy.StarInfo>(initState);

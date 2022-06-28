@@ -21,6 +21,10 @@ declare namespace Api {
       nick_name: string;
       product_box: number; // 产出box
       power: number; // 战斗力
+      cost_star: number; // 挑战门票
+      destroy_star: number; // 销毁
+      staking_pool_star: number; // 分配质押池
+      planet_owner_star: number; // 恒星主获得
     }
 
     interface OwnerInfo {
