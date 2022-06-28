@@ -34,7 +34,7 @@ const BoxRightTop = styled(Box)<ScaleProps>`
   top: 15px;
   right: 0;
   transform: ${({ scale }) => `scale(${scale})`};
-  z-index: 99;
+  /* z-index: 99; */
   transform-origin: top right;
 `;
 
@@ -43,7 +43,7 @@ const FlexLeftTop = styled(Flex)<ScaleProps>`
   transform: ${({ scale }) => `scale(${scale})`};
   left: 0;
   transform-origin: top left;
-  z-index: 99;
+  /* z-index: 99; */
 `;
 
 const BoxRightBottom = styled(Box)<ScaleProps>`
@@ -52,7 +52,7 @@ const BoxRightBottom = styled(Box)<ScaleProps>`
   transform: ${({ scale }) => `scale(${scale})`};
   transform-origin: bottom right;
   bottom: 15px;
-  z-index: 99;
+  /* z-index: 99; */
 `;
 
 interface DashboardProps extends ButtonGroupProps {

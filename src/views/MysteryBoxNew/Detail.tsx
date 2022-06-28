@@ -98,6 +98,7 @@ const MysteryBoxDetail = () => {
           <MysteryBoxBaseStyled quality={mysteryBoxQualities.ORDINARY} />
           <MysteryBoxStarStyled quality={mysteryBoxQualities.ORDINARY}>
             <Globe
+              rotate
               scale='ld'
               shadow={QualityColor[info?.rarity]}
               url={info?.picture1}

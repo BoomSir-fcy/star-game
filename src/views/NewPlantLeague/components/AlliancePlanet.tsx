@@ -41,7 +41,7 @@ const AlliancePlanet: React.FC<{
         name: allianceList[i]?.planet?.name,
         planetId: allianceList[i]?.planetId,
         rarity: allianceList[i]?.planet?.rarity || qualities.ORDINARY,
-        url: allianceList[i]?.planet?.picture1,
+        url: allianceList[i]?.planet?.picture1 || '',
         No: i + 1,
         Leve: allianceList[i]?.planet?.level || '',
       };
@@ -50,60 +50,20 @@ const AlliancePlanet: React.FC<{
     return arr;
   }, [alliance, allianceList]);
 
-  // 删除星球
-  const Remove = useCallback(
-    async (id: number) => {
-      const list = allianceList.filter(item => {
-        return item.planetId !== id;
-      });
-      setAllianceList(list);
-      const newList = newIds.concat([]);
-      const index = newList.indexOf(Number(id));
-      newList.splice(index, 1);
-      setNewIds(newList);
-    },
-    [allianceList, newIds, setNewIds, setAllianceList],
-  );
-
-  // 提交修改
-  const SubmitList = useCallback(async () => {
-    if (Loading) return;
-    setLoading(true);
-    const newIdsStr = newIds.join();
-    const workingListStr = workingList.join();
-    if (newIdsStr === workingListStr) {
-      toastError(t('The alliance has not changed'));
-      return;
-    }
-    try {
-      await RemoveStar(newIds);
-      toastSuccess(t('Remove Succeeded'));
-    } catch (e) {
-      console.error(e);
-      toastError(t('Remove Failed'));
-    }
-    dispatch(fetchAllianceViewAsync());
-    setLoading(false);
-  }, [
-    RemoveStar,
-    toastError,
-    toastSuccess,
-    dispatch,
-    t,
-    Loading,
-    workingList,
-    newIds,
-  ]);
-
   const addStar = (id: any) => {
     if (!account) {
       onConnectWallet();
       return;
     }
     // callbackGuide();
-    navigate(`/star/planet?hide=true&choose=${id || 1}`);
+    navigate('/choose-planet');
   };
 
+  // const getResourcesText = (ore,splce,energy)=>{
+  //   if(!ore){
+
+  //   }
+  // }
   useEffect(() => {
     setNewIds(workingList);
   }, [workingList]);
@@ -141,7 +101,7 @@ const AlliancePlanet: React.FC<{
                   ball
                   ballWorking={item.ballWorking}
                   name={item.name}
-                  onRemove={() => Remove(item.planetId)}
+                  onRemove={() => {}}
                   onPlantClick={() => {
                     setPlantManageModule(true);
                     setChoosePlant(allianceList[index]);
@@ -160,6 +120,12 @@ const AlliancePlanet: React.FC<{
                   url={item.url}
                   No={item.No}
                   Leve={item.Leve}
+                  resources={
+                    item.stone_enough ||
+                    item.population_enough ||
+                    item.energy_enough
+                  }
+                  resourcesText={t('资源不足')}
                 />
               </Box>
             ))}

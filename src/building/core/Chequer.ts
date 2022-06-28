@@ -120,8 +120,8 @@ class Chequer {
     this.stateSprite.anchor.set(0.5);
     this.stateSprite.x = 0;
     this.stateSprite.y = (Chequer.HEIGHT * Chequer.Y_RATIO) / 2;
-    this.stateSprite.width = Chequer.WIDTH;
-    this.stateSprite.height = Chequer.HEIGHT;
+    this.stateSprite.width = Chequer.WIDTH + 3;
+    this.stateSprite.height = Chequer.HEIGHT + 3;
     this.bunny.addChild(this.stateSprite);
     this.stateSprite.visible = false;
 

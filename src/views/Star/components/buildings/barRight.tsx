@@ -4,6 +4,7 @@ import { useStore } from 'state';
 import { Flex, Box, MarkText } from 'uikit';
 
 import { useTranslation } from 'contexts/Localization';
+import { useNavigate } from 'react-router-dom';
 import { BarCard } from './barCard';
 import { BarHead } from './barHead';
 import { PlanetAssets } from './planetAssets';
@@ -14,6 +15,7 @@ const BarLayout = styled(Box)`
   position: fixed;
   right: 0;
   top: 8%;
+  z-index: 88;
 `;
 
 const ImgFlex = styled(Flex)`
@@ -27,6 +29,7 @@ export const BarRight: React.FC<{
   planet_id: number;
 }> = ({ planet_id }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { getPlanetBuff } = useBuffer();
   const [currentBufffer, setCurrentBuffer] = React.useState({});
   const planetInfo = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
@@ -57,7 +60,10 @@ export const BarRight: React.FC<{
     <BarLayout>
       <Flex flexDirection='column' alignItems='flex-end'>
         <BarHead plant_info={planetInfo} />
-        <BarCard title={t('星球升級')}>
+        <BarCard
+          title={t('planetMenuUpgrade')}
+          onClick={() => navigate(`/star/upgrade?id=${planet_id}`)}
+        >
           <Flex
             justifyContent='center'
             alignItems='center'
@@ -71,7 +77,10 @@ export const BarRight: React.FC<{
             </MarkText>
           </Flex>
         </BarCard>
-        <BarCard title={t('星球培育')}>
+        <BarCard
+          title={t('planetMenuGrow')}
+          onClick={() => navigate(`/star/grow?id=${planet_id}`)}
+        >
           <Flex
             justifyContent='center'
             alignItems='center'
@@ -85,7 +94,10 @@ export const BarRight: React.FC<{
             </MarkText>
           </Flex>
         </BarCard>
-        <BarCard title={t('战斗布阵')}>
+        <BarCard
+          title={t('planetMenuEmbattle')}
+          onClick={() => navigate(`/star/embattle?id=${planet_id}`)}
+        >
           <Flex
             justifyContent='center'
             alignItems='center'

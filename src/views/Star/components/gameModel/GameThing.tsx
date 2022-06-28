@@ -126,7 +126,7 @@ export const GameThing: React.FC<{
   return (
     <Flex justifyContent='center' flexDirection='column'>
       <Container
-        radius
+        isRadius
         width={`${sizeBox.width}px`}
         height={`${sizeBox.height}px`}
         draggable={draggable}

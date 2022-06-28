@@ -70,7 +70,7 @@ class Building extends EventTarget {
 
   app: Application;
 
-  boards;
+  boards: Boards;
 
   boardsCreated = false;
 
@@ -122,8 +122,8 @@ class Building extends EventTarget {
     return this.loaders;
   }
 
-  creatTerrain(TerrainInfo?: Api.Game.TerrainInfo[]) {
-    this.boards.drawChequers(this.test, TerrainInfo);
+  creatTerrain(areaX: number, areaY: number) {
+    this.boards.drawChequers(areaX, areaY);
     this.boardsCreated = true;
     this.dispatchEvent(new Event('boardsCreated'));
   }
@@ -151,17 +151,22 @@ class Building extends EventTarget {
     this.boards.container.zIndex = 1;
     this.boards.container.addChild(builder.container);
     builder.container
+      // .on('pointerdown', () => {
+      //   this.showSameSoliderState(soldier);
+      //   builder.setMoved(false);
+      // })
       .on('pointermove', event => {
+        // console.log(builder.dragging, 'builder.dragging')
         if (builder.dragging) {
-          this.onDrageMoveBuilder(event);
+          // this.onDrageMoveBuilder(event, builder);
         }
       })
       .on('pointerup', event => {
-        console.log(12222222);
         if (builder.moved) {
           const res = this.onDragEndBuilder(event, builder);
           if (res) {
             this.dispatchEvent(getUpdateBuilderPosition(this.builders));
+            this.dispatchEvent(getAddActiveBuilderEvent(builder));
           }
         }
         this.activeBuilderFlag = true;
@@ -243,7 +248,7 @@ class Building extends EventTarget {
     this.dragPreBuilder.container.visible = false;
     this.app.stage.addChild(this.dragPreBuilder.container);
     this.dragPreBuilder.container.on('pointermove', event => {
-      this.onDrageMoveBuilder(event);
+      this.onDrageMoveBuilder(event, builder);
     });
   }
 
@@ -260,6 +265,7 @@ class Building extends EventTarget {
             detail: { builders: this.builders },
           }),
         );
+        this.dispatchEvent(getAddActiveBuilderEvent(builder));
       }
       this.dragPreBuilder.setDragging(false);
       this.dragPreBuilder.container.visible = false;
@@ -282,42 +288,55 @@ class Building extends EventTarget {
   }
 
   // 移动小人
-  onDrageMoveBuilder(event: InteractionEvent) {
-    this.boards.chequers.forEach(item => {
-      const point = new Point(
-        event.data.global.x - 10,
-        event.data.global.y + 5,
-      );
-      const collection = item.checkCollisionPoint(point);
-      if (collection && item.state === stateType.PREVIEW) {
-        item.setState(stateType.PLACE);
-      } else if (!collection && item.state === stateType.PLACE) {
-        item.setState(stateType.PREVIEW);
-      }
-    });
+  onDrageMoveBuilder(event: InteractionEvent, builder: Builder) {
+    if (builder.areaX === 2) {
+      const matrix4 = this.boards.checkCollisionPointOfTow(event);
+      matrix4?.setState(stateType.PLACE);
+      return;
+    }
+    const chequer = this.boards.checkCollisionPoint(event);
+    chequer?.setState(stateType.PLACE);
+
+    // this.boards.chequers.forEach(item => {
+    //   const point = new Point(
+    //     event.data.global.x - 10,
+    //     event.data.global.y + 5,
+    //   );
+    //   const collection = item.checkCollisionPoint(point);
+    //   if (collection && item.state === stateType.PREVIEW) {
+    //     item.setState(stateType.PLACE);
+    //   } else if (!collection && item.state === stateType.PLACE) {
+    //     item.setState(stateType.PREVIEW);
+    //   }
+    // });
   }
 
   // 拖拽小人结束生命周期
   onDragEndBuilder(event: InteractionEvent, builder: Builder) {
-    let canDrag = false;
-
-    this.boards.chequers.forEach(item => {
-      const point = new Point(
-        event.data.global.x - 10,
-        event.data.global.y + 5,
-      );
-      const collection = item.checkCollisionPoint(point);
-      if (collection && item.state === stateType.PLACE) {
-        console.log(12112);
-        builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
-        canDrag = true;
+    if (builder.areaX === 2) {
+      const matrix4 = this.boards.checkCollisionPointOfTow(event);
+      if (matrix4) {
+        builder.setPosition(
+          new AxisPoint(
+            matrix4.chequers[0].axisX,
+            matrix4.chequers[0].axisY,
+            matrix4.chequers[0],
+          ),
+        );
+        matrix4.setState(stateType.ACTIVE);
+      } else {
+        builder.resetPosition();
       }
-      item.displayState(false);
-    });
-    if (!canDrag) {
+      return !!matrix4;
+      // builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
+    }
+    const chequer = this.boards.checkCollisionPoint(event);
+    if (chequer) {
+      builder.setPosition(new AxisPoint(chequer.axisX, chequer.axisY, chequer));
+    } else {
       builder.resetPosition();
     }
-    return canDrag;
+    return !!chequer;
   }
 
   /**

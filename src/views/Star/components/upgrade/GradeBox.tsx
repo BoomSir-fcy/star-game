@@ -6,8 +6,8 @@ const StyledGradeBox = styled(Flex)`
   position: relative;
   justify-content: center;
   align-items: center;
-  width: 94px;
-  height: 104px;
+  width: 87px;
+  height: 96px;
   background: url('/images/commons/star/grade.png') no-repeat;
   background-size: 100%;
 `;

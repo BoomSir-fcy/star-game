@@ -1,6 +1,6 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Box, BoxProps } from 'uikit';
+import { Box, BoxProps, Image } from 'uikit';
 import { getVariantsSize } from 'components/StarCom/StyledStar';
 import { Scale, variants } from 'components/StarCom/types';
 import styled, { keyframes, DefaultTheme } from 'styled-components';
@@ -41,20 +41,28 @@ const Planet = styled(Box)<{ url: string }>`
     animation: ${planetRotate} calc(153.3 * 0.1s) linear infinite;
   }
 `;
+const IconUnion = styled(Image)`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`;
+
 export interface GlobeProps extends BoxProps {
   url: string;
   scale?: Scale;
   shadow?: string;
   rotate?: boolean;
   theme?: DefaultTheme;
+  showUnion?: boolean;
 }
 
 const Globe: React.FC<GlobeProps> = ({
   shadow = '#FFF',
   scale = 'md',
-  rotate = true,
+  rotate,
   url,
   theme,
+  showUnion,
   ...props
 }) => {
   const { width, height } = React.useMemo(() => {
@@ -65,12 +73,18 @@ const Globe: React.FC<GlobeProps> = ({
   }, [theme, shadow]);
 
   return (
-    <PlanetBox width={width} height={height} color={getColor} {...props}>
-      <Planet url={url} className={rotate ? 'rotate' : ''} />
-      {/* <Canvas resize={{ offsetSize: true }}>
-        <Scene rotate={rotate} shadow={shadow} url={url} />
-      </Canvas> */}
-    </PlanetBox>
+    <Box position='relative'>
+      <PlanetBox width={width} height={height} color={getColor} {...props}>
+        <Planet url={url} className={rotate ? 'rotate' : ''} />
+      </PlanetBox>
+      {showUnion && (
+        <IconUnion
+          width={47}
+          height={45}
+          src='/images/commons/icon/union.png'
+        />
+      )}
+    </Box>
   );
 };
 

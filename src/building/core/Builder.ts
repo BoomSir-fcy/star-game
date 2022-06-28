@@ -10,11 +10,14 @@ export interface BuilderOption {
   src?: string;
   id: string;
   race?: number;
+  building: Api.Building.Building;
+  areaY: number;
+  areaX: number;
 }
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
     super();
-    const { src, id, race = 1 } = option;
+    const { src, id, race = 1, areaX, areaY } = option;
     this.id = id;
 
     const img = `${window.location.origin}/assets/buildings/${race}/${
@@ -22,6 +25,8 @@ class Builder extends EventTarget {
     }`;
 
     this.src = img;
+    this.areaY = areaY;
+    this.areaX = areaX;
     this.texture = Texture.from(img);
     this.option = { ...option };
 
@@ -50,11 +55,31 @@ class Builder extends EventTarget {
 
   moved = false; // 是否发生移动
 
+  position: {
+    from: {
+      x: number;
+      y: number;
+    };
+    to: {
+      x: number;
+      y: number;
+    };
+  } = {
+    from: {
+      x: 0,
+      y: 0,
+    },
+    to: {
+      x: 0,
+      y: 0,
+    },
+  };
+
   init() {
     this.sprite.texture = this.texture;
 
-    this.sprite.width = 100;
-    this.sprite.height = 100;
+    this.sprite.width = 150 * this.areaX;
+    this.sprite.height = 150 * this.areaY;
     this.sprite.anchor.set(0.5);
 
     this.container.addChild(this.sprite);
@@ -91,6 +116,14 @@ class Builder extends EventTarget {
     this.axisPoint = point;
     this.axisPoint?.chequer?.setState(stateType.DISABLE);
     this.axisPoint?.chequer?.displayState(false);
+    this.position.from = {
+      x: point.axisX,
+      y: point.axisY,
+    };
+    this.position.to = {
+      x: point.axisX + this.areaX,
+      y: point.axisY + this.areaY,
+    };
   }
 
   // 重置位置 用于拖动的时候
