@@ -9,8 +9,8 @@ const StyledStar = styled.div<StarAddBtnProps>`
   position: relative;
   width: ${({ size }) => size};
   height: ${({ size }) => size};
-  background: ${({ url }) =>
-    url ? 'none' : `url('/images/commons/star/add.png') no-repeat`};
+  background: ${({ Leve }) =>
+    Leve ? 'none' : `url('/images/commons/star/add.png') no-repeat`};
   background-size: 100%;
   border: 0;
   box-shadow: none;
@@ -21,41 +21,13 @@ const StyledStar = styled.div<StarAddBtnProps>`
   &:hover,
   &:active,
   &.star-active {
-    background: ${({ url }) =>
-      url ? 'none' : `url('/images/commons/star/add-active.png') no-repeat`};
+    background: ${({ Leve }) =>
+      Leve ? 'none' : `url('/images/commons/star/add-active.png') no-repeat`};
     background-size: 100%;
     width: ${({ size }) => size};
     height: ${({ size }) => size};
     transform: scale(1.1);
   }
-`;
-
-const OwnerFlex = styled(Flex)`
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  justify-content: center;
-  align-items: center;
-  width: 134px;
-  height: 34px;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
-  border-radius: ${({ theme }) => theme.radii.tag};
-`;
-
-const NumberFlex = styled(Flex)`
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  justify-content: center;
-  align-items: center;
-  width: 134px;
-  height: 34px;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  box-shadow: inset 0px 0px 3px 1px rgba(255, 255, 255, 0.35);
-  border-radius: ${({ theme }) => theme.radii.tag};
 `;
 
 const StarImage = styled.img<StarAddBtnProps>`
@@ -75,24 +47,15 @@ const StarImage = styled.img<StarAddBtnProps>`
       : 'none'};
 `;
 const GlobeStyled = styled(Globe)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-const RemoveIcon = styled.img`
-  position: absolute;
-  top: 10px;
-  right: 18px;
-  width: 37px;
-  height: 37px;
-  z-index: 2;
+  margin: 0 auto;
 `;
 
-const LeveBox = styled(Box)`
-  position: relative;
+const LeveBox = styled(Flex)`
+  position: absolute;
   z-index: 1;
-  padding-top: 40px;
+  top: 40px;
+  justify-content: center;
+  width: 100%;
 `;
 
 const MaskBox = styled(Flex)<{ height: string; width: string }>`
@@ -122,7 +85,6 @@ interface StarAddBtnProps extends BoxProps {
   imgBorder?: Qualities;
   showIcon?: boolean;
   callBack?: () => void;
-  onRemove?: () => void;
   onPlantClick?: () => void;
   name?: string;
   ball?: boolean;
@@ -143,7 +105,6 @@ const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
   imgBorder,
   showIcon,
   callBack,
-  onRemove,
   onPlantClick,
   name,
   ball,
@@ -160,19 +121,21 @@ const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
     }
     if (url && ball) {
       return (
-        <GlobeStyled
-          width={width_height}
-          height={width_height}
-          shadow={QualityColor[imgBorder]}
-          url={url}
-          rotate={ballWorking}
-          onClick={event => {
-            if (onPlantClick) {
-              event.stopPropagation();
-              onPlantClick();
-            }
-          }}
-        />
+        <Flex height='100%' justifyContent='center' alignItems='center'>
+          <GlobeStyled
+            width={width_height}
+            height={width_height}
+            shadow={QualityColor[imgBorder]}
+            url={url}
+            rotate={ballWorking}
+            onClick={event => {
+              if (onPlantClick) {
+                event.stopPropagation();
+                onPlantClick();
+              }
+            }}
+          />
+        </Flex>
       );
     }
     return (
@@ -201,23 +164,6 @@ const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
       size={size}
       {...restProps}
     >
-      {showIcon && url && (
-        <RemoveIcon
-          onClick={e => {
-            e.stopPropagation();
-            if (onRemove) {
-              onRemove();
-            }
-          }}
-          src='/images/commons/icon/remove.png'
-          alt=''
-        />
-      )}
-      {owner && (
-        <OwnerFlex>
-          <Text small>{owner}</Text>
-        </OwnerFlex>
-      )}
       {resources && (
         <MaskBox height={width_height} width={width_height}>
           <MarkText fontStyle='normal' fontSize='16px' bold>
