@@ -145,8 +145,6 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
         src: item.picture,
         id: `${item._id}`,
         race,
-        areaX: item.propterty.size.area_x,
-        areaY: item.propterty.size.area_y,
       });
       setMoving(true);
       building?.addDragPreBuilder(builder);

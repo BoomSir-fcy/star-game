@@ -367,29 +367,6 @@ class Building extends EventTarget {
     return builder;
   }
 
-  initBuilder(
-    list: {
-      building: Api.Building.Building;
-      position: {
-        from: { x: number; y: number };
-        to: { x: number; y: number };
-      };
-    }[],
-  ) {
-    console.log(list);
-    if (this.builders.length) return;
-    console.log(1);
-    list.forEach(item => {
-      this.createBuilder(item.position.from.x, item.position.from.y, {
-        src: item.building.picture,
-        id: `${item.building._id}`,
-        race: item.building.race,
-        areaX: item.building.propterty.size.area_x + 1,
-        areaY: item.building.propterty.size.area_y + 1,
-      });
-    });
-  }
-
   /**
    * @dev 获取坐标详情
    * @param x x轴坐标

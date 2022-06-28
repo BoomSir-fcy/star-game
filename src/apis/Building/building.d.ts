@@ -32,7 +32,6 @@ declare namespace Api {
       parent_buildings_number: number;
       picture: string;
       type: number;
-      race: number;
       extra: BuildingExtra;
       propterty: BuildingPropterty;
       _id: string | number;
