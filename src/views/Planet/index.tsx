@@ -32,6 +32,7 @@ const PlanetList = () => {
   useEffect(() => {
     setPlanetList(mePlanet);
     setVisibleInfo(false);
+    setActivePlanet(null);
   }, [mePlanet]);
 
   const init = useCallback(() => {
@@ -75,7 +76,7 @@ const PlanetList = () => {
   const scrollPointermove = useCallback(
     e => {
       e.preventDefault();
-      e.stopPropagation();
+      // e.stopPropagation();
       const moveX = targetDrag.coord.x - e.pageX;
       const moveY = targetDrag.coord.y - e.pageY;
       setTargetDrag(p => {
@@ -110,10 +111,9 @@ const PlanetList = () => {
   // const [planetList] = React.useState(
   //   Array.from(new Array(20)).map((item, index) => index),
   // );
-
   return (
     <DragBox ref={pageRef}>
-      <PlanetBox className={targetDrag.isDown ? 'no-select' : ''}>
+      <PlanetBox>
         <GlobeFlexList
           setVisibleInfo={setVisibleInfo}
           setActivePlanet={setActivePlanet}

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useStore } from 'state';
-import { Flex, Box, MarkText } from 'uikit';
+import { Flex, Box, MarkText, BoxProps } from 'uikit';
 
 import { useTranslation } from 'contexts/Localization';
 import { useNavigate } from 'react-router-dom';
@@ -11,10 +11,11 @@ import { PlanetAssets } from './planetAssets';
 import { PlanetBuff } from './planetBuff';
 import { useBuffer } from '../hooks';
 
-const BarLayout = styled(Box)`
+const BarLayout = styled(Box)<{ top: number | string }>`
   position: fixed;
   right: 0;
-  top: 8%;
+  /* top: 8%; */
+  top: ${({ top }) => top};
   z-index: 88;
 `;
 
@@ -24,10 +25,15 @@ const ImgFlex = styled(Flex)`
     width: 100%;
   }
 `;
-
-export const BarRight: React.FC<{
+interface BarRightProps extends BoxProps {
   planet_id: number;
-}> = ({ planet_id }) => {
+  top: number | string;
+}
+export const BarRight: React.FC<BarRightProps> = ({
+  planet_id,
+  top,
+  ...props
+}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { getPlanetBuff } = useBuffer();
@@ -57,9 +63,26 @@ export const BarRight: React.FC<{
   }, [getBuffer]);
 
   return (
-    <BarLayout>
+    <BarLayout top={top} {...props}>
       <Flex flexDirection='column' alignItems='flex-end'>
         <BarHead plant_info={planetInfo} />
+        <BarCard
+          title={t('planetMenuBuilding')}
+          onClick={() => navigate(`/star?id=${planet_id}`)}
+        >
+          <Flex
+            justifyContent='center'
+            alignItems='center'
+            width='42px'
+            height='42px'
+            mr='8px'
+            position='relative'
+          >
+            <MarkText fontSize='18px' bold fontStyle='italic'>
+              {planetInfo?.build_count}
+            </MarkText>
+          </Flex>
+        </BarCard>
         <BarCard
           title={t('planetMenuUpgrade')}
           onClick={() => navigate(`/star/upgrade?id=${planet_id}`)}

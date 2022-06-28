@@ -19,7 +19,7 @@ class SkyStar {
     this.orbitY = star.height / 2;
     this.timePassed = SkyStar.randomM(0, star.maxStars);
     // 星星移动速度
-    this.speed = SkyStar.randomM(this.orbitRadius) / 100000;
+    this.speed = SkyStar.randomM(this.orbitRadius) / 500000;
     this.alpha = SkyStar.randomM(2, 10) / 10;
   }
 

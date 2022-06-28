@@ -98,6 +98,7 @@ const SearchInput: React.FC<{
               )}
             </ButtonStyled>
             <InputStyled
+              value={value}
               ref={inputRef}
               autoComplete='off'
               onBlur={e => {

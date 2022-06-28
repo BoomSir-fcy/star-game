@@ -28,8 +28,8 @@ const Star: React.FC<{
   const parsedQs = useParsedQueryString();
   const id = Number(parsedQs.id);
   const { t } = useTranslation();
-  const { activeNavId } = useStore(p => p.planet);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
+  const [positionTop, setPositionTop] = useState('0');
 
   React.useEffect(() => {
     if (id) {
@@ -50,23 +50,14 @@ const Star: React.FC<{
   }, [id, dispatch, planet?.race]);
 
   React.useEffect(() => {
-    dispatch(setActiveNavId('build'));
-    if (pathname.indexOf('/star/upgrade') !== -1) {
-      dispatch(setActiveNavId('upgrade'));
+    if (pathname.indexOf('/star/') === -1) {
+      console.log('建造页面');
+      setPositionTop('8%');
+    } else {
+      console.log('其他页面');
+      setPositionTop('-4%');
     }
-    if (pathname.indexOf('/star/grow') !== -1) {
-      dispatch(setActiveNavId('grow'));
-    }
-    if (pathname.indexOf('/star/embattle') !== -1) {
-      dispatch(setActiveNavId('embattle'));
-    }
-    if (pathname.indexOf('/star/embattle-test') !== -1) {
-      dispatch(setActiveNavId('embattle-test'));
-    }
-    if (pathname.indexOf('/star/search') !== -1) {
-      dispatch(setActiveNavId('search'));
-    }
-  }, [dispatch, pathname]);
+  }, [pathname]);
 
   return (
     <Layout>
@@ -82,7 +73,7 @@ const Star: React.FC<{
         </Box>
         <StarHeader />
       </Flex> */}
-      <BarRight planet_id={id} />
+      <BarRight top={positionTop} planet_id={id} />
       <Flex width='100%'>{children}</Flex>
       {/* <Flex width='100%'>
         <Nav

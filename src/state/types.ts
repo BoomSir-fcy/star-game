@@ -51,6 +51,7 @@ export interface userProductView {
   stone: number;
   energy: number;
   population: number;
+  power: number;
 }
 
 export interface UserInfoState {
@@ -260,6 +261,7 @@ export interface UserState {
     width: number;
     height: number;
   };
+  zIndex: boolean; // 导航层级
 }
 export interface State {
   user: UserState;

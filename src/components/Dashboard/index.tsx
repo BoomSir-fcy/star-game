@@ -19,6 +19,7 @@ import HandleButtonGroup from './HandleButtonGroup';
 
 interface ScaleProps {
   scale: number;
+  index: boolean;
 }
 const FlexStyled = styled(Flex)<ScaleProps>`
   /* background: url('/images/commons/dashboard/b1.png'); */
@@ -34,8 +35,8 @@ const BoxRightTop = styled(Box)<ScaleProps>`
   top: 15px;
   right: 0;
   transform: ${({ scale }) => `scale(${scale})`};
-  /* z-index: 99; */
   transform-origin: top right;
+  ${({ index }) => index && `z-index: 99;`}
 `;
 
 const FlexLeftTop = styled(Flex)<ScaleProps>`
@@ -43,7 +44,7 @@ const FlexLeftTop = styled(Flex)<ScaleProps>`
   transform: ${({ scale }) => `scale(${scale})`};
   left: 0;
   transform-origin: top left;
-  /* z-index: 99; */
+  ${({ index }) => index && `z-index: 99;`}
 `;
 
 const BoxRightBottom = styled(Box)<ScaleProps>`
@@ -52,7 +53,7 @@ const BoxRightBottom = styled(Box)<ScaleProps>`
   transform: ${({ scale }) => `scale(${scale})`};
   transform-origin: bottom right;
   bottom: 15px;
-  /* z-index: 99; */
+  ${({ index }) => index && `z-index: 99;`}
 `;
 
 interface DashboardProps extends ButtonGroupProps {
@@ -83,6 +84,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   // }, [location.pathname, FetchBlance, FetchProduct]);
 
   const Product = useStore(p => p.userInfo.userProduct);
+  const zIndex = useStore(p => p.user.zIndex);
 
   const hideHeader = useMemo(() => {
     return getHideHeader(location.pathname) || params?.hide;
@@ -92,18 +94,18 @@ const Dashboard: React.FC<DashboardProps> = ({
     <>
       {!hideHeader && (
         <>
-          <FlexLeftTop scale={scale}>
+          <FlexLeftTop scale={scale} index={zIndex}>
             <Avatar />
             <TokenInfo />
           </FlexLeftTop>
-          <BoxRightTop scale={scale}>
-            <HandleButtonGroup />
+          <BoxRightTop scale={scale} index={zIndex}>
+            <HandleButtonGroup onRefresh={onRefreshClick} />
           </BoxRightTop>
-          <BoxRightBottom scale={scale}>
+          <BoxRightBottom scale={scale} index={zIndex}>
             <ButtonGroup />
           </BoxRightBottom>
-          <FlexStyled scale={scale}>
-            {/* <Flex flex={1}>
+          {/* <FlexStyled scale={scale}>
+            <Flex flex={1}>
               <Info onRefresh={() => onRefreshClick()} className={className}>
                 {location.pathname === '/mystery-box' && !Product.planet_num && (
                   <BgCard variant='short'>
@@ -122,8 +124,8 @@ const Dashboard: React.FC<DashboardProps> = ({
                 )}
                 {children}
               </Info>
-            </Flex> */}
-          </FlexStyled>
+            </Flex>
+          </FlexStyled> */}
         </>
       )}
     </>
