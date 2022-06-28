@@ -17,7 +17,7 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
-import type { AreaDataItem } from './components/dragCompoents';
+import { useBuildingOperate } from './components/gameModel/hooks';
 
 import {
   BarRight,
@@ -43,6 +43,7 @@ const Details = () => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
   const { refreshWorkQueue } = useWorkqueue();
+  const { destory: destoryHook } = useBuildingOperate();
   const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
   const [serverDiffTime, setServerDiffTime] = React.useState<number>(0);
@@ -105,7 +106,6 @@ const Details = () => {
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
   const upgrad = useStore(p => p.buildling.upgradesBuilding);
   const destory = useStore(p => p.buildling.destroyBuilding);
-  const currentTime = Number((Date.now() / 1000).toFixed(0));
 
   const [stateBuilding, setStateBuilding] = useImmer({
     visible: false,
@@ -138,42 +138,29 @@ const Details = () => {
     };
   }, [initBuilder, building]);
 
-  const getWorkQueue = React.useCallback(
-    async () => {
-      try {
-        const res = await refreshWorkQueue(id);
-        if (Api.isSuccess(res)) {
-          const workQueueBase = res.data.base;
-          const resWorkQueue = res.data.work_queue;
-          const queueList = resWorkQueue.map(item => {
-            const buildings = workQueueBase.find(
-              ({ _id }) => _id === item.buildings_id,
-            );
-            return { ...item, building: buildings };
-          });
-          // let isQueue = [];
-          // if (isSave) {
-          //   isQueue = currentQueue.filter((item: any) => !item.planet_id);
-          // }
-          // setCurrentQueue([...resWorkQueue, ...isQueue]);
-          setStateBuilding(p => {
-            p.workQueue = queueList;
-          });
-          setServerDiffTime(
-            res.data.time - currentTime > 0
-              ? -(res.data.time - currentTime)
-              : res.data.time - currentTime,
+  const getWorkQueue = React.useCallback(async () => {
+    try {
+      const res = await refreshWorkQueue(id);
+      if (Api.isSuccess(res)) {
+        const workQueueBase = res.data.base;
+        const resWorkQueue = res.data.work_queue;
+        const queueList = resWorkQueue.map(item => {
+          const buildings = workQueueBase.find(
+            ({ _id }) => _id === item.buildings_id,
           );
-          dispatch(fetchPlanetBuildingsAsync(id));
-          dispatch(fetchPlanetInfoAsync([id]));
-        }
-      } catch (error) {
-        console.log(error);
+          return { ...item, building: buildings };
+        });
+        setStateBuilding(p => {
+          p.workQueue = queueList;
+        });
+        setServerDiffTime(res.data.time);
+        dispatch(fetchPlanetBuildingsAsync(id));
+        dispatch(fetchPlanetInfoAsync([id]));
       }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [refreshWorkQueue],
-  );
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch, id, refreshWorkQueue, setStateBuilding]);
 
   // 保存到队列
   const saveWorkQueue = React.useCallback(
@@ -218,8 +205,43 @@ const Details = () => {
     [id, t, toastSuccess, activeBuilder],
   );
 
+  // 销毁建筑
+  const destoryBuilding = React.useCallback(async () => {
+    try {
+      const res = await destoryHook({
+        planet_id: id,
+        build_type: destory?.destory?.type,
+        building_setting: [destory?.destory?._id],
+      });
+      if (Api.isSuccess(res)) {
+        toastSuccess(t('planetDestroyedSuccessfully'));
+        setStateBuilding(p => {
+          p.visible = false;
+        });
+        dispatch(
+          storeAction.destoryBuildingModal({ visible: false, destory: {} }),
+        );
+        building.removeBuilder(activeBuilder);
+      } else {
+        toastError(res.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [
+    activeBuilder,
+    building,
+    destory,
+    destoryHook,
+    dispatch,
+    id,
+    setStateBuilding,
+    t,
+    toastError,
+    toastSuccess,
+  ]);
+
   React.useEffect(() => {
-    console.log('activeBuilder: ', activeBuilder);
     if (activeBuilder?.option?.id) {
       setStateBuilding(p => {
         p.visible = true;
@@ -283,9 +305,9 @@ const Details = () => {
           )} */}
         <SideLeftContent race={planet?.race} building={building} />
         <PlanetQueue
-          serverTime={currentTime + serverDiffTime}
+          serverTime={serverDiffTime}
           currentQueue={stateBuilding.workQueue}
-          onComplete={getWorkQueue}
+          onComplete={() => getWorkQueue()}
         />
         {stateBuilding.visible && (
           <SideRightBuildingInfo
@@ -294,7 +316,12 @@ const Details = () => {
             planet_id={id}
             buildingsId={stateBuilding.building?._id}
             itemData={stateBuilding?.building}
-            onCreateBuilding={saveWorkQueue}
+            onCreateBuilding={val => {
+              setStateBuilding(p => {
+                p.visible = false;
+              });
+              saveWorkQueue(val);
+            }}
             onClose={() => {
               building.removeActiveSolider();
               setStateBuilding(p => {
@@ -326,7 +353,7 @@ const Details = () => {
       <ThingDestoryModal
         visible={destory.visible}
         planet_id={id}
-        onChange={() => {}}
+        onChange={destoryBuilding}
         onClose={() =>
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),

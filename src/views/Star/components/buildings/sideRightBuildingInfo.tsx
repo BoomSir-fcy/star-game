@@ -171,8 +171,9 @@ export const SideRightBuildingInfo: React.FC<{
               </Flex>
               <Destory
                 variant='text'
-                onClick={() => {
-                  onClose();
+                onClick={event => {
+                  event.stopPropagation();
+                  event.preventDefault();
                   dispatch(
                     storeAction.destoryBuildingModal({
                       visible: true,
