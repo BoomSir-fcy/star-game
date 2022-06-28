@@ -140,10 +140,12 @@ class Building extends EventTarget {
     builder.container
       .on('pointerdown', () => {
         // this.showSameSoliderState(soldier);
-        builder.setMoved(true);
+        if (builder.enableDrag) {
+          builder.setMoved(true);
+        }
       })
       .on('pointermove', event => {
-        if (builder.dragging) {
+        if (builder.dragging && builder.enableDrag) {
           this.onDragStarBuilder(builder)
           this.onDrageMoveBuilder(event, builder);
           builder.matrix4?.setState(stateType.PREVIEW)

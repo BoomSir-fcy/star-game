@@ -23,9 +23,8 @@ class Builder extends EventTarget {
     const { src, id, race = 1, areaX, areaY, enableDrag } = option;
     this.id = id;
 
-    const img = `${window.location.origin}/assets/buildings/${race}/${
-      src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
-    }`;
+    const img = `${window.location.origin}/assets/buildings/${race}/${src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
+      }`;
 
     this.src = img;
     this.areaY = areaY;
@@ -75,15 +74,15 @@ class Builder extends EventTarget {
       y: number;
     };
   } = {
-    from: {
-      x: 0,
-      y: 0,
-    },
-    to: {
-      x: 0,
-      y: 0,
-    },
-  };
+      from: {
+        x: 0,
+        y: 0,
+      },
+      to: {
+        x: 0,
+        y: 0,
+      },
+    };
 
   init() {
     this.sprite.texture = this.texture;
@@ -95,6 +94,9 @@ class Builder extends EventTarget {
     this.container.addChild(this.sprite);
 
     this.setEnableDrag(this.enableDrag);
+
+    this.container.buttonMode = true;
+    this.container.interactive = true;
 
     this.container
       .on('pointerdown', e => this.onDragStart(e))
@@ -110,8 +112,8 @@ class Builder extends EventTarget {
 
   setEnableDrag(enableDrag: boolean) {
     this.enableDrag = enableDrag;
-    this.container.buttonMode = enableDrag;
-    this.container.interactive = enableDrag;
+    // this.container.buttonMode = enableDrag;
+    // this.container.interactive = enableDrag;
   }
 
   setPointAsXY(x: number, y: number) {
@@ -175,8 +177,10 @@ class Builder extends EventTarget {
 
   changeState(state: StateType, visible?: boolean) {
     this.axisPoint?.chequer?.setState(state);
+    this.matrix4?.setState(state);
     if (typeof visible === 'boolean') {
       this.axisPoint?.chequer?.displayState(visible);
+      this.matrix4?.displayState(visible);
     }
   }
 
@@ -210,7 +214,7 @@ class Builder extends EventTarget {
 
   onDragMove(event?: InteractionEvent) {
     this.dragData = event?.data || this.dragData;
-    if (this.dragging) {
+    if (this.enableDrag && this.dragging) {
       const newPosition = this?.dragData?.getLocalPosition(
         this.container.parent,
       );
