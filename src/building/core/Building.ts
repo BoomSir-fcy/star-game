@@ -151,9 +151,14 @@ class Building extends EventTarget {
     this.boards.container.zIndex = 1;
     this.boards.container.addChild(builder.container);
     builder.container
+      // .on('pointerdown', () => {
+      //   this.showSameSoliderState(soldier);
+      //   builder.setMoved(false);
+      // })
       .on('pointermove', event => {
+        // console.log(builder.dragging, 'builder.dragging')
         if (builder.dragging) {
-          this.onDrageMoveBuilder(event, builder);
+          // this.onDrageMoveBuilder(event, builder);
         }
       })
       .on('pointerup', event => {
