@@ -178,7 +178,6 @@ class Boards extends EventTarget {
 
   // 找1*1建筑的碰撞检测
   checkCollisionPoint(event: InteractionEvent) {
-
     this.chequers.forEach(item => {
       const point = new Point(
         event.data.global.x - 10,
@@ -205,7 +204,7 @@ class Boards extends EventTarget {
       }
       item.displayState(false);
       if (collection && item.state === stateType.PLACE) {
-        return true
+        return true;
       }
       return false;
     });
@@ -213,18 +212,19 @@ class Boards extends EventTarget {
 
   // 获取所有2*2的格子 2*2的格子由4个1*1的格子组成
   getAllTowArea() {
-
     this.chequers.forEach(item => {
       const { axisX, axisY } = item;
       if (axisX < this.axisX - 1 && axisY < this.axisY - 1) {
-        this.matrix4s.push(new Matrix4(
-          this.axis[axisX][axisY].chequer,
-          this.axis[axisX][axisY+1].chequer,
-          this.axis[axisX+1][axisY+1].chequer,
-          this.axis[axisX+1][axisY].chequer,
-        ))
+        this.matrix4s.push(
+          new Matrix4(
+            this.axis[axisX][axisY].chequer,
+            this.axis[axisX][axisY + 1].chequer,
+            this.axis[axisX + 1][axisY + 1].chequer,
+            this.axis[axisX + 1][axisY].chequer,
+          ),
+        );
       }
-    })
+    });
     // this.matrix4s[5].displayState(true)
   }
 
@@ -239,14 +239,23 @@ class Boards extends EventTarget {
       const collection = item.checkCollisionPoint(point);
       item.displayState(false);
 
-      if (collection && item.chequers.every((chequer) => chequer.state === stateType.PLACE)) {
+      if (
+        collection &&
+        item.chequers.every(chequer => chequer.state === stateType.PLACE)
+      ) {
         res = item;
       }
-      if (collection && item.chequers.every((chequer) => chequer.state === stateType.PREVIEW)) {
+      if (
+        collection &&
+        item.chequers.every(chequer => chequer.state === stateType.PREVIEW)
+      ) {
         item.setState(stateType.PLACE);
         res = item;
       }
-      if (!collection && item.chequers.every((chequer) => chequer.state === stateType.PLACE)) {
+      if (
+        !collection &&
+        item.chequers.every(chequer => chequer.state === stateType.PLACE)
+      ) {
         item.setState(stateType.PREVIEW);
       }
     });

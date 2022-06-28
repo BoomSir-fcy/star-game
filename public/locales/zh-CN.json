@@ -597,6 +597,8 @@
   "Storage jars cannot be destroyed when they are unique": "储物罐唯一时不能被销毁",
   "The number of cellars must be less than or equal to storage tanks": "The number of cellars must be less than or equal to storage tanks",
   "upgradeRequirements": "升级需求",
+  "construction needs": "建造需求",
+  "build buildings": "建造建筑",
   "Next Lv. ": "下个等级 %value%",
   "BUFF Details": "BUFF详情",
   "buff bonus": "BUFF加成",

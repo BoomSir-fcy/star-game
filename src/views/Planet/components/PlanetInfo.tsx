@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { RaceAvatar, TooltipTrigger } from 'components';
+import { Globe, RaceAvatar, TooltipTrigger } from 'components';
 import StarCom from 'components/StarCom';
 import { useTranslation } from 'contexts/Localization';
 import React from 'react';
@@ -42,12 +42,12 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
               Lv{info?.level}
             </Text>
           </Flex>
-          <StarCom
-            quality={info?.rarity}
-            picture={info?.picture}
-            picture1={info?.picture1}
+          <Globe
+            width='174px'
+            height='161px'
+            shadow={QualityColor[info?.rarity]}
+            url={info?.picture1}
             showUnion={info?.in_alliance !== 0}
-            style={{ flexShrink: 1 }}
           />
         </Box>
 
