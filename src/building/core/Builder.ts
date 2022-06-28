@@ -128,23 +128,25 @@ class Builder extends EventTarget {
       this.matrix4 = matrix4;
       this.container.position.set(matrix4.x, matrix4.y);
       this.startPoint.set(matrix4.x, matrix4.y);
-      this.matrix4?.setState(stateType.DISABLE);
-      this.matrix4?.displayState(false);
+      matrix4.setState(stateType.DISABLE);
+      matrix4.displayState(false);
     } else {
       this.axisPoint = point;
       this.container.position.set(point.x, point.y);
       this.startPoint.set(point.x, point.y);
-      this.axisPoint?.chequer?.setState(stateType.DISABLE);
-      this.axisPoint?.chequer?.displayState(false);
+      point.chequer?.setState(stateType.DISABLE);
+      point.chequer?.displayState(false);
     }
-    this.position.from = {
-      x: point.axisX,
-      y: point.axisY,
-    };
-    this.position.to = {
-      x: point.axisX + this.areaX,
-      y: point.axisY + this.areaY,
-    };
+    this.position = {
+      from: {
+        x: point.axisX,
+        y: point.axisY,
+      },
+      to: {
+        x: point.axisX + this.areaX,
+        y: point.axisY + this.areaY,
+      },
+    }
   }
 
   // 重置位置 用于拖动的时候
@@ -180,7 +182,7 @@ class Builder extends EventTarget {
     this.container.alpha = 1;
     this.container.filters = [];
     this.dragging = false;
-    this.axisPoint?.chequer?.setState(stateType.DISABLE);
+    // this.axisPoint?.chequer?.setState(stateType.DISABLE);
     this.updateZIndex();
   }
 

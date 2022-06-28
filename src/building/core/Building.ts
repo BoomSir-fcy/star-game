@@ -150,14 +150,17 @@ class Building extends EventTarget {
     this.boards.container.zIndex = 1;
     this.boards.container.addChild(builder.container);
     builder.container
-      // .on('pointerdown', () => {
-      //   this.showSameSoliderState(soldier);
-      //   builder.setMoved(false);
-      // })
+      .on('pointerdown', () => {
+        // this.showSameSoliderState(soldier);
+        builder.setMoved(true);
+      })
       .on('pointermove', event => {
-        // console.log(builder.dragging, 'builder.dragging')
         if (builder.dragging) {
-          // this.onDrageMoveBuilder(event, builder);
+          this.onDragStarBuilder(builder)
+          this.onDrageMoveBuilder(event, builder);
+          builder.matrix4?.setState(stateType.PREVIEW)
+          builder.changeState(stateType.PREVIEW)
+
         }
       })
       .on('pointerup', event => {
@@ -176,6 +179,7 @@ class Building extends EventTarget {
       .on('click', (e: InteractionEvent) => {
         this.activeBuilderFlag = true;
       });
+
   }
 
   // 添加当前选中小人
@@ -278,7 +282,7 @@ class Building extends EventTarget {
   onDragStarBuilder(builder?: Builder) {
     this.boards.chequers.forEach(item => {
       if (builder?.axisPoint?.chequer === item) {
-        builder.changeState(stateType.ACTIVE);
+        builder.changeState(stateType.PREVIEW);
       } else if (builder) {
         builder.changeState(stateType.DISABLE);
       }
@@ -330,7 +334,7 @@ class Building extends EventTarget {
       return !!matrix4;
       // builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
     }
-    const chequer = this.boards.checkCollisionPoint(event);
+    const chequer = this.boards.checkCollisionPoint(event, true);
 
     if (chequer) {
       builder.setPosition(new AxisPoint(chequer.axisX, chequer.axisY, chequer));
@@ -349,12 +353,11 @@ class Building extends EventTarget {
    */
   createBuilder(_x: number, _y: number, option: BuilderOption) {
     const axis = this.getAxis(_x, _y);
-    let zIndex = 0;
-    if (axis) {
-      zIndex = axis?.axisX + axis?.axisY;
-    }
+    const matrix = option.areaX === 2 ? this.getMatrix4ByAxis(axis) : undefined;
     if (!axis) return null;
+    if (!matrix && option.areaX === 2) return null;
     const builder = new Builder(option);
+    builder.setPosition(axis, matrix)
 
     this.addBuilder(builder);
 
@@ -362,28 +365,32 @@ class Building extends EventTarget {
     builder.changeState(stateType.PREVIEW, true);
     const point0 = new Point(axis.x, axis.y - 1000) as AxisPoint;
     const point1 = new Point(axis.x, axis.y) as AxisPoint;
+    builder.container.position.set(axis.x, axis.y);
 
     const id = uniqueId();
     this.lastCreateBuilderId = id;
 
+    // FIXME: 这行代码不能删 我也不知道为什么
     const linearMove = new LinearMove(builder.container, point0, point1, {
       speed: SpeederType.SOLDIER_CREATE,
     });
-    linearMove.addEventListener('end', () => {
-      builder.container.position.set(axis.x, axis.y);
-      builder.startPoint = point1;
-      builder.changeState(stateType.DISABLE, false);
-      this.dispatchEvent(
-        new CustomEvent('builderCreated', { detail: { builder } }),
-      );
-      if (id === this.lastCreateBuilderId) {
-        this.dispatchEvent(
-          new CustomEvent('lastBuilderCreated', { detail: { builder } }),
-        );
-      }
-    });
+    // linearMove.addEventListener('end', () => {
+    //   builder.container.position.set(axis.x, axis.y);
+    //   builder.startPoint = point1;
+    //   builder.changeState(stateType.DISABLE, false);
+    //   this.dispatchEvent(
+    //     new CustomEvent('builderCreated', { detail: { builder } }),
+    //   );
+    //   if (id === this.lastCreateBuilderId) {
+    //     this.dispatchEvent(
+    //       new CustomEvent('lastBuilderCreated', { detail: { builder } }),
+    //     );
+    //   }
+    // });
     // linearMove.speed = 100;
-    linearMove.move();
+    // linearMove.move();
+    builder.changeState(stateType.DISABLE, false);
+
     return builder;
   }
 
@@ -400,6 +407,15 @@ class Building extends EventTarget {
       console.error('Get axis is error, place wite some time of this created');
       return null;
     }
+  }
+
+  /**
+   * @dev 根据坐标获取小人
+   * @param axis
+   * @returns Builder | null
+   */
+  getMatrix4ByAxis(axis: AxisPoint) {
+    return this.boards.matrix4s.find(item => item.chequers[0] === axis?.chequer);
   }
 
   /**

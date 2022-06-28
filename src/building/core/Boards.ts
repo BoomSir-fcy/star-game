@@ -177,7 +177,7 @@ class Boards extends EventTarget {
   }
 
   // 找1*1建筑的碰撞检测
-  checkCollisionPoint(event: InteractionEvent) {
+  checkCollisionPoint(event: InteractionEvent, dargEnd?: boolean) {
 
     let res: Chequer = null;
 
@@ -194,7 +194,9 @@ class Boards extends EventTarget {
       } else if (!collection && item.state === stateType.PLACE) {
         item.setState(stateType.PREVIEW);
       }
-      item.displayState(false);
+      if (dargEnd) {
+        item.displayState(false);
+      }
 
     });
 
@@ -229,7 +231,9 @@ class Boards extends EventTarget {
         event.data.global.y + 5,
       );
       const collection = item.checkCollisionPoint(point);
-      item.displayState(false);
+      if (dargEnd) {
+        item.displayState(false);
+      }
 
       if (
         dargEnd && collection &&
