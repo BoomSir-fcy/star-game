@@ -5,6 +5,7 @@ import { Texture } from '@pixi/core';
 import { Container } from '@pixi/display';
 import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
+import Matrix4 from './Matrix4';
 
 export interface BuilderOption {
   src?: string;
@@ -13,21 +14,24 @@ export interface BuilderOption {
   building: Api.Building.Building;
   areaY: number;
   areaX: number;
+  enableDrag?: boolean;
 }
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
     super();
-    const { src, id, race = 1, areaX, areaY } = option;
+    const { src, id, race = 1, areaX, areaY, enableDrag } = option;
     this.id = id;
 
-    const img = `${window.location.origin}/assets/buildings/${race}/${
-      src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
-    }`;
+    const img = `${window.location.origin}/assets/buildings/${race}/${src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
+      }`;
 
     this.src = img;
     this.areaY = areaY;
     this.areaX = areaX;
     this.texture = Texture.from(img);
+
+    this.enableDrag = Boolean(enableDrag);
+
     this.option = { ...option };
 
     this.init();
@@ -45,11 +49,15 @@ class Builder extends EventTarget {
 
   axisPoint?: AxisPoint;
 
+  matrix4?: Matrix4;
+
   startPoint = new Point();
 
   id = '1';
 
   src = '';
+
+  enableDrag = false;
 
   option: BuilderOption;
 
@@ -65,15 +73,15 @@ class Builder extends EventTarget {
       y: number;
     };
   } = {
-    from: {
-      x: 0,
-      y: 0,
-    },
-    to: {
-      x: 0,
-      y: 0,
-    },
-  };
+      from: {
+        x: 0,
+        y: 0,
+      },
+      to: {
+        x: 0,
+        y: 0,
+      },
+    };
 
   init() {
     this.sprite.texture = this.texture;
@@ -84,7 +92,7 @@ class Builder extends EventTarget {
 
     this.container.addChild(this.sprite);
 
-    this.container.interactive = true;
+    this.setEnableDrag(this.enableDrag);
 
     this.container
       .on('pointerdown', e => this.onDragStart(e))
@@ -98,6 +106,12 @@ class Builder extends EventTarget {
       .on('pointerout', () => this.onDragOut());
   }
 
+  setEnableDrag(enableDrag: boolean) {
+    this.enableDrag = enableDrag;
+    this.container.buttonMode = enableDrag;
+    this.container.interactive = enableDrag;
+  }
+
   setPointAsXY(x: number, y: number) {
     const chequer = new Chequer({
       axisX: x,
@@ -109,13 +123,20 @@ class Builder extends EventTarget {
   }
 
   // 设置位置
-  setPosition(point: AxisPoint) {
-    this.container.position.set(point.x, point.y);
-    this.startPoint.set(point.x, point.y);
-    this.axisPoint?.chequer?.setState(stateType.PREVIEW);
-    this.axisPoint = point;
-    this.axisPoint?.chequer?.setState(stateType.DISABLE);
-    this.axisPoint?.chequer?.displayState(false);
+  setPosition(point: AxisPoint, matrix4?: Matrix4) {
+    if (matrix4) {
+      this.matrix4 = matrix4;
+      this.container.position.set(matrix4.x, matrix4.y);
+      this.startPoint.set(matrix4.x, matrix4.y);
+      this.matrix4?.setState(stateType.DISABLE);
+      this.matrix4?.displayState(false);
+    } else {
+      this.axisPoint = point;
+      this.container.position.set(point.x, point.y);
+      this.startPoint.set(point.x, point.y);
+      this.axisPoint?.chequer?.setState(stateType.DISABLE);
+      this.axisPoint?.chequer?.displayState(false);
+    }
     this.position.from = {
       x: point.axisX,
       y: point.axisY,
@@ -140,7 +161,7 @@ class Builder extends EventTarget {
   onDragStart(event: InteractionEvent) {
     event.stopPropagation();
     this.dragData = event.data;
-    this.container.alpha = 0.9;
+    this.container.alpha = 0.1;
     this.container.filters = [];
     this.dragging = true;
     this.container.zIndex = 9999;

@@ -313,7 +313,8 @@ class Building extends EventTarget {
   // 拖拽小人结束生命周期
   onDragEndBuilder(event: InteractionEvent, builder: Builder) {
     if (builder.areaX === 2) {
-      const matrix4 = this.boards.checkCollisionPointOfTow(event);
+      const matrix4 = this.boards.checkCollisionPointOfTow(event, true);
+      console.log(matrix4, 'matrix4')
       if (matrix4) {
         builder.setPosition(
           new AxisPoint(
@@ -321,6 +322,7 @@ class Building extends EventTarget {
             matrix4.chequers[0].axisY,
             matrix4.chequers[0],
           ),
+          matrix4,
         );
         matrix4.setState(stateType.ACTIVE);
       } else {
@@ -330,6 +332,8 @@ class Building extends EventTarget {
       // builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
     }
     const chequer = this.boards.checkCollisionPoint(event);
+    console.log(chequer, 'chequer')
+
     if (chequer) {
       builder.setPosition(new AxisPoint(chequer.axisX, chequer.axisY, chequer));
     } else {
@@ -425,8 +429,8 @@ class Building extends EventTarget {
         src: item.building.picture,
         id: `${item.building._id}`,
         race: item.building.race,
-        areaX: item.building.propterty.size.area_x + 1,
-        areaY: item.building.propterty.size.area_y + 1,
+        areaX: item.building.propterty.size.area_x,
+        areaY: item.building.propterty.size.area_y,
       });
     });
   }
@@ -450,3 +454,26 @@ class Building extends EventTarget {
 }
 
 export default Building;
+
+
+/* 
+
+  拖建筑
+    1*1的建筑 2*2的建筑
+  
+  拖到棋盘后 对未保存的建筑进行拖动
+  
+  保存的建筑不能拖
+
+  更改策略
+  按照现在的代码进行重构 从新梳理逻辑 不要去读原来的代码 逻辑有些不一样
+
+  2 * 2 的建筑中心点放置
+
+  要不要在现在的建筑上加一个Matrix4的属性
+  
+  先解决第一个问题
+  1.1*1的拖动 放置后状态不对 需要重置所有状态
+  2.2*2的拖动 会出现三个格子的情况
+  3.
+*/
