@@ -40,7 +40,6 @@ class Building extends EventTarget {
       test,
       enableDrag = true,
       enableSoliderDrag = true,
-      offsetStartY,
       offsetStartX,
     } = options || {};
     const _width = width || config.WIDTH;
@@ -408,6 +407,28 @@ class Building extends EventTarget {
    */
   findBuilderByAxis(axis: AxisPoint) {
     return this.builders.find(builder => builder.axisPoint === axis);
+  }
+
+  initBuilder(
+    list: {
+      building: Api.Building.Building;
+      position: {
+        from: { x: number; y: number };
+        to: { x: number; y: number };
+      };
+    }[],
+  ) {
+    if (this.builders.length) return;
+    list.forEach(item => {
+      this.createBuilder(item.position.from.x, item.position.from.y, {
+        building: item.building,
+        src: item.building.picture,
+        id: `${item.building._id}`,
+        race: item.building.race,
+        areaX: item.building.propterty.size.area_x + 1,
+        areaY: item.building.propterty.size.area_y + 1,
+      });
+    });
   }
 
   /**
