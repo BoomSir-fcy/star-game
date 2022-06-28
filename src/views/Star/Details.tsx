@@ -110,8 +110,11 @@ const Details = () => {
   const currentTime = Number((Date.now() / 1000).toFixed(0));
 
   const [stateBuilding, setStateBuilding] = useImmer({
-    visible: false,
-    building: {} as Api.Building.Building,
+    visible: true,
+    building: {
+      _id: '62a314b372602a41651771a1',
+      isbuilding: true,
+    } as Api.Building.Building,
     workQueue: [],
   });
 
