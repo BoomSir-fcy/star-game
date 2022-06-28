@@ -125,7 +125,7 @@ class Building extends EventTarget {
       this.removeActiveSolider();
     });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
-      if (e.key === 'Delete' && this.activeBuilder) {
+      if (e.key === 'Delete' && this.activeBuilder && this.activeBuilder.enableDrag) {
         this.removeBuilder(this.activeBuilder);
       }
     });
@@ -153,6 +153,7 @@ class Building extends EventTarget {
         }
       })
       .on('pointerup', event => {
+        console.log(builder.moved)
         if (builder.moved) {
           const res = this.onDragEndBuilder(event, builder);
           if (res) {
@@ -400,6 +401,11 @@ class Building extends EventTarget {
    * @returns Builder | null
    */
   findBuilderByAxis(axis: AxisPoint) {
+    return this.builders.find(builder => builder.axisPoint === axis);
+  }
+
+  findBuilderByXY(x: number, y: number) {
+    const axis = this.getAxis(x, y);
     return this.builders.find(builder => builder.axisPoint === axis);
   }
 
