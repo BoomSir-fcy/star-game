@@ -40,7 +40,6 @@ class Building extends EventTarget {
       test,
       enableDrag = true,
       enableSoliderDrag = true,
-      offsetStartY,
       offsetStartX,
     } = options || {};
     const _width = width || config.WIDTH;
@@ -314,7 +313,7 @@ class Building extends EventTarget {
   // 拖拽小人结束生命周期
   onDragEndBuilder(event: InteractionEvent, builder: Builder) {
     if (builder.areaX === 2) {
-      const matrix4 = this.boards.checkCollisionPointOfTow(event);
+      const matrix4 = this.boards.checkCollisionPointOfTow(event, true);
       if (matrix4) {
         builder.setPosition(
           new AxisPoint(
@@ -322,6 +321,7 @@ class Building extends EventTarget {
             matrix4.chequers[0].axisY,
             matrix4.chequers[0],
           ),
+          matrix4,
         );
         matrix4.setState(stateType.ACTIVE);
       } else {
@@ -331,6 +331,7 @@ class Building extends EventTarget {
       // builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
     }
     const chequer = this.boards.checkCollisionPoint(event);
+
     if (chequer) {
       builder.setPosition(new AxisPoint(chequer.axisX, chequer.axisY, chequer));
     } else {
@@ -410,6 +411,28 @@ class Building extends EventTarget {
     return this.builders.find(builder => builder.axisPoint === axis);
   }
 
+  initBuilder(
+    list: {
+      building: Api.Building.Building;
+      position: {
+        from: { x: number; y: number };
+        to: { x: number; y: number };
+      };
+    }[],
+  ) {
+    if (this.builders.length) return;
+    list.forEach(item => {
+      this.createBuilder(item.position.from.x, item.position.from.y, {
+        building: item.building,
+        src: item.building.picture,
+        id: `${item.building._id}`,
+        race: item.building.race,
+        areaX: item.building.propterty.size.area_x,
+        areaY: item.building.propterty.size.area_y,
+      });
+    });
+  }
+
   /**
    * @dev 根据id获取小人
    * @param id
@@ -429,3 +452,26 @@ class Building extends EventTarget {
 }
 
 export default Building;
+
+
+/* 
+
+  拖建筑
+    1*1的建筑 2*2的建筑
+  
+  拖到棋盘后 对未保存的建筑进行拖动
+  
+  保存的建筑不能拖
+
+  更改策略
+  按照现在的代码进行重构 从新梳理逻辑 不要去读原来的代码 逻辑有些不一样
+
+  2 * 2 的建筑中心点放置
+
+  要不要在现在的建筑上加一个Matrix4的属性
+  
+  先解决第一个问题
+  1.1*1的拖动 放置后状态不对 需要重置所有状态
+  2.2*2的拖动 会出现三个格子的情况
+  3.
+*/
