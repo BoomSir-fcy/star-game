@@ -17,7 +17,6 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
-import { isTokenKind } from 'typescript';
 import type { AreaDataItem } from './components/dragCompoents';
 
 import {
@@ -110,11 +109,8 @@ const Details = () => {
   const currentTime = Number((Date.now() / 1000).toFixed(0));
 
   const [stateBuilding, setStateBuilding] = useImmer({
-    visible: true,
-    building: {
-      _id: '62a314b372602a41651771a1',
-      isbuilding: true,
-    } as Api.Building.Building,
+    visible: false,
+    building: {} as Api.Building.Building,
     workQueue: [],
   });
 
@@ -217,6 +213,7 @@ const Details = () => {
 
   React.useEffect(() => {
     if (activeBuilder?.option?.id) {
+      console.log('activeBuilder: ', activeBuilder);
       setStateBuilding(p => {
         p.visible = true;
         p.building = {
@@ -282,7 +279,7 @@ const Details = () => {
   return (
     <>
       <Container>
-        {!guides.guideFinish &&
+        {/* {!guides.guideFinish &&
           guides.finish &&
           steps.length - 1 > guides.step && (
             <Steps
@@ -314,7 +311,7 @@ const Details = () => {
                 }
               }}
             />
-          )}
+          )} */}
         <SideLeftContent race={planet?.race} building={building} />
         <PlanetQueue
           serverTime={currentTime + serverDiffTime}

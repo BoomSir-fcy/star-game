@@ -1,20 +1,156 @@
-import { useTranslation } from 'contexts/Localization';
 import React from 'react';
-import { Flex, Box, MarkText, Text, Button } from 'uikit';
+import random from 'lodash/random';
+import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
+import { Flex, Box, MarkText, Text, Button } from 'uikit';
+import { useStore } from 'state';
+import { Api } from 'apis';
+
+import { useToast } from 'contexts/ToastsContext';
+import { useTranslation } from 'contexts/Localization';
+
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { signMessage } from 'utils/web3React';
+
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 
 import { BuildingProgress } from './buildingProgress';
 import { BuildingResourceModal } from './buildingResourceModal';
+import { BuildingRechargeModal } from './buildingRechargeModal';
+
+enum StoreType {
+  STONE = 1,
+  POPULATION = 2,
+  ENERGY = 3,
+}
 
 export const BuildingResources: React.FC<{
+  planet_id: number;
   currnet_building: Api.Building.BuildingDetail;
   estimate?: Api.Building.BuildingDetail;
-}> = ({ currnet_building, estimate }) => {
+  onClose: () => void;
+}> = ({ planet_id, currnet_building, estimate, onClose }) => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const { store } = currnet_building;
+  const { toastSuccess, toastError } = useToast();
+  const { account, library } = useActiveWeb3React();
+  const planet = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
+  const [storeAssets, setStoreAssets] = React.useState({
+    [StoreType.STONE]: { already: 0, max: 0 },
+    [StoreType.POPULATION]: { already: 0, max: 0 },
+    [StoreType.ENERGY]: { already: 0, max: 0 },
+  });
   const [state, setState] = useImmer({
     visible: false,
+    type: 1, // 1充值，2提取
+    needMax: {
+      stone: 0,
+      population: 0,
+      energy: 0,
+    },
   });
+
+  // 获取储物罐最大充值金额
+  const getStoreData = React.useCallback(async () => {
+    try {
+      const res = await Api.BuildingApi.getMaxReCharge(planet_id);
+      if (Api.isSuccess(res)) {
+        const info: Api.Building.Store = res.data;
+        setState(p => {
+          p.visible = true;
+          p.type = 1;
+        });
+        setStoreAssets({
+          [StoreType.STONE]: {
+            already: info.already_stone,
+            max: info.max_store,
+          },
+          [StoreType.POPULATION]: {
+            already: info.already_population,
+            max: info.max_population,
+          },
+          [StoreType.ENERGY]: {
+            already: info.already_energy,
+            max: info.max_energy,
+          },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [planet_id, setState]);
+
+  const extractChange = React.useCallback(
+    async val => {
+      try {
+        const sign = {
+          nonce: `${random(0xffff, 0xffff_ffff_ffff)}`,
+          timestamp: new Date().getTime(),
+        };
+        const signature = await signMessage(
+          library,
+          account,
+          JSON.stringify(sign),
+        );
+        const params: Api.Building.StoreRechargeParams = {
+          planet_id,
+          ...sign,
+          signature,
+          ...val,
+        };
+        const res = await Api.BuildingApi.storeExtract(params);
+        if (Api.isSuccess(res)) {
+          setState(p => {
+            p.visible = false;
+          });
+          toastSuccess(t('Recharge Succeeded'));
+          onClose();
+          dispatch(fetchPlanetInfoAsync([planet_id]));
+          dispatch(fetchPlanetBuildingsAsync(planet_id));
+        }
+      } catch (error) {
+        console.log('error: ', error);
+      }
+    },
+    [account, dispatch, library, onClose, planet_id, setState, t, toastSuccess],
+  );
+
+  const rechargeChange = React.useCallback(
+    async val => {
+      try {
+        const sign = {
+          nonce: `${random(0xffff, 0xffff_ffff_ffff)}`,
+          timestamp: new Date().getTime(),
+        };
+        const signature = await signMessage(
+          library,
+          account,
+          JSON.stringify(sign),
+        );
+        const params: Api.Building.StoreRechargeParams = {
+          planet_id,
+          ...sign,
+          signature,
+          ...val,
+        };
+        const res = await Api.BuildingApi.storeReCharge(params);
+        if (Api.isSuccess(res)) {
+          setState(p => {
+            p.visible = false;
+          });
+          toastSuccess(t('Recharge Succeeded'));
+          onClose();
+          dispatch(fetchPlanetInfoAsync([planet_id]));
+          dispatch(fetchPlanetBuildingsAsync(planet_id));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [account, dispatch, library, onClose, planet_id, setState, t, toastSuccess],
+  );
 
   return (
     <Box position='relative'>
@@ -77,9 +213,7 @@ export const BuildingResources: React.FC<{
           onClick={event => {
             event.stopPropagation();
             event.preventDefault();
-            setState(p => {
-              p.visible = true;
-            });
+            getStoreData();
           }}
         >
           <Text bold fontSize='16px' color='#4FFFFB'>
@@ -95,6 +229,10 @@ export const BuildingResources: React.FC<{
             event.preventDefault();
             setState(p => {
               p.visible = true;
+              p.type = 2;
+              p.needMax.stone = planet?.stone;
+              p.needMax.population = planet?.population;
+              p.needMax.energy = planet?.energy;
             });
           }}
         >
@@ -104,9 +242,25 @@ export const BuildingResources: React.FC<{
         </Button>
       </Flex>
 
+      {state.visible && state.type === 1 && (
+        <BuildingRechargeModal
+          type={state.type}
+          maxValue={storeAssets}
+          onFinish={rechargeChange}
+          onClose={() =>
+            setState(p => {
+              p.visible = false;
+            })
+          }
+        />
+      )}
+
       {/* 充提资源 */}
-      {state.visible && (
+      {state.visible && state.type === 2 && (
         <BuildingResourceModal
+          type={state.type}
+          maxValue={state.needMax}
+          onFinish={extractChange}
           onClose={() =>
             setState(p => {
               p.visible = false;

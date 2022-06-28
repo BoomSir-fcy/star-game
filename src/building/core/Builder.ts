@@ -13,6 +13,7 @@ export interface BuilderOption {
   building: Api.Building.Building;
   areaY: number;
   areaX: number;
+  isBuilding?: boolean;
 }
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
