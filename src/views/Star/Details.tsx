@@ -44,7 +44,6 @@ const Details = () => {
   const { toastSuccess, toastError } = useToast();
   const { refreshWorkQueue } = useWorkqueue();
   const { guides, setGuide } = useGuide(location.pathname);
-  const [state, setState] = React.useState<AreaDataItem[]>([]);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
   const [serverDiffTime, setServerDiffTime] = React.useState<number>(0);
 
@@ -118,10 +117,6 @@ const Details = () => {
     return [planet?.areaX, planet?.areaY];
   }, [planet]);
 
-  const updateGrid = React.useCallback(data => {
-    setState(data);
-  }, []);
-
   React.useEffect(() => {
     if (ref.current && areaX && areaY) {
       ref.current.appendChild(building.view);
@@ -131,16 +126,16 @@ const Details = () => {
 
   const initBuilder = React.useCallback(() => {
     building.initBuilder(selfBuilding);
-  }, [building, selfBuilding])
+  }, [building, selfBuilding]);
 
   React.useEffect(() => {
     if (building.boardsCreated) {
-      initBuilder()
+      initBuilder();
     }
     building.addEventListener('boardsCreated', initBuilder);
     return () => {
       building.removeEventListener('boardsCreated', initBuilder);
-    }
+    };
   }, [initBuilder, building]);
 
   const getWorkQueue = React.useCallback(
@@ -209,6 +204,7 @@ const Details = () => {
           work_queue_params: current,
         });
         if (Api.isSuccess(res)) {
+          activeBuilder?.setIsBuilding(true);
           getWorkQueue();
           toastSuccess(t('planetTipsSaveSuccess'));
         }
@@ -221,8 +217,8 @@ const Details = () => {
   );
 
   React.useEffect(() => {
+    console.log('activeBuilder: ', activeBuilder);
     if (activeBuilder?.option?.id) {
-      console.log('activeBuilder: ', activeBuilder);
       setStateBuilding(p => {
         p.visible = true;
         p.building = {
@@ -233,44 +229,6 @@ const Details = () => {
       });
     }
   }, [activeBuilder, setStateBuilding]);
-
-  React.useEffect(() => {
-    if (planet?.areaX > 0 && planet?.areaY > 0) {
-      const data: any = [];
-      for (let i = 0; i < planet.areaX; i++) {
-        for (let j = 0; j < planet.areaY; j++) {
-          const buildings = selfBuilding?.find(
-            r => r.index === j * planet.areaX + i,
-          );
-          if (buildings?.building?._id) {
-            data.push({
-              ...buildings,
-              ...buildings.building,
-              x: i,
-              y: j,
-              index: j * planet.areaX + i,
-              isbuilding: true,
-              isactive: false,
-            });
-          } else {
-            data.push({
-              index: j * planet.areaX + i,
-              isbuilding: false,
-              propterty: {
-                size: {
-                  area_x: 1,
-                  area_y: 1,
-                },
-              },
-              x: i,
-              y: j,
-            });
-          }
-        }
-      }
-      updateGrid(data);
-    }
-  }, [planet, selfBuilding, updateGrid]);
 
   React.useEffect(() => {
     if (id) {
@@ -335,11 +293,12 @@ const Details = () => {
             buildingsId={stateBuilding.building?._id}
             itemData={stateBuilding?.building}
             onCreateBuilding={saveWorkQueue}
-            onClose={() =>
+            onClose={() => {
+              building.removeActiveSolider();
               setStateBuilding(p => {
                 p.visible = false;
-              })
-            }
+              });
+            }}
           />
         )}
 
@@ -350,7 +309,7 @@ const Details = () => {
       <ThingUpgradesModal
         visible={upgrad.visible}
         planet_id={id}
-        onChange={async () => { }}
+        onChange={async () => {}}
         onClose={() => {
           dispatch(
             storeAction.upgradesBuildingModal({
@@ -365,7 +324,7 @@ const Details = () => {
       <ThingDestoryModal
         visible={destory.visible}
         planet_id={id}
-        onChange={() => { }}
+        onChange={() => {}}
         onClose={() =>
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),

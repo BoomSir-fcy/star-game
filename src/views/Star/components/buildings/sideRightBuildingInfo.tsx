@@ -169,26 +169,24 @@ export const SideRightBuildingInfo: React.FC<{
                   </Text>
                 )}
               </Flex>
-              {currentAttributes.isbuilding && (
-                <Destory
-                  variant='text'
-                  onClick={() => {
-                    onClose();
-                    dispatch(
-                      storeAction.destoryBuildingModal({
-                        visible: true,
-                        destory: currentAttributes,
-                      }),
-                    );
-                  }}
-                >
-                  <Image
-                    src='../images/commons/icon/icon-destory.png'
-                    width={30}
-                    height={30}
-                  />
-                </Destory>
-              )}
+              <Destory
+                variant='text'
+                onClick={() => {
+                  onClose();
+                  dispatch(
+                    storeAction.destoryBuildingModal({
+                      visible: true,
+                      destory: currentAttributes,
+                    }),
+                  );
+                }}
+              >
+                <Image
+                  src='../images/commons/icon/icon-destory.png'
+                  width={30}
+                  height={30}
+                />
+              </Destory>
             </Flex>
           </Flex>
           <Box mb='20px'>
