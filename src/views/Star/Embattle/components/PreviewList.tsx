@@ -5,7 +5,7 @@ import Soldier from 'game/core/Soldier';
 import { getSpriteName, getSpriteRes } from 'game/core/utils';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
-import { Box, Text, BgCard, Flex, BorderCard, BgCardProps } from 'uikit';
+import { Box, Text, GraphicsCard, Flex, BorderCard, GraphicsCardProps } from 'uikit';
 import orderBy from 'lodash/orderBy';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
@@ -14,7 +14,7 @@ import PreviewSoldier from './PreviewSoldier';
 import { SortSoldier } from './SortBoard';
 import { PlayBtn } from './styled';
 
-interface PreviewListProps extends BgCardProps {
+interface PreviewListProps extends GraphicsCardProps {
   game: Game;
   gameSoldiers: SortSoldier[];
   activeSoldier: Soldier | null;
@@ -161,7 +161,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, []);
 
   return (
-    <BgCard padding='0 28px' variant='long' {...props}>
+    <GraphicsCard width='627px' height='222px' padding='0 16px'  {...props}>
       <Flex
         className='star-embattle-step1'
         style={{ overflow: 'auto' }}
@@ -175,7 +175,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 cursor: 'pointer',
               }}
               key={`${item.unique_id}_${item.level}`}
-              margin='49px 20px 0'
+              margin='16px 20px 0'
               position='relative'
             >
               {visibleBtn && activeSoldier?.unique_id === item.unique_id ? (
@@ -250,7 +250,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
           );
         })}
       </Flex>
-    </BgCard>
+    </GraphicsCard>
   );
 };
 

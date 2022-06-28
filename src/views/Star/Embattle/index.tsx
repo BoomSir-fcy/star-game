@@ -11,7 +11,7 @@ import 'intro.js/introjs.css';
 
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Button, Text, Flex, Image } from 'uikit';
+import { Box, Button, Text, Flex, Image, GraphicsCard, BalanceText } from 'uikit';
 import { useGuide } from 'hooks/useGuide';
 import config from 'game/config';
 import { Api } from 'apis';
@@ -33,6 +33,7 @@ import Preview from './components/Preview';
 import SortBoard, { SortSoldier } from './components/SortBoard';
 import useUpdatePos from './hooks/useUpdatePos';
 import useActiveSoldier from './hooks/useActiveSoldier';
+import { ArmsInfo } from '../components/arms';
 
 // const game = new Game();
 
@@ -247,7 +248,7 @@ const Embattle = () => {
           />
         </>
       )}
-      <Box position='absolute' top={0} left={0} width={200}>
+      {/* <Box position='absolute' top={0} left={0} width={200}>
         <Button onClick={() => game.clearSoldier()}>
           <Text fontSize='20px'>Clear All</Text>
         </Button>
@@ -257,6 +258,17 @@ const Embattle = () => {
             {gameSoldiers.length}/{config.MAX_SOLDIER_COUNT}
           </Text>
         </Flex>
+      </Box> */}
+      <Box position='absolute' bottom={0} left={0}>
+        <GraphicsCard width='740px' height='75px' padding={0}>
+          <Flex alignItems='center' justifyContent='space-between' height='100%' width='100%'>
+            <Flex >
+              <Text margin='0 32px'>阵队战斗力</Text>
+              <Text mark>88888848</Text>
+            </Flex>
+            <Button mr='16px' width='213px' height='45px' variant='purple'>完成部署</Button>
+          </Flex>
+        </GraphicsCard>
       </Box>
       <Box
         position='absolute'
@@ -274,6 +286,7 @@ const Embattle = () => {
         top='0'
         right='18px'
       >
+        {/* <ArmsInfo armsData={{}} /> */}
         <Preview game={game} activeSoldier={activeSoldier} />
         {/* <SortBoard
           className='star-embattle-step6'
@@ -290,8 +303,8 @@ const Embattle = () => {
       <Box
         style={{ userSelect: 'none' }}
         position='absolute'
-        top='490px'
-        left='0'
+        bottom='0'
+        right='0'
       >
         {/* <Box position='absolute' top='-80px'>
           <Button
@@ -314,22 +327,24 @@ const Embattle = () => {
           }}
         />
       </Box>
-      {arrowShow && (
-        <ArrowBox
-          position='absolute'
-          top={400}
-          left={100}
-          width={200}
-          height={200}
-        >
-          <Image
+      {
+        arrowShow && (
+          <ArrowBox
+            position='absolute'
+            top={400}
+            left={100}
             width={200}
             height={200}
-            src='/images/commons/icon/to-arrow.png'
-          />
-        </ArrowBox>
-      )}
-    </Box>
+          >
+            <Image
+              width={200}
+              height={200}
+              src='/images/commons/icon/to-arrow.png'
+            />
+          </ArrowBox>
+        )
+      }
+    </Box >
   );
 };
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { space } from 'styled-system';
 import { Box } from '../Box';
 import { GraphicsCardProps } from './types';
 
-const GraphicsBox = styled(Box)<GraphicsCardProps>`
+const GraphicsBox = styled(Box) <GraphicsCardProps>`
   position: relative;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
@@ -21,6 +22,7 @@ const GraphicsBox = styled(Box)<GraphicsCardProps>`
       background-size: 10px 10px;
     `}
 
+  ${space}
   ::before {
     content: '';
     position: absolute;
@@ -32,9 +34,9 @@ const GraphicsBox = styled(Box)<GraphicsCardProps>`
     height: 100%;
     margin: auto;
     background: ${({ theme, stripe }) =>
-      stripe ? theme.colors.gradients.stripeBg : theme.colors.gradients.card};
+    stripe ? theme.colors.gradients.stripeBg : theme.colors.gradients.card};
     ${({ theme, isRadius }) =>
-      isRadius && `border-radius: ${theme.radii.card};`}
+    isRadius && `border-radius: ${theme.radii.card};`}
     z-index: -1;
   }
 `;
