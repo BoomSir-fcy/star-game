@@ -1,7 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { UserState } from '../types';
 import { updateVersion } from '../global/actions';
-import { setGlobalClient, setGlobalScale, toggleTheme } from './actions';
+import {
+  setGlobalClient,
+  setGlobalScale,
+  toggleTheme,
+  setNavZIndex,
+} from './actions';
 
 const currentTimestamp = () => new Date().getTime();
 
@@ -12,6 +17,7 @@ export const initialState: UserState = {
     width: 1920,
     height: 900,
   },
+  zIndex: true,
 };
 
 export default createReducer(initialState, builder =>
@@ -26,6 +32,10 @@ export default createReducer(initialState, builder =>
 
     .addCase(setGlobalScale, (state, { payload }) => {
       state.scale = payload;
+    })
+
+    .addCase(setNavZIndex, (state, { payload }) => {
+      state.zIndex = payload;
     })
 
     .addCase(setGlobalClient, (state, { payload }: { payload: any }) => {

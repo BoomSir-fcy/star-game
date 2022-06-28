@@ -219,7 +219,7 @@ const Upgrade = () => {
   }, [dispatch]);
 
   // 升级经验
-  const { expStep, curExp, maxExp, preExpStep, exportExp } = useMemo(() => {
+  const { expStep, curExp, maxExp, preExpStep, expectedExp } = useMemo(() => {
     const maxValue = Number(upgradeInfo.upgrade_exp);
     const currentValue = planetInfo[planetId]?.exp;
     let rsVal = 0;
@@ -229,9 +229,13 @@ const Upgrade = () => {
       rsVal = 100;
     } else rsVal = Number((currentValue / maxValue).toFixed(4)) * 100;
 
-    const _exportExp = Object.values(activeMaterialMap).reduce((prev, item) => {
-      return prev + item.can_provided_exp;
-    }, currentValue);
+    const _expectedExp = Object.values(activeMaterialMap).reduce(
+      (prev, item) => {
+        return prev + item.can_provided_exp;
+      },
+      0,
+    );
+    const _exportExp = currentValue + _expectedExp;
     const _preExpStep =
       Number(
         (_exportExp / maxValue > 1 ? 1 : _exportExp / maxValue).toFixed(4),
@@ -242,6 +246,7 @@ const Upgrade = () => {
       preExpStep: _preExpStep,
       curExp: currentValue,
       exportExp: _exportExp,
+      expectedExp: _expectedExp,
       maxExp: maxValue,
     };
   }, [upgradeInfo, planetInfo, planetId, activeMaterialMap]);
@@ -345,6 +350,7 @@ const Upgrade = () => {
       height='626px'
       borderWidth={2}
       padding='30px 68px'
+      mt='113px'
     >
       {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
         <Steps
@@ -421,7 +427,7 @@ const Upgrade = () => {
                     <Text fontSize='24px' fontStyle='normal' mark bold>
                       {t('Upgrade experience')}
                     </Text>
-                    <Text fontSize='20px'>{t('升级需要吞噬同种族星球')}</Text>
+                    {/* <Text fontSize='20px'>{t('升级需要吞噬同种族星球')}</Text> */}
                   </Flex>
                   <StripedProgress
                     preStep={`${preExpStep}%`}
@@ -435,7 +441,7 @@ const Upgrade = () => {
                     <Text fontSize='20px'>{`${curExp} / ${maxExp}`}</Text>
                     {Object.keys(activeMaterialMap).length > 0 && (
                       <Text fontSize='20px' color='textUp'>
-                        {t('Expected +%value%', { value: exportExp })}
+                        {t('Expected +%value%', { value: expectedExp })}
                       </Text>
                     )}
                   </Flex>

@@ -232,7 +232,7 @@ const List = () => {
                 <Dots>{t('joining')}</Dots>
               ) : (
                 <Text fontSize='18px' bold>
-                  一键部署到行星联盟
+                  {t('OpenMysteryBoxBtnDesc1')}
                 </Text>
               )}
             </Button>
@@ -246,7 +246,7 @@ const List = () => {
             }}
           >
             <Text fontSize='18px' bold>
-              老手自己配置
+              {t('OpenMysteryBoxBtnDesc2')}
             </Text>
           </Button>
         </Flex>
