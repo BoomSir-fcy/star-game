@@ -164,9 +164,20 @@ class Boards extends EventTarget {
         event.data.global.y + 5,
       );
       const collection = item.checkCollisionPoint(point);
+
       if (dargEnd) {
         item.displayState(false);
       }
+
+      item.chequers.forEach(chequer => {
+        if (chequer.state === stateType.PLACE) {
+          chequer.setState(stateType.PREVIEW);
+        }
+      })
+
+      // if (item.chequers.every(chequer => chequer.state === stateType.PLACE)) {
+      //   item.setState(stateType.PREVIEW);
+      // }
 
       if (
         dargEnd && collection &&
@@ -177,13 +188,13 @@ class Boards extends EventTarget {
         collection &&
         item.chequers.every(chequer => chequer.state === stateType.PREVIEW)
       ) {
-        item.setState(stateType.PLACE);
+        // item.setState(stateType.PLACE);
         res = item;
       } else if (
         !collection &&
         item.chequers.every(chequer => chequer.state === stateType.PLACE)
       ) {
-        item.setState(stateType.PREVIEW);
+        // item.setState(stateType.PREVIEW);
       }
     });
 

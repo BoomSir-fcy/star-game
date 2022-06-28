@@ -133,7 +133,7 @@ class Building extends EventTarget {
 
   // 添加小人
   addBuilder(builder: Builder) {
-    // this.builders.push(builder);
+    this.builders.push(builder);
     this.boards.container.sortableChildren = true;
     this.boards.container.zIndex = 1;
     this.boards.container.addChild(builder.container);
@@ -142,19 +142,18 @@ class Building extends EventTarget {
         // this.showSameSoliderState(soldier);
         if (builder.enableDrag) {
           builder.setMoved(true);
+          builder.matrix4?.setState(stateType.PREVIEW)
+          builder.changeState(stateType.PREVIEW)
         }
       })
       .on('pointermove', event => {
         if (builder.dragging && builder.enableDrag) {
           this.onDragStarBuilder(builder)
           this.onDrageMoveBuilder(event, builder);
-          builder.matrix4?.setState(stateType.PREVIEW)
-          builder.changeState(stateType.PREVIEW)
 
         }
       })
       .on('pointerup', event => {
-        console.log(builder.moved)
         if (builder.moved) {
           const res = this.onDragEndBuilder(event, builder);
           if (res) {
@@ -272,13 +271,20 @@ class Building extends EventTarget {
   // 拖拽小人开始生命周期
   onDragStarBuilder(builder?: Builder) {
     this.boards.chequers.forEach(item => {
-      if (builder?.axisPoint?.chequer === item) {
-        builder.changeState(stateType.PREVIEW);
-      } else if (builder) {
-        builder.changeState(stateType.DISABLE);
-      }
+      // if (builder?.axisPoint?.chequer === item) {
+      //   builder.changeState(stateType.PREVIEW);
+      // } else if (builder) {
+      //   builder.changeState(stateType.DISABLE);
+      // }
       item.displayState(true);
     });
+    this.builders.forEach(item => {
+      if (item === builder) {
+        item.changeState(stateType.PREVIEW);
+      } else {
+        item.changeState(stateType.DISABLE);
+      }
+    })
   }
 
   // 移动小人
@@ -289,7 +295,7 @@ class Building extends EventTarget {
       return;
     }
     const chequer = this.boards.checkCollisionPoint(event);
-    chequer?.setState(stateType.PLACE);
+    // chequer?.setState(stateType.PLACE);
   }
 
   // 拖拽小人结束生命周期
