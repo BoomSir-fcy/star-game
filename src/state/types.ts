@@ -116,14 +116,24 @@ export interface GalaxyState {
   currentGalaxy: GalaxyInfo;
   currentStarPeriod: StarLevelInfo;
   galaxyList: GalaxyInfo[];
-  galaxyStarList: StarLevelInfo[];
+  galaxyStarList: Api.Galaxy.StarInfo[];
   galaxyNft: GalaxyNft;
   loadingGalaxy: boolean;
   loading: boolean;
   auctionRecordList: any[];
   AllLogs: AllLogsInfo[];
+  OwnerInfo: OwnerInfoView;
 }
 
+export interface OwnerInfoView {
+  hold_time: number;
+  nickname: string;
+  avatar: string;
+  owner_get_box: number;
+  all_get_box: number;
+  auction_count: number;
+  power: number;
+}
 export interface AllLogsInfo {
   id: number;
   galaxyId: number;

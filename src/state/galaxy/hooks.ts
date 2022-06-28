@@ -8,6 +8,7 @@ import {
   fetchGalaxyListAsync,
   fetchGalaxyStarListAsync,
   fetchGetNftViewAsync,
+  fetchOwnerInfoAsync,
 } from './reducer';
 
 export const useGalaxySelector = () => {
@@ -78,6 +79,24 @@ export const useFetchAllLogsView = () => {
       dispatch(fetchAllLogsAsync());
     }
   }, [account, dispatch]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return {
+    fetch,
+  };
+};
+
+export const useFetchOwnerInfo = (nft_id: number) => {
+  const dispatch = useDispatch();
+  const { account } = useActiveWeb3React();
+  const fetch = useCallback(() => {
+    if (account) {
+      dispatch(fetchOwnerInfoAsync(nft_id));
+    }
+  }, [account, nft_id, dispatch]);
 
   useEffect(() => {
     fetch();

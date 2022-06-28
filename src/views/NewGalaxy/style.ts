@@ -36,7 +36,7 @@ export const GalaxyImg = styled.img`
 export const InfoModuleBox = styled(Box)`
   position: absolute;
   width: 582px;
-  height: 460px;
+  height: 500px;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
   left: 0px;

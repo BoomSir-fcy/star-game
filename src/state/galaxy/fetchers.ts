@@ -93,3 +93,16 @@ export const fetchAllLogs = async () => {
     return [];
   }
 };
+
+export const fetchOwnerInfo = async (nft_id: number) => {
+  try {
+    const res = await Api.GalaxyApi.getOwnerInfo(nft_id);
+    if (Api.isSuccess(res)) {
+      return res.data;
+    }
+    return null;
+  } catch (error) {
+    console.error(`fetch fetchOwnerInfo error: ${error}`);
+    return null;
+  }
+};

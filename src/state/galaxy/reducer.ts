@@ -6,6 +6,7 @@ import {
   fetchGalaxyList,
   fetchGalaxyStarList,
   fetchGetNftView,
+  fetchOwnerInfo,
 } from './fetchers';
 import { getGalaxyIncoming, sliceByLevels } from './util';
 
@@ -32,6 +33,15 @@ export const initialState: GalaxyState = {
   },
   auctionRecordList: [],
   AllLogs: [],
+  OwnerInfo: {
+    hold_time: 0,
+    nickname: '',
+    avatar: '',
+    owner_get_box: 0,
+    all_get_box: 0,
+    auction_count: 0,
+    power: 0,
+  },
 };
 
 export const fetchGalaxyListAsync = (): AppThunk => async dispatch => {
@@ -44,6 +54,13 @@ export const fetchAllLogsAsync = (): AppThunk => async dispatch => {
   const list = await fetchAllLogs();
   dispatch(setAllLogsList(list));
 };
+
+export const fetchOwnerInfoAsync =
+  (nft_id: number): AppThunk =>
+  async dispatch => {
+    const info = await fetchOwnerInfo(nft_id);
+    dispatch(setOwnerInfo(info));
+  };
 
 export const fetchGalaxyStarListAsync =
   (galaxyId: number): AppThunk =>
@@ -124,6 +141,12 @@ export const galaxySlice = createSlice({
         state.AllLogs = payload;
       }
     },
+    setOwnerInfo: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        state.OwnerInfo = payload;
+      }
+    },
   },
 });
 
@@ -138,6 +161,7 @@ export const {
   setGalaxyNft,
   setAuctionRecordList,
   setAllLogsList,
+  setOwnerInfo,
 } = galaxySlice.actions;
 
 export default galaxySlice.reducer;

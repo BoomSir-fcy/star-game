@@ -10,6 +10,7 @@ import {
 } from 'state/galaxy/reducer';
 import { GalaxyImg, GalaxyInfoBox, ItemGalaxyBox } from 'views/NewGalaxy/style';
 import InfoModule from './InfoModule';
+import OccupiedModul from './OccupiedModul';
 
 const GalaxyInfo: React.FC = () => {
   useGalaxyList();
@@ -17,6 +18,7 @@ const GalaxyInfo: React.FC = () => {
 
   const { galaxyList, currentGalaxy, loadingGalaxy } = useStore(p => p.galaxy);
   const [OpenInfo, setOpenInfo] = useState(false);
+  const [ShowListModule, setShowListModule] = useState(false);
 
   return (
     <GalaxyInfoBox>
@@ -29,12 +31,19 @@ const GalaxyInfo: React.FC = () => {
             dispatch(setCurrentGalaxy(item));
             dispatch(fetchGalaxyStarListAsync(item.id as number));
             setOpenInfo(true);
+            setShowListModule(true);
           }}
         >
           <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />
         </ItemGalaxyBox>
       ))}
       {OpenInfo && <InfoModule setOpenInfo={setOpenInfo} />}
+      {ShowListModule && (
+        <OccupiedModul
+          ShowListModule={ShowListModule}
+          setShowListModule={setShowListModule}
+        />
+      )}
     </GalaxyInfoBox>
   );
 };

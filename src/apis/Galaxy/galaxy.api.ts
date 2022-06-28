@@ -54,4 +54,10 @@ export class GalaxyApi extends Http {
     const res = await this.get('galaxy/all-auction-logs');
     return res;
   }
+
+  // 获取星系拥有者详情
+  async getOwnerInfo(nft_id: number) {
+    const res = await this.get('galaxy/owner/info', { nft_id });
+    return res;
+  }
 }
