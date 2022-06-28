@@ -1,26 +1,11 @@
-// import {
-//   Application,
-//   Sprite,
-//   Container,
-//   Loader,
-//   InteractionData,
-//   InteractionEvent,
-// } from '@pixi/core';
-import { Texture } from '@pixi/core';
-import { Application } from '@pixi/app';
 import { Point } from '@pixi/math';
-import { Sprite } from '@pixi/sprite';
-import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 import { Graphics } from '@pixi/graphics';
 import { Container } from '@pixi/display';
-import { Loader } from '@pixi/loaders';
 import { InteractionEvent, InteractionData } from '@pixi/interaction';
 
 import config from '../config';
 import Chequer, { mapType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
-import PixelateFilter from './PixelateFilter';
-import Builder from './Builder';
 import Matrix4 from './Matrix4';
 
 interface BoardsProps {
@@ -79,58 +64,6 @@ class Boards extends EventTarget {
     this.container.height = this.height;
 
     this.container.interactive = true;
-  }
-
-  createGraphics() {
-    const path = [
-      0,
-      0,
-      Chequer.WIDTH * Chequer.X_RATIO * 4,
-      Chequer.HEIGHT * Chequer.Y_RATIO * 4,
-      Chequer.WIDTH * Chequer.X_RATIO * 4,
-      Chequer.HEIGHT * Chequer.Y_RATIO * 5 - 30,
-      50,
-      Chequer.HEIGHT * Chequer.Y_RATIO,
-    ];
-    const graphics = new Graphics();
-    graphics.beginFill(0x4ffffb, 0.1);
-    graphics.drawPolygon(path);
-    graphics.endFill();
-    // const { x } = this.bunny;
-    // const y = this.bunny.y - 60;
-    graphics.x = -Chequer.WIDTH * Chequer.Y_RATIO * 4;
-    graphics.y = -0;
-
-    graphics.interactive = true;
-    graphics.zIndex = 10;
-    // this.centerPoint.set(x, y + 30);
-    this.container.addChild(graphics);
-    return graphics;
-  }
-
-  createGraphics1() {
-    const path = [
-      Chequer.WIDTH * Chequer.X_RATIO * 8,
-      0,
-      Chequer.WIDTH * Chequer.X_RATIO * 4,
-      Chequer.HEIGHT * Chequer.Y_RATIO * 4,
-      Chequer.WIDTH * Chequer.X_RATIO * 4,
-      Chequer.HEIGHT * Chequer.Y_RATIO * 5 - 30,
-      Chequer.WIDTH * Chequer.X_RATIO * 8 - 50,
-      Chequer.HEIGHT * Chequer.Y_RATIO,
-    ];
-    const graphics = new Graphics();
-    graphics.beginFill(0x4ffffb, 0.15);
-    graphics.drawPolygon(path);
-    graphics.endFill();
-    graphics.x = -Chequer.WIDTH * Chequer.Y_RATIO * 4;
-    graphics.y = -0;
-
-    graphics.interactive = true;
-    graphics.zIndex = 10;
-
-    this.container.addChild(graphics);
-    return graphics;
   }
 
   // 绘制棋格

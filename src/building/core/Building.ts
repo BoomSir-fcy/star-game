@@ -14,7 +14,6 @@ import {
   getUpdateBuilderPosition,
 } from './event';
 import LinearMove from './LinearMove';
-import loaders from './Loaders';
 import { SpeederType } from '../types';
 import Builder, { BuilderOption } from './Builder';
 
@@ -75,8 +74,6 @@ class Building extends EventTarget {
 
   view = document.createElement('canvas');
 
-  loaders = loaders;
-
   private axis: AxisPoint[][] = [];
 
   builders: Builder[] = []; // 小人
@@ -90,10 +87,6 @@ class Building extends EventTarget {
   activeBuilder?: Builder; // 当前选中建筑
 
   activeBuilderFlag?: boolean; // 表示事件触发源未activeSolider
-
-  private lastCreateBuilderId = '';
-
-  private enemyOfBuilderId: { [id: string]: boolean } = {};
 
   init() {
     this.view = this.app.view;
@@ -114,11 +107,6 @@ class Building extends EventTarget {
       }
     });
     this.addEventListenerOfWindow();
-  }
-
-  loadResources() {
-    this.loaders.loadSpineAll();
-    return this.loaders;
   }
 
   creatTerrain(areaX: number, areaY: number) {
@@ -299,19 +287,6 @@ class Building extends EventTarget {
     }
     const chequer = this.boards.checkCollisionPoint(event);
     chequer?.setState(stateType.PLACE);
-
-    // this.boards.chequers.forEach(item => {
-    //   const point = new Point(
-    //     event.data.global.x - 10,
-    //     event.data.global.y + 5,
-    //   );
-    //   const collection = item.checkCollisionPoint(point);
-    //   if (collection && item.state === stateType.PREVIEW) {
-    //     item.setState(stateType.PLACE);
-    //   } else if (!collection && item.state === stateType.PLACE) {
-    //     item.setState(stateType.PREVIEW);
-    //   }
-    // });
   }
 
   // 拖拽小人结束生命周期
@@ -368,7 +343,6 @@ class Building extends EventTarget {
     builder.container.position.set(axis.x, axis.y);
 
     const id = uniqueId();
-    this.lastCreateBuilderId = id;
 
     // FIXME: 这行代码不能删 我也不知道为什么
     const linearMove = new LinearMove(builder.container, point0, point1, {
