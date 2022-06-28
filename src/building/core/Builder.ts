@@ -20,7 +20,7 @@ export interface BuilderOption {
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
     super();
-    const { src, id, race = 1, areaX, areaY, enableDrag } = option;
+    const { src, id, race = 1, areaX, areaY, enableDrag, isBuilding } = option;
     this.id = id;
 
     const img = `${window.location.origin}/assets/buildings/${race}/${src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
@@ -32,6 +32,8 @@ class Builder extends EventTarget {
     this.texture = Texture.from(img);
 
     this.enableDrag = Boolean(enableDrag);
+
+    this.setIsBuilding(isBuilding);
 
     this.option = { ...option };
 
@@ -59,6 +61,8 @@ class Builder extends EventTarget {
   src = '';
 
   enableDrag = false;
+
+  isBuilding = false;
 
   option: BuilderOption;
 
@@ -126,6 +130,17 @@ class Builder extends EventTarget {
     this.setPosition(axisPoint);
   }
 
+  setIsBuilding(isBuilding?: boolean) {
+    console.log(isBuilding, '==isBuilding')
+    this.isBuilding = isBuilding;
+    if (isBuilding) {
+      this.container.alpha = 0.5;
+      this.enableDrag = false;
+    } else {
+      this.container.alpha = 1;
+    }
+  }
+
   // 设置位置
   setPosition(point: AxisPoint, matrix4?: Matrix4) {
     if (matrix4) {
@@ -166,12 +181,13 @@ class Builder extends EventTarget {
 
   onDragStart(event: InteractionEvent) {
     event.stopPropagation();
-    this.dragData = event.data;
-    this.container.alpha = 0.1;
-    this.container.filters = [];
-    this.dragging = true;
-    this.container.zIndex = 9999;
-    // this.axisPoint?.chequer?.setState(stateType.ACTIVE);
+    if (this.enableDrag) {
+      this.dragData = event.data;
+      this.container.alpha = 0.9;
+      this.container.filters = [];
+      this.dragging = true;
+      this.container.zIndex = 9999;
+    }
     this.changeState(stateType.ACTIVE, true);
   }
 
@@ -185,9 +201,11 @@ class Builder extends EventTarget {
   }
 
   onDragEnd() {
-    this.container.alpha = 1;
-    this.container.filters = [];
-    this.dragging = false;
+    if (this.enableDrag) {
+      this.container.alpha = 1;
+      this.container.filters = [];
+      this.dragging = false;
+    }
     // this.axisPoint?.chequer?.setState(stateType.DISABLE);
     this.updateZIndex();
   }

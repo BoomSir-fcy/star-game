@@ -209,6 +209,9 @@ const Details = () => {
           work_queue_params: current,
         });
         if (Api.isSuccess(res)) {
+          activeBuilder?.setIsBuilding(true);
+          // console.log(1111111111)
+          // building.findBuilderByXY(val.position.from.x, val.position.from.y)?.setIsBuilding(true);
           getWorkQueue();
           toastSuccess(t('planetTipsSaveSuccess'));
         }
@@ -217,7 +220,7 @@ const Details = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [id, t, toastSuccess],
+    [id, t, toastSuccess, activeBuilder],
   );
 
   React.useEffect(() => {
