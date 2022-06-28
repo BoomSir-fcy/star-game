@@ -34,7 +34,7 @@ declare namespace Api {
       type: number;
       extra: BuildingExtra;
       propterty: BuildingPropterty;
-      _id: string | number;
+      _id: string;
       status?: {
         building_id: string | number;
         count_down: number;
@@ -43,7 +43,18 @@ declare namespace Api {
       building: {
         _id: number;
       };
+      upgrade_need: UpgradeNeed;
       work_queue_id?: number;
+      position?: {
+        from: {
+          x: number;
+          y: number;
+        };
+        to: {
+          x: number;
+          y: number;
+        };
+      };
       isbuilding?: boolean;
       isactive?: boolean; // 是否激活
       iscreate?: boolean; // 是否已经保存创建建筑了
@@ -63,9 +74,9 @@ declare namespace Api {
     }
 
     interface CreateBuildingParams {
-      planet_id: number | string;
+      planet_id: number;
       build_type?: number;
-      work_queue_params: CreateworkQueueParams;
+      work_queue_params: CreateworkQueueParams[];
     }
 
     interface CreateworkQueueParams {

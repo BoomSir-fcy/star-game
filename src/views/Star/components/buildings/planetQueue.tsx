@@ -57,7 +57,7 @@ export const PlanetQueue: React.FC<{
   onSave?: () => void;
   onSelectCurrent?: (item: any) => void;
   onComplete?: () => void;
-}> = ({ serverTime, currentQueue }) => {
+}> = ({ serverTime, currentQueue, onComplete }) => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -73,36 +73,56 @@ export const PlanetQueue: React.FC<{
       <MarkText mb='24px' fontSize='20px' bold>
         {t('BuildUpgradeQueue')}
       </MarkText>
-      {(queueArr ?? []).map(item => (
-        <QueueGroup key={item}>
-          {currentQueue.length <= 0 ? (
-            <QueueBox
-              onClick={event => {
-                event.stopPropagation();
-                event.preventDefault();
-                dispatch(storeAction.queueVisbleSide(true));
-              }}
-            >
-              <Image
-                src='../images/commons/icon/icon-queue-add.png'
-                width={37}
-                height={37}
-              />
-            </QueueBox>
-          ) : (
-            <>
-              <QueueBox>
+      {(queueArr ?? []).map((item, index) => {
+        return (
+          <QueueGroup key={item}>
+            {!currentQueue[index]?._id ? (
+              <QueueBox
+                onClick={event => {
+                  event.stopPropagation();
+                  event.preventDefault();
+                  dispatch(storeAction.queueVisbleSide(true));
+                }}
+              >
                 <Image
-                  src='http://192.168.101.106:9091/nfts/planet/33.png'
-                  width={95}
-                  height={95}
+                  src='../images/commons/icon/icon-queue-add.png'
+                  width={37}
+                  height={37}
                 />
               </QueueBox>
-              <QueueBuilding type={1} status={1} level={1} />
-            </>
-          )}
-        </QueueGroup>
-      ))}
+            ) : (
+              <>
+                <QueueBox>
+                  <Image
+                    src={currentQueue[index]?.work_build_picture}
+                    width={95}
+                    height={95}
+                  />
+                </QueueBox>
+                <QueueBuilding
+                  currentBuilding={currentQueue[index]?.building}
+                  type={currentQueue[index]?.work_type}
+                  status={currentQueue[index]?.work_status}
+                  diffTime={
+                    currentQueue[index]?.work_end_time - serverTime > 0
+                      ? currentQueue[index]?.work_end_time - serverTime
+                      : 0
+                  }
+                  endTime={
+                    currentQueue[index]?.work_end_time -
+                      currentQueue[index]?.work_start_time >
+                    0
+                      ? currentQueue[index]?.work_end_time -
+                        currentQueue[index]?.work_start_time
+                      : 0
+                  }
+                  onComplete={onComplete}
+                />
+              </>
+            )}
+          </QueueGroup>
+        );
+      })}
       {!vipBenefite?.is_vip && (
         <QueueGroup onClick={() => navigate('/vip')}>
           <QueueBox>

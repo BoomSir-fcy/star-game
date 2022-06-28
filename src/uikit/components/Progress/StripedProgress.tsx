@@ -4,7 +4,7 @@ import { Box, BoxProps } from '../Box';
 
 const ProgressBox = styled(Box)<{ step: string; preStep?: string }>`
   width: 537px;
-  height: 16px;
+  height: 12px;
   background: url('/images/plunder/bar.png');
   background-size: 100% 100%;
   position: relative;

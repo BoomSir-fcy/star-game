@@ -44,8 +44,14 @@ const ArmsPreview: React.FC<{
   }, [data]);
 
   return (
-    <ArmsContent onClick={onClick}>
-      <Preview radius>
+    <ArmsContent
+      onClick={event => {
+        event.stopPropagation();
+        event.preventDefault();
+        onClick();
+      }}
+    >
+      <Preview isRadius stripe width='92px' height='92px'>
         <PreviewNumber>{data?.count}</PreviewNumber>
         <Image src={getSoldierSrc()} width={92} height={92} />
       </Preview>
@@ -66,6 +72,22 @@ export const BuildingArms: React.FC<{
     arms: {},
   });
 
+  const close = React.useCallback(() => {
+    setState(p => {
+      p.visible = false;
+      p.index = '';
+    });
+  }, [setState]);
+
+  React.useEffect(() => {
+    window.addEventListener('click', close);
+    return () => {
+      window.removeEventListener('click', close);
+    };
+  }, [close]);
+
+  console.log(currnet_building);
+
   return (
     <Box style={{ position: 'relative' }}>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
@@ -78,7 +100,7 @@ export const BuildingArms: React.FC<{
             key={item.unique_id}
             onClick={() => {
               setState(p => {
-                p.visible = state.index !== index;
+                p.visible = !state.visible;
                 p.index = index;
                 p.arms = item;
               });
@@ -87,7 +109,7 @@ export const BuildingArms: React.FC<{
         ))}
       </Flex>
 
-      {state.visible && <ArmsInfo armsData={state.arms} />}
+      {state.visible && state.index >= 0 && <ArmsInfo armsData={state.arms} />}
     </Box>
   );
 };

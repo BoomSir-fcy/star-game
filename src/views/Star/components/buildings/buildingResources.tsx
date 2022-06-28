@@ -1,8 +1,10 @@
 import { useTranslation } from 'contexts/Localization';
 import React from 'react';
 import { Flex, Box, MarkText, Text, Button } from 'uikit';
+import { useImmer } from 'use-immer';
 
 import { BuildingProgress } from './buildingProgress';
+import { BuildingResourceModal } from './buildingResourceModal';
 
 export const BuildingResources: React.FC<{
   currnet_building: Api.Building.BuildingDetail;
@@ -10,9 +12,12 @@ export const BuildingResources: React.FC<{
 }> = ({ currnet_building, estimate }) => {
   const { t } = useTranslation();
   const { store } = currnet_building;
+  const [state, setState] = useImmer({
+    visible: false,
+  });
 
   return (
-    <Box>
+    <Box position='relative'>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>
         {t('store resources')}
       </MarkText>
@@ -65,17 +70,50 @@ export const BuildingResources: React.FC<{
         </Box>
       </Flex>
       <Flex justifyContent='space-between'>
-        <Button width='226px' height='53px' variant='purple'>
+        <Button
+          width='226px'
+          height='53px'
+          variant='purple'
+          onClick={event => {
+            event.stopPropagation();
+            event.preventDefault();
+            setState(p => {
+              p.visible = true;
+            });
+          }}
+        >
           <Text bold fontSize='16px' color='#4FFFFB'>
             {t('Supplement Resources')}
           </Text>
         </Button>
-        <Button width='226px' height='53px' variant='purple'>
+        <Button
+          width='226px'
+          height='53px'
+          variant='purple'
+          onClick={event => {
+            event.stopPropagation();
+            event.preventDefault();
+            setState(p => {
+              p.visible = true;
+            });
+          }}
+        >
           <Text bold fontSize='16px' color='#4FFFFB'>
             {t('Extract Resources')}
           </Text>
         </Button>
       </Flex>
+
+      {/* 充提资源 */}
+      {state.visible && (
+        <BuildingResourceModal
+          onClose={() =>
+            setState(p => {
+              p.visible = false;
+            })
+          }
+        />
+      )}
     </Box>
   );
 };

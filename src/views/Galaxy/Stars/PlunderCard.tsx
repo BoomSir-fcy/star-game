@@ -6,7 +6,7 @@ import { useToast } from 'contexts/ToastsContext';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { setState } from 'state/game/reducer';
 import { GamePkState } from 'state/types';
 import { Button, Text, Flex, BgCard, Image, Dots } from 'uikit';

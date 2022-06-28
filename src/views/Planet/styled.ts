@@ -27,17 +27,15 @@ export const DragBox = styled(Box)`
   width: 100%;
   height: 100vh;
   margin: auto;
-  border: 5px solid black;
+  /* border: 5px solid black; */
   overflow: auto;
 
-  &.no-select {
-    user-select: none;
-  }
   ::-webkit-scrollbar {
-    height: 16px;
+    height: 12px;
   }
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.textSubtle};
+    /* background: ${({ theme }) => theme.colors.textSubtle}; */
+    background: rgb(75 75 75 / 50%);
     border-radius: 20px;
   }
 `;
@@ -45,6 +43,9 @@ export const PlanetBox = styled(Box)`
   position: relative;
   width: 3000px;
   height: 100%;
+  &.no-select {
+    user-select: none;
+  }
   /* border: 5px solid red; */
 `;
 

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { RaceAvatar } from 'components';
+import { Globe, RaceAvatar, TooltipTrigger } from 'components';
 import StarCom from 'components/StarCom';
 import { useTranslation } from 'contexts/Localization';
 import React from 'react';
@@ -12,6 +12,7 @@ import { formatDisplayApr } from 'utils/formatBalance';
 const InfoFlex = styled(Flex)`
   margin-top: 13px;
   flex-wrap: wrap;
+  justify-content: flex-end;
   & > :nth-child(n) {
     margin-bottom: 14px;
   }
@@ -41,27 +42,45 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
               Lv{info?.level}
             </Text>
           </Flex>
-          <StarCom
-            quality={info?.rarity}
-            picture={info?.picture}
-            picture1={info?.picture1}
+          <Globe
+            width='174px'
+            height='161px'
+            shadow={QualityColor[info?.rarity]}
+            url={info?.picture1}
             showUnion={info?.in_alliance !== 0}
-            style={{ flexShrink: 1 }}
           />
         </Box>
 
-        <Box ml='45px'>
+        <Box>
           <Flex justifyContent='flex-end' alignItems='center'>
             <Text>战斗力</Text>
             <Text ml='20px' mark fontStyle='normal' fontSize='20px' bold>
               {info?.power}
             </Text>
-            <Image
-              ml='10px'
-              width={25}
-              height={25}
-              src='/images/commons/icon/help-new.png'
-            />
+
+            <TooltipTrigger
+              overlay={
+                <Box>
+                  <Text small>BUFF建筑加成</Text>
+                  <Text color='textPrimary' small>
+                    +265952626
+                  </Text>
+                  <Text mt='10px' small>
+                    培育强化加成
+                  </Text>
+                  <Text color='textPrimary' small>
+                    +265952626
+                  </Text>
+                </Box>
+              }
+            >
+              <Image
+                ml='10px'
+                width={25}
+                height={25}
+                src='/images/commons/icon/help-new.png'
+              />
+            </TooltipTrigger>
           </Flex>
           <InfoFlex>
             <InfoValueFlex alignItems='center'>
@@ -183,7 +202,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
               </Text>
             </InfoValueFlex>
             <Button
-              width='212px'
+              width='207px'
               height='53px'
               variant='purple'
               onClick={() => {

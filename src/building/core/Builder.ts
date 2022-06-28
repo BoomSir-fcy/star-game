@@ -10,17 +10,23 @@ export interface BuilderOption {
   src?: string;
   id: string;
   race?: number;
+  building: Api.Building.Building;
+  areaY: number;
+  areaX: number;
 }
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
     super();
-    const { src, id, race = 1 } = option;
+    const { src, id, race = 1, areaX, areaY } = option;
     this.id = id;
 
-    const img = `${window.location.origin}/assets/buildings/${race}/${src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
-      }`;
+    const img = `${window.location.origin}/assets/buildings/${race}/${
+      src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
+    }`;
 
     this.src = img;
+    this.areaY = areaY;
+    this.areaX = areaX;
     this.texture = Texture.from(img);
     this.option = { ...option };
 
@@ -53,27 +59,27 @@ class Builder extends EventTarget {
     from: {
       x: number;
       y: number;
-    },
+    };
     to: {
       x: number;
       y: number;
-    }
+    };
   } = {
-      from: {
-        x: 0,
-        y: 0,
-      },
-      to: {
-        x: 0,
-        y: 0,
-      },
-    }
+    from: {
+      x: 0,
+      y: 0,
+    },
+    to: {
+      x: 0,
+      y: 0,
+    },
+  };
 
   init() {
     this.sprite.texture = this.texture;
 
-    this.sprite.width = 200 * this.areaX;
-    this.sprite.height = 200 * this.areaY;
+    this.sprite.width = 150 * this.areaX;
+    this.sprite.height = 150 * this.areaY;
     this.sprite.anchor.set(0.5);
 
     this.container.addChild(this.sprite);
@@ -113,11 +119,11 @@ class Builder extends EventTarget {
     this.position.from = {
       x: point.axisX,
       y: point.axisY,
-    }
+    };
     this.position.to = {
       x: point.axisX + this.areaX,
       y: point.axisY + this.areaY,
-    }
+    };
   }
 
   // 重置位置 用于拖动的时候

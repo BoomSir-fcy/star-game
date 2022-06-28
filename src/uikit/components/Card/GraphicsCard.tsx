@@ -8,12 +8,11 @@ const GraphicsBox = styled(Box)<GraphicsCardProps>`
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   max-width: 100%;
-  /* min-height: 200px; */
   padding: 20px;
   border: ${({ theme, borderWidth }) =>
     `${borderWidth}px solid ${theme.colors.borderPrimary}`};
   box-shadow: inset 0px 4px 18px 0px rgba(0, 0, 0, 0.31);
-  ${({ theme, radius }) => radius && `border-radius: ${theme.radii.card};`}
+  ${({ theme, isRadius }) => isRadius && `border-radius: ${theme.radii.card};`}
   z-index: 1;
   ${({ theme, stripe }) =>
     stripe &&
@@ -34,7 +33,8 @@ const GraphicsBox = styled(Box)<GraphicsCardProps>`
     margin: auto;
     background: ${({ theme, stripe }) =>
       stripe ? theme.colors.gradients.stripeBg : theme.colors.gradients.card};
-    ${({ theme, radius }) => radius && `border-radius: ${theme.radii.card};`}
+    ${({ theme, isRadius }) =>
+      isRadius && `border-radius: ${theme.radii.card};`}
     z-index: -1;
   }
 `;
@@ -48,6 +48,7 @@ GraphicsCard.defaultProps = {
   height: '264px',
   stripe: false,
   borderWidth: 1,
+  isRadius: false,
 };
 
 export default GraphicsCard;
