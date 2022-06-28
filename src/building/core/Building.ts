@@ -125,7 +125,11 @@ class Building extends EventTarget {
       this.removeActiveSolider();
     });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
-      if (e.key === 'Delete' && this.activeBuilder && this.activeBuilder.enableDrag) {
+      if (
+        e.key === 'Delete' &&
+        this.activeBuilder &&
+        this.activeBuilder.enableDrag
+      ) {
         this.removeBuilder(this.activeBuilder);
       }
     });
@@ -142,15 +146,16 @@ class Building extends EventTarget {
         // this.showSameSoliderState(soldier);
         if (builder.enableDrag) {
           builder.setMoved(true);
-          builder.matrix4?.setState(stateType.PREVIEW)
-          builder.changeState(stateType.PREVIEW)
+          builder.matrix4?.setState(stateType.PREVIEW);
+          builder.changeState(stateType.PREVIEW);
         }
       })
       .on('pointermove', event => {
         if (builder.dragging && builder.enableDrag) {
-          this.onDragStarBuilder(builder)
+          this.onDragStarBuilder(builder);
           this.onDrageMoveBuilder(event, builder);
-
+          builder.matrix4?.setState(stateType.PREVIEW);
+          builder.changeState(stateType.PREVIEW);
         }
       })
       .on('pointerup', event => {
@@ -169,7 +174,6 @@ class Building extends EventTarget {
       .on('click', (e: InteractionEvent) => {
         this.activeBuilderFlag = true;
       });
-
   }
 
   // 添加当前选中小人
@@ -284,7 +288,7 @@ class Building extends EventTarget {
       } else {
         item.changeState(stateType.DISABLE);
       }
-    })
+    });
   }
 
   // 移动小人
@@ -341,7 +345,7 @@ class Building extends EventTarget {
     if (!axis) return null;
     if (!matrix && option.areaX === 2) return null;
     const builder = new Builder(option);
-    builder.setPosition(axis, matrix)
+    builder.setPosition(axis, matrix);
 
     this.addBuilder(builder);
 
@@ -398,7 +402,9 @@ class Building extends EventTarget {
    * @returns Builder | null
    */
   getMatrix4ByAxis(axis: AxisPoint) {
-    return this.boards.matrix4s.find(item => item.chequers[0] === axis?.chequer);
+    return this.boards.matrix4s.find(
+      item => item.chequers[0] === axis?.chequer,
+    );
   }
 
   /**
@@ -456,7 +462,6 @@ class Building extends EventTarget {
 }
 
 export default Building;
-
 
 /* 
 
