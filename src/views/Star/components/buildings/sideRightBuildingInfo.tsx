@@ -110,7 +110,9 @@ export const SideRightBuildingInfo: React.FC<{
     },
     estimate_building_detail: {},
   });
-  const currentAttributes = upgradeInfo?.building_detail?._id || itemData;
+  const currentAttributes = upgradeInfo?.building_detail?._id
+    ? upgradeInfo?.building_detail
+    : itemData;
   const estimate = upgradeInfo?.estimate_building_detail || {};
 
   const init = React.useCallback(
@@ -130,8 +132,6 @@ export const SideRightBuildingInfo: React.FC<{
       init();
     }
   }, [init, itemData]);
-
-  // console.log(currentAttributes);
 
   return (
     <Container>
@@ -226,8 +226,10 @@ export const SideRightBuildingInfo: React.FC<{
           {currentAttributes.detail_type ===
             BuildingDetailType.BuildingDetailTypeStore && (
             <BuildingResources
+              planet_id={planet_id}
               currnet_building={currentAttributes}
               estimate={estimate}
+              onClose={onClose}
             />
           )}
 

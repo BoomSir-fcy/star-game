@@ -44,6 +44,7 @@ export const InProgress: React.FC<{
       style={{ padding: 0, border: 'none' }}
       width='max-content'
       height='max-content'
+      stripe
     >
       <CardBox>
         <Box>

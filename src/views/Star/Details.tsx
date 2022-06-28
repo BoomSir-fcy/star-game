@@ -17,7 +17,6 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
-import { isTokenKind } from 'typescript';
 import type { AreaDataItem } from './components/dragCompoents';
 
 import {
@@ -127,9 +126,22 @@ const Details = () => {
     if (ref.current && areaX && areaY) {
       ref.current.appendChild(building.view);
       building.creatTerrain(areaX, areaY);
-      // createHandle();
     }
   }, [building, ref, areaX, areaY]);
+
+  const initBuilder = React.useCallback(() => {
+    building.initBuilder(selfBuilding);
+  }, [building, selfBuilding])
+
+  React.useEffect(() => {
+    if (building.boardsCreated) {
+      initBuilder()
+    }
+    building.addEventListener('boardsCreated', initBuilder);
+    return () => {
+      building.removeEventListener('boardsCreated', initBuilder);
+    }
+  }, [initBuilder, building]);
 
   const getWorkQueue = React.useCallback(
     async () => {
@@ -197,6 +209,9 @@ const Details = () => {
           work_queue_params: current,
         });
         if (Api.isSuccess(res)) {
+          activeBuilder?.setIsBuilding(true);
+          // console.log(1111111111)
+          // building.findBuilderByXY(val.position.from.x, val.position.from.y)?.setIsBuilding(true);
           getWorkQueue();
           toastSuccess(t('planetTipsSaveSuccess'));
         }
@@ -205,11 +220,12 @@ const Details = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [id, t, toastSuccess],
+    [id, t, toastSuccess, activeBuilder],
   );
 
   React.useEffect(() => {
     if (activeBuilder?.option?.id) {
+      console.log('activeBuilder: ', activeBuilder);
       setStateBuilding(p => {
         p.visible = true;
         p.building = {
@@ -275,7 +291,7 @@ const Details = () => {
   return (
     <>
       <Container>
-        {!guides.guideFinish &&
+        {/* {!guides.guideFinish &&
           guides.finish &&
           steps.length - 1 > guides.step && (
             <Steps
@@ -307,7 +323,7 @@ const Details = () => {
                 }
               }}
             />
-          )}
+          )} */}
         <SideLeftContent race={planet?.race} building={building} />
         <PlanetQueue
           serverTime={currentTime + serverDiffTime}
@@ -337,7 +353,7 @@ const Details = () => {
       <ThingUpgradesModal
         visible={upgrad.visible}
         planet_id={id}
-        onChange={async () => {}}
+        onChange={async () => { }}
         onClose={() => {
           dispatch(
             storeAction.upgradesBuildingModal({
@@ -352,7 +368,7 @@ const Details = () => {
       <ThingDestoryModal
         visible={destory.visible}
         planet_id={id}
-        onChange={() => {}}
+        onChange={() => { }}
         onClose={() =>
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),

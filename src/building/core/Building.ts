@@ -14,7 +14,6 @@ import {
   getUpdateBuilderPosition,
 } from './event';
 import LinearMove from './LinearMove';
-import loaders from './Loaders';
 import { SpeederType } from '../types';
 import Builder, { BuilderOption } from './Builder';
 
@@ -40,7 +39,6 @@ class Building extends EventTarget {
       test,
       enableDrag = true,
       enableSoliderDrag = true,
-      offsetStartY,
       offsetStartX,
     } = options || {};
     const _width = width || config.WIDTH;
@@ -76,8 +74,6 @@ class Building extends EventTarget {
 
   view = document.createElement('canvas');
 
-  loaders = loaders;
-
   private axis: AxisPoint[][] = [];
 
   builders: Builder[] = []; // 小人
@@ -91,10 +87,6 @@ class Building extends EventTarget {
   activeBuilder?: Builder; // 当前选中建筑
 
   activeBuilderFlag?: boolean; // 表示事件触发源未activeSolider
-
-  private lastCreateBuilderId = '';
-
-  private enemyOfBuilderId: { [id: string]: boolean } = {};
 
   init() {
     this.view = this.app.view;
@@ -117,11 +109,6 @@ class Building extends EventTarget {
     this.addEventListenerOfWindow();
   }
 
-  loadResources() {
-    this.loaders.loadSpineAll();
-    return this.loaders;
-  }
-
   creatTerrain(areaX: number, areaY: number) {
     this.boards.drawChequers(areaX, areaY);
     this.boardsCreated = true;
@@ -138,7 +125,7 @@ class Building extends EventTarget {
       this.removeActiveSolider();
     });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
-      if (e.key === 'Delete' && this.activeBuilder) {
+      if (e.key === 'Delete' && this.activeBuilder && this.activeBuilder.enableDrag) {
         this.removeBuilder(this.activeBuilder);
       }
     });
@@ -151,17 +138,23 @@ class Building extends EventTarget {
     this.boards.container.zIndex = 1;
     this.boards.container.addChild(builder.container);
     builder.container
-      // .on('pointerdown', () => {
-      //   this.showSameSoliderState(soldier);
-      //   builder.setMoved(false);
-      // })
+      .on('pointerdown', () => {
+        // this.showSameSoliderState(soldier);
+        if (builder.enableDrag) {
+          builder.setMoved(true);
+        }
+      })
       .on('pointermove', event => {
-        // console.log(builder.dragging, 'builder.dragging')
-        if (builder.dragging) {
-          // this.onDrageMoveBuilder(event, builder);
+        if (builder.dragging && builder.enableDrag) {
+          this.onDragStarBuilder(builder)
+          this.onDrageMoveBuilder(event, builder);
+          builder.matrix4?.setState(stateType.PREVIEW)
+          builder.changeState(stateType.PREVIEW)
+
         }
       })
       .on('pointerup', event => {
+        console.log(builder.moved)
         if (builder.moved) {
           const res = this.onDragEndBuilder(event, builder);
           if (res) {
@@ -177,6 +170,7 @@ class Building extends EventTarget {
       .on('click', (e: InteractionEvent) => {
         this.activeBuilderFlag = true;
       });
+
   }
 
   // 添加当前选中小人
@@ -279,7 +273,7 @@ class Building extends EventTarget {
   onDragStarBuilder(builder?: Builder) {
     this.boards.chequers.forEach(item => {
       if (builder?.axisPoint?.chequer === item) {
-        builder.changeState(stateType.ACTIVE);
+        builder.changeState(stateType.PREVIEW);
       } else if (builder) {
         builder.changeState(stateType.DISABLE);
       }
@@ -296,25 +290,12 @@ class Building extends EventTarget {
     }
     const chequer = this.boards.checkCollisionPoint(event);
     chequer?.setState(stateType.PLACE);
-
-    // this.boards.chequers.forEach(item => {
-    //   const point = new Point(
-    //     event.data.global.x - 10,
-    //     event.data.global.y + 5,
-    //   );
-    //   const collection = item.checkCollisionPoint(point);
-    //   if (collection && item.state === stateType.PREVIEW) {
-    //     item.setState(stateType.PLACE);
-    //   } else if (!collection && item.state === stateType.PLACE) {
-    //     item.setState(stateType.PREVIEW);
-    //   }
-    // });
   }
 
   // 拖拽小人结束生命周期
   onDragEndBuilder(event: InteractionEvent, builder: Builder) {
     if (builder.areaX === 2) {
-      const matrix4 = this.boards.checkCollisionPointOfTow(event);
+      const matrix4 = this.boards.checkCollisionPointOfTow(event, true);
       if (matrix4) {
         builder.setPosition(
           new AxisPoint(
@@ -322,6 +303,7 @@ class Building extends EventTarget {
             matrix4.chequers[0].axisY,
             matrix4.chequers[0],
           ),
+          matrix4,
         );
         matrix4.setState(stateType.ACTIVE);
       } else {
@@ -330,7 +312,8 @@ class Building extends EventTarget {
       return !!matrix4;
       // builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
     }
-    const chequer = this.boards.checkCollisionPoint(event);
+    const chequer = this.boards.checkCollisionPoint(event, true);
+
     if (chequer) {
       builder.setPosition(new AxisPoint(chequer.axisX, chequer.axisY, chequer));
     } else {
@@ -348,12 +331,11 @@ class Building extends EventTarget {
    */
   createBuilder(_x: number, _y: number, option: BuilderOption) {
     const axis = this.getAxis(_x, _y);
-    let zIndex = 0;
-    if (axis) {
-      zIndex = axis?.axisX + axis?.axisY;
-    }
+    const matrix = option.areaX === 2 ? this.getMatrix4ByAxis(axis) : undefined;
     if (!axis) return null;
+    if (!matrix && option.areaX === 2) return null;
     const builder = new Builder(option);
+    builder.setPosition(axis, matrix)
 
     this.addBuilder(builder);
 
@@ -361,28 +343,31 @@ class Building extends EventTarget {
     builder.changeState(stateType.PREVIEW, true);
     const point0 = new Point(axis.x, axis.y - 1000) as AxisPoint;
     const point1 = new Point(axis.x, axis.y) as AxisPoint;
+    builder.container.position.set(axis.x, axis.y);
 
     const id = uniqueId();
-    this.lastCreateBuilderId = id;
 
+    // FIXME: 这行代码不能删 我也不知道为什么
     const linearMove = new LinearMove(builder.container, point0, point1, {
       speed: SpeederType.SOLDIER_CREATE,
     });
-    linearMove.addEventListener('end', () => {
-      builder.container.position.set(axis.x, axis.y);
-      builder.startPoint = point1;
-      builder.changeState(stateType.DISABLE, false);
-      this.dispatchEvent(
-        new CustomEvent('builderCreated', { detail: { builder } }),
-      );
-      if (id === this.lastCreateBuilderId) {
-        this.dispatchEvent(
-          new CustomEvent('lastBuilderCreated', { detail: { builder } }),
-        );
-      }
-    });
+    // linearMove.addEventListener('end', () => {
+    //   builder.container.position.set(axis.x, axis.y);
+    //   builder.startPoint = point1;
+    //   builder.changeState(stateType.DISABLE, false);
+    //   this.dispatchEvent(
+    //     new CustomEvent('builderCreated', { detail: { builder } }),
+    //   );
+    //   if (id === this.lastCreateBuilderId) {
+    //     this.dispatchEvent(
+    //       new CustomEvent('lastBuilderCreated', { detail: { builder } }),
+    //     );
+    //   }
+    // });
     // linearMove.speed = 100;
-    linearMove.move();
+    // linearMove.move();
+    builder.changeState(stateType.DISABLE, false);
+
     return builder;
   }
 
@@ -406,8 +391,44 @@ class Building extends EventTarget {
    * @param axis
    * @returns Builder | null
    */
+  getMatrix4ByAxis(axis: AxisPoint) {
+    return this.boards.matrix4s.find(item => item.chequers[0] === axis?.chequer);
+  }
+
+  /**
+   * @dev 根据坐标获取小人
+   * @param axis
+   * @returns Builder | null
+   */
   findBuilderByAxis(axis: AxisPoint) {
     return this.builders.find(builder => builder.axisPoint === axis);
+  }
+
+  findBuilderByXY(x: number, y: number) {
+    const axis = this.getAxis(x, y);
+    return this.builders.find(builder => builder.axisPoint === axis);
+  }
+
+  initBuilder(
+    list: {
+      building: Api.Building.Building;
+      position: {
+        from: { x: number; y: number };
+        to: { x: number; y: number };
+      };
+    }[],
+  ) {
+    if (this.builders.length) return;
+    list.forEach(item => {
+      this.createBuilder(item.position.from.x, item.position.from.y, {
+        building: item.building,
+        src: item.building.picture,
+        id: `${item.building._id}`,
+        race: item.building.race,
+        areaX: item.building.propterty.size.area_x,
+        areaY: item.building.propterty.size.area_y,
+      });
+    });
   }
 
   /**
@@ -429,3 +450,26 @@ class Building extends EventTarget {
 }
 
 export default Building;
+
+
+/* 
+
+  拖建筑
+    1*1的建筑 2*2的建筑
+  
+  拖到棋盘后 对未保存的建筑进行拖动
+  
+  保存的建筑不能拖
+
+  更改策略
+  按照现在的代码进行重构 从新梳理逻辑 不要去读原来的代码 逻辑有些不一样
+
+  2 * 2 的建筑中心点放置
+
+  要不要在现在的建筑上加一个Matrix4的属性
+  
+  先解决第一个问题
+  1.1*1的拖动 放置后状态不对 需要重置所有状态
+  2.2*2的拖动 会出现三个格子的情况
+  3.
+*/

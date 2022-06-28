@@ -5,6 +5,7 @@ import { Texture } from '@pixi/core';
 import { Container } from '@pixi/display';
 import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
+import Matrix4 from './Matrix4';
 
 export interface BuilderOption {
   src?: string;
@@ -13,21 +14,27 @@ export interface BuilderOption {
   building: Api.Building.Building;
   areaY: number;
   areaX: number;
+  isBuilding?: boolean;
+  enableDrag?: boolean;
 }
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
     super();
-    const { src, id, race = 1, areaX, areaY } = option;
+    const { src, id, race = 1, areaX, areaY, enableDrag, isBuilding } = option;
     this.id = id;
 
-    const img = `${window.location.origin}/assets/buildings/${race}/${
-      src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
-    }`;
+    const img = `${window.location.origin}/assets/buildings/${race}/${src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
+      }`;
 
     this.src = img;
     this.areaY = areaY;
     this.areaX = areaX;
     this.texture = Texture.from(img);
+
+    this.enableDrag = Boolean(enableDrag);
+
+    this.setIsBuilding(isBuilding);
+
     this.option = { ...option };
 
     this.init();
@@ -45,11 +52,17 @@ class Builder extends EventTarget {
 
   axisPoint?: AxisPoint;
 
+  matrix4?: Matrix4;
+
   startPoint = new Point();
 
   id = '1';
 
   src = '';
+
+  enableDrag = false;
+
+  isBuilding = false;
 
   option: BuilderOption;
 
@@ -65,15 +78,15 @@ class Builder extends EventTarget {
       y: number;
     };
   } = {
-    from: {
-      x: 0,
-      y: 0,
-    },
-    to: {
-      x: 0,
-      y: 0,
-    },
-  };
+      from: {
+        x: 0,
+        y: 0,
+      },
+      to: {
+        x: 0,
+        y: 0,
+      },
+    };
 
   init() {
     this.sprite.texture = this.texture;
@@ -84,6 +97,9 @@ class Builder extends EventTarget {
 
     this.container.addChild(this.sprite);
 
+    this.setEnableDrag(this.enableDrag);
+
+    this.container.buttonMode = true;
     this.container.interactive = true;
 
     this.container
@@ -98,6 +114,12 @@ class Builder extends EventTarget {
       .on('pointerout', () => this.onDragOut());
   }
 
+  setEnableDrag(enableDrag: boolean) {
+    this.enableDrag = enableDrag;
+    // this.container.buttonMode = enableDrag;
+    // this.container.interactive = enableDrag;
+  }
+
   setPointAsXY(x: number, y: number) {
     const chequer = new Chequer({
       axisX: x,
@@ -108,21 +130,41 @@ class Builder extends EventTarget {
     this.setPosition(axisPoint);
   }
 
+  setIsBuilding(isBuilding?: boolean) {
+    console.log(isBuilding, '==isBuilding')
+    this.isBuilding = isBuilding;
+    if (isBuilding) {
+      this.container.alpha = 0.5;
+      this.enableDrag = false;
+    } else {
+      this.container.alpha = 1;
+    }
+  }
+
   // 设置位置
-  setPosition(point: AxisPoint) {
-    this.container.position.set(point.x, point.y);
-    this.startPoint.set(point.x, point.y);
-    this.axisPoint?.chequer?.setState(stateType.PREVIEW);
-    this.axisPoint = point;
-    this.axisPoint?.chequer?.setState(stateType.DISABLE);
-    this.axisPoint?.chequer?.displayState(false);
-    this.position.from = {
-      x: point.axisX,
-      y: point.axisY,
-    };
-    this.position.to = {
-      x: point.axisX + this.areaX,
-      y: point.axisY + this.areaY,
+  setPosition(point: AxisPoint, matrix4?: Matrix4) {
+    if (matrix4) {
+      this.matrix4 = matrix4;
+      this.container.position.set(matrix4.x, matrix4.y);
+      this.startPoint.set(matrix4.x, matrix4.y);
+      matrix4.setState(stateType.DISABLE);
+      matrix4.displayState(false);
+    } else {
+      this.axisPoint = point;
+      this.container.position.set(point.x, point.y);
+      this.startPoint.set(point.x, point.y);
+      point.chequer?.setState(stateType.DISABLE);
+      point.chequer?.displayState(false);
+    }
+    this.position = {
+      from: {
+        x: point.axisX,
+        y: point.axisY,
+      },
+      to: {
+        x: point.axisX + this.areaX,
+        y: point.axisY + this.areaY,
+      },
     };
   }
 
@@ -139,27 +181,32 @@ class Builder extends EventTarget {
 
   onDragStart(event: InteractionEvent) {
     event.stopPropagation();
-    this.dragData = event.data;
-    this.container.alpha = 0.9;
-    this.container.filters = [];
-    this.dragging = true;
-    this.container.zIndex = 9999;
-    // this.axisPoint?.chequer?.setState(stateType.ACTIVE);
+    if (this.enableDrag) {
+      this.dragData = event.data;
+      this.container.alpha = 0.9;
+      this.container.filters = [];
+      this.dragging = true;
+      this.container.zIndex = 9999;
+    }
     this.changeState(stateType.ACTIVE, true);
   }
 
   changeState(state: StateType, visible?: boolean) {
     this.axisPoint?.chequer?.setState(state);
+    this.matrix4?.setState(state);
     if (typeof visible === 'boolean') {
       this.axisPoint?.chequer?.displayState(visible);
+      this.matrix4?.displayState(visible);
     }
   }
 
   onDragEnd() {
-    this.container.alpha = 1;
-    this.container.filters = [];
-    this.dragging = false;
-    this.axisPoint?.chequer?.setState(stateType.DISABLE);
+    if (this.enableDrag) {
+      this.container.alpha = 1;
+      this.container.filters = [];
+      this.dragging = false;
+    }
+    // this.axisPoint?.chequer?.setState(stateType.DISABLE);
     this.updateZIndex();
   }
 
@@ -185,7 +232,7 @@ class Builder extends EventTarget {
 
   onDragMove(event?: InteractionEvent) {
     this.dragData = event?.data || this.dragData;
-    if (this.dragging) {
+    if (this.enableDrag && this.dragging) {
       const newPosition = this?.dragData?.getLocalPosition(
         this.container.parent,
       );

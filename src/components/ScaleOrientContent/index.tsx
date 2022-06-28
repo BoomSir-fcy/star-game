@@ -199,6 +199,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
     if (pathname === '/plant-league') return 2;
     if (pathname === '/star') return 2;
     if (pathname === '/') return 1;
+    if (pathname === '/galaxy') return 4;
     return 0;
   }, [pathname]);
 

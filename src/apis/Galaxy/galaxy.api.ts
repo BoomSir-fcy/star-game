@@ -48,4 +48,16 @@ export class GalaxyApi extends Http {
   async ClaimRewards(galaxyId: number) {
     return this.post(`galaxy/claim`, { galaxy_id: galaxyId });
   }
+
+  // 获取所有星系拍卖记录列表
+  async getAllLogs() {
+    const res = await this.get('galaxy/all-auction-logs');
+    return res;
+  }
+
+  // 获取星系拥有者详情
+  async getOwnerInfo(nft_id: number) {
+    const res = await this.get('galaxy/owner/info', { nft_id });
+    return res;
+  }
 }
