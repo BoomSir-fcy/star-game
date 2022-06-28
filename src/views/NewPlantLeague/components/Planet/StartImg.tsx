@@ -31,14 +31,20 @@ export const StartImg: React.FC<StartImgProps> = ({
 }) => {
   return (
     <Box position='relative'>
-      <Globe scale={scale} shadow={QualityColor[shadow]} url={url} />
-      {showIcon && (
+      <Globe
+        showUnion={showIcon}
+        zIndex={0}
+        scale={scale}
+        shadow={QualityColor[shadow]}
+        url={url}
+      />
+      {/* {showIcon && (
         <IconUnion
           width={iconWidth}
           height={iconHeight}
           src='/images/commons/icon/union.png'
         />
-      )}
+      )} */}
     </Box>
   );
 };
