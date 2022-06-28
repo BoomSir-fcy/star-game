@@ -177,37 +177,31 @@ class Boards extends EventTarget {
   }
 
   // 找1*1建筑的碰撞检测
-  checkCollisionPoint(event: InteractionEvent) {
+  checkCollisionPoint(event: InteractionEvent, dargEnd?: boolean) {
+
+    let res: Chequer = null;
+
     this.chequers.forEach(item => {
       const point = new Point(
         event.data.global.x - 10,
         event.data.global.y + 5,
       );
       const collection = item.checkCollisionPoint(point);
-      if (collection && item.state === stateType.PREVIEW) {
+      if (collection && item.state === stateType.PLACE) {
+        res = item;
+      } else if (collection && item.state === stateType.PREVIEW) {
         item.setState(stateType.PLACE);
       } else if (!collection && item.state === stateType.PLACE) {
         item.setState(stateType.PREVIEW);
       }
+      if (dargEnd) {
+        item.displayState(false);
+      }
+
     });
 
-    return this.chequers.find(item => {
-      const point = new Point(
-        event.data.global.x - 10,
-        event.data.global.y + 5,
-      );
-      const collection = item.checkCollisionPoint(point);
-      if (collection && item.state === stateType.PREVIEW) {
-        item.setState(stateType.PLACE);
-      } else if (!collection && item.state === stateType.PLACE) {
-        item.setState(stateType.PREVIEW);
-      }
-      item.displayState(false);
-      if (collection && item.state === stateType.PLACE) {
-        return true;
-      }
-      return false;
-    });
+    return res;
+
   }
 
   // 获取所有2*2的格子 2*2的格子由4个1*1的格子组成
@@ -237,22 +231,22 @@ class Boards extends EventTarget {
         event.data.global.y + 5,
       );
       const collection = item.checkCollisionPoint(point);
-      item.displayState(false);
+      if (dargEnd) {
+        item.displayState(false);
+      }
 
       if (
-        collection &&
+        dargEnd && collection &&
         item.chequers.every(chequer => chequer.state === stateType.PLACE)
       ) {
         res = item;
-      }
-      if (
+      } else if (
         collection &&
         item.chequers.every(chequer => chequer.state === stateType.PREVIEW)
       ) {
         item.setState(stateType.PLACE);
         res = item;
-      }
-      if (
+      } else if (
         !collection &&
         item.chequers.every(chequer => chequer.state === stateType.PLACE)
       ) {

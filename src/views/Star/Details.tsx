@@ -126,13 +126,22 @@ const Details = () => {
     if (ref.current && areaX && areaY) {
       ref.current.appendChild(building.view);
       building.creatTerrain(areaX, areaY);
-      // createHandle();
     }
   }, [building, ref, areaX, areaY]);
 
-  React.useEffect(() => {
+  const initBuilder = React.useCallback(() => {
     building.initBuilder(selfBuilding);
-  }, [selfBuilding, building]);
+  }, [building, selfBuilding])
+
+  React.useEffect(() => {
+    if (building.boardsCreated) {
+      initBuilder()
+    }
+    building.addEventListener('boardsCreated', initBuilder);
+    return () => {
+      building.removeEventListener('boardsCreated', initBuilder);
+    }
+  }, [initBuilder, building]);
 
   const getWorkQueue = React.useCallback(
     async () => {
@@ -341,7 +350,7 @@ const Details = () => {
       <ThingUpgradesModal
         visible={upgrad.visible}
         planet_id={id}
-        onChange={async () => {}}
+        onChange={async () => { }}
         onClose={() => {
           dispatch(
             storeAction.upgradesBuildingModal({
@@ -356,7 +365,7 @@ const Details = () => {
       <ThingDestoryModal
         visible={destory.visible}
         planet_id={id}
-        onChange={() => {}}
+        onChange={() => { }}
         onClose={() =>
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),

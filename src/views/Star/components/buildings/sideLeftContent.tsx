@@ -149,6 +149,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
         areaX: item.propterty.size.area_x,
         areaY: item.propterty.size.area_y,
         isBuilding: false,
+        enableDrag: true,
       });
       setMoving(true);
       building?.addDragPreBuilder(builder);
