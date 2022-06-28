@@ -134,6 +134,10 @@ const Details = () => {
     }
   }, [building, ref, areaX, areaY]);
 
+  React.useEffect(() => {
+    building.initBuilder(selfBuilding);
+  }, [selfBuilding, building]);
+
   const getWorkQueue = React.useCallback(
     async () => {
       try {

@@ -258,15 +258,6 @@ class Boards extends EventTarget {
       ) {
         item.setState(stateType.PREVIEW);
       }
-      if (
-        item.chequers.every(
-          chequer =>
-            chequer.state !== stateType.PLACE &&
-            chequer.state !== stateType.PREVIEW,
-        )
-      ) {
-        item.setState(stateType.DISABLE);
-      }
     });
 
     return res;

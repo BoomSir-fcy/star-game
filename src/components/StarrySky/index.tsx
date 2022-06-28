@@ -8,6 +8,8 @@ export const backgroundVariants = [
   '/images/commons/sky-bg0.png',
   '/images/commons/sky-bg1.jpg',
   '/images/commons/sky-bg2.png',
+  '/images/commons/sky-bg3.png',
+  '/images/commons/sky-bg4.png',
 ];
 
 const getBackground = ({ type }: { type: number }) => {

@@ -78,8 +78,8 @@ class Builder extends EventTarget {
   init() {
     this.sprite.texture = this.texture;
 
-    this.sprite.width = 200 * this.areaX;
-    this.sprite.height = 200 * this.areaY;
+    this.sprite.width = 150 * this.areaX;
+    this.sprite.height = 150 * this.areaY;
     this.sprite.anchor.set(0.5);
 
     this.container.addChild(this.sprite);

@@ -5,6 +5,7 @@ import { useStore } from 'state/util';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'contexts/Localization';
 import { getFullDisplayBalance } from 'utils/formatBalance';
+import { SubString_1 } from 'utils/DecimalPlaces';
 
 const Addition = () => {
   const { t } = useTranslation();
@@ -68,14 +69,6 @@ const ItemRow: React.FC<{
   info: AdditionInfo;
 }> = ({ info }) => {
   const { t } = useTranslation();
-
-  const SubString_1 = (value, bit = 2) => {
-    let str = value.toString();
-    const strIndex = str.indexOf('.');
-    if (strIndex === -1) return str;
-    str = str.substring(0, strIndex + bit);
-    return str;
-  };
   return (
     <Flex alignItems='flex-end'>
       <Flex flex='1'>
