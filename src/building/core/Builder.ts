@@ -150,12 +150,6 @@ class Builder extends EventTarget {
       this.setIsBuilding(false)
     }
     this.builded = builded;
-    if (builded) {
-      this.container.alpha = 1;
-      this.enableDrag = false;
-    } else {
-      this.container.alpha = 0.5;
-    }
   }
 
   // 设置位置

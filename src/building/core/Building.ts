@@ -439,6 +439,8 @@ class Building extends EventTarget {
         race: item.building.race,
         areaX: item.building.propterty.size.area_x,
         areaY: item.building.propterty.size.area_y,
+        isBuilding: false,
+        builded: true,
       });
     });
   }
