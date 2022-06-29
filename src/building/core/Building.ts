@@ -192,7 +192,7 @@ class Building extends EventTarget {
     this.dispatchEvent(getAddActiveBuilderEvent(activeBuilder));
   }
 
-  // 移除当前选中小人
+  // 移除当前选中小人状态（不会删除棋盘上的棋子）
   removeActiveSolider() {
     if (this.activeBuilder) {
       this.dispatchEvent(getRemoveActiveBuilderEvent());
