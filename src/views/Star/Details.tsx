@@ -17,8 +17,7 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
-import { isTokenKind } from 'typescript';
-import type { AreaDataItem } from './components/dragCompoents';
+import { useBuildingOperate } from './components/gameModel/hooks';
 
 import {
   BarRight,
@@ -44,8 +43,8 @@ const Details = () => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
   const { refreshWorkQueue } = useWorkqueue();
+  const { destory: destoryHook } = useBuildingOperate();
   const { guides, setGuide } = useGuide(location.pathname);
-  const [state, setState] = React.useState<AreaDataItem[]>([]);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
   const [serverDiffTime, setServerDiffTime] = React.useState<number>(0);
 
@@ -107,7 +106,6 @@ const Details = () => {
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
   const upgrad = useStore(p => p.buildling.upgradesBuilding);
   const destory = useStore(p => p.buildling.destroyBuilding);
-  const currentTime = Number((Date.now() / 1000).toFixed(0));
 
   const [stateBuilding, setStateBuilding] = useImmer({
     visible: false,
@@ -119,58 +117,50 @@ const Details = () => {
     return [planet?.areaX, planet?.areaY];
   }, [planet]);
 
-  const updateGrid = React.useCallback(data => {
-    setState(data);
-  }, []);
-
   React.useEffect(() => {
     if (ref.current && areaX && areaY) {
       ref.current.appendChild(building.view);
       building.creatTerrain(areaX, areaY);
-      // createHandle();
     }
   }, [building, ref, areaX, areaY]);
 
-  React.useEffect(() => {
+  const initBuilder = React.useCallback(() => {
     building.initBuilder(selfBuilding);
-  }, [selfBuilding, building]);
+  }, [building, selfBuilding]);
 
-  const getWorkQueue = React.useCallback(
-    async () => {
-      try {
-        const res = await refreshWorkQueue(id);
-        if (Api.isSuccess(res)) {
-          const workQueueBase = res.data.base;
-          const resWorkQueue = res.data.work_queue;
-          const queueList = resWorkQueue.map(item => {
-            const buildings = workQueueBase.find(
-              ({ _id }) => _id === item.buildings_id,
-            );
-            return { ...item, building: buildings };
-          });
-          // let isQueue = [];
-          // if (isSave) {
-          //   isQueue = currentQueue.filter((item: any) => !item.planet_id);
-          // }
-          // setCurrentQueue([...resWorkQueue, ...isQueue]);
-          setStateBuilding(p => {
-            p.workQueue = queueList;
-          });
-          setServerDiffTime(
-            res.data.time - currentTime > 0
-              ? -(res.data.time - currentTime)
-              : res.data.time - currentTime,
+  React.useEffect(() => {
+    if (building.boardsCreated) {
+      initBuilder();
+    }
+    building.addEventListener('boardsCreated', initBuilder);
+    return () => {
+      building.removeEventListener('boardsCreated', initBuilder);
+    };
+  }, [initBuilder, building]);
+
+  const getWorkQueue = React.useCallback(async () => {
+    try {
+      const res = await refreshWorkQueue(id);
+      if (Api.isSuccess(res)) {
+        const workQueueBase = res.data.base;
+        const resWorkQueue = res.data.work_queue;
+        const queueList = resWorkQueue.map(item => {
+          const buildings = workQueueBase.find(
+            ({ _id }) => _id === item.buildings_id,
           );
-          dispatch(fetchPlanetBuildingsAsync(id));
-          dispatch(fetchPlanetInfoAsync([id]));
-        }
-      } catch (error) {
-        console.log(error);
+          return { ...item, building: buildings };
+        });
+        setStateBuilding(p => {
+          p.workQueue = queueList;
+        });
+        setServerDiffTime(res.data.time);
+        dispatch(fetchPlanetBuildingsAsync(id));
+        dispatch(fetchPlanetInfoAsync([id]));
       }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [refreshWorkQueue],
-  );
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch, id, refreshWorkQueue, setStateBuilding]);
 
   // 保存到队列
   const saveWorkQueue = React.useCallback(
@@ -201,6 +191,9 @@ const Details = () => {
           work_queue_params: current,
         });
         if (Api.isSuccess(res)) {
+          activeBuilder?.setIsBuilding(true);
+          // console.log(1111111111)
+          // building.findBuilderByXY(val.position.from.x, val.position.from.y)?.setIsBuilding(true);
           getWorkQueue();
           toastSuccess(t('planetTipsSaveSuccess'));
         }
@@ -209,8 +202,44 @@ const Details = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [id, t, toastSuccess],
+    [id, t, toastSuccess, activeBuilder],
   );
+
+  // 销毁建筑
+  const destoryBuilding = React.useCallback(async () => {
+    try {
+      const res = await destoryHook({
+        planet_id: id,
+        build_type: destory?.destory?.type,
+        building_setting: [destory?.destory?._id],
+      });
+      if (Api.isSuccess(res)) {
+        toastSuccess(t('planetDestroyedSuccessfully'));
+        setStateBuilding(p => {
+          p.visible = false;
+        });
+        dispatch(
+          storeAction.destoryBuildingModal({ visible: false, destory: {} }),
+        );
+        building.removeBuilder(activeBuilder);
+      } else {
+        toastError(res.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [
+    activeBuilder,
+    building,
+    destory,
+    destoryHook,
+    dispatch,
+    id,
+    setStateBuilding,
+    t,
+    toastError,
+    toastSuccess,
+  ]);
 
   React.useEffect(() => {
     if (activeBuilder?.option?.id) {
@@ -224,44 +253,6 @@ const Details = () => {
       });
     }
   }, [activeBuilder, setStateBuilding]);
-
-  React.useEffect(() => {
-    if (planet?.areaX > 0 && planet?.areaY > 0) {
-      const data: any = [];
-      for (let i = 0; i < planet.areaX; i++) {
-        for (let j = 0; j < planet.areaY; j++) {
-          const buildings = selfBuilding?.find(
-            r => r.index === j * planet.areaX + i,
-          );
-          if (buildings?.building?._id) {
-            data.push({
-              ...buildings,
-              ...buildings.building,
-              x: i,
-              y: j,
-              index: j * planet.areaX + i,
-              isbuilding: true,
-              isactive: false,
-            });
-          } else {
-            data.push({
-              index: j * planet.areaX + i,
-              isbuilding: false,
-              propterty: {
-                size: {
-                  area_x: 1,
-                  area_y: 1,
-                },
-              },
-              x: i,
-              y: j,
-            });
-          }
-        }
-      }
-      updateGrid(data);
-    }
-  }, [planet, selfBuilding, updateGrid]);
 
   React.useEffect(() => {
     if (id) {
@@ -279,7 +270,7 @@ const Details = () => {
   return (
     <>
       <Container>
-        {!guides.guideFinish &&
+        {/* {!guides.guideFinish &&
           guides.finish &&
           steps.length - 1 > guides.step && (
             <Steps
@@ -311,12 +302,12 @@ const Details = () => {
                 }
               }}
             />
-          )}
+          )} */}
         <SideLeftContent race={planet?.race} building={building} />
         <PlanetQueue
-          serverTime={currentTime + serverDiffTime}
+          serverTime={serverDiffTime}
           currentQueue={stateBuilding.workQueue}
-          onComplete={getWorkQueue}
+          onComplete={() => getWorkQueue()}
         />
         {stateBuilding.visible && (
           <SideRightBuildingInfo
@@ -325,12 +316,18 @@ const Details = () => {
             planet_id={id}
             buildingsId={stateBuilding.building?._id}
             itemData={stateBuilding?.building}
-            onCreateBuilding={saveWorkQueue}
-            onClose={() =>
+            onCreateBuilding={val => {
               setStateBuilding(p => {
                 p.visible = false;
-              })
-            }
+              });
+              saveWorkQueue(val);
+            }}
+            onClose={() => {
+              building.removeActiveSolider();
+              setStateBuilding(p => {
+                p.visible = false;
+              });
+            }}
           />
         )}
 
@@ -356,7 +353,7 @@ const Details = () => {
       <ThingDestoryModal
         visible={destory.visible}
         planet_id={id}
-        onChange={() => {}}
+        onChange={destoryBuilding}
         onClose={() =>
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),

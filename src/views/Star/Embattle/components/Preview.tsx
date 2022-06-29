@@ -40,7 +40,7 @@ import MiniRaceAni from './miniRace';
 import useSimulation from '../hooks/useSimulation';
 
 // transform: translateX(252px);
-const BorderCardStyled = styled(BorderCard)<{ show?: boolean }>`
+const BorderCardStyled = styled(BorderCard) <{ show?: boolean }>`
   transition: 0.3s all;
   transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(120%)')};
 `;
@@ -162,21 +162,6 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     }
   }, [activeSoldier, game]);
 
-  const skillValue = useMemo(() => {
-    const key = getSkillKey(activeSoldier?.options?.unitInfo?.skill);
-    if (baseSkill[key]) {
-      const value = baseSkill[key]?.find(
-        item => item.skill_id === activeSoldier?.options?.unitInfo?.skill_id,
-      )?.value;
-      if (value) return `+${value}`;
-    }
-    return '+0';
-  }, [
-    activeSoldier?.options?.unitInfo?.skill,
-    activeSoldier?.options?.unitInfo?.skill_id,
-    baseSkill,
-  ]);
-
   const getGameSimulation = React.useCallback(
     async (from: number) => {
       const res = await getSimulation(from);
@@ -292,7 +277,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                 label={t('planetHPValue')}
                 value={activeSoldier?.options?.unitInfo?.hp || 0}
                 src='/images/commons/star/HP.png'
-                // subSrc='/images/commons/icon/add_blood.png'
+              // subSrc='/images/commons/icon/add_blood.png'
               />
               <StatusItem
                 label={t('hit')}

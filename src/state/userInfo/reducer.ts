@@ -58,6 +58,7 @@ export const initialState: UserInfoState = {
     stone: 0,
     energy: 0,
     population: 0,
+    power: 0,
   },
 };
 

@@ -76,10 +76,19 @@ const TokenInfo = () => {
             variant='custom'
           >
             <Flex width='100%' alignItems='center'>
-              <Flex alignItems='center' flex={1}>
-                <Text ml='5px'>战斗力</Text>
-                <Text mark fontSize='20px' bold ml='8px' ellipsis>
-                  {TokenBlance('BOX')?.amount}
+              <Flex justifyContent='space-between' alignItems='center' flex={1}>
+                <Text ml='5px'>{t('Power')}</Text>
+                <Text
+                  maxWidth='130px'
+                  mark
+                  fontSize='20px'
+                  fontStyle='normal'
+                  bold
+                  ml='8px'
+                  ellipsis
+                  title={`${Product.power}`}
+                >
+                  {Product.power}
                 </Text>
               </Flex>
             </Flex>
@@ -97,7 +106,12 @@ const TokenInfo = () => {
                   height={32}
                   tokenAddress={getBoxAddress()}
                 />
-                <Text small ml='8px' ellipsis>
+                <Text
+                  small
+                  ml='8px'
+                  ellipsis
+                  title={`${TokenBlance('BOX')?.amount}`}
+                >
                   {TokenBlance('BOX')?.amount}
                 </Text>
               </Flex>
@@ -115,7 +129,12 @@ const TokenInfo = () => {
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={30} height={32} tokenAddress='BNB' />
-                <Text small ml='8px' ellipsis>
+                <Text
+                  small
+                  ml='8px'
+                  ellipsis
+                  title={`${TokenBlance('BNB')?.amount}`}
+                >
                   {TokenBlance('BNB')?.amount}
                 </Text>
               </Flex>
@@ -135,7 +154,7 @@ const TokenInfo = () => {
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={30} height={32} tokenAddress='ORE' />
-                <Text small ml='8px' ellipsis>
+                <Text small ml='8px' ellipsis title={`${Product.stone}`}>
                   {Product.stone}
                 </Text>
               </Flex>
@@ -153,12 +172,12 @@ const TokenInfo = () => {
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={30} height={32} tokenAddress='SPICES' />
-                <Text small ml='8px' ellipsis>
+                <Text small ml='8px' ellipsis title={`${Product.population}`}>
                   {Product.population}
                 </Text>
               </Flex>
               <Text ml='8px' small>
-                {t('SPICES ')}
+                {t('Population')}
               </Text>
             </Flex>
           </ButtonLeft>
@@ -171,7 +190,7 @@ const TokenInfo = () => {
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={30} height={32} tokenAddress='ENG' />
-                <Text small ml='8px' ellipsis>
+                <Text small ml='8px' ellipsis title={`${Product.energy}`}>
                   {Product.energy}
                 </Text>
               </Flex>

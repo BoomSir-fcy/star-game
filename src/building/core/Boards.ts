@@ -1,26 +1,11 @@
-// import {
-//   Application,
-//   Sprite,
-//   Container,
-//   Loader,
-//   InteractionData,
-//   InteractionEvent,
-// } from '@pixi/core';
-import { Texture } from '@pixi/core';
-import { Application } from '@pixi/app';
 import { Point } from '@pixi/math';
-import { Sprite } from '@pixi/sprite';
-import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 import { Graphics } from '@pixi/graphics';
 import { Container } from '@pixi/display';
-import { Loader } from '@pixi/loaders';
 import { InteractionEvent, InteractionData } from '@pixi/interaction';
 
 import config from '../config';
 import Chequer, { mapType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
-import PixelateFilter from './PixelateFilter';
-import Builder from './Builder';
 import Matrix4 from './Matrix4';
 
 interface BoardsProps {
@@ -81,58 +66,6 @@ class Boards extends EventTarget {
     this.container.interactive = true;
   }
 
-  createGraphics() {
-    const path = [
-      0,
-      0,
-      Chequer.WIDTH * Chequer.X_RATIO * 4,
-      Chequer.HEIGHT * Chequer.Y_RATIO * 4,
-      Chequer.WIDTH * Chequer.X_RATIO * 4,
-      Chequer.HEIGHT * Chequer.Y_RATIO * 5 - 30,
-      50,
-      Chequer.HEIGHT * Chequer.Y_RATIO,
-    ];
-    const graphics = new Graphics();
-    graphics.beginFill(0x4ffffb, 0.1);
-    graphics.drawPolygon(path);
-    graphics.endFill();
-    // const { x } = this.bunny;
-    // const y = this.bunny.y - 60;
-    graphics.x = -Chequer.WIDTH * Chequer.Y_RATIO * 4;
-    graphics.y = -0;
-
-    graphics.interactive = true;
-    graphics.zIndex = 10;
-    // this.centerPoint.set(x, y + 30);
-    this.container.addChild(graphics);
-    return graphics;
-  }
-
-  createGraphics1() {
-    const path = [
-      Chequer.WIDTH * Chequer.X_RATIO * 8,
-      0,
-      Chequer.WIDTH * Chequer.X_RATIO * 4,
-      Chequer.HEIGHT * Chequer.Y_RATIO * 4,
-      Chequer.WIDTH * Chequer.X_RATIO * 4,
-      Chequer.HEIGHT * Chequer.Y_RATIO * 5 - 30,
-      Chequer.WIDTH * Chequer.X_RATIO * 8 - 50,
-      Chequer.HEIGHT * Chequer.Y_RATIO,
-    ];
-    const graphics = new Graphics();
-    graphics.beginFill(0x4ffffb, 0.15);
-    graphics.drawPolygon(path);
-    graphics.endFill();
-    graphics.x = -Chequer.WIDTH * Chequer.Y_RATIO * 4;
-    graphics.y = -0;
-
-    graphics.interactive = true;
-    graphics.zIndex = 10;
-
-    this.container.addChild(graphics);
-    return graphics;
-  }
-
   // 绘制棋格
   drawChequers(areaX: number, areaY: number) {
     // this.createGraphics();
@@ -177,7 +110,7 @@ class Boards extends EventTarget {
   }
 
   // 找1*1建筑的碰撞检测
-  checkCollisionPoint(event: InteractionEvent) {
+  checkCollisionPoint(event: InteractionEvent, dargEnd?: boolean) {
 
     let res: Chequer = null;
 
@@ -194,7 +127,9 @@ class Boards extends EventTarget {
       } else if (!collection && item.state === stateType.PLACE) {
         item.setState(stateType.PREVIEW);
       }
-      item.displayState(false);
+      if (dargEnd) {
+        item.displayState(false);
+      }
 
     });
 
@@ -229,7 +164,20 @@ class Boards extends EventTarget {
         event.data.global.y + 5,
       );
       const collection = item.checkCollisionPoint(point);
-      item.displayState(false);
+
+      if (dargEnd) {
+        item.displayState(false);
+      }
+
+      item.chequers.forEach(chequer => {
+        if (chequer.state === stateType.PLACE) {
+          chequer.setState(stateType.PREVIEW);
+        }
+      })
+
+      // if (item.chequers.every(chequer => chequer.state === stateType.PLACE)) {
+      //   item.setState(stateType.PREVIEW);
+      // }
 
       if (
         dargEnd && collection &&
@@ -240,13 +188,13 @@ class Boards extends EventTarget {
         collection &&
         item.chequers.every(chequer => chequer.state === stateType.PREVIEW)
       ) {
-        item.setState(stateType.PLACE);
+        // item.setState(stateType.PLACE);
         res = item;
       } else if (
         !collection &&
         item.chequers.every(chequer => chequer.state === stateType.PLACE)
       ) {
-        item.setState(stateType.PREVIEW);
+        // item.setState(stateType.PREVIEW);
       }
     });
 

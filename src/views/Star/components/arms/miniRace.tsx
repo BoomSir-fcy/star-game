@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { Box } from 'uikit';
+import { Box, BoxProps } from 'uikit';
 import useGame from 'game/hooks/useGame';
 import { MapBaseUnits } from 'game/types';
 
@@ -22,10 +22,12 @@ const Container = styled(Box) <{ show: boolean }>`
 const GridWidth = 200;
 const GridHeight = 200;
 
-const MiniRaceAni: React.FC<{
+interface MiniRaceAniProps extends BoxProps {
   mock: any;
   show: boolean;
-}> = ({ mock, show }) => {
+}
+
+const MiniRaceAni: React.FC<MiniRaceAniProps> = ({ mock, show, ...props }) => {
   const ref = React.useRef<HTMLDivElement>(null);
 
   const game = useGame({
@@ -179,7 +181,7 @@ const MiniRaceAni: React.FC<{
   // }, [mock, game]);
 
   return (
-    <Container show={show} className='star-embattle-step3'>
+    <Container show={show} className='star-embattle-step3' {...props}>
       <Box ref={ref} />
     </Container>
   );

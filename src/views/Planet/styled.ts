@@ -25,11 +25,10 @@ const StarScaleFrame = keyframes`
 export const DragBox = styled(Box)`
   position: relative;
   width: 100%;
-  height: 100vh;
-  margin: auto;
+  height: 900px;
   /* border: 5px solid black; */
   overflow: auto;
-
+  user-select: none;
   ::-webkit-scrollbar {
     height: 12px;
   }
@@ -43,9 +42,6 @@ export const PlanetBox = styled(Box)`
   position: relative;
   width: 3000px;
   height: 100%;
-  &.no-select {
-    user-select: none;
-  }
   /* border: 5px solid red; */
 `;
 

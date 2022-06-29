@@ -13,7 +13,7 @@ export const QueueBuilding: React.FC<{
 }> = ({ type, status, diffTime, endTime, currentBuilding, onComplete }) => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
-    time: diffTime,
+    time: 0,
   });
   let timer: any = null;
 
@@ -48,27 +48,35 @@ export const QueueBuilding: React.FC<{
 
   // 倒计时
   const countDown = () => {
-    if (state.time <= 0) {
-      clearInterval(timer);
-      onComplete();
-      return;
-    }
     timer = setInterval(() => {
-      setState({
-        ...state,
-        time: state.time - 1,
-      });
+      const { time } = state;
+      if (time > 0) {
+        console.log(time, diffTime, 22222);
+        setState(p => {
+          p.time = time - 1;
+        });
+      } else {
+        console.log('clear');
+        clearInterval(timer);
+        onComplete();
+      }
     }, 1000);
   };
 
   React.useEffect(() => {
+    setState(p => {
+      p.time = diffTime;
+    });
+  }, [diffTime, setState]);
+
+  React.useEffect(() => {
     if (status !== 3 && diffTime > 0) {
+      console.log(diffTime, 1111);
       countDown();
     }
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-  });
+    return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.time]);
 
   return (
     <Flex width='250px'>

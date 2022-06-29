@@ -4,7 +4,6 @@ import {
   mysteryBoxQualities,
   MysteryBoxQualities,
 } from 'components/MysteryBoxComNew';
-import { GlobalVideo } from 'components/Video';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Box, Button, Dots, Flex, Skeleton, Text } from 'uikit';
 import { getWEtherAddress } from 'utils/addressHelpers';
@@ -18,8 +17,12 @@ import { useFetchBoxView } from 'state/mysteryBox/hooks';
 import { useStore } from 'state';
 import { getBalanceNumber } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
-import { fetchUserKeysAsync } from 'state/mysteryBox/reducer';
+import {
+  fetchUserKeysAsync,
+  fetchBoxViewAsync,
+} from 'state/mysteryBox/reducer';
 import { useNavigate } from 'react-router-dom';
+import eventBus from 'utils/eventBus';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import { queryMintEvent } from './event';
 
@@ -141,12 +144,26 @@ const State = () => {
   const maxNum = useMemo(() => {
     return new BigNumber(maxHeld).toNumber();
   }, [maxHeld]);
+
+  const onRefreshClick = useCallback(() => {
+    dispatch(fetchBoxViewAsync(account));
+    dispatch(fetchUserKeysAsync(account));
+  }, [account, dispatch]);
+
+  // 监听刷新事件
+  React.useEffect(() => {
+    eventBus.addEventListener('onRefresh', onRefreshClick);
+    return () => {
+      eventBus.removeEventListener('onRefresh', onRefreshClick);
+    };
+  }, [onRefreshClick]);
+
   return (
     <Flex flexDirection='column' justifyContent='center' alignItems='center'>
       <MysteryBoxCom rotate={0} left={0} right={0} quality={quality} />
       <Flex mt='180px' flexDirection='column' justifyContent='center'>
         <Text fontSize='22px' bold>
-          开启盲盒会获得随机品质的5个行星品质
+          {t('OpenMysteryBoxDesc')}
         </Text>
         <Flex mt='20px'>
           {info.rarity.map(item => (

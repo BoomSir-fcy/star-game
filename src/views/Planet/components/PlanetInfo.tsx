@@ -53,7 +53,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
 
         <Box>
           <Flex justifyContent='flex-end' alignItems='center'>
-            <Text>战斗力</Text>
+            <Text>{t('Power')}</Text>
             <Text ml='20px' mark fontStyle='normal' fontSize='20px' bold>
               {info?.power}
             </Text>
@@ -61,12 +61,12 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
             <TooltipTrigger
               overlay={
                 <Box>
-                  <Text small>BUFF建筑加成</Text>
+                  <Text small>{t('BUFFBonusDesc')}</Text>
                   <Text color='textPrimary' small>
                     +265952626
                   </Text>
                   <Text mt='10px' small>
-                    培育强化加成
+                    {t('NurturingBonusDesc')}
                   </Text>
                   <Text color='textPrimary' small>
                     +265952626
@@ -88,7 +88,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
               <Box ml='10px'>
                 <Flex alignItems='center'>
                   <TextStyled color='textTips' small>
-                    产能
+                    {t('Capacity')}
                   </TextStyled>
                   <TextStyled ml='10px' small ellipsis>
                     {formatDisplayApr(new BigNumber(info?.oreYield).toNumber())}
@@ -101,7 +101,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
                     small
                     title={`${info?.stone}/${info?.max_stone}`}
                   >
-                    矿石
+                    {t('Ore')}
                   </TextStyled>
                   <TextStyled ml='10px' ellipsis small>
                     {info?.stone}/{info?.max_stone}
@@ -114,7 +114,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
               <Box ml='10px'>
                 <Flex alignItems='center'>
                   <TextStyled color='textTips' small>
-                    产能
+                    {t('Capacity')}
                   </TextStyled>
                   <TextStyled ml='10px' ellipsis small>
                     {formatDisplayApr(
@@ -125,7 +125,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
                 </Flex>
                 <Flex alignItems='center'>
                   <TextStyled color='textTips' small>
-                    香料
+                    {t('Population')}
                   </TextStyled>
                   <TextStyled
                     ml='10px'
@@ -143,7 +143,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
               <Box ml='10px'>
                 <Flex alignItems='center'>
                   <TextStyled color='textTips' small>
-                    产能
+                    {t('Capacity')}
                   </TextStyled>
                   <TextStyled ml='10px' ellipsis small>
                     {formatDisplayApr(
@@ -154,7 +154,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
                 </Flex>
                 <Flex alignItems='center'>
                   <TextStyled color='textTips' small>
-                    能量
+                    {t('Energy')}
                   </TextStyled>
                   <TextStyled
                     ml='10px'
@@ -170,7 +170,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
             <InfoValueFlex flexDirection='column'>
               <Flex>
                 <Text color='textTips' small>
-                  建筑数
+                  {t('Building Count')}
                 </Text>
                 <Text ml='8px' small>
                   {info?.build_count}
@@ -178,7 +178,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
               </Flex>
               <Flex>
                 <Text color='textTips' small>
-                  兵种总数
+                  {t('Total number of arms')}
                 </Text>
                 <Text ml='8px' small>
                   {info?.arm_count}
@@ -210,7 +210,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
               }}
             >
               <Text color='textPrimary' bold>
-                管理
+                {t('Manage Planet')}
               </Text>
             </Button>
           </InfoFlex>

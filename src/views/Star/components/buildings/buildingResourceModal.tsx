@@ -1,8 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import BigNumber from 'bignumber.js';
 import { useImmer } from 'use-immer';
 import { Flex, Box, GraphicsCard, Button, MarkText, Slider, Text } from 'uikit';
 import { TokenImage } from 'components/TokenImage';
+
+import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
 
 const Container = styled(GraphicsCard)`
@@ -12,14 +15,13 @@ const Container = styled(GraphicsCard)`
   padding: 20px 30px;
 `;
 
-const ResourceSlider: React.FC<{
+export const ResourceSlider: React.FC<{
   icon: string;
   title: string;
   defaultValue: number;
   maxValue: number;
   onChange: (val: number) => void;
 }> = ({ icon, title, defaultValue, maxValue, onChange }) => {
-  const { t } = useTranslation();
   return (
     <Flex width='100%'>
       <TokenImage width={50} height={50} tokenAddress={icon} />
@@ -33,7 +35,7 @@ const ResourceSlider: React.FC<{
           min={0}
           max={100}
           value={defaultValue}
-          onValueChanged={value => onChange(value)}
+          onValueChanged={onChange}
           mt='5px'
         />
       </Flex>
@@ -42,34 +44,43 @@ const ResourceSlider: React.FC<{
 };
 
 export const BuildingResourceModal: React.FC<{
+  type: number;
+  maxValue: {
+    stone: number;
+    population: number;
+    energy: number;
+  };
   onClose: () => void;
-}> = ({ onClose }) => {
+  onFinish: (prams) => void;
+}> = ({ type, maxValue, onClose, onFinish }) => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
-    ore: 0,
+    stone: 0,
+    population: 0,
+    energy: 0,
   });
 
-  React.useEffect(() => {
-    window.addEventListener('click', onClose);
-    return () => {
-      window.removeEventListener('click', onClose);
-    };
-  }, [onClose]);
+  // React.useEffect(() => {
+  //   window.addEventListener('click', onClose);
+  //   return () => {
+  //     window.removeEventListener('click', onClose);
+  //   };
+  // }, [onClose]);
 
   return (
     <Container width='547px' height='343px'>
       <MarkText bold fontStyle='normal' mb='25px'>
-        提取资源
+        {type === 1 ? t('Extract Resources') : t('Supplement Resources')}
       </MarkText>
       <Box mb='21px'>
         <ResourceSlider
           icon='ORE'
           title={t('Ore')}
-          defaultValue={state.ore}
-          maxValue={100}
+          defaultValue={state.stone}
+          maxValue={maxValue.stone}
           onChange={val =>
             setState(p => {
-              p.ore = val;
+              p.stone = Number(val.toFixed(0));
             })
           }
         />
@@ -78,11 +89,11 @@ export const BuildingResourceModal: React.FC<{
         <ResourceSlider
           icon='ENG'
           title={t('Energy')}
-          defaultValue={state.ore}
-          maxValue={100}
+          defaultValue={state.energy}
+          maxValue={maxValue.energy}
           onChange={val =>
             setState(p => {
-              p.ore = val;
+              p.energy = Number(val.toFixed(0));
             })
           }
         />
@@ -91,17 +102,22 @@ export const BuildingResourceModal: React.FC<{
         <ResourceSlider
           icon='SPICES'
           title={t('Population')}
-          defaultValue={state.ore}
-          maxValue={100}
+          defaultValue={state.population}
+          maxValue={maxValue.population}
           onChange={val =>
             setState(p => {
-              p.ore = val;
+              p.population = Number(val.toFixed(0));
             })
           }
         />
       </Box>
       <Flex justifyContent='center' mt='15px'>
-        <Button width='226px' height='53px' variant='purple'>
+        <Button
+          width='226px'
+          height='53px'
+          variant='purple'
+          onClick={() => onFinish(state)}
+        >
           <Text bold fontSize='16px' color='#4FFFFB'>
             {t('确认提取')}
           </Text>
