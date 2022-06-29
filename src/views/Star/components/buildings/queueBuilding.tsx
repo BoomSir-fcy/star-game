@@ -75,7 +75,6 @@ export const QueueBuilding: React.FC<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.time]);
 
-  console.log(currentBuilding);
   return (
     <Flex width='250px'>
       <Flex flexDirection='column' style={{ flex: 1 }}>

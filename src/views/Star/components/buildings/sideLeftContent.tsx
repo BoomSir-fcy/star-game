@@ -114,7 +114,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
 
   const close = React.useCallback(() => {
     if (queueStore.visible) {
-      // dispatch(setNavZIndex(true));
+      dispatch(setNavZIndex(true));
       dispatch(storeAction.queueVisbleSide(false));
     }
   }, [dispatch, queueStore.visible]);
