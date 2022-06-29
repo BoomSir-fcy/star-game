@@ -117,13 +117,13 @@ class Building extends EventTarget {
 
   // 取消选中
   addEventListenerOfWindow() {
-    window.addEventListener('click', () => {
-      if (this.activeBuilderFlag) {
-        this.activeBuilderFlag = false;
-        return;
-      }
-      this.removeActiveSolider();
-    });
+    // window.addEventListener('click', () => {
+    //   if (this.activeBuilderFlag) {
+    //     this.activeBuilderFlag = false;
+    //     return;
+    //   }
+    //   this.removeActiveSolider();
+    // });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
       if (
         e.key === 'Delete' &&
@@ -439,6 +439,8 @@ class Building extends EventTarget {
         race: item.building.race,
         areaX: item.building.propterty.size.area_x,
         areaY: item.building.propterty.size.area_y,
+        isBuilding: false,
+        builded: true,
       });
     });
   }
