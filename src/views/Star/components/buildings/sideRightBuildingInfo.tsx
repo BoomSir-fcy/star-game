@@ -19,7 +19,7 @@ const Container = styled(Box)`
   position: absolute;
   right: -15px;
   top: 0;
-  z-index: 99;
+  z-index: 199;
 `;
 const SideCloseButton = styled(Button)`
   position: absolute;
@@ -111,7 +111,7 @@ export const SideRightBuildingInfo: React.FC<{
     estimate_building_detail: {},
   });
   const currentAttributes = upgradeInfo?.building_detail?._id
-    ? upgradeInfo?.building_detail
+    ? { ...upgradeInfo?.building_detail, isbuilding: itemData?.isbuilding }
     : itemData;
   const estimate = upgradeInfo?.estimate_building_detail || {};
 
@@ -124,7 +124,7 @@ export const SideRightBuildingInfo: React.FC<{
         console.log('error: ', error);
       }
     },
-    [planet_id, buildingsId, upgrade],
+    [upgrade, planet_id, buildingsId],
   );
 
   React.useEffect(() => {

@@ -4,6 +4,7 @@ import { fetchBuildingsListAsync, fetchPlanetBuildingsAsync } from './fetchers';
 import {
   destoryBuildingModal,
   upgradesBuildingModal,
+  resetModal,
   queueVisbleSide,
 } from './action';
 
@@ -79,6 +80,16 @@ export const buildling = createSlice({
       })
       .addCase(upgradesBuildingModal, (state, action) => {
         state.upgradesBuilding = action.payload;
+      })
+      .addCase(resetModal, (state, action) => {
+        state.destroyBuilding = {
+          visible: false,
+          destory: {},
+        };
+        state.upgradesBuilding = {
+          visible: false,
+          upgrad: {},
+        };
       })
       .addCase(queueVisbleSide, (state, action) => {
         state.queue.visible = action.payload;

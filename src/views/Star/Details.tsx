@@ -17,6 +17,7 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { setNavZIndex } from 'state/user/actions';
 import { useBuildingOperate } from './components/gameModel/hooks';
 
 import {
@@ -154,6 +155,7 @@ const Details = () => {
           p.workQueue = queueList;
         });
         setServerDiffTime(res.data.time);
+        dispatch(storeAction.resetModal());
         dispatch(fetchPlanetBuildingsAsync(id));
         dispatch(fetchPlanetInfoAsync([id]));
       }
@@ -218,9 +220,7 @@ const Details = () => {
         setStateBuilding(p => {
           p.visible = false;
         });
-        dispatch(
-          storeAction.destoryBuildingModal({ visible: false, destory: {} }),
-        );
+        dispatch(storeAction.resetModal());
         building.removeBuilder(activeBuilder);
       } else {
         toastError(res.message);
@@ -242,17 +242,19 @@ const Details = () => {
   ]);
 
   React.useEffect(() => {
+    console.log(activeBuilder);
     if (activeBuilder?.option?.id) {
+      dispatch(setNavZIndex(false));
       setStateBuilding(p => {
         p.visible = true;
         p.building = {
           ...activeBuilder?.option?.building,
           position: activeBuilder.position,
-          isbuilding: false,
+          isbuilding: activeBuilder?.builded,
         };
       });
     }
-  }, [activeBuilder, setStateBuilding]);
+  }, [activeBuilder, dispatch, setStateBuilding]);
 
   React.useEffect(() => {
     if (id) {
@@ -316,13 +318,14 @@ const Details = () => {
             planet_id={id}
             buildingsId={stateBuilding.building?._id}
             itemData={stateBuilding?.building}
-            onCreateBuilding={val => {
+            onCreateBuilding={async val => {
               setStateBuilding(p => {
                 p.visible = false;
               });
-              saveWorkQueue(val);
+              await saveWorkQueue(val);
             }}
             onClose={() => {
+              console.log('关闭', activeBuilder);
               building.removeActiveSolider();
               setStateBuilding(p => {
                 p.visible = false;
@@ -338,7 +341,12 @@ const Details = () => {
       <ThingUpgradesModal
         visible={upgrad.visible}
         planet_id={id}
-        onChange={async () => {}}
+        onChange={async val => {
+          setStateBuilding(p => {
+            p.visible = false;
+          });
+          await saveWorkQueue(val);
+        }}
         onClose={() => {
           dispatch(
             storeAction.upgradesBuildingModal({

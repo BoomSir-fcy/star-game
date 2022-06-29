@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore, storeAction } from 'state';
 import { Box, Flex, MarkText, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
+import { setNavZIndex } from 'state/user/actions';
 import { QueueBuilding } from './queueBuilding';
 
 const Layout = styled(Box)`
@@ -81,6 +82,7 @@ export const PlanetQueue: React.FC<{
                 onClick={event => {
                   event.stopPropagation();
                   event.preventDefault();
+                  dispatch(setNavZIndex(false));
                   dispatch(storeAction.queueVisbleSide(true));
                 }}
               >
@@ -101,7 +103,7 @@ export const PlanetQueue: React.FC<{
                 </QueueBox>
                 <QueueBuilding
                   key={currentQueue[index]}
-                  currentBuilding={currentQueue[index]?.building}
+                  currentBuilding={currentQueue[index]}
                   type={currentQueue[index]?.work_type}
                   status={currentQueue[index]?.work_status}
                   diffTime={
