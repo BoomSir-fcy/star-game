@@ -15,12 +15,13 @@ export interface BuilderOption {
   areaY: number;
   areaX: number;
   isBuilding?: boolean;
+  builded?: boolean;
   enableDrag?: boolean;
 }
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
     super();
-    const { src, id, race = 1, areaX, areaY, enableDrag, isBuilding } = option;
+    const { src, id, race = 1, areaX, areaY, enableDrag, isBuilding, builded } = option;
     this.id = id;
 
     const img = `${window.location.origin}/assets/buildings/${race}/${src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
@@ -33,7 +34,8 @@ class Builder extends EventTarget {
 
     this.enableDrag = Boolean(enableDrag);
 
-    this.setIsBuilding(isBuilding);
+    this.setIsBuilding(Boolean(isBuilding));
+    this.setIsBuilded(Boolean(builded));
 
     this.option = { ...option };
 
@@ -63,6 +65,8 @@ class Builder extends EventTarget {
   enableDrag = false;
 
   isBuilding = false;
+
+  builded = false;
 
   option: BuilderOption;
 
@@ -130,14 +134,25 @@ class Builder extends EventTarget {
     this.setPosition(axisPoint);
   }
 
-  setIsBuilding(isBuilding?: boolean) {
-    console.log(isBuilding, '==isBuilding')
+  setIsBuilding(isBuilding: boolean) {
+    this.setIsBuilding(!isBuilding)
     this.isBuilding = isBuilding;
     if (isBuilding) {
       this.container.alpha = 0.5;
       this.enableDrag = false;
     } else {
       this.container.alpha = 1;
+    }
+  }
+
+  setIsBuilded(builded: boolean) {
+    this.setIsBuilding(!builded)
+    this.builded = builded;
+    if (builded) {
+      this.container.alpha = 1;
+      this.enableDrag = false;
+    } else {
+      this.container.alpha = 0.5;
     }
   }
 

@@ -117,13 +117,13 @@ class Building extends EventTarget {
 
   // 取消选中
   addEventListenerOfWindow() {
-    window.addEventListener('click', () => {
-      if (this.activeBuilderFlag) {
-        this.activeBuilderFlag = false;
-        return;
-      }
-      this.removeActiveSolider();
-    });
+    // window.addEventListener('click', () => {
+    //   if (this.activeBuilderFlag) {
+    //     this.activeBuilderFlag = false;
+    //     return;
+    //   }
+    //   this.removeActiveSolider();
+    // });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
       if (
         e.key === 'Delete' &&
