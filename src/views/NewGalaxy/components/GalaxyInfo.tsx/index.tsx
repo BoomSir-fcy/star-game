@@ -20,10 +20,16 @@ const GalaxyInfo: React.FC = () => {
   const [OpenInfo, setOpenInfo] = useState(false);
   const [ShowListModule, setShowListModule] = useState(false);
 
+  const getRandomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
   return (
     <GalaxyInfoBox>
       {(galaxyList ?? []).map((item, index) => (
         <ItemGalaxyBox
+          name={`box${index}`}
+          delay={getRandomInt(5, 0)}
           key={item.id}
           width={300}
           height={300}
