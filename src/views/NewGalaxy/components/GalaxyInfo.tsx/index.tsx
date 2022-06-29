@@ -58,8 +58,7 @@ const GalaxyInfo: React.FC = () => {
         // 移动
         InfoBox.onmousemove = function (move_ev) {
           // ev = ev || window.event;
-
-          //                      clearInterval( timer );
+          clearInterval(timer);
 
           nowX = move_ev.clientX; // clientX 鼠标距离页面左边的距离
           nowY = move_ev.clientY; // clientY ………………………………顶部………………
@@ -74,11 +73,6 @@ const GalaxyInfo: React.FC = () => {
 
           oWrap.style.transform = `rotateY(${roY}deg)`;
 
-          //                      //生成div，让div跟着鼠标动
-          //                      var oDiv = document.createElement('div');
-          //                      oDiv.style.cssText = 'width:5px;height:5px;background:red;position:fixed;left:'+nowX+'px;top:'+nowY+'px';
-          //                      this.body.appendChild(oDiv);
-
           // 前一点的坐标
           lastX = nowX;
           lastY = nowY;
@@ -86,6 +80,55 @@ const GalaxyInfo: React.FC = () => {
         // 抬起
         InfoBox.onmouseup = function () {
           InfoBox.onmousemove = null;
+          if (timer) {
+            clearInterval(timer);
+          }
+          timer = setInterval(function () {
+            disx *= 0.98;
+            disy *= 0.98;
+            roY += disx * 0.05; // roY = roY + disx*0.05;
+            roX -= disy * 0.05;
+            oWrap.style.transform = `rotateY(${roY}deg)`;
+          }, 20);
+        };
+        return false;
+      };
+      InfoBox.ontouchstart = function (ev) {
+        // ev = ev || window.MouseEvent;
+
+        // 鼠标按下的时候，给前一点坐标赋值，为了避免第一次相减的时候出错
+        lastX = ev.targetTouches[0].pageY;
+        lastY = ev.targetTouches[0].pageX;
+
+        // 移动
+        InfoBox.ontouchmove = function (move_ev) {
+          // ev = ev || window.event;
+
+          clearInterval(timer);
+
+          nowX = move_ev.targetTouches[0].pageY; // clientX 鼠标距离页面左边的距离
+          nowY = move_ev.targetTouches[0].pageX; // clientY ………………………………顶部………………
+
+          // 当前坐标和前一点坐标差值
+          disx = nowX - lastX;
+          disy = nowY - lastY;
+
+          // 更新wrap的旋转角度，拖拽越快-> minus变化大 -> roY变化大 -> 旋转快
+          roY += disx * 0.05; // roY = roY + disx*0.1;
+          roX -= disy * 0.05;
+
+          oWrap.style.transform = `rotateY(${roY}deg)`;
+
+          // 前一点的坐标
+          lastX = nowX;
+          lastY = nowY;
+        };
+        // 抬起
+        InfoBox.ontouchend = function () {
+          InfoBox.ontouchmove = null;
+          if (timer) {
+            clearInterval(timer);
+          }
           timer = setInterval(function () {
             disx *= 0.98;
             disy *= 0.98;
@@ -103,8 +146,8 @@ const GalaxyInfo: React.FC = () => {
     <GalaxyInfoBox id='InfoBox'>
       <Box
         id='box'
-        width={350}
-        height={350}
+        width={300}
+        height={300}
         margin='100px auto'
         style={{ position: 'relative', transformStyle: 'preserve-3d' }}
       >
@@ -112,8 +155,14 @@ const GalaxyInfo: React.FC = () => {
           <ItemGalaxyBox
             className='imgBox'
             key={item.id}
-            width={350}
-            height={350}
+            width={300}
+            height={300}
+            onTouchStart={() => {
+              dispatch(setCurrentGalaxy(item));
+              dispatch(fetchGalaxyStarListAsync(item.id as number));
+              setOpenInfo(true);
+              setShowListModule(true);
+            }}
             onClick={() => {
               dispatch(setCurrentGalaxy(item));
               dispatch(fetchGalaxyStarListAsync(item.id as number));
