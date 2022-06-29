@@ -25,6 +25,7 @@ declare namespace Api {
       destroy_star: number; // 销毁
       staking_pool_star: number; // 分配质押池
       planet_owner_star: number; // 恒星主获得
+      pre_box: number; // 恒星主24小时预计获得box
     }
 
     interface OwnerInfo {

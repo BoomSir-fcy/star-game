@@ -143,37 +143,39 @@ const GalaxyInfo: React.FC = () => {
   }, [galaxyList]);
 
   return (
-    <GalaxyInfoBox id='InfoBox'>
-      <Box
-        id='box'
-        width={300}
-        height={300}
-        margin='100px auto'
-        style={{ position: 'relative', transformStyle: 'preserve-3d' }}
-      >
-        {(galaxyList ?? []).map((item, index) => (
-          <ItemGalaxyBox
-            className='imgBox'
-            key={item.id}
-            width={300}
-            height={300}
-            onTouchStart={() => {
-              dispatch(setCurrentGalaxy(item));
-              dispatch(fetchGalaxyStarListAsync(item.id as number));
-              setOpenInfo(true);
-              setShowListModule(true);
-            }}
-            onClick={() => {
-              dispatch(setCurrentGalaxy(item));
-              dispatch(fetchGalaxyStarListAsync(item.id as number));
-              setOpenInfo(true);
-              setShowListModule(true);
-            }}
-          >
-            <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />
-          </ItemGalaxyBox>
-        ))}
-      </Box>
+    <Box position='relative'>
+      <GalaxyInfoBox id='InfoBox'>
+        <Box
+          id='box'
+          width={300}
+          height={300}
+          margin='100px auto'
+          style={{ position: 'relative', transformStyle: 'preserve-3d' }}
+        >
+          {(galaxyList ?? []).map((item, index) => (
+            <ItemGalaxyBox
+              className='imgBox'
+              key={item.id}
+              width={300}
+              height={300}
+              onTouchStart={() => {
+                dispatch(setCurrentGalaxy(item));
+                dispatch(fetchGalaxyStarListAsync(item.id as number));
+                setOpenInfo(true);
+                setShowListModule(true);
+              }}
+              onClick={() => {
+                dispatch(setCurrentGalaxy(item));
+                dispatch(fetchGalaxyStarListAsync(item.id as number));
+                setOpenInfo(true);
+                setShowListModule(true);
+              }}
+            >
+              <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />
+            </ItemGalaxyBox>
+          ))}
+        </Box>
+      </GalaxyInfoBox>
       {OpenInfo && <InfoModule setOpenInfo={setOpenInfo} />}
       {ShowListModule && (
         <OccupiedModul
@@ -181,7 +183,7 @@ const GalaxyInfo: React.FC = () => {
           setShowListModule={setShowListModule}
         />
       )}
-    </GalaxyInfoBox>
+    </Box>
   );
 };
 
