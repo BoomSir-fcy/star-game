@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flex, Box, Text, GraphicsCard, MarkText, Image } from 'uikit';
+import { Flex, Box, Text, GraphicsCard, MarkText, Image, BoxProps } from 'uikit';
+import { position } from 'styled-system';
 import { RaceTypeColor } from 'uikit/theme/colors';
 
 import { useTranslation } from 'contexts/Localization';
 import { getSpriteRes } from 'game/core/utils';
 import RadarChart from 'game/core/RadarChart';
+import MiniRaceAni from './miniRace';
+import useSimulation from './useSimulation'
 
 const Container = styled(Box)`
   position: absolute;
@@ -18,6 +21,7 @@ const Container = styled(Box)`
   max-width: none;
   padding: 20px 25px;
   z-index: 1;
+  ${position};
   &::before {
     z-index: 2;
   }
@@ -59,9 +63,11 @@ const GroupInfo = styled(Flex)`
   width: 45%;
 `;
 
-export const ArmsInfo: React.FC<{
+interface ArmsInfoProps extends BoxProps {
   armsData?: any;
-}> = ({ armsData }) => {
+  sid?: number;
+}
+export const ArmsInfo: React.FC<ArmsInfoProps> = ({ armsData, sid, ...props }) => {
   const { t } = useTranslation();
   const { game_base_unit } = armsData;
   const [radarChart] = React.useState(
@@ -115,8 +121,29 @@ export const ArmsInfo: React.FC<{
     }
   }, [ref, radarChart]);
 
+  const [visible, setVisible] = React.useState(true);
+  const [gameMock, setGameMock] = React.useState({});
+  const { getSimulation } = useSimulation();
+
+
+  const getGameSimulation = React.useCallback(
+    async (from: number) => {
+      const res = await getSimulation(from);
+      setGameMock(res);
+    },
+    [getSimulation],
+  );
+
+  React.useEffect(() => {
+    // setVisible(false);
+    if (sid) {
+      getGameSimulation(sid);
+    }
+  }, [sid, getGameSimulation]);
+
+
   return (
-    <Container>
+    <Container {...props}>
       <Content>
         <Head>
           <Flex alignItems='center'>
@@ -144,7 +171,9 @@ export const ArmsInfo: React.FC<{
           </Flex>
         </Head>
         <Body>
-          <Preview isRadius stripe width='180px' height='180px'>
+          <Preview onClick={() => {
+            setVisible(!visible)
+          }} isRadius stripe width='180px' height='180px'>
             <PreviewNumber>{armsData.count}</PreviewNumber>
             <Image src={getSoldierSrc()} width={180} height={180} />
           </Preview>
@@ -218,6 +247,8 @@ export const ArmsInfo: React.FC<{
           </Box>
         </Flex>
       </Content>
+      <MiniRaceAni top='0' left='0' mock={gameMock} show={visible && !!sid} />
+
     </Container>
   );
 };

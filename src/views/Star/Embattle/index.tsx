@@ -280,14 +280,15 @@ const Embattle = () => {
         zIndex={-1}
       />
       <Box ref={ref} />
+      <ArmsInfo armsData={{ game_base_unit: activeSoldier?.options?.unitInfo }} sid={activeSoldier?.id} right='0' />
+
       <Flex
         style={{ userSelect: 'none' }}
         position='absolute'
         top='0'
         right='18px'
       >
-        {/* <ArmsInfo armsData={{}} /> */}
-        <Preview game={game} activeSoldier={activeSoldier} />
+        {/* <Preview game={game} activeSoldier={activeSoldier} /> */}
         {/* <SortBoard
           className='star-embattle-step6'
           sortSoldiers={gameSoldiers}

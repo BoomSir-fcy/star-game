@@ -162,21 +162,6 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
     }
   }, [activeSoldier, game]);
 
-  const skillValue = useMemo(() => {
-    const key = getSkillKey(activeSoldier?.options?.unitInfo?.skill);
-    if (baseSkill[key]) {
-      const value = baseSkill[key]?.find(
-        item => item.skill_id === activeSoldier?.options?.unitInfo?.skill_id,
-      )?.value;
-      if (value) return `+${value}`;
-    }
-    return '+0';
-  }, [
-    activeSoldier?.options?.unitInfo?.skill,
-    activeSoldier?.options?.unitInfo?.skill_id,
-    baseSkill,
-  ]);
-
   const getGameSimulation = React.useCallback(
     async (from: number) => {
       const res = await getSimulation(from);
