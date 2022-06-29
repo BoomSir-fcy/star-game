@@ -175,7 +175,7 @@ const VipPage = () => {
 
   React.useEffect(() => {
     getVipList();
-  });
+  }, [getVipList]);
 
   return (
     <Box>

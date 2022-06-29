@@ -6,13 +6,14 @@ import Builder from 'building/core/Builder';
 import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, Image, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
+import { setNavZIndex } from 'state/user/actions';
 import { GameThing } from '../gameModel';
 
 const Container = styled(Box)`
   position: fixed;
   top: 0;
   left: -16px;
-  z-index: 999;
+  z-index: 199;
 `;
 const SideCloseButton = styled(Button)`
   position: absolute;
@@ -112,8 +113,11 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   const buildings = useStore(p => p.buildling.buildings);
 
   const close = React.useCallback(() => {
-    dispatch(storeAction.queueVisbleSide(false));
-  }, [dispatch]);
+    if (queueStore.visible) {
+      // dispatch(setNavZIndex(true));
+      dispatch(storeAction.queueVisbleSide(false));
+    }
+  }, [dispatch, queueStore.visible]);
 
   React.useEffect(() => {
     window.addEventListener('click', close);
