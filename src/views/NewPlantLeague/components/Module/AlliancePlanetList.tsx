@@ -187,7 +187,7 @@ const AlliancePlanetList: React.FC<{
     dispatch,
   ]);
   useEffect(() => {
-    if (order.length) {
+    if (order?.length) {
       const arr = order.map(item => {
         return item.planet;
       });
