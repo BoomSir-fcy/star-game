@@ -1,3 +1,4 @@
+import { PlanetBall } from 'components';
 import Globe from 'components/Globe';
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
@@ -46,7 +47,7 @@ const StarImage = styled.img<StarAddBtnProps>`
       ? `2px solid ${theme.colors[imgBorder || qualities.ORDINARY]}}`
       : 'none'};
 `;
-const GlobeStyled = styled(Globe)`
+const GlobeStyled = styled(PlanetBall)`
   margin: 0 auto;
 `;
 

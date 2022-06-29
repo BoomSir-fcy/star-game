@@ -184,6 +184,8 @@ const OccupiedModul: React.FC<{
       num += galaxyStarList[i].disapth_box;
     }
     setTotalReward(num);
+    const ScrollDom = document.getElementById('ScrollDom');
+    ScrollDom.scrollTop = 0;
   }, [galaxyStarList]);
 
   return (
@@ -197,7 +199,7 @@ const OccupiedModul: React.FC<{
             {t('占领恒星')}
           </MarkText>
         </Flex>
-        <ScrollBox>
+        <ScrollBox id='ScrollDom'>
           {(galaxyStarList ?? []).map((item, index) => (
             <Box mb='30px' key={`${item.number}`}>
               <Flex

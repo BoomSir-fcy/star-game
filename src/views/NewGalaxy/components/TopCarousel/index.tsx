@@ -91,11 +91,12 @@ const TopCarousel: React.FC = () => {
                 key={item.id}
               >
                 <Flex justifyContent='center' alignItems='flex-end'>
-                  <Text ellipsis>
-                    {t('%name% 成为了', { name: item.nickname })}
+                  <Text maxWidth='114px' ellipsis>
+                    {item.nickname}
                   </Text>
+                  <Text>{t('成为了')}</Text>
                   <Text color='#4FFFFB'>
-                    {t(' %galaxy% 星系 ', { galaxy: item.name })}
+                    {t('%galaxy% 星系 ', { galaxy: item.name })}
                   </Text>
                   <Text>{t('的领主,竞拍金额: ')}</Text>
                   <Text color='#4FFFFB'>{item.price} BNB</Text>

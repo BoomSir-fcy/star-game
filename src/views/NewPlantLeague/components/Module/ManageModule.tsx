@@ -3,7 +3,7 @@ import { Button, Flex, Box, BgCard, MarkText, Text, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
 import { orderInfo } from 'state/types';
-import { Globe, RaceAvatar } from 'components';
+import { Globe, PlanetBall, RaceAvatar } from 'components';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 import ScoringPanel from 'components/ScoringPanel';
 import { getPlanetRarity } from 'utils/planetRarity';
@@ -50,7 +50,8 @@ const ManageModule: React.FC<{
       <BgCard variant='Sl' padding='30px'>
         <Flex height='100%' justifyContent='space-between' alignItems='center'>
           <Box position='relative'>
-            <Globe
+            <PlanetBall
+              rotate
               scale='xl'
               shadow={QualityColor[planetInfo?.rarity]}
               url={planetInfo?.picture1}

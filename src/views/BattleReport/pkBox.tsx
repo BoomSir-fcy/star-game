@@ -58,32 +58,6 @@ export const PkBox: React.FC<{
     [isFrom, info.success],
   );
 
-  const BoxList = useMemo(() => {
-    const List = [
-      {
-        title: t('Get Ore'),
-        img: '/images/commons/icon/icon_minera.png',
-        num: GetValue(info.loseStone, info.incomeStone),
-      },
-      {
-        title: t('Get Energy'),
-        img: '/images/commons/icon/icon_energy.png',
-        num: GetValue(info.loseEnergy, info.incomeEnergy),
-      },
-      {
-        title: t('Attrition combat unit'),
-        img: '/images/commons/star/HP.png',
-        num: isFrom ? info.blueLoseUnit : info.redLoseUnit,
-      },
-      {
-        title: t('Lose Building Durability'),
-        img: '/images/commons/star/durability.png',
-        num: `- ${GetValue(info.lostDurability, 0)}`,
-      },
-    ];
-    return List;
-  }, [t, GetValue, info, isFrom]);
-
   const pkRes = useMemo(() => {
     return isFrom ? !!info.success : !info.success;
   }, [isFrom, info.success]);
