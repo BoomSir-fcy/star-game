@@ -14,6 +14,7 @@ import { TokenImage } from 'components/TokenImage';
 import { getWEtherAddress } from 'utils/addressHelpers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useToast } from 'contexts/ToastsContext';
+import useThree from './components/grow/Three';
 import {
   Arms,
   Extra,
@@ -129,6 +130,10 @@ const Grow: React.FC = () => {
     }
   }, [parsedQs.id, t, dispatch, toastError, toastSuccess]);
 
+  const ref = React.useRef(null)
+
+  useThree(ref.current)
+
   return (
     <Box width='86%' mt='6%'>
       {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
@@ -147,6 +152,7 @@ const Grow: React.FC = () => {
           }}
         />
       )}
+      <Box ref={ref} position='absolute' width='500px' height='500px' />
       <Flex justifyContent='space-between' alignItems='flex-end'>
         <Box>
           <GrowLevel
@@ -158,6 +164,7 @@ const Grow: React.FC = () => {
           <GrowRule />
         </Box>
         <Box>
+          <Text>111</Text>
           <Flex justifyContent='center'>
             <Box width={30}>
               <TokenImage

@@ -147,7 +147,8 @@ class Builder extends EventTarget {
 
   setIsBuilded(builded: boolean) {
     if (builded) {
-      this.setIsBuilding(false)
+      this.setIsBuilding(false);
+      this.enableDrag = false;
     }
     this.builded = builded;
   }

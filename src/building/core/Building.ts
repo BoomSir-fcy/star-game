@@ -26,6 +26,14 @@ export interface GameOptionsProps {
   offsetStartX?: number;
   offsetStartY?: number;
 }
+
+interface BuilderInfoOfApi {
+  building: Api.Building.Building;
+  position: {
+    from: { x: number; y: number };
+    to: { x: number; y: number };
+  }
+}
 /**
  * 游戏入口
  */
@@ -422,15 +430,12 @@ class Building extends EventTarget {
   }
 
   initBuilder(
-    list: {
-      building: Api.Building.Building;
-      position: {
-        from: { x: number; y: number };
-        to: { x: number; y: number };
-      };
-    }[],
+    list: BuilderInfoOfApi[],
   ) {
-    if (this.builders.length) return;
+    if (this.builders.length) {
+      this.updateBuilderState(list);
+      return
+    }
     list.forEach(item => {
       this.createBuilder(item.position.from.x, item.position.from.y, {
         building: item.building,
@@ -443,6 +448,28 @@ class Building extends EventTarget {
         builded: true,
       });
     });
+  }
+
+  updateBuilderState(list: BuilderInfoOfApi[]) {
+    console.log(this.builders)
+    console.log(list)
+    list.forEach(item => {
+      const builder = this.findBuilderByXY(item.position.from.x, item.position.from.y);
+      if (builder) {
+        builder.setIsBuilded(true);
+      } else {
+        this.createBuilder(item.position.from.x, item.position.from.y, {
+          building: item.building,
+          src: item.building.picture,
+          id: `${item.building._id}`,
+          race: item.building.race,
+          areaX: item.building.propterty.size.area_x,
+          areaY: item.building.propterty.size.area_y,
+          isBuilding: false,
+          builded: true,
+        });
+      }
+    })
   }
 
   /**
