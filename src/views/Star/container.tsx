@@ -53,6 +53,8 @@ const Star: React.FC<{
     if (pathname.indexOf('/star/') === -1) {
       console.log('建造页面');
       setPositionTop('8%');
+    } else if (pathname.indexOf('/star/grow') !== -1) {
+      setPositionTop('1%');
     } else {
       console.log('其他页面');
       setPositionTop('-4%');

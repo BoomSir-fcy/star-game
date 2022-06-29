@@ -47,4 +47,8 @@ export interface StrengthenConsumeType {
   };
   now_level: number;
   next_level: number;
+  now_units: any;
+  estimate_units: any;
+  now_power: number;
+  estimate_power: number;
 }

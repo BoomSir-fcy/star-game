@@ -189,7 +189,12 @@ const List = () => {
                   navigate(`/mystery-box/detail?i=${item?.id}`);
                 }}
               >
-                <Globe scale='ld' rotate url={item?.picture1} />
+                <Globe
+                  shadow={QualityColor[item?.rarity]}
+                  scale='ld'
+                  rotate
+                  url={item?.picture1}
+                />
               </AnimationStar>
               <Flex className='star-desc' mt='30px' alignItems='center'>
                 <RaceAvatar width='44px' height='44px' race={item?.race} />

@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 const Container = React.lazy(() => import('./container'));
 const Details = React.lazy(() => import('./Details'));
 const Upgrade = React.lazy(() => import('./Upgrade'));
-const Grow = React.lazy(() => import('./Grow'));
+const Grow = React.lazy(() => import('./GrowNew'));
 const Embattle = React.lazy(() => import('./Embattle'));
 const EmbattleTest = React.lazy(() => import('./EmbattleTest'));
 
