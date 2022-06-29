@@ -125,7 +125,11 @@ class Building extends EventTarget {
       this.removeActiveSolider();
     });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
-      if (e.key === 'Delete' && this.activeBuilder && this.activeBuilder.enableDrag) {
+      if (
+        e.key === 'Delete' &&
+        this.activeBuilder &&
+        this.activeBuilder.enableDrag
+      ) {
         this.removeBuilder(this.activeBuilder);
       }
     });
@@ -133,7 +137,7 @@ class Building extends EventTarget {
 
   // 添加小人
   addBuilder(builder: Builder) {
-    // this.builders.push(builder);
+    this.builders.push(builder);
     this.boards.container.sortableChildren = true;
     this.boards.container.zIndex = 1;
     this.boards.container.addChild(builder.container);
@@ -142,19 +146,19 @@ class Building extends EventTarget {
         // this.showSameSoliderState(soldier);
         if (builder.enableDrag) {
           builder.setMoved(true);
+          builder.matrix4?.setState(stateType.PREVIEW);
+          builder.changeState(stateType.PREVIEW);
         }
       })
       .on('pointermove', event => {
         if (builder.dragging && builder.enableDrag) {
-          this.onDragStarBuilder(builder)
+          this.onDragStarBuilder(builder);
           this.onDrageMoveBuilder(event, builder);
-          builder.matrix4?.setState(stateType.PREVIEW)
-          builder.changeState(stateType.PREVIEW)
-
+          builder.matrix4?.setState(stateType.PREVIEW);
+          builder.changeState(stateType.PREVIEW);
         }
       })
       .on('pointerup', event => {
-        console.log(builder.moved)
         if (builder.moved) {
           const res = this.onDragEndBuilder(event, builder);
           if (res) {
@@ -170,7 +174,6 @@ class Building extends EventTarget {
       .on('click', (e: InteractionEvent) => {
         this.activeBuilderFlag = true;
       });
-
   }
 
   // 添加当前选中小人
@@ -272,12 +275,19 @@ class Building extends EventTarget {
   // 拖拽小人开始生命周期
   onDragStarBuilder(builder?: Builder) {
     this.boards.chequers.forEach(item => {
-      if (builder?.axisPoint?.chequer === item) {
-        builder.changeState(stateType.PREVIEW);
-      } else if (builder) {
-        builder.changeState(stateType.DISABLE);
-      }
+      // if (builder?.axisPoint?.chequer === item) {
+      //   builder.changeState(stateType.PREVIEW);
+      // } else if (builder) {
+      //   builder.changeState(stateType.DISABLE);
+      // }
       item.displayState(true);
+    });
+    this.builders.forEach(item => {
+      if (item === builder) {
+        item.changeState(stateType.PREVIEW);
+      } else {
+        item.changeState(stateType.DISABLE);
+      }
     });
   }
 
@@ -289,7 +299,7 @@ class Building extends EventTarget {
       return;
     }
     const chequer = this.boards.checkCollisionPoint(event);
-    chequer?.setState(stateType.PLACE);
+    // chequer?.setState(stateType.PLACE);
   }
 
   // 拖拽小人结束生命周期
@@ -335,7 +345,7 @@ class Building extends EventTarget {
     if (!axis) return null;
     if (!matrix && option.areaX === 2) return null;
     const builder = new Builder(option);
-    builder.setPosition(axis, matrix)
+    builder.setPosition(axis, matrix);
 
     this.addBuilder(builder);
 
@@ -392,7 +402,9 @@ class Building extends EventTarget {
    * @returns Builder | null
    */
   getMatrix4ByAxis(axis: AxisPoint) {
-    return this.boards.matrix4s.find(item => item.chequers[0] === axis?.chequer);
+    return this.boards.matrix4s.find(
+      item => item.chequers[0] === axis?.chequer,
+    );
   }
 
   /**
@@ -450,7 +462,6 @@ class Building extends EventTarget {
 }
 
 export default Building;
-
 
 /* 
 

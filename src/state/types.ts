@@ -337,6 +337,7 @@ export interface AllianceView {
   max_work_count: number;
   now_work_count: number;
   unread_plunder_count: number;
+  message_count: number;
 }
 export interface AllianceState {
   allianceView: AllianceView;

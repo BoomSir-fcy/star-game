@@ -3,7 +3,7 @@ import { Button, Flex, Box, Spinner, MarkText, Text, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
 import { useStore } from 'state';
-import { Globe } from 'components';
+import { Globe, PlanetBall } from 'components';
 import { QualityColor } from 'uikit/theme/colors';
 import { getPlanetRarity } from 'utils/planetRarity';
 import { useJoinAlliance } from 'views/Star/hook';
@@ -241,7 +241,8 @@ const AlliancePlanetList: React.FC<{
                       Lv {item.level}
                     </MarkText>
                   </LeveFlex>
-                  <Globe
+                  <PlanetBall
+                    rotate
                     scale='md'
                     shadow={QualityColor[item?.rarity]}
                     url={item?.picture1}

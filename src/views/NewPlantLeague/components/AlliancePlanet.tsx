@@ -101,7 +101,6 @@ const AlliancePlanet: React.FC<{
                   ball
                   ballWorking={item.ballWorking}
                   name={item.name}
-                  onRemove={() => {}}
                   onPlantClick={() => {
                     setPlantManageModule(true);
                     setChoosePlant(allianceList[index]);

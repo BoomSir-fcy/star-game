@@ -30,13 +30,13 @@ const TabsButton = styled(Button)<{ active?: boolean }>`
   font-size: 20px;
   font-weight: bold;
   color: #ffffff;
-  ${({ active }) =>
+  /* ${({ active }) =>
     active &&
     css`
       border-radius: 10px;
       background: url(/images/commons/btn/blue-round.png) no-repeat;
       background-size: auto auto;
-    `}
+    `} */
 `;
 
 export const PlanetRaceTabs: React.FC<{
@@ -69,13 +69,14 @@ export const PlanetRaceTabs: React.FC<{
       style={{ padding: 0 }}
       width='max-content'
       height='max-content'
+      stripe
     >
       <Container>
         {raceArr.map(({ id, label }) => (
           <TabsButton
             key={id}
             scale='sm'
-            variant='text'
+            variant={current === id ? 'purple' : 'text'}
             active={current === id}
             onClick={() => callBack(id)}
           >

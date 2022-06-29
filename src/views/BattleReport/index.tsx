@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { BgCard, Box, Flex, Spinner, Text } from 'uikit';
+import { BgCard, Box, Empty, Flex, Spinner, Text } from 'uikit';
 import { useStore, storeAction } from 'state';
 import {
   useFetchAllianceView,
@@ -155,16 +155,20 @@ const BattleReport = () => {
         </BgCard>
       </Box> */}
       <ScrollBox className='Pk_list'>
-        {(RecordList ?? []).map((item, index) => (
-          <RowFlex key={item.id}>
-            <InProgress info={item} />
-            {(item.plunder ?? []).map(info => (
-              <>
-                <PkBox key={info.createTime} info={info} />
-              </>
+        {RecordList.length > 0 ? (
+          <>
+            {(RecordList ?? []).map((item, index) => (
+              <RowFlex key={item.id}>
+                <InProgress info={item} />
+                {(item.plunder ?? []).map(info => (
+                  <PkBox key={info.createTime} info={info} />
+                ))}
+              </RowFlex>
             ))}
-          </RowFlex>
-        ))}
+          </>
+        ) : (
+          <Empty />
+        )}
       </ScrollBox>
       {loading && (
         <LoadingBox>

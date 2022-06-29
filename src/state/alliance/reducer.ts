@@ -30,6 +30,7 @@ export const initialState: AllianceState = {
     max_work_count: 0,
     now_work_count: 0,
     unread_plunder_count: 0,
+    message_count: 0,
   },
   workingPlanet: [],
   pkRecord: {

@@ -22,15 +22,32 @@ export const GalaxyInfoBox = styled(Flex)`
   &.no-select {
     user-select: none;
   }
+  perspective: 1000px;
+  perspective-origin: 50% 20%;
+  /* z-index: 0; */
+  /* position: relative;
+  transform-style: preserve-3d; */
 `;
 
 export const ItemGalaxyBox = styled(Box)`
-  /* position: absolute; */
   cursor: pointer;
+  position: absolute;
 `;
 
 export const GalaxyImg = styled.img`
   width: 100%;
+  animation: box 20s ease-in-out infinite;
+  @keyframes box {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
 `;
 
 export const InfoModuleBox = styled(Box)`

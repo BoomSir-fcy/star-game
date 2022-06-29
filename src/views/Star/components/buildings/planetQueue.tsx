@@ -59,9 +59,9 @@ export const PlanetQueue: React.FC<{
   onComplete?: () => void;
 }> = ({ serverTime, currentQueue, onComplete }) => {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
   const { t } = useTranslation();
+
   const vipBenefite = useStore(p => p.userInfo.userInfo.vipBenefits);
   const queueArr = Array.from(
     { length: vipBenefite?.building_queue_capacity },
@@ -100,21 +100,16 @@ export const PlanetQueue: React.FC<{
                   />
                 </QueueBox>
                 <QueueBuilding
+                  key={currentQueue[index]}
                   currentBuilding={currentQueue[index]?.building}
                   type={currentQueue[index]?.work_type}
                   status={currentQueue[index]?.work_status}
                   diffTime={
-                    currentQueue[index]?.work_end_time - serverTime > 0
-                      ? currentQueue[index]?.work_end_time - serverTime
-                      : 0
+                    currentQueue[index]?.work_end_time - serverTime || 0
                   }
                   endTime={
                     currentQueue[index]?.work_end_time -
-                      currentQueue[index]?.work_start_time >
-                    0
-                      ? currentQueue[index]?.work_end_time -
-                        currentQueue[index]?.work_start_time
-                      : 0
+                    currentQueue[index]?.work_start_time
                   }
                   onComplete={onComplete}
                 />

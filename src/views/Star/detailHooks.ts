@@ -19,10 +19,18 @@ export const useActiveBuilder = (building: Building) => {
       eventsType.ADD_ACTIVE_SOLDIER,
       handleAddActiveBuilder,
     );
+    building.addEventListener(
+      eventsType.REMOVE_ACTIVE_SOLDIER,
+      handleRemoveActiveBuilder,
+    );
     return () => {
       building.removeEventListener(
         eventsType.ADD_ACTIVE_SOLDIER,
         handleAddActiveBuilder,
+      );
+      building.removeEventListener(
+        eventsType.REMOVE_ACTIVE_SOLDIER,
+        handleRemoveActiveBuilder,
       );
     };
   }, [handleAddActiveBuilder, handleRemoveActiveBuilder, building]);

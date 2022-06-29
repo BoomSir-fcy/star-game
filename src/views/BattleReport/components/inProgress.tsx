@@ -43,7 +43,7 @@ export const InProgress: React.FC<{
     <GraphicsCard
       style={{ padding: 0, border: 'none' }}
       width='max-content'
-      height='max-content'
+      height='100%'
       stripe
     >
       <CardBox>

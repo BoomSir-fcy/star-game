@@ -80,7 +80,7 @@ const RightFloatBar: React.FC = () => {
   const { setBatchRepair } = useBuildingRepair();
   const { toastSuccess } = useToast();
 
-  const { unread_plunder_count, later_extract_time } = useStore(
+  const { unread_plunder_count, message_count, later_extract_time } = useStore(
     p => p.alliance.allianceView,
   );
   const { userInfo } = useStore(p => p.userInfo);
@@ -194,14 +194,18 @@ const RightFloatBar: React.FC = () => {
             position='relative'
           >
             <MarkText fontSize='18px' bold fontStyle='italic'>
-              3
+              {message_count}
             </MarkText>
-            <MessageBox />
+            {message_count > 0 && <MessageBox />}
           </Flex>
         </RecordBox>
       </Link>
       <Link to='/BattleReport'>
-        <RecordBox onMouseEnter={() => setCloseTips(true)}>
+        <RecordBox
+          onMouseEnter={() => {
+            // setCloseTips(true)
+          }}
+        >
           <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
             {t('联盟消息')}
           </MarkText>

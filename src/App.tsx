@@ -107,10 +107,10 @@ function App() {
 
               <Route path='/battleReport' element={<BattleReport />} />
               {/* 星系 */}
-              <Route path='/galaxy' element={<Galaxy />} />
+              {/* <Route path='/galaxy' element={<Galaxy />} />
               <Route path='/galaxy/auction' element={<Auction />} />
-              <Route path='/galaxy/stars' element={<Stars />} />
-              <Route path='/galaxyN' element={<NewGalaxy />} />
+              <Route path='/galaxy/stars' element={<Stars />} /> */}
+              <Route path='/galaxy' element={<NewGalaxy />} />
 
               {/* 掠夺 */}
               <Route path='/plunder' element={<Plunder />} />

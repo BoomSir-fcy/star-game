@@ -1,5 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { RefreshButton, Flex, Box, BackButton, MarkText, Text } from 'uikit';
+import {
+  RefreshButton,
+  Flex,
+  Box,
+  BackButton,
+  MarkText,
+  Text,
+  Empty,
+} from 'uikit';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useTranslation } from 'contexts/Localization';
@@ -50,8 +58,6 @@ const PlatformNews: React.FC = () => {
   const loadMore = useCallback(
     (e: any) => {
       const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
-      console.log(offsetHeight + scrollTop, scrollHeight);
-
       if (offsetHeight + scrollTop >= scrollHeight) {
         if (loading || end) return; // 判断是否在请求状态或者已到最后一页
         setPageNum(page + 1);
@@ -79,20 +85,26 @@ const PlatformNews: React.FC = () => {
         </TitleBox>
       </Flex>
       <ScrollBox onScroll={loadMore}>
-        {(MessageList ?? []).map(item => (
-          <ItemFlex key={item.id}>
-            <Img src='/images/commons/icon/news.png' alt='' />
-            <Box ml='30px'>
-              <Flex alignItems='flex-end'>
-                <MarkText mr='28px' fontSize='20px' bold fontStyle='normal'>
-                  {item.title}
-                </MarkText>
-                <Text>{dayjs(item.addTime).format('YYYY-MM-DD')}</Text>
-              </Flex>
-              <Text>{item?.msgContent}</Text>
-            </Box>
-          </ItemFlex>
-        ))}
+        {MessageList.length > 0 ? (
+          <>
+            {(MessageList ?? []).map(item => (
+              <ItemFlex key={item.id}>
+                <Img src='/images/commons/icon/news.png' alt='' />
+                <Box ml='30px'>
+                  <Flex alignItems='flex-end'>
+                    <MarkText mr='28px' fontSize='20px' bold fontStyle='normal'>
+                      {item.title}
+                    </MarkText>
+                    <Text>{dayjs(item.addTime).format('YYYY-MM-DD')}</Text>
+                  </Flex>
+                  <Text>{item?.msgContent}</Text>
+                </Box>
+              </ItemFlex>
+            ))}
+          </>
+        ) : (
+          <Empty />
+        )}
       </ScrollBox>
     </Box>
   );

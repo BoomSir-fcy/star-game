@@ -41,10 +41,11 @@ const Planet = styled(Box)<{ url: string }>`
     animation: ${planetRotate} calc(153.3 * 0.1s) linear infinite;
   }
 `;
-const IconUnion = styled(Image)`
+const IconUnion = styled(Image)<{ zIndex?: number | string }>`
   position: absolute;
   bottom: 0;
   right: 0;
+  z-index: ${({ zIndex }) => zIndex};
 `;
 
 export interface GlobeProps extends BoxProps {
@@ -54,6 +55,7 @@ export interface GlobeProps extends BoxProps {
   rotate?: boolean;
   theme?: DefaultTheme;
   showUnion?: boolean;
+  zIndex?: number | string;
 }
 
 const Globe: React.FC<GlobeProps> = ({
@@ -63,6 +65,7 @@ const Globe: React.FC<GlobeProps> = ({
   url,
   theme,
   showUnion,
+  zIndex = 'auto',
   ...props
 }) => {
   const { width, height } = React.useMemo(() => {
@@ -74,11 +77,18 @@ const Globe: React.FC<GlobeProps> = ({
 
   return (
     <Box position='relative'>
-      <PlanetBox width={width} height={height} color={getColor} {...props}>
+      <PlanetBox
+        zIndex={zIndex}
+        width={width}
+        height={height}
+        color={getColor}
+        {...props}
+      >
         <Planet url={url} className={rotate ? 'rotate' : ''} />
       </PlanetBox>
       {showUnion && (
         <IconUnion
+          zIndex={zIndex}
           width={47}
           height={45}
           src='/images/commons/icon/union.png'

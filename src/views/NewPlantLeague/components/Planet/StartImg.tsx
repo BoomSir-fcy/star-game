@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { BoxProps, Box, Image } from 'uikit';
 import { Scale } from 'components/StarCom/types';
-import { Globe } from 'components';
+import { Globe, PlanetBall } from 'components';
 import styled from 'styled-components';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 
@@ -31,14 +31,27 @@ export const StartImg: React.FC<StartImgProps> = ({
 }) => {
   return (
     <Box position='relative'>
-      <Globe scale={scale} shadow={QualityColor[shadow]} url={url} />
-      {showIcon && (
+      {/* <Globe
+        showUnion={showIcon}
+        zIndex={0}
+        scale={scale}
+        shadow={QualityColor[shadow]}
+        url={url}
+      /> */}
+      <PlanetBall
+        rotate
+        showUnion={showIcon}
+        scale={scale}
+        shadow={QualityColor[shadow]}
+        url={url}
+      />
+      {/* {showIcon && (
         <IconUnion
           width={iconWidth}
           height={iconHeight}
           src='/images/commons/icon/union.png'
         />
-      )}
+      )} */}
     </Box>
   );
 };
