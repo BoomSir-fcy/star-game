@@ -209,6 +209,14 @@ const Details = () => {
 
   // 销毁建筑
   const destoryBuilding = React.useCallback(async () => {
+    if (!activeBuilder?.builded) {
+      building?.removeBuilder(activeBuilder);
+      setStateBuilding(p => {
+        p.visible = false;
+      });
+      dispatch(storeAction.resetModal());
+      return;
+    }
     try {
       const res = await destoryHook({
         planet_id: id,
@@ -221,7 +229,7 @@ const Details = () => {
           p.visible = false;
         });
         dispatch(storeAction.resetModal());
-        building.removeBuilder(activeBuilder);
+        building?.removeBuilder(activeBuilder);
       } else {
         toastError(res.message);
       }
@@ -326,7 +334,7 @@ const Details = () => {
             }}
             onClose={() => {
               console.log('关闭', activeBuilder);
-              building.removeActiveSolider();
+              building?.removeBuilder(activeBuilder);
               setStateBuilding(p => {
                 p.visible = false;
               });
