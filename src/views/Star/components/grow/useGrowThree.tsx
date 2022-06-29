@@ -3,17 +3,23 @@
 import { useEffect } from 'react';
 import * as THREE from 'three';
 
-const useThree = (dom: Element) => {
+const getImageUrl = (url?: string) => {
+  return `${window.location.origin}/images/star/${url ? url?.substring(url?.lastIndexOf('/') + 1) : '36.jpg'
+    }`
+}
+
+const useGrowThree = (dom: Element, url: string) => {
   var renderer, scene, camera, composer, circle, particle, luminor, halo, galaxy;
   var lights = [];
   useEffect(() => {
-    if (dom) {
-      init();
+    if (dom && url) {
+      const src = getImageUrl(url);
+      init(src);
       animate();
     }
-  }, [dom])
+  }, [dom, url])
 
-  function init() {
+  function init(textureSrc) {
     renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true
@@ -66,9 +72,9 @@ const useThree = (dom: Element) => {
       //shading: THREE.FlatShading,
       shading: THREE.SmoothShading,
       bumpScale: 0.025,
-      // map: THREE.ImageUtils.loadTexture('https://tsapi.cryptogalaxybox.com/nfts/planet/39.png'),
-      // bumpMap: THREE.ImageUtils.loadTexture('/images/star/37.jpg'),
-      // specularMap: THREE.ImageUtils.loadTexture('/images/star/37.jpg'),
+      map: new THREE.TextureLoader().load(textureSrc),
+      bumpMap: new THREE.TextureLoader().load(textureSrc),
+      specularMap: new THREE.TextureLoader().load(textureSrc),
       specular: new THREE.Color('grey')
     });
 
@@ -138,4 +144,4 @@ const useThree = (dom: Element) => {
   };
 }
 
-export default useThree;
+export default useGrowThree;
