@@ -22,73 +22,32 @@ export const GalaxyInfoBox = styled(Flex)`
   &.no-select {
     user-select: none;
   }
+  perspective: 1000px;
+  perspective-origin: 50% 20%;
+  /* z-index: 0; */
+  /* position: relative;
+  transform-style: preserve-3d; */
 `;
 
-export const ItemGalaxyBox = styled(Box)<{ name: string; delay: number }>`
-  /* position: absolute; */
+export const ItemGalaxyBox = styled(Box)`
   cursor: pointer;
-  animation: ${({ name, delay }) =>
-    `${name} 20s ease-in-out ${delay}s infinite`};
-  @keyframes box0 {
-    0% {
-      transform: translateX(0px) translateY(0px);
-    }
-    50% {
-      transform: translateX(-40px) translateY(-60px);
-    }
-    100% {
-      transform: translateX(0px) translateY(0px);
-    }
-  }
-  @keyframes box1 {
-    0% {
-      transform: translateX(0px) translateY(0px);
-    }
-    50% {
-      transform: translateX(60px) translateY(-40px);
-    }
-    100% {
-      transform: translateX(0px) translateY(0px);
-    }
-  }
-  @keyframes box2 {
-    0% {
-      transform: translateX(0px) translateY(0px);
-    }
-    25% {
-      transform: translateX(-20px) translateY(60px);
-    }
-    50% {
-      transform: translateX(0px) translateY(100px);
-    }
-    75% {
-      transform: translateX(20px) translateY(40px);
-    }
-    100% {
-      transform: translateX(0px) translateY(0px);
-    }
-  }
-  @keyframes box3 {
-    0% {
-      transform: translateX(0px) translateY(0px);
-    }
-    25% {
-      transform: translateX(30px) translateY(-20px);
-    }
-    50% {
-      transform: translateX(60px) translateY(0px);
-    }
-    75% {
-      transform: translateX(30px) translateY(20px);
-    }
-    100% {
-      transform: translateX(0px) translateY(0px);
-    }
-  }
+  position: absolute;
 `;
 
 export const GalaxyImg = styled.img`
   width: 100%;
+  animation: box 20s ease-in-out infinite;
+  @keyframes box {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
 `;
 
 export const InfoModuleBox = styled(Box)`

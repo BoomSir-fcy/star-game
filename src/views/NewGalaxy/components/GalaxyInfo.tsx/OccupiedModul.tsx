@@ -18,12 +18,12 @@ import TipsOccupiedModul from './TipsOccupiedModul';
 
 const OutModule = styled(Box)<{ ShowListModule: boolean }>`
   display: ${({ ShowListModule }) => (ShowListModule ? 'block' : 'none')};
-  position: fixed;
+  position: absolute;
   width: 548px;
   height: 718px;
   z-index: 2;
   right: 0;
-  top: 100px;
+  top: -60px;
 `;
 
 const CloseBox = styled(Flex)`
