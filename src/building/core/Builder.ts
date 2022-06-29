@@ -135,7 +135,7 @@ class Builder extends EventTarget {
   }
 
   setIsBuilding(isBuilding: boolean) {
-    this.setIsBuilding(!isBuilding)
+    // this.setIsBuilding(!isBuilding)
     this.isBuilding = isBuilding;
     if (isBuilding) {
       this.container.alpha = 0.5;
@@ -146,7 +146,9 @@ class Builder extends EventTarget {
   }
 
   setIsBuilded(builded: boolean) {
-    this.setIsBuilding(!builded)
+    if (builded) {
+      this.setIsBuilding(false)
+    }
     this.builded = builded;
     if (builded) {
       this.container.alpha = 1;
