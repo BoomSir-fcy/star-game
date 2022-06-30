@@ -12,7 +12,7 @@ import { ResourceSlider } from './buildingResourceModal';
 const Container = styled(GraphicsCard)`
   position: absolute;
   right: 580px;
-  bottom: -250px;
+  bottom: -150px;
   padding: 20px 30px;
 `;
 
@@ -25,9 +25,14 @@ enum StoreType {
 export const BuildingRechargeModal: React.FC<{
   type: number;
   maxValue: any;
+  defaultValue: {
+    stone: number;
+    population: number;
+    energy: number;
+  };
   onClose: () => void;
   onFinish: (prams) => void;
-}> = ({ type, maxValue, onClose, onFinish }) => {
+}> = ({ type, maxValue, defaultValue, onClose, onFinish }) => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
     stone: 0,
@@ -38,29 +43,30 @@ export const BuildingRechargeModal: React.FC<{
     (
       (maxValue[StoreType.STONE].already / maxValue[StoreType.STONE].max) *
       100
-    ).toFixed(0),
+    ).toFixed(2),
   );
   const populationProportion = Number(
     (
       (maxValue[StoreType.POPULATION].already /
         maxValue[StoreType.POPULATION].max) *
       100
-    ).toFixed(0),
+    ).toFixed(2),
   );
   const energyProportion = Number(
     (
       (maxValue[StoreType.ENERGY].already / maxValue[StoreType.ENERGY].max) *
       100
-    ).toFixed(0),
+    ).toFixed(2),
   );
 
   React.useEffect(() => {
     setState(p => {
-      p.stone = stoneProportion;
-      p.population = populationProportion;
-      p.energy = energyProportion;
+      p.stone = (defaultValue.stone / maxValue[StoreType.STONE].max) * 100;
+      p.population =
+        (defaultValue.population / maxValue[StoreType.POPULATION].max) * 100;
+      p.energy = (defaultValue.energy / maxValue[StoreType.ENERGY].max) * 100;
     });
-  }, [energyProportion, populationProportion, setState, stoneProportion]);
+  }, [defaultValue, setState, maxValue]);
 
   // React.useEffect(() => {
   //   window.addEventListener('click', onClose);
@@ -72,7 +78,7 @@ export const BuildingRechargeModal: React.FC<{
   return (
     <Container width='547px' height='343px'>
       <MarkText bold fontStyle='normal' mb='25px'>
-        {type === 1 ? t('Extract Resources') : t('Supplement Resources')}
+        {t('Supplement Resources')}
       </MarkText>
       <Box mb='21px'>
         <ResourceSlider

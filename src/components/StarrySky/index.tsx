@@ -10,6 +10,7 @@ export const backgroundVariants = [
   '/images/commons/sky-bg2.png',
   '/images/commons/sky-bg3.png',
   '/images/commons/sky-bg4.png',
+  '/images/commons/sky-bg5.png',
 ];
 
 const getBackground = ({ type }: { type: number }) => {

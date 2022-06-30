@@ -11,7 +11,7 @@ import { useTranslation } from 'contexts/Localization';
 const Container = styled(GraphicsCard)`
   position: absolute;
   right: 580px;
-  bottom: -250px;
+  bottom: -150px;
   padding: 20px 30px;
 `;
 
@@ -72,7 +72,7 @@ export const BuildingResourceModal: React.FC<{
   return (
     <Container width='547px' height='343px'>
       <MarkText bold fontStyle='normal' mb='25px'>
-        {type === 1 ? t('Extract Resources') : t('Supplement Resources')}
+        {t('Extract Resources')}
       </MarkText>
       <Box mb='21px'>
         <ResourceSlider

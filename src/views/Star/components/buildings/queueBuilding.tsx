@@ -84,8 +84,8 @@ export const QueueBuilding: React.FC<{
           </Text>
           <Text small bold ml='11px' mb='1px'>
             {type === 2
-              ? `Lv${currentBuilding?.propterty?.levelEnergy}~Lv${
-                  currentBuilding?.propterty?.levelEnergy + 1
+              ? `Lv${currentBuilding?.propterty?.levelEnergy - 1}~Lv${
+                  currentBuilding?.propterty?.levelEnergy
                 }`
               : `Lv${currentBuilding?.propterty?.levelEnergy}`}
           </Text>

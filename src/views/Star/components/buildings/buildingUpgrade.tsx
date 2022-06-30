@@ -3,36 +3,18 @@ import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction } from 'state';
-import { Flex, Box, Button, MarkText, Text, Image } from 'uikit';
+import { Flex, Box, GraphicsCard, Button, MarkText, Text, Image } from 'uikit';
 
 import { useTranslation } from 'contexts/Localization';
 import { formatDisplayApr } from 'utils/formatBalance';
 
-const Container = styled(Box)`
+const Container = styled(GraphicsCard)`
   position: relative;
-  height: auto;
-  padding: 45px 20px 40px;
+  height: 180px;
+  overflow: hidden scroll;
+  padding: 25px 20px 40px;
   border-top: 2px solid #4ffffb;
-  background: linear-gradient(0deg, #1f5758 0%, #102426 100%);
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(
-      45deg,
-      rgba(31, 34, 40, 0.5) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(31, 34, 40, 0.5) 50%,
-      rgba(31, 34, 40, 0.5) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-size: 7px 7px;
-  }
+  flex: 1;
 `;
 const Content = styled(Box)`
   position: relative;
@@ -72,7 +54,7 @@ export const BuildingUpgrade: React.FC<{
   );
 
   return (
-    <Container>
+    <Container stripe>
       <Content>
         <Flex width='100%' justifyContent='space-between' alignItems='center'>
           <Flex alignItems='center'>
