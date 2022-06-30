@@ -130,9 +130,9 @@ const Grow: React.FC = () => {
     }
   }, [parsedQs.id, t, dispatch, toastError, toastSuccess]);
 
-  const ref = React.useRef(null)
+  const ref = React.useRef(null);
 
-  useGrowThree(ref.current, planetInfo?.picture1)
+  useGrowThree(ref.current, planetInfo?.picture1);
 
   return (
     <Box width='86%' mt='6%'>
@@ -152,7 +152,15 @@ const Grow: React.FC = () => {
           }}
         />
       )}
-      <Box left={120} ref={ref} position='absolute' width='500px' height='500px' />
+      <Box
+        left='14%'
+        bottom='-1%'
+        ref={ref}
+        position='absolute'
+        width='800px'
+        height='800px'
+        zIndex={-1}
+      />
       <Flex justifyContent='space-between' alignItems='flex-end'>
         <Box>
           <GrowLevel
@@ -180,7 +188,6 @@ const Grow: React.FC = () => {
             </Text>
           </Flex>
           <Button
-            disabled
             mt='19px'
             width='277px'
             height='50px'

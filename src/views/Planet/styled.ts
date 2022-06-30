@@ -25,7 +25,7 @@ const StarScaleFrame = keyframes`
 export const DragBox = styled(Box)`
   position: relative;
   width: 100%;
-  height: 900px;
+  height: 940px;
   /* border: 5px solid black; */
   overflow: auto;
   user-select: none;
