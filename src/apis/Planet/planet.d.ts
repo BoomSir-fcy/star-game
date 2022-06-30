@@ -67,6 +67,8 @@ declare namespace Api {
       population_enough: boolean; // 香料是否足够
       power: number; // 战斗力
       arm_count: number; // 兵种数量
+      ak_buff: number; // buff建筑加成
+      strengthen_buff: number; // 培育强化加成
     }
 
     interface UpgradePlanetInfo {

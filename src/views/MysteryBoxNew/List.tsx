@@ -5,7 +5,7 @@ import {
 } from 'components/MysteryBoxComNew';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Box, Flex, Text, Image, Button, Spinner, Dots } from 'uikit';
-import { Globe, RaceAvatar } from 'components';
+import { ConnectWalletButton, Globe, RaceAvatar } from 'components';
 import styled, { keyframes } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useStore } from 'state';
@@ -17,9 +17,31 @@ import { raceData } from 'config/raceConfig';
 import { useJoinAlliance } from 'views/Star/hook';
 import { useToast } from 'contexts/ToastsContext';
 import { useFetchAllianceView } from 'state/alliance/hooks';
+import { useWeb3React } from '@web3-react/core';
 
+const ContentTweenFrame1 = keyframes`
+  0% {
+    opacity: 1;
+    transform: translateY(0px) scale(0.9);
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(28rem,26rem) scale(0.05);
+  }
+`;
+const ContentTweenFrame2 = keyframes`
+  0% {
+    opacity: 1;
+    transform: translateY(0px) scale(0.9);
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(44rem,26rem) scale(0.05);
+  }
+`;
 const StarFrame = keyframes`
   0% {
+    /* 中间位置：transform: translate(48rem, 3rem); */
     transform: translateY(-1000px);
   }
   80% {
@@ -34,10 +56,20 @@ const StarFrame = keyframes`
 `;
 const StarDescFrame = keyframes`
   0% {
+    visibility: hidden;
     opacity: 0;
   }
   100% {
+    visibility: unset;
     opacity: 1;
+  }
+`;
+const StarDescFrame2 = keyframes`
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 `;
 const LightFrame = keyframes`
@@ -68,13 +100,21 @@ const AnimationStar = styled(Box)`
     animation: ${StarFrame} 1.5s cubic-bezier(0.19, -0.54, 0.73, 1.35) 5s both;
   }
 `;
-const ContentBox = styled(Box)`
+const ContentBox = styled(Box)<{ tween?: number }>`
   & .star-desc {
-    opacity: 0;
     animation: ${StarDescFrame} 2s linear 6s both;
   }
+  & .star-desc-cancel {
+    animation: ${StarDescFrame2} 1s linear -1s both;
+  }
+  &.tween-animation2 {
+    animation: ${({ tween }) =>
+        tween === 2 ? ContentTweenFrame2 : ContentTweenFrame1}
+      1s linear 0s both;
+  }
 `;
-const Light = styled(Box)`
+const Light = styled(Box)<{ tween?: number }>`
+  ${({ tween }) => (tween ? `display: none;` : '')}
   position: absolute;
   top: -330px;
   width: 220px;
@@ -106,8 +146,10 @@ const Light = styled(Box)`
     animation: ${LightFrame} 1s ease-in-out 4.9s both;
   }
 `;
+
 const List = () => {
   useFetchAllianceView();
+  const { account } = useWeb3React();
   const paramsQs = useParsedQueryString();
   const quality = Number(paramsQs.q) as MysteryBoxQualities;
 
@@ -117,7 +159,9 @@ const List = () => {
   const { SetWorking } = useJoinAlliance();
   const { toastSuccess, toastError } = useToast();
 
+  const [tween, setTween] = useState(0);
   const [pending, setPending] = useState(false);
+  const [planetList, setPlanetList] = useState(null);
 
   const planetInfo = useStore(p => p.planet.planetInfo);
   const { order } = useStore(p => p.alliance.allianceView);
@@ -128,11 +172,14 @@ const List = () => {
       ?.map(v => Number(v));
   }, [paramsQs.i]);
 
-  const planetList = useMemo(() => {
-    return Object.values(planetInfo).filter(
-      item => planetIds.indexOf(item.id) !== -1,
-    );
-  }, [planetInfo, planetIds]);
+  useEffect(() => {
+    if (planetIds && planetInfo && !planetList) {
+      const list = Object.values(planetInfo).filter(
+        item => planetIds.indexOf(item.id) !== -1,
+      );
+      setPlanetList(list.length > 0 ? list : null);
+    }
+  }, [planetInfo, planetIds, planetList]);
 
   useEffect(() => {
     if (planetIds) {
@@ -141,7 +188,7 @@ const List = () => {
   }, [planetIds, dispatch]);
 
   useEffect(() => {
-    if (!planetList.length) {
+    if (!planetList) {
       setTimeout(() => {
         dispatch(fetchPlanetInfoAsync(planetIds));
       }, 10000);
@@ -153,8 +200,97 @@ const List = () => {
       str.length - chars,
     )}`;
   }, []);
+
+  const rendeButton = useMemo(() => {
+    if (!account) {
+      return (
+        <ConnectWalletButton variant='purple' width='355px' height='68px' />
+      );
+    }
+
+    if (planetList?.length > 0 && order?.length === 0) {
+      return (
+        <>
+          <Button
+            mr='60px'
+            disabled={pending}
+            variant='purple'
+            width='355px'
+            height='68px'
+            onClick={async () => {
+              setPending(true);
+              try {
+                await SetWorking(planetList.map(v => v.id));
+                toastSuccess(t('Join Succeeded'));
+                setTween(2);
+                setTimeout(() => {
+                  navigate('/plant-league');
+                }, 1200);
+              } catch (e) {
+                console.error(e);
+                toastError(t('Join Failed'));
+                setPending(false);
+              }
+            }}
+          >
+            {pending ? (
+              <Dots>{t('joining')}</Dots>
+            ) : (
+              <Text fontSize='18px' bold>
+                {t('OpenMysteryBoxBtnDesc1')}
+              </Text>
+            )}
+          </Button>
+          <Button
+            variant='purple'
+            width='355px'
+            height='68px'
+            onClick={() => {
+              setTween(1);
+              setTimeout(() => {
+                navigate('/star/planet');
+              }, 1200);
+            }}
+          >
+            <Text fontSize='18px' bold>
+              {t('OpenMysteryBoxBtnDesc2')}
+            </Text>
+          </Button>
+        </>
+      );
+    }
+
+    return (
+      <Button
+        variant='purple'
+        width='355px'
+        height='68px'
+        onClick={() => {
+          setTween(1);
+          setTimeout(() => {
+            navigate('/star/planet');
+          }, 1200);
+        }}
+      >
+        <Text fontSize='18px' bold>
+          {t('Confirm')}
+        </Text>
+      </Button>
+    );
+  }, [
+    account,
+    pending,
+    planetList,
+    order,
+    SetWorking,
+    navigate,
+    toastError,
+    toastSuccess,
+    t,
+  ]);
+
   return (
-    <ContentBox>
+    <ContentBox tween={tween} className={tween ? `tween-animation2` : ''}>
       <MysteryBoxCom
         rotate={0}
         left={0}
@@ -164,17 +300,17 @@ const List = () => {
         style={{ opacity: 0.3 }}
       />
       <Flex justifyContent='space-evenly'>
-        {!planetList.length && (
+        {!planetList?.length && (
           <Flex width='100%' alignItems='center' justifyContent='center'>
             <Spinner />
           </Flex>
         )}
-        {planetList.length > 0 &&
-          planetList.map((item, index) => (
+        {planetList?.length > 0 &&
+          planetList?.map((item, index) => (
             <Box key={item?.id}>
-              <Light className={`light-${index}`} />
+              <Light tween={tween} className={`light-${index}`} />
               <Text
-                className='star-desc'
+                className={tween ? 'star-desc-cancel' : 'star-desc'}
                 mb='6px'
                 textAlign='center'
                 fontSize='26px'
@@ -196,7 +332,11 @@ const List = () => {
                   url={item?.picture1}
                 />
               </AnimationStar>
-              <Flex className='star-desc' mt='30px' alignItems='center'>
+              <Flex
+                className={tween ? 'star-desc-cancel' : 'star-desc'}
+                mt='30px'
+                alignItems='center'
+              >
                 <RaceAvatar width='44px' height='44px' race={item?.race} />
                 <Box ml='9px'>
                   <Text color={RaceTypeColor[item?.race]} fontSize='18px' bold>
@@ -210,52 +350,13 @@ const List = () => {
             </Box>
           ))}
       </Flex>
-
-      {planetList.length > 0 && (
-        <Flex className='star-desc' mt='139px' justifyContent='center'>
-          {order?.length === 0 && (
-            <Button
-              mr='60px'
-              disabled={pending}
-              variant='purple'
-              width='355px'
-              height='68px'
-              onClick={async () => {
-                setPending(true);
-                try {
-                  await SetWorking(planetList.map(v => v.id));
-                  toastSuccess(t('Join Succeeded'));
-                  navigate('/plant-league');
-                } catch (e) {
-                  console.error(e);
-                  toastError(t('Join Failed'));
-                  setPending(false);
-                }
-              }}
-            >
-              {pending ? (
-                <Dots>{t('joining')}</Dots>
-              ) : (
-                <Text fontSize='18px' bold>
-                  {t('OpenMysteryBoxBtnDesc1')}
-                </Text>
-              )}
-            </Button>
-          )}
-          <Button
-            variant='purple'
-            width='355px'
-            height='68px'
-            onClick={() => {
-              navigate('/plant-league');
-            }}
-          >
-            <Text fontSize='18px' bold>
-              {t('OpenMysteryBoxBtnDesc2')}
-            </Text>
-          </Button>
-        </Flex>
-      )}
+      <Flex
+        className={tween ? 'star-desc-cancel' : 'star-desc'}
+        mt='139px'
+        justifyContent='center'
+      >
+        {rendeButton}
+      </Flex>
     </ContentBox>
   );
 };

@@ -72,7 +72,7 @@ const TokenInfo = () => {
   );
 
   const format = useCallback((number: number) => {
-    return formatDisplayApr(number);
+    return formatLocalisedCompactNumber(number);
   }, []);
   return (
     <Box mt='-8px' position='relative'>
@@ -97,7 +97,7 @@ const TokenInfo = () => {
                   ellipsis
                   title={`${Product.power}`}
                 >
-                  {splitThousandSeparator(Product.power)}
+                  {formatDisplayApr(Product.power)}
                 </Text>
               </Flex>
             </Flex>
