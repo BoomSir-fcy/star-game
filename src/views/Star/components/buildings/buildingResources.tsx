@@ -15,6 +15,7 @@ import { signMessage } from 'utils/web3React';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 
+import { BuildingDetailType } from 'state/types';
 import { BuildingProgress } from './buildingProgress';
 import { BuildingResourceModal } from './buildingResourceModal';
 import { BuildingRechargeModal } from './buildingRechargeModal';
@@ -33,7 +34,7 @@ export const BuildingResources: React.FC<{
 }> = ({ planet_id, currnet_building, estimate, onClose }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { store } = currnet_building;
+  const { store, cellar } = currnet_building;
   const { toastSuccess, toastError } = useToast();
   const { account, library } = useActiveWeb3React();
   const planet = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
@@ -61,6 +62,10 @@ export const BuildingResources: React.FC<{
         setState(p => {
           p.visible = true;
           p.type = 1;
+          p.needMax.stone = store?.store_stone + store?.charge_stone;
+          p.needMax.population =
+            store?.store_population + store?.charge_population;
+          p.needMax.energy = store?.store_energy + store?.charge_energy;
         });
         setStoreAssets({
           [StoreType.STONE]: {
@@ -80,7 +85,7 @@ export const BuildingResources: React.FC<{
     } catch (error) {
       console.error(error);
     }
-  }, [planet_id, setState]);
+  }, [planet_id, setState, store]);
 
   const extractChange = React.useCallback(
     async val => {
@@ -152,99 +157,149 @@ export const BuildingResources: React.FC<{
     [account, dispatch, library, onClose, planet_id, setState, t, toastSuccess],
   );
 
+  console.log(state);
   return (
     <Box position='relative'>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>
         {t('store resources')}
       </MarkText>
-      <Flex width='100%' flexDirection='column'>
-        <Box mb='20px'>
-          <BuildingProgress
-            token='ORE'
-            title={t('Ore')}
-            value={store?.store_stone + store?.charge_stone}
-            nextValue={
-              estimate?.store?.store_max_stone - store?.store_max_stone
-            }
-            progressbar={
-              ((store?.store_stone + store?.charge_stone) /
-                store?.store_max_stone) *
-              100
-            }
-          />
-        </Box>
-        <Box mb='20px'>
-          <BuildingProgress
-            token='ENG'
-            title={t('Energy')}
-            value={store?.store_energy + store?.charge_energy}
-            nextValue={
-              estimate?.store?.store_max_energy - store?.store_max_energy
-            }
-            progressbar={
-              ((store?.store_energy + store?.charge_energy) /
-                store?.store_max_energy) *
-              100
-            }
-          />
-        </Box>
-        <Box mb='20px'>
-          <BuildingProgress
-            token='SPICES'
-            title={t('Population')}
-            value={store?.store_population + store?.charge_population}
-            nextValue={
-              estimate?.store?.store_max_population -
-              store?.store_max_population
-            }
-            progressbar={
-              ((store?.store_population + store?.charge_population) /
-                store?.store_max_population) *
-              100
-            }
-          />
-        </Box>
-      </Flex>
-      <Flex justifyContent='space-between'>
-        <Button
-          width='226px'
-          height='53px'
-          variant='purple'
-          onClick={event => {
-            event.stopPropagation();
-            event.preventDefault();
-            getStoreData();
-          }}
-        >
-          <Text bold fontSize='16px' color='#4FFFFB'>
-            {t('Supplement Resources')}
-          </Text>
-        </Button>
-        <Button
-          width='226px'
-          height='53px'
-          variant='purple'
-          onClick={event => {
-            event.stopPropagation();
-            event.preventDefault();
-            setState(p => {
-              p.visible = true;
-              p.type = 2;
-              p.needMax.stone = planet?.stone;
-              p.needMax.population = planet?.population;
-              p.needMax.energy = planet?.energy;
-            });
-          }}
-        >
-          <Text bold fontSize='16px' color='#4FFFFB'>
-            {t('Extract Resources')}
-          </Text>
-        </Button>
-      </Flex>
+      {currnet_building.detail_type ===
+        BuildingDetailType.BuildingDetailTypeStore && (
+        <Flex width='100%' flexDirection='column'>
+          <Box mb='20px'>
+            <BuildingProgress
+              token='ORE'
+              title={t('Ore')}
+              value={store?.store_stone + store?.charge_stone}
+              nextValue={
+                estimate?.store?.store_max_stone - store?.store_max_stone
+              }
+              progressbar={
+                ((store?.store_stone + store?.charge_stone) /
+                  store?.store_max_stone) *
+                100
+              }
+            />
+          </Box>
+          <Box mb='20px'>
+            <BuildingProgress
+              token='ENG'
+              title={t('Energy')}
+              value={store?.store_energy + store?.charge_energy}
+              nextValue={
+                estimate?.store?.store_max_energy - store?.store_max_energy
+              }
+              progressbar={
+                ((store?.store_energy + store?.charge_energy) /
+                  store?.store_max_energy) *
+                100
+              }
+            />
+          </Box>
+          <Box mb='20px'>
+            <BuildingProgress
+              token='SPICES'
+              title={t('Population')}
+              value={store?.store_population + store?.charge_population}
+              nextValue={
+                estimate?.store?.store_max_population -
+                store?.store_max_population
+              }
+              progressbar={
+                ((store?.store_population + store?.charge_population) /
+                  store?.store_max_population) *
+                100
+              }
+            />
+          </Box>
+        </Flex>
+      )}
+
+      {/* 地窖 */}
+      {currnet_building.detail_type ===
+        BuildingDetailType.BuildingDetailTypeCellar && (
+        <Flex width='100%' flexDirection='column'>
+          <Box mb='20px'>
+            <BuildingProgress
+              token='ORE'
+              title={t('Ore')}
+              value={cellar?.protect_stone}
+              nextValue={
+                estimate?.cellar?.protect_stone - cellar?.protect_stone
+              }
+              progressbar={100}
+            />
+          </Box>
+          <Box mb='20px'>
+            <BuildingProgress
+              token='ENG'
+              title={t('Energy')}
+              value={cellar?.protect_energy}
+              nextValue={
+                estimate?.cellar?.protect_energy - cellar?.protect_energy
+              }
+              progressbar={100}
+            />
+          </Box>
+          <Box mb='20px'>
+            <BuildingProgress
+              token='SPICES'
+              title={t('Population')}
+              value={cellar?.protect_population}
+              nextValue={
+                estimate?.cellar?.protect_population -
+                cellar?.protect_population
+              }
+              progressbar={100}
+            />
+          </Box>
+        </Flex>
+      )}
+
+      {currnet_building.detail_type ===
+        BuildingDetailType.BuildingDetailTypeStore && (
+        <Flex justifyContent='space-between'>
+          <Button
+            width='226px'
+            height='53px'
+            variant='purple'
+            onClick={event => {
+              event.stopPropagation();
+              event.preventDefault();
+              getStoreData();
+            }}
+          >
+            <Text bold fontSize='16px' color='#4FFFFB'>
+              {t('Supplement Resources')}
+            </Text>
+          </Button>
+          <Button
+            width='226px'
+            height='53px'
+            variant='purple'
+            onClick={event => {
+              event.stopPropagation();
+              event.preventDefault();
+              setState(p => {
+                p.visible = true;
+                p.type = 2;
+                p.needMax.stone = planet?.stone;
+                p.needMax.population = planet?.population;
+                p.needMax.energy = planet?.energy;
+              });
+            }}
+          >
+            <Text bold fontSize='16px' color='#4FFFFB'>
+              {t('Extract Resources')}
+            </Text>
+          </Button>
+        </Flex>
+      )}
 
       {state.visible && state.type === 1 && (
         <BuildingRechargeModal
           type={state.type}
+          defaultValue={state.needMax}
           maxValue={storeAssets}
           onFinish={rechargeChange}
           onClose={() =>

@@ -121,6 +121,7 @@ const Grow: React.FC = () => {
       if (Api.isSuccess(res)) {
         toastSuccess(t('Operate Succeeded'));
         dispatch(fetchPlanetInfoAsync([Number(parsedQs.id)]));
+        getPlanetStrengthen();
       }
       setPending(false);
     } catch (error) {
@@ -128,7 +129,7 @@ const Grow: React.FC = () => {
       setPending(false);
       console.error(error);
     }
-  }, [parsedQs.id, t, dispatch, toastError, toastSuccess]);
+  }, [parsedQs.id, t, dispatch, toastError, toastSuccess, getPlanetStrengthen]);
 
   const ref = React.useRef(null);
 
