@@ -48,7 +48,7 @@ const Stars = () => {
       planet_owner_star: 0, // 恒星主获得
     };
   }, []);
-  const [activeStar, setActiveStar] = useState<Api.Galaxy.StarInfo>(initState);
+  const [activeStar, setActiveStar] = useState<Api.Galaxy.StarInfo>();
   const [navList, setNavList] = useState<StarLevelInfo[]>([]);
 
   const initList = useCallback(() => {

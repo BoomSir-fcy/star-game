@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'state';
 import { useGalaxyList } from 'state/galaxy/hooks';
 import { Text, Flex, Box } from 'uikit';
@@ -9,16 +9,30 @@ import {
   setCurrentGalaxy,
 } from 'state/galaxy/reducer';
 import { GalaxyImg, GalaxyInfoBox, ItemGalaxyBox } from 'views/NewGalaxy/style';
+import { GalaxyInfo } from 'state/types';
 import InfoModule from './InfoModule';
 import OccupiedModul from './OccupiedModul';
 
-const GalaxyInfo: React.FC = () => {
+const GalaxyInfoIndex: React.FC = () => {
   useGalaxyList();
   const dispatch = useDispatch();
 
   const { galaxyList, currentGalaxy, loadingGalaxy } = useStore(p => p.galaxy);
   const [OpenInfo, setOpenInfo] = useState(false);
   const [ShowListModule, setShowListModule] = useState(false);
+  const [ActiveGalaxy, setActiveGalaxy] = useState(0);
+
+  const ChangeActiveGalaxy = useCallback(
+    (item: GalaxyInfo) => {
+      if (item.id === ActiveGalaxy) {
+        return;
+      }
+      setActiveGalaxy(item.id);
+      dispatch(setCurrentGalaxy(item));
+      dispatch(fetchGalaxyStarListAsync(item.id as number));
+    },
+    [ActiveGalaxy, dispatch],
+  );
 
   useEffect(() => {
     if (galaxyList.length) {
@@ -143,37 +157,37 @@ const GalaxyInfo: React.FC = () => {
   }, [galaxyList]);
 
   return (
-    <GalaxyInfoBox id='InfoBox'>
-      <Box
-        id='box'
-        width={300}
-        height={300}
-        margin='100px auto'
-        style={{ position: 'relative', transformStyle: 'preserve-3d' }}
-      >
-        {(galaxyList ?? []).map((item, index) => (
-          <ItemGalaxyBox
-            className='imgBox'
-            key={item.id}
-            width={300}
-            height={300}
-            onTouchStart={() => {
-              dispatch(setCurrentGalaxy(item));
-              dispatch(fetchGalaxyStarListAsync(item.id as number));
-              setOpenInfo(true);
-              setShowListModule(true);
-            }}
-            onClick={() => {
-              dispatch(setCurrentGalaxy(item));
-              dispatch(fetchGalaxyStarListAsync(item.id as number));
-              setOpenInfo(true);
-              setShowListModule(true);
-            }}
-          >
-            <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />
-          </ItemGalaxyBox>
-        ))}
-      </Box>
+    <Box position='relative'>
+      <GalaxyInfoBox id='InfoBox'>
+        <Box
+          id='box'
+          width={300}
+          height={300}
+          margin='100px auto'
+          style={{ position: 'relative', transformStyle: 'preserve-3d' }}
+        >
+          {(galaxyList ?? []).map((item, index) => (
+            <ItemGalaxyBox
+              className='imgBox'
+              key={item.id}
+              width={300}
+              height={300}
+              onTouchStart={() => {
+                ChangeActiveGalaxy(item);
+                setOpenInfo(true);
+                setShowListModule(true);
+              }}
+              onClick={() => {
+                ChangeActiveGalaxy(item);
+                setOpenInfo(true);
+                setShowListModule(true);
+              }}
+            >
+              <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />
+            </ItemGalaxyBox>
+          ))}
+        </Box>
+      </GalaxyInfoBox>
       {OpenInfo && <InfoModule setOpenInfo={setOpenInfo} />}
       {ShowListModule && (
         <OccupiedModul
@@ -181,8 +195,8 @@ const GalaxyInfo: React.FC = () => {
           setShowListModule={setShowListModule}
         />
       )}
-    </GalaxyInfoBox>
+    </Box>
   );
 };
 
-export default GalaxyInfo;
+export default GalaxyInfoIndex;

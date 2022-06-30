@@ -114,16 +114,16 @@ const OccupiedModul: React.FC<{
     [TotalReward],
   );
 
-  const GetBoxFor24 = useCallback((Factor: string) => {
-    // 50000000000 / 365 / 10 * 0.8 * Factor
-    const Num = new BigNumber(50000000000)
-      .div(365)
-      .div(10)
-      .times(0.8)
-      .times(Factor)
-      .toString();
-    return Num;
-  }, []);
+  // const GetBoxFor24 = useCallback((Factor: string) => {
+  //   // 50000000000 / 365 / 10 * 0.8 * Factor
+  //   const Num = new BigNumber(50000000000)
+  //     .div(365)
+  //     .div(10)
+  //     .times(0.8)
+  //     .times(Factor)
+  //     .toString();
+  //   return Num;
+  // }, []);
 
   const HoldTime = useCallback((hold_time: number) => {
     const time = Math.floor(new Date().getTime() / 1000) - hold_time;
@@ -248,12 +248,7 @@ const OccupiedModul: React.FC<{
                     <SmText mr='10px' color='textSubtle'>
                       {t('24小时预计获得BOX')}:
                     </SmText>
-                    <SmText>
-                      {SubString_1(
-                        GetBoxFor24(GetRewardFactor(item?.disapth_box)),
-                        3,
-                      )}
-                    </SmText>
+                    <SmText>{SubString_1(item.pre_box, 3)}</SmText>
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>

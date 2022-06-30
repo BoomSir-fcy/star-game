@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+} from 'react';
 import { Button, Flex, Text, Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'state';
@@ -6,9 +12,7 @@ import { Api } from 'apis';
 import { useToast } from 'contexts/ToastsContext';
 import { useDispatch } from 'react-redux';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
-import { useImmer } from 'use-immer';
-
-import { EasyformatTime } from 'utils/timeFormat';
+import { useCountdownTime, getTimePeriod } from 'components';
 
 const Explore: React.FC<{
   Difficulty: number;
@@ -19,20 +23,27 @@ const Explore: React.FC<{
   const { toastError, toastSuccess } = useToast();
   const dispatch = useDispatch();
 
-  const {
-    max_work_count,
-    now_work_count,
-    end_time,
-    free_time,
-    alliance,
-    later_extract_time,
-  } = useStore(p => p.alliance.allianceView);
+  const { max_work_count, now_work_count, end_time, free_time, alliance } =
+    useStore(p => p.alliance.allianceView);
   const { userInfo } = useStore(p => p.userInfo);
+  const timer = useRef<ReturnType<typeof setTimeout>>();
 
-  const [state, setState] = useImmer({
-    time: 0,
-  });
-  let timer = null as any;
+  const diffSeconds = useCountdownTime(0, 0, free_time);
+  const { hour, minute, second } = useMemo(() => {
+    if (diffSeconds <= 0) {
+      return {
+        hour: 0,
+        minute: 0,
+        second: 0,
+      };
+    }
+    const { hours, minutes, seconds } = getTimePeriod(diffSeconds);
+    return {
+      hour: hours,
+      minute: minutes,
+      second: seconds,
+    };
+  }, [diffSeconds]);
 
   // 按钮文字显示
   const BtnShowText = useMemo(() => {
@@ -42,7 +53,7 @@ const Explore: React.FC<{
     }
     // 次数用完
     if (max_work_count === now_work_count) {
-      if (userInfo.vipBenefits?.is_vip) {
+      if (!userInfo.vipBenefits?.is_vip) {
         return t('成为VIP可继续探索');
       }
     }
@@ -64,41 +75,31 @@ const Explore: React.FC<{
       });
   }, [toastSuccess, toastError, t, dispatch, Difficulty]);
 
-  // 倒计时
-  const countDown = () => {
-    if (alliance.working <= 0) {
-      return;
-    }
-    timer = setInterval(() => {
-      const { time } = state;
-      if (time > 0) {
-        setState(p => {
-          p.time = time - 1;
-        });
-      } else {
-        clearInterval(timer);
-        if (free_time > 0) {
-          dispatch(fetchAllianceViewAsync());
-        }
+  useEffect(() => {
+    // 已经停止工作 清除倒计时
+    if (alliance.working === 0 || diffSeconds > 0) {
+      if (timer.current) {
+        clearInterval(timer.current);
       }
-    }, 1000);
-  };
-
-  useEffect(() => {
-    if (alliance.working <= 0) {
-      setState({ time: end_time });
       return;
     }
-    setState({ time: free_time });
-  }, [free_time, alliance, end_time, later_extract_time, setState]);
+    // 倒计时为0并且在工作状态
+    console.log(diffSeconds, alliance.working);
+    if (diffSeconds === 0 && alliance.working === 1) {
+      console.log('---1--');
 
-  useEffect(() => {
-    countDown();
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-    // eslint-disable-next-line
-  }, [state]);
+      if (timer) {
+        console.log('---2--');
+
+        clearInterval(timer.current);
+      }
+      timer.current = setInterval(() => {
+        console.log('--3---');
+        dispatch(fetchAllianceViewAsync());
+      }, 5000);
+    }
+  }, [diffSeconds, alliance.working, dispatch]);
+
   return (
     <Flex zIndex={1} position='relative' justifyContent='center'>
       <Button
@@ -114,7 +115,9 @@ const Explore: React.FC<{
         <Flex flexDirection='column'>
           <Text fontSize='22px'>{BtnShowText}</Text>
           {alliance.working !== 0 && (
-            <Text> ( {EasyformatTime(state.time)} )</Text>
+            <Text>
+              {`( ${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')} )`}
+            </Text>
           )}
         </Flex>
       </Button>
