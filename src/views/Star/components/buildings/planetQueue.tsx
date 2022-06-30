@@ -103,7 +103,7 @@ export const PlanetQueue: React.FC<{
                 </QueueBox>
                 <QueueBuilding
                   key={currentQueue[index]}
-                  currentBuilding={currentQueue[index]}
+                  currentBuilding={currentQueue[index]?.building}
                   type={currentQueue[index]?.work_type}
                   status={currentQueue[index]?.work_status}
                   diffTime={

@@ -23,7 +23,9 @@ export const BuildingProgress: React.FC<{
           <Flex justifyContent='space-between' alignItems='center' width='100%'>
             <Flex alignItems='center'>
               <Text color='textSubtle'>{title}</Text>
-              <Text ml='12px'>{value}</Text>
+              <Text ml='12px'>
+                {formatDisplayApr(new BigNumber(value).toNumber())}
+              </Text>
             </Flex>
             <Text
               color={`${nextValue >= 0 ? 'progressGreenBar' : 'textDanger'}`}

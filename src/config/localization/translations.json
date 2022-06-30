@@ -665,6 +665,7 @@
   "http-error-300015": "Building failed to restore durability",
   "http-error-300016": "Building upgrade failed, max level reached",
   "http-error-300017": "Building upgrade failed, max level reached",
+  "http-error-300024": "Building queue exceeds maximum limit",
   "http-error-300030": "The planet is in a planetary alliance, buildings cannot join the work queue",
   "http-error-300031": "Planetary alliance is occupying the stars",
   "http-error-400001": "Failed to get user information",

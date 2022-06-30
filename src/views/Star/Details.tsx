@@ -147,7 +147,7 @@ const Details = () => {
         const resWorkQueue = res.data.work_queue;
         const queueList = resWorkQueue.map(item => {
           const buildings = workQueueBase.find(
-            ({ _id }) => _id === item.buildings_id,
+            ({ buildings_number }) => buildings_number === item.building_number,
           );
           return { ...item, building: buildings };
         });
@@ -252,7 +252,6 @@ const Details = () => {
   React.useEffect(() => {
     console.log(activeBuilder);
     if (activeBuilder?.option?.id) {
-      dispatch(setNavZIndex(false));
       setStateBuilding(p => {
         p.visible = true;
         p.building = {
@@ -261,6 +260,9 @@ const Details = () => {
           isbuilding: activeBuilder?.builded,
         };
       });
+      setTimeout(() => {
+        dispatch(setNavZIndex(false));
+      }, 100);
     }
   }, [activeBuilder, dispatch, setStateBuilding]);
 
@@ -324,6 +326,7 @@ const Details = () => {
             visible={stateBuilding.visible}
             planet={planet}
             planet_id={id}
+            workQueue={stateBuilding.workQueue}
             buildingsId={stateBuilding.building?._id}
             itemData={stateBuilding?.building}
             onCreateBuilding={async val => {
@@ -332,9 +335,10 @@ const Details = () => {
               });
               await saveWorkQueue(val);
             }}
-            onClose={() => {
-              console.log('关闭', activeBuilder);
-              building?.removeBuilder(activeBuilder);
+            onClose={bool => {
+              if (bool && activeBuilder) {
+                building?.removeBuilder(activeBuilder);
+              }
               setStateBuilding(p => {
                 p.visible = false;
               });
