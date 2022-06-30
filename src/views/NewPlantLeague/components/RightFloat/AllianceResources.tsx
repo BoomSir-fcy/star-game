@@ -37,7 +37,7 @@ const AllianceResources: React.FC = () => {
         <Flex width='100%' alignItems='center'>
           <Flex alignItems='center' flex={1}>
             <TokenImage width={30} height={32} tokenAddress='ORE' />
-            <Text small ml='8px'>
+            <Text small ml='8px' ellipsis>
               {energy.total_stone}
             </Text>
           </Flex>
@@ -48,7 +48,7 @@ const AllianceResources: React.FC = () => {
         <Flex width='100%' alignItems='center'>
           <Flex alignItems='center' flex={1}>
             <TokenImage width={30} height={32} tokenAddress='SPICES' />
-            <Text small ml='8px'>
+            <Text small ml='8px' ellipsis>
               {energy.total_population}
             </Text>
           </Flex>
@@ -59,7 +59,7 @@ const AllianceResources: React.FC = () => {
         <Flex width='100%' alignItems='center'>
           <Flex alignItems='center' flex={1}>
             <TokenImage width={30} height={32} tokenAddress='ENG' />
-            <Text small ml='8px'>
+            <Text small ml='8px' ellipsis>
               {energy.total_energy}
             </Text>
           </Flex>

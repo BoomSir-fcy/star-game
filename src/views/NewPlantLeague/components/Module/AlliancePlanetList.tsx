@@ -12,13 +12,27 @@ import { useToast } from 'contexts/ToastsContext';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useDispatch } from 'react-redux';
 
-const OutModule = styled(Box)<{ ShowListModule: boolean }>`
-  display: ${({ ShowListModule }) => (ShowListModule ? 'block' : 'none')};
-  /* background-color: rgba(0, 0, 0, 0.5); */
-  /* width: 100%; */
+const OutModule = styled(Box)`
   height: 100%;
   position: fixed;
   z-index: 2;
+  opacity: 0;
+  transition: all 0.5s ease;
+  left: -660px;
+  &.active {
+    opacity: 1;
+    left: 0;
+    animation: activeList 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 alternate
+      forwards;
+  }
+  @keyframes activeList {
+    0% {
+      transform: translate(-200px, 0);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
 `;
 
 const CloseBox = styled(Flex)`
@@ -213,7 +227,7 @@ const AlliancePlanetList: React.FC<{
   }, [workingList]);
 
   return (
-    <OutModule ShowListModule={ShowListModule}>
+    <OutModule className={ShowListModule ? 'active' : ''}>
       <ListBox>
         <CloseBox onClick={() => setShowListModule(false)}>
           <CloseImg src='/images/commons/icon/back.png' alt='' />

@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, Flex, Box, BackButton, RefreshButton, Spinner } from 'uikit';
+import {
+  Text,
+  Flex,
+  Box,
+  BackButton,
+  RefreshButton,
+  Spinner,
+  Empty,
+} from 'uikit';
 import { Layout } from 'components';
 import Nav from 'components/Nav';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -32,8 +40,7 @@ const BorderBox = styled(Box)`
 
 const ScrollBox = styled(Box)`
   margin-top: 22px;
-  min-height: 450px;
-  max-height: 520px;
+  height: 520px;
   overflow-y: auto;
 `;
 
@@ -139,21 +146,26 @@ const ChoosePlanet: React.FC = () => {
                 />
               </Flex>
               <ScrollBox className='planet_list_content'>
-                {(StarList ?? []).map((item, index) => (
-                  <React.Fragment key={`${item.id}_${item.name}`}>
-                    <PlanetBox
-                      info={item}
-                      className={`${`planet_choose_${index}`}`}
-                      setShowListModule={e => {
-                        if (item.in_queue) {
-                          setVisible(true);
-                        } else {
-                          setShowListModule(e);
-                        }
-                      }}
-                    />
-                  </React.Fragment>
-                ))}
+                {StarList.length ? (
+                  <>
+                    {(StarList ?? []).map((item, index) => (
+                      <PlanetBox
+                        key={`${item.id}_${item.name}`}
+                        info={item}
+                        className={`${`planet_choose_${index}`}`}
+                        setShowListModule={e => {
+                          if (item.in_queue) {
+                            setVisible(true);
+                          } else {
+                            setShowListModule(e);
+                          }
+                        }}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <Empty />
+                )}
               </ScrollBox>
             </BorderBox>
           </Flex>

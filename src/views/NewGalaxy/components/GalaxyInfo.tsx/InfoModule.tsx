@@ -35,8 +35,9 @@ import { useToast } from 'contexts/ToastsContext';
 import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
 
 const InfoModule: React.FC<{
+  OpenInfo: boolean;
   setOpenInfo: (e) => void;
-}> = ({ setOpenInfo }) => {
+}> = ({ OpenInfo, setOpenInfo }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { onAuction } = useAuction();
@@ -168,7 +169,7 @@ const InfoModule: React.FC<{
   }, [dispatch, currentGalaxy, getClaimMax]);
 
   return (
-    <InfoModuleBox>
+    <InfoModuleBox className={OpenInfo ? 'Show' : 'close'}>
       <Flex mb='16px' justifyContent='space-between'>
         <Flex alignItems='flex-end'>
           <NormalMarkText bold fontSize='20px'>

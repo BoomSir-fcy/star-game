@@ -16,14 +16,41 @@ import usePlunder from 'views/NewGalaxy/hook';
 import { fetchGalaxyStarListAsync } from 'state/galaxy/reducer';
 import TipsOccupiedModul from './TipsOccupiedModul';
 
-const OutModule = styled(Box)<{ ShowListModule: boolean }>`
-  display: ${({ ShowListModule }) => (ShowListModule ? 'block' : 'none')};
+const OutModule = styled(Box)`
   position: absolute;
   width: 548px;
   height: 718px;
   z-index: 2;
-  right: 0;
   top: -60px;
+  right: -548px;
+  opacity: 0;
+  transition: all 0.5s ease;
+  &.active {
+    opacity: 1;
+    right: 0;
+    animation: activeDom 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 alternate
+      forwards;
+  }
+  &.removeActive {
+    animation: removeDom 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 alternate
+      forwards;
+  }
+  @keyframes activeDom {
+    0% {
+      right: -548px;
+    }
+    100% {
+      right: 0;
+    }
+  }
+  @keyframes removeDom {
+    0% {
+      right: 0;
+    }
+    100% {
+      right: -548px;
+    }
+  }
 `;
 
 const CloseBox = styled(Flex)`
@@ -189,7 +216,7 @@ const OccupiedModul: React.FC<{
   }, [galaxyStarList]);
 
   return (
-    <OutModule ShowListModule={ShowListModule}>
+    <OutModule className={ShowListModule ? 'active' : 'removeActive'}>
       <ListBox>
         <CloseBox onClick={() => setShowListModule(false)}>
           <CloseImg src='/images/commons/icon/back.png' alt='' />
