@@ -204,11 +204,13 @@ const InfoModule: React.FC<{
               {OwnerInfo.nickname}
             </NormalMarkText>
           </Flex>
-          <Text fontSize='14px'>
-            {t('已经领取到了')}
-            &nbsp; &nbsp;
-            {EasyformatTime(HoldTime(OwnerInfo.hold_time), true)}
-          </Text>
+          {OwnerInfo.nickname && (
+            <Text fontSize='14px'>
+              {t('已经领取到了')}
+              &nbsp; &nbsp;
+              {EasyformatTime(HoldTime(OwnerInfo.hold_time), true)}
+            </Text>
+          )}
         </Box>
       </Flex>
       <Flex mb='8px' justifyContent='space-between'>

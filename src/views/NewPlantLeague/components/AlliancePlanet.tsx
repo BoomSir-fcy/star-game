@@ -44,6 +44,10 @@ const AlliancePlanet: React.FC<{
         url: allianceList[i]?.planet?.picture1 || '',
         No: i + 1,
         Leve: allianceList[i]?.planet?.level || '',
+        resources:
+          !allianceList[i]?.planet?.stone_enough ||
+          !allianceList[i]?.planet?.population_enough ||
+          !allianceList[i]?.planet?.energy_enough,
       };
       arr.push(obj);
     }
@@ -119,11 +123,7 @@ const AlliancePlanet: React.FC<{
                   url={item.url}
                   No={item.No}
                   Leve={item.Leve}
-                  resources={
-                    item.stone_enough ||
-                    item.population_enough ||
-                    item.energy_enough
-                  }
+                  resources={item.resources}
                   resourcesText={t('资源不足')}
                 />
               </Box>

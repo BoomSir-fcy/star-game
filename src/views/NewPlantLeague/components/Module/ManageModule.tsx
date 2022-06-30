@@ -9,6 +9,13 @@ import ScoringPanel from 'components/ScoringPanel';
 import { getPlanetRarity } from 'utils/planetRarity';
 import { useNavigate } from 'react-router-dom';
 
+const OutBox = styled(Box)`
+  width: 680px;
+  height: 264px;
+  background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
+  border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
+`;
+
 const IconUnion = styled(Image)`
   position: absolute;
   bottom: 0;
@@ -47,7 +54,7 @@ const ManageModule: React.FC<{
 
   return (
     <Box zIndex={1} position='absolute' left={0} bottom={-20}>
-      <BgCard variant='Sl' padding='30px'>
+      <OutBox padding='16px'>
         <Flex height='100%' justifyContent='space-between' alignItems='center'>
           <Box position='relative'>
             <PlanetBall
@@ -116,7 +123,7 @@ const ManageModule: React.FC<{
             </Flex>
           </InfoFlex>
         </Flex>
-      </BgCard>
+      </OutBox>
     </Box>
   );
 };
