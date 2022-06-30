@@ -1,38 +1,63 @@
 /* eslint-disable */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 const getImageUrl = (url?: string) => {
-  return `${window.location.origin}/images/star/${url ? url?.substring(url?.lastIndexOf('/') + 1) : '36.jpg'
-    }`
-}
+  return `${window.location.origin}/images/star/${
+    url ? url?.substring(url?.lastIndexOf('/') + 1) : '36.jpg'
+  }`;
+};
 
 const useGrowThree = (dom: Element, url: string) => {
-  var renderer, scene, camera, composer, circle, particle, luminor, halo, galaxy;
+  var renderer,
+    scene,
+    camera,
+    composer,
+    circle,
+    particle,
+    luminor,
+    halo,
+    galaxy,
+    width,
+    height;
   var lights = [];
+  var timer = null;
   useEffect(() => {
     if (dom && url) {
+      console.log('----------初始化---------');
       const src = getImageUrl(url);
+
       init(src);
       animate();
     }
-  }, [dom, url])
+
+    return () => {
+      if (timer) {
+        console.log('清除 timer--------->', timer);
+        cancelAnimationFrame(timer);
+      }
+    };
+  }, [dom, url]);
 
   function init(textureSrc) {
+    width = dom.clientWidth;
+    height = dom.clientHeight;
     renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: true
+      alpha: true,
     });
-    renderer.setPixelRatio((window.devicePixelRatio) ? window.devicePixelRatio : 1);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(
+      window.devicePixelRatio ? window.devicePixelRatio : 1,
+    );
+    renderer.setSize(width, height);
     renderer.autoClear = false;
     renderer.setClearColor(0x000000, 0.0);
     dom.appendChild(renderer.domElement);
 
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+    camera = new THREE.PerspectiveCamera(75, width / height, 1, 1000);
     camera.position.z = 400;
     scene.add(camera);
 
@@ -53,38 +78,46 @@ const useGrowThree = (dom: Element, url: string) => {
 
     var material = new THREE.MeshPhongMaterial({
       color: 0x111111,
-      shading: THREE.FlatShading
+      flatShading: THREE.FlatShading,
     });
 
     for (var i = 0; i < 500; i++) {
       var mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-      mesh.position.multiplyScalar(200 + (Math.random() * 500));
-      mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+      mesh.position
+        .set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5)
+        .normalize();
+      mesh.position.multiplyScalar(200 + Math.random() * 500);
+      mesh.rotation.set(
+        Math.random() * 2,
+        Math.random() * 2,
+        Math.random() * 2,
+      );
       particle.add(mesh);
     }
 
-    console.log(new THREE.ImageUtils())
+    console.log(new THREE.ImageUtils());
 
     var mat = new THREE.MeshPhongMaterial({
       color: 0xcea3a3,
       emissive: 0x000000,
       //shading: THREE.FlatShading,
-      shading: THREE.SmoothShading,
+      flatShading: THREE.SmoothShading,
       bumpScale: 0.025,
       map: new THREE.TextureLoader().load(textureSrc),
       bumpMap: new THREE.TextureLoader().load(textureSrc),
       specularMap: new THREE.TextureLoader().load(textureSrc),
-      specular: new THREE.Color('grey')
+      specular: new THREE.Color('grey'),
     });
 
     var mat3 = new THREE.ShaderMaterial({
       uniforms: {},
-      vertexShader: 'varying vec3 vNormal; void main() { vNormal = normalize( normalMatrix * normal ); gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 ); }',
-      fragmentShader: 'varying vec3 vNormal; void main() { float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 4.0 ); gl_FragColor = vec4( 1.3, 1.0, 1.0, 1.0 ) * intensity; }',
+      vertexShader:
+        'varying vec3 vNormal; void main() { vNormal = normalize( normalMatrix * normal ); gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 ); }',
+      fragmentShader:
+        'varying vec3 vNormal; void main() { float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 0.5 ) ), 4.0 ); gl_FragColor = vec4( 1.3, 1.0, 1.0, 1.0 ) * intensity; }',
       side: THREE.BackSide,
       blending: THREE.AdditiveBlending,
-      transparent: true
+      transparent: true,
     });
 
     var planet = new THREE.Mesh(geo_planet, mat);
@@ -97,7 +130,7 @@ const useGrowThree = (dom: Element, url: string) => {
 
     var ball2 = new THREE.Mesh(geom3, mat3);
     ball2.scale.x = ball2.scale.y = ball2.scale.z = 12;
-    ball2.position.set(25, 5, 1)
+    ball2.position.set(25, 5, 1);
     halo.add(ball2);
 
     var ambientLight = new THREE.AmbientLight(0x000000);
@@ -115,9 +148,8 @@ const useGrowThree = (dom: Element, url: string) => {
     scene.add(lights[1]);
     scene.add(lights[2]);
 
-    window.addEventListener('resize', onWindowResize, false);
-
-  };
+    // window.addEventListener('resize', onWindowResize, false);
+  }
 
   function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -127,10 +159,10 @@ const useGrowThree = (dom: Element, url: string) => {
 
   function animate() {
     var timer = 0.0001 * Date.now();
-    requestAnimationFrame(animate);
+    timer = requestAnimationFrame(animate);
 
-    particle.rotation.x += 0.0000;
-    particle.rotation.y -= 0.0040;
+    particle.rotation.x += 0.0;
+    particle.rotation.y -= 0.004;
     circle.rotation.x -= 0.001;
     circle.rotation.y -= 0.001;
 
@@ -140,8 +172,8 @@ const useGrowThree = (dom: Element, url: string) => {
     //halo.scale.y = Math.sin( timer * 7 ) * 0.09 + 1;
 
     renderer.clear();
-    renderer.render(scene, camera)
-  };
-}
+    renderer.render(scene, camera);
+  }
+};
 
 export default useGrowThree;

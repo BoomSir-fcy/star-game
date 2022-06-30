@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import Modal from 'components/Modal';
@@ -12,6 +12,12 @@ import { useToast } from 'contexts/ToastsContext';
 import { getBoxAddress } from 'utils/addressHelpers';
 import { TokenImage } from 'components/TokenImage';
 import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
+import {
+  splitThousandSeparator,
+  formatLocalisedCompactNumber,
+  formatDisplayApr,
+} from 'utils/formatBalance';
+import BigNumber from 'bignumber.js';
 
 const TokenGroupBox = styled(Box)`
   width: 261px;
@@ -65,6 +71,9 @@ const TokenInfo = () => {
     [setActiveToken, setVisible, toastError],
   );
 
+  const format = useCallback((number: number) => {
+    return formatDisplayApr(number);
+  }, []);
   return (
     <Box mt='-8px' position='relative'>
       <Flex>
@@ -88,7 +97,7 @@ const TokenInfo = () => {
                   ellipsis
                   title={`${Product.power}`}
                 >
-                  {Product.power}
+                  {splitThousandSeparator(Product.power)}
                 </Text>
               </Flex>
             </Flex>
@@ -112,7 +121,7 @@ const TokenInfo = () => {
                   ellipsis
                   title={`${TokenBlance('BOX')?.amount}`}
                 >
-                  {TokenBlance('BOX')?.amount}
+                  {format(TokenBlance('BOX')?.amount)}
                 </Text>
               </Flex>
               <Text ml='8px' small>
@@ -135,7 +144,7 @@ const TokenInfo = () => {
                   ellipsis
                   title={`${TokenBlance('BNB')?.amount}`}
                 >
-                  {TokenBlance('BNB')?.amount}
+                  {format(TokenBlance('BNB')?.amount)}
                 </Text>
               </Flex>
               <Text ml='8px' small>
@@ -155,7 +164,7 @@ const TokenInfo = () => {
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={30} height={32} tokenAddress='ORE' />
                 <Text small ml='8px' ellipsis title={`${Product.stone}`}>
-                  {Product.stone}
+                  {format(Product.stone)}
                 </Text>
               </Flex>
               <Text ml='8px' small>
@@ -173,7 +182,7 @@ const TokenInfo = () => {
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={30} height={32} tokenAddress='SPICES' />
                 <Text small ml='8px' ellipsis title={`${Product.population}`}>
-                  {Product.population}
+                  {format(Product.population)}
                 </Text>
               </Flex>
               <Text ml='8px' small>
@@ -191,7 +200,7 @@ const TokenInfo = () => {
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={30} height={32} tokenAddress='ENG' />
                 <Text small ml='8px' ellipsis title={`${Product.energy}`}>
-                  {Product.energy}
+                  {format(Product.energy)}
                 </Text>
               </Flex>
               <Text ml='8px' small>
