@@ -51,12 +51,10 @@ export const QueueBuilding: React.FC<{
     timer = setInterval(() => {
       const { time } = state;
       if (time > 0) {
-        console.log(time, diffTime, 22222);
         setState(p => {
           p.time = time - 1;
         });
       } else {
-        console.log('clear');
         clearInterval(timer);
         onComplete();
       }
@@ -71,7 +69,6 @@ export const QueueBuilding: React.FC<{
 
   React.useEffect(() => {
     if (status !== 3 && diffTime > 0) {
-      console.log(diffTime, 1111);
       countDown();
     }
     return () => clearInterval(timer);

@@ -11,8 +11,8 @@ const scales = {
 
 const scaleVariants = {
   [scales.MD]: {
-    width: '436px',
-    height: '80px',
+    width: '337px',
+    height: 'auto',
     padding: '10px 10px 14px',
   },
   [scales.SM]: {
@@ -59,9 +59,9 @@ const ScoringPanel: React.FC<ScoringPanelProps> = ({
       {ellipsis ? (
         <>
           <Image
-            margin='0 7.5px'
-            width={22}
-            height={22}
+            margin='0 6px'
+            width={17}
+            height={15}
             src='/images/commons/icon/star-a.png'
           />
           <Text fontSize='18px'> x {count}</Text>
@@ -73,18 +73,18 @@ const ScoringPanel: React.FC<ScoringPanelProps> = ({
               return (
                 <Image
                   key={`${item}_${index}`}
-                  margin='0 7.5px'
-                  width={22}
-                  height={22}
+                  margin='0 6px'
+                  width={17}
+                  height={15}
                   src='/images/commons/icon/star-s.png'
                 />
               );
             return (
               <Image
                 key={`${item}_${index}`}
-                margin='0 8px'
-                width={22}
-                height={22}
+                margin='0 6px'
+                width={17}
+                height={15}
                 src='/images/commons/icon/star-a.png'
               />
             );

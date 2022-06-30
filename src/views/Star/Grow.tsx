@@ -84,6 +84,10 @@ const Grow: React.FC = () => {
     },
     now_level: null,
     next_level: null,
+    now_units: [],
+    estimate_units: [],
+    now_power: 0,
+    estimate_power: 0,
   });
 
   const [stepsEnabled, setStepsEnabled] = useState(true);

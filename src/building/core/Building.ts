@@ -26,6 +26,14 @@ export interface GameOptionsProps {
   offsetStartX?: number;
   offsetStartY?: number;
 }
+
+interface BuilderInfoOfApi {
+  building: Api.Building.Building;
+  position: {
+    from: { x: number; y: number };
+    to: { x: number; y: number };
+  }
+}
 /**
  * 游戏入口
  */
@@ -117,13 +125,13 @@ class Building extends EventTarget {
 
   // 取消选中
   addEventListenerOfWindow() {
-    window.addEventListener('click', () => {
-      if (this.activeBuilderFlag) {
-        this.activeBuilderFlag = false;
-        return;
-      }
-      this.removeActiveSolider();
-    });
+    // window.addEventListener('click', () => {
+    //   if (this.activeBuilderFlag) {
+    //     this.activeBuilderFlag = false;
+    //     return;
+    //   }
+    //   this.removeActiveSolider();
+    // });
     window.addEventListener('keyup', (e: KeyboardEvent) => {
       if (
         e.key === 'Delete' &&
@@ -184,7 +192,7 @@ class Building extends EventTarget {
     this.dispatchEvent(getAddActiveBuilderEvent(activeBuilder));
   }
 
-  // 移除当前选中小人
+  // 移除当前选中小人状态（不会删除棋盘上的棋子）
   removeActiveSolider() {
     if (this.activeBuilder) {
       this.dispatchEvent(getRemoveActiveBuilderEvent());
@@ -422,15 +430,12 @@ class Building extends EventTarget {
   }
 
   initBuilder(
-    list: {
-      building: Api.Building.Building;
-      position: {
-        from: { x: number; y: number };
-        to: { x: number; y: number };
-      };
-    }[],
+    list: BuilderInfoOfApi[],
   ) {
-    if (this.builders.length) return;
+    if (this.builders.length) {
+      this.updateBuilderState(list);
+      return
+    }
     list.forEach(item => {
       this.createBuilder(item.position.from.x, item.position.from.y, {
         building: item.building,
@@ -439,8 +444,32 @@ class Building extends EventTarget {
         race: item.building.race,
         areaX: item.building.propterty.size.area_x,
         areaY: item.building.propterty.size.area_y,
+        isBuilding: false,
+        builded: true,
       });
     });
+  }
+
+  updateBuilderState(list: BuilderInfoOfApi[]) {
+    console.log(this.builders)
+    console.log(list)
+    list.forEach(item => {
+      const builder = this.findBuilderByXY(item.position.from.x, item.position.from.y);
+      if (builder) {
+        builder.setIsBuilded(true);
+      } else {
+        this.createBuilder(item.position.from.x, item.position.from.y, {
+          building: item.building,
+          src: item.building.picture,
+          id: `${item.building._id}`,
+          race: item.building.race,
+          areaX: item.building.propterty.size.area_x,
+          areaY: item.building.propterty.size.area_y,
+          isBuilding: false,
+          builded: true,
+        });
+      }
+    })
   }
 
   /**
