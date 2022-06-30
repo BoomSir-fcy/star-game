@@ -236,8 +236,16 @@ const AlliancePlanetList: React.FC<{
           <MarkText fontSize='18px' bold fontStyle='normal'>
             {t('行星联盟更换')}
           </MarkText>
-          <Button onClick={ToSetWorking} padding='0 10px' height='42px'>
-            <Text>{t('保存更改')}</Text>
+          <Button
+            variant='purple'
+            width='max-content'
+            onClick={ToSetWorking}
+            padding='0 10px'
+            height='42px'
+          >
+            <Text color='textPrimary' fontSize='16px'>
+              {t('保存更改')}
+            </Text>
           </Button>
         </Flex>
         <ScrollBox>
@@ -263,18 +271,24 @@ const AlliancePlanetList: React.FC<{
                   />
                   <BtnFlex>
                     <ReplaceBtn
+                      variant='purple'
                       onClick={() => {
                         addPlanetToList(item.id, index, 1);
                       }}
                     >
-                      <Text>{t('替换')}</Text>
+                      <Text color='textPrimary' fontSize='16px'>
+                        {t('替换')}
+                      </Text>
                     </ReplaceBtn>
                     <ReplaceBtn
+                      variant='purple'
                       onClick={() => {
                         addPlanetToList(item.id, index, 2);
                       }}
                     >
-                      <Text>{t('删除')}</Text>
+                      <Text color='textPrimary' fontSize='16px'>
+                        {t('删除')}
+                      </Text>
                     </ReplaceBtn>
                   </BtnFlex>
                 </Box>
@@ -413,6 +427,8 @@ const AlliancePlanetList: React.FC<{
               height='150px'
             >
               <Button
+                variant='purple'
+                width='100px'
                 onClick={() => {
                   addPlanetToList(activePlanet.id, StarList.length, 1);
                 }}

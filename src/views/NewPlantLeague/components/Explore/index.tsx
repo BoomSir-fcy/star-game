@@ -114,7 +114,9 @@ const Explore: React.FC<{
         }}
       >
         <Flex flexDirection='column'>
-          <Text fontSize='22px'>{BtnShowText}</Text>
+          <Text color='textPrimary' fontSize='22px'>
+            {BtnShowText}
+          </Text>
           {alliance.working !== 0 && (
             <Text>
               {`( ${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')} )`}

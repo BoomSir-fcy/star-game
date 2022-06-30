@@ -8,7 +8,10 @@ import { useDispatch } from 'react-redux';
 import { EasyformatTime } from 'utils/timeFormat';
 import BigNumber from 'bignumber.js';
 import { SubString_1 } from 'utils/DecimalPlaces';
-import { splitThousandSeparator } from 'utils/formatBalance';
+import {
+  formatLocalisedCompactBalance,
+  splitThousandSeparator,
+} from 'utils/formatBalance';
 import Modal from 'components/Modal';
 import { useWeb3React } from '@web3-react/core';
 import { Api } from 'apis';
@@ -275,7 +278,9 @@ const OccupiedModul: React.FC<{
                     <SmText mr='10px' color='textSubtle'>
                       {t('24小时预计获得BOX')}:
                     </SmText>
-                    <SmText>{SubString_1(item.pre_box, 3)}</SmText>
+                    <SmText>
+                      {formatLocalisedCompactBalance(item.pre_box)}
+                    </SmText>
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>

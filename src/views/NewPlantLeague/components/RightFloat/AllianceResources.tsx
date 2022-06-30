@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { Text, Flex, Box, Button, MarkText } from 'uikit';
 import { TokenImage } from 'components/TokenImage';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'state';
+import { formatDisplayApr } from 'utils/formatBalance';
 
 const TokenGroupBox = styled(Box)`
   width: 261px;
@@ -31,6 +32,9 @@ const AllianceResources: React.FC = () => {
   const { t } = useTranslation();
   const { alliance, energy } = useStore(p => p.alliance.allianceView);
 
+  const format = useCallback((number: number) => {
+    return formatDisplayApr(number);
+  }, []);
   return (
     <TokenGroupBox>
       <ButtonLeft disabled variant='custom'>
@@ -38,7 +42,7 @@ const AllianceResources: React.FC = () => {
           <Flex alignItems='center' flex={1}>
             <TokenImage width={30} height={32} tokenAddress='ORE' />
             <Text small ml='8px' ellipsis>
-              {energy.total_stone}
+              {format(energy.total_stone)}
             </Text>
           </Flex>
           <Text small>{t('Ore')}</Text>
@@ -49,7 +53,7 @@ const AllianceResources: React.FC = () => {
           <Flex alignItems='center' flex={1}>
             <TokenImage width={30} height={32} tokenAddress='SPICES' />
             <Text small ml='8px' ellipsis>
-              {energy.total_population}
+              {format(energy.total_population)}
             </Text>
           </Flex>
           <Text small>{t('Spices')}</Text>
@@ -60,7 +64,7 @@ const AllianceResources: React.FC = () => {
           <Flex alignItems='center' flex={1}>
             <TokenImage width={30} height={32} tokenAddress='ENG' />
             <Text small ml='8px' ellipsis>
-              {energy.total_energy}
+              {format(energy.total_energy)}
             </Text>
           </Flex>
           <Text small>{t('Energy')}</Text>
