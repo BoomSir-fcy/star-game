@@ -11,12 +11,13 @@ import {
   fetchUserProductAsync,
 } from 'state/userInfo/reducer';
 import { BuildingValue, GameThing } from '../gameModel';
-import { useBuildingUpgrade, useBuildingOperate } from '../gameModel/hooks';
+import { useBuildingUpgrade } from '../gameModel/hooks';
 import { BuildingUpgrade } from './buildingUpgrade';
 import { BuildingCapacity } from './buildingCapacity';
 import { BuildingResources } from './buildingResources';
 import { BuildingArms } from './buildingArms';
 import { BuildingBuff } from './buildingBuff';
+import { BuildingConsume } from './buildingConsume';
 
 const Container = styled(Box)`
   position: absolute;
@@ -40,12 +41,13 @@ const SideCloseButton = styled(Button)`
 const Content = styled(Box)`
   position: relative;
   width: 547px;
-  min-height: 100vh;
+  height: 100vh;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid #4ffffb;
   opacity: 0;
   display: none;
   transition: all 0.5s ease;
+  padding-bottom: 0;
   &.active {
     opacity: 1;
     display: block;
@@ -106,7 +108,6 @@ export const SideRightBuildingInfo: React.FC<{
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { upgrade } = useBuildingUpgrade();
-  const { destory } = useBuildingOperate();
   const [upgradeInfo, setUpgradeInfo] = React.useState<any>({
     building_detail: {
       petri_dish: {
@@ -116,7 +117,11 @@ export const SideRightBuildingInfo: React.FC<{
     estimate_building_detail: {},
   });
   const currentAttributes = upgradeInfo?.building_detail?._id
-    ? { ...upgradeInfo?.building_detail, isbuilding: itemData?.isbuilding }
+    ? {
+        ...upgradeInfo?.building_detail,
+        isbuilding: itemData?.isbuilding,
+        _id: itemData?._id,
+      }
     : itemData;
   const estimate = upgradeInfo?.estimate_building_detail || {};
 
@@ -139,7 +144,7 @@ export const SideRightBuildingInfo: React.FC<{
         if (taregtBuildingLevel.length > 0) {
           selfLevel =
             taregtBuildingLevel[0]?.propterty?.levelEnergy + 2 ||
-            taregtBuildingLevel[0]?.target_level + 2;
+            taregtBuildingLevel[0]?.target_level + 1;
         }
       }
 
@@ -180,130 +185,140 @@ export const SideRightBuildingInfo: React.FC<{
             />
           </Box>
         </SideCloseButton>
-        <Box padding='23px'>
-          <Flex mb='20px' alignItems='flex-start'>
-            <GameThing
-              src={currentAttributes?.picture}
-              level={currentAttributes?.propterty?.levelEnergy}
-              scale='md'
-              border
-            />
-            <Flex
-              flex={1}
-              justifyContent='space-between'
-              alignItems='flex-start'
-            >
-              <Flex flexDirection='column' ml='19px' flex={1}>
-                <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
-                  {currentAttributes?.propterty?.name_cn}
-                </MarkText>
-                {currentAttributes.detail_type ===
-                  BuildingDetailType.BuildingDetailTypeStore && (
-                  <Text color='textSubtle'>
-                    {t('planetResourcesProducedPlanetaryBuildings')}
-                  </Text>
-                )}
-              </Flex>
-              <Destory
-                variant='text'
-                onClick={event => {
-                  event.stopPropagation();
-                  event.preventDefault();
-                  dispatch(
-                    storeAction.destoryBuildingModal({
-                      visible: true,
-                      destory: currentAttributes,
-                    }),
-                  );
-                }}
+        <Flex
+          flexDirection='column'
+          style={{
+            height: 'calc(100vh - 4px)',
+          }}
+        >
+          <Box padding='20px'>
+            <Flex mb='20px' alignItems='flex-start'>
+              <GameThing
+                src={currentAttributes?.picture}
+                level={currentAttributes?.propterty?.levelEnergy}
+                scale='md'
+                border
+              />
+              <Flex
+                flex={1}
+                justifyContent='space-between'
+                alignItems='flex-start'
               >
-                <Image
-                  src='../images/commons/icon/icon-destory.png'
-                  width={30}
-                  height={30}
-                />
-              </Destory>
+                <Flex flexDirection='column' ml='19px' flex={1}>
+                  <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
+                    {currentAttributes?.propterty?.name_cn}
+                  </MarkText>
+                  {currentAttributes.detail_type ===
+                    BuildingDetailType.BuildingDetailTypeStore && (
+                    <Text color='textSubtle'>
+                      {t('planetResourcesProducedPlanetaryBuildings')}
+                    </Text>
+                  )}
+                </Flex>
+                <Destory
+                  variant='text'
+                  onClick={event => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    dispatch(
+                      storeAction.destoryBuildingModal({
+                        visible: true,
+                        destory: currentAttributes,
+                      }),
+                    );
+                  }}
+                >
+                  <Image
+                    src='../images/commons/icon/icon-destory.png'
+                    width={30}
+                    height={30}
+                  />
+                </Destory>
+              </Flex>
             </Flex>
-          </Flex>
-          <Box mb='20px'>
-            <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
-              {t('Basic properties')}
-            </MarkText>
-            <Flex justifyContent='space-between' width='100%'>
-              <InfoCard>
-                <BuildingValue
-                  itemData={itemData}
-                  planet_id={planet_id}
-                  title={t('planetDurability')}
-                  value={`${
-                    currentAttributes?.propterty?.now_durability || 0
-                  }/${currentAttributes?.propterty?.max_durability || 0}`}
-                  icon='/images/commons/star/durability.png'
-                  isRepair={
-                    currentAttributes?.propterty?.now_durability <
-                    currentAttributes?.propterty?.max_durability
-                  }
-                />
-              </InfoCard>
-              <InfoCard>
-                <BuildingValue
-                  itemData={itemData}
-                  planet_id={planet_id}
-                  title={t('devour value')}
-                  value={currentAttributes?.exp}
-                  icon='/images/commons/star/attackValue.png'
-                />
-              </InfoCard>
-            </Flex>
+            <Box mb='20px'>
+              <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
+                {t('Basic properties')}
+              </MarkText>
+              <Flex justifyContent='space-between' width='100%'>
+                <InfoCard>
+                  <BuildingValue
+                    itemData={itemData}
+                    planet_id={planet_id}
+                    title={t('planetDurability')}
+                    value={`${
+                      currentAttributes?.propterty?.now_durability || 0
+                    }/${currentAttributes?.propterty?.max_durability || 0}`}
+                    icon='/images/commons/star/durability.png'
+                    isRepair={
+                      currentAttributes?.propterty?.now_durability <
+                      currentAttributes?.propterty?.max_durability
+                    }
+                    onClose={onClose}
+                  />
+                </InfoCard>
+                <InfoCard>
+                  <BuildingValue
+                    itemData={itemData}
+                    planet_id={planet_id}
+                    title={t('devour value')}
+                    value={currentAttributes?.exp}
+                    icon='/images/commons/star/attackValue.png'
+                  />
+                </InfoCard>
+              </Flex>
+            </Box>
+
+            <BuildingConsume currnet_building={currentAttributes} />
+
+            {(currentAttributes.detail_type ===
+              BuildingDetailType.BuildingDetailTypeStore ||
+              currentAttributes.detail_type ===
+                BuildingDetailType.BuildingDetailTypeCellar) && (
+              <BuildingResources
+                planet_id={planet_id}
+                currnet_building={currentAttributes}
+                estimate={estimate}
+                onClose={() => {
+                  onClose();
+                  dispatch(fetchUserBalanceAsync());
+                  dispatch(fetchUserProductAsync());
+                }}
+              />
+            )}
+
+            {currentAttributes.detail_type ===
+              BuildingDetailType.BuildingDetailTypeAk && (
+              <BuildingBuff currnet_building={currentAttributes} />
+            )}
+
+            {(currentAttributes.detail_type ===
+              BuildingDetailType.BuildingDetailTypeStone ||
+              currentAttributes.detail_type ===
+                BuildingDetailType.BuildingDetailTypeEnergy ||
+              currentAttributes.detail_type ===
+                BuildingDetailType.BuildingDetailTypePopulation) && (
+              <BuildingCapacity currnet_building={currentAttributes} />
+            )}
+
+            {(currentAttributes.detail_type ===
+              BuildingDetailType.BuildingDetailTypeFactory1 ||
+              currentAttributes.detail_type ===
+                BuildingDetailType.BuildingDetailTypeFactory2 ||
+              currentAttributes.detail_type ===
+                BuildingDetailType.BuildingDetailTypeFactory3) && (
+              <BuildingArms currnet_building={currentAttributes} />
+            )}
           </Box>
 
-          {(currentAttributes.detail_type ===
-            BuildingDetailType.BuildingDetailTypeStore ||
-            currentAttributes.detail_type ===
-              BuildingDetailType.BuildingDetailTypeCellar) && (
-            <BuildingResources
-              planet_id={planet_id}
-              currnet_building={currentAttributes}
-              estimate={estimate}
-              onClose={() => {
-                onClose();
-                dispatch(fetchUserBalanceAsync());
-                dispatch(fetchUserProductAsync());
-              }}
-            />
-          )}
-
-          {currentAttributes.detail_type ===
-            BuildingDetailType.BuildingDetailTypeAk && (
-            <BuildingBuff currnet_building={currentAttributes} />
-          )}
-
-          {(currentAttributes.detail_type ===
-            BuildingDetailType.BuildingDetailTypeStone ||
-            currentAttributes.detail_type ===
-              BuildingDetailType.BuildingDetailTypeEnergy ||
-            currentAttributes.detail_type ===
-              BuildingDetailType.BuildingDetailTypePopulation) && (
-            <BuildingCapacity currnet_building={currentAttributes} />
-          )}
-
-          {(currentAttributes.detail_type ===
-            BuildingDetailType.BuildingDetailTypeFactory1 ||
-            currentAttributes.detail_type ===
-              BuildingDetailType.BuildingDetailTypeFactory2 ||
-            currentAttributes.detail_type ===
-              BuildingDetailType.BuildingDetailTypeFactory3) && (
-            <BuildingArms currnet_building={currentAttributes} />
-          )}
-        </Box>
-
-        <BuildingUpgrade
-          planet={planet}
-          currnet_building={currentAttributes}
-          estimate={estimate}
-          onFinish={onClose}
-          onCreateBuilding={onCreateBuilding}
-        />
+          <BuildingUpgrade
+            planet={planet}
+            currnet_building={currentAttributes}
+            estimate={estimate}
+            onFinish={onClose}
+            onCreateBuilding={onCreateBuilding}
+          />
+        </Flex>
       </Content>
     </Container>
   );

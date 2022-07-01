@@ -339,6 +339,8 @@ const Details = () => {
               if (bool && activeBuilder) {
                 building?.removeBuilder(activeBuilder);
               }
+              building?.removeActiveSolider();
+              dispatch(setNavZIndex(true));
               setStateBuilding(p => {
                 p.visible = false;
               });

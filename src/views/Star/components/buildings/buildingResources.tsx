@@ -62,6 +62,10 @@ export const BuildingResources: React.FC<{
         setState(p => {
           p.visible = true;
           p.type = 1;
+          p.needMax.stone = store?.store_stone + store?.charge_stone;
+          p.needMax.population =
+            store?.store_population + store?.charge_population;
+          p.needMax.energy = store?.store_energy + store?.charge_energy;
         });
         setStoreAssets({
           [StoreType.STONE]: {
@@ -81,7 +85,7 @@ export const BuildingResources: React.FC<{
     } catch (error) {
       console.error(error);
     }
-  }, [planet_id, setState]);
+  }, [planet_id, setState, store]);
 
   const extractChange = React.useCallback(
     async val => {
@@ -153,6 +157,7 @@ export const BuildingResources: React.FC<{
     [account, dispatch, library, onClose, planet_id, setState, t, toastSuccess],
   );
 
+  console.log(state);
   return (
     <Box position='relative'>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>
@@ -294,6 +299,7 @@ export const BuildingResources: React.FC<{
       {state.visible && state.type === 1 && (
         <BuildingRechargeModal
           type={state.type}
+          defaultValue={state.needMax}
           maxValue={storeAssets}
           onFinish={rechargeChange}
           onClose={() =>

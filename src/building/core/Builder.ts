@@ -178,6 +178,8 @@ class Builder extends EventTarget {
         y: point.axisY + this.areaY,
       },
     };
+
+    this.setEnableDrag(false)
   }
 
   // 重置位置 用于拖动的时候

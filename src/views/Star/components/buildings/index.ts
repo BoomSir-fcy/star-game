@@ -10,3 +10,4 @@ export * from './buildingCapacity';
 export * from './buildingResources';
 export * from './buildingArms';
 export * from './buildingBuff';
+export * from './buildingConsume';

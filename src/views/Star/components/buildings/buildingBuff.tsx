@@ -6,7 +6,7 @@ import { useTranslation } from 'contexts/Localization';
 const Items = styled(Flex)`
   width: calc(100% / 3);
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 `;
 
 export const BuildingBuff: React.FC<{
@@ -16,8 +16,8 @@ export const BuildingBuff: React.FC<{
   const { ak_bonus_machine } = currnet_building;
 
   return (
-    <Box pb='40px'>
-      <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>
+    <Box>
+      <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
         {t('BUFF Details')}
       </MarkText>
       <Flex flexWrap='wrap'>
