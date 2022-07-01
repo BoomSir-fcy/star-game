@@ -124,7 +124,7 @@ const AlliancePlanet: React.FC<{
                   No={item.No}
                   Leve={item.Leve}
                   resources={item.resources}
-                  resourcesText={t('资源不足')}
+                  resourcesText={t('Insufficient resources')}
                 />
               </Box>
             ))}

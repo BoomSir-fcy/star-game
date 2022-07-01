@@ -111,14 +111,14 @@ const ManageModule: React.FC<{
                 height='42px'
                 onClick={() => gotoPlantDetail(planetInfo?.id)}
               >
-                <Text>{t('管理')}</Text>
+                <Text>{t('Manage')}</Text>
               </Button>
               <Button
                 onClick={() => addStar(planetInfo?.id)}
                 variant='danger'
                 height='42px'
               >
-                <Text>{t('替换')}</Text>
+                <Text>{t('Replace')}</Text>
               </Button>
             </Flex>
           </InfoFlex>
