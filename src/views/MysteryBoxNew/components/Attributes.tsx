@@ -41,7 +41,7 @@ const Attributes: React.FC<AttributesProps> = ({
           <AttrText>{info?.build_count}</AttrText>
         </LabelStyled>
       </Flex>
-      <Flex mt='11px'>
+      {/* <Flex mt='11px'>
         <LabelStyled>
           <LabelText>{t('Population')}: </LabelText>
           <AttrText>{info?.population}</AttrText>
@@ -54,7 +54,7 @@ const Attributes: React.FC<AttributesProps> = ({
           <LabelText>{t('Energy')}: </LabelText>
           <AttrText>{info?.energy}</AttrText>
         </LabelStyled>
-      </Flex>
+      </Flex> */}
     </Box>
   );
 };

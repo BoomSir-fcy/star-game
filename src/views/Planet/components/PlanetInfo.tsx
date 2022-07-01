@@ -7,7 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Text, Flex, Box, GraphicsCard, Image } from 'uikit';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
-import { formatDisplayApr, splitThousandSeparator } from 'utils/formatBalance';
+import {
+  formatDisplayApr,
+  formatLocalisedCompactNumber,
+} from 'utils/formatBalance';
 
 const InfoFlex = styled(Flex)`
   margin-top: 13px;
@@ -96,15 +99,17 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
                   </TextStyled>
                 </Flex>
                 <Flex alignItems='center'>
+                  <TextStyled color='textTips' small>
+                    {t('Ore')}
+                  </TextStyled>
                   <TextStyled
-                    color='textTips'
+                    ml='10px'
+                    ellipsis
                     small
                     title={`${info?.stone}/${info?.max_stone}`}
                   >
-                    {t('Ore')}
-                  </TextStyled>
-                  <TextStyled ml='10px' ellipsis small>
-                    {info?.stone}/{info?.max_stone}
+                    {formatDisplayApr(info?.stone, 1)}/
+                    {formatDisplayApr(info?.max_stone, 1)}
                   </TextStyled>
                 </Flex>
               </Box>
@@ -133,7 +138,8 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
                     ellipsis
                     title={`${info?.population}/${info?.max_population}`}
                   >
-                    {info?.population}/{info?.max_population}
+                    {formatDisplayApr(info?.population, 1)}/
+                    {formatDisplayApr(info?.max_population, 1)}
                   </TextStyled>
                 </Flex>
               </Box>
@@ -162,7 +168,8 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
                     small
                     title={`${info?.energy}/${info?.max_energy}`}
                   >
-                    {info?.energy}/{info?.max_energy}
+                    {formatDisplayApr(info?.energy, 1)}/
+                    {formatDisplayApr(info?.max_energy, 1)}
                   </TextStyled>
                 </Flex>
               </Box>

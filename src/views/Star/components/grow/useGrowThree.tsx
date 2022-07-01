@@ -4,12 +4,15 @@ import { useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 const getImageUrl = (url?: string) => {
+  if (!url) {
+    return 'preview.jpg';
+  }
   return `${window.location.origin}/images/star/${
     url ? url?.substring(url?.lastIndexOf('/') + 1) : '36.jpg'
   }`;
 };
 
-const useGrowThree = (dom: Element, url: string) => {
+const useGrowThree = (dom: Element, url?: string) => {
   var renderer,
     scene,
     camera,
@@ -24,7 +27,9 @@ const useGrowThree = (dom: Element, url: string) => {
   var lights = [];
   var timer = null;
   useEffect(() => {
-    if (dom && url) {
+    if (dom) {
+      console.log('----------初始化-----------');
+
       const src = getImageUrl(url);
 
       init(src);
@@ -92,8 +97,6 @@ const useGrowThree = (dom: Element, url: string) => {
       );
       particle.add(mesh);
     }
-
-    console.log(new THREE.ImageUtils());
 
     var mat = new THREE.MeshPhongMaterial({
       color: 0xcea3a3,
