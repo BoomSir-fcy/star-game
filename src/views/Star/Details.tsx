@@ -139,6 +139,22 @@ const Details = () => {
     };
   }, [initBuilder, building]);
 
+  const initBuildingBuilder = React.useCallback(() => {
+    console.log(stateBuilding.workQueue, building)
+    const createWorks = stateBuilding.workQueue.filter(item => item.work_type === 1);
+    building.initBuildingBuilder(createWorks);
+  }, [building, stateBuilding.workQueue]);
+
+  React.useEffect(() => {
+    if (building.boardsCreated) {
+      initBuildingBuilder();
+    }
+    building.addEventListener('boardsCreated', initBuildingBuilder);
+    return () => {
+      building.removeEventListener('boardsCreated', initBuildingBuilder);
+    };
+  }, [initBuildingBuilder, building]);
+
   const getWorkQueue = React.useCallback(async () => {
     try {
       const res = await refreshWorkQueue(id);
