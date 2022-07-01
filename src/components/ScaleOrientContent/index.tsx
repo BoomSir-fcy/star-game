@@ -105,7 +105,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  const { client } = useStore(p => p.user);
+  const { client, zIndex } = useStore(p => p.user);
   const guideState = useStore(p => p.guide);
 
   const [minHeight, setMinHeight] = useState(900);
@@ -209,7 +209,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   }, [pathname, params]);
 
   return (
-    <Box position='relative' id='detect-orient' ref={ref}>
+    <Box zIndex={99} position='relative' id='detect-orient' ref={ref}>
       <ResetCSS scale={scale} rotate={client?.width < client?.height} />
       <StarrySky bgType={bgType} />
       <VideoComponent

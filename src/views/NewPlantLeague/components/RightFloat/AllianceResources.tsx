@@ -70,11 +70,11 @@ const AllianceResources: React.FC = () => {
           <Text small>{t('Energy')}</Text>
         </Flex>
       </ButtonLeft>
-      <Box position='absolute' left='34%' top='4px'>
+      <Flex position='absolute' top='4px' justifyContent='center' width='100%'>
         <MarkText fontSize='14px' fontStyle='normal' bold>
-          {t('行星联盟资源')}
+          {t('Planetary Alliance Resources')}
         </MarkText>
-      </Box>
+      </Flex>
     </TokenGroupBox>
   );
 };

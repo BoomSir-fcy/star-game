@@ -1,11 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import BigNumber from 'bignumber.js';
 import { useImmer } from 'use-immer';
 import { Flex, Box, GraphicsCard, Button, MarkText, Slider, Text } from 'uikit';
 import { TokenImage } from 'components/TokenImage';
 
-import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
 
 const Container = styled(GraphicsCard)`

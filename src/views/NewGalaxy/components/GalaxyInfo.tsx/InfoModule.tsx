@@ -177,7 +177,7 @@ const InfoModule: React.FC<{
           </NormalMarkText>
           <Flex ml='30px' alignItems='flex-end'>
             <Text fontSize='14px' mr='15px'>
-              {t('星系总战力')}
+              {t('Total galaxy power')}
             </Text>
             <NormalMarkText bold fontSize='18px'>
               {splitThousandSeparator(OwnerInfo.power)}
@@ -198,7 +198,7 @@ const InfoModule: React.FC<{
         <Box ml='18px'>
           <Flex mb='10px' alignItems='flex-end'>
             <Text fontSize='14px' mr='15px'>
-              {t('星系主')}
+              {t('Galaxy master')}
             </Text>
             <NormalMarkText bold fontSize='16px'>
               {OwnerInfo.nickname}
@@ -206,7 +206,7 @@ const InfoModule: React.FC<{
           </Flex>
           {OwnerInfo.nickname && (
             <Text fontSize='14px'>
-              {t('已经领取到了')}
+              {t('Received')}
               &nbsp; &nbsp;
               {EasyformatTime(HoldTime(OwnerInfo.hold_time), true)}
             </Text>
@@ -220,7 +220,7 @@ const InfoModule: React.FC<{
           width='48%'
           height='max-content'
         >
-          <Text fontSize='14px'>{t('他累计获得BOX')}</Text>
+          <Text fontSize='14px'>{t('He has accumulated')}BOX</Text>
           <NormalMarkText bold fontSize='18px'>
             {SubString_1(OwnerInfo.owner_get_box, 5)}
           </NormalMarkText>
@@ -231,7 +231,7 @@ const InfoModule: React.FC<{
           width='48%'
           height='max-content'
         >
-          <Text fontSize='14px'>{t('历史累计获得BOX')}</Text>
+          <Text fontSize='14px'>{t('Accumulated history')}BOX</Text>
           <NormalMarkText bold fontSize='18px'>
             {SubString_1(OwnerInfo.all_get_box, 5)}
           </NormalMarkText>
@@ -239,16 +239,22 @@ const InfoModule: React.FC<{
       </Flex>
       <BorderBox mb='8px'>
         <Text fontSize='14px'>
-          {t('该星系历史所有星系主累计赚取')}26262 BNB
+          {t(
+            'All galaxy masters in the history of the galaxy have accumulated',
+          )}
+          {OwnerInfo.all_auction_num} BNB
         </Text>
       </BorderBox>
-      <Text fontSize='14px'>{t('历史记录')}</Text>
+      <Text fontSize='14px'>{t('History record')}</Text>
       <ScrollBox mb='10px'>
         {(auctionRecordList ?? []).map(item => (
           <Text key={item.id} fontSize='14px' mb='4px'>
             UTC {formatUTC(item.auctionAt, 'HH:mm:ss')}&nbsp;&nbsp;
             {shortenAddress(item.newOwner, 2)}&nbsp;&nbsp;
-            {t('以 %num%BNB 竞拍成功并成为该星系主', { num: item.price })}
+            {t(
+              'won the auction with %num%BNB and became the master of the system',
+              { num: item.price },
+            )}
           </Text>
         ))}
       </ScrollBox>
@@ -262,7 +268,7 @@ const InfoModule: React.FC<{
           onClick={handleClaim}
         >
           <Text color='textPrimary' bold>
-            {t('领取')}
+            {t('Claim')}
             {`(${SubString_1(claimMax, 6)}BOX)`}
           </Text>
         </AuctionBtn>
@@ -292,17 +298,20 @@ const InfoModule: React.FC<{
             ) : pending ? (
               <Dots>{t('Bidding')}</Dots>
             ) : (
-              t('竞拍( %num% BNB)', {
-                num: currentPrice ? `${currentPrice}` : '---',
-              })
+              `${t('Auction')}( ${
+                currentPrice ? `${currentPrice}` : '---'
+              }BNB )`
             )}
           </Text>
         </AuctionBtn>
         <Text color='#A9CCCB' fontSize='14px' ml='20px' mr='20px'>
-          {t('其中 %num1% BNB给上一任星系主, %num2%BNB 加入奖池', {
-            num1: incomingPrice ? `${incomingPrice}` : '---',
-            num2: prizPpool ? `${prizPpool}` : '---',
-          })}
+          {t(
+            'Among them, %num1% BNB is given to the previous galaxy master, and %num2% BNB is added to the prize pool',
+            {
+              num1: incomingPrice ? `${incomingPrice}` : '---',
+              num2: prizPpool ? `${prizPpool}` : '---',
+            },
+          )}
         </Text>
       </Flex>
     </InfoModuleBox>

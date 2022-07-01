@@ -229,7 +229,7 @@ const OccupiedModul: React.FC<{
         </CloseBox>
         <Flex mb='20px' justifyContent='space-between' alignItems='flex-end'>
           <MarkText fontSize='20px' bold fontStyle='normal'>
-            {t('占领恒星')}
+            {t('Occupy')}
           </MarkText>
         </Flex>
         <ScrollBox id='ScrollDom'>
@@ -243,7 +243,7 @@ const OccupiedModul: React.FC<{
                 <Box position='relative'>
                   <LeveFlex>
                     <MarkText fontStyle='normal' fontSize='14px' bold>
-                      # {item.number} 恒星
+                      # {item.number} {t('Star')}
                     </MarkText>
                   </LeveFlex>
                   <ImgBox>
@@ -265,13 +265,13 @@ const OccupiedModul: React.FC<{
                 >
                   <Flex alignItems='baseline'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('恒星主')}:
+                      {t('Stellar master')}:
                     </SmText>
-                    <SmText ellipsis>{item?.nick_name || t('暂无')}</SmText>
+                    <SmText ellipsis>{item?.nick_name || ''}</SmText>
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('奖励系数')}
+                      {t('Reward factor')}
                     </SmText>
                     <SmText>
                       {SubString_1(GetRewardFactor(item?.disapth_box), 3)}%
@@ -279,7 +279,7 @@ const OccupiedModul: React.FC<{
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('24小时预计获得BOX')}:
+                      {t('Expect to get BOX within 24 hours')}:
                     </SmText>
                     <SmText>
                       {formatLocalisedCompactBalance(item.pre_box)}
@@ -287,7 +287,7 @@ const OccupiedModul: React.FC<{
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('TA的占领时间')}:
+                      {t('TA occupation time')}:
                     </SmText>
                     <SmText>
                       {item?.nick_name

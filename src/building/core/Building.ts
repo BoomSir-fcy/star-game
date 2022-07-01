@@ -32,7 +32,7 @@ interface BuilderInfoOfApi {
   position: {
     from: { x: number; y: number };
     to: { x: number; y: number };
-  }
+  };
 }
 /**
  * 游戏入口
@@ -431,9 +431,7 @@ class Building extends EventTarget {
     return this.builders.find(builder => builder.axisPoint?.chequer === axis?.chequer);
   }
 
-  initBuilder(
-    list: BuilderInfoOfApi[],
-  ) {
+  initBuilder(list: BuilderInfoOfApi[]) {
     if (this.builders.length) {
       this.updateBuilderState(list, true);
       return
@@ -457,7 +455,6 @@ class Building extends EventTarget {
   ) {
     if (this.builders.length) {
       this.updateBuilderState(list);
-      console.log(list, 'updateBuilderState')
       return
     }
     list.forEach(item => {
@@ -476,7 +473,10 @@ class Building extends EventTarget {
 
   updateBuilderState(list: BuilderInfoOfApi[], created?: boolean) {
     list.forEach(item => {
-      const builder = this.findBuilderByXY(item.position.from.x, item.position.from.y);
+      const builder = this.findBuilderByXY(
+        item.position.from.x,
+        item.position.from.y,
+      );
       if (builder) {
         builder.setIsBuilded(true);
       } else {
@@ -491,7 +491,7 @@ class Building extends EventTarget {
           builded: !!created,
         });
       }
-    })
+    });
   }
 
   /**

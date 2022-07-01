@@ -104,18 +104,19 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
   }, [BigNumberBalance, Token, bnbBalance]);
 
   const ShowMaxBtn = useMemo(() => {
-    if (
-      TokenInfo.symbol === 'ORE' ||
-      TokenInfo.symbol === 'SPICES' ||
-      TokenInfo.symbol === 'ENG'
-    ) {
-      return true;
-    }
-    if (OperationType !== 1) {
-      return true;
-    }
-    return false;
-  }, [TokenInfo, OperationType]);
+    // if (
+    //   TokenInfo.symbol === 'ORE' ||
+    //   TokenInfo.symbol === 'SPICES' ||
+    //   TokenInfo.symbol === 'ENG'
+    // ) {
+    //   return true;
+    // }
+    // if (OperationType !== 1) {
+    //   return true;
+    // }
+    // return false;
+    return true;
+  }, []);
 
   // 复制地址
   const Copy = () => {

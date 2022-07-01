@@ -4,6 +4,7 @@ import { QualityColor } from 'uikit/theme/colors';
 import { Globe } from 'components';
 import { useStore } from 'state';
 import { useTranslation } from 'contexts/Localization';
+import { formatDisplayApr } from 'utils/formatBalance';
 import { GlobeFlex, Desc, useStarCss, LinkStyled } from '../styled';
 
 interface GlobeFlexListProps {
@@ -49,7 +50,7 @@ const GlobeFlexList: React.FC<GlobeFlexListProps> = ({
                         alignItems='center'
                       >
                         <Flex justifyContent='center' alignItems='center'>
-                          <Text fontSize='0.001rem'>战斗力</Text>
+                          <Text fontSize='0.001rem'>{t('Power')}</Text>
                           <Text
                             ml='0.4rem'
                             fontSize='1rem'
@@ -61,7 +62,7 @@ const GlobeFlexList: React.FC<GlobeFlexListProps> = ({
                           </Text>
                         </Flex>
                         <Text fontSize='1rem' fontStyle='normal' mark bold>
-                          {item?.power}
+                          {formatDisplayApr(item?.power)}
                         </Text>
                       </Flex>
                     )}
@@ -77,7 +78,8 @@ const GlobeFlexList: React.FC<GlobeFlexListProps> = ({
           {!planetList?.length && (
             <Flex
               mt='50px'
-              ml='25%'
+              // ml='25%'
+              width='100%'
               justifyContent='center'
               alignItems='center'
             >

@@ -59,9 +59,9 @@ export const PlanetBox: React.FC<{
                 </Text>
                 <Text bold>{info?.build_count}</Text>
               </Flex>
-              <Flex width='120px' mr='30px' alignItems='baseline'>
+              <Flex width='240px' mr='30px' alignItems='baseline'>
                 <Text mr='10px' color='textSubtle'>
-                  {t('兵种总数')}
+                  {t('Total number of arms')}
                 </Text>
                 <Text bold>{info?.arm_count}</Text>
               </Flex>
@@ -99,20 +99,22 @@ export const PlanetBox: React.FC<{
               <Button
                 mr='26px'
                 height='42px'
+                padding='0 10px'
                 onClick={() => {
                   navigate(`/star?id=${info.id}`);
                 }}
               >
-                <Text>{t('查看详情')}</Text>
+                <Text>{t('Details')}</Text>
               </Button>
               <Button
                 onClick={() => {
                   dispatch(setActivePlanet(info));
                   setShowListModule(true);
                 }}
+                padding='0 10px'
                 height='42px'
               >
-                <Text>{t('选择星球')}</Text>
+                <Text>{t('Choose planet')}</Text>
               </Button>
             </Flex>
           </Flex>

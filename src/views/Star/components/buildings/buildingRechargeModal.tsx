@@ -75,8 +75,6 @@ export const BuildingRechargeModal: React.FC<{
   //   };
   // }, [onClose]);
 
-  console.log(state);
-
   return (
     <Container width='547px' height='343px'>
       <MarkText bold fontStyle='normal' mb='25px'>

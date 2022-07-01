@@ -49,15 +49,15 @@ const Explore: React.FC<{
   const BtnShowText = useMemo(() => {
     // 工作中
     if (alliance.working !== 0) {
-      return t('探索中');
+      return t('Exploring');
     }
     // 次数用完
     if (max_work_count === now_work_count) {
       if (!userInfo.vipBenefits?.is_vip) {
-        return t('成为VIP可继续探索');
+        return t('Become a VIP to continue exploring');
       }
     }
-    return `${t('开始探索')}(${now_work_count}/${max_work_count})`;
+    return `${t('Start exploring')}(${now_work_count}/${max_work_count})`;
   }, [alliance, t, now_work_count, max_work_count, userInfo]);
 
   // 开始工作
@@ -86,15 +86,10 @@ const Explore: React.FC<{
     // 倒计时为0并且在工作状态
     console.log(diffSeconds, alliance.working);
     if (diffSeconds === 0 && alliance.working === 1) {
-      console.log('---1--');
-
       if (timer) {
-        console.log('---2--');
-
         clearInterval(timer.current);
       }
       timer.current = setInterval(() => {
-        console.log('--3---');
         dispatch(fetchAllianceViewAsync());
       }, 5000);
     }

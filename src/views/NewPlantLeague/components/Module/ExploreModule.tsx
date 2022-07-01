@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 const OutBox = styled(Box)`
   width: 682px;
-  height: 300px;
+  height: max-content;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
 `;
@@ -46,7 +46,7 @@ const ExploreModule: React.FC<{
       <OutBox padding='16px'>
         <Flex mb='20px' justifyContent='space-between' alignItems='center'>
           <MarkText fontSize='22px' bold>
-            {t('探索难度')}
+            {t('Difficulty to explore')}
           </MarkText>
           <GraphicsCard
             style={{ padding: 0 }}
@@ -60,7 +60,7 @@ const ExploreModule: React.FC<{
                 onClick={() => setDifficulty(0)}
               >
                 <Text color='textPrimary' fontSize='16px' bold>
-                  {t('简单')}
+                  {t('Simple')}
                 </Text>
               </ChooseBtn>
               <ChooseBtn
@@ -68,7 +68,7 @@ const ExploreModule: React.FC<{
                 onClick={() => setDifficulty(1)}
               >
                 <Text color='textPrimary' fontSize='16px' bold>
-                  {t('一般')}
+                  {t('Generally')}
                 </Text>
               </ChooseBtn>
               <ChooseBtn
@@ -76,7 +76,7 @@ const ExploreModule: React.FC<{
                 onClick={() => setDifficulty(2)}
               >
                 <Text color='textPrimary' fontSize='16px' bold>
-                  {t('高级')}
+                  {t('Advanced')}
                 </Text>
               </ChooseBtn>
             </ChooseFlex>
@@ -85,26 +85,14 @@ const ExploreModule: React.FC<{
         <RulesFlex>
           <Box mb='20px'>
             <RulesText>
-              {t(
-                '* 探索难度决定了您的资源奖励获取系数，同时也会在遭遇战中根据难度匹配到不同实力的对手，遭遇战失败会扣除部分开采的资源，但可通过在行星中摆放地窖减少损失。',
-              )}
-              <span style={{ color: '#4FFFFB' }}>
-                {t('(简单25%，一般30%，困难35%)')}
-              </span>
+              {t('ExploreRules1')}
+              <span style={{ color: '#4FFFFB' }}>{t('ExploreRules2')}</span>
             </RulesText>
-            <RulesText>
-              {t(
-                '* 根据自身的定位，合理的管理行星建筑和摆放兵种，会有更好的结果。',
-              )}
-            </RulesText>
-            <RulesText>
-              {t('*  合理的管理行星，会加强自己的战斗能力。')}
-            </RulesText>
-            <RulesText>{t('*  战斗的部署策略也能让你脱颖而出。')}</RulesText>
+            <RulesText>{t('ExploreRules3')}</RulesText>
+            <RulesText>{t('ExploreRules4')}</RulesText>
+            <RulesText>{t('ExploreRules5')}</RulesText>
           </Box>
-          <RulesText color='redText'>
-            {t('探索耗时：4小时(不可取消)')}
-          </RulesText>
+          <RulesText color='redText'>{t('ExploreRules6')}</RulesText>
         </RulesFlex>
       </OutBox>
     </Box>

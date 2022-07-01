@@ -116,7 +116,7 @@ const SelectPlanet = () => {
         <Box>
           <Flex padding='0 20px' mb='60px'>
             <BackButton />
-            <RefreshButton ml='33px' />
+            <RefreshButton onRefresh={() => init()} ml='33px' />
           </Flex>
           <Nav
             activeId={Number(parsedQs.t)}
@@ -161,8 +161,8 @@ const SelectPlanet = () => {
         </Box>
         <Flex ml='30px' mr='30px' flex={1}>
           <GraphicsCard
-            width='100%'
-            height='100%'
+            width='1589px'
+            height='802px'
             borderWidth={2}
             padding='26px 30px'
           >
