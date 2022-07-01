@@ -242,7 +242,7 @@ const InfoModule: React.FC<{
           {t(
             'All galaxy masters in the history of the galaxy have accumulated',
           )}
-          26262 BOX
+          {OwnerInfo.all_auction_num} BNB
         </Text>
       </BorderBox>
       <Text fontSize='14px'>{t('History record')}</Text>

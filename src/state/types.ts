@@ -132,7 +132,7 @@ export interface OwnerInfoView {
   avatar: string;
   owner_get_box: number;
   all_get_box: number;
-  auction_count: number;
+  all_auction_num: number;
   power: number;
 }
 export interface AllLogsInfo {
