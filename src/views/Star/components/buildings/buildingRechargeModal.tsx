@@ -43,14 +43,14 @@ export const BuildingRechargeModal: React.FC<{
     (
       (maxValue[StoreType.STONE].already / maxValue[StoreType.STONE].max) *
       100
-    ).toFixed(2),
+    ).toFixed(0),
   );
   const populationProportion = Number(
     (
       (maxValue[StoreType.POPULATION].already /
         maxValue[StoreType.POPULATION].max) *
       100
-    ).toFixed(2),
+    ).toFixed(0),
   );
   const energyProportion = Number(
     (
@@ -74,6 +74,8 @@ export const BuildingRechargeModal: React.FC<{
   //     window.removeEventListener('click', onClose);
   //   };
   // }, [onClose]);
+
+  console.log(state);
 
   return (
     <Container width='547px' height='343px'>
