@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import BigNumber from 'bignumber.js';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, MarkText, Text, Image } from 'uikit';
 
 import { useTranslation } from 'contexts/Localization';
+import { formatDisplayApr } from 'utils/formatBalance';
 
 const Container = styled(Box)`
   position: relative;
@@ -115,30 +117,50 @@ export const BuildingUpgrade: React.FC<{
             <Items alignItems='center'>
               <Text>{t('EnergyRequiredBuild')}</Text>
               <Text
+                ml='2px'
+                small
                 color={`${
-                  planetAssets?.energy <
-                  currnet_building?.upgrade_need?.upgrade_energy
+                  planetAssets?.energy < estimate?.upgrade_need?.upgrade_energy
                     ? 'warning'
                     : 'progressGreenBar'
                 }`}
               >
-                {currnet_building?.upgrade_need?.upgrade_energy}
+                {formatDisplayApr(
+                  new BigNumber(
+                    estimate?.upgrade_need?.upgrade_energy,
+                  ).toNumber(),
+                )}
               </Text>
-              <Text>/{planetAssets?.energy}</Text>
+              <Text small>
+                /
+                {formatDisplayApr(
+                  new BigNumber(planetAssets?.energy).toNumber(),
+                )}
+              </Text>
             </Items>
             <Items alignItems='center' justifyContent='flex-end'>
               <Text>{t('OreRequiredConstruction')}</Text>
               <Text
+                ml='2px'
+                small
                 color={`${
-                  planetAssets?.stone <
-                  currnet_building?.upgrade_need?.upgrade_stone
+                  planetAssets?.stone < estimate?.upgrade_need?.upgrade_stone
                     ? 'warning'
                     : 'progressGreenBar'
                 }`}
               >
-                {currnet_building?.upgrade_need?.upgrade_stone}
+                {formatDisplayApr(
+                  new BigNumber(
+                    estimate?.upgrade_need?.upgrade_stone,
+                  ).toNumber(),
+                )}
               </Text>
-              <Text>/{planetAssets?.stone}</Text>
+              <Text small>
+                /
+                {formatDisplayApr(
+                  new BigNumber(planetAssets?.stone).toNumber(),
+                )}
+              </Text>
             </Items>
           </Flex>
 
@@ -146,30 +168,49 @@ export const BuildingUpgrade: React.FC<{
             <Items alignItems='center'>
               <Text>{t('SpicesNeededToBuild')}</Text>
               <Text
+                ml='2px'
+                small
                 color={`${
                   planetAssets?.population <
-                  currnet_building?.upgrade_need?.upgrade_population
+                  estimate?.upgrade_need?.upgrade_population
                     ? 'warning'
                     : 'progressGreenBar'
                 }`}
               >
-                {currnet_building?.upgrade_need?.upgrade_population}
+                {formatDisplayApr(
+                  new BigNumber(
+                    estimate?.upgrade_need?.upgrade_population,
+                  ).toNumber(),
+                )}
               </Text>
-              <Text>/{planetAssets?.population}</Text>
+              <Text small>
+                /
+                {formatDisplayApr(
+                  new BigNumber(planetAssets?.population).toNumber(),
+                )}
+              </Text>
             </Items>
             <Items alignItems='center' justifyContent='flex-end'>
               <Text>{t('BuildRequiredBOX')}</Text>
               <Text
+                ml='2px'
+                small
                 color={`${
-                  planetAssets?.stone <
-                  currnet_building?.upgrade_need?.upgrade_box
+                  planetAssets?.stone < estimate?.upgrade_need?.upgrade_box
                     ? 'warning'
                     : 'progressGreenBar'
                 }`}
               >
-                {currnet_building?.upgrade_need?.upgrade_box}
+                {formatDisplayApr(
+                  new BigNumber(estimate?.upgrade_need?.upgrade_box).toNumber(),
+                )}
               </Text>
-              <Text>/{TokenBlance('BOX')?.amount}</Text>
+              <Text small>
+                /
+                {formatDisplayApr(
+                  new BigNumber(TokenBlance('BOX')?.amount).toNumber(),
+                )}
+              </Text>
             </Items>
           </Flex>
         </Flex>

@@ -28,7 +28,9 @@ export const ResourceSlider: React.FC<{
       <Flex flexDirection='column' flex={1} ml='9px'>
         <Flex justifyContent='space-between' alignItems='center'>
           <Text color='textSubtle'>{title}</Text>
-          <Text>{maxValue}</Text>
+          <Text small>
+            {Number(((defaultValue / 100) * maxValue).toFixed(0))}/{maxValue}
+          </Text>
         </Flex>
         <Slider
           name='lp-amount'
@@ -116,10 +118,32 @@ export const BuildingResourceModal: React.FC<{
           width='226px'
           height='53px'
           variant='purple'
-          onClick={() => onFinish(state)}
+          onClick={() => {
+            const params = {
+              stone:
+                state.stone === 100
+                  ? maxValue?.stone
+                  : Number(((state.stone / 100) * maxValue?.stone).toFixed(0)),
+              population:
+                state.population === 100
+                  ? maxValue?.population
+                  : Number(
+                      ((state.population / 100) * maxValue?.population).toFixed(
+                        0,
+                      ),
+                    ),
+              energy:
+                state.energy === 100
+                  ? maxValue?.energy
+                  : Number(
+                      ((state.energy / 100) * maxValue?.energy).toFixed(0),
+                    ),
+            };
+            onFinish(params);
+          }}
         >
           <Text bold fontSize='16px' color='#4FFFFB'>
-            {t('确认提取')}
+            {t('Confirm Extract')}
           </Text>
         </Button>
       </Flex>

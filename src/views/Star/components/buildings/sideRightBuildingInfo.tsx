@@ -6,8 +6,11 @@ import { useStore, storeAction } from 'state';
 import { useTranslation } from 'contexts/Localization';
 import { BuildingDetailType } from 'state/types';
 import { useDispatch } from 'react-redux';
+import {
+  fetchUserBalanceAsync,
+  fetchUserProductAsync,
+} from 'state/userInfo/reducer';
 import { BuildingValue, GameThing } from '../gameModel';
-
 import { useBuildingUpgrade, useBuildingOperate } from '../gameModel/hooks';
 import { BuildingUpgrade } from './buildingUpgrade';
 import { BuildingCapacity } from './buildingCapacity';
@@ -87,14 +90,16 @@ export const SideRightBuildingInfo: React.FC<{
   buildingsId: string;
   visible: boolean;
   itemData?: any;
+  workQueue: any[];
   onCreateBuilding: (building: Api.Building.Building) => void;
-  onClose: () => void;
+  onClose: (destory?: boolean) => void;
 }> = ({
   visible,
   planet,
   planet_id,
   buildingsId,
   itemData,
+  workQueue,
   onCreateBuilding,
   onClose,
 }) => {
@@ -117,14 +122,39 @@ export const SideRightBuildingInfo: React.FC<{
 
   const init = React.useCallback(
     async (target_level?: number) => {
+      // 获取当前建筑的最高等级
+      let selfLevel = '';
+      // 已经创建建筑加入队列，获取加入队列的最高建筑信息
+      if (workQueue.length > 0) {
+        const taregtBuildings = workQueue.filter(
+          ({ _id, buildings_id, work_type }) =>
+            (_id === itemData?._id || buildings_id === itemData?._id) &&
+            work_type === 2,
+        );
+        const taregtBuildingLevel = taregtBuildings?.sort(
+          (a, b) =>
+            b?.propterty?.levelEnergy - a?.propterty?.levelEnergy ||
+            b?.target_level - a?.target_level,
+        );
+        if (taregtBuildingLevel.length > 0) {
+          selfLevel =
+            taregtBuildingLevel[0]?.propterty?.levelEnergy + 2 ||
+            taregtBuildingLevel[0]?.target_level + 2;
+        }
+      }
+
       try {
-        const res = await upgrade(planet_id, buildingsId, target_level);
+        const res = await upgrade(
+          planet_id,
+          buildingsId,
+          target_level || selfLevel,
+        );
         setUpgradeInfo(res);
       } catch (error) {
         console.log('error: ', error);
       }
     },
-    [upgrade, planet_id, buildingsId],
+    [workQueue, itemData?._id, upgrade, planet_id, buildingsId],
   );
 
   React.useEffect(() => {
@@ -136,7 +166,12 @@ export const SideRightBuildingInfo: React.FC<{
   return (
     <Container>
       <Content className={classNames(visible ? 'active' : 'removeActive')}>
-        <SideCloseButton variant='text' onClick={onClose}>
+        <SideCloseButton
+          variant='text'
+          onClick={() => {
+            onClose(!currentAttributes?.isbuilding);
+          }}
+        >
           <Box width='34px' height='42px'>
             <Image
               src='../images/commons/icon/icon-back.png'
@@ -222,13 +257,19 @@ export const SideRightBuildingInfo: React.FC<{
             </Flex>
           </Box>
 
-          {currentAttributes.detail_type ===
-            BuildingDetailType.BuildingDetailTypeStore && (
+          {(currentAttributes.detail_type ===
+            BuildingDetailType.BuildingDetailTypeStore ||
+            currentAttributes.detail_type ===
+              BuildingDetailType.BuildingDetailTypeCellar) && (
             <BuildingResources
               planet_id={planet_id}
               currnet_building={currentAttributes}
               estimate={estimate}
-              onClose={onClose}
+              onClose={() => {
+                onClose();
+                dispatch(fetchUserBalanceAsync());
+                dispatch(fetchUserProductAsync());
+              }}
             />
           )}
 
