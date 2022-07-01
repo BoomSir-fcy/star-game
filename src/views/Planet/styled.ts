@@ -40,13 +40,15 @@ export const DragBox = styled(Box)`
 `;
 export const PlanetBox = styled(Box)`
   position: relative;
-  width: 3000px;
+  width: 1920px;
   height: 100%;
   /* border: 5px solid red; */
 `;
 
-const SCREEN_WIDTH = 3000;
+// 一屏宽度
+const SCREEN_WIDTH = 1920;
 
+// 一屏展示星球个数
 const position = [
   {
     index: 0,
@@ -71,22 +73,22 @@ const position = [
   },
   {
     index: 3,
-    x: 460,
-    y: -258,
+    x: 570,
+    y: -210,
     z: -700,
     scale3d: '1.1, 1.1, 1.1',
   },
   {
     index: 4,
     x: 950,
-    y: -250,
+    y: -230,
     z: -700,
     scale3d: '1, 1, 1',
   },
   {
     index: 5,
     x: 1560,
-    y: -250,
+    y: -230,
     z: -900,
     scale3d: '0.9, 0.9, 0.9',
   },
@@ -97,36 +99,37 @@ const position = [
     z: -300,
     scale3d: '1.6, 1.6, 1.6',
   },
-  {
-    index: 7,
-    x: 2200,
-    y: -250,
-    z: -700,
-    scale3d: '1.1, 1.1, 1.1',
-  },
-  {
-    index: 8,
-    x: 2300,
-    y: 140,
-    z: -100,
-    scale3d: '2, 2, 2',
-  },
-  {
-    index: 9,
-    x: 2800,
-    y: -100,
-    z: -500,
-    scale3d: '1.6, 1.6, 1.6',
-  },
+  // {
+  //   index: 7,
+  //   x: 2200,
+  //   y: -230,
+  //   z: -700,
+  //   scale3d: '1.1, 1.1, 1.1',
+  // },
+  // {
+  //   index: 8,
+  //   x: 2300,
+  //   y: 140,
+  //   z: -100,
+  //   scale3d: '2, 2, 2',
+  // },
+  // {
+  //   index: 9,
+  //   x: 2800,
+  //   y: -100,
+  //   z: -500,
+  //   scale3d: '1.6, 1.6, 1.6',
+  // },
 ];
 
 export const useStarCss = (plant: number) => {
+  const screen_num = position.length;
   return React.useMemo(() => {
     const res = Array.from(new Array(plant))
       .map((item, index) => index)
       .reduce((prev, cur) => {
-        const activeIndex = cur % 10;
-        const offsetX = Math.floor(cur / 10) * SCREEN_WIDTH;
+        const activeIndex = cur % screen_num;
+        const offsetX = Math.floor(cur / screen_num) * SCREEN_WIDTH;
         return `
       & .star-${cur} {
         transform: translate(${position[activeIndex].x + offsetX}px, ${
@@ -137,7 +140,7 @@ export const useStarCss = (plant: number) => {
       }, '');
     console.log(111, '===');
     return res;
-  }, [plant]);
+  }, [plant, screen_num]);
 };
 
 export const GlobeFlex = styled(Flex)<{ starCss: string }>`

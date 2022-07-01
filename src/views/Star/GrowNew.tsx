@@ -154,15 +154,24 @@ const Grow: React.FC = () => {
         />
       )}
       <Box
-        left='14%'
-        bottom='-1%'
         ref={ref}
         position='absolute'
+        // left='14%'
+        // bottom='-1%'
         width='800px'
         height='800px'
+        left='25%'
+        bottom='-1%'
+        // width='100%'
+        // height='100%'
         zIndex={-1}
       />
-      <Flex justifyContent='space-between' alignItems='flex-end'>
+      <Flex
+        width='62%'
+        pl='15%'
+        justifyContent='space-between'
+        alignItems='flex-end'
+      >
         <Box>
           <GrowLevel
             nowLevel={estimateCost?.now_level}
@@ -200,10 +209,10 @@ const Grow: React.FC = () => {
             </Text>
           </Button>
         </Box>
-        <Box>
+        {/* <Box>
           <Extra info={estimateCost} />
           <Arms info={estimateCost} />
-        </Box>
+        </Box> */}
       </Flex>
     </Box>
   );
