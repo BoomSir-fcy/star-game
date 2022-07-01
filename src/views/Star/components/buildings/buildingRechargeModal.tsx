@@ -164,7 +164,7 @@ export const BuildingRechargeModal: React.FC<{
           }}
         >
           <Text bold fontSize='16px' color='#4FFFFB'>
-            {t('Confirm Extract')}
+            {t('Confirm Recharge')}
           </Text>
         </Button>
       </Flex>
