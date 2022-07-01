@@ -103,23 +103,23 @@ const TipsOccupiedModul: React.FC<{
   return (
     <Box width='100%' padding='100px 0'>
       <Text color='textPrimary' mb='40px' textAlign='center' fontSize='20px'>
-        {t('挑战需支付 %num%BNB 门票费用', { num: info.cost_star })}
+        {t('挑战需支付 %num%BOX 门票费用', { num: info.cost_star })}
       </Text>
       <Flex mb='150px' justifyContent='space-around'>
         <SmText>
           {t('给与恒星主:')}
           &nbsp; &nbsp;
-          {info.planet_owner_star}BNB
+          {info.planet_owner_star}BOX
         </SmText>
         <SmText>
           {t('放入奖池:')}
           &nbsp; &nbsp;
-          {info.staking_pool_star}BNB
+          {info.staking_pool_star}BOX
         </SmText>
         <SmText>
           {t('用于消耗:')}
           &nbsp; &nbsp;
-          {info.destroy_star}BNB
+          {info.destroy_star}BOX
         </SmText>
       </Flex>
       <Flex justifyContent='center'>

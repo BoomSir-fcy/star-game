@@ -138,7 +138,10 @@ const OccupiedModul: React.FC<{
   const GetRewardFactor = useCallback(
     (disapth_box: number) => {
       if (!disapth_box || !TotalReward) return '';
-      const Factor = new BigNumber(disapth_box).div(TotalReward).toString();
+      const Factor = new BigNumber(disapth_box)
+        .div(TotalReward)
+        .times(100)
+        .toString();
       return Factor;
     },
     [TotalReward],
