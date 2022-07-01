@@ -140,8 +140,10 @@ const Details = () => {
   }, [initBuilder, building]);
 
   const initBuildingBuilder = React.useCallback(() => {
-    console.log(stateBuilding.workQueue, building)
-    const createWorks = stateBuilding.workQueue.filter(item => item.work_type === 1);
+    console.log(stateBuilding.workQueue, building);
+    const createWorks = stateBuilding.workQueue.filter(
+      item => item.work_type === 1,
+    );
     building.initBuildingBuilder(createWorks);
   }, [building, stateBuilding.workQueue]);
 
@@ -210,8 +212,6 @@ const Details = () => {
         });
         if (Api.isSuccess(res)) {
           activeBuilder?.setIsBuilding(true);
-          // console.log(1111111111)
-          // building.findBuilderByXY(val.position.from.x, val.position.from.y)?.setIsBuilding(true);
           getWorkQueue();
           toastSuccess(t('planetTipsSaveSuccess'));
         }
@@ -244,6 +244,7 @@ const Details = () => {
         setStateBuilding(p => {
           p.visible = false;
         });
+        dispatch(setNavZIndex(true));
         dispatch(storeAction.resetModal());
         building?.removeBuilder(activeBuilder);
       } else {
@@ -378,6 +379,7 @@ const Details = () => {
           await saveWorkQueue(val);
         }}
         onClose={() => {
+          dispatch(setNavZIndex(true));
           dispatch(
             storeAction.upgradesBuildingModal({
               visible: false,
@@ -392,11 +394,12 @@ const Details = () => {
         visible={destory.visible}
         planet_id={id}
         onChange={destoryBuilding}
-        onClose={() =>
+        onClose={() => {
+          dispatch(setNavZIndex(true));
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),
-          )
-        }
+          );
+        }}
       />
     </>
   );
