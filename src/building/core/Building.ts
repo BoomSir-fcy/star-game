@@ -479,6 +479,9 @@ class Building extends EventTarget {
       );
       if (builder) {
         builder.setIsBuilded(true);
+        builder.option.building = {
+          ...item.building,
+        }
       } else {
         this.createBuilder(item.position.from.x, item.position.from.y, {
           building: item.building,
