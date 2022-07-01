@@ -148,21 +148,21 @@ export const PkBox: React.FC<{
         <TextStyle mb='8px'>{t('Battle attrition')} :</TextStyle>
         <FlexStyle mb='8px'>
           <TextStyle>
-            -{isFrom ? info.blueLoseUnit : info.redLoseUnit} {t('Combat unit')}
+            -{GetValue(info.blueLoseUnit, info.redLoseUnit)} {t('Combat unit')}
           </TextStyle>
           <TextStyle style={{ width: '60%' }}>
-            -{isFrom ? info.lostDurability : 0} {t('Building durability')}
+            -{GetValue(info.lostDurability, 0)} {t('Building durability')}
           </TextStyle>
         </FlexStyle>
         <FlexStyle>
           <TextStyle>
-            -{GetValue(0, info.incomeEnergy)} {t('Energy')}
+            -{GetValue(info.loseEnergy, 0)} {t('Energy')}
           </TextStyle>
           <TextStyle>
-            -{GetValue(0, info.incomeStone)} {t('Ore')}
+            -{GetValue(info.loseStone, 0)} {t('Ore')}
           </TextStyle>
           <TextStyle>
-            -{GetValue(0, info.incomePopulation)} {t('Population')}
+            -{GetValue(info.losePopulation, 0)} {t('Population')}
           </TextStyle>
         </FlexStyle>
       </Box>
@@ -173,10 +173,10 @@ export const PkBox: React.FC<{
             +{GetValue(0, info.incomeEnergy)} {t('Energy')}
           </TextStyle>
           <TextStyle>
-            +{GetValue(0, info.incomeEnergy)} {t('Ore')}
+            +{GetValue(0, info.incomeStone)} {t('Ore')}
           </TextStyle>
           <TextStyle>
-            +{GetValue(0, info.incomeEnergy)} {t('Population')}
+            +{GetValue(0, info.incomePopulation)} {t('Population')}
           </TextStyle>
         </FlexStyle>
       </Box>
