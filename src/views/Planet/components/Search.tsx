@@ -48,7 +48,7 @@ const Search: React.FC<{ onSearchCallback: (params: any) => void }> = ({
         }}
       >
         <Text color='textPrimary' bold>
-          切换
+          {t('Toggle')}
         </Text>
       </Button>
     </Flex>

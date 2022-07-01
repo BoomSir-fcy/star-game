@@ -3,20 +3,20 @@ import { qualities } from './types';
 export const mysteryConfig = {
   [qualities.ORDINARY]: {
     label: 'Ordinary',
-    tips: 'Common, Uncommon, or Rare Planet',
+    tips: 'Common, Uncommon, Rare, Epic',
     srcName: 'ordinary',
-    rarity: [1, 2, 3],
+    rarity: [1, 2, 3, 4],
   },
   [qualities.ADVANCED]: {
     label: 'Advanced',
-    tips: 'Uncommon, Rare, or Epic Planet',
+    tips: 'Uncommon, Rare, Epic, Legendary',
     srcName: 'advanced',
-    rarity: [2, 3, 4],
+    rarity: [2, 3, 4, 5],
   },
   [qualities.SUPER]: {
     label: 'Super',
-    tips: 'Epic, Legendary, or Mythic Planet',
+    tips: 'Rare, Epic, Legendary, Mythic',
     srcName: 'super',
-    rarity: [4, 5, 6],
+    rarity: [3, 4, 5, 6],
   },
 };

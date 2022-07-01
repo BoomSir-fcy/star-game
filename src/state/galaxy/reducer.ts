@@ -39,7 +39,7 @@ export const initialState: GalaxyState = {
     avatar: '',
     owner_get_box: 0,
     all_get_box: 0,
-    auction_count: 0,
+    all_auction_num: 0,
     power: 0,
   },
 };

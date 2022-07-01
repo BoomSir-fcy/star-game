@@ -12,7 +12,7 @@ import { AllLogsInfo } from 'state/types';
 
 const Content = styled(Box)`
   width: 700px;
-  padding-left: 200px;
+  padding-left: 70px;
   margin: 0 auto;
   padding-top: 10px;
 `;
@@ -47,13 +47,13 @@ const TopCarousel: React.FC = () => {
     <Content>
       <Flex mb='20px' justifyContent='space-around' alignItems='flex-end'>
         <Box>
-          <Text>{t('恒星主获得BOX')}</Text>
+          <Text>{t('Stellar Master Gets')}BOX</Text>
           <MarkText bold fontStyle='normal'>
             123123
           </MarkText>
         </Box>
         <Box>
-          <Text>{t('星系主获得BOX')}</Text>
+          <Text>{t('Galaxy Lord Gets')}BOX</Text>
           <MarkText bold fontStyle='normal'>
             123123
           </MarkText>
@@ -94,11 +94,11 @@ const TopCarousel: React.FC = () => {
                   <Text maxWidth='114px' ellipsis>
                     {item.nickname}
                   </Text>
-                  <Text>{t('成为了')}</Text>
+                  <Text> {t('became the lord of')} </Text>
                   <Text color='#4FFFFB'>
-                    {t('%galaxy% 星系 ', { galaxy: item.name })}
+                    {t('Galaxy %galaxy%', { galaxy: item.name })}
                   </Text>
-                  <Text>{t('的领主,竞拍金额: ')}</Text>
+                  <Text> {t('bidding amount:')} </Text>
                   <Text color='#4FFFFB'>{item.price} BNB</Text>
                 </Flex>
               </SwiperSlide>

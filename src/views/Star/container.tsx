@@ -50,14 +50,14 @@ const Star: React.FC<{
   }, [id, dispatch, planet?.race]);
 
   React.useEffect(() => {
-    if (pathname.indexOf('/star/') === -1) {
-      console.log('建造页面');
-      setPositionTop('8%');
+    if (pathname.indexOf('/star/upgrade') !== -1) {
+      setPositionTop('-30px');
     } else if (pathname.indexOf('/star/grow') !== -1) {
-      setPositionTop('1%');
+      setPositionTop('-13px');
+    } else if (pathname.indexOf('/star/embattle') !== -1) {
+      setPositionTop('-38px');
     } else {
-      console.log('其他页面');
-      setPositionTop('-4%');
+      setPositionTop('69px');
     }
   }, [pathname]);
 

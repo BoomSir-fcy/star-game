@@ -12,7 +12,7 @@ const Planet = styled.div<{ url: string; color?: string }>`
   width: 100%;
   &.rotate {
     &::before {
-      animation: rotate 10s infinite linear;
+      animation: rotate 10s linear infinite;
     }
   }
   &::before {

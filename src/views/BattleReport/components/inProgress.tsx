@@ -18,7 +18,7 @@ const CardBox = styled(Flex)`
   min-width: 490px;
   height: 100%;
   padding: 22px 30px;
-  border-right: 1px solid #4ffffb;
+  border-right: 1px solid ${({ theme }) => theme.colors.borderPrimary};
   flex-direction: column;
   justify-content: space-between;
 `;
@@ -54,14 +54,14 @@ export const InProgress: React.FC<{
             </MarkText>
             {info.working ? (
               <Text color='#59E97B' fontSize='16px'>
-                {t('探索中')}
+                {t('Exploring')}
               </Text>
             ) : (
-              <Text fontSize='16px'>{t('探索完成')}</Text>
+              <Text fontSize='16px'>{t('Exploration complete')}</Text>
             )}
           </Flex>
           <Flex mb='10px'>
-            <Text mr='30px'>{t('预计探索时间')}</Text>
+            <Text mr='30px'>{t('Estimated time to explore')}</Text>
             <Text>
               {dayjs.unix(info.startTime).format('YYYY-MM-DD HH:mm:ss')}
               &nbsp;~&nbsp;
@@ -69,21 +69,20 @@ export const InProgress: React.FC<{
             </Text>
           </Flex>
           <Text>
-            {t('产生几次战斗 : ')}
-            {info.plunderCount}
+            {t('Spawn several battles')} :{info.plunderCount}
           </Text>
         </Box>
         <Box>
           <MarkText mb='10px' fontSize='16px' bold>
-            {t('探索汇总')}
+            {t('Explore the summary')}
           </MarkText>
-          <TextStyle mb='8px'>{t('战斗损耗 ')}:</TextStyle>
+          <TextStyle mb='8px'>{t('Battle attrition')} :</TextStyle>
           <FlexStyle mb='8px'>
             <TextStyle>
-              -{info.loseUnit} {t('战斗单位')}
+              -{info.loseUnit} {t('Combat unit')}
             </TextStyle>
             <TextStyle>
-              -{info.lostDurability} {t('建筑耐久度')}
+              -{info.lostDurability} {t('Building durability')}
             </TextStyle>
           </FlexStyle>
           <FlexStyle>
@@ -99,7 +98,7 @@ export const InProgress: React.FC<{
           </FlexStyle>
         </Box>
         <Box>
-          <TextStyle mb='8px'>{t('获得资源 ')}:</TextStyle>
+          <TextStyle mb='8px'>{t('Get resources')} :</TextStyle>
           <FlexStyle>
             <TextStyle>
               +{info.getEnergy} {t('Energy')}

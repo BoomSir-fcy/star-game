@@ -46,9 +46,10 @@ const Stars = () => {
       destroy_star: 0, // 销毁
       staking_pool_star: 0, // 分配质押池
       planet_owner_star: 0, // 恒星主获得
+      pre_box: 0,
     };
   }, []);
-  const [activeStar, setActiveStar] = useState<Api.Galaxy.StarInfo>();
+  const [activeStar, setActiveStar] = useState<Api.Galaxy.StarInfo>(initState);
   const [navList, setNavList] = useState<StarLevelInfo[]>([]);
 
   const initList = useCallback(() => {

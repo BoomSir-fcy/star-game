@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Text, Flex, Box, GraphicsCard, Image } from 'uikit';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
-import { formatDisplayApr } from 'utils/formatBalance';
+import { formatDisplayApr, splitThousandSeparator } from 'utils/formatBalance';
 
 const InfoFlex = styled(Flex)`
   margin-top: 13px;
@@ -55,7 +55,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
           <Flex justifyContent='flex-end' alignItems='center'>
             <Text>{t('Power')}</Text>
             <Text ml='20px' mark fontStyle='normal' fontSize='20px' bold>
-              {info?.power}
+              {formatDisplayApr(info?.power)}
             </Text>
 
             <TooltipTrigger
@@ -63,13 +63,13 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
                 <Box>
                   <Text small>{t('BUFFBonusDesc')}</Text>
                   <Text color='textPrimary' small>
-                    +265952626
+                    +{info?.ak_buff}
                   </Text>
                   <Text mt='10px' small>
                     {t('NurturingBonusDesc')}
                   </Text>
                   <Text color='textPrimary' small>
-                    +265952626
+                    +{info?.strengthen_buff}
                   </Text>
                 </Box>
               }

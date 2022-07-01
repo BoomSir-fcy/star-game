@@ -2,7 +2,8 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { getLanguageCodeFromLS } from 'contexts/Localization/helpers';
-import { BIG_TEN, ONE_BILLION } from 'config/constants/bigNumber';
+import { BIG_TEN, ONE_BILLION, ONE_MILLION } from 'config/constants/bigNumber';
+import { SubString_1 } from './DecimalPlaces';
 
 /**
  * Take a formatted amount, e.g. 15 BNB and convert it to full decimal value, e.g. 15000000000000000
@@ -103,6 +104,22 @@ export const formatDisplayApr = (number: number, decimals = 6): string => {
     }).format(Number(number?.toFixed(decimals)));
   }
   return number.toLocaleString('en-US', { maximumFractionDigits: decimals });
+};
+
+export const formatLocalisedCompactBalance = (
+  number: number,
+  decimals = 3,
+): string => {
+  if (!Number.isFinite(number)) return '0';
+  if (new BigNumber(number).isGreaterThanOrEqualTo(ONE_MILLION)) {
+    const codeFromStorage = getLanguageCodeFromLS();
+    return new Intl.NumberFormat(codeFromStorage, {
+      notation: 'compact',
+      // compactDisplay: 'long',
+      maximumSignificantDigits: 6,
+    }).format(Number(number?.toFixed(decimals)));
+  }
+  return SubString_1(number, decimals);
 };
 
 export const formatLocalisedCompactNumber = (

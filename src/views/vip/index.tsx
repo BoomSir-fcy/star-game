@@ -21,9 +21,11 @@ import { Api } from 'apis';
 import { useStore } from 'state';
 import { debounce } from 'lodash';
 
-const Container = styled(BgCard)`
+const Container = styled(Box)`
   position: relative;
   padding: 47px 110px;
+  background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
+  border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
 `;
 
 const RecordBox = styled(Flex)`
@@ -88,8 +90,8 @@ const TextBox = styled(Text)`
 const Content = styled(Flex)`
   width: 100%;
   height: 500px;
-  background: #161920;
-  box-shadow: 0px 7px 3px 0px rgba(0, 0, 0, 0.35);
+  /* background: #161920; */
+  box-shadow: 0px 5px 20px 20px rgb(0 0 0 / 35%);
   border-radius: 10px;
 `;
 
@@ -202,7 +204,7 @@ const VipPage = () => {
           </RecordBox>
         </Flex>
       </Flex>
-      <Container variant='Fullscreen'>
+      <Container>
         <Flex>
           <IconBox>
             <VipLevel>
