@@ -86,8 +86,6 @@ export const BuildingArms: React.FC<{
     };
   }, [close]);
 
-  console.log(currnet_building);
-
   return (
     <Box style={{ position: 'relative' }}>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>

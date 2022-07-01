@@ -53,12 +53,28 @@ export const GalaxyImg = styled.img`
 export const InfoModuleBox = styled(Box)`
   position: absolute;
   width: 582px;
-  height: 500px;
+  height: max-content;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
-  left: 0px;
   bottom: 0;
   padding: 20px 22px;
+  opacity: 0;
+  transition: all 0.5s ease;
+  left: -582px;
+  &.Show {
+    opacity: 1;
+    left: 0;
+    animation: ShowDom 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 alternate
+      forwards;
+  }
+  @keyframes ShowDom {
+    0% {
+      transform: translate(-200px, 0);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
 `;
 
 export const NormalMarkText = styled(MarkText)`

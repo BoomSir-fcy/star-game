@@ -73,6 +73,7 @@ const DropDownContainer = styled.div<{
   scale?: Scale;
   childrenHeight?: string;
   direction?: Direction;
+  Isradius?: boolean;
 }>`
   position: relative;
   width: ${({ width }) => width};
@@ -83,7 +84,8 @@ const DropDownContainer = styled.div<{
   /* background: ${({ theme }) => theme.colors.input}; */
   border: 1px solid ${({ theme }) => theme.colors.borderPrimary};
   box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
-  /* border-radius: ${({ theme }) => theme.radii.card}; */
+  border-radius: ${({ theme, Isradius }) =>
+    Isradius ? theme.radii.card : 'initial'};
   background: ${({ theme }) => theme.colors.gradients.stripe};
   background-size: 10px 10px;
   user-select: none;
@@ -149,6 +151,7 @@ const DropDownContainer = styled.div<{
         border: 1px solid ${({ theme }) => theme.colors.borderPrimary};
         border-top-width: 0;
         border-radius: 0 0 16px 16px;
+        top: ${props.height};
       }
     `}
     ${props =>
@@ -199,6 +202,7 @@ export interface SelectProps extends SpaceProps {
   idKey?: string;
   direction?: Direction; // 方向
   height?: string;
+  Isradius?: boolean;
 }
 
 export interface OptionProps {
@@ -221,6 +225,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
   height = '50px',
   direction = 'down',
   childrenHeight = '150px',
+  Isradius,
   ...props
 }) => {
   const containerRef = useRef(null);
@@ -281,6 +286,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
       height={height}
       direction={direction}
       ref={containerRef}
+      Isradius={Isradius}
       {...props}
     >
       <Flex height='100%' justifyContent='space-between' alignItems='center'>
@@ -292,7 +298,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
           </Text>
           {children}
         </DropDownHeader>
-        <ArrowDropDownIcon direction={direction} />
+        <ArrowDropDownIcon direction={direction} toggling={toggling} />
       </Flex>
       <DropDownListContainer scale={scale}>
         <DropDownList ref={dropdownRef}>
@@ -312,9 +318,10 @@ export const Select: React.FunctionComponent<SelectProps> = ({
   );
 };
 
-const ArrowDropDownIcon: React.FC<{ direction: Direction }> = ({
-  direction,
-}) => {
+const ArrowDropDownIcon: React.FC<{
+  direction: Direction;
+  toggling: (event: React.MouseEvent<HTMLDivElement>) => void;
+}> = ({ direction, toggling }) => {
   return (
     <Box
       width='22px'
@@ -324,6 +331,7 @@ const ArrowDropDownIcon: React.FC<{ direction: Direction }> = ({
           direction === 'down' ? 'rotate(90deg)' : 'rotate(-90deg)'
         }`,
       }}
+      onClick={toggling}
     >
       <Image
         width={22}

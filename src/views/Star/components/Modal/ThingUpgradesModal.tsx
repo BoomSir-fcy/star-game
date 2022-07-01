@@ -102,7 +102,7 @@ export const ThingUpgradesModal: React.FC<{
                     <ThingRepair
                       itemData={itemData}
                       planet_id={planet_id}
-                      building_id={itemData._id}
+                      building_id={itemData?._id}
                       onCallback={() => {
                         // TODO: 更多
                       }}

@@ -188,7 +188,7 @@ const GalaxyInfoIndex: React.FC = () => {
           ))}
         </Box>
       </GalaxyInfoBox>
-      {OpenInfo && <InfoModule setOpenInfo={setOpenInfo} />}
+      {OpenInfo && <InfoModule OpenInfo={OpenInfo} setOpenInfo={setOpenInfo} />}
       {ShowListModule && (
         <OccupiedModul
           ShowListModule={ShowListModule}

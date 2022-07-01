@@ -148,7 +148,7 @@ const RightFloatBar: React.FC = () => {
         onMouseLeave={() => setShowPlay(false)}
       >
         <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
-          {t('玩法介绍')}
+          {t('How to play')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
           <img src='/images/commons/icon/help.png' alt='' />
@@ -156,7 +156,7 @@ const RightFloatBar: React.FC = () => {
       </RecordBox>
       <RecordBox onClick={repairHandle}>
         <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
-          {t('修复耐久')}
+          {t('Repair durability')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
           <img src='/images/commons/icon/icon-vip.png' alt='' />
@@ -164,7 +164,7 @@ const RightFloatBar: React.FC = () => {
       </RecordBox>
       <RecordBox onClick={rechargeHandle}>
         <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
-          {t('充值资源')}
+          {t('Recharge resources')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
           <img src='/images/commons/icon/icon-vip.png' alt='' />
@@ -183,7 +183,7 @@ const RightFloatBar: React.FC = () => {
       <Link to='/platform-News'>
         <RecordBox>
           <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
-            {t('站内消息')}
+            {t('Station news')}
           </MarkText>
           <Flex
             justifyContent='center'
@@ -207,7 +207,7 @@ const RightFloatBar: React.FC = () => {
           }}
         >
           <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
-            {t('联盟消息')}
+            {t('Alliance news')}
           </MarkText>
           <Flex
             justifyContent='center'
@@ -230,7 +230,7 @@ const RightFloatBar: React.FC = () => {
                 : {}
             }
           >
-            <Text fontSize='14px'>{t('新的探索已完成')}</Text>
+            <Text fontSize='14px'>{t('New exploration completed')}</Text>
             <TipTriangle />
           </TipBox>
         </RecordBox>

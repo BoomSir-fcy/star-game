@@ -29,7 +29,7 @@ const TabsButton = styled(Button)<{ active?: boolean }>`
   height: 45px;
   font-size: 20px;
   font-weight: bold;
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.textPrimary};
   /* ${({ active }) =>
     active &&
     css`

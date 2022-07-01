@@ -8,7 +8,10 @@ import { useDispatch } from 'react-redux';
 import { EasyformatTime } from 'utils/timeFormat';
 import BigNumber from 'bignumber.js';
 import { SubString_1 } from 'utils/DecimalPlaces';
-import { splitThousandSeparator } from 'utils/formatBalance';
+import {
+  formatLocalisedCompactBalance,
+  splitThousandSeparator,
+} from 'utils/formatBalance';
 import Modal from 'components/Modal';
 import { useWeb3React } from '@web3-react/core';
 import { Api } from 'apis';
@@ -16,14 +19,41 @@ import usePlunder from 'views/NewGalaxy/hook';
 import { fetchGalaxyStarListAsync } from 'state/galaxy/reducer';
 import TipsOccupiedModul from './TipsOccupiedModul';
 
-const OutModule = styled(Box)<{ ShowListModule: boolean }>`
-  display: ${({ ShowListModule }) => (ShowListModule ? 'block' : 'none')};
+const OutModule = styled(Box)`
   position: absolute;
   width: 548px;
   height: 718px;
   z-index: 2;
-  right: 0;
   top: -60px;
+  right: -548px;
+  opacity: 0;
+  transition: all 0.5s ease;
+  &.active {
+    opacity: 1;
+    right: 0;
+    animation: activeDom 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 alternate
+      forwards;
+  }
+  &.removeActive {
+    animation: removeDom 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 alternate
+      forwards;
+  }
+  @keyframes activeDom {
+    0% {
+      right: -548px;
+    }
+    100% {
+      right: 0;
+    }
+  }
+  @keyframes removeDom {
+    0% {
+      right: 0;
+    }
+    100% {
+      right: -548px;
+    }
+  }
 `;
 
 const CloseBox = styled(Flex)`
@@ -108,7 +138,10 @@ const OccupiedModul: React.FC<{
   const GetRewardFactor = useCallback(
     (disapth_box: number) => {
       if (!disapth_box || !TotalReward) return '';
-      const Factor = new BigNumber(disapth_box).div(TotalReward).toString();
+      const Factor = new BigNumber(disapth_box)
+        .div(TotalReward)
+        .times(100)
+        .toString();
       return Factor;
     },
     [TotalReward],
@@ -189,14 +222,14 @@ const OccupiedModul: React.FC<{
   }, [galaxyStarList]);
 
   return (
-    <OutModule ShowListModule={ShowListModule}>
+    <OutModule className={ShowListModule ? 'active' : 'removeActive'}>
       <ListBox>
         <CloseBox onClick={() => setShowListModule(false)}>
           <CloseImg src='/images/commons/icon/back.png' alt='' />
         </CloseBox>
         <Flex mb='20px' justifyContent='space-between' alignItems='flex-end'>
           <MarkText fontSize='20px' bold fontStyle='normal'>
-            {t('占领恒星')}
+            {t('Occupy')}
           </MarkText>
         </Flex>
         <ScrollBox id='ScrollDom'>
@@ -210,7 +243,7 @@ const OccupiedModul: React.FC<{
                 <Box position='relative'>
                   <LeveFlex>
                     <MarkText fontStyle='normal' fontSize='14px' bold>
-                      # {item.number} 恒星
+                      # {item.number} {t('Star')}
                     </MarkText>
                   </LeveFlex>
                   <ImgBox>
@@ -232,13 +265,13 @@ const OccupiedModul: React.FC<{
                 >
                   <Flex alignItems='baseline'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('恒星主')}:
+                      {t('Stellar master')}:
                     </SmText>
-                    <SmText ellipsis>{item?.nick_name || t('暂无')}</SmText>
+                    <SmText ellipsis>{item?.nick_name || ''}</SmText>
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('奖励系数')}
+                      {t('Reward factor')}
                     </SmText>
                     <SmText>
                       {SubString_1(GetRewardFactor(item?.disapth_box), 3)}%
@@ -246,13 +279,15 @@ const OccupiedModul: React.FC<{
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('24小时预计获得BOX')}:
+                      {t('Expect to get BOX within 24 hours')}:
                     </SmText>
-                    <SmText>{SubString_1(item.pre_box, 3)}</SmText>
+                    <SmText>
+                      {formatLocalisedCompactBalance(item.pre_box)}
+                    </SmText>
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('TA的占领时间')}:
+                      {t('TA occupation time')}:
                     </SmText>
                     <SmText>
                       {item?.nick_name

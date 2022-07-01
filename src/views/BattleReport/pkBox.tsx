@@ -73,11 +73,11 @@ export const PkBox: React.FC<{
           justifyContent='space-around'
         >
           <Box>
-            <Text>{t('战斗星球编号')}</Text>
+            <Text>{t('Battle planet number')}</Text>
             <Text>NO.{info.id}</Text>
           </Box>
           <Box>
-            <Text>{t('结束时间')}</Text>
+            <Text>{t('End Time')}</Text>
             <Text>
               {dayjs.unix(info.createTime).format('YY-MM-DD HH:mm:ss')}
             </Text>
@@ -145,13 +145,13 @@ export const PkBox: React.FC<{
         </Flex> */}
       </Flex>
       <Box>
-        <TextStyle mb='8px'>{t('战斗损耗 ')}:</TextStyle>
+        <TextStyle mb='8px'>{t('Battle attrition')} :</TextStyle>
         <FlexStyle mb='8px'>
           <TextStyle>
-            -{isFrom ? info.blueLoseUnit : info.redLoseUnit} {t('战斗单位')}
+            -{isFrom ? info.blueLoseUnit : info.redLoseUnit} {t('Combat unit')}
           </TextStyle>
-          <TextStyle>
-            -{isFrom ? info.lostDurability : 0} {t('建筑耐久度')}
+          <TextStyle style={{ width: '60%' }}>
+            -{isFrom ? info.lostDurability : 0} {t('Building durability')}
           </TextStyle>
         </FlexStyle>
         <FlexStyle>
@@ -167,7 +167,7 @@ export const PkBox: React.FC<{
         </FlexStyle>
       </Box>
       <Box>
-        <TextStyle mb='8px'>{t('获得资源 ')}:</TextStyle>
+        <TextStyle mb='8px'>{t('Get resources')} :</TextStyle>
         <FlexStyle>
           <TextStyle>
             +{GetValue(0, info.incomeEnergy)} {t('Energy')}

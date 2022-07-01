@@ -12,13 +12,27 @@ import { useToast } from 'contexts/ToastsContext';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useDispatch } from 'react-redux';
 
-const OutModule = styled(Box)<{ ShowListModule: boolean }>`
-  display: ${({ ShowListModule }) => (ShowListModule ? 'block' : 'none')};
-  /* background-color: rgba(0, 0, 0, 0.5); */
-  /* width: 100%; */
+const OutModule = styled(Box)`
   height: 100%;
   position: fixed;
   z-index: 2;
+  opacity: 0;
+  transition: all 0.5s ease;
+  left: -660px;
+  &.active {
+    opacity: 1;
+    left: 0;
+    animation: activeList 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 alternate
+      forwards;
+  }
+  @keyframes activeList {
+    0% {
+      transform: translate(-200px, 0);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
 `;
 
 const CloseBox = styled(Flex)`
@@ -131,7 +145,7 @@ const AlliancePlanetList: React.FC<{
       if (type === 1) {
         // 替换、添加
         if (InIt !== -1) {
-          toastError(t('联盟中已有此星球'));
+          toastError(t('This planet already exists in the alliance'));
           return;
         }
         arr[index] = activePlanet;
@@ -165,13 +179,13 @@ const AlliancePlanetList: React.FC<{
       }
       console.log(ChooseList);
       await SetWorking(ChooseList);
-      toastSuccess(t('Join Succeeded'));
+      toastSuccess(t('planetTipsSaveSuccess'));
       dispatch(fetchAllianceViewAsync());
 
       setShowListModule(false);
     } catch (e) {
       console.error(e);
-      toastError(t('Join Failed'));
+      toastError(t('Failed to save'));
     } finally {
       setpending(false);
     }
@@ -213,17 +227,25 @@ const AlliancePlanetList: React.FC<{
   }, [workingList]);
 
   return (
-    <OutModule ShowListModule={ShowListModule}>
+    <OutModule className={ShowListModule ? 'active' : ''}>
       <ListBox>
         <CloseBox onClick={() => setShowListModule(false)}>
           <CloseImg src='/images/commons/icon/back.png' alt='' />
         </CloseBox>
         <Flex mb='20px' justifyContent='space-between' alignItems='flex-end'>
           <MarkText fontSize='18px' bold fontStyle='normal'>
-            {t('行星联盟更换')}
+            {t('Planetary alliance replacement')}
           </MarkText>
-          <Button onClick={ToSetWorking} padding='0 10px' height='42px'>
-            <Text>{t('保存更改')}</Text>
+          <Button
+            variant='purple'
+            width='max-content'
+            onClick={ToSetWorking}
+            padding='0 10px'
+            height='42px'
+          >
+            <Text color='textPrimary' fontSize='16px'>
+              {t('Save')}
+            </Text>
           </Button>
         </Flex>
         <ScrollBox>
@@ -249,18 +271,24 @@ const AlliancePlanetList: React.FC<{
                   />
                   <BtnFlex>
                     <ReplaceBtn
+                      variant='purple'
                       onClick={() => {
                         addPlanetToList(item.id, index, 1);
                       }}
                     >
-                      <Text>{t('替换')}</Text>
+                      <Text color='textPrimary' fontSize='16px'>
+                        {t('Replace')}
+                      </Text>
                     </ReplaceBtn>
                     <ReplaceBtn
+                      variant='purple'
                       onClick={() => {
                         addPlanetToList(item.id, index, 2);
                       }}
                     >
-                      <Text>{t('删除')}</Text>
+                      <Text color='textPrimary' fontSize='16px'>
+                        {t('Delete')}
+                      </Text>
                     </ReplaceBtn>
                   </BtnFlex>
                 </Box>
@@ -272,7 +300,7 @@ const AlliancePlanetList: React.FC<{
                 >
                   <Flex alignItems='baseline'>
                     <Text mr='10px' color='textSubtle'>
-                      {t('稀有度')}
+                      {t('Rarity')}
                     </Text>
                     <Text width='98px' color={QualityColor[item?.rarity]} bold>
                       {t(getPlanetRarity(item?.rarity))}
@@ -281,7 +309,7 @@ const AlliancePlanetList: React.FC<{
 
                   <Flex alignItems='baseline'>
                     <Text mr='10px' color='textSubtle'>
-                      {t('兵种总数')}
+                      {t('Total number of arms')}
                     </Text>
                     <Text bold>{item?.arm_count}</Text>
                   </Flex>
@@ -399,13 +427,15 @@ const AlliancePlanetList: React.FC<{
               height='150px'
             >
               <Button
+                variant='purple'
+                width='100px'
                 onClick={() => {
                   addPlanetToList(activePlanet.id, StarList.length, 1);
                 }}
                 padding='0 10px'
                 height='42px'
               >
-                <Text>{t('添加')}</Text>
+                <Text>{t('Add')}</Text>
               </Button>
             </Flex>
           ))}
