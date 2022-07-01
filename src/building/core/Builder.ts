@@ -157,6 +157,7 @@ class Builder extends EventTarget {
   setPosition(point: AxisPoint, matrix4?: Matrix4) {
     if (matrix4) {
       this.matrix4 = matrix4;
+      this.axisPoint = point;
       this.container.position.set(matrix4.x, matrix4.y);
       this.startPoint.set(matrix4.x, matrix4.y);
       matrix4.setState(stateType.DISABLE);

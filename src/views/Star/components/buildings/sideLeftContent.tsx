@@ -190,7 +190,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                   key={row.buildings_number}
                   className={classNames(`building_${index}`)}
                 >
-                  <Text>{row.propterty.size.area_x}</Text>
+                  {/* <Text>{row.propterty.size.area_x}</Text> */}
                   <GameThing
                     scale='sm'
                     round

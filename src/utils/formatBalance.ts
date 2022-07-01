@@ -144,8 +144,7 @@ export const splitThousandSeparator = (num: number): string => {
   }
   let DIGIT_PATTERN = /(^|\s)\d+(?=\.?\d*($|\s))/g;
   let MILI_PATTERN = /(?=(?!\b)(\d{3})+\.?\b)/g;
-  let str: string = num
-    .toString()
+  let str: string = num?.toString()
     .replace(DIGIT_PATTERN, m => m.replace(MILI_PATTERN, ','));
   return prefix + str;
 };
