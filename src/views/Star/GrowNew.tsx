@@ -14,7 +14,7 @@ import { TokenImage } from 'components/TokenImage';
 import { getWEtherAddress } from 'utils/addressHelpers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useToast } from 'contexts/ToastsContext';
-import useGrowThree from './components/grow/useGrowThree';
+import ModalWrapper from 'components/Modal';
 import {
   Arms,
   Extra,
@@ -22,6 +22,8 @@ import {
   GrowLevel,
   StrengthenConsumeType,
 } from './components/grow';
+import { successRate } from './components/grow/GrowLevel';
+import useGrowThree from './components/grow/useGrowThree';
 
 const Grow: React.FC = () => {
   const { t } = useTranslation();
@@ -34,6 +36,9 @@ const Grow: React.FC = () => {
   const planetInfo = useStore(p => p.planet.planetInfo[id ?? 0]);
 
   const [pending, setPending] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(0); // 1-成功 2-失败
+  const [downgrade, setDowngrade] = useState(0); // 培育失败后掉的等级
   // 培育信息
   const [estimateCost, setEstimateCost] = useState<StrengthenConsumeType>({
     consume_bnb: null,
@@ -119,24 +124,30 @@ const Grow: React.FC = () => {
         planet_id: Number(parsedQs.id),
       });
       if (Api.isSuccess(res)) {
-        toastSuccess(t('Operate Succeeded'));
-        dispatch(fetchPlanetInfoAsync([Number(parsedQs.id)]));
-        getPlanetStrengthen();
+        if (res?.data?.success) {
+          toastSuccess(t('Operate Succeeded'));
+          setIsSuccess(1);
+        } else {
+          setIsSuccess(2);
+          setDowngrade(res?.data?.sub_level);
+        }
       }
       setPending(false);
+      setVisible(false);
     } catch (error) {
       toastError(t('Operate Failed'));
       setPending(false);
+      setIsSuccess(0);
       console.error(error);
     }
-  }, [parsedQs.id, t, dispatch, toastError, toastSuccess, getPlanetStrengthen]);
+  }, [parsedQs.id, t, toastError, toastSuccess]);
 
   const ref = React.useRef(null);
 
-  useGrowThree(ref.current, planetInfo?.picture1);
+  useGrowThree(ref.current);
 
   return (
-    <Box width='86%' mt='6%'>
+    <Box width='100%' height='100%'>
       {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
         <Steps
           enabled={stepsEnabled}
@@ -156,64 +167,161 @@ const Grow: React.FC = () => {
       <Box
         ref={ref}
         position='absolute'
-        // left='14%'
-        // bottom='-1%'
         width='800px'
         height='800px'
-        left='25%'
-        bottom='-1%'
-        // width='100%'
-        // height='100%'
+        left='0'
+        right='0'
+        top='0'
+        bottom='0'
+        margin='auto'
         zIndex={-1}
       />
       <Flex
-        width='62%'
-        pl='15%'
-        justifyContent='space-between'
+        mt='60px'
+        height='658px'
+        width='57%'
         alignItems='flex-end'
+        justifyContent='flex-end'
       >
-        <Box>
-          <GrowLevel
-            nowLevel={estimateCost?.now_level}
-            nextLevel={estimateCost?.next_level}
-            now_power={estimateCost?.now_power}
-            estimate_power={estimateCost?.estimate_power}
-          />
-          <GrowRule />
-        </Box>
-        <Box>
-          <Flex justifyContent='center'>
-            <Box width={30}>
-              <TokenImage
-                width={30}
-                height={30}
-                tokenAddress={getWEtherAddress()}
-              />
-            </Box>
-            <Text ml='15px' fontSize='22px' bold>
-              {t('BNB')}
-            </Text>
-            <Text ml='15px' fontSize='22px' fontStyle='normal' bold mark>
-              {estimateCost?.consume_bnb?.toString()}
-            </Text>
+        {isSuccess ? (
+          <Flex flexDirection='column' alignItems='flex-end'>
+            {isSuccess === 1 ? (
+              <Text mr='-30px' fontSize='34px' fontStyle='normal' mark bold>
+                {t('Cultivate Succeeded')}
+              </Text>
+            ) : (
+              <Text fontSize='34px' fontStyle='normal' mark bold>
+                {t('Cultivate Failed')}
+              </Text>
+            )}
+            <Flex flexDirection='column' alignItems='center'>
+              <Flex
+                mt='252px'
+                justifyContent='space-between'
+                alignItems='center'
+              >
+                <Box>
+                  <Text small>{isSuccess === 1 ? t('Power') : t('Level')}</Text>
+                  <Text fontSize='20px' fontStyle='normal' mark bold>
+                    {isSuccess === 1
+                      ? estimateCost?.now_power
+                      : estimateCost?.now_level}
+                  </Text>
+                </Box>
+                <Box margin='0 39px' width={58}>
+                  <Image
+                    width={58}
+                    height={28}
+                    src='/images/commons/icon/upgrade.png'
+                  />
+                </Box>
+                <Box>
+                  <Text small>{isSuccess === 1 ? t('Power') : t('Level')}</Text>
+                  <Text fontSize='20px' fontStyle='normal' mark bold>
+                    {isSuccess === 1
+                      ? estimateCost?.estimate_power
+                      : estimateCost?.now_level - downgrade}
+                  </Text>
+                </Box>
+              </Flex>
+              <Button
+                mt='19px'
+                width='277px'
+                height='50px'
+                variant='purple'
+                onClick={() => {
+                  setIsSuccess(0);
+                  dispatch(fetchPlanetInfoAsync([Number(parsedQs.id)]));
+                  getPlanetStrengthen();
+                }}
+              >
+                <Text fontSize='16px' color='textPrimary' bold>
+                  {t('Config')}
+                </Text>
+              </Button>
+            </Flex>
           </Flex>
-          <Button
-            mt='19px'
-            width='277px'
-            height='50px'
-            variant='purple'
-            onClick={ToStrengthenPlante}
-          >
-            <Text fontSize='16px' color='textPrimary' bold>
-              {t('Cultivate')}
-            </Text>
-          </Button>
-        </Box>
-        {/* <Box>
+        ) : (
+          <>
+            <Box>
+              <GrowLevel
+                nowLevel={estimateCost?.now_level}
+                nextLevel={estimateCost?.next_level}
+                now_power={estimateCost?.now_power}
+                estimate_power={estimateCost?.estimate_power}
+              />
+              <GrowRule />
+            </Box>
+            <Box ml='150px'>
+              <Flex justifyContent='center'>
+                <Box width={30}>
+                  <TokenImage
+                    width={30}
+                    height={30}
+                    tokenAddress={getWEtherAddress()}
+                  />
+                </Box>
+                <Text ml='15px' fontSize='22px' bold>
+                  {t('BNB')}
+                </Text>
+                <Text ml='15px' fontSize='22px' fontStyle='normal' bold mark>
+                  {estimateCost?.consume_bnb?.toString()}
+                </Text>
+              </Flex>
+              <Button
+                mt='19px'
+                width='277px'
+                height='50px'
+                variant='purple'
+                onClick={() => setVisible(true)}
+              >
+                <Text fontSize='16px' color='textPrimary' bold>
+                  {t('Cultivate')}
+                </Text>
+              </Button>
+            </Box>
+            {/* <Box>
           <Extra info={estimateCost} />
           <Arms info={estimateCost} />
-        </Box> */}
+        </Box>  */}
+          </>
+        )}
       </Flex>
+
+      <ModalWrapper
+        title={t('Planet Cultivation')}
+        visible={visible}
+        setVisible={setVisible}
+      >
+        <Box padding='30px 25px'>
+          <Flex
+            flex='1'
+            mt='100px'
+            justifyContent='center'
+            alignItems='center'
+            flexDirection='column'
+          >
+            <Text fontSize='24px'>
+              {t('CultivationConfirmDesc', {
+                rate: t(successRate(estimateCost?.now_level)),
+                value:
+                  estimateCost?.now_level >= 1 && estimateCost?.now_level <= 6
+                    ? ''
+                    : t('CultivationConfirmDesc1'),
+              })}
+            </Text>
+            <Flex mt='30px' width='100%' justifyContent='center'>
+              <Button
+                variant='purple'
+                width='350px'
+                onClick={() => ToStrengthenPlante()}
+              >
+                {t('Confirm Cultivating')}
+              </Button>
+            </Flex>
+          </Flex>
+        </Box>
+      </ModalWrapper>
     </Box>
   );
 };

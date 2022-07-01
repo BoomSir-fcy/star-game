@@ -7,15 +7,9 @@ import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 import { useTranslation } from 'contexts/Localization';
 import { getPlanetRarity } from 'utils/planetRarity';
 import { useDispatch } from 'react-redux';
-import StarCom from 'components/StarCom';
+import { StartImg } from 'views/NewPlantLeague/components/Planet/StartImg';
 import { PlanetDesc } from './PlanetDesc';
 
-const StarComStyled = styled(StarCom)`
-  border: none;
-  box-shadow: none;
-  width: 115px;
-  height: 115px;
-`;
 const CardBox = styled(Card)<{ active?: boolean }>`
   width: 100%;
   height: 150px;
@@ -42,10 +36,13 @@ export const PlanetBox: React.FC<{
   return (
     <CardBox active={active}>
       <Flex height='100%' alignItems='center'>
-        <StarComStyled
+        <StartImg
           scale='md'
-          picture={info.picture}
-          showUnion={info.in_alliance > 0}
+          iconWidth={47}
+          iconHeight={45}
+          shadow={info.rarity}
+          url={info.picture1}
+          showIcon={info.in_alliance > 0}
         />
         <Flex flex={1} ml='60px' flexDirection='column'>
           <Desc justifyContent='space-between'>
@@ -62,9 +59,9 @@ export const PlanetBox: React.FC<{
                 </Text>
                 <Text bold>{info?.build_count}</Text>
               </Flex>
-              <Flex width='120px' mr='30px' alignItems='baseline'>
+              <Flex width='240px' mr='30px' alignItems='baseline'>
                 <Text mr='10px' color='textSubtle'>
-                  {t('兵种总数')}
+                  {t('Total number of arms')}
                 </Text>
                 <Text bold>{info?.arm_count}</Text>
               </Flex>
@@ -105,19 +102,21 @@ export const PlanetBox: React.FC<{
               <Button
                 mr='26px'
                 height='42px'
+                padding='0 20px'
                 onClick={() => {
                   navigate(`/star?id=${info.id}`);
                 }}
               >
-                <Text>{t('查看详情')}</Text>
+                <Text>{t('Details')}</Text>
               </Button>
               <Button
+                padding='0 20px'
                 onClick={() => {
                   if (onSelect) onSelect(info);
                 }}
                 height='42px'
               >
-                <Text>{active ? t('取消选择') : t('选择星球')}</Text>
+                <Text>{active ? t('Cancel') : t('Choose planet')}</Text>
               </Button>
             </Flex>
           </Flex>
