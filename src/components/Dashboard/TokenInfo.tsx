@@ -5,7 +5,7 @@ import Modal from 'components/Modal';
 import InvitePop from 'components/NavPop/Invite';
 import UserInfo from 'components/NavPop/userInfo';
 import { useTranslation } from 'contexts/Localization';
-import { Box, Flex, Text, Button } from 'uikit';
+import { Box, Flex, Text, Button, Image } from 'uikit';
 import { useStore } from 'state/util';
 import { UserBalanceView } from 'state/types';
 import { useToast } from 'contexts/ToastsContext';
@@ -18,6 +18,7 @@ import {
   formatDisplayApr,
 } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
+import DepositWithdrawalModule from 'components/NavPop/DepositWithdrawalNew';
 
 const TokenGroupBox = styled(Box)`
   width: 261px;
@@ -27,6 +28,7 @@ const TokenGroupBox = styled(Box)`
   padding: 8px 13px;
   padding-top: 16px;
   margin-left: -5px;
+  position: relative;
 `;
 
 const ButtonLeft = styled(Button)`
@@ -36,6 +38,20 @@ const ButtonLeft = styled(Button)`
   margin: 5px 0;
   padding: 0 26px 0 22px;
   display: block;
+  &:disabled {
+    cursor: auto;
+    background: none;
+  }
+`;
+
+const DepositWithdrawalBtn = styled(Flex)`
+  position: absolute;
+  bottom: -20px;
+  width: 90%;
+  height: 36px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 60px;
 `;
 
 const TokenInfo = () => {
@@ -43,7 +59,7 @@ const TokenInfo = () => {
 
   const [visible, setVisible] = useState(false);
   const [ActiveToken, setActiveToken] = useState<UserBalanceView>();
-
+  const [OperationType, setOperationType] = useState(1);
   const Balance = useStore(p => p.userInfo.userBalance);
   const Product = useStore(p => p.userInfo.userProduct);
 
@@ -78,7 +94,30 @@ const TokenInfo = () => {
     <Box mt='-8px' position='relative'>
       <Flex>
         <TokenGroupBox>
+          <DepositWithdrawalBtn>
+            <Image
+              style={{ cursor: 'pointer' }}
+              width={36}
+              height={36}
+              src='/images/commons/icon/add.png'
+              onClick={() => {
+                setOperationType(1);
+                setVisible(true);
+              }}
+            />
+            <Image
+              style={{ cursor: 'pointer' }}
+              width={36}
+              height={36}
+              src='/images/commons/icon/withDrawal.png'
+              onClick={() => {
+                setOperationType(2);
+                setVisible(true);
+              }}
+            />
+          </DepositWithdrawalBtn>
           <ButtonLeft
+            disabled
             onClick={() => {
               openModalHandle(TokenBlance('BOX'));
             }}
@@ -103,6 +142,7 @@ const TokenInfo = () => {
             </Flex>
           </ButtonLeft>
           <ButtonLeft
+            disabled
             onClick={() => {
               openModalHandle(TokenBlance('BOX'));
             }}
@@ -130,6 +170,7 @@ const TokenInfo = () => {
             </Flex>
           </ButtonLeft>
           <ButtonLeft
+            disabled
             onClick={() => {
               openModalHandle(TokenBlance('BNB'));
             }}
@@ -155,6 +196,7 @@ const TokenInfo = () => {
         </TokenGroupBox>
         <TokenGroupBox>
           <ButtonLeft
+            disabled
             onClick={() => {
               openModalHandle(TokenBlance('ORE'));
             }}
@@ -173,6 +215,7 @@ const TokenInfo = () => {
             </Flex>
           </ButtonLeft>
           <ButtonLeft
+            disabled
             onClick={() => {
               openModalHandle(TokenBlance('SPICES'));
             }}
@@ -191,6 +234,7 @@ const TokenInfo = () => {
             </Flex>
           </ButtonLeft>
           <ButtonLeft
+            disabled
             onClick={() => {
               openModalHandle(TokenBlance('ENG'));
             }}
@@ -211,15 +255,15 @@ const TokenInfo = () => {
         </TokenGroupBox>
       </Flex>
       <Modal
-        title={`${ActiveToken?.symbol} ${t('Wallet')}`}
+        title={OperationType === 1 ? t('充值') : t('提取')}
         visible={visible}
         setVisible={setVisible}
       >
-        <DepositWithdrawal
+        <DepositWithdrawalModule
+          OperationType={OperationType}
           close={() => {
             setVisible(false);
           }}
-          TokenInfo={ActiveToken}
         />
       </Modal>
     </Box>
