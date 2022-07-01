@@ -1,6 +1,10 @@
 import React from 'react';
 import { Flex, Box, Text, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
+import {
+  formatDisplayApr,
+  formatLocalisedCompactBalance,
+} from 'utils/formatBalance';
 
 export const PlanetDesc: React.FC<{
   info: Api.Planet.PlanetInfo;
@@ -26,10 +30,11 @@ export const PlanetDesc: React.FC<{
             <Text color='textTips'>{t('Ore')}</Text>
             <Flex>
               <Text bold>
-                {info?.stone}/{info?.max_stone}
+                {formatLocalisedCompactBalance(info?.stone)}/
+                {formatLocalisedCompactBalance(info?.max_stone)}
               </Text>
               <Text bold ml='6px' color='#3ED450'>
-                +{info?.oreYield}/s
+                +{formatLocalisedCompactBalance(info?.oreYield)}/s
               </Text>
             </Flex>
           </Flex>
@@ -50,10 +55,11 @@ export const PlanetDesc: React.FC<{
             <Text color='textTips'>{t('Population')}</Text>
             <Flex>
               <Text bold>
-                {info?.population}/{info.max_population}
+                {formatLocalisedCompactBalance(info?.population)}/
+                {formatLocalisedCompactBalance(info?.max_population)}
               </Text>
               <Text bold ml='6px' color='#3ED450'>
-                +{info?.populationYield}/s
+                +{formatLocalisedCompactBalance(info?.populationYield)}/s
               </Text>
             </Flex>
           </Flex>
@@ -74,10 +80,11 @@ export const PlanetDesc: React.FC<{
             <Text color='textTips'>{t('Energy')}</Text>
             <Flex>
               <Text bold>
-                {info?.energy}/{info.max_energy}
+                {formatLocalisedCompactBalance(info?.energy)}/
+                {formatLocalisedCompactBalance(info?.max_energy)}
               </Text>
               <Text bold ml='6px' color='#3ED450'>
-                +{info?.energyYield}/s
+                +{formatLocalisedCompactBalance(info?.energyYield)}/s
               </Text>
             </Flex>
           </Flex>

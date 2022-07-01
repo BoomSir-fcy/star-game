@@ -9,7 +9,7 @@ import { Button, Text, Flex, Box, GraphicsCard, Image } from 'uikit';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 import {
   formatDisplayApr,
-  formatLocalisedCompactNumber,
+  formatLocalisedCompactBalance,
 } from 'utils/formatBalance';
 
 const InfoFlex = styled(Flex)`
@@ -108,8 +108,8 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
                     small
                     title={`${info?.stone}/${info?.max_stone}`}
                   >
-                    {formatDisplayApr(info?.stone, 1)}/
-                    {formatDisplayApr(info?.max_stone, 1)}
+                    {formatLocalisedCompactBalance(info?.stone)}/
+                    {formatLocalisedCompactBalance(info?.max_stone)}
                   </TextStyled>
                 </Flex>
               </Box>
@@ -138,8 +138,8 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
                     ellipsis
                     title={`${info?.population}/${info?.max_population}`}
                   >
-                    {formatDisplayApr(info?.population, 1)}/
-                    {formatDisplayApr(info?.max_population, 1)}
+                    {formatLocalisedCompactBalance(info?.population)}/
+                    {formatLocalisedCompactBalance(info?.max_population)}
                   </TextStyled>
                 </Flex>
               </Box>
@@ -168,8 +168,8 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
                     small
                     title={`${info?.energy}/${info?.max_energy}`}
                   >
-                    {formatDisplayApr(info?.energy, 1)}/
-                    {formatDisplayApr(info?.max_energy, 1)}
+                    {formatLocalisedCompactBalance(info?.energy)}/
+                    {formatLocalisedCompactBalance(info?.max_energy)}
                   </TextStyled>
                 </Flex>
               </Box>

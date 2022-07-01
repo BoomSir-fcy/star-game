@@ -14,7 +14,7 @@ import { TokenImage } from 'components/TokenImage';
 import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
 import {
   splitThousandSeparator,
-  formatLocalisedCompactNumber,
+  formatLocalisedCompactBalance,
   formatDisplayApr,
 } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
@@ -88,7 +88,7 @@ const TokenInfo = () => {
   );
 
   const format = useCallback((number: number) => {
-    return formatLocalisedCompactNumber(number);
+    return formatLocalisedCompactBalance(number);
   }, []);
   return (
     <Box mt='-8px' position='relative'>
