@@ -4,16 +4,16 @@ import { GalaxyNft } from 'state/types';
 import { getGalaxyContract } from 'utils/contractHelpers';
 import { getBalanceAmount } from 'utils/formatBalance';
 
-export const fetchGalaxyList = async (): Promise<Api.Galaxy.GalaxyInfo[]> => {
+export const fetchGalaxyList = async () => {
   try {
     const res = await Api.GalaxyApi.getGalaxyList();
     if (Api.isSuccess(res)) {
-      return res.data?.data || [];
+      return res.data;
     }
-    return [];
+    return null;
   } catch (error) {
     console.error(`fetch fetchGalaxyList error: ${error}`);
-    return [];
+    return null;
   }
 };
 

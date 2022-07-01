@@ -124,6 +124,8 @@ export interface GalaxyState {
   auctionRecordList: any[];
   AllLogs: AllLogsInfo[];
   OwnerInfo: OwnerInfoView;
+  galaxy_total_box: number;
+  planet_total_box: number;
 }
 
 export interface OwnerInfoView {

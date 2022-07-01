@@ -9,6 +9,7 @@ import 'swiper/swiper.min.css';
 import { useFetchAllLogsView } from 'state/galaxy/hooks';
 import { useStore } from 'state';
 import { AllLogsInfo } from 'state/types';
+import { SubString_1 } from 'utils/DecimalPlaces';
 
 const Content = styled(Box)`
   width: 700px;
@@ -40,22 +41,24 @@ const SwiperBox = styled(Box)`
 const TopCarousel: React.FC = () => {
   useFetchAllLogsView();
   const { t } = useTranslation();
-  const AllLogs = useStore(p => p.galaxy.AllLogs);
+  const { AllLogs, galaxy_total_box, planet_total_box } = useStore(
+    p => p.galaxy,
+  );
   const [index, setIndex] = useState(1);
 
   return (
     <Content>
       <Flex mb='20px' justifyContent='space-around' alignItems='flex-end'>
         <Box>
-          <Text>{t('Stellar Master Gets')}BOX</Text>
+          <Text>{t('Stellar Master Gets')} BOX</Text>
           <MarkText bold fontStyle='normal'>
-            123123
+            {SubString_1(planet_total_box, 4)}
           </MarkText>
         </Box>
         <Box>
-          <Text>{t('Galaxy Lord Gets')}BOX</Text>
+          <Text>{t('Galaxy Lord Gets')} BOX</Text>
           <MarkText bold fontStyle='normal'>
-            123123
+            {SubString_1(galaxy_total_box, 4)}
           </MarkText>
         </Box>
       </Flex>

@@ -42,6 +42,8 @@ export const initialState: GalaxyState = {
     all_auction_num: 0,
     power: 0,
   },
+  galaxy_total_box: 0,
+  planet_total_box: 0,
 };
 
 export const fetchGalaxyListAsync = (): AppThunk => async dispatch => {
@@ -96,7 +98,9 @@ export const galaxySlice = createSlice({
     setGalaxyList: (state, action) => {
       const { payload } = action;
       if (payload) {
-        state.galaxyList = payload;
+        state.galaxyList = payload.data;
+        state.galaxy_total_box = payload.galaxy_total_box;
+        state.planet_total_box = payload.planet_total_box;
         state.loadingGalaxy = false;
       }
     },
