@@ -30,10 +30,11 @@ const useGrowThree = (dom: Element, url?: string) => {
   useEffect(() => {
     if (dom) {
       console.log('----------初始化-----------');
-
       // const src = getImageUrl(url);
-
       init(url);
+      if (timer) {
+        cancelAnimationFrame(timer);
+      }
       animate();
     }
 

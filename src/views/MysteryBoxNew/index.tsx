@@ -27,6 +27,7 @@ const ClickBox = styled(Box)`
   top: 0;
   bottom: 0;
   margin: auto;
+  cursor: pointer;
 `;
 const VipBox = styled(Box)`
   position: absolute;
