@@ -14,6 +14,7 @@ export const backgroundVariants = [
 ];
 
 const getBackground = ({ type }: { type: number }) => {
+  if (type === -1) return '';
   if (backgroundVariants[type]) {
     const backgroundImage = backgroundVariants[type];
 
@@ -23,7 +24,7 @@ const getBackground = ({ type }: { type: number }) => {
     `;
   }
   return `
-    background: url(${backgroundVariants[0]}) no-repeat right;
+    background: url(${backgroundVariants[3]}) no-repeat right;
     background-size: cover;
 
   `;
@@ -37,6 +38,7 @@ const StarrySkyBg = styled(Box)<{ bgType: number }>`
   height: 100%;
   width: 100%;
   ${({ bgType }) => getBackground({ type: bgType })}
+  background-color: #1d1d1d;
   transform: translate3d(0, 0, 0);
   transform: translateZ(-1px);
   overflow: hidden;
