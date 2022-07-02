@@ -45,17 +45,42 @@ export const PkBox: React.FC<{
     );
   }, [account, info.fromAddress]);
 
-  const GetValue = useCallback(
-    (loseNum: number, inComeNum: number) => {
+  const LostDurability = useMemo(() => {
+    let num = 0;
+    if (isFrom) {
+      num = info.success === 1 ? 0 : info.lostDurability;
+    } else {
+      num = info.success === 0 ? 0 : info.lostDurability;
+    }
+    return num;
+  }, [info, isFrom]);
+
+  // 失去 from地址的输赢是 inComeNum loseNum   to地址的输赢是loseNum inComeNum 取from的反
+  const LostValue = useCallback(
+    (inComeNum: number, loseNum: number) => {
       let num = 0;
       if (isFrom) {
-        num = info.success ? inComeNum : loseNum;
+        num = loseNum;
       } else {
-        num = info.success ? loseNum : inComeNum;
+        num = inComeNum;
       }
       return num;
     },
-    [isFrom, info.success],
+    [isFrom],
+  );
+
+  // 获得
+  const GetValue = useCallback(
+    (inComeNum: number, loseNum: number) => {
+      let num = 0;
+      if (isFrom) {
+        num = inComeNum;
+      } else {
+        num = loseNum;
+      }
+      return num;
+    },
+    [isFrom],
   );
 
   const pkRes = useMemo(() => {
@@ -151,18 +176,19 @@ export const PkBox: React.FC<{
             -{isFrom ? info.blueLoseUnit : info.redLoseUnit} {t('Combat unit')}
           </TextStyle>
           <TextStyle style={{ width: '60%' }}>
-            -{isFrom ? info.lostDurability : 0} {t('Building durability')}
+            -{LostDurability} {t('Building durability')}
           </TextStyle>
         </FlexStyle>
         <FlexStyle>
           <TextStyle>
-            -{GetValue(0, info.incomeEnergy)} {t('Energy')}
+            -{LostValue(info.incomeEnergy, info.loseEnergy)} {t('Energy')}
           </TextStyle>
           <TextStyle>
-            -{GetValue(0, info.incomeStone)} {t('Ore')}
+            -{LostValue(info.incomeStone, info.loseStone)} {t('Ore')}
           </TextStyle>
           <TextStyle>
-            -{GetValue(0, info.incomePopulation)} {t('Population')}
+            -{LostValue(info.incomePopulation, info.losePopulation)}{' '}
+            {t('Population')}
           </TextStyle>
         </FlexStyle>
       </Box>
@@ -170,13 +196,14 @@ export const PkBox: React.FC<{
         <TextStyle mb='8px'>{t('Get resources')} :</TextStyle>
         <FlexStyle>
           <TextStyle>
-            +{GetValue(0, info.incomeEnergy)} {t('Energy')}
+            +{GetValue(info.incomeEnergy, info.loseEnergy)} {t('Energy')}
           </TextStyle>
           <TextStyle>
-            +{GetValue(0, info.incomeEnergy)} {t('Ore')}
+            +{GetValue(info.incomeStone, info.loseStone)} {t('Ore')}
           </TextStyle>
           <TextStyle>
-            +{GetValue(0, info.incomeEnergy)} {t('Population')}
+            +{GetValue(info.incomePopulation, info.losePopulation)}{' '}
+            {t('Population')}
           </TextStyle>
         </FlexStyle>
       </Box>

@@ -44,10 +44,11 @@ const AlliancePlanet: React.FC<{
         url: allianceList[i]?.planet?.picture1 || '',
         No: i + 1,
         Leve: allianceList[i]?.planet?.level || '',
-        resources:
-          !allianceList[i]?.planet?.stone_enough ||
-          !allianceList[i]?.planet?.population_enough ||
-          !allianceList[i]?.planet?.energy_enough,
+        resources: allianceList[i]
+          ? !allianceList[i]?.planet?.stone_enough ||
+            !allianceList[i]?.planet?.population_enough ||
+            !allianceList[i]?.planet?.energy_enough
+          : false,
       };
       arr.push(obj);
     }

@@ -41,6 +41,7 @@
     "lib-flexible": "^0.3.2",
     "lodash": "^4.17.21",
     "mobile-drag-drop": "^2.3.0-rc.2",
+    "moment": "^2.29.3",
     "pako": "^2.0.4",
     "parallax-js": "^3.1.0",
     "pixi-dragonbones": "^5.7.0-1",

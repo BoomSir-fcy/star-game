@@ -7,6 +7,7 @@ import {
   GraphicsCard,
   MarkText,
   Image,
+  Button,
   BoxProps,
 } from 'uikit';
 import { position } from 'styled-system';
@@ -76,10 +77,12 @@ const GroupInfo = styled(Flex)`
 interface ArmsInfoProps extends BoxProps {
   armsData?: any;
   sid?: number;
+  removeHandle?: () => void;
 }
 export const ArmsInfo: React.FC<ArmsInfoProps> = ({
   armsData,
   sid,
+  removeHandle,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -171,10 +174,21 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
             <Text ml='25px'>Lv {game_base_unit?.level}</Text>
           </Flex>
           <Flex flex={1} justifyContent='flex-end' alignItems='flex-end'>
-            <Text>{t('Power')}</Text>
-            <MarkText bold fontSize='20px' fontStyle='normal' ml='22px'>
-              {game_base_unit?.power}
-            </MarkText>
+            {removeHandle && (
+              <Button
+                onClick={removeHandle}
+                width={40}
+                height={40}
+                padding='0'
+                variant='text'
+              >
+                <Image
+                  width={40}
+                  height={40}
+                  src='/images/commons/icon/delete.png'
+                />
+              </Button>
+            )}
           </Flex>
         </Head>
         <Body>
@@ -191,7 +205,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
             <Image src={getSoldierSrc()} width={180} height={180} />
           </Preview>
           <Flex flexDirection='column' ml='16px' flex={1}>
-            <Flex alignItems='center' mb='5px'>
+            <Flex alignItems='center' justifyContent='space-between' mb='5px'>
               <Text
                 color={RaceTypeColor[game_base_unit?.race]}
                 mb='2px'
@@ -200,7 +214,13 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
               >
                 {game_base_unit?.race ? t(`race-${game_base_unit?.race}`) : ''}
               </Text>
-              <Text ml='17px' />
+              {/* <Text ml='17px' /> */}
+              <Flex>
+                <Text>{t('Power')}</Text>
+                <MarkText bold fontSize='20px' fontStyle='normal' ml='22px'>
+                  {game_base_unit?.power}
+                </MarkText>
+              </Flex>
             </Flex>
             <Flex flex={1} alignItems='space-between' flexDirection='column'>
               <Group>

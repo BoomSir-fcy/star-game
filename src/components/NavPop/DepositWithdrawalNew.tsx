@@ -130,6 +130,16 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
     toastSuccess(t('Copy Succeeded'));
   };
 
+  // 获取授权余额
+  const getApproveNum = useCallback(
+    async (addr: string, coinId: string) => {
+      const Num = await FetchApproveNum(String(addr), coinId);
+      if (Num) {
+        setapprovedNum(Num);
+      }
+    },
+    [setapprovedNum],
+  );
   // 充值、提取
   const handSure = useCallback(async () => {
     setpending(true);
@@ -200,8 +210,17 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
     } finally {
       setpending(false);
     }
-    setLoadApprovedNum(false);
-  }, [onApprove, toastSuccess, t, toastError, setpending]);
+    getApproveNum(account, TokenInfo.coinId);
+  }, [
+    account,
+    TokenInfo.coinId,
+    onApprove,
+    toastSuccess,
+    t,
+    toastError,
+    setpending,
+    getApproveNum,
+  ]);
 
   // 输入框输入限制
   const handleChange = useCallback(
@@ -235,17 +254,17 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
   }, [Balance]);
 
   useEffect(() => {
-    const getApproveNum = async () => {
-      const Num = await FetchApproveNum(String(account), TokenInfo?.coinId);
-      if (Num) {
-        setapprovedNum(Num);
-      }
-    };
-    if (account && TokenInfo?.coinId && !LoadApprovedNum) {
-      getApproveNum();
-      setLoadApprovedNum(true);
+    // const getApproveNum = async () => {
+    //   const Num = await FetchApproveNum(String(account), TokenInfo?.coinId);
+    //   if (Num) {
+    //     setapprovedNum(Num);
+    //   }
+    // };
+    if (account && TokenInfo?.coinId) {
+      console.log('更新授权', TokenInfo.symbol);
+      getApproveNum(account, TokenInfo?.coinId);
     }
-  }, [account, TokenInfo?.coinId, LoadApprovedNum]);
+  }, [account, TokenInfo, getApproveNum]);
 
   return (
     <Box width='100%' padding='30px 15px'>
@@ -265,6 +284,7 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
             defaultId={TokenInfo.coinId}
             onChange={option => {
               setVal('');
+              setapprovedNum(0);
               setTokenInfo(BalanceList[option.value]);
             }}
           />

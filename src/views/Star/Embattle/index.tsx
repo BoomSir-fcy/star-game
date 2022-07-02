@@ -221,6 +221,13 @@ const Embattle = () => {
     }, 0);
   }, [gameSoldiers]);
 
+  const removeHandle = useCallback(() => {
+    if (activeSoldier) {
+      game.removeSoldier(activeSoldier);
+      handleUpdate();
+    }
+  }, [activeSoldier, handleUpdate, game]);
+
   return (
     <Box className='star-embattle-step5' position='relative'>
       {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
@@ -284,13 +291,19 @@ const Embattle = () => {
             height='100%'
             width='100%'
           >
-            <Flex>
+            <Flex alignItems='center'>
               <Text margin='0 32px'>{t('Total Power')}</Text>
-              <Text paddingRight={10} mark>
+              <Text bold fontSize='34px' paddingRight={10} mark>
                 {totalPower}
               </Text>
             </Flex>
-            <Button mr='16px' width='213px' height='45px' variant='purple'>
+            <Button
+              onClick={() => handleUpdate()}
+              mr='16px'
+              width='213px'
+              height='45px'
+              variant='purple'
+            >
               {t('Complete')}
             </Button>
           </Flex>
@@ -310,6 +323,7 @@ const Embattle = () => {
         armsData={{ game_base_unit: activeSoldier?.options?.unitInfo }}
         sid={activeSoldier?.id}
         right='0'
+        removeHandle={removeHandle}
       />
 
       <Flex

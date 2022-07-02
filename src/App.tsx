@@ -4,7 +4,6 @@ import { Box, ResetCSS, Spinner } from 'uikit';
 import VConsole from 'vconsole';
 import ScaleOrientContent from 'components/ScaleOrientContent';
 import useEagerConnect from 'hooks/useEagerConnect';
-import Toast from 'components/Toast';
 import { ConnectWalletProvider } from 'contexts/ConnectWallet';
 import AccountUpdater from './views/Updater/AccountUpdater';
 import EventBusUpdater from './views/Updater/EventBusUpdater';
@@ -133,7 +132,6 @@ function App() {
             </Routes>
           </Suspense>
         </ConnectWalletProvider>
-        <Toast />
       </ScaleOrientContent>
     </>
     // </BrowserRouter>

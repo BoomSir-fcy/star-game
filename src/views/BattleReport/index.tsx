@@ -8,6 +8,7 @@ import {
   useFetchAllianceView,
   useFetchCombatRecord,
 } from 'state/alliance/hooks';
+import moment from 'moment';
 
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import eventBus from 'utils/eventBus';
@@ -74,10 +75,13 @@ const BattleReport = () => {
   const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const [Start_time, setStart_time] = useState<number>(
-    new Date(new Date().toLocaleDateString()).getTime() / 1000,
+    moment(new Date(new Date().toLocaleDateString()).getTime()).unix(),
   );
   const [End_time, setEnd_time] = useState<number>(
-    new Date(new Date().toLocaleDateString()).getTime() / 1000 + 86400,
+    moment(
+      (new Date(new Date().toLocaleDateString()).getTime() / 1000 + 86400) *
+        1000,
+    ).unix(),
   );
 
   useFetchCombatRecord(Start_time, End_time);
@@ -144,16 +148,16 @@ const BattleReport = () => {
 
       <BattleTop
         cont={{ Cont, WinCont, FailedCont }}
-        upDate={e => {
+        Start_time={Start_time}
+        End_time={End_time}
+        setStart_time={e => {
           setStart_time(e);
-          setEnd_time(e + 86400);
+        }}
+        setEnd_time={e => {
+          setEnd_time(e);
         }}
       />
-      {/* <Box>
-        <BgCard variant='Fullscreen' padding='40px 37px'>
-          
-        </BgCard>
-      </Box> */}
+
       <ScrollBox className='Pk_list'>
         {RecordList.length > 0 ? (
           <>

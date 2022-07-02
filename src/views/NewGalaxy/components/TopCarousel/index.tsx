@@ -9,10 +9,11 @@ import 'swiper/swiper.min.css';
 import { useFetchAllLogsView } from 'state/galaxy/hooks';
 import { useStore } from 'state';
 import { AllLogsInfo } from 'state/types';
+import { SubString_1 } from 'utils/DecimalPlaces';
 
 const Content = styled(Box)`
-  width: 700px;
-  padding-left: 70px;
+  width: 900px;
+  padding-left: 200px;
   margin: 0 auto;
   padding-top: 10px;
 `;
@@ -40,22 +41,24 @@ const SwiperBox = styled(Box)`
 const TopCarousel: React.FC = () => {
   useFetchAllLogsView();
   const { t } = useTranslation();
-  const AllLogs = useStore(p => p.galaxy.AllLogs);
+  const { AllLogs, galaxy_total_box, planet_total_box } = useStore(
+    p => p.galaxy,
+  );
   const [index, setIndex] = useState(1);
 
   return (
     <Content>
       <Flex mb='20px' justifyContent='space-around' alignItems='flex-end'>
         <Box>
-          <Text>{t('Stellar Master Gets')}BOX</Text>
+          <Text>{t('Stellar Master Gets')} BOX</Text>
           <MarkText bold fontStyle='normal'>
-            123123
+            {SubString_1(planet_total_box, 4)}
           </MarkText>
         </Box>
         <Box>
-          <Text>{t('Galaxy Lord Gets')}BOX</Text>
+          <Text>{t('Galaxy Lord Gets')} BOX</Text>
           <MarkText bold fontStyle='normal'>
-            123123
+            {SubString_1(galaxy_total_box, 4)}
           </MarkText>
         </Box>
       </Flex>
@@ -91,14 +94,14 @@ const TopCarousel: React.FC = () => {
                 key={item.id}
               >
                 <Flex justifyContent='center' alignItems='flex-end'>
-                  <Text maxWidth='114px' ellipsis>
+                  <Text maxWidth='180px' color='#4FFFFB' ellipsis mr='4px'>
                     {item.nickname}
                   </Text>
-                  <Text> {t('became the lord of')} </Text>
-                  <Text color='#4FFFFB'>
+                  <Text mr='4px'>{t('became the lord of')}</Text>
+                  <Text color='#4FFFFB' mr='4px'>
                     {t('Galaxy %galaxy%', { galaxy: item.name })}
                   </Text>
-                  <Text> {t('bidding amount:')} </Text>
+                  <Text mr='4px'>{t('bidding amount:')}</Text>
                   <Text color='#4FFFFB'>{item.price} BNB</Text>
                 </Flex>
               </SwiperSlide>

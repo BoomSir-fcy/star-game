@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import styled, { DefaultTheme } from 'styled-components';
 import { Text, Flex, Button, Box } from 'uikit';
 import useTheme from 'hooks/useTheme';
+import { MODAL_GLOBAL_ID_NAME } from 'config';
 
 const BoxStyled = styled(Box)<{ overflow?: string }>`
   margin: 40px 0 0 0;
@@ -71,8 +72,8 @@ const getCustomStyles = (themes: DefaultTheme) => ({
     backgroundColor: themes.colors.overlay,
     zIndex: 200,
     // transform: 'scale(1)',
-    // width: '100vw',
-    // height: '100vw',
+    // width: '200vw',
+    // height: '200vh',
   },
 });
 
@@ -105,7 +106,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
         shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
         contentLabel='Example Modal'
         parentSelector={() =>
-          document.querySelector('#scale-content') || document.body
+          document.querySelector(`#${MODAL_GLOBAL_ID_NAME}`) || document.body
         }
         overlayElement={(props, contentElement) => {
           const { width, height } =
@@ -127,7 +128,9 @@ const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
             </div>
           );
         }}
-        appElement={document.getElementById('scale-content') || document.body}
+        appElement={
+          document.getElementById(`#${MODAL_GLOBAL_ID_NAME}`) || document.body
+        }
       >
         <ModalHeader title={title} onClose={onClose} theme={themes} />
         <BoxStyled>{children}</BoxStyled>

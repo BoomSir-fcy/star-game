@@ -41,6 +41,7 @@ import { fetchUserKeysAsync } from 'state/mysteryBox/reducer';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import OpenModal from './components/OpenModal';
 import { queryMintEvent } from './event';
+import { useToast } from 'contexts/ToastsContext';
 
 const CardStyled = styled(Card)<{ height?: string }>`
   width: 696px;
