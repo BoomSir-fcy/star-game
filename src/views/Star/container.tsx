@@ -53,7 +53,7 @@ const Star: React.FC<{
     if (pathname.indexOf('/star/upgrade') !== -1) {
       setPositionTop('-30px');
     } else if (pathname.indexOf('/star/grow') !== -1) {
-      setPositionTop('-39px');
+      setPositionTop('-30px');
     } else if (pathname.indexOf('/star/embattle') !== -1) {
       setPositionTop('-38px');
     } else {

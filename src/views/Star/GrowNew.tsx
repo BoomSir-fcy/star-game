@@ -178,7 +178,7 @@ const Grow: React.FC = () => {
         zIndex={-1}
       />
       <Flex
-        mt='60px'
+        mt='80px'
         height='658px'
         width='57%'
         alignItems='flex-end'
