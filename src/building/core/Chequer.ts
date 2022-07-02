@@ -126,14 +126,15 @@ class Chequer {
     this.stateSprite.visible = false;
 
     this.centerPoint.set(x, y);
+    // this.centerPoint.set(x, y - (Chequer.HEIGHT * Chequer.Y_RATIO) / 2);
 
-    // const text = new Text(`x${this.axisX}, ${this.axisY}`, {
-    //   fill: 0xffffff,
-    //   fontSize: 16,
-    // });
-    // text.x = -30;
-    // text.y = 28;
-    // this.bunny.addChild(text);
+    const text = new Text(`x${this.axisX}, ${this.axisY}`, {
+      fill: 0xffffff,
+      fontSize: 16,
+    });
+    text.x = -30;
+    text.y = 28;
+    this.bunny.addChild(text);
   }
 
   // 底色是不规则渲染 所以事件范围也不规则
