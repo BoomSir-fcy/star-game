@@ -80,7 +80,7 @@ const PlatformNews: React.FC = () => {
         </Box>
         <TitleBox>
           <MarkText fontSize='18px' bold fontStyle='italic'>
-            {t('Battle details')}
+            {t('Station news')}
           </MarkText>
         </TitleBox>
       </Flex>
