@@ -749,6 +749,7 @@
   "http-error-300024": "Building queue exceeds maximum limit",
   "http-error-300030": "The planet is in a planetary alliance, buildings cannot join the work queue",
   "http-error-300031": "Planetary alliance is occupying the stars",
+  "http-error-300033": "Work queue point error",
   "http-error-400001": "Failed to get user information",
   "http-error-500001": "The galaxy star is still inside the protector",
   "http-error-500002": "The galaxy already owns",

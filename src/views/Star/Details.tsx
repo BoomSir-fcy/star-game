@@ -211,8 +211,6 @@ const Details = () => {
         });
         if (Api.isSuccess(res)) {
           activeBuilder?.setIsBuilding(true);
-          // console.log(1111111111)
-          // building.findBuilderByXY(val.position.from.x, val.position.from.y)?.setIsBuilding(true);
           getWorkQueue();
           toastSuccess(t('planetTipsSaveSuccess'));
         }
@@ -245,6 +243,7 @@ const Details = () => {
         setStateBuilding(p => {
           p.visible = false;
         });
+        dispatch(setNavZIndex(true));
         dispatch(storeAction.resetModal());
         building?.removeBuilder(activeBuilder);
       } else {
@@ -379,6 +378,7 @@ const Details = () => {
           await saveWorkQueue(val);
         }}
         onClose={() => {
+          dispatch(setNavZIndex(true));
           dispatch(
             storeAction.upgradesBuildingModal({
               visible: false,
@@ -393,11 +393,12 @@ const Details = () => {
         visible={destory.visible}
         planet_id={id}
         onChange={destoryBuilding}
-        onClose={() =>
+        onClose={() => {
+          dispatch(setNavZIndex(true));
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),
-          )
-        }
+          );
+        }}
       />
     </>
   );

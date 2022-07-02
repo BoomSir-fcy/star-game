@@ -2,6 +2,7 @@ export * from './sideLeftContent';
 export * from './sideRightBuildingInfo';
 export * from './barRight';
 export * from './barHead';
+export * from './barRightWarp';
 export * from './planetAssets';
 export * from './queueBuilding';
 export * from './buildingProgress';
