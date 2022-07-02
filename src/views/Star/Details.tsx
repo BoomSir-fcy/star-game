@@ -101,6 +101,8 @@ const Details = () => {
 
   const activeBuilder = useActiveBuilder(building);
 
+  // console.log(activeBuilder);
+
   const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
@@ -126,6 +128,8 @@ const Details = () => {
 
   const initBuilder = React.useCallback(() => {
     building.initBuilder(selfBuilding);
+    // setTimeout(() => {
+    // }, 2000);
   }, [building, selfBuilding]);
 
   React.useEffect(() => {
@@ -210,16 +214,18 @@ const Details = () => {
           work_queue_params: current,
         });
         if (Api.isSuccess(res)) {
-          activeBuilder?.setIsBuilding(true);
+          // activeBuilder?.setIsBuilding(true);
           getWorkQueue();
           toastSuccess(t('planetTipsSaveSuccess'));
+        } else if (activeBuilder) {
+          building?.removeBuilder(activeBuilder);
         }
       } catch (error) {
         console.error(error);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [id, t, toastSuccess, activeBuilder],
+    [id, t, toastSuccess],
   );
 
   // 销毁建筑

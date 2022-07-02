@@ -98,8 +98,9 @@ export const fetchGameMatchUserAsync =
     if (Api.isSuccess(res) && res.data) {
       if (our === 1) {
         dispatch(setMineUser(res.data));
+      } else {
+        dispatch(setMatchUser(res.data));
       }
-      dispatch(setMatchUser(res.data));
       dispatch(setState(GamePkState.MATCHED));
     } else {
       dispatch(setState(GamePkState.MATCH_ERROR));

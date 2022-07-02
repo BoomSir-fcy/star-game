@@ -7,6 +7,7 @@
 //   InteractionEvent,
 // } from '@pixi/core';
 import { Application } from '@pixi/app';
+import { Texture } from '@pixi/core';
 import { Sprite } from '@pixi/sprite';
 import { Container } from '@pixi/display';
 import { Loader } from '@pixi/loaders';
@@ -63,6 +64,10 @@ class Boards extends EventTarget {
 
   enableDrag = true;
 
+  bg1 = new Sprite(Texture.from('/assets/map/1.png'));
+
+  bg2 = new Sprite(Texture.from('/assets/map/2.png'));
+
   private dragData: InteractionData = new InteractionData();
 
   private dragging = false;
@@ -71,7 +76,7 @@ class Boards extends EventTarget {
     this.container.position.set(this.width / 2, this.height / 2);
 
     // this.drawChequers(test);
-
+    // this.drawBg();
     this.container.interactive = true;
     this.container.on('wheel', e => {
       this.onHandleWheel(e);
@@ -150,6 +155,27 @@ class Boards extends EventTarget {
     });
 
     this.created = true;
+  }
+
+  drawBg() {
+    const chequer = new Chequer({
+      axisX: 7,
+      axisY: -2,
+    });
+    const chequer1 = new Chequer({
+      axisX: 7,
+      axisY: 2,
+    });
+    this.bg1.position.set(chequer.centerPoint.x, chequer.centerPoint.y);
+    this.bg1.anchor.set(0.5);
+    this.container.addChild(this.bg1);
+
+    this.bg2.position.set(
+      chequer1.centerPoint.x + config.TWO_BOARDS_OFFSET,
+      chequer1.centerPoint.y + config.TWO_BOARDS_OFFSET,
+    );
+    this.bg2.anchor.set(0.5);
+    this.container.addChild(this.bg2);
   }
 
   onDragStart(event: InteractionEvent) {

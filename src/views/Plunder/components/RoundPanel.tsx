@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Box, BoxProps, Text, Flex, Button } from 'uikit';
 import Modal from 'components/Modal';
+import { useTranslation } from 'contexts/Localization';
 
 const BoxStyled = styled(Box)`
   width: 281px;
@@ -38,6 +39,7 @@ const RoundPanel: React.FC<RoundPanelProps> = ({
   ...props
 }) => {
   const [visible, setVisible] = useState(false);
+  const { t } = useTranslation();
 
   const handleEnd = useCallback(() => {
     setVisible(true);
@@ -66,19 +68,23 @@ const RoundPanel: React.FC<RoundPanelProps> = ({
           </Text>
         </ButtonStyled>
       </FlexStyled>
-      <Modal title='温馨提示' visible={visible} setVisible={setVisible}>
+      <Modal title={t('Kind tips')} visible={visible} setVisible={setVisible}>
         <Flex
           height='500px'
           flexDirection='column'
           justifyContent='space-around'
         >
           <Box>
-            <Text textAlign='center'>是否跳过本轮战斗?</Text>
-            <Text textAlign='center'>(跳过不会影响本次战斗结果)</Text>
+            <Text fontSize='20px' textAlign='center'>
+              {t('Skip this round of combat?')}
+            </Text>
+            <Text fontSize='20px' textAlign='center'>
+              {t('(Skip will not affect the result of this battle)')}
+            </Text>
           </Box>
           <Flex justifyContent='space-around'>
-            <Button onClick={() => setVisible(false)}>取消</Button>
-            <Button onClick={handleEnd}>确认</Button>
+            <Button onClick={() => setVisible(false)}>{t('Cancel')}</Button>
+            <Button onClick={handleEnd}>{t('Confirm')}</Button>
           </Flex>
         </Flex>
       </Modal>
