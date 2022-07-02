@@ -24,6 +24,7 @@
     "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.25",
     "@types/styled-system": "^5.1.13",
+    "@types/three": "^0.141.0",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/walletconnect-connector": "^6.2.13",

@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 const getImageUrl = (url?: string) => {
@@ -11,28 +11,29 @@ const getImageUrl = (url?: string) => {
     url ? url?.substring(url?.lastIndexOf('/') + 1) : '36.jpg'
   }`;
 };
+var renderer,
+  scene: THREE.Scene,
+  camera,
+  composer,
+  circle: THREE.Object3D,
+  geo_planet: THREE.SphereGeometry,
+  particle,
+  luminor,
+  halo,
+  galaxy,
+  width,
+  height;
+var lights = [];
+var timer = null;
 
 const useGrowThree = (dom: Element, url?: string) => {
-  var renderer: THREE.WebGLRenderer,
-    scene,
-    camera,
-    composer,
-    circle: THREE.Object3D,
-    particle,
-    luminor,
-    halo,
-    galaxy,
-    width,
-    height;
-  var lights = [];
-  var timer = null;
   useEffect(() => {
     if (dom) {
       console.log('----------初始化-----------');
 
-      const src = getImageUrl(url);
+      // const src = getImageUrl(url);
 
-      init(src);
+      init(url);
       animate();
     }
 
@@ -75,13 +76,14 @@ const useGrowThree = (dom: Element, url?: string) => {
     scene.add(luminor);
 
     var geometry = new THREE.TetrahedronGeometry(1, 1);
-    var geo_planet = new THREE.SphereGeometry(10, 64, 32);
+    geo_planet = new THREE.SphereGeometry(10, 64, 32);
     var geom3 = new THREE.SphereGeometry(16, 32, 16);
     var geo_star = new THREE.SphereGeometry(90, 64, 64);
 
     var material = new THREE.MeshPhongMaterial({
       color: 0x111111,
-      flatShading: THREE.FlatShading,
+      flatShading: false,
+      // flatShading: THREE.FlatShading,
     });
 
     for (var i = 0; i < 500; i++) {
@@ -98,17 +100,8 @@ const useGrowThree = (dom: Element, url?: string) => {
       particle.add(mesh);
     }
 
-    var mat = new THREE.MeshPhongMaterial({
-      color: 0xcea3a3,
-      emissive: 0x000000,
-      //shading: THREE.FlatShading,
-      flatShading: THREE.SmoothShading,
-      bumpScale: 0.025,
-      map: new THREE.TextureLoader().load(textureSrc),
-      bumpMap: new THREE.TextureLoader().load(textureSrc),
-      specularMap: new THREE.TextureLoader().load(textureSrc),
-      specular: new THREE.Color('grey'),
-    });
+    // 生成球体
+    const mat = createPlanet(textureSrc);
 
     var mat3 = new THREE.ShaderMaterial({
       uniforms: {},
@@ -121,9 +114,9 @@ const useGrowThree = (dom: Element, url?: string) => {
       transparent: true,
     });
 
-    var planet = new THREE.Mesh(geo_planet, mat);
-    planet.scale.x = planet.scale.y = planet.scale.z = 15;
-    circle.add(planet);
+    // var planet = new THREE.Mesh(geo_planet, mat);
+    // planet.scale.x = planet.scale.y = planet.scale.z = 15;
+    // circle.add(planet);
 
     var ball = new THREE.Mesh(geom3, mat3);
     ball.scale.x = ball.scale.y = ball.scale.z = 16;
@@ -152,6 +145,30 @@ const useGrowThree = (dom: Element, url?: string) => {
     // window.addEventListener('resize', onWindowResize, false);
   }
 
+  function createPlanet(url: string) {
+    if (circle) {
+      circle.clear();
+      const textureSrc = getImageUrl(url);
+      // console.log('textureSrc', textureSrc);
+
+      const mat = new THREE.MeshPhongMaterial({
+        color: 0xcea3a3,
+        emissive: 0x000000,
+        //shading: THREE.FlatShading,
+        // flatShading: THREE.SmoothShading,
+        bumpScale: 0.025,
+        map: new THREE.TextureLoader().load(textureSrc),
+        bumpMap: new THREE.TextureLoader().load(textureSrc),
+        specularMap: new THREE.TextureLoader().load(textureSrc),
+        specular: new THREE.Color('grey'),
+      });
+      var planet = new THREE.Mesh(geo_planet, mat);
+
+      planet.scale.x = planet.scale.y = planet.scale.z = 15;
+      circle.add(planet);
+    }
+  }
+
   function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -166,7 +183,11 @@ const useGrowThree = (dom: Element, url?: string) => {
     particle.rotation.y -= 0.004;
     circle.rotation.x -= 0.001;
     circle.rotation.y -= 0.001;
-
+    // circle?.scale?.set(
+    //   circle?.scale.x + 0.001,
+    //   circle?.scale.x + 0.001,
+    //   circle?.scale.x + 0.001,
+    // );
     halo.rotation.z -= 0.005;
     luminor.rotation.z -= 0.005;
     //halo.scale.x = Math.sin( timer * 3) * 0.09 + 1;
@@ -175,6 +196,8 @@ const useGrowThree = (dom: Element, url?: string) => {
     renderer.clear();
     renderer.render(scene, camera);
   }
+
+  return { createPlanet };
 };
 
 export default useGrowThree;
