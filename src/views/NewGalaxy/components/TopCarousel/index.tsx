@@ -12,8 +12,8 @@ import { AllLogsInfo } from 'state/types';
 import { SubString_1 } from 'utils/DecimalPlaces';
 
 const Content = styled(Box)`
-  width: 700px;
-  padding-left: 70px;
+  width: 900px;
+  padding-left: 200px;
   margin: 0 auto;
   padding-top: 10px;
 `;
@@ -94,14 +94,14 @@ const TopCarousel: React.FC = () => {
                 key={item.id}
               >
                 <Flex justifyContent='center' alignItems='flex-end'>
-                  <Text maxWidth='114px' ellipsis>
+                  <Text maxWidth='180px' color='#4FFFFB' ellipsis mr='4px'>
                     {item.nickname}
                   </Text>
-                  <Text> {t('became the lord of')} </Text>
-                  <Text color='#4FFFFB'>
+                  <Text mr='4px'>{t('became the lord of')}</Text>
+                  <Text color='#4FFFFB' mr='4px'>
                     {t('Galaxy %galaxy%', { galaxy: item.name })}
                   </Text>
-                  <Text> {t('bidding amount:')} </Text>
+                  <Text mr='4px'>{t('bidding amount:')}</Text>
                   <Text color='#4FFFFB'>{item.price} BNB</Text>
                 </Flex>
               </SwiperSlide>
