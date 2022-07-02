@@ -9,6 +9,7 @@ import { BoardPositionSelf } from '../types';
 import { checkPolygonPoint } from './utils';
 
 export const mapType = {
+  MAP: 99,
   MAP1: 0,
   MAP2: 1,
   MAP3: 2,
@@ -79,6 +80,8 @@ class Chequer {
   state: StateType = stateType.PREVIEW;
 
   static maps = {
+    [mapType.MAP]: Texture.from('/assets/map/map.png'),
+
     [mapType.MAP1]: Texture.from('/assets/map/map0.png'),
 
     [mapType.MAP2]: Texture.from('/assets/map/map1.png'),
@@ -147,6 +150,7 @@ class Chequer {
     } else {
       this.setState(enemy ? stateType.DISABLE : state);
     }
+    this.centerPoint.set(x, y);
 
     this.stateSprite.anchor.set(0.5);
     this.stateSprite.x = 0;
