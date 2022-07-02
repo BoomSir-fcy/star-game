@@ -266,7 +266,6 @@ const Details = () => {
   ]);
 
   React.useEffect(() => {
-    console.log(activeBuilder);
     if (activeBuilder?.option?.id) {
       setStateBuilding(p => {
         p.visible = true;

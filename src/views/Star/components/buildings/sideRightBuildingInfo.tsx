@@ -23,6 +23,7 @@ const Container = styled(Box)`
   position: absolute;
   right: -15px;
   top: 0;
+  min-height: 100vh;
   z-index: 199;
 `;
 const SideCloseButton = styled(Button)`
@@ -165,6 +166,15 @@ export const SideRightBuildingInfo: React.FC<{
   React.useEffect(() => {
     if (itemData?.isbuilding) {
       init();
+    } else {
+      setUpgradeInfo({
+        building_detail: {
+          petri_dish: {
+            arms: [],
+          },
+        },
+        estimate_building_detail: {},
+      });
     }
   }, [init, itemData]);
 

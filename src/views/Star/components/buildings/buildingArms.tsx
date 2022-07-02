@@ -4,12 +4,14 @@ import { Flex, Box, GraphicsCard, MarkText, Text, Image } from 'uikit';
 import { getSpriteRes } from 'game/core/utils';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'contexts/Localization';
+import { raceData } from 'config/raceConfig';
 import { ArmsInfo } from '../arms';
 
 const ArmsContent = styled(Box)`
   width: 92px;
   margin-right: 9px;
   margin-bottom: 15px;
+  cursor: pointer;
   &:nth-child(5n) {
     margin-right: 0;
   }
@@ -31,6 +33,13 @@ const ArmsPreview: React.FC<{
   data: Api.Building.Arms;
   onClick: () => void;
 }> = ({ data, onClick }) => {
+  const getArms = React.useCallback(() => {
+    const arms = raceData[data?.game_base_unit?.race]?.children.find(
+      ({ id }) => id === Number(data?.game_base_unit.index),
+    );
+    return arms;
+  }, [data?.game_base_unit.index, data?.game_base_unit?.race]);
+
   const getSoldierSrc = React.useCallback(() => {
     let img = '';
     if (data?.game_base_unit?.race) {
@@ -56,7 +65,7 @@ const ArmsPreview: React.FC<{
         <Image src={getSoldierSrc()} width={92} height={92} />
       </Preview>
       <Text mt='11px' textAlign='center' ellipsis>
-        {data?.game_base_unit?.tag}
+        {getArms()?.name}
       </Text>
     </ArmsContent>
   );
@@ -98,7 +107,7 @@ export const BuildingArms: React.FC<{
             key={item.unique_id}
             onClick={() => {
               setState(p => {
-                p.visible = !state.visible;
+                p.visible = !(state.visible && index === state.index);
                 p.index = index;
                 p.arms = item;
               });

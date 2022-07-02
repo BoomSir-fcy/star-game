@@ -134,7 +134,7 @@ export const BarRight: React.FC<BarRightProps> = ({
             </ImgFlex>
           </Flex>
         </BarCard>
-        <Box mt='20px'>
+        <Box>
           <PlanetAssets plant_info={planetInfo} />
           <PlanetBuff current_buff={currentBufffer} />
         </Box>
