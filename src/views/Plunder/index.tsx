@@ -87,11 +87,11 @@ const Plunder = () => {
           >
             开始掠夺
           </Button>
-          <RefreshButton
+          {/* <RefreshButton
             disabled={!!GamePkState.MATCHING}
             onClick={() => fetch()}
             variant='vsRefresh'
-          />
+          /> */}
         </ButtonBox>
       </BoxStyled>
     </Layout>
