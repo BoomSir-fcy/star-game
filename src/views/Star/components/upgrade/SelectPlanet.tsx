@@ -16,7 +16,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import Layout from 'components/Layout';
 import { Api } from 'apis';
 import { useStore } from 'state';
-import { setActiveMaterialMap } from 'state/planet/actions';
+import { setActiveMaterialMap, setUpgradePlanetId } from 'state/planet/actions';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
 import { Nav } from 'components';
@@ -106,8 +106,10 @@ const SelectPlanet = () => {
         // 取消选择
         dispatch(setActiveMaterialMap({ [item.id]: null }));
       }
+      dispatch(setUpgradePlanetId(planetId));
     },
-    [activeMaterialMap, t, dispatch, toastWarning],
+
+    [planetId, activeMaterialMap, t, dispatch, toastWarning],
   );
 
   return (
@@ -115,8 +117,13 @@ const SelectPlanet = () => {
       <Flex width='100%'>
         <Box>
           <Flex padding='0 20px' mb='60px'>
-            <BackButton />
-            <RefreshButton onRefresh={() => init()} ml='33px' />
+            <BackButton
+              onBack={() => {
+                // dispatch(setActiveMaterialMap(null));
+                navigate(`/star/upgrade?id=${planetId}`);
+              }}
+            />
+            {/* <RefreshButton onRefresh={() => init()} ml='33px' /> */}
           </Flex>
           <Nav
             activeId={Number(parsedQs.t)}
@@ -176,6 +183,15 @@ const SelectPlanet = () => {
                   setState({ ...state, token: value ? Number(value) : 0 })
                 }
               />
+              <Button
+                width='200px'
+                variant='purple'
+                onClick={() => {
+                  navigate(`/star/upgrade?id=${planetId}`);
+                }}
+              >
+                {t('Confirm')}
+              </Button>
             </Flex>
             <ScrollBox>
               {(starList ?? []).map((item: any) => (
@@ -183,7 +199,8 @@ const SelectPlanet = () => {
                   <MaterialBox
                     mb='20px'
                     onClick={() => {
-                      addMaterialPlanet(item);
+                      // addMaterialPlanet(item);
+                      navigate(`/star?id=${item.id}`);
                     }}
                   >
                     <PlanetBox

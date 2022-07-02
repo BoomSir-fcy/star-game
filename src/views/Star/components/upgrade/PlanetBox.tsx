@@ -111,7 +111,8 @@ export const PlanetBox: React.FC<{
               </Button>
               <Button
                 padding='0 20px'
-                onClick={() => {
+                onClick={e => {
+                  e.stopPropagation();
                   if (onSelect) onSelect(info);
                 }}
                 height='42px'
