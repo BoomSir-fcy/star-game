@@ -64,6 +64,7 @@ export interface UserInfoState {
     loading: boolean;
   };
   userProduct: userProductView;
+  zIndex: boolean; // 导航层级
 }
 
 export interface MysteryBoxView {
@@ -288,7 +289,6 @@ export interface UserState {
     width: number;
     height: number;
   };
-  zIndex: boolean; // 导航层级
 }
 export interface State {
   user: UserState;

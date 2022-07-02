@@ -1,14 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flex, Box, Text, GraphicsCard, MarkText, Image, BoxProps } from 'uikit';
+import {
+  Flex,
+  Box,
+  Text,
+  GraphicsCard,
+  MarkText,
+  Image,
+  BoxProps,
+} from 'uikit';
 import { position } from 'styled-system';
 import { RaceTypeColor } from 'uikit/theme/colors';
+import { bulletType } from 'game/types';
 
+import { raceData } from 'config/raceConfig';
 import { useTranslation } from 'contexts/Localization';
 import { getSpriteRes } from 'game/core/utils';
 import RadarChart from 'game/core/RadarChart';
 import MiniRaceAni from './miniRace';
-import useSimulation from './useSimulation'
+import useSimulation from './useSimulation';
 
 const Container = styled(Box)`
   position: absolute;
@@ -60,14 +70,18 @@ const Group = styled(Flex)`
   margin-bottom: 15px;
 `;
 const GroupInfo = styled(Flex)`
-  width: 45%;
+  width: 33%;
 `;
 
 interface ArmsInfoProps extends BoxProps {
   armsData?: any;
   sid?: number;
 }
-export const ArmsInfo: React.FC<ArmsInfoProps> = ({ armsData, sid, ...props }) => {
+export const ArmsInfo: React.FC<ArmsInfoProps> = ({
+  armsData,
+  sid,
+  ...props
+}) => {
   const { t } = useTranslation();
   const { game_base_unit } = armsData;
   const [radarChart] = React.useState(
@@ -125,7 +139,6 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({ armsData, sid, ...props }) =
   const [gameMock, setGameMock] = React.useState({});
   const { getSimulation } = useSimulation();
 
-
   const getGameSimulation = React.useCallback(
     async (from: number) => {
       const res = await getSimulation(from);
@@ -134,13 +147,18 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({ armsData, sid, ...props }) =
     [getSimulation],
   );
 
+  const getArms = React.useCallback(() => {
+    const arms = raceData[game_base_unit?.race]?.children?.find(
+      ({ id }) => id === Number(game_base_unit?.index),
+    );
+    return arms;
+  }, [game_base_unit]);
+
   React.useEffect(() => {
-    // setVisible(false);
     if (sid) {
       getGameSimulation(sid);
     }
   }, [sid, getGameSimulation]);
-
 
   return (
     <Container {...props}>
@@ -148,107 +166,107 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({ armsData, sid, ...props }) =
         <Head>
           <Flex alignItems='center'>
             <Text bold shadow='primary' fontSize='22px'>
-              {game_base_unit?.tag}
+              {getArms()?.name}
             </Text>
             <Text ml='25px'>Lv {game_base_unit?.level}</Text>
           </Flex>
-          <Flex ml='80px' alignItems='center'>
-            <Text
-              color={RaceTypeColor[game_base_unit?.race]}
-              mb='2px'
-              fontSize='22px'
-              bold
-            >
-              {game_base_unit?.race ? t(`race-${game_base_unit?.race}`) : ''}
-            </Text>
-            <Text ml='17px' />
-          </Flex>
           <Flex flex={1} justifyContent='flex-end' alignItems='flex-end'>
-            <Text>战斗力</Text>
+            <Text>{t('Power')}</Text>
             <MarkText bold fontSize='20px' fontStyle='normal' ml='22px'>
               {game_base_unit?.power}
             </MarkText>
           </Flex>
         </Head>
         <Body>
-          <Preview onClick={() => {
-            setVisible(!visible)
-          }} isRadius stripe width='180px' height='180px'>
+          <Preview
+            onClick={() => {
+              setVisible(!visible);
+            }}
+            isRadius
+            stripe
+            width='180px'
+            height='180px'
+          >
             <PreviewNumber>{armsData.count}</PreviewNumber>
             <Image src={getSoldierSrc()} width={180} height={180} />
           </Preview>
-          <Flex
-            flex={1}
-            ml='16px'
-            alignItems='space-between'
-            flexDirection='column'
-          >
-            <Group>
-              <GroupInfo>
-                <Text color='textSubtle'>Health</Text>
-                <Text ml='10px'>{game_base_unit?.hp}</Text>
-              </GroupInfo>
-              <GroupInfo>
-                <Text color='textSubtle'>Miss</Text>
-                <Text ml='10px'>{game_base_unit?.dodge}</Text>
-              </GroupInfo>
-            </Group>
-            <Group>
-              <GroupInfo>
-                <Text color='textSubtle'>MD</Text>
-                <Text ml='10px'>{game_base_unit?.ak}</Text>
-              </GroupInfo>
-              <GroupInfo>
-                <Text color='textSubtle'>Crit</Text>
-                <Text ml='10px'>{game_base_unit?.crit}</Text>
-              </GroupInfo>
-            </Group>
-            <Group>
-              <GroupInfo>
-                <Text color='textSubtle'>Def</Text>
-                <Text ml='10px'>{game_base_unit?.df}</Text>
-              </GroupInfo>
-              <GroupInfo>
-                <Text color='textSubtle'>Speed</Text>
-                <Text ml='10px'>{game_base_unit?.speed}</Text>
-              </GroupInfo>
-            </Group>
-            <Group>
-              <GroupInfo>
-                <Text color='textSubtle'>Point</Text>
-                <Text ml='10px'>0</Text>
-              </GroupInfo>
-              <GroupInfo>
-                <Text color='textSubtle'>Area</Text>
-                <Text ml='10px'>0</Text>
-              </GroupInfo>
-            </Group>
-            <Group>
-              <GroupInfo>
-                <Text color='textSubtle'>Hit</Text>
-                <Text ml='10px'>{game_base_unit?.hit}</Text>
-              </GroupInfo>
-              <GroupInfo />
-            </Group>
+          <Flex flexDirection='column' ml='16px' flex={1}>
+            <Flex alignItems='center' mb='5px'>
+              <Text
+                color={RaceTypeColor[game_base_unit?.race]}
+                mb='2px'
+                fontSize='22px'
+                bold
+              >
+                {game_base_unit?.race ? t(`race-${game_base_unit?.race}`) : ''}
+              </Text>
+              <Text ml='17px' />
+            </Flex>
+            <Flex flex={1} alignItems='space-between' flexDirection='column'>
+              <Group>
+                <GroupInfo>
+                  <Text color='textSubtle'>Health</Text>
+                  <Text ml='10px'>{game_base_unit?.hp}</Text>
+                </GroupInfo>
+                <GroupInfo>
+                  <Text color='textSubtle'>MD</Text>
+                  <Text ml='10px'>{game_base_unit?.ak}</Text>
+                </GroupInfo>
+                <GroupInfo>
+                  <Text color='textSubtle'>Def</Text>
+                  <Text ml='10px'>{game_base_unit?.df}</Text>
+                </GroupInfo>
+              </Group>
+              <Group>
+                <GroupInfo>
+                  <Text color='textSubtle'>Miss</Text>
+                  <Text ml='10px'>{game_base_unit?.dodge}</Text>
+                </GroupInfo>
+                <GroupInfo>
+                  <Text color='textSubtle'>Crit</Text>
+                  <Text ml='10px'>{game_base_unit?.crit}</Text>
+                </GroupInfo>
+                <GroupInfo>
+                  <Text color='textSubtle'>Speed</Text>
+                  <Text ml='10px'>{game_base_unit?.speed}</Text>
+                </GroupInfo>
+              </Group>
+              <Group>
+                <GroupInfo>
+                  <Text color='textSubtle'>Point</Text>
+                  <Text ml='10px'>
+                    {
+                      bulletType[
+                        game_base_unit?.attack_effect?.attack_effect_id
+                      ]
+                    }
+                  </Text>
+                </GroupInfo>
+                <GroupInfo>
+                  <Text color='textSubtle'>Hit</Text>
+                  <Text ml='10px'>{game_base_unit?.hit}</Text>
+                </GroupInfo>
+                <GroupInfo>
+                  <Text color='textSubtle'>Area</Text>
+                  <Text ml='10px'>{`${game_base_unit?.ak_range_min}-${game_base_unit?.ak_range_max}`}</Text>
+                </GroupInfo>
+              </Group>
+            </Flex>
           </Flex>
         </Body>
         <Flex>
           <Box ref={ref} width={180} />
           <Box ml='17px'>
             <MarkText bold fontSize='18px' mb='20px' fontStyle='normal'>
-              能力评级：SS
+              {t('Ability rating', { value: 'SS' })}
             </MarkText>
             <GraphicsCard stripe width='490px' height='110px'>
-              <Text color='textSubtle'>
-                提高角色最终命中率，同时处于反击状态。每提升1级，
-                最终命中率提高3%，同时每提升1级，反击的为例提高。
-              </Text>
+              <Text color='textSubtle'>{getArms()?.desc}</Text>
             </GraphicsCard>
           </Box>
         </Flex>
       </Content>
       <MiniRaceAni top='0' left='0' mock={gameMock} show={visible && !!sid} />
-
     </Container>
   );
 };

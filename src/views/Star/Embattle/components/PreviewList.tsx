@@ -5,7 +5,14 @@ import Soldier from 'game/core/Soldier';
 import { getSpriteName, getSpriteRes } from 'game/core/utils';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
-import { Box, Text, GraphicsCard, Flex, BorderCard, GraphicsCardProps } from 'uikit';
+import {
+  Box,
+  Text,
+  GraphicsCard,
+  Flex,
+  BorderCard,
+  GraphicsCardProps,
+} from 'uikit';
 import orderBy from 'lodash/orderBy';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
@@ -50,7 +57,8 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, [units, race]);
 
   const isBaseUnit = (item: Api.Game.UnitInfo) => {
-    return Number(`${item.race}3999`) === item.number;
+    return item.default_unit;
+    // return item.default_unit;
   };
 
   const list = useMemo(() => {
@@ -161,7 +169,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, []);
 
   return (
-    <GraphicsCard width='627px' height='222px' padding='0 16px'  {...props}>
+    <GraphicsCard width='627px' height='222px' padding='0 16px' {...props}>
       <Flex
         className='star-embattle-step1'
         style={{ overflow: 'auto' }}

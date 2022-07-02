@@ -62,7 +62,7 @@ const GalaxyInfoIndex: React.FC = () => {
       }
       // 拖拽：三个事件-按下 移动 抬起
       // 按下
-      InfoBox.onmousedown = function (ev: MouseEvent) {
+      InfoBox.onmousedown = (ev: MouseEvent) => {
         // ev = ev || window.MouseEvent;
 
         // 鼠标按下的时候，给前一点坐标赋值，为了避免第一次相减的时候出错
@@ -70,7 +70,7 @@ const GalaxyInfoIndex: React.FC = () => {
         lastY = ev.clientY;
 
         // 移动
-        InfoBox.onmousemove = function (move_ev) {
+        InfoBox.onmousemove = move_ev => {
           // ev = ev || window.event;
           clearInterval(timer);
 
@@ -92,12 +92,12 @@ const GalaxyInfoIndex: React.FC = () => {
           lastY = nowY;
         };
         // 抬起
-        InfoBox.onmouseup = function () {
+        InfoBox.onmouseup = () => {
           InfoBox.onmousemove = null;
           if (timer) {
             clearInterval(timer);
           }
-          timer = setInterval(function () {
+          timer = setInterval(() => {
             disx *= 0.98;
             disy *= 0.98;
             roY += disx * 0.05; // roY = roY + disx*0.05;
@@ -107,7 +107,7 @@ const GalaxyInfoIndex: React.FC = () => {
         };
         return false;
       };
-      InfoBox.ontouchstart = function (ev) {
+      InfoBox.ontouchstart = ev => {
         // ev = ev || window.MouseEvent;
 
         // 鼠标按下的时候，给前一点坐标赋值，为了避免第一次相减的时候出错
@@ -115,7 +115,7 @@ const GalaxyInfoIndex: React.FC = () => {
         lastY = ev.targetTouches[0].pageX;
 
         // 移动
-        InfoBox.ontouchmove = function (move_ev) {
+        InfoBox.ontouchmove = move_ev => {
           // ev = ev || window.event;
 
           clearInterval(timer);
@@ -138,12 +138,12 @@ const GalaxyInfoIndex: React.FC = () => {
           lastY = nowY;
         };
         // 抬起
-        InfoBox.ontouchend = function () {
+        InfoBox.ontouchend = () => {
           InfoBox.ontouchmove = null;
           if (timer) {
             clearInterval(timer);
           }
-          timer = setInterval(function () {
+          timer = setInterval(() => {
             disx *= 0.98;
             disy *= 0.98;
             roY += disx * 0.05; // roY = roY + disx*0.05;

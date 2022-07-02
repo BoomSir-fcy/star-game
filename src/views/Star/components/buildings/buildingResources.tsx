@@ -157,7 +157,6 @@ export const BuildingResources: React.FC<{
     [account, dispatch, library, onClose, planet_id, setState, t, toastSuccess],
   );
 
-  console.log(state);
   return (
     <Box position='relative'>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>

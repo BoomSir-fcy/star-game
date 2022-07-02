@@ -25,7 +25,7 @@ const GlobeFlexList: React.FC<GlobeFlexListProps> = ({
   return (
     <GlobeFlex starCss={starCss}>
       {loading ? (
-        <Flex ml='25%' alignItems='center' justifyContent='center'>
+        <Flex width='100%' alignItems='center' justifyContent='center'>
           <Spinner />
         </Flex>
       ) : (
@@ -85,7 +85,7 @@ const GlobeFlexList: React.FC<GlobeFlexListProps> = ({
             >
               <LinkStyled to='/mystery-box'>
                 <Text fontSize='18px'>
-                  {t('No data, Go to open the blind box')} &gt;
+                  {t('No data, Go to open the black hole')} &gt;
                 </Text>
               </LinkStyled>
             </Flex>

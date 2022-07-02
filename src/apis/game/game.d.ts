@@ -55,6 +55,8 @@ declare namespace Api {
       number: number; // 兵种标识
       build_id: string; // 培养皿id 建筑id
       count: number; // 数量
+      default_unit: number; // 是否是基础兵种
+      power: number; // 战斗力
       arms_attr: {
         ak: number;
         crit: number;

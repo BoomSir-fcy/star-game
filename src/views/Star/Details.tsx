@@ -17,9 +17,8 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
-import { setNavZIndex } from 'state/user/actions';
+import { setNavZIndex } from 'state/userInfo/reducer';
 import { useBuildingOperate } from './components/gameModel/hooks';
-
 import {
   BarRight,
   SideLeftContent,
@@ -139,6 +138,24 @@ const Details = () => {
     };
   }, [initBuilder, building]);
 
+  const initBuildingBuilder = React.useCallback(() => {
+    console.log(stateBuilding.workQueue, building);
+    const createWorks = stateBuilding.workQueue.filter(
+      item => item.work_type === 1,
+    );
+    building.initBuildingBuilder(createWorks);
+  }, [building, stateBuilding.workQueue]);
+
+  React.useEffect(() => {
+    if (building.boardsCreated) {
+      initBuildingBuilder();
+    }
+    building.addEventListener('boardsCreated', initBuildingBuilder);
+    return () => {
+      building.removeEventListener('boardsCreated', initBuildingBuilder);
+    };
+  }, [initBuildingBuilder, building]);
+
   const getWorkQueue = React.useCallback(async () => {
     try {
       const res = await refreshWorkQueue(id);
@@ -194,8 +211,6 @@ const Details = () => {
         });
         if (Api.isSuccess(res)) {
           activeBuilder?.setIsBuilding(true);
-          // console.log(1111111111)
-          // building.findBuilderByXY(val.position.from.x, val.position.from.y)?.setIsBuilding(true);
           getWorkQueue();
           toastSuccess(t('planetTipsSaveSuccess'));
         }
@@ -210,11 +225,12 @@ const Details = () => {
   // 销毁建筑
   const destoryBuilding = React.useCallback(async () => {
     if (!activeBuilder?.builded) {
-      building?.removeBuilder(activeBuilder);
       setStateBuilding(p => {
         p.visible = false;
       });
+      dispatch(setNavZIndex(true));
       dispatch(storeAction.resetModal());
+      building?.removeBuilder(activeBuilder);
       return;
     }
     try {
@@ -228,6 +244,7 @@ const Details = () => {
         setStateBuilding(p => {
           p.visible = false;
         });
+        dispatch(setNavZIndex(true));
         dispatch(storeAction.resetModal());
         building?.removeBuilder(activeBuilder);
       } else {
@@ -250,7 +267,6 @@ const Details = () => {
   ]);
 
   React.useEffect(() => {
-    console.log(activeBuilder);
     if (activeBuilder?.option?.id) {
       setStateBuilding(p => {
         p.visible = true;
@@ -276,6 +292,7 @@ const Details = () => {
   React.useEffect(() => {
     return () => {
       dispatch(storeAction.toggleVisible({ visible: false }));
+      dispatch(storeAction.resetModal());
     };
   }, [dispatch]);
 
@@ -362,6 +379,7 @@ const Details = () => {
           await saveWorkQueue(val);
         }}
         onClose={() => {
+          dispatch(setNavZIndex(true));
           dispatch(
             storeAction.upgradesBuildingModal({
               visible: false,
@@ -376,11 +394,12 @@ const Details = () => {
         visible={destory.visible}
         planet_id={id}
         onChange={destoryBuilding}
-        onClose={() =>
+        onClose={() => {
+          // dispatch(setNavZIndex(true));
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),
-          )
-        }
+          );
+        }}
       />
     </>
   );

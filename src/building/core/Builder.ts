@@ -21,11 +21,21 @@ export interface BuilderOption {
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
     super();
-    const { src, id, race = 1, areaX, areaY, enableDrag, isBuilding, builded } = option;
+    const {
+      src,
+      id,
+      race = 1,
+      areaX,
+      areaY,
+      enableDrag,
+      isBuilding,
+      builded,
+    } = option;
     this.id = id;
 
-    const img = `${window.location.origin}/assets/buildings/${race}/${src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
-      }`;
+    const img = `${window.location.origin}/assets/buildings/${race}/${
+      src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
+    }`;
 
     this.src = img;
     this.areaY = areaY;
@@ -82,15 +92,15 @@ class Builder extends EventTarget {
       y: number;
     };
   } = {
-      from: {
-        x: 0,
-        y: 0,
-      },
-      to: {
-        x: 0,
-        y: 0,
-      },
-    };
+    from: {
+      x: 0,
+      y: 0,
+    },
+    to: {
+      x: 0,
+      y: 0,
+    },
+  };
 
   init() {
     this.sprite.texture = this.texture;
@@ -157,6 +167,7 @@ class Builder extends EventTarget {
   setPosition(point: AxisPoint, matrix4?: Matrix4) {
     if (matrix4) {
       this.matrix4 = matrix4;
+      this.axisPoint = point;
       this.container.position.set(matrix4.x, matrix4.y);
       this.startPoint.set(matrix4.x, matrix4.y);
       matrix4.setState(stateType.DISABLE);
@@ -179,7 +190,7 @@ class Builder extends EventTarget {
       },
     };
 
-    this.setEnableDrag(false)
+    this.setEnableDrag(false);
   }
 
   // 重置位置 用于拖动的时候

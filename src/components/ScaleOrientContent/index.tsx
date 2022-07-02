@@ -1,6 +1,11 @@
 import StarrySky from 'components/StarrySky';
 import { VideoComponent } from 'components/Video';
-import { APP_HEIGHT, APP_WIDTH, VIDEO_GLOBAL_CLASS_NAME } from 'config';
+import {
+  APP_HEIGHT,
+  APP_WIDTH,
+  MODAL_GLOBAL_ID_NAME,
+  VIDEO_GLOBAL_CLASS_NAME,
+} from 'config';
 import React, {
   useCallback,
   useEffect,
@@ -16,7 +21,7 @@ import { Box } from 'uikit';
 import agentClient from 'utils/client';
 import { storeAction, useStore } from 'state';
 import detectOrient from 'utils/detectOrient';
-
+import Toast from 'components/Toast';
 import Dashboard from 'components/Dashboard';
 import { GuideModal } from 'components/Modal/guideModal';
 import { getHideHeader } from 'components/Dashboard/config';
@@ -100,12 +105,22 @@ const Content = styled(Box)<{ scale: number; hideHeader?: boolean }>`
   } */
 `;
 
+const ModalContent = styled(Box)<{ scale: number }>`
+  /* width: 1px;
+  height: 1px; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: ${({ scale }) => `translate(-50%, -50%) scale(${scale})`};
+  z-index: 100;
+`;
+
 const ScaleOrientContent: React.FC = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  const { client, zIndex } = useStore(p => p.user);
+  const { client } = useStore(p => p.user);
   const guideState = useStore(p => p.guide);
 
   const [minHeight, setMinHeight] = useState(900);
@@ -218,7 +233,10 @@ const ScaleOrientContent: React.FC = ({ children }) => {
         scale={scale}
       />
       <div className={VIDEO_GLOBAL_CLASS_NAME} />
+      <ModalContent scale={scale} id={MODAL_GLOBAL_ID_NAME} />
       <Dashboard scale={scale} />
+      <Toast />
+
       <Content id='scale-content' scale={scale} hideHeader={!!hideHeader}>
         {children}
         {/* 引导提示框 */}

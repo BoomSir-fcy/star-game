@@ -6,7 +6,7 @@ import Builder from 'building/core/Builder';
 import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, Image, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
-import { setNavZIndex } from 'state/user/actions';
+import { setNavZIndex } from 'state/userInfo/reducer';
 import { GameThing } from '../gameModel';
 
 const Container = styled(Box)`
@@ -190,7 +190,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                   key={row.buildings_number}
                   className={classNames(`building_${index}`)}
                 >
-                  <Text>{row.propterty.size.area_x}</Text>
+                  {/* <Text>{row.propterty.size.area_x}</Text> */}
                   <GameThing
                     scale='sm'
                     round

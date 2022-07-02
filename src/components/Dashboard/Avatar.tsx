@@ -49,7 +49,7 @@ const Avatar = () => {
 
   return (
     <BoxStyled position='relative'>
-      <VipButton variant='custom' />
+      {userInfo.vipBenefits?.is_vip && <VipButton variant='custom' />}
       <Box
         onClick={() => {
           setPopType(1);

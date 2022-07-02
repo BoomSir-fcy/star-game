@@ -32,7 +32,7 @@ interface BuilderInfoOfApi {
   position: {
     from: { x: number; y: number };
     to: { x: number; y: number };
-  }
+  };
 }
 /**
  * 游戏入口
@@ -314,6 +314,7 @@ class Building extends EventTarget {
   onDragEndBuilder(event: InteractionEvent, builder: Builder) {
     if (builder.areaX === 2) {
       const matrix4 = this.boards.checkCollisionPointOfTow(event, true);
+
       if (matrix4) {
         builder.setPosition(
           new AxisPoint(
@@ -426,17 +427,18 @@ class Building extends EventTarget {
 
   findBuilderByXY(x: number, y: number) {
     const axis = this.getAxis(x, y);
-    return this.builders.find(builder => builder.axisPoint === axis);
+    // debugger;
+    return this.builders.find(
+      builder => builder.axisPoint?.chequer === axis?.chequer,
+    );
   }
 
-  initBuilder(
-    list: BuilderInfoOfApi[],
-  ) {
+  initBuilder(list: BuilderInfoOfApi[]) {
     if (this.builders.length) {
-      this.updateBuilderState(list);
-      return
+      this.updateBuilderState(list, true);
+      return;
     }
-    list.forEach(item => {
+    list?.forEach(item => {
       this.createBuilder(item.position.from.x, item.position.from.y, {
         building: item.building,
         src: item.building.picture,
@@ -450,13 +452,36 @@ class Building extends EventTarget {
     });
   }
 
-  updateBuilderState(list: BuilderInfoOfApi[]) {
-    console.log(this.builders)
-    console.log(list)
+  initBuildingBuilder(list: BuilderInfoOfApi[]) {
+    if (this.builders.length) {
+      this.updateBuilderState(list);
+      return;
+    }
     list.forEach(item => {
-      const builder = this.findBuilderByXY(item.position.from.x, item.position.from.y);
+      this.createBuilder(item.position.from.x, item.position.from.y, {
+        building: item.building,
+        src: item.building.picture,
+        id: `${item.building._id}`,
+        race: item.building.race,
+        areaX: item.building.propterty.size.area_x,
+        areaY: item.building.propterty.size.area_y,
+        isBuilding: true,
+        builded: false,
+      });
+    });
+  }
+
+  updateBuilderState(list: BuilderInfoOfApi[], created?: boolean) {
+    list.forEach(item => {
+      const builder = this.findBuilderByXY(
+        item.position.from.x,
+        item.position.from.y,
+      );
       if (builder) {
         builder.setIsBuilded(true);
+        builder.option.building = {
+          ...item.building,
+        };
       } else {
         this.createBuilder(item.position.from.x, item.position.from.y, {
           building: item.building,
@@ -465,11 +490,11 @@ class Building extends EventTarget {
           race: item.building.race,
           areaX: item.building.propterty.size.area_x,
           areaY: item.building.propterty.size.area_y,
-          isBuilding: false,
-          builded: true,
+          isBuilding: !created,
+          builded: !!created,
         });
       }
-    })
+    });
   }
 
   /**

@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { useImmer } from 'use-immer';
-import { Flex, Box, GraphicsCard, Button, MarkText, Slider, Text } from 'uikit';
-import { TokenImage } from 'components/TokenImage';
+import { Flex, Box, GraphicsCard, Button, MarkText, Text } from 'uikit';
 
 import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
@@ -60,13 +59,23 @@ export const BuildingRechargeModal: React.FC<{
   );
 
   React.useEffect(() => {
-    setState(p => {
-      p.stone = (defaultValue.stone / maxValue[StoreType.STONE].max) * 100;
-      p.population =
-        (defaultValue.population / maxValue[StoreType.POPULATION].max) * 100;
-      p.energy = (defaultValue.energy / maxValue[StoreType.ENERGY].max) * 100;
-    });
-  }, [defaultValue, setState, maxValue]);
+    if (Object.keys(maxValue).length > 0) {
+      console.log('Object.keys(maxValue): ', Object.keys(maxValue), maxValue);
+      setState(p => {
+        p.stone =
+          (maxValue[StoreType.STONE].already / maxValue[StoreType.STONE].max) *
+          100;
+        p.population =
+          (maxValue[StoreType.POPULATION].already /
+            maxValue[StoreType.POPULATION].max) *
+          100;
+        p.energy =
+          (maxValue[StoreType.ENERGY].already /
+            maxValue[StoreType.ENERGY].max) *
+          100;
+      });
+    }
+  }, [setState, maxValue]);
 
   // React.useEffect(() => {
   //   window.addEventListener('click', onClose);
@@ -74,8 +83,6 @@ export const BuildingRechargeModal: React.FC<{
   //     window.removeEventListener('click', onClose);
   //   };
   // }, [onClose]);
-
-  console.log(state);
 
   return (
     <Container width='547px' height='343px'>

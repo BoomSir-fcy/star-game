@@ -60,6 +60,8 @@ export const initialState: UserInfoState = {
     population: 0,
     power: 0,
   },
+
+  zIndex: true,
 };
 
 export const fetchInfoViewAsync =
@@ -112,6 +114,10 @@ export const userInfoSlice = createSlice({
   name: 'userInfo',
   initialState,
   reducers: {
+    setNavZIndex: (state, action) => {
+      const { payload } = action;
+      state.zIndex = payload;
+    },
     setInfoView: (state, action) => {
       const { payload } = action;
       if (payload) {
@@ -162,6 +168,7 @@ export const userInfoSlice = createSlice({
 
 // Actions
 export const {
+  setNavZIndex,
   setInfoView,
   setUserInfo,
   setUserInfoView,

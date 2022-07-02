@@ -65,7 +65,7 @@ const HandleButtonGroup: React.FC<HandleButtonGroupProps> = ({
       <BackButton mr='22px' onBack={onBack} />
       <RefreshButton mr='22px' onRefresh={onRefresh} />
       <SecondaryButton href='/mystery-box' tag='m-box1'>
-        发现
+        {t('Find').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/vip' tag='vip'>
         VIP

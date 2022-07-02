@@ -63,17 +63,17 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
   return (
     <Flex>
       <SecondaryButton href='/star/planet' tag='bag'>
-        {t('行星').toLocaleUpperCase()}
+        {t('Planet').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton
         href='/plant-league'
         tag='star'
         className='header_explore'
       >
-        {t('联盟').toLocaleUpperCase()}
+        {t('Alliance').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/galaxy' tag='flag'>
-        {t('星系').toLocaleUpperCase()}
+        {t('Galaxy').toLocaleUpperCase()}
       </SecondaryButton>
 
       {/* <BackButton onBack={onBack} /> */}

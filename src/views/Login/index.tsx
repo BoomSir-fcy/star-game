@@ -43,16 +43,26 @@ import { useLogin } from './hooks/login';
 const StarGameBoxMove = styled(StarGameBox)<{ move?: boolean }>`
   transition: 0.3s;
   transform: translateY(${({ move }) => (move ? '-160px' : '0')});
+  position: absolute;
+  top: 180px;
 `;
 
 const EnterBoxMove = styled(Box)<{ move?: boolean }>`
   transition: 0.3s;
   transform: translateY(${({ move }) => (move ? '200px' : '0')}) translateZ(1px);
+  position: absolute;
+  bottom: 240px;
 `;
 
 const CreateBoxShow = styled(Box)<{ show?: boolean }>`
   transition: 0.3s;
   opacity: ${({ show }) => (show ? 1 : 0)};
+`;
+
+const Container = styled(Box)`
+  position: relative;
+  width: 100%;
+  height: 100vh;
 `;
 
 const Login = () => {
@@ -228,7 +238,7 @@ const Login = () => {
   }, [parsedQs.InviteAddress]);
 
   useEffect(() => {
-    if (!userInfoView.loading && !parsedQs.s) {
+    if (!userInfoView.loading || !parsedQs.s) {
       if (account && !userInfoView.isActive) {
         navigate(`${pathname}?s=${1}`, { replace: true });
       } else {
@@ -271,7 +281,7 @@ const Login = () => {
   );
 
   return (
-    <>
+    <Container>
       {showCreate && (
         <Steps
           enabled={stepsEnabled}
@@ -329,7 +339,7 @@ const Login = () => {
           onRegister={payType => onHandleRegister(payType)}
         />
       )}
-    </>
+    </Container>
   );
 };
 

@@ -84,7 +84,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   // }, [location.pathname, FetchBlance, FetchProduct]);
 
   const Product = useStore(p => p.userInfo.userProduct);
-  const zIndex = useStore(p => p.user.zIndex);
+  const zIndex = useStore(p => p.userInfo.zIndex);
 
   const hideHeader = useMemo(() => {
     return getHideHeader(location.pathname) || params?.hide;

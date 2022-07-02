@@ -22,6 +22,7 @@ import {
   fetchBoxViewAsync,
 } from 'state/mysteryBox/reducer';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from 'contexts/ToastsContext';
 import eventBus from 'utils/eventBus';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import { queryMintEvent } from './event';
@@ -34,6 +35,7 @@ const State = () => {
   const navigate = useNavigate();
   const [buyNum, setBuyNum] = useState(5);
 
+  const { toastError } = useToast();
   useFetchBoxView();
 
   const { priceBNB, maxHeld, boxCount, loading } = useStore(
@@ -75,6 +77,9 @@ const State = () => {
       setHandleLoading(false);
     } catch (error) {
       setHandleLoading(false);
+      toastError(
+        'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+      );
       console.error(error);
     }
   }, [
@@ -85,6 +90,7 @@ const State = () => {
     priceBNB,
     setHandleLoading,
     dispatch,
+    toastError,
   ]);
 
   const { handleOpen } = useOpenMysteryBox();
@@ -130,8 +136,20 @@ const State = () => {
     } catch (error) {
       setHandleLoading(false);
       console.error(error);
+      toastError(
+        'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+      );
     }
-  }, [account, buyNum, quality, handleOpen, navigate, getPlanetId, dispatch]);
+  }, [
+    account,
+    buyNum,
+    quality,
+    handleOpen,
+    navigate,
+    getPlanetId,
+    dispatch,
+    toastError,
+  ]);
 
   useEffect(() => {
     fetchHandle();
@@ -213,7 +231,7 @@ const State = () => {
                 <Dots>{t('Opening')}</Dots>
               ) : (
                 <Text fontSize='22px' bold>
-                  {t('Open blind box')}
+                  {t('Open')}
                 </Text>
               )}
             </Button>
@@ -229,7 +247,7 @@ const State = () => {
                 <Dots>{t('Purchasing')}</Dots>
               ) : (
                 <Text fontSize='22px' bold>
-                  {t('Buy blind box')}
+                  {t('Buy')}
                 </Text>
               )}
             </Button>
