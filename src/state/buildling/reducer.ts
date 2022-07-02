@@ -90,6 +90,12 @@ export const buildling = createSlice({
           visible: false,
           upgrad: {},
         };
+        state.selfBuildings = {
+          building_type: 0,
+          buildings: [],
+          id: '',
+          planet_id: 0,
+        };
       })
       .addCase(queueVisbleSide, (state, action) => {
         state.queue.visible = action.payload;

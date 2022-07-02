@@ -11,6 +11,7 @@ import {
 } from 'uikit';
 import { position } from 'styled-system';
 import { RaceTypeColor } from 'uikit/theme/colors';
+import { bulletType } from 'game/types';
 
 import { raceData } from 'config/raceConfig';
 import { useTranslation } from 'contexts/Localization';
@@ -147,7 +148,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
   );
 
   const getArms = React.useCallback(() => {
-    const arms = raceData[game_base_unit?.race]?.children.find(
+    const arms = raceData[game_base_unit?.race]?.children?.find(
       ({ id }) => id === Number(game_base_unit?.index),
     );
     return arms;
@@ -233,7 +234,13 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
               <Group>
                 <GroupInfo>
                   <Text color='textSubtle'>Point</Text>
-                  <Text ml='10px'>{game_base_unit?.attack_effect}</Text>
+                  <Text ml='10px'>
+                    {
+                      bulletType[
+                        game_base_unit?.attack_effect?.attack_effect_id
+                      ]
+                    }
+                  </Text>
                 </GroupInfo>
                 <GroupInfo>
                   <Text color='textSubtle'>Hit</Text>
