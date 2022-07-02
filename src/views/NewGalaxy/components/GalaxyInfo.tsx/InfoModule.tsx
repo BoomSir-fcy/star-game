@@ -220,7 +220,7 @@ const InfoModule: React.FC<{
           width='48%'
           height='max-content'
         >
-          <Text fontSize='14px'>{t('He has accumulated')}BOX</Text>
+          <Text fontSize='14px'>{t('He has accumulated')} BOX</Text>
           <NormalMarkText bold fontSize='18px'>
             {SubString_1(OwnerInfo.owner_get_box, 5)}
           </NormalMarkText>
@@ -231,7 +231,7 @@ const InfoModule: React.FC<{
           width='48%'
           height='max-content'
         >
-          <Text fontSize='14px'>{t('Accumulated history')}BOX</Text>
+          <Text fontSize='14px'>{t('Accumulated history')} BOX</Text>
           <NormalMarkText bold fontSize='18px'>
             {SubString_1(OwnerInfo.all_get_box, 5)}
           </NormalMarkText>
@@ -242,6 +242,7 @@ const InfoModule: React.FC<{
           {t(
             'All galaxy masters in the history of the galaxy have accumulated',
           )}
+          &nbsp;
           {OwnerInfo.all_auction_num} BNB
         </Text>
       </BorderBox>
@@ -258,7 +259,7 @@ const InfoModule: React.FC<{
           </Text>
         ))}
       </ScrollBox>
-      <Flex mb='10px'>
+      <Flex mb='10px' alignItems='center'>
         <AuctionBtn
           variant='purple'
           height='45px'
@@ -281,7 +282,7 @@ const InfoModule: React.FC<{
           </Text>
         </Box>
       </Flex>
-      <Flex>
+      <Flex alignItems='center'>
         <AuctionBtn
           variant='purple'
           height='45px'
