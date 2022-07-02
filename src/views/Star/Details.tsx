@@ -213,6 +213,8 @@ const Details = () => {
           activeBuilder?.setIsBuilding(true);
           getWorkQueue();
           toastSuccess(t('planetTipsSaveSuccess'));
+        } else if (activeBuilder) {
+          building?.removeBuilder(activeBuilder);
         }
       } catch (error) {
         console.error(error);
