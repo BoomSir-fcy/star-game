@@ -225,11 +225,12 @@ const Details = () => {
   // 销毁建筑
   const destoryBuilding = React.useCallback(async () => {
     if (!activeBuilder?.builded) {
-      building?.removeBuilder(activeBuilder);
       setStateBuilding(p => {
         p.visible = false;
       });
+      dispatch(setNavZIndex(true));
       dispatch(storeAction.resetModal());
+      building?.removeBuilder(activeBuilder);
       return;
     }
     try {
@@ -266,7 +267,6 @@ const Details = () => {
   ]);
 
   React.useEffect(() => {
-    console.log(activeBuilder);
     if (activeBuilder?.option?.id) {
       setStateBuilding(p => {
         p.visible = true;
@@ -292,6 +292,7 @@ const Details = () => {
   React.useEffect(() => {
     return () => {
       dispatch(storeAction.toggleVisible({ visible: false }));
+      dispatch(storeAction.resetModal());
     };
   }, [dispatch]);
 
@@ -394,7 +395,7 @@ const Details = () => {
         planet_id={id}
         onChange={destoryBuilding}
         onClose={() => {
-          dispatch(setNavZIndex(true));
+          // dispatch(setNavZIndex(true));
           dispatch(
             storeAction.destoryBuildingModal({ visible: false, destory: {} }),
           );

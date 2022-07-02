@@ -428,15 +428,17 @@ class Building extends EventTarget {
   findBuilderByXY(x: number, y: number) {
     const axis = this.getAxis(x, y);
     // debugger;
-    return this.builders.find(builder => builder.axisPoint?.chequer === axis?.chequer);
+    return this.builders.find(
+      builder => builder.axisPoint?.chequer === axis?.chequer,
+    );
   }
 
   initBuilder(list: BuilderInfoOfApi[]) {
     if (this.builders.length) {
       this.updateBuilderState(list, true);
-      return
+      return;
     }
-    list.forEach(item => {
+    list?.forEach(item => {
       this.createBuilder(item.position.from.x, item.position.from.y, {
         building: item.building,
         src: item.building.picture,
@@ -450,12 +452,10 @@ class Building extends EventTarget {
     });
   }
 
-  initBuildingBuilder(
-    list: BuilderInfoOfApi[],
-  ) {
+  initBuildingBuilder(list: BuilderInfoOfApi[]) {
     if (this.builders.length) {
       this.updateBuilderState(list);
-      return
+      return;
     }
     list.forEach(item => {
       this.createBuilder(item.position.from.x, item.position.from.y, {
@@ -481,7 +481,7 @@ class Building extends EventTarget {
         builder.setIsBuilded(true);
         builder.option.building = {
           ...item.building,
-        }
+        };
       } else {
         this.createBuilder(item.position.from.x, item.position.from.y, {
           building: item.building,

@@ -11,7 +11,9 @@ import {
 } from 'uikit';
 import { position } from 'styled-system';
 import { RaceTypeColor } from 'uikit/theme/colors';
+import { bulletType } from 'game/types';
 
+import { raceData } from 'config/raceConfig';
 import { useTranslation } from 'contexts/Localization';
 import { getSpriteRes } from 'game/core/utils';
 import RadarChart from 'game/core/RadarChart';
@@ -145,6 +147,13 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
     [getSimulation],
   );
 
+  const getArms = React.useCallback(() => {
+    const arms = raceData[game_base_unit?.race]?.children?.find(
+      ({ id }) => id === Number(game_base_unit?.index),
+    );
+    return arms;
+  }, [game_base_unit]);
+
   React.useEffect(() => {
     if (sid) {
       getGameSimulation(sid);
@@ -157,7 +166,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
         <Head>
           <Flex alignItems='center'>
             <Text bold shadow='primary' fontSize='22px'>
-              {game_base_unit?.tag}
+              {getArms()?.name}
             </Text>
             <Text ml='25px'>Lv {game_base_unit?.level}</Text>
           </Flex>
@@ -225,7 +234,13 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
               <Group>
                 <GroupInfo>
                   <Text color='textSubtle'>Point</Text>
-                  <Text ml='10px'>{game_base_unit?.attack_effect}</Text>
+                  <Text ml='10px'>
+                    {
+                      bulletType[
+                        game_base_unit?.attack_effect?.attack_effect_id
+                      ]
+                    }
+                  </Text>
                 </GroupInfo>
                 <GroupInfo>
                   <Text color='textSubtle'>Hit</Text>
@@ -246,10 +261,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
               {t('Ability rating', { value: 'SS' })}
             </MarkText>
             <GraphicsCard stripe width='490px' height='110px'>
-              <Text color='textSubtle'>
-                提高角色最终命中率，同时处于反击状态。每提升1级，
-                最终命中率提高3%，同时每提升1级，反击的为例提高。
-              </Text>
+              <Text color='textSubtle'>{getArms()?.desc}</Text>
             </GraphicsCard>
           </Box>
         </Flex>
