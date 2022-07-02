@@ -2,10 +2,11 @@ import React from 'react';
 import { Box, Flex, Text, Image } from 'uikit';
 import ScoringPanel from 'components/ScoringPanel';
 import { useTranslation } from 'contexts/Localization';
+import { formatDisplayApr } from 'utils/formatBalance';
 import { CardStyle, TopBox1, TopBox2, TopText2, TopText1 } from './styled';
 
 export const successRate = (nowLevel: number) => {
-  if (nowLevel >= 1 && nowLevel <= 6) {
+  if (nowLevel >= 0 && nowLevel <= 6) {
     return 'Extremely high';
   }
   if (nowLevel >= 7 && nowLevel <= 14) {
@@ -62,7 +63,7 @@ const GrowLevel: React.FC<GrowLevelProps> = ({
         <Box>
           <Text small>{t('Power')}</Text>
           <Text fontSize='20px' fontStyle='normal' mark bold>
-            {now_power}
+            {formatDisplayApr(now_power)}
           </Text>
         </Box>
         <Box width={58}>
@@ -75,7 +76,7 @@ const GrowLevel: React.FC<GrowLevelProps> = ({
         <Box>
           <Text small>{t('After lifting')}</Text>
           <Text fontSize='20px' fontStyle='normal' mark bold>
-            {estimate_power}
+            {formatDisplayApr(estimate_power)}
           </Text>
         </Box>
       </Flex>

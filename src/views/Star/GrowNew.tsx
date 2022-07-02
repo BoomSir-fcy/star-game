@@ -15,6 +15,7 @@ import { getWEtherAddress } from 'utils/addressHelpers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useToast } from 'contexts/ToastsContext';
 import ModalWrapper from 'components/Modal';
+import { formatDisplayApr } from 'utils/formatBalance';
 import {
   Arms,
   Extra,
@@ -204,7 +205,7 @@ const Grow: React.FC = () => {
                   <Text small>{isSuccess === 1 ? t('Power') : t('Level')}</Text>
                   <Text fontSize='20px' fontStyle='normal' mark bold>
                     {isSuccess === 1
-                      ? estimateCost?.now_power
+                      ? formatDisplayApr(estimateCost?.now_power)
                       : estimateCost?.now_level}
                   </Text>
                 </Box>
@@ -219,7 +220,7 @@ const Grow: React.FC = () => {
                   <Text small>{isSuccess === 1 ? t('Power') : t('Level')}</Text>
                   <Text fontSize='20px' fontStyle='normal' mark bold>
                     {isSuccess === 1
-                      ? estimateCost?.estimate_power
+                      ? formatDisplayApr(estimateCost?.estimate_power)
                       : estimateCost?.now_level - downgrade}
                   </Text>
                 </Box>

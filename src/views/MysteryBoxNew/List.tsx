@@ -208,7 +208,7 @@ const List = () => {
       );
     }
 
-    if (planetList?.length > 0 && order?.length === 0) {
+    if (planetList?.length > 0 && (!order || order?.length === 0)) {
       return (
         <>
           <Button
