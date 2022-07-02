@@ -85,7 +85,7 @@ const GlobeFlexList: React.FC<GlobeFlexListProps> = ({
             >
               <LinkStyled to='/mystery-box'>
                 <Text fontSize='18px'>
-                  {t('No data, Go to open the blind box')} &gt;
+                  {t('No data, Go to open the black hole')} &gt;
                 </Text>
               </LinkStyled>
             </Flex>

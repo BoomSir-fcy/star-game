@@ -314,7 +314,7 @@ const MysteryBoxState = () => {
                   {handleLoading ? (
                     <Dots>{t('Opening')}</Dots>
                   ) : (
-                    <Text fontSize='inherit'>{t('Open blind box')}</Text>
+                    <Text fontSize='inherit'>{t('Open')}</Text>
                   )}
                 </Button>
               ) : (
@@ -325,7 +325,7 @@ const MysteryBoxState = () => {
                   {handleLoading ? (
                     <Dots>{t('Purchasing')}</Dots>
                   ) : (
-                    <Text fontSize='inherit'>{t('Buy blind box')}</Text>
+                    <Text fontSize='inherit'>{t('Buy')}</Text>
                   )}
                 </Button>
               )}
