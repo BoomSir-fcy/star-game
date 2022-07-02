@@ -49,6 +49,8 @@ const BarFlex = styled(Flex)`
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 `;
 
 const TipBox = styled(Box)`
