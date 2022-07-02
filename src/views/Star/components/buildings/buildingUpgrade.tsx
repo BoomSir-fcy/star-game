@@ -102,14 +102,17 @@ export const BuildingUpgrade: React.FC<{
                 ml='2px'
                 small
                 color={`${
-                  planetAssets?.energy < estimate?.upgrade_need?.upgrade_energy
+                  planetAssets?.energy <
+                  (estimate?.upgrade_need?.upgrade_energy ||
+                    currnet_building?.upgrade_need?.upgrade_energy)
                     ? 'warning'
                     : 'progressGreenBar'
                 }`}
               >
                 {formatDisplayApr(
                   new BigNumber(
-                    estimate?.upgrade_need?.upgrade_energy,
+                    estimate?.upgrade_need?.upgrade_energy ||
+                      currnet_building?.upgrade_need?.upgrade_energy,
                   ).toNumber(),
                 )}
               </Text>
@@ -126,14 +129,17 @@ export const BuildingUpgrade: React.FC<{
                 ml='2px'
                 small
                 color={`${
-                  planetAssets?.stone < estimate?.upgrade_need?.upgrade_stone
+                  planetAssets?.stone <
+                  (estimate?.upgrade_need?.upgrade_stone ||
+                    currnet_building?.upgrade_need?.upgrade_stone)
                     ? 'warning'
                     : 'progressGreenBar'
                 }`}
               >
                 {formatDisplayApr(
                   new BigNumber(
-                    estimate?.upgrade_need?.upgrade_stone,
+                    estimate?.upgrade_need?.upgrade_stone ||
+                      currnet_building?.upgrade_need?.upgrade_stone,
                   ).toNumber(),
                 )}
               </Text>
@@ -154,14 +160,16 @@ export const BuildingUpgrade: React.FC<{
                 small
                 color={`${
                   planetAssets?.population <
-                  estimate?.upgrade_need?.upgrade_population
+                  (estimate?.upgrade_need?.upgrade_population ||
+                    currnet_building?.upgrade_need?.upgrade_population)
                     ? 'warning'
                     : 'progressGreenBar'
                 }`}
               >
                 {formatDisplayApr(
                   new BigNumber(
-                    estimate?.upgrade_need?.upgrade_population,
+                    estimate?.upgrade_need?.upgrade_population ||
+                      currnet_building?.upgrade_need?.upgrade_population,
                   ).toNumber(),
                 )}
               </Text>
@@ -178,13 +186,18 @@ export const BuildingUpgrade: React.FC<{
                 ml='2px'
                 small
                 color={`${
-                  planetAssets?.stone < estimate?.upgrade_need?.upgrade_box
+                  planetAssets?.stone <
+                  (estimate?.upgrade_need?.upgrade_box ||
+                    currnet_building?.upgrade_need?.upgrade_box)
                     ? 'warning'
                     : 'progressGreenBar'
                 }`}
               >
                 {formatDisplayApr(
-                  new BigNumber(estimate?.upgrade_need?.upgrade_box).toNumber(),
+                  new BigNumber(
+                    estimate?.upgrade_need?.upgrade_box ||
+                      currnet_building?.upgrade_need?.upgrade_box,
+                  ).toNumber(),
                 )}
               </Text>
               <Text small>

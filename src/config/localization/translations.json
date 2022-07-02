@@ -766,5 +766,6 @@
   "http-error-200031": "Insufficient resources consumed by the upgrade",
   "http-error-200037": "Planet upgrade fail in planetary alliance",
   "http-error-1000004": "Game unit count over.",
+  "http-error-200029": "Planetary Alliance is working, unable to occupy stars",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

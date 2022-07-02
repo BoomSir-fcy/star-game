@@ -25,7 +25,7 @@ const GlobeFlexList: React.FC<GlobeFlexListProps> = ({
   return (
     <GlobeFlex starCss={starCss}>
       {loading ? (
-        <Flex ml='25%' alignItems='center' justifyContent='center'>
+        <Flex width='100%' alignItems='center' justifyContent='center'>
           <Spinner />
         </Flex>
       ) : (
