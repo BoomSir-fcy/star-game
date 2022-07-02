@@ -149,6 +149,42 @@ class Building extends EventTarget {
     this.boards.container.sortableChildren = true;
     this.boards.container.zIndex = 1;
     this.boards.container.addChild(builder.container);
+
+    // builder.axisPoint?.chequer?.graphics.on('', () => {});
+    // builder.axisPoint?.chequer?.graphics
+    //   ?.on('pointerdown', () => {
+    //     // this.showSameSoliderState(soldier);
+    //     if (builder.enableDrag) {
+    //       builder.setMoved(true);
+    //       builder.matrix4?.setState(stateType.PREVIEW);
+    //       builder.changeState(stateType.PREVIEW);
+    //     }
+    //   })
+    //   .on('pointermove', event => {
+    //     if (builder.dragging && builder.enableDrag) {
+    //       this.onDragStarBuilder(builder);
+    //       this.onDrageMoveBuilder(event, builder);
+    //       builder.matrix4?.setState(stateType.PREVIEW);
+    //       builder.changeState(stateType.PREVIEW);
+    //     }
+    //   })
+    //   .on('pointerup', event => {
+    //     if (builder.moved) {
+    //       const res = this.onDragEndBuilder(event, builder);
+    //       if (res) {
+    //         this.dispatchEvent(getUpdateBuilderPosition(this.builders));
+    //         this.dispatchEvent(getAddActiveBuilderEvent(builder));
+    //       }
+    //     }
+    //     this.activeBuilderFlag = true;
+    //     this.activeBuilder = builder;
+    //     builder.changeState(stateType.ACTIVE, true);
+    //     this.dispatchEvent(getAddActiveBuilderEvent(builder));
+    //   })
+    //   .on('click', (e: InteractionEvent) => {
+    //     this.activeBuilderFlag = true;
+    //   });
+
     builder.container
       .on('pointerdown', () => {
         // this.showSameSoliderState(soldier);
@@ -358,33 +394,6 @@ class Building extends EventTarget {
 
     this.addBuilder(builder);
 
-    // 小人从天而降
-    builder.changeState(stateType.PREVIEW, true);
-    const point0 = new Point(axis.x, axis.y - 1000) as AxisPoint;
-    const point1 = new Point(axis.x, axis.y) as AxisPoint;
-    builder.container.position.set(axis.x, axis.y);
-
-    const id = uniqueId();
-
-    // FIXME: 这行代码不能删 我也不知道为什么
-    const linearMove = new LinearMove(builder.container, point0, point1, {
-      speed: SpeederType.SOLDIER_CREATE,
-    });
-    // linearMove.addEventListener('end', () => {
-    //   builder.container.position.set(axis.x, axis.y);
-    //   builder.startPoint = point1;
-    //   builder.changeState(stateType.DISABLE, false);
-    //   this.dispatchEvent(
-    //     new CustomEvent('builderCreated', { detail: { builder } }),
-    //   );
-    //   if (id === this.lastCreateBuilderId) {
-    //     this.dispatchEvent(
-    //       new CustomEvent('lastBuilderCreated', { detail: { builder } }),
-    //     );
-    //   }
-    // });
-    // linearMove.speed = 100;
-    // linearMove.move();
     builder.changeState(stateType.DISABLE, false);
 
     return builder;

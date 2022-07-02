@@ -1,7 +1,8 @@
 import { Sprite } from '@pixi/sprite';
 import { InteractionEvent, InteractionData } from '@pixi/interaction';
-import { Point } from '@pixi/math';
+import { Point, Polygon } from '@pixi/math';
 import { Texture } from '@pixi/core';
+import { Graphics } from '@pixi/graphics';
 import { Container } from '@pixi/display';
 import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
@@ -18,6 +19,7 @@ export interface BuilderOption {
   builded?: boolean;
   enableDrag?: boolean;
 }
+
 class Builder extends EventTarget {
   constructor(option: BuilderOption) {
     super();
@@ -82,6 +84,8 @@ class Builder extends EventTarget {
 
   moved = false; // 是否发生移动
 
+  graphics = new Graphics();
+
   position: {
     from: {
       x: number;
@@ -130,8 +134,45 @@ class Builder extends EventTarget {
 
   setEnableDrag(enableDrag: boolean) {
     this.enableDrag = enableDrag;
-    // this.container.buttonMode = enableDrag;
-    // this.container.interactive = enableDrag;
+    // this.sprite.buttonMode = false;
+    // this.sprite.interactive = false;
+    // this.sprite;
+  }
+
+  createGraphics() {
+    const offsetY = -Chequer.HEIGHT * Chequer.Y_RATIO * (this.areaX - 0.5);
+    const path = [
+      0,
+      offsetY,
+      Chequer.WIDTH * Chequer.X_RATIO * this.areaX,
+      Chequer.HEIGHT * Chequer.Y_RATIO * this.areaX + offsetY,
+      0,
+      Chequer.HEIGHT * Chequer.Y_RATIO * 2 * this.areaX + offsetY,
+      -Chequer.WIDTH * Chequer.X_RATIO * this.areaX,
+      Chequer.HEIGHT * Chequer.Y_RATIO * this.areaX + offsetY,
+    ];
+    const polygon = new Polygon(path);
+    // polygon
+    // this.graphics.lineStyle(1, 0xff0000, 0.7);
+    // this.graphics.beginFill(0xff0000, 0.2);
+    // this.graphics.drawPolygon(polygon);
+    // this.graphics.endFill();
+    // const { x, y } = this?.matrix4 || this.axisPoint || {};
+    // // const { x } = this.bunny;
+    // // const y = y - (Chequer.HEIGHT * Chequer.Y_RATIO) / 2;
+    // this.graphics.x = 0;
+    // this.graphics.y = 0;
+    // this.graphics.y = -Chequer.HEIGHT * Chequer.Y_RATIO * (this.areaX - 0.5);
+
+    // console.log(this.graphics.position);
+
+    // this.graphics.interactive = true;
+
+    // this.centerPoint.set(x, y);
+    this.container.addChild(this.graphics);
+
+    this.container.hitArea = new Polygon(path);
+    return this.graphics;
   }
 
   setPointAsXY(x: number, y: number) {
@@ -190,6 +231,7 @@ class Builder extends EventTarget {
       },
     };
 
+    this.createGraphics();
     this.setEnableDrag(false);
   }
 
