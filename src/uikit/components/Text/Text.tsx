@@ -27,6 +27,7 @@ const Text = styled.div<TextProps>`
       font-style: italic;
 
       color: #ffffff;
+      padding-left: 5px;
       text-shadow: 0px 3px 0.4em #79c6c4;
 
       background: linear-gradient(
