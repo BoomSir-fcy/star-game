@@ -217,7 +217,7 @@ const Embattle = () => {
 
   const totalPower = useMemo(() => {
     return gameSoldiers.reduce((prev, curr) => {
-      return prev + curr.soldier.options?.unitInfo?.power;
+      return prev + (curr.soldier.options?.unitInfo?.power || 0);
     }, 0);
   }, [gameSoldiers]);
 

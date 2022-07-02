@@ -27,6 +27,8 @@ import { successRate } from './components/grow/GrowLevel';
 import useGrowThree from './components/grow/useGrowThree';
 
 const Grow: React.FC = () => {
+  const ref = React.useRef(null);
+
   const { t } = useTranslation();
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
@@ -40,6 +42,9 @@ const Grow: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(0); // 1-成功 2-失败
   const [downgrade, setDowngrade] = useState(0); // 培育失败后掉的等级
+
+  const { createPlanet } = useGrowThree(ref.current, planetInfo?.picture1);
+
   // 培育信息
   const [estimateCost, setEstimateCost] = useState<StrengthenConsumeType>({
     consume_bnb: null,
@@ -131,6 +136,7 @@ const Grow: React.FC = () => {
         } else {
           setIsSuccess(2);
           setDowngrade(res?.data?.sub_level);
+          createPlanet('');
         }
       }
       setPending(false);
@@ -141,11 +147,7 @@ const Grow: React.FC = () => {
       setIsSuccess(0);
       console.error(error);
     }
-  }, [parsedQs.id, t, toastError, toastSuccess]);
-
-  const ref = React.useRef(null);
-
-  useGrowThree(ref.current);
+  }, [parsedQs.id, t, toastError, toastSuccess, createPlanet]);
 
   return (
     <Box width='100%' height='100%'>
@@ -232,6 +234,9 @@ const Grow: React.FC = () => {
                 variant='purple'
                 onClick={() => {
                   setIsSuccess(0);
+                  if (isSuccess === 2) {
+                    createPlanet(planetInfo?.picture1);
+                  }
                   dispatch(fetchPlanetInfoAsync([Number(parsedQs.id)]));
                   getPlanetStrengthen();
                 }}
