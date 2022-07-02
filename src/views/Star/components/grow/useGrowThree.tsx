@@ -13,11 +13,11 @@ const getImageUrl = (url?: string) => {
 };
 
 const useGrowThree = (dom: Element, url?: string) => {
-  var renderer,
+  var renderer: THREE.WebGLRenderer,
     scene,
     camera,
     composer,
-    circle,
+    circle: THREE.Object3D,
     particle,
     luminor,
     halo,
