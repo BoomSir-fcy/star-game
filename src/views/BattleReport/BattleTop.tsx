@@ -115,6 +115,9 @@ export const BattleTop: React.FC<{
   const [isFocused, setIsFocused] = useState(null);
 
   const onDateChange = (e: any) => {
+    const E_startDate = e.startDate;
+    const E_endDate = e.endDate;
+
     const Starttime = moment(e.startDate).format('YYYY-MM-DD');
     const Endtime = moment(e.endDate).format('YYYY-MM-DD');
     const Start =
@@ -122,7 +125,7 @@ export const BattleTop: React.FC<{
     const End =
       new Date(new Date(Endtime).toLocaleDateString()).getTime() / 1000;
     setStart_time(Start);
-    setEnd_time(End);
+    setEnd_time(End || Start + 86400);
     setIsFocused(null);
   };
   const onFocusChange = e => {
@@ -182,6 +185,7 @@ export const BattleTop: React.FC<{
           onFocusChange={onFocusChange}
           onDatesChange={onDateChange}
           maxDate={moment(new Date(new Date().toLocaleDateString()).getTime())}
+          minimumNights={0}
           // disabled='endDate'
           numberOfMonths={1}
           isOutsideRange={() => {}}
