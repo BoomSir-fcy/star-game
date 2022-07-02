@@ -51,6 +51,7 @@ const RecordBox = styled(Flex)`
           rgba(255, 255, 255, 1) 60.4873046875%
         );
         -webkit-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
         color: #ffffff;
         font-size: 22px;
