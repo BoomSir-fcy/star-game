@@ -29,7 +29,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
   );
 
   const handleUpdate = useCallback(
-    async (isDelete?: boolean) => {
+    async (noToast?: boolean) => {
       const { soldiers } = game;
       // const { soldiers } = event.detail as { soldiers: Soldier[] };
       const MAX = 64;
@@ -52,7 +52,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
       });
       if (Api.isSuccess(res)) {
         // setSortSoldiers(game.soldiers);
-        if (!isDelete) {
+        if (!noToast) {
           toastSuccess(t('部署成功'));
         }
       } else {
@@ -67,8 +67,9 @@ const useUpdatePos = (planetId: number, game: Game) => {
       // const { soldiers } = game;
       const { soldiers } = event.detail as { soldiers: Soldier[] };
       setSortSoldiers(soldiers);
+      handleUpdate();
     },
-    [setSortSoldiers],
+    [setSortSoldiers, handleUpdate],
   );
 
   useEffect(() => {
