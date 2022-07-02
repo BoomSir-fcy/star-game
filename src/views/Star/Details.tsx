@@ -17,9 +17,8 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
-import { setNavZIndex } from 'state/user/actions';
+import { setNavZIndex } from 'state/userInfo/reducer';
 import { useBuildingOperate } from './components/gameModel/hooks';
-
 import {
   BarRight,
   SideLeftContent,
@@ -140,8 +139,10 @@ const Details = () => {
   }, [initBuilder, building]);
 
   const initBuildingBuilder = React.useCallback(() => {
-    console.log(stateBuilding.workQueue, building)
-    const createWorks = stateBuilding.workQueue.filter(item => item.work_type === 1);
+    console.log(stateBuilding.workQueue, building);
+    const createWorks = stateBuilding.workQueue.filter(
+      item => item.work_type === 1,
+    );
     building.initBuildingBuilder(createWorks);
   }, [building, stateBuilding.workQueue]);
 

@@ -105,7 +105,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  const { client, zIndex } = useStore(p => p.user);
+  const { client } = useStore(p => p.user);
   const guideState = useStore(p => p.guide);
 
   const [minHeight, setMinHeight] = useState(900);

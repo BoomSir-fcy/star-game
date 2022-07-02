@@ -6,7 +6,7 @@ import Builder from 'building/core/Builder';
 import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, Image, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
-import { setNavZIndex } from 'state/user/actions';
+import { setNavZIndex } from 'state/userInfo/reducer';
 import { GameThing } from '../gameModel';
 
 const Container = styled(Box)`
