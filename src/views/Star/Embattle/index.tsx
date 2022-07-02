@@ -11,7 +11,15 @@ import 'intro.js/introjs.css';
 
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Button, Text, Flex, Image, GraphicsCard, BalanceText } from 'uikit';
+import {
+  Box,
+  Button,
+  Text,
+  Flex,
+  Image,
+  GraphicsCard,
+  BalanceText,
+} from 'uikit';
 import { useGuide } from 'hooks/useGuide';
 import config from 'game/config';
 import { Api } from 'apis';
@@ -123,7 +131,10 @@ const Embattle = () => {
     }
   }, [ref, game]);
 
-  const { gameSoldiers, setSortSoldiers } = useUpdatePos(planetId, game);
+  const { gameSoldiers, setSortSoldiers, handleUpdate } = useUpdatePos(
+    planetId,
+    game,
+  );
 
   const activeSoldier = useActiveSoldier(game);
 
@@ -204,6 +215,12 @@ const Embattle = () => {
 
   const [arrowShow, setArrowShow] = useState(false);
 
+  const totalPower = useMemo(() => {
+    return gameSoldiers.reduce((prev, curr) => {
+      return prev + curr.soldier.options?.unitInfo?.power;
+    }, 0);
+  }, [gameSoldiers]);
+
   return (
     <Box className='star-embattle-step5' position='relative'>
       {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
@@ -261,12 +278,21 @@ const Embattle = () => {
       </Box> */}
       <Box position='absolute' bottom={0} left={0}>
         <GraphicsCard width='740px' height='75px' padding={0}>
-          <Flex alignItems='center' justifyContent='space-between' height='100%' width='100%'>
-            <Flex >
-              <Text margin='0 32px'>阵队战斗力</Text>
-              <Text mark>88888848</Text>
+          <Flex
+            alignItems='center'
+            justifyContent='space-between'
+            height='100%'
+            width='100%'
+          >
+            <Flex>
+              <Text margin='0 32px'>{t('Total Power')}</Text>
+              <Text paddingRight={10} mark>
+                {totalPower}
+              </Text>
             </Flex>
-            <Button mr='16px' width='213px' height='45px' variant='purple'>完成部署</Button>
+            <Button mr='16px' width='213px' height='45px' variant='purple'>
+              {t('Complete')}
+            </Button>
           </Flex>
         </GraphicsCard>
       </Box>
@@ -280,7 +306,11 @@ const Embattle = () => {
         zIndex={-1}
       />
       <Box ref={ref} />
-      <ArmsInfo armsData={{ game_base_unit: activeSoldier?.options?.unitInfo }} sid={activeSoldier?.id} right='0' />
+      <ArmsInfo
+        armsData={{ game_base_unit: activeSoldier?.options?.unitInfo }}
+        sid={activeSoldier?.id}
+        right='0'
+      />
 
       <Flex
         style={{ userSelect: 'none' }}
@@ -328,24 +358,22 @@ const Embattle = () => {
           }}
         />
       </Box>
-      {
-        arrowShow && (
-          <ArrowBox
-            position='absolute'
-            top={400}
-            left={100}
+      {arrowShow && (
+        <ArrowBox
+          position='absolute'
+          top={400}
+          left={100}
+          width={200}
+          height={200}
+        >
+          <Image
             width={200}
             height={200}
-          >
-            <Image
-              width={200}
-              height={200}
-              src='/images/commons/icon/to-arrow.png'
-            />
-          </ArrowBox>
-        )
-      }
-    </Box >
+            src='/images/commons/icon/to-arrow.png'
+          />
+        </ArrowBox>
+      )}
+    </Box>
   );
 };
 

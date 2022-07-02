@@ -213,7 +213,7 @@ const State = () => {
                 <Dots>{t('Opening')}</Dots>
               ) : (
                 <Text fontSize='22px' bold>
-                  {t('Open blind box')}
+                  {t('Open')}
                 </Text>
               )}
             </Button>
@@ -229,7 +229,7 @@ const State = () => {
                 <Dots>{t('Purchasing')}</Dots>
               ) : (
                 <Text fontSize='22px' bold>
-                  {t('Buy blind box')}
+                  {t('Buy')}
                 </Text>
               )}
             </Button>

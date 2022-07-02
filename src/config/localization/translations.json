@@ -78,9 +78,9 @@
   "Purchase succeeded, try your luck now!": "Purchase succeeded, try your luck now!",
   "BNB Value": "BNB Value",
   "Opening": "Opening",
-  "Open blind box": "Open blind box",
+  "Open": "Open",
   "Purchasing": "Purchasing",
-  "Buy blind box": "Buy blind box",
+  "Buy": "Buy",
   "Planet Name": "Planet Name",
   "Planet Nickname": "Planet Nickname",
   "Enter planet nickname": "Enter planet nickname",
@@ -111,7 +111,7 @@
   "Devour": "Devour",
   "Upgrade experience": "Upgrade experience",
   "Upgrade consumption": "Upgrade consumption",
-  "No data, Go to open the blind box": "No data, Go to open the blind box",
+  "No data, Go to open the black hole": "No data, Go to open the black hole",
   "Max sales:": "Max sales:",
   "Sold:": "Sold:",
   "Open quantity": "Open quantity",
@@ -766,5 +766,6 @@
   "http-error-200031": "Insufficient resources consumed by the upgrade",
   "http-error-200037": "Planet upgrade fail in planetary alliance",
   "http-error-1000004": "Game unit count over.",
+  "http-error-200029": "Planetary Alliance is working, unable to occupy stars",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

@@ -78,9 +78,9 @@
   "Purchase succeeded, try your luck now!": "购买成功，快试试您的手气吧！",
   "BNB Value": "价值BNB",
   "Opening": "正在打开",
-  "Open blind box": "打开发现",
+  "Open": "打开",
   "Purchasing": "购买中",
-  "Buy blind box": "购买发现",
+  "Buy": "购买",
   "Planet Name": "星球命名",
   "Planet Nickname": "星球昵称",
   "Enter planet nickname": "请输入星球昵称",
@@ -111,7 +111,7 @@
   "Devour": "吞噬",
   "Upgrade experience": "升级经验",
   "Upgrade consumption": "升级消耗",
-  "No data, Go to open the blind box": "暂无数据，前往打开发现",
+  "No data, Go to open the black hole": "暂无数据，前往探索黑洞",
   "Max sales:": "最大销售量:",
   "Sold:": "已销售量:",
   "Open quantity": "开启数量",
@@ -766,5 +766,6 @@
   "http-error-200031": "升级所消耗的资源不足",
   "http-error-200037": "星球升级失败，在星球联盟中",
   "http-error-1000004": "超过最大数量",
+  "http-error-200029": "行星联盟正在工作中, 无法占领恒星",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }
