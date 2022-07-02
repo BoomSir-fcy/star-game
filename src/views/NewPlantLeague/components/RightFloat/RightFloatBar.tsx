@@ -49,6 +49,8 @@ const BarFlex = styled(Flex)`
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 `;
 
 const TipBox = styled(Box)`
@@ -147,7 +149,7 @@ const RightFloatBar: React.FC = () => {
         onMouseEnter={() => setShowPlay(true)}
         onMouseLeave={() => setShowPlay(false)}
       >
-        <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
+        <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
           {t('How to play')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
@@ -155,7 +157,7 @@ const RightFloatBar: React.FC = () => {
         </ImgFlex>
       </RecordBox>
       <RecordBox onClick={repairHandle}>
-        <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
+        <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
           {t('Repair durability')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
@@ -163,7 +165,7 @@ const RightFloatBar: React.FC = () => {
         </ImgFlex>
       </RecordBox>
       <RecordBox onClick={rechargeHandle}>
-        <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
+        <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
           {t('Recharge resources')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
@@ -171,7 +173,7 @@ const RightFloatBar: React.FC = () => {
         </ImgFlex>
       </RecordBox>
       <RecordBox onClick={() => ExtractResources()}>
-        <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
+        <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
           {later_extract_time > 0
             ? EasyformatTime(state.Extracttime)
             : t('Extract')}
@@ -182,7 +184,7 @@ const RightFloatBar: React.FC = () => {
       </RecordBox>
       <Link to='/platform-News'>
         <RecordBox>
-          <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
+          <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
             {t('Station news')}
           </MarkText>
           <Flex

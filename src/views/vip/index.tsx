@@ -189,7 +189,6 @@ const VipPage = () => {
       >
         <Flex>
           <BackButton />
-          <RefreshButton ml='33px' />
           <RecordBox>
             <VipMarkText ml='10px' mt='10px' fontSize='24px' bold>
               VIP BENEFITS

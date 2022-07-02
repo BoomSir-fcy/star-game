@@ -137,12 +137,12 @@ export const BattleTop: React.FC<{
     <Flex padding='0 20px' mb='16px' alignItems='center' flex={1}>
       <Box mr='40px'>
         <BackButton />
-        <RefreshButton
+        {/* <RefreshButton
           ml='33px'
           onRefresh={() => {
             // upDate(new Date(new Date().toLocaleDateString()).getTime() / 1000);
           }}
-        />
+        /> */}
       </Box>
       <TitleBox>
         <MarkText fontSize='18px' bold fontStyle='italic'>

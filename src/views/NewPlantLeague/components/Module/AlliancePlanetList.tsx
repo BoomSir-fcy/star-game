@@ -11,6 +11,7 @@ import ModalQueue from 'views/Star/components/planet/ModalQueue';
 import { useToast } from 'contexts/ToastsContext';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const OutModule = styled(Box)`
   height: 100%;
@@ -100,10 +101,10 @@ const UpDownImg = styled.img`
 `;
 const LoadingBox = styled(Box)`
   position: fixed;
-  left: 56%;
+  left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 120%;
+  width: 100%;
   height: 100%;
   z-index: 99;
 `;
@@ -115,6 +116,7 @@ const AlliancePlanetList: React.FC<{
   const { t } = useTranslation();
   const { toastError, toastSuccess, toastWarning } = useToast();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { SetWorking } = useJoinAlliance();
   const { order } = useStore(p => p.alliance.allianceView);
@@ -183,6 +185,7 @@ const AlliancePlanetList: React.FC<{
       dispatch(fetchAllianceViewAsync());
 
       setShowListModule(false);
+      navigate('/plant-league');
     } catch (e) {
       console.error(e);
       toastError(t('Failed to save'));
@@ -199,6 +202,7 @@ const AlliancePlanetList: React.FC<{
     toastError,
     setShowListModule,
     dispatch,
+    navigate,
   ]);
   useEffect(() => {
     if (order?.length) {

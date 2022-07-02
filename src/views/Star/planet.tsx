@@ -384,7 +384,7 @@ const Planet = () => {
             {choose && (
               <Flex padding='0 20px' mb='60px'>
                 <BackButton />
-                <RefreshButton ml='33px' />
+                {/* <RefreshButton ml='33px' /> */}
               </Flex>
             )}
             <Nav
