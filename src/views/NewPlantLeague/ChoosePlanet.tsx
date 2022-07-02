@@ -91,7 +91,7 @@ const ChoosePlanet: React.FC = () => {
           <Box>
             <Flex padding='0 20px' mb='60px'>
               <BackButton />
-              <RefreshButton ml='33px' />
+              {/* <RefreshButton ml='33px' /> */}
             </Flex>
             <Nav
               activeId={Number(parsedQs.t)}

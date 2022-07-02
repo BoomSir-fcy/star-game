@@ -71,12 +71,12 @@ const PlatformNews: React.FC = () => {
       <Flex padding='0 20px' mb='16px' alignItems='center' flex={1}>
         <Box mr='40px'>
           <BackButton />
-          <RefreshButton
+          {/* <RefreshButton
             ml='33px'
             onRefresh={() => {
               setPageNum(1);
             }}
-          />
+          /> */}
         </Box>
         <TitleBox>
           <MarkText fontSize='18px' bold fontStyle='italic'>
