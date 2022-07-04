@@ -65,7 +65,7 @@ export const BuildingUpgrade: React.FC<{
             </MarkText>
             {currnet_building?.isbuilding && (
               <Flex alignItems='center' ml='30px' mt='4px'>
-                <Text shadow='primary' bold fontSize='14px'>
+                <Text shadow='primary' bold small>
                   Lv {currnet_building?.propterty?.levelEnergy}
                 </Text>
                 <>
@@ -76,14 +76,14 @@ export const BuildingUpgrade: React.FC<{
                       height={40}
                     />
                   </Box>
-                  <Text shadow='primary' bold fontSize='14px'>
+                  <Text shadow='primary' bold small>
                     Lv {currnet_building?.propterty?.levelEnergy + 1}
                   </Text>
                 </>
               </Flex>
             )}
           </Flex>
-          <Text textAlign='right'>
+          <Text textAlign='right' style={{ flex: 1 }}>
             {t('TimeCnsumingBuild', {
               time: formatTime(currnet_building?.upgrade_need?.upgrade_time),
             })}
