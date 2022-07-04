@@ -234,7 +234,7 @@ const List = () => {
             }}
           >
             {pending ? (
-              <Dots>{t('joining')}</Dots>
+              <Dots>{t('Joining')}</Dots>
             ) : (
               <Text fontSize='18px' bold>
                 {t('OpenMysteryBoxBtnDesc1')}
