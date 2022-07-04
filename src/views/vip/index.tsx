@@ -300,7 +300,7 @@ const VipPage = () => {
                       </TView>
                     </Items>
                     <Items>
-                      <TView small>{row?.buildingQueueCapacity}个</TView>
+                      <TView small>{row?.buildingQueueCapacity}</TView>
                     </Items>
                     <Items>
                       <TView small>{row?.produceJob}</TView>
