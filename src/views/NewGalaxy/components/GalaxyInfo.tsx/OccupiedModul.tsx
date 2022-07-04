@@ -279,11 +279,14 @@ const OccupiedModul: React.FC<{
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('Estimated amount of BOX received in 24 hours')}:
+                      {t('Estimated amount of BOX received in 24 hours')}:&nbsp;
+                      <span style={{ color: '#fff' }}>
+                        {formatLocalisedCompactBalance(item.pre_box)}
+                      </span>
                     </SmText>
-                    <SmText>
-                      {formatLocalisedCompactBalance(item.pre_box)}
-                    </SmText>
+                    {/* <SmText>
+                      
+                    </SmText> */}
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>

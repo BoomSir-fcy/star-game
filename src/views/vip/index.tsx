@@ -300,7 +300,7 @@ const VipPage = () => {
                       </TView>
                     </Items>
                     <Items>
-                      <TView small>{row?.buildingQueueCapacity}个</TView>
+                      <TView small>{row?.buildingQueueCapacity}</TView>
                     </Items>
                     <Items>
                       <TView small>{row?.produceJob}</TView>
@@ -321,7 +321,8 @@ const VipPage = () => {
                       >
                         (
                         {t(
-                          'Income: 100% for the first 3 times and 50% for the last time',
+                          'Income: 100% for the first %num% times and 50% for the last time',
+                          { num: row?.planetExploreFrequency - 1 },
                         )}
                         )
                       </Text>
