@@ -134,7 +134,7 @@ class Boards extends EventTarget {
     return res;
   }
 
-  // 获取所有2*2的格子 2*2的格子由4个1*1的格子组成
+  // 获取所有2*2的格子 2*2的格子由4个ss1*1的格子组成
   getAllTowArea() {
     this.chequers.forEach(item => {
       const { axisX, axisY } = item;

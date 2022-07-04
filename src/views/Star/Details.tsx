@@ -32,7 +32,7 @@ import { useActiveBuilder } from './detailHooks';
 const Container = styled(Box)`
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
 `;
 
 const Details = () => {
