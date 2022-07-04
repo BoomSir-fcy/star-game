@@ -142,9 +142,9 @@ class Boards extends EventTarget {
         this.matrix4s.push(
           new Matrix4(
             this.axis[axisX][axisY].chequer,
-            this.axis[axisX][axisY + 1].chequer,
-            this.axis[axisX + 1][axisY + 1].chequer,
             this.axis[axisX + 1][axisY].chequer,
+            this.axis[axisX + 1][axisY + 1].chequer,
+            this.axis[axisX][axisY + 1].chequer,
           ),
         );
       }
