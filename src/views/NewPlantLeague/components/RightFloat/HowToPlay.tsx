@@ -61,7 +61,7 @@ const HowToPlay: React.FC<{
       onMouseLeave={() => setShowPlay(false)}
     >
       <MarkText mb='20px' fontSize='20px' bold fontStyle='normal'>
-        {t('How to play - Planetary Alliance')}
+        {t('Gameplay – Planet Alliance')}
       </MarkText>
       <Box mb='20px'>
         <RulsText>{t('PlayRules1')}</RulsText>

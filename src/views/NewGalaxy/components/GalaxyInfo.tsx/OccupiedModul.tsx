@@ -265,13 +265,13 @@ const OccupiedModul: React.FC<{
                 >
                   <Flex alignItems='baseline'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('Stellar master')}:
+                      {t('Star Lord')}:
                     </SmText>
                     <SmText ellipsis>{item?.nick_name || ''}</SmText>
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('Reward factor')}
+                      {t('Reward Coefficient')}
                     </SmText>
                     <SmText>
                       {SubString_1(GetRewardFactor(item?.disapth_box), 3)}%
@@ -279,7 +279,7 @@ const OccupiedModul: React.FC<{
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('Expect to get BOX within 24 hours')}:
+                      {t('Estimated amount of BOX received in 24 hours')}:
                     </SmText>
                     <SmText>
                       {formatLocalisedCompactBalance(item.pre_box)}
@@ -287,7 +287,7 @@ const OccupiedModul: React.FC<{
                   </Flex>
                   <Flex alignItems='center'>
                     <SmText mr='10px' color='textSubtle'>
-                      {t('TA occupation time')}:
+                      {t('Time of occupation')}:
                     </SmText>
                     <SmText>
                       {item?.nick_name

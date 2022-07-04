@@ -50,13 +50,13 @@ const TopCarousel: React.FC = () => {
     <Content>
       <Flex mb='20px' justifyContent='space-around' alignItems='flex-end'>
         <Box>
-          <Text>{t('Stellar Master Gets')} BOX</Text>
+          <Text>{t('Star Lord get:')} BOX</Text>
           <MarkText bold fontStyle='normal'>
             {SubString_1(planet_total_box, 4)}
           </MarkText>
         </Box>
         <Box>
-          <Text>{t('Galaxy Lord Gets')} BOX</Text>
+          <Text>{t('Galaxy Lord get')} BOX</Text>
           <MarkText bold fontStyle='normal'>
             {SubString_1(galaxy_total_box, 4)}
           </MarkText>

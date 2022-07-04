@@ -57,7 +57,7 @@ const Explore: React.FC<{
         return t('Become a VIP to continue exploring');
       }
     }
-    return `${t('Start exploring')}(${now_work_count}/${max_work_count})`;
+    return `${t('Start Exploration')}(${now_work_count}/${max_work_count})`;
   }, [alliance, t, now_work_count, max_work_count, userInfo]);
 
   // 开始工作

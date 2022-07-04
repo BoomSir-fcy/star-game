@@ -150,7 +150,7 @@ const RightFloatBar: React.FC = () => {
         onMouseLeave={() => setShowPlay(false)}
       >
         <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
-          {t('How to play')}
+          {t('Gameplay')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
           <img src='/images/commons/icon/help.png' alt='' />
@@ -158,7 +158,7 @@ const RightFloatBar: React.FC = () => {
       </RecordBox>
       <RecordBox onClick={repairHandle}>
         <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
-          {t('Repair durability')}
+          {t('Regenerate END')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
           <img src='/images/commons/icon/icon-vip.png' alt='' />
@@ -166,7 +166,7 @@ const RightFloatBar: React.FC = () => {
       </RecordBox>
       <RecordBox onClick={rechargeHandle}>
         <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
-          {t('Recharge resources')}
+          {t('Recharge Resources')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
           <img src='/images/commons/icon/icon-vip.png' alt='' />
@@ -185,7 +185,7 @@ const RightFloatBar: React.FC = () => {
       <Link to='/platform-News'>
         <RecordBox>
           <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
-            {t('Station news')}
+            {t('Platform Messages')}
           </MarkText>
           <Flex
             justifyContent='center'
@@ -209,7 +209,7 @@ const RightFloatBar: React.FC = () => {
           }}
         >
           <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
-            {t('Alliance news')}
+            {t('Alliance Messages')}
           </MarkText>
           <Flex
             justifyContent='center'

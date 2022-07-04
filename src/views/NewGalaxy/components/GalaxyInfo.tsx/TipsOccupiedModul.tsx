@@ -103,7 +103,7 @@ const TipsOccupiedModul: React.FC<{
   return (
     <Box width='100%' padding='100px 0'>
       <Text color='textPrimary' mb='40px' textAlign='center' fontSize='20px'>
-        {t('Challenges require a %num%BOX ticket fee', { num: info.cost_star })}
+        {t('Challenge ticket %num%BOX', { num: info.cost_star })}
       </Text>
       <Flex mb='150px' justifyContent='space-around'>
         <SmText>
@@ -112,12 +112,12 @@ const TipsOccupiedModul: React.FC<{
           {info.planet_owner_star}BOX
         </SmText>
         <SmText>
-          {t('Into the prize pool:')}
+          {t('Rewards Pool get:')}
           &nbsp; &nbsp;
           {info.staking_pool_star}BOX
         </SmText>
         <SmText>
-          {t('Used to consume:')}
+          {t('Burn:')}
           &nbsp; &nbsp;
           {info.destroy_star}BOX
         </SmText>

@@ -57,11 +57,11 @@ export const InProgress: React.FC<{
                 {t('Exploring')}
               </Text>
             ) : (
-              <Text fontSize='16px'>{t('Exploration complete')}</Text>
+              <Text fontSize='16px'>{t('Exploration Completed')}</Text>
             )}
           </Flex>
           <Flex mb='10px'>
-            <Text mr='30px'>{t('Estimated time to explore')}</Text>
+            <Text mr='30px'>{t('Estimated exploration time')}</Text>
             <Text>
               {dayjs.unix(info.startTime).format('YYYY-MM-DD HH:mm:ss')}
               &nbsp;~&nbsp;
@@ -69,20 +69,20 @@ export const InProgress: React.FC<{
             </Text>
           </Flex>
           <Text>
-            {t('Spawn several battles')} :{info.plunderCount}
+            {t('Number of battles')} :{info.plunderCount}
           </Text>
         </Box>
         <Box>
           <MarkText mb='10px' fontSize='16px' bold>
-            {t('Explore the summary')}
+            {t('Exploration Summary')}
           </MarkText>
-          <TextStyle mb='8px'>{t('Battle attrition')} :</TextStyle>
+          <TextStyle mb='8px'>{t('Battle Losses')} :</TextStyle>
           <FlexStyle mb='8px'>
             <TextStyle>
-              -{info.loseUnit} {t('Combat unit')}
+              -{info.loseUnit} {t('Battle Unit')}
             </TextStyle>
             <TextStyle>
-              -{info.lostDurability} {t('Building durability')}
+              -{info.lostDurability} {t('Building’s END')}
             </TextStyle>
           </FlexStyle>
           <FlexStyle>
@@ -98,7 +98,7 @@ export const InProgress: React.FC<{
           </FlexStyle>
         </Box>
         <Box>
-          <TextStyle mb='8px'>{t('Get resources')} :</TextStyle>
+          <TextStyle mb='8px'>{t('Get Resources')} :</TextStyle>
           <FlexStyle>
             <TextStyle>
               +{info.getEnergy} {t('Energy')}

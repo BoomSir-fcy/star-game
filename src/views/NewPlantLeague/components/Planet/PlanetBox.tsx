@@ -114,7 +114,7 @@ export const PlanetBox: React.FC<{
                 padding='0 10px'
                 height='42px'
               >
-                <Text>{t('Choose planet')}</Text>
+                <Text>{t('Choose Planet')}</Text>
               </Button>
             </Flex>
           </Flex>

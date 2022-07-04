@@ -117,7 +117,7 @@ export const PlanetBox: React.FC<{
                 }}
                 height='42px'
               >
-                <Text>{active ? t('Cancel') : t('Choose planet')}</Text>
+                <Text>{active ? t('Cancel') : t('Choose Planet')}</Text>
               </Button>
             </Flex>
           </Flex>

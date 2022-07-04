@@ -146,7 +146,7 @@ export const BattleTop: React.FC<{
       </Box>
       <TitleBox>
         <MarkText fontSize='18px' bold fontStyle='italic'>
-          {t('Alliance news')}
+          {t('Alliance Messages')}
         </MarkText>
       </TitleBox>
       <RecordBox width='316px'>

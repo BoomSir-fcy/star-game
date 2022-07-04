@@ -177,7 +177,7 @@ const InfoModule: React.FC<{
           </NormalMarkText>
           <Flex ml='30px' alignItems='flex-end'>
             <Text fontSize='14px' mr='15px'>
-              {t('Total galaxy power')}
+              {t('Total Galaxy CE')}
             </Text>
             <NormalMarkText bold fontSize='18px'>
               {splitThousandSeparator(OwnerInfo.power)}
@@ -198,7 +198,7 @@ const InfoModule: React.FC<{
         <Box ml='18px'>
           <Flex mb='10px' alignItems='flex-end'>
             <Text fontSize='14px' mr='15px'>
-              {t('Galaxy master')}
+              {t('Galaxy Lord')}
             </Text>
             <NormalMarkText bold fontSize='16px'>
               {OwnerInfo.nickname}
@@ -206,7 +206,7 @@ const InfoModule: React.FC<{
           </Flex>
           {OwnerInfo.nickname && (
             <Text fontSize='14px'>
-              {t('Received')}
+              {t('Claimed')}
               &nbsp; &nbsp;
               {EasyformatTime(HoldTime(OwnerInfo.hold_time), true)}
             </Text>
@@ -220,7 +220,7 @@ const InfoModule: React.FC<{
           width='48%'
           height='max-content'
         >
-          <Text fontSize='14px'>{t('He has accumulated')} BOX</Text>
+          <Text fontSize='14px'>{t('Accumulated')} BOX</Text>
           <NormalMarkText bold fontSize='18px'>
             {SubString_1(OwnerInfo.owner_get_box, 5)}
           </NormalMarkText>
@@ -231,7 +231,7 @@ const InfoModule: React.FC<{
           width='48%'
           height='max-content'
         >
-          <Text fontSize='14px'>{t('Accumulated history')} BOX</Text>
+          <Text fontSize='14px'>{t('Accumulated in history')} BOX</Text>
           <NormalMarkText bold fontSize='18px'>
             {SubString_1(OwnerInfo.all_get_box, 5)}
           </NormalMarkText>
@@ -239,23 +239,20 @@ const InfoModule: React.FC<{
       </Flex>
       <BorderBox mb='8px'>
         <Text fontSize='14px'>
-          {t(
-            'All galaxy masters in the history of the galaxy have accumulated',
-          )}
+          {t('Accumulated by all Lords of this galaxy in history')}
           &nbsp;
           {OwnerInfo.all_auction_num} BNB
         </Text>
       </BorderBox>
-      <Text fontSize='14px'>{t('History record')}</Text>
+      <Text fontSize='14px'>{t('History Record')}</Text>
       <ScrollBox mb='10px'>
         {(auctionRecordList ?? []).map(item => (
           <Text key={item.id} fontSize='14px' mb='4px'>
             UTC {formatUTC(item.auctionAt, 'HH:mm:ss')}&nbsp;&nbsp;
             {shortenAddress(item.newOwner, 2)}&nbsp;&nbsp;
-            {t(
-              'won the auction with %num%BNB and became the master of the system',
-              { num: item.price },
-            )}
+            {t('won the auction with %num%BNB and became the Galaxy Lord', {
+              num: item.price,
+            })}
           </Text>
         ))}
       </ScrollBox>
@@ -307,7 +304,7 @@ const InfoModule: React.FC<{
         </AuctionBtn>
         <Text color='#A9CCCB' fontSize='14px' ml='20px' mr='20px'>
           {t(
-            'Among them, %num1% BNB is given to the previous galaxy master, and %num2% BNB is added to the prize pool',
+            'Of Which, %num1% BNB will be given to the previous galaxy lord, and %num2% BNB will go to the Rewards Pool',
             {
               num1: incomingPrice ? `${incomingPrice}` : '---',
               num2: prizPpool ? `${prizPpool}` : '---',

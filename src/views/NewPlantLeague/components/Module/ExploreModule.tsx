@@ -46,7 +46,7 @@ const ExploreModule: React.FC<{
       <OutBox padding='16px'>
         <Flex mb='20px' justifyContent='space-between' alignItems='center'>
           <MarkText fontSize='22px' bold>
-            {t('Difficulty to explore')}
+            {t('Exploration Difficulty')}
           </MarkText>
           <GraphicsCard
             style={{ padding: 0 }}
@@ -60,7 +60,7 @@ const ExploreModule: React.FC<{
                 onClick={() => setDifficulty(0)}
               >
                 <Text color='textPrimary' fontSize='16px' bold>
-                  {t('Simple')}
+                  {t('Easy')}
                 </Text>
               </ChooseBtn>
               <ChooseBtn

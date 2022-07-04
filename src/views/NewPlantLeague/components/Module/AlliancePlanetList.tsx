@@ -147,7 +147,7 @@ const AlliancePlanetList: React.FC<{
       if (type === 1) {
         // 替换、添加
         if (InIt !== -1) {
-          toastError(t('This planet already exists in the alliance'));
+          toastError(t('This planet is already in the alliance'));
           return;
         }
         arr[index] = activePlanet;
@@ -188,7 +188,7 @@ const AlliancePlanetList: React.FC<{
       navigate('/plant-league');
     } catch (e) {
       console.error(e);
-      toastError(t('Failed to save'));
+      toastError(t('Save Failed'));
     } finally {
       setpending(false);
     }
@@ -238,7 +238,7 @@ const AlliancePlanetList: React.FC<{
         </CloseBox>
         <Flex mb='20px' justifyContent='space-between' alignItems='flex-end'>
           <MarkText fontSize='18px' bold fontStyle='normal'>
-            {t('Planetary alliance replacement')}
+            {t('Gameplay – Planet Alliance')}
           </MarkText>
           <Button
             variant='purple'
