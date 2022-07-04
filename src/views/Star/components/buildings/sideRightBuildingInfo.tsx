@@ -23,7 +23,7 @@ const Container = styled(Box)`
   position: absolute;
   right: -15px;
   top: 0;
-  min-height: 100vh;
+  height: 100%;
   z-index: 199;
 `;
 const SideCloseButton = styled(Button)`
@@ -42,7 +42,7 @@ const SideCloseButton = styled(Button)`
 const Content = styled(Box)`
   position: relative;
   width: 547px;
-  height: 100vh;
+  height: 100%;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid #4ffffb;
   opacity: 0;
@@ -198,7 +198,7 @@ export const SideRightBuildingInfo: React.FC<{
         <Flex
           flexDirection='column'
           style={{
-            height: 'calc(100vh - 4px)',
+            height: 'calc(100%)',
           }}
         >
           <Box padding='20px'>

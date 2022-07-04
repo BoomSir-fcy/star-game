@@ -63,67 +63,8 @@ const Star: React.FC<{
 
   return (
     <Layout>
-      {/* <Flex padding='0 20px' mb='16px' justifyContent='space-between' flex={1}>
-        <Box>
-          <BackButton />
-          <RefreshButton
-            onRefresh={() => {
-              eventBus.dispatchEvent(new MessageEvent('onRefresh'));
-            }}
-            ml='33px'
-          />
-        </Box>
-        <StarHeader />
-      </Flex> */}
       <BarRight top={positionTop} planet_id={id} />
       <Flex width='100%'>{children}</Flex>
-      {/* <Flex width='100%'>
-        <Nav
-          className='common_nav'
-          nav={[
-            {
-              id: 'build',
-              label: `${t('planetMenuBuilding')}`,
-              path: `/star?id=${parsedQs.id}`,
-            },
-            {
-              id: 'upgrade',
-              label: `${t('planetMenuUpgrade')}`,
-              path: `/star/upgrade?id=${parsedQs.id}`,
-            },
-            {
-              id: 'grow',
-              label: `${t('planetMenuGrow')}`,
-              path: `/star/grow?id=${parsedQs.id}`,
-            },
-            {
-              id: 'embattle',
-              label: `${t('planetMenuEmbattle')}`,
-              path: `/star/embattle?id=${parsedQs.id}`,
-            },
-            {
-              id: 'embattle-test',
-              label: `${t('测试摆盘')}`,
-              path: `/star/embattle-test?id=${parsedQs.id}`,
-            },
-            {
-              id: 'Marketplace',
-              label: `${t('Marketplace')}`,
-              external: true,
-              path: `${
-                process.env.REACT_APP_WEB_LINK
-              }/nftdetail/bag/${getPlanetAddress()}/${parsedQs.id}`,
-            },
-          ]}
-          activeId={activeNavId}
-          onChangeNav={e => {
-            dispatch(setActiveNavId(e.id as string));
-          }}
-        />
-        <Flex ml='23px' flex={1}>
-          {children}
-        </Flex>
-      </Flex> */}
     </Layout>
   );
 };

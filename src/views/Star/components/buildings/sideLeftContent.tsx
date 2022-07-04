@@ -12,7 +12,8 @@ import { GameThing } from '../gameModel';
 const Container = styled(Box)`
   position: fixed;
   top: 0;
-  left: -16px;
+  left: -15px;
+  height: 100%;
   z-index: 199;
 `;
 const SideCloseButton = styled(Button)`
@@ -33,7 +34,7 @@ const Content = styled(Box)`
   position: absolute;
   top: 0;
   width: 294px;
-  height: 100vh;
+  height: 100%;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid #4ffffb;
   opacity: 0;

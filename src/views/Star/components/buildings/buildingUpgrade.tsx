@@ -13,6 +13,7 @@ const Container = styled(GraphicsCard)`
   height: 180px;
   overflow: hidden scroll;
   padding: 25px 20px 40px;
+  border: 0;
   border-top: 2px solid #4ffffb;
   flex: 1;
 `;
