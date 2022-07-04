@@ -446,7 +446,7 @@
   "Save": "Save",
   "loginSigninSearch": "Querying...",
   "registerSigninSearch": "Registering...",
-  "RegistrationCheckBalance": "Registration failed, please check if you have sufficient DSG balance",
+  "RegistrationCheckBalance": "Registration failed, please check if your balance of DSG or BNB is sufficient",
   "Battle details": "Battle details",
   "Get Ore": "Get Ore",
   "Get Energy": "Get Energy",
