@@ -441,7 +441,7 @@ const Upgrade = () => {
                     <Text fontSize='20px'>{`${curExp} / ${maxExp}`}</Text>
                     {Object.keys(activeMaterialMap).length > 0 && (
                       <Text fontSize='20px' color='textUp'>
-                        {t('Expected +%value%', { value: expectedExp })}
+                        {t('Estimated +%value%', { value: expectedExp })}
                       </Text>
                     )}
                   </Flex>
@@ -461,7 +461,7 @@ const Upgrade = () => {
                   />
                   <Box ml='10px'>
                     <Text bold mark fontStyle='normal'>
-                      {t('After the upgrade')}
+                      {t('Effect after upgrade')}
                     </Text>
                     <Flex justifyContent='space-between' alignItems='center'>
                       <Text small color='textSubtle'>
