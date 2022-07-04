@@ -111,7 +111,6 @@ class Boards extends EventTarget {
 
   // 找1*1建筑的碰撞检测
   checkCollisionPoint(event: InteractionEvent, dargEnd?: boolean) {
-
     let res: Chequer = null;
 
     this.chequers.forEach(item => {
@@ -130,11 +129,9 @@ class Boards extends EventTarget {
       if (dargEnd) {
         item.displayState(false);
       }
-
     });
 
     return res;
-
   }
 
   // 获取所有2*2的格子 2*2的格子由4个1*1的格子组成
@@ -173,14 +170,15 @@ class Boards extends EventTarget {
         if (chequer.state === stateType.PLACE) {
           chequer.setState(stateType.PREVIEW);
         }
-      })
+      });
 
       // if (item.chequers.every(chequer => chequer.state === stateType.PLACE)) {
       //   item.setState(stateType.PREVIEW);
       // }
 
       if (
-        dargEnd && collection &&
+        dargEnd &&
+        collection &&
         item.chequers.every(chequer => chequer.state === stateType.PLACE)
       ) {
         res = item;

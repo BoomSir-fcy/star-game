@@ -128,13 +128,13 @@ class Chequer {
     this.centerPoint.set(x, y);
     // this.centerPoint.set(x, y - (Chequer.HEIGHT * Chequer.Y_RATIO) / 2);
 
-    const text = new Text(`x${this.axisX}, ${this.axisY}`, {
-      fill: 0xffffff,
-      fontSize: 16,
-    });
-    text.x = -30;
-    text.y = 28;
-    this.bunny.addChild(text);
+    // const text = new Text(`x${this.axisX}, ${this.axisY}`, {
+    //   fill: 0xffffff,
+    //   fontSize: 16,
+    // });
+    // text.x = -30;
+    // text.y = 28;
+    // this.bunny.addChild(text);
   }
 
   // 底色是不规则渲染 所以事件范围也不规则
@@ -167,33 +167,9 @@ class Chequer {
   }
 
   getXY(axisX: number, axisY: number) {
-    // 把两个棋盘分成2份
-    let excessOffsetA = 0;
-    let excessOffsetB = 0;
-    if (
-      axisY >= config.BOARDS_COL_COUNT / 2 &&
-      config.BOARD_POSITION_SELF === BoardPositionSelf.BOTTOM_LEFT
-    ) {
-      excessOffsetA = config.TWO_BOARDS_OFFSET;
-    }
-    if (
-      axisX >= config.BOARDS_COL_COUNT / 2 &&
-      config.BOARD_POSITION_SELF === BoardPositionSelf.TOP_LEFT
-    ) {
-      excessOffsetB = config.TWO_BOARDS_OFFSET;
-    }
-    const { width, height } = this.bunny.getBounds();
     return {
-      x:
-        this.offsetStartX -
-        excessOffsetA +
-        excessOffsetB +
-        (axisX - axisY) * Chequer.WIDTH * Chequer.X_RATIO,
-      y:
-        this.offsetStartY +
-        excessOffsetA +
-        excessOffsetB +
-        (axisX + axisY) * Chequer.HEIGHT * Chequer.Y_RATIO,
+      x: this.offsetStartX - (axisX - axisY) * Chequer.WIDTH * Chequer.X_RATIO,
+      y: this.offsetStartY + (axisX + axisY) * Chequer.HEIGHT * Chequer.Y_RATIO,
     };
   }
 
