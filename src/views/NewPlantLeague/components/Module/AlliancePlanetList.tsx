@@ -186,8 +186,12 @@ const AlliancePlanetList: React.FC<{
 
       setShowListModule(false);
       navigate('/plant-league');
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      if (e?.data?.message === 'execution reverted: not owner') {
+        toastError(t('Not Owner'));
+        return;
+      }
       toastError(t('Save Failed'));
     } finally {
       setpending(false);

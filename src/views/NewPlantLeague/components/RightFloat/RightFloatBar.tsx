@@ -149,7 +149,13 @@ const RightFloatBar: React.FC = () => {
         onMouseEnter={() => setShowPlay(true)}
         onMouseLeave={() => setShowPlay(false)}
       >
-        <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
+        <MarkText
+          ml='10px'
+          maxWidth='120px'
+          fontSize='16px'
+          bold
+          fontStyle='normal'
+        >
           {t('Gameplay')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
@@ -157,7 +163,13 @@ const RightFloatBar: React.FC = () => {
         </ImgFlex>
       </RecordBox>
       <RecordBox onClick={repairHandle}>
-        <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
+        <MarkText
+          ml='10px'
+          maxWidth='120px'
+          fontSize='16px'
+          bold
+          fontStyle='normal'
+        >
           {t('Regenerate END')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
@@ -165,7 +177,13 @@ const RightFloatBar: React.FC = () => {
         </ImgFlex>
       </RecordBox>
       <RecordBox onClick={rechargeHandle}>
-        <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
+        <MarkText
+          ml='10px'
+          maxWidth='120px'
+          fontSize='16px'
+          bold
+          fontStyle='normal'
+        >
           {t('Recharge Resources')}
         </MarkText>
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
@@ -173,7 +191,13 @@ const RightFloatBar: React.FC = () => {
         </ImgFlex>
       </RecordBox>
       <RecordBox onClick={() => ExtractResources()}>
-        <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
+        <MarkText
+          ml='10px'
+          maxWidth='120px'
+          fontSize='16px'
+          bold
+          fontStyle='normal'
+        >
           {later_extract_time > 0
             ? EasyformatTime(state.Extracttime)
             : t('Extract')}
@@ -184,7 +208,13 @@ const RightFloatBar: React.FC = () => {
       </RecordBox>
       <Link to='/platform-News'>
         <RecordBox>
-          <MarkText ml='10px' fontSize='16px' bold fontStyle='normal'>
+          <MarkText
+            ml='10px'
+            maxWidth='120px'
+            fontSize='16px'
+            bold
+            fontStyle='normal'
+          >
             {t('Platform Messages')}
           </MarkText>
           <Flex
@@ -208,7 +238,13 @@ const RightFloatBar: React.FC = () => {
             // setCloseTips(true)
           }}
         >
-          <MarkText ml='24px' fontSize='16px' bold fontStyle='normal'>
+          <MarkText
+            ml='10px'
+            maxWidth='120px'
+            fontSize='16px'
+            bold
+            fontStyle='normal'
+          >
             {t('Alliance Messages')}
           </MarkText>
           <Flex

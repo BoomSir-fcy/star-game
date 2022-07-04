@@ -76,7 +76,7 @@ const ExploreModule: React.FC<{
                 onClick={() => setDifficulty(2)}
               >
                 <Text color='textPrimary' fontSize='16px' bold>
-                  {t('Advanced')}
+                  {t('Hard')}
                 </Text>
               </ChooseBtn>
             </ChooseFlex>
