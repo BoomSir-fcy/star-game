@@ -62,7 +62,7 @@ const CreateBoxShow = styled(Box)<{ show?: boolean }>`
 const Container = styled(Box)`
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 940px;
 `;
 
 const Login = () => {
@@ -165,9 +165,10 @@ const Login = () => {
               fetch();
             }
           }, 6000);
-        } catch (error) {
+        } catch (error: any) {
           console.error(error);
-          toastError(t('RegistrationCheckBalance'));
+          toastError(error?.data?.message);
+          // toastError(t('RegistrationCheckBalance'));
         }
       }
     },

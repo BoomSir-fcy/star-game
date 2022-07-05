@@ -111,8 +111,8 @@ const GalaxyInfoIndex: React.FC = () => {
         // ev = ev || window.MouseEvent;
 
         // 鼠标按下的时候，给前一点坐标赋值，为了避免第一次相减的时候出错
-        lastX = ev.targetTouches[0].pageY;
-        lastY = ev.targetTouches[0].pageX;
+        lastX = ev.targetTouches[0].pageX;
+        lastY = ev.targetTouches[0].pageY;
 
         // 移动
         InfoBox.ontouchmove = move_ev => {
@@ -120,8 +120,8 @@ const GalaxyInfoIndex: React.FC = () => {
 
           clearInterval(timer);
 
-          nowX = move_ev.targetTouches[0].pageY; // clientX 鼠标距离页面左边的距离
-          nowY = move_ev.targetTouches[0].pageX; // clientY ………………………………顶部………………
+          nowX = move_ev.targetTouches[0].pageX; // clientX 鼠标距离页面左边的距离
+          nowY = move_ev.targetTouches[0].pageY; // clientY ………………………………顶部………………
 
           // 当前坐标和前一点坐标差值
           disx = nowX - lastX;
@@ -157,7 +157,7 @@ const GalaxyInfoIndex: React.FC = () => {
   }, [galaxyList]);
 
   return (
-    <Box position='relative'>
+    <Box position='relative' height='100%'>
       <GalaxyInfoBox id='InfoBox'>
         <Box
           id='box'

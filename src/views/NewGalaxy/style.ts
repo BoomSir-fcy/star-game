@@ -6,7 +6,7 @@ import { Box, Button, Flex, MarkText } from 'uikit';
 export const GalaxyBox = styled(Box)`
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 940px;
   margin: auto;
   &.no-select {
     user-select: none;
@@ -16,7 +16,7 @@ export const GalaxyBox = styled(Box)`
 export const GalaxyInfoBox = styled(Flex)`
   position: relative;
   width: 100%;
-  height: calc(100vh - 160px);
+  height: calc(100% - 160px);
   margin: auto;
   flex-wrap: wrap;
   &.no-select {
@@ -51,7 +51,7 @@ export const GalaxyImg = styled.img`
 `;
 
 export const InfoModuleBox = styled(Box)`
-  position: absolute;
+  position: fixed;
   width: 582px;
   height: max-content;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);

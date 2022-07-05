@@ -75,12 +75,17 @@ const State = () => {
       const res = await handleBuy(quality, priceBNB[quality], buyNum);
       dispatch(fetchUserKeysAsync(account));
       setHandleLoading(false);
-    } catch (error) {
+    } catch (e: any) {
       setHandleLoading(false);
-      toastError(
-        'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+      // toastError(
+      //   'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+      // );
+      console.error(e);
+      const msg = e?.data?.message;
+      const errorMsg = msg?.substring(
+        msg?.indexOf('execution reverted: ') + 20,
       );
-      console.error(error);
+      if (errorMsg) toastError(t(errorMsg));
     }
   }, [
     buyNum,
@@ -91,6 +96,7 @@ const State = () => {
     setHandleLoading,
     dispatch,
     toastError,
+    t,
   ]);
 
   const { handleOpen } = useOpenMysteryBox();
@@ -133,12 +139,17 @@ const State = () => {
       dispatch(fetchUserKeysAsync(account));
       setHandleLoading(false);
       navigate(`/mystery-box/list?q=${quality}&i=${ids?.join(',')}`);
-    } catch (error) {
+    } catch (e: any) {
       setHandleLoading(false);
-      console.error(error);
-      toastError(
-        'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+      // toastError(
+      //   'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+      // );
+      console.error(e);
+      const msg = e?.data?.message;
+      const errorMsg = msg?.substring(
+        msg?.indexOf('execution reverted: ') + 20,
       );
+      if (errorMsg) toastError(t(errorMsg));
     }
   }, [
     account,
@@ -149,6 +160,7 @@ const State = () => {
     getPlanetId,
     dispatch,
     toastError,
+    t,
   ]);
 
   useEffect(() => {
