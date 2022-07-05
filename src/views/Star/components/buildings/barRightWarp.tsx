@@ -20,6 +20,24 @@ const Container = styled(Box)`
   &.removeActive {
     animation: bounceInLeft 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
       alternate forwards;
+    @keyframes bounceInLeft {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(320px, 0);
+      }
+    }
+    ${({ theme }) => theme.mediaQueries.md} {
+      @keyframes bounceInLeft {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(272px, 0);
+        }
+      }
+    }
   }
   @keyframes bounceInRight {
     0% {
@@ -27,14 +45,6 @@ const Container = styled(Box)`
     }
     100% {
       transform: translate(0, 0);
-    }
-  }
-  @keyframes bounceInLeft {
-    0% {
-      transform: translate(0, 0);
-    }
-    100% {
-      transform: translate(272px, 0);
     }
   }
 `;
