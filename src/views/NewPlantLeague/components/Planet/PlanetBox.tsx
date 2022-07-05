@@ -8,6 +8,7 @@ import { useTranslation } from 'contexts/Localization';
 import { getPlanetRarity } from 'utils/planetRarity';
 import { useDispatch } from 'react-redux';
 import { setActivePlanet } from 'state/planet/actions';
+import { useStore } from 'state';
 import { PlanetDesc } from './PlanetDesc';
 import { StartImg } from './StartImg';
 
@@ -17,6 +18,9 @@ const CardBox = styled(Card)`
   padding: 16px 30px 16px 16px;
   margin-bottom: 24px;
   border: 1px solid rgb(137 136 136 / 35%);
+  &.active {
+    box-shadow: 0 0 15px 5px #4ffffb;
+  }
 `;
 
 const Desc = styled(Flex)`
@@ -32,9 +36,12 @@ export const PlanetBox: React.FC<{
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const activePlanet = useStore(p => p.planet.activePlanet);
 
   return (
-    <CardBox className={className}>
+    <CardBox
+      className={`${className} ${activePlanet.id === info.id ? 'active' : ''}`}
+    >
       <Flex height='100%' alignItems='center'>
         <StartImg
           scale='md'
