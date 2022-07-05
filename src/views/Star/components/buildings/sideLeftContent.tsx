@@ -3,12 +3,18 @@ import classNames from 'classnames';
 import styled from 'styled-components';
 import Building from 'building/core/Building';
 import Builder from 'building/core/Builder';
+import { polyfill } from 'mobile-drag-drop';
+import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour';
 import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, Image, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
 import { setNavZIndex } from 'state/userInfo/reducer';
 import { GameThing } from '../gameModel';
 import { useActiveBuilder } from '../../detailHooks';
+
+polyfill({
+  dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
+});
 
 const Container = styled(Box)`
   position: fixed;
@@ -106,10 +112,12 @@ const BuildingsItem = styled(Box)`
 interface SideLeftContentProps {
   building: Building;
   race: number;
+  sideRightStatus: boolean;
 }
 export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   building,
   race,
+  sideRightStatus,
 }) => {
   const dispatch = useDispatch();
   const activeBuilder = useActiveBuilder(building);
@@ -121,7 +129,14 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       dispatch(setNavZIndex(true));
       dispatch(storeAction.queueVisbleSide(false));
     }
-  }, [activeBuilder, dispatch, queueStore.visible]);
+  }, [activeBuilder?.builded, dispatch, queueStore.visible]);
+
+  React.useEffect(() => {
+    if (!sideRightStatus) {
+      dispatch(setNavZIndex(true));
+      dispatch(storeAction.queueVisbleSide(false));
+    }
+  }, [dispatch, sideRightStatus]);
 
   React.useEffect(() => {
     window.addEventListener('click', close);
@@ -205,6 +220,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                 <GameThing
                   scale='sm'
                   round
+                  draggable
                   itemData={row}
                   level={row.propterty.levelEnergy}
                   src={row.picture}

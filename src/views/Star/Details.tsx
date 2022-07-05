@@ -143,7 +143,6 @@ const Details = () => {
   }, [initBuilder, building]);
 
   const initBuildingBuilder = React.useCallback(() => {
-    console.log(stateBuilding.workQueue, building);
     const createWorks = stateBuilding.workQueue.filter(
       item => item.work_type === 1,
     );
@@ -215,6 +214,8 @@ const Details = () => {
         if (Api.isSuccess(res)) {
           // activeBuilder?.setIsBuilding(true);
           getWorkQueue();
+          dispatch(fetchPlanetBuildingsAsync(id));
+          dispatch(fetchPlanetInfoAsync([id]));
           toastSuccess(t('planetTipsSaveSuccess'));
         } else if (activeBuilder) {
           building?.removeBuilder(activeBuilder);
@@ -337,7 +338,11 @@ const Details = () => {
               }}
             />
           )} */}
-        <SideLeftContent race={planet?.race} building={building} />
+        <SideLeftContent
+          race={planet?.race}
+          building={building}
+          sideRightStatus={stateBuilding.visible}
+        />
         <PlanetQueue
           serverTime={serverDiffTime}
           currentQueue={stateBuilding.workQueue}
