@@ -53,7 +53,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
       if (Api.isSuccess(res)) {
         // setSortSoldiers(game.soldiers);
         if (!noToast) {
-          toastSuccess(t('部署成功'));
+          toastSuccess(t('Deploy Succeeded'));
         }
       } else {
         // game.removeSoldier(game.soldiers[game.soldiers.length - 1]);

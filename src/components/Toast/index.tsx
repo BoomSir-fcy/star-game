@@ -11,8 +11,18 @@ const StyledContainer = styled(ToastContainer)<{ scale: number }>`
     z-index: 99999;
     transform: translateZ(1px) scale(${({ scale }) => scale});
     left: auto;
-    right: 20px;
-    top: 20px;
+    right: -80px;
+    top: 10px;
+    /* right: ${({ scale }) => `${scale * 20}px`};
+    top: ${({ scale }) => `${scale * 20}px`}; */
+    ${({ theme }) => theme.mediaQueries.sm} {
+      right: -60px;
+      top: 20px;
+    }
+    ${({ theme }) => theme.mediaQueries.xl} {
+      right: 20px;
+      top: 20px;
+    }
   }
   .Toastify__toast {
     background: url('/images/commons/modal/toast.png') no-repeat;

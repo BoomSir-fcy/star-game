@@ -314,12 +314,16 @@ const Upgrade = () => {
             // toastSuccess(t('Upgrade succeeded'));
             setPending(false);
           } catch (error: any) {
+            setPending(false);
             const msg = error?.data?.message;
             const errorMsg = msg?.substring(
               msg?.indexOf('execution reverted: ') + 20,
             );
-            if (errorMsg) toastError(t(`There are ${errorMsg} planets`));
-            setPending(false);
+            if (errorMsg) toastError(t('errorMsg'));
+            else
+              toastError(
+                'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+              );
           }
         }}
       >

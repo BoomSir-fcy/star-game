@@ -86,6 +86,10 @@ const State = () => {
         msg?.indexOf('execution reverted: ') + 20,
       );
       if (errorMsg) toastError(t(errorMsg));
+      else
+        toastError(
+          'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+        );
     }
   }, [
     buyNum,
@@ -150,6 +154,10 @@ const State = () => {
         msg?.indexOf('execution reverted: ') + 20,
       );
       if (errorMsg) toastError(t(errorMsg));
+      else
+        toastError(
+          'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+        );
     }
   }, [
     account,
