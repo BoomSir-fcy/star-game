@@ -177,6 +177,7 @@ const Details = () => {
         });
         setServerDiffTime(res.data.time);
         dispatch(storeAction.resetModal());
+        dispatch(storeAction.queueVisbleSide(false));
         dispatch(fetchPlanetBuildingsAsync(id));
         dispatch(fetchPlanetInfoAsync([id]));
       }

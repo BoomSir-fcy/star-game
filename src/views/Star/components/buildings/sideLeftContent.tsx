@@ -176,7 +176,13 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       <Content
         className={classNames(queueStore.visible ? 'active' : 'removeActive')}
       >
-        <SideCloseButton variant='text' onClick={close}>
+        <SideCloseButton
+          variant='text'
+          onClick={() => {
+            dispatch(setNavZIndex(true));
+            dispatch(storeAction.queueVisbleSide(false));
+          }}
+        >
           <Box width='34px' height='42px'>
             <Image
               src='../images/commons/icon/icon-back.png'

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useStore, storeAction } from 'state';
-import { Box, Flex, MarkText, Image } from 'uikit';
+import { Box, Flex, MarkText, Image, Text } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { setNavZIndex } from 'state/userInfo/reducer';
 import { QueueBuilding } from './queueBuilding';
@@ -101,6 +101,14 @@ export const PlanetQueue: React.FC<{
                     height={95}
                   />
                 </QueueBox>
+                <Flex flexDirection='column'>
+                  <Text bold fontSize='25px'>
+                    {currentQueue[index]?.work_start_time}
+                  </Text>
+                  <Text bold fontSize='25px'>
+                    {currentQueue[index]?.work_end_time}
+                  </Text>
+                </Flex>
                 <QueueBuilding
                   key={currentQueue[index]}
                   currentBuilding={currentQueue[index]?.building}
