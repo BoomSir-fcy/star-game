@@ -20,11 +20,11 @@ import { fetchGalaxyStarListAsync } from 'state/galaxy/reducer';
 import TipsOccupiedModul from './TipsOccupiedModul';
 
 const OutModule = styled(Box)`
-  position: absolute;
+  position: fixed;
   width: 548px;
   height: 718px;
   z-index: 2;
-  top: -60px;
+  top: 110px;
   right: -548px;
   opacity: 0;
   transition: all 0.5s ease;

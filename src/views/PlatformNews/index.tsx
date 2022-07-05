@@ -23,7 +23,7 @@ const TitleBox = styled(Flex)`
 `;
 
 const ScrollBox = styled(Box)`
-  height: calc(100vh - 160px);
+  height: calc(940px - 160px);
   width: 1500px;
   margin: 22px auto 0;
   overflow-y: auto;

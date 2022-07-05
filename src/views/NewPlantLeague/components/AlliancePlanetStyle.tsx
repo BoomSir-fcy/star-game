@@ -4,8 +4,8 @@ import LeagueStarAddBtn from './LeagueStarAddBtn';
 
 export const Content = styled.div`
   width: 100%;
-  height: 100%;
-  position: relative;
+  height: calc(100% - 80px);
+  /* position: relative; */
 `;
 export const Section = styled.div``;
 
