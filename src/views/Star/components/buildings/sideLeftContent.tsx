@@ -68,11 +68,12 @@ const Content = styled(Box)`
   }
 `;
 
-const ScrollView = styled(Box)`
+const ScrollView = styled(Flex)`
   padding: 20px;
   width: 100%;
-  height: 100%;
-  overflow-y: scroll;
+  height: calc(100% - 20px);
+  flex-wrap: wrap;
+  overflow: hidden scroll;
 `;
 
 const BuildingsItem = styled(Box)`
@@ -194,29 +195,27 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
           </Box>
         </SideCloseButton>
         <ScrollView>
-          <Flex flexWrap='wrap'>
-            {(buildings[1] ?? []).map(
-              (row: Api.Building.Building, index: number) => (
-                <BuildingsItem
-                  key={row.buildings_number}
-                  className={classNames(`building_${index}`)}
-                >
-                  {/* <Text>{row.propterty.size.area_x}</Text> */}
-                  <GameThing
-                    scale='sm'
-                    round
-                    itemData={row}
-                    level={row.propterty.levelEnergy}
-                    src={row.picture}
-                    text={row?.propterty.name_cn}
-                    onPointerDown={e => {
-                      dragStartHandle(e, row);
-                    }}
-                  />
-                </BuildingsItem>
-              ),
-            )}
-          </Flex>
+          {(buildings[1] ?? []).map(
+            (row: Api.Building.Building, index: number) => (
+              <BuildingsItem
+                key={row.buildings_number}
+                className={classNames(`building_${index}`)}
+              >
+                {/* <Text>{row.propterty.size.area_x}</Text> */}
+                <GameThing
+                  scale='sm'
+                  round
+                  itemData={row}
+                  level={row.propterty.levelEnergy}
+                  src={row.picture}
+                  text={row?.propterty.name_cn}
+                  onPointerDown={e => {
+                    dragStartHandle(e, row);
+                  }}
+                />
+              </BuildingsItem>
+            ),
+          )}
         </ScrollView>
       </Content>
     </Container>
