@@ -8,6 +8,7 @@ import { Flex, Box, Button, Image, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
 import { setNavZIndex } from 'state/userInfo/reducer';
 import { GameThing } from '../gameModel';
+import { useActiveBuilder } from '../../detailHooks';
 
 const Container = styled(Box)`
   position: fixed;
@@ -110,15 +111,16 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   race,
 }) => {
   const dispatch = useDispatch();
+  const activeBuilder = useActiveBuilder(building);
   const queueStore = useStore(p => p.buildling.queue);
   const buildings = useStore(p => p.buildling.buildings);
 
   const close = React.useCallback(() => {
-    if (queueStore.visible) {
+    if (activeBuilder?.builded && queueStore.visible) {
       dispatch(setNavZIndex(true));
       dispatch(storeAction.queueVisbleSide(false));
     }
-  }, [dispatch, queueStore.visible]);
+  }, [activeBuilder, dispatch, queueStore.visible]);
 
   React.useEffect(() => {
     window.addEventListener('click', close);
@@ -174,7 +176,15 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       <Content
         className={classNames(queueStore.visible ? 'active' : 'removeActive')}
       >
-        <SideCloseButton variant='text' onClick={close}>
+        <SideCloseButton
+          variant='text'
+          onClick={() => {
+            if (!activeBuilder?.id) {
+              dispatch(setNavZIndex(true));
+            }
+            dispatch(storeAction.queueVisbleSide(false));
+          }}
+        >
           <Box width='34px' height='42px'>
             <Image
               src='../images/commons/icon/icon-back.png'

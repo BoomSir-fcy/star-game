@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useStore, storeAction } from 'state';
-import { Box, Flex, MarkText, Image } from 'uikit';
+import { Box, Flex, MarkText, Image, Text } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { setNavZIndex } from 'state/userInfo/reducer';
 import { QueueBuilding } from './queueBuilding';
