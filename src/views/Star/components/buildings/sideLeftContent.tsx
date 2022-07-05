@@ -179,7 +179,9 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
         <SideCloseButton
           variant='text'
           onClick={() => {
-            dispatch(setNavZIndex(true));
+            if (!activeBuilder?.id) {
+              dispatch(setNavZIndex(true));
+            }
             dispatch(storeAction.queueVisbleSide(false));
           }}
         >

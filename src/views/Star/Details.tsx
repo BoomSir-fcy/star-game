@@ -178,8 +178,6 @@ const Details = () => {
         setServerDiffTime(res.data.time);
         dispatch(storeAction.resetModal());
         dispatch(storeAction.queueVisbleSide(false));
-        dispatch(fetchPlanetBuildingsAsync(id));
-        dispatch(fetchPlanetInfoAsync([id]));
       }
     } catch (error) {
       console.log(error);
@@ -343,7 +341,11 @@ const Details = () => {
         <PlanetQueue
           serverTime={serverDiffTime}
           currentQueue={stateBuilding.workQueue}
-          onComplete={() => getWorkQueue()}
+          onComplete={() => {
+            getWorkQueue();
+            dispatch(fetchPlanetBuildingsAsync(id));
+            dispatch(fetchPlanetInfoAsync([id]));
+          }}
         />
         {stateBuilding.visible && (
           <SideRightBuildingInfo
