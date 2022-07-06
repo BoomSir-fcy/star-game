@@ -190,6 +190,21 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
     };
   }, [dragEndHandle]);
 
+  // 上阵
+  const handleGoIntoBattle = (item: Api.Building.Building) => {
+    const option = {
+      src: item.picture,
+      id: `${item._id}`,
+      building: item,
+      race,
+      areaX: item.propterty.size.area_x,
+      areaY: item.propterty.size.area_y,
+      isBuilding: false,
+      enableDrag: true,
+    };
+    building?.addDragPreBuilderApp(option);
+  };
+
   return (
     <Container>
       <Content
@@ -234,6 +249,10 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                   }}
                   onPointerDown={e => {
                     dragStartHandle(e, row);
+                  }}
+                  onAddClick={() => {
+                    console.log(8888);
+                    handleGoIntoBattle(row);
                   }}
                 />
               </BuildingsItem>

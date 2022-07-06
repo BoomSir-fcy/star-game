@@ -386,7 +386,7 @@ const Details = () => {
             }}
           />
         )}
-        <Box zIndex={-1} position='relative' width={1920} height={900}>
+        <Box position='relative' width={1920} height={900}>
           <Box
             // background='red'
             position='absolute'

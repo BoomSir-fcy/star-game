@@ -290,6 +290,7 @@ class Building extends EventTarget {
     const chequer = this.boards.chequers.find(
       item => item.state === stateType.PREVIEW,
     ) as Chequer;
+    console.log(chequer, '==chequer');
     if (chequer) {
       this.createBuilder(chequer.axisX, chequer.axisY, options);
     }
@@ -302,7 +303,6 @@ class Building extends EventTarget {
     this.dragPreBuilder.setDragging(true);
     this.dragPreBuilder.container.visible = false;
     this.app.stage.addChild(this.dragPreBuilder.container);
-    console.log(this.dragPreBuilder.container);
     this.dragPreBuilder.container.on('pointermove', event => {
       this.onDrageMoveBuilder(event, builder);
     });
