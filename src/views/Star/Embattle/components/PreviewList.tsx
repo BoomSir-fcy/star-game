@@ -165,7 +165,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, []);
 
   const getSoldierName = useCallback((item: Api.Game.UnitInfo) => {
-    return getSpriteName(item.race, item.unique_id.toString()) || item.tag;
+    return getSpriteName(item.race, item.index.toString()) || item.tag;
   }, []);
 
   return (
@@ -186,11 +186,11 @@ const PreviewList: React.FC<PreviewListProps> = ({
               margin='36px 20px 0'
               position='relative'
             >
-              {visibleBtn && activeSoldier?.unique_id === item.unique_id ? (
+              {/* {visibleBtn && activeSoldier?.unique_id === item.unique_id ? (
                 <PlayBtn scale='xs' onClick={() => handleGoIntoBattle(item)}>
                   上阵
                 </PlayBtn>
-              ) : null}
+              ) : null} */}
               <BorderCard
                 isActive={activeSoldier?.unique_id === item.unique_id}
                 width={122}
@@ -212,9 +212,9 @@ const PreviewList: React.FC<PreviewListProps> = ({
                       unitInfo: unitMaps?.[item.unique_id],
                     });
                     game.addActiveSolider(soldier);
-                    if (isApp()) {
-                      setVisibleBtn(true);
-                    }
+                    // if (isApp()) {
+                    //   setVisibleBtn(true);
+                    // }
                   }
                   // game.dispatchEvent(getAddActiveSoliderEvent(soldier));
                 }}
