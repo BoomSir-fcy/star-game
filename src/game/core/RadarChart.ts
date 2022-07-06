@@ -194,6 +194,9 @@ class RadarChart {
 
   updateDate(data: AttrData) {
     this.data = data;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.count = data.length;
+    this.angle = (Math.PI * 2) / this.count;
     this.draw();
   }
 }

@@ -130,6 +130,12 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
       ],
     }),
   );
+
+  // React.useEffect(() => {
+  //   radarChart.updateDate(armsAttr);
+  //   console.log(armsAttr);
+  // }, [armsAttr, radarChart]);
+
   const ref = React.useRef<HTMLDivElement>(null);
 
   const getSoldierSrc = React.useCallback(() => {

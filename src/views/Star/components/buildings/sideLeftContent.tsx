@@ -178,6 +178,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       });
       setMoving(true);
       building?.addDragPreBuilder(builder);
+      console.log(111, building);
     },
     [building, race],
   );
@@ -222,7 +223,6 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                 <GameThing
                   scale='sm'
                   round
-                  draggable
                   itemData={row}
                   level={row.propterty.levelEnergy}
                   src={row.picture}

@@ -49,8 +49,17 @@ class Building extends EventTarget {
       enableSoliderDrag = true,
       offsetStartX,
     } = options || {};
-    const _width = width || config.WIDTH;
-    const _height = height || config.HEIGHT;
+
+    const { clientHeight, clientWidth } = window.document.body;
+
+    let _width = width || config.WIDTH;
+    let _height = height || config.HEIGHT;
+    const screenRota = clientHeight > clientWidth;
+    if (screenRota) {
+      _height = width || config.WIDTH;
+      _width = height || config.HEIGHT;
+    }
+
     this.boards = new Boards({
       width,
       height,
@@ -68,6 +77,11 @@ class Building extends EventTarget {
     // 添加棋盘
     this.app.stage.addChild(this.boards.container);
     this.test = test;
+
+    if (screenRota) {
+      this.app.stage.rotation = Math.PI / 2;
+      this.app.stage.position.set(1920 / 2, 0);
+    }
 
     this.init();
   }
@@ -288,6 +302,7 @@ class Building extends EventTarget {
     this.dragPreBuilder.setDragging(true);
     this.dragPreBuilder.container.visible = false;
     this.app.stage.addChild(this.dragPreBuilder.container);
+    console.log(this.dragPreBuilder.container);
     this.dragPreBuilder.container.on('pointermove', event => {
       this.onDrageMoveBuilder(event, builder);
     });
@@ -337,6 +352,7 @@ class Building extends EventTarget {
 
   // 移动小人
   onDrageMoveBuilder(event: InteractionEvent, builder: Builder) {
+    console.log(21112);
     if (builder.areaX === 2) {
       const matrix4 = this.boards.checkCollisionPointOfTow(event);
       matrix4?.setState(stateType.PLACE);

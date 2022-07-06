@@ -29,6 +29,7 @@ export interface GameOptionsProps {
   enableSoliderDrag?: boolean;
   offsetStartX?: number;
   offsetStartY?: number;
+  scale?: number;
 }
 /**
  * 游戏入口
@@ -45,6 +46,7 @@ class Game extends EventTarget {
       enableSoliderDrag = true,
       offsetStartY,
       offsetStartX,
+      scale = 1,
     } = options || {};
 
     const { clientHeight, clientWidth } = window.document.body;
@@ -72,7 +74,7 @@ class Game extends EventTarget {
       backgroundAlpha: test ? 0.5 : 0,
     });
     this.enableSoliderDrag = enableSoliderDrag;
-    // this.app.stage.scale.set(0.5);
+    this.app.stage.scale.set(scale);
     if (screenRota) {
       this.app.stage.rotation = Math.PI / 2;
       this.app.stage.position.set(
