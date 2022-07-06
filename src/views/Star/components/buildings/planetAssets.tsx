@@ -11,103 +11,210 @@ import { BarRightWarp } from './barRightWarp';
 const Group = styled(Flex)`
   width: 100%;
   height: 42px;
-  margin: 5px 0;
-  padding: 0 26px 0 22px;
+  margin-bottom: 20px;
+`;
+
+const AssetsContent = styled(Flex)`
+  width: 330px;
+  flex-direction: column;
+  border-right: 1px solid #3a5050;
+`;
+
+const Warp = styled(Flex)`
+  flex: 1;
+  justify-content: center;
+`;
+
+const Items = styled(Box)`
+  width: 100%;
+  height: 28px;
+  text-align: center;
 `;
 
 export const PlanetAssets: React.FC<{
   plant_info: Api.Planet.PlanetInfo;
-}> = ({ plant_info }) => {
+  current_buff?: Api.Building.BuildingBuffer;
+}> = ({ plant_info, current_buff }) => {
   const { t } = useTranslation();
   return (
-    <BarRightWarp title={t('Current Planetary Resources')}>
-      <Box pt='5px'>
-        <Group>
-          <Flex width='100%' alignItems='center' flex={1}>
-            <TokenImage width={30} height={32} tokenAddress='ORE' />
-            <Text
-              fontSize='15px'
-              ml='5px'
-              width='90px'
-              ellipsis
-              title={(plant_info?.stone || 0).toString()}
-            >
-              {plant_info?.stone}
+    <BarRightWarp>
+      <Flex width='100%' alignItems='flex-start'>
+        <AssetsContent>
+          <MarkText
+            fontSize='14px'
+            mb='20px'
+            fontStyle='normal'
+            bold
+            textAlign='center'
+          >
+            {t('Current Planetary Resources')}
+          </MarkText>
+          <Group>
+            <Flex width='100%' alignItems='center' flex={1}>
+              <TokenImage width={40} height={50} tokenAddress='ORE' />
+              <Flex flexDirection='column' ml='18px'>
+                <Text
+                  small
+                  mb='3px'
+                  width='90px'
+                  ellipsis
+                  title={(plant_info?.stone || 0).toString()}
+                >
+                  {formatDisplayApr(
+                    new BigNumber(plant_info?.stone).toNumber(),
+                  )}
+                </Text>
+                <Text
+                  small
+                  ellipsis
+                  color='progressGreenBar'
+                  style={{ flex: 1 }}
+                  title={`${formatDisplayApr(
+                    new BigNumber(plant_info?.oreYield).toNumber(),
+                  )}/s`}
+                >
+                  {formatDisplayApr(
+                    new BigNumber(plant_info?.oreYield).toNumber(),
+                  )}
+                  /s
+                </Text>
+              </Flex>
+            </Flex>
+          </Group>
+          <Group>
+            <Flex width='100%' alignItems='center' flex={1}>
+              <TokenImage width={40} height={40} tokenAddress='ENG' />
+              <Flex flexDirection='column' ml='18px'>
+                <Text
+                  small
+                  mb='3px'
+                  width='90px'
+                  ellipsis
+                  title={(plant_info?.energy || 0).toString()}
+                >
+                  {formatDisplayApr(
+                    new BigNumber(plant_info?.energy).toNumber(),
+                  )}
+                </Text>
+                <Text
+                  small
+                  ellipsis
+                  color='progressGreenBar'
+                  style={{ flex: 1 }}
+                  title={`${formatDisplayApr(
+                    new BigNumber(plant_info?.energyYield).toNumber(),
+                  )}/s`}
+                >
+                  {formatDisplayApr(
+                    new BigNumber(plant_info?.energyYield).toNumber(),
+                  )}
+                  /s
+                </Text>
+              </Flex>
+            </Flex>
+          </Group>
+          <Group>
+            <Flex width='100%' alignItems='center' flex={1}>
+              <TokenImage width={40} height={40} tokenAddress='SPICES' />
+              <Flex flexDirection='column' ml='18px'>
+                <Text
+                  small
+                  mb='3px'
+                  width='90px'
+                  ellipsis
+                  title={(plant_info?.population || 0).toString()}
+                >
+                  {formatDisplayApr(
+                    new BigNumber(plant_info?.population).toNumber(),
+                  )}
+                </Text>
+                <Text
+                  small
+                  ellipsis
+                  color='progressGreenBar'
+                  style={{ flex: 1 }}
+                  title={`${formatDisplayApr(
+                    new BigNumber(plant_info?.populationYield).toNumber(),
+                  )}/s`}
+                >
+                  {formatDisplayApr(
+                    new BigNumber(plant_info?.populationYield).toNumber(),
+                  )}
+                  /s
+                </Text>
+              </Flex>
+            </Flex>
+          </Group>
+        </AssetsContent>
+        <Warp flexDirection='column'>
+          <MarkText
+            fontSize='14px'
+            mb='20px'
+            fontStyle='normal'
+            bold
+            textAlign='center'
+          >
+            {t('buff bonus')}
+          </MarkText>
+          <Items>
+            <Text>
+              HP: +
+              {formatDisplayApr(new BigNumber(current_buff?.hp).toNumber(), 0)}
             </Text>
-            <Text
-              fontSize='15px'
-              ellipsis
-              color='progressGreenBar'
-              ml='5px'
-              style={{ flex: 1 }}
-              title={`${formatDisplayApr(
-                new BigNumber(plant_info?.oreYield).toNumber(),
-              )}/s`}
-            >
-              {formatDisplayApr(new BigNumber(plant_info?.oreYield).toNumber())}
-              /s
-            </Text>
-          </Flex>
-        </Group>
-        <Group>
-          <Flex width='100%' alignItems='center' flex={1}>
-            <TokenImage width={30} height={32} tokenAddress='ENG' />
-            <Text
-              fontSize='15px'
-              ml='5px'
-              width='90px'
-              ellipsis
-              title={(plant_info?.energy || 0).toString()}
-            >
-              {plant_info?.energy}
-            </Text>
-            <Text
-              fontSize='15px'
-              ellipsis
-              color='progressGreenBar'
-              ml='5px'
-              style={{ flex: 1 }}
-              title={`${formatDisplayApr(
-                new BigNumber(plant_info?.energyYield).toNumber(),
-              )}/s`}
-            >
+          </Items>
+          <Items>
+            <Text>
+              {t('Attack')}: +
               {formatDisplayApr(
-                new BigNumber(plant_info?.energyYield).toNumber(),
+                new BigNumber(current_buff?.attack).toNumber(),
+                0,
               )}
-              /s
             </Text>
-          </Flex>
-        </Group>
-        <Group>
-          <Flex width='100%' alignItems='center' flex={1}>
-            <TokenImage width={30} height={32} tokenAddress='SPICES' />
-            <Text
-              fontSize='15px'
-              ml='5px'
-              width='90px'
-              ellipsis
-              title={(plant_info?.population || 0).toString()}
-            >
-              {plant_info?.population}
+          </Items>
+          <Items>
+            <Text>
+              {t('hit')}: +
+              {formatDisplayApr(new BigNumber(current_buff?.hit).toNumber(), 0)}
             </Text>
-            <Text
-              fontSize='15px'
-              ellipsis
-              color='progressGreenBar'
-              ml='5px'
-              style={{ flex: 1 }}
-              title={`${formatDisplayApr(
-                new BigNumber(plant_info?.populationYield).toNumber(),
-              )}/s`}
-            >
+          </Items>
+          <Items>
+            <Text>
+              {t('firstMove')}: +
               {formatDisplayApr(
-                new BigNumber(plant_info?.populationYield).toNumber(),
+                new BigNumber(current_buff?.speed).toNumber(),
+                0,
               )}
-              /s
             </Text>
-          </Flex>
-        </Group>
-      </Box>
+          </Items>
+          <Items>
+            <Text>
+              {t('dodge')}: +
+              {formatDisplayApr(
+                new BigNumber(current_buff?.miss).toNumber(),
+                0,
+              )}
+            </Text>
+          </Items>
+          <Items>
+            <Text>
+              {t('Burst')}: +
+              {formatDisplayApr(
+                new BigNumber(current_buff?.critical).toNumber(),
+                0,
+              )}
+            </Text>
+          </Items>
+          <Items>
+            <Text>
+              {t('Defense')}: +
+              {formatDisplayApr(
+                new BigNumber(current_buff?.defense).toNumber(),
+                0,
+              )}
+            </Text>
+          </Items>
+        </Warp>
+      </Flex>
     </BarRightWarp>
   );
 };

@@ -57,8 +57,6 @@ const Content = styled(Box)`
   }
   &.removeActive {
     opacity: 0;
-    /* animation: bounceInLeft 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
-      alternate forwards; */
   }
   @keyframes bounceInRight {
     0% {
@@ -66,14 +64,6 @@ const Content = styled(Box)`
     }
     100% {
       transform: translate(0, 0);
-    }
-  }
-  @keyframes bounceInLeft {
-    0% {
-      transform: translate(0, 0);
-    }
-    100% {
-      transform: translate(200px, 0);
     }
   }
 `;
@@ -199,6 +189,7 @@ export const SideRightBuildingInfo: React.FC<{
           flexDirection='column'
           style={{
             height: 'calc(100%)',
+            overflow: 'visible auto',
           }}
         >
           <Box padding='20px'>

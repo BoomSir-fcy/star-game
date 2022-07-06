@@ -21,7 +21,7 @@ export const PlanetBuff: React.FC<{
 }> = ({ current_buff }) => {
   const { t } = useTranslation();
   return (
-    <BarRightWarp title={t('buff bonus')}>
+    <BarRightWarp>
       <Warp flexWrap='wrap'>
         <Items>
           <Text>

@@ -98,10 +98,7 @@ const Details = () => {
     height: 900,
   });
   const ref = React.useRef<HTMLDivElement>(null);
-
   const activeBuilder = useActiveBuilder(building);
-
-  // console.log(activeBuilder);
 
   const id = Number(parsedQs.id);
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
@@ -343,6 +340,15 @@ const Details = () => {
           race={planet?.race}
           building={building}
           sideRightStatus={stateBuilding.visible}
+          onPreview={val => {
+            setStateBuilding(p => {
+              p.visible = true;
+              p.building = {
+                ...val,
+                isPreview: true,
+              };
+            });
+          }}
         />
         <PlanetQueue
           serverTime={serverDiffTime}

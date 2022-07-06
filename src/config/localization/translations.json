@@ -527,6 +527,8 @@
   "hit": "ACC",
   "firstMove": "AGI",
   "dodge": "EVA",
+  "speed": "Speed",
+  "area": "Area",
   "Total Building": "Total Buildings",
   "Red Side": "Red Side",
   "Blue Side": "Blue Side",

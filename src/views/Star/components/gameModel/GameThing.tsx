@@ -96,7 +96,7 @@ export const GameThing: React.FC<{
   border?: boolean;
   round?: boolean;
   draggable?: boolean;
-  onClick?: () => void;
+  onClick?: (event) => void;
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;

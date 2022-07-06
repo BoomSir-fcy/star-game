@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Box, Flex, BackButton, RefreshButton } from 'uikit';
-
-import useParsedQueryString from 'hooks/useParsedQueryString';
-import { useTranslation } from 'contexts/Localization';
-import { getPlanetAddress } from 'utils/addressHelpers';
-
-import Nav from 'components/Nav';
-import Layout from 'components/Layout';
-import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { Flex } from 'uikit';
+import { useStore } from 'state';
 import {
   fetchBuildingsListAsync,
   fetchPlanetBuildingsAsync,
 } from 'state/buildling/fetchers';
-import { setActiveNavId } from 'state/planet/actions';
-import { useStore } from 'state';
-import eventBus from 'utils/eventBus';
-import { StarHeader } from './components';
-import { BarRight, SideRightBuildingInfo } from './components/buildings';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+
+import useParsedQueryString from 'hooks/useParsedQueryString';
+
+import Layout from 'components/Layout';
+import { BarRight } from './components/buildings';
 
 const Star: React.FC<{
   children: React.ReactNode;
@@ -27,7 +21,6 @@ const Star: React.FC<{
   const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
   const id = Number(parsedQs.id);
-  const { t } = useTranslation();
   const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
   const [positionTop, setPositionTop] = useState('0');
 

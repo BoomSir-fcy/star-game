@@ -96,7 +96,7 @@ export const BuildingArms: React.FC<{
   }, [close]);
 
   return (
-    <Box style={{ position: 'relative' }}>
+    <Box>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
         {t('Arm details')}
       </MarkText>
@@ -116,7 +116,9 @@ export const BuildingArms: React.FC<{
         ))}
       </Flex>
 
-      {state.visible && state.index >= 0 && <ArmsInfo armsData={state.arms} />}
+      {state.visible && state.index >= 0 && (
+        <ArmsInfo armsData={state.arms} top='40%' />
+      )}
     </Box>
   );
 };

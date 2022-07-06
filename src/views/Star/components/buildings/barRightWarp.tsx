@@ -7,12 +7,11 @@ import { useTranslation } from 'contexts/Localization';
 
 const Container = styled(Box)`
   position: relative;
-  width: 261px;
-  height: 173px;
-  background: url('/images/commons/dashboard/token-group.png');
+  width: 546px;
+  height: 286px;
+  background: url('/images/commons/dashboard/token-buff.png');
   background-size: 100% 100%;
   padding: 8px 13px;
-  margin-left: -5px;
   &.active {
     animation: bounceInRight 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
       alternate forwards;
@@ -25,7 +24,7 @@ const Container = styled(Box)`
         transform: translate(0, 0);
       }
       100% {
-        transform: translate(320px, 0);
+        transform: translate(585px, 0);
       }
     }
     ${({ theme }) => theme.mediaQueries.md} {
@@ -34,7 +33,7 @@ const Container = styled(Box)`
           transform: translate(0, 0);
         }
         100% {
-          transform: translate(272px, 0);
+          transform: translate(545px, 0);
         }
       }
     }
@@ -51,7 +50,7 @@ const Container = styled(Box)`
 
 const SideCloseButton = styled(Button)`
   position: absolute;
-  right: 255px;
+  right: 525px;
   top: calc(50% - 87px);
   width: 43px;
   height: 173px;
@@ -65,16 +64,12 @@ const SideCloseButton = styled(Button)`
 
 const Content = styled(Box)`
   position: relative;
-`;
-
-const Warp = styled(Flex)`
-  padding: 20px 25px;
+  padding: 20px 28px 30px;
 `;
 
 export const BarRightWarp: React.FC<{
-  title: string;
   children: React.ReactNode;
-}> = ({ title, children }) => {
+}> = ({ children }) => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
     visible: true,
@@ -102,17 +97,6 @@ export const BarRightWarp: React.FC<{
         </Box>
       </SideCloseButton>
       <Content>
-        <Box
-          position='absolute'
-          left='0'
-          right='0'
-          top='-10px'
-          style={{ margin: 'auto', textAlign: 'center' }}
-        >
-          <MarkText fontSize='14px' fontStyle='normal' bold>
-            {title}
-          </MarkText>
-        </Box>
         {children}
         {/* <Warp flexWrap='wrap'>wssss</Warp> */}
       </Content>
