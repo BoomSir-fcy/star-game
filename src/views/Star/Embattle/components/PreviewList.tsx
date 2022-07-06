@@ -202,7 +202,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 position='relative'
                 onClick={() => {
                   if (!disableClick) {
-                    if (!checkCreateSoldier(item)) return;
+                    // if (!checkCreateSoldier(item)) return;
 
                     const soldier = new Soldier({
                       x: 0,
