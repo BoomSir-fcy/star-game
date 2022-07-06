@@ -87,9 +87,12 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
 }) => {
   const { t } = useTranslation();
   const { game_base_unit } = armsData;
-  const armsAttr = Object.keys(game_base_unit?.arms_attr).map(keys => {
-    return { attr: keys, value: game_base_unit?.arms_attr[keys] };
-  });
+  const armsAttr = React.useMemo(() => {
+    return Object.keys(game_base_unit?.arms_attr || {}).map(keys => {
+      return { attr: keys, value: game_base_unit?.arms_attr?.[keys] };
+    });
+  }, [game_base_unit?.arms_attr]);
+
   const [radarChart] = React.useState(
     new RadarChart({
       width: 180,
@@ -100,6 +103,12 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
       data: armsAttr,
     }),
   );
+
+  React.useEffect(() => {
+    radarChart.updateDate(armsAttr);
+    console.log(armsAttr);
+  }, [armsAttr, radarChart]);
+
   const ref = React.useRef<HTMLDivElement>(null);
 
   const getSoldierSrc = React.useCallback(() => {

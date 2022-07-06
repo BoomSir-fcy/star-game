@@ -47,6 +47,7 @@ const Details = () => {
   const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
   const [serverDiffTime, setServerDiffTime] = React.useState<number>(0);
+  const { screenMode } = useStore(p => p.user);
 
   const steps = React.useMemo(() => {
     return [
@@ -379,8 +380,16 @@ const Details = () => {
             }}
           />
         )}
-
-        <Box ref={ref} />
+        <Box zIndex={-1} position='relative' width={1920} height={900}>
+          <Box
+            // background='red'
+            position='absolute'
+            top={screenMode ? 0 : (900 - 1920) / 2}
+            left={screenMode ? 0 : (1920 - 900) / 2}
+            className={screenMode ? '' : 'reverse-rotate'}
+            ref={ref}
+          />
+        </Box>
       </Container>
 
       {/* 建筑升级 */}
