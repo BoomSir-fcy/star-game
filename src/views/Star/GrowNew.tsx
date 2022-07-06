@@ -15,6 +15,7 @@ import { getWEtherAddress } from 'utils/addressHelpers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useToast } from 'contexts/ToastsContext';
 import ModalWrapper from 'components/Modal';
+import styled from 'styled-components';
 import { formatDisplayApr } from 'utils/formatBalance';
 import {
   Arms,
@@ -25,6 +26,14 @@ import {
 } from './components/grow';
 import { successRate } from './components/grow/GrowLevel';
 import useGrowThree from './components/grow/useGrowThree';
+
+const BgFlex = styled(Flex)`
+  width: 100%;
+  height: 227px;
+  margin-top: -80px;
+  background: rgb(39 48 48 / 50%);
+  box-shadow: 0px 4px 18px 0px rgba(0, 0, 0, 0.31);
+`;
 
 const Grow: React.FC = () => {
   const ref = React.useRef(null);
@@ -179,7 +188,184 @@ const Grow: React.FC = () => {
         margin='auto'
         zIndex={-1}
       />
-      <Flex
+      {isSuccess ? (
+        <Flex
+          mt='80px'
+          height='658px'
+          width='100%'
+          alignItems='center'
+          justifyContent='center'
+        >
+          <BgFlex flexDirection='column' alignItems='center'>
+            {isSuccess === 1 ? (
+              <Flex alignItems='baseline'>
+                <Text height={126} fontSize='60px' fontStyle='normal' mark bold>
+                  {t('Cultivate Succeeded')}
+                </Text>
+                <Box width={33}>
+                  <Image
+                    width={33}
+                    height={33}
+                    src='/images/commons/icon/up.png'
+                  />
+                  <Image
+                    mt='-10px'
+                    width={33}
+                    height={33}
+                    src='/images/commons/icon/up.png'
+                  />
+                </Box>
+              </Flex>
+            ) : (
+              <Flex>
+                <Box width={537}>
+                  <Text fontSize='34px' fontStyle='normal' mark bold>
+                    {t('Unfortunately! Cultivate Failed')}
+                  </Text>
+                  <Text fontSize='34px' fontStyle='normal' mark bold>
+                    {t("Influenced by the black hole's magnetic field")}
+                  </Text>
+                </Box>
+                <Box width={33}>
+                  <Image
+                    width={33}
+                    height={33}
+                    src='/images/commons/icon/down.png'
+                  />
+                  <Image
+                    mt='-10px'
+                    width={33}
+                    height={33}
+                    src='/images/commons/icon/down.png'
+                  />
+                </Box>
+              </Flex>
+            )}
+            <Flex flexDirection='column' alignItems='center'>
+              <Flex
+                mt='10px'
+                justifyContent='space-between'
+                alignItems='center'
+              >
+                {isSuccess === 1 ? (
+                  <Box>
+                    <Text textAlign='center' fontSize='20px'>
+                      {t('Power')}
+                    </Text>
+                    <Text fontSize='28px' fontStyle='normal' mark bold>
+                      {formatDisplayApr(estimateCost?.now_power)}
+                    </Text>
+                  </Box>
+                ) : (
+                  <Box>
+                    <Text textAlign='center' small>
+                      {t('Level')}
+                    </Text>
+                    <Text fontSize='20px' fontStyle='normal' mark bold>
+                      {estimateCost?.now_level}
+                    </Text>
+                  </Box>
+                )}
+                <Box margin='0 39px' width={58}>
+                  <Image
+                    width={58}
+                    height={28}
+                    src='/images/commons/icon/upgrade.png'
+                  />
+                </Box>
+                {isSuccess === 1 ? (
+                  <Box>
+                    <Text textAlign='center' fontSize='20px'>
+                      {t('Power')}
+                    </Text>
+                    <Text fontSize='28px' fontStyle='normal' mark bold>
+                      {formatDisplayApr(estimateCost?.estimate_power)}
+                    </Text>
+                  </Box>
+                ) : (
+                  <Box>
+                    <Text textAlign='center' small>
+                      {t('Level')}
+                    </Text>
+                    <Text fontSize='20px' fontStyle='normal' mark bold>
+                      {estimateCost?.now_level - downgrade}
+                    </Text>
+                  </Box>
+                )}
+              </Flex>
+              <Button
+                mt='200px'
+                width='277px'
+                height='50px'
+                variant='purple'
+                onClick={() => {
+                  setIsSuccess(0);
+                  if (isSuccess === 2) {
+                    createPlanet(planetInfo?.picture1);
+                  }
+                  dispatch(fetchPlanetInfoAsync([Number(parsedQs.id)]));
+                  getPlanetStrengthen();
+                }}
+              >
+                <Text fontSize='16px' color='textPrimary' bold>
+                  {t('Config')}
+                </Text>
+              </Button>
+            </Flex>
+          </BgFlex>
+        </Flex>
+      ) : (
+        <Flex
+          mt='80px'
+          height='658px'
+          width='57%'
+          alignItems='flex-end'
+          justifyContent='flex-end'
+        >
+          <Box>
+            <GrowLevel
+              nowLevel={estimateCost?.now_level}
+              nextLevel={estimateCost?.next_level}
+              now_power={estimateCost?.now_power}
+              estimate_power={estimateCost?.estimate_power}
+            />
+            <GrowRule />
+          </Box>
+          <Box ml='150px'>
+            <Flex justifyContent='center'>
+              <Box width={30}>
+                <TokenImage
+                  width={30}
+                  height={30}
+                  tokenAddress={getWEtherAddress()}
+                />
+              </Box>
+              <Text ml='15px' fontSize='22px' bold>
+                {t('BNB')}
+              </Text>
+              <Text ml='15px' fontSize='22px' fontStyle='normal' bold mark>
+                {estimateCost?.consume_bnb?.toString()}
+              </Text>
+            </Flex>
+            <Button
+              mt='19px'
+              width='277px'
+              height='50px'
+              variant='purple'
+              onClick={() => setVisible(true)}
+            >
+              <Text fontSize='16px' color='textPrimary' bold>
+                {t('Cultivate')}
+              </Text>
+            </Button>
+          </Box>
+          {/* <Box>
+          <Extra info={estimateCost} />
+          <Arms info={estimateCost} />
+        </Box>  */}
+        </Flex>
+      )}
+      {/* <Flex
         mt='80px'
         height='658px'
         width='57%'
@@ -286,13 +472,13 @@ const Grow: React.FC = () => {
                 </Text>
               </Button>
             </Box>
-            {/* <Box>
+            <Box>
           <Extra info={estimateCost} />
           <Arms info={estimateCost} />
-        </Box>  */}
+        </Box> 
           </>
         )}
-      </Flex>
+      </Flex> */}
 
       <ModalWrapper
         title={t('Planet Cultivation')}

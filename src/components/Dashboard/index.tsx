@@ -14,7 +14,7 @@ import Info from './Info';
 import TokenInfo from './TokenInfo';
 import ButtonGroup, { ButtonGroupProps } from './ButtonGroup';
 
-import { getHideHeader } from './config';
+import { getHideFooter, getHideHeader } from './config';
 import HandleButtonGroup from './HandleButtonGroup';
 
 interface ScaleProps {
@@ -90,6 +90,9 @@ const Dashboard: React.FC<DashboardProps> = ({
     return getHideHeader(location.pathname) || params?.hide;
   }, [location.pathname, params]);
 
+  const hideFooter = useMemo(() => {
+    return getHideFooter(location.pathname) || params?.hide;
+  }, [location.pathname, params]);
   return (
     <>
       {!hideHeader && (
@@ -101,9 +104,12 @@ const Dashboard: React.FC<DashboardProps> = ({
           <BoxRightTop scale={scale} index={zIndex}>
             <HandleButtonGroup onRefresh={onRefreshClick} />
           </BoxRightTop>
-          <BoxRightBottom scale={scale} index={zIndex}>
-            <ButtonGroup />
-          </BoxRightBottom>
+          {!hideFooter && (
+            <BoxRightBottom scale={scale} index={zIndex}>
+              <ButtonGroup />
+            </BoxRightBottom>
+          )}
+
           {/* <FlexStyled scale={scale}>
             <Flex flex={1}>
               <Info onRefresh={() => onRefreshClick()} className={className}>

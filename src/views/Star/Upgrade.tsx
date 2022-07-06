@@ -127,7 +127,7 @@ const Upgrade = () => {
         } = planetUpgradeInfo.data;
         const isHighest =
           now_planet_info?.max_level &&
-          now_planet_info.level === now_planet_info?.max_level;
+          now_planet_info.level >= now_planet_info?.max_level;
         setUpgradeInfo({
           ...planetUpgradeInfo.data,
           estimate_planet_info: {
@@ -253,7 +253,11 @@ const Upgrade = () => {
 
   const rendeButton = useMemo(() => {
     if (isHighestLevel) {
-      return <Text color='warning'>{t('Raised to the highest level')}</Text>;
+      return (
+        <Text fontSize='26px' color='warning'>
+          {t('Raised to the highest level')}
+        </Text>
+      );
     }
     if (!account) {
       return (
