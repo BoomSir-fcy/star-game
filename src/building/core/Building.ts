@@ -287,12 +287,32 @@ class Building extends EventTarget {
 
   // 移动端, 棋盘外向棋盘内拖拽小人
   addDragPreBuilderApp(options: BuilderOption) {
-    const chequer = this.boards.chequers.find(
-      item => item.state === stateType.PREVIEW,
-    ) as Chequer;
-    console.log(chequer, '==chequer');
-    if (chequer) {
-      this.createBuilder(chequer.axisX, chequer.axisY, options);
+    if (options.areaX === 1) {
+      const chequer = this.boards.chequers.find(
+        item => item.state === stateType.PREVIEW,
+      ) as Chequer;
+      if (chequer) {
+        const builder = this.createBuilder(
+          chequer.axisX,
+          chequer.axisY,
+          options,
+        );
+        this.dispatchEvent(getAddActiveBuilderEvent(builder));
+      }
+    } else if (options.areaX === 2) {
+      const matrix4 = this.boards.matrix4s.find(item => {
+        return item.chequers.every(
+          chequer => chequer.state === stateType.PREVIEW,
+        );
+      });
+      if (matrix4) {
+        const builder = this.createBuilder(
+          matrix4.chequers[0].axisX,
+          matrix4.chequers[0].axisY,
+          options,
+        );
+        this.dispatchEvent(getAddActiveBuilderEvent(builder));
+      }
     }
   }
 
