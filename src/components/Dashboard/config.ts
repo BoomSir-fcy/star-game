@@ -22,3 +22,16 @@ export const getHideHeader = (url: string) => {
     url,
   );
 };
+
+export const getHideFooter = (url: string) => {
+  return getHidePath(
+    [
+      '/star',
+      '/star/upgrade',
+      '/star/grow',
+      '/star/embattle',
+      '/star/embattle-test',
+    ],
+    url,
+  );
+};
