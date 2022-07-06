@@ -15,7 +15,11 @@ import React, {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { setGlobalClient, setGlobalScale } from 'state/user/actions';
+import {
+  setGlobalClient,
+  setGlobalScale,
+  setScreenMode,
+} from 'state/user/actions';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Box } from 'uikit';
 import agentClient from 'utils/client';
@@ -154,6 +158,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
         }),
       );
       dispatch(setGlobalScale(rate));
+      dispatch(setScreenMode(clientWidth > clientHeight));
       if (ref.current) {
         detectOrient(ref.current, typeof mode === 'boolean' ? mode : false);
       }

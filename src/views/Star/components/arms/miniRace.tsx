@@ -5,8 +5,9 @@ import useGame from 'game/hooks/useGame';
 import { MapBaseUnits } from 'game/types';
 
 import Running, { RoundsProps } from 'game/core/Running';
+import { useStore } from 'state';
 
-const Container = styled(Box) <{ show: boolean }>`
+const Container = styled(Box)<{ show: boolean }>`
   position: absolute;
   border: 4px solid #f9feff;
   box-shadow: 0px 0px 10px 2px #41b7ff;
@@ -179,10 +180,11 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({ mock, show, ...props }) => {
   //     game.clearSoldier();
   //   };
   // }, [mock, game]);
+  const { screenMode } = useStore(p => p.user);
 
   return (
     <Container show={show} className='star-embattle-step3' {...props}>
-      <Box ref={ref} />
+      <Box className={screenMode ? '' : 'reverse-rotate'} ref={ref} />
     </Container>
   );
 };

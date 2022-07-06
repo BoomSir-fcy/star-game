@@ -228,6 +228,8 @@ const Embattle = () => {
     }
   }, [activeSoldier, handleUpdate, game]);
 
+  const { screenMode } = useStore(p => p.user);
+
   return (
     <Box className='star-embattle-step5' position='relative'>
       {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
@@ -318,7 +320,15 @@ const Embattle = () => {
         className='star-embattle-step0'
         zIndex={-1}
       />
-      <Box ref={ref} />
+      <Box position='relative' width={1600} height={720}>
+        <Box
+          position='absolute'
+          top={screenMode ? 0 : (720 - 1600) / 2}
+          left={screenMode ? 0 : (1600 - 720) / 2}
+          className={screenMode ? '' : 'reverse-rotate'}
+          ref={ref}
+        />
+      </Box>
       <ArmsInfo
         armsData={{ game_base_unit: activeSoldier?.options?.unitInfo }}
         sid={activeSoldier?.id}

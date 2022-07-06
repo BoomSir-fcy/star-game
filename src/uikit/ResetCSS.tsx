@@ -130,6 +130,9 @@ const ResetCSS = createGlobalStyle`
     border-color: transparent;
     color: transparent;
   }
+  .reverse-rotate {
+    transform: rotate(-90deg);
+  }
   .show-media-lg {
     display: none;
     ${mediaQueries.lg} {

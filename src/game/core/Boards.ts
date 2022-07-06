@@ -74,9 +74,15 @@ class Boards extends EventTarget {
 
   init({ test }: { test?: boolean }) {
     this.container.position.set(this.width / 2, this.height / 2);
-
+    console.log(this.height);
+    console.log(this.width);
+    // this.container.position.set(this.height / 2, this.width / 2);
+    // this.container.position.set(this.width, this.height);
+    this.container.width = this.width;
+    this.container.height = this.height;
     // this.drawChequers(test);
     // this.drawBg();
+    // this.container.scale.set(0.5);
     this.container.interactive = true;
     this.container.on('wheel', e => {
       this.onHandleWheel(e);

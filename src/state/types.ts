@@ -283,6 +283,8 @@ export interface UserState {
 
   isDark: boolean;
 
+  screenMode: boolean; // true为 为竖屏操作旋转屏幕
+
   scale: number; // 缩放比列
 
   client: {

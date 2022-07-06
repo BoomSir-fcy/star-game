@@ -46,11 +46,19 @@ class Game extends EventTarget {
       offsetStartY,
       offsetStartX,
     } = options || {};
-    const _width = width || config.WIDTH;
-    const _height = height || config.HEIGHT;
+
+    const { clientHeight, clientWidth } = window.document.body;
+
+    let _width = width || config.WIDTH;
+    let _height = height || config.HEIGHT;
+    const screenRota = clientHeight > clientWidth;
+    if (screenRota) {
+      _height = width || config.WIDTH;
+      _width = height || config.HEIGHT;
+    }
     this.boards = new Boards({
-      width,
-      height,
+      width: _width,
+      height: _height,
       test,
       enableDrag,
       offsetStartX,
@@ -64,6 +72,16 @@ class Game extends EventTarget {
       backgroundAlpha: test ? 0.5 : 0,
     });
     this.enableSoliderDrag = enableSoliderDrag;
+    // this.app.stage.scale.set(0.5);
+    if (screenRota) {
+      this.app.stage.rotation = Math.PI / 2;
+      this.app.stage.position.set(
+        (_width + _height) / 2,
+        (_height - _width) / 2,
+      );
+    }
+    // this.app.stage.anchor = 0.2;
+
     // 添加棋盘
     this.app.stage.addChild(this.boards.container);
     // 绑定缩放
