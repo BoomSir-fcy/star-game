@@ -113,11 +113,13 @@ interface SideLeftContentProps {
   building: Building;
   race: number;
   sideRightStatus: boolean;
+  onPreview: (val) => void;
 }
 export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   building,
   race,
   sideRightStatus,
+  onPreview,
 }) => {
   const dispatch = useDispatch();
   const activeBuilder = useActiveBuilder(building);
@@ -125,11 +127,11 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   const buildings = useStore(p => p.buildling.buildings);
 
   const close = React.useCallback(() => {
-    if (activeBuilder?.builded && queueStore.visible) {
+    if (!activeBuilder?.id && queueStore.visible) {
       dispatch(setNavZIndex(true));
       dispatch(storeAction.queueVisbleSide(false));
     }
-  }, [activeBuilder?.builded, dispatch, queueStore.visible]);
+  }, [activeBuilder, dispatch, queueStore.visible]);
 
   React.useEffect(() => {
     if (!sideRightStatus) {
@@ -176,6 +178,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       });
       setMoving(true);
       building?.addDragPreBuilder(builder);
+      console.log(111, building);
     },
     [building, race],
   );
@@ -186,6 +189,21 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       window.removeEventListener('pointerup', dragEndHandle);
     };
   }, [dragEndHandle]);
+
+  // 上阵
+  const handleGoIntoBattle = (item: Api.Building.Building) => {
+    const option = {
+      src: item.picture,
+      id: `${item._id}`,
+      building: item,
+      race,
+      areaX: item.propterty.size.area_x,
+      areaY: item.propterty.size.area_y,
+      isBuilding: false,
+      enableDrag: true,
+    };
+    building?.addDragPreBuilderApp(option);
+  };
 
   return (
     <Container>
@@ -220,13 +238,21 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                 <GameThing
                   scale='sm'
                   round
-                  draggable
                   itemData={row}
                   level={row.propterty.levelEnergy}
                   src={row.picture}
                   text={row?.propterty.name_cn}
+                  onClick={event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    onPreview(row);
+                  }}
                   onPointerDown={e => {
                     dragStartHandle(e, row);
+                  }}
+                  onAddClick={() => {
+                    console.log(8888);
+                    handleGoIntoBattle(row);
                   }}
                 />
               </BuildingsItem>

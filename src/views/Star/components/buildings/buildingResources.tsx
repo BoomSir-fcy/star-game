@@ -158,7 +158,7 @@ export const BuildingResources: React.FC<{
   );
 
   return (
-    <Box position='relative'>
+    <Box>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>
         {t('store resources')}
       </MarkText>

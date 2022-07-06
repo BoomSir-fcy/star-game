@@ -87,9 +87,6 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
 }) => {
   const { t } = useTranslation();
   const { game_base_unit } = armsData;
-  const armsAttr = Object.keys(game_base_unit?.arms_attr).map(keys => {
-    return { attr: keys, value: game_base_unit?.arms_attr[keys] };
-  });
   const [radarChart] = React.useState(
     new RadarChart({
       width: 180,
@@ -97,9 +94,47 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
       colorPolygon: '#FFFFFF',
       colorText: '#FFFFFF',
       fillColor: 'rgba(211, 95, 96, 0.5)',
-      data: armsAttr,
+      data: [],
     }),
   );
+
+  React.useEffect(() => {
+    radarChart.updateDate([
+      {
+        attr: 'HP',
+        value: game_base_unit?.hp,
+      },
+      {
+        attr: t('Defense'),
+        value: game_base_unit?.df,
+      },
+      {
+        attr: t('Attack'),
+        value: game_base_unit?.ak,
+      },
+      {
+        attr: t('dodge'),
+        value: game_base_unit?.dodge,
+      },
+      {
+        attr: t('hit'),
+        value: game_base_unit?.hit,
+      },
+      {
+        attr: t('Burst'),
+        value: game_base_unit?.crit,
+      },
+      {
+        attr: t('speed'),
+        value: game_base_unit?.speed,
+      },
+      {
+        attr: t('area'),
+        value: game_base_unit?.ak_range_max,
+      },
+    ]);
+  }, [game_base_unit, radarChart, t]);
+
   const ref = React.useRef<HTMLDivElement>(null);
 
   const getSoldierSrc = React.useCallback(() => {
@@ -203,49 +238,39 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
             <Flex flex={1} alignItems='space-between' flexDirection='column'>
               <Group>
                 <GroupInfo>
-                  <Text color='textSubtle'>Health</Text>
+                  <Text color='textSubtle'>HP</Text>
                   <Text ml='10px'>{game_base_unit?.hp}</Text>
                 </GroupInfo>
                 <GroupInfo>
-                  <Text color='textSubtle'>MD</Text>
-                  <Text ml='10px'>{game_base_unit?.ak}</Text>
-                </GroupInfo>
-                <GroupInfo>
-                  <Text color='textSubtle'>Def</Text>
+                  <Text color='textSubtle'>{t('Defense')}</Text>
                   <Text ml='10px'>{game_base_unit?.df}</Text>
                 </GroupInfo>
+                <GroupInfo>
+                  <Text color='textSubtle'>{t('Attack')}</Text>
+                  <Text ml='10px'>{game_base_unit?.ak}</Text>
+                </GroupInfo>
               </Group>
               <Group>
                 <GroupInfo>
-                  <Text color='textSubtle'>Miss</Text>
-                  <Text ml='10px'>{game_base_unit?.dodge}</Text>
+                  <Text color='textSubtle'>{t('dodge')}</Text>
+                  <Text ml='10px'>{game_base_unit?.dodge}%</Text>
                 </GroupInfo>
                 <GroupInfo>
-                  <Text color='textSubtle'>Crit</Text>
-                  <Text ml='10px'>{game_base_unit?.crit}</Text>
+                  <Text color='textSubtle'>{t('hit')}</Text>
+                  <Text ml='10px'>{game_base_unit?.hit}%</Text>
                 </GroupInfo>
                 <GroupInfo>
-                  <Text color='textSubtle'>Speed</Text>
+                  <Text color='textSubtle'>{t('Burst')}</Text>
+                  <Text ml='10px'>{game_base_unit?.crit}%</Text>
+                </GroupInfo>
+              </Group>
+              <Group>
+                <GroupInfo>
+                  <Text color='textSubtle'>{t('firstMove')}</Text>
                   <Text ml='10px'>{game_base_unit?.speed}</Text>
                 </GroupInfo>
-              </Group>
-              <Group>
                 <GroupInfo>
-                  <Text color='textSubtle'>Point</Text>
-                  <Text ml='10px'>
-                    {
-                      bulletType[
-                        game_base_unit?.attack_effect?.attack_effect_id
-                      ]
-                    }
-                  </Text>
-                </GroupInfo>
-                <GroupInfo>
-                  <Text color='textSubtle'>Hit</Text>
-                  <Text ml='10px'>{game_base_unit?.hit}</Text>
-                </GroupInfo>
-                <GroupInfo>
-                  <Text color='textSubtle'>Area</Text>
+                  <Text color='textSubtle'>{t('area')}</Text>
                   <Text ml='10px'>{`${game_base_unit?.ak_range_min}-${game_base_unit?.ak_range_max}`}</Text>
                 </GroupInfo>
               </Group>

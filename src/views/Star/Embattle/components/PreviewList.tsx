@@ -12,6 +12,7 @@ import {
   Flex,
   BorderCard,
   GraphicsCardProps,
+  Image,
 } from 'uikit';
 import orderBy from 'lodash/orderBy';
 import { useToast } from 'contexts/ToastsContext';
@@ -127,6 +128,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
 
   const checkCreateSoldier = useCallback(
     (item: Api.Game.UnitInfo) => {
+      console.log(gameSoldiers.length);
       if (gameSoldiers.length >= config.MAX_SOLDIER_COUNT) {
         toastError(t('http-error-1000004'));
         return false;
@@ -200,7 +202,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 position='relative'
                 onClick={() => {
                   if (!disableClick) {
-                    if (!checkCreateSoldier(item)) return;
+                    // if (!checkCreateSoldier(item)) return;
 
                     const soldier = new Soldier({
                       x: 0,
@@ -250,6 +252,26 @@ const PreviewList: React.FC<PreviewListProps> = ({
                     }
                   }}
                 />
+                <Box
+                  width={36}
+                  height={36}
+                  position='absolute'
+                  left='0'
+                  bottom='0'
+                >
+                  <Image
+                    style={{ cursor: 'pointer' }}
+                    // position='absolute'
+                    // bottom='0'
+                    // left='0'
+                    width={36}
+                    height={36}
+                    src='/images/commons/icon/add.png'
+                    onClick={() => {
+                      handleGoIntoBattle(item);
+                    }}
+                  />
+                </Box>
               </BorderCard>
               <Text mt='8px' textAlign='center' fontSize='20' bold>
                 {getSoldierName(item)}

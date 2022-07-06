@@ -35,6 +35,7 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({ mock, show, ...props }) => {
     width: GridWidth,
     height: GridHeight,
     enableDrag: false,
+    scale: 0.8,
   });
 
   const [running, setRunning] = useState(null);

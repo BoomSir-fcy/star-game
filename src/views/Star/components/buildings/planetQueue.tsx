@@ -12,6 +12,7 @@ const Layout = styled(Box)`
   position: fixed;
   left: 30px;
   top: 23%;
+  z-index: 9;
 `;
 
 const QueueGroup = styled(Flex)`

@@ -96,7 +96,8 @@ export const GameThing: React.FC<{
   border?: boolean;
   round?: boolean;
   draggable?: boolean;
-  onClick?: () => void;
+  onClick?: (event) => void;
+  onAddClick?: () => void;
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -114,6 +115,7 @@ export const GameThing: React.FC<{
   round,
   draggable,
   onClick,
+  onAddClick,
   onDragStart,
   onDrop,
   onDragOver,
@@ -169,6 +171,27 @@ export const GameThing: React.FC<{
         <MarkText mt='12px' bold small textAlign='center' fontStyle='normal'>
           {text}
         </MarkText>
+      )}
+      {onAddClick && (
+        <Box
+          zIndex={100}
+          width={36}
+          height={36}
+          position='absolute'
+          left='0'
+          bottom={36}
+          onClick={() => {
+            console.log(66666);
+            onAddClick();
+          }}
+        >
+          <Image
+            style={{ cursor: 'pointer' }}
+            width={36}
+            height={36}
+            src='/images/commons/icon/add.png'
+          />
+        </Box>
       )}
     </Flex>
   );

@@ -9,7 +9,7 @@ import { useTranslation } from 'contexts/Localization';
 const Container = styled(GraphicsCard)`
   position: absolute;
   right: 580px;
-  bottom: -150px;
+  bottom: 50px;
   padding: 20px 30px;
 `;
 

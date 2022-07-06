@@ -29,6 +29,7 @@ export interface GameOptionsProps {
   enableSoliderDrag?: boolean;
   offsetStartX?: number;
   offsetStartY?: number;
+  scale?: number;
 }
 /**
  * 游戏入口
@@ -45,6 +46,7 @@ class Game extends EventTarget {
       enableSoliderDrag = true,
       offsetStartY,
       offsetStartX,
+      scale = 1,
     } = options || {};
 
     const { clientHeight, clientWidth } = window.document.body;
@@ -72,7 +74,7 @@ class Game extends EventTarget {
       backgroundAlpha: test ? 0.5 : 0,
     });
     this.enableSoliderDrag = enableSoliderDrag;
-    // this.app.stage.scale.set(0.5);
+    this.app.stage.scale.set(scale);
     if (screenRota) {
       this.app.stage.rotation = Math.PI / 2;
       this.app.stage.position.set(
@@ -282,6 +284,11 @@ class Game extends EventTarget {
     ) as Chequer;
     if (chequer) {
       this.createSoldier(chequer.axisX, chequer.axisY, { ...options });
+      this.dispatchEvent(
+        new CustomEvent('updateSoldierPosition', {
+          detail: { soldiers: this.soldiers },
+        }),
+      );
     }
   }
 
@@ -405,7 +412,7 @@ class Game extends EventTarget {
     this.addSoldier(soldier);
 
     // 小人从天而降
-    soldier.changeState(stateType.PREVIEW, true);
+    soldier.changeState(stateType.ACTIVE, true);
     const point0 = new Point(axis.x, axis.y - 1000) as AxisPoint;
     const point1 = new Point(axis.x, axis.y) as AxisPoint;
 

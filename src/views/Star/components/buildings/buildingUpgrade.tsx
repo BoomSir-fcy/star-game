@@ -10,8 +10,8 @@ import { formatDisplayApr } from 'utils/formatBalance';
 
 const Container = styled(GraphicsCard)`
   position: relative;
-  height: 180px;
-  overflow: hidden scroll;
+  /* height: 180px; */
+  /* overflow: hidden scroll; */
   padding: 25px 20px 40px;
   border: 0;
   border-top: 2px solid #4ffffb;
@@ -216,48 +216,50 @@ export const BuildingUpgrade: React.FC<{
             </Items>
           </Flex>
         </Flex>
-        <Flex justifyContent='center' mt='34px'>
-          {currnet_building?.isbuilding ? (
-            <Button
-              width='226px'
-              height='53px'
-              variant='purple'
-              disabled={
-                planet?.level <= currnet_building?.propterty?.levelEnergy
-              }
-              onClick={() => {
-                dispatch(
-                  storeAction.upgradesBuildingModal({
-                    visible: true,
-                    upgrad: {
-                      building_detail: currnet_building,
-                      estimate_building_detail: estimate,
-                    },
-                  }),
-                );
-                onFinish();
-              }}
-            >
-              <Text bold fontSize='16px' color='#4FFFFB'>
-                {t('planetBuildingUpgrades')}
-              </Text>
-            </Button>
-          ) : (
-            <Button
-              width='226px'
-              height='53px'
-              variant='purple'
-              onClick={() => {
-                onCreateBuilding(currnet_building);
-                onFinish();
-              }}
-            >
-              <Text bold fontSize='16px' color='#4FFFFB'>
-                {t('build buildings')}
-              </Text>
-            </Button>
-          )}
-        </Flex>
+        {!currnet_building?.isPreview && (
+          <Flex justifyContent='center' mt='34px'>
+            {currnet_building?.isbuilding ? (
+              <Button
+                width='226px'
+                height='53px'
+                variant='purple'
+                disabled={
+                  planet?.level <= currnet_building?.propterty?.levelEnergy
+                }
+                onClick={() => {
+                  dispatch(
+                    storeAction.upgradesBuildingModal({
+                      visible: true,
+                      upgrad: {
+                        building_detail: currnet_building,
+                        estimate_building_detail: estimate,
+                      },
+                    }),
+                  );
+                  onFinish();
+                }}
+              >
+                <Text bold fontSize='16px' color='#4FFFFB'>
+                  {t('planetBuildingUpgrades')}
+                </Text>
+              </Button>
+            ) : (
+              <Button
+                width='226px'
+                height='53px'
+                variant='purple'
+                onClick={() => {
+                  onCreateBuilding(currnet_building);
+                  onFinish();
+                }}
+              >
+                <Text bold fontSize='16px' color='#4FFFFB'>
+                  {t('build buildings')}
+                </Text>
+              </Button>
+            )}
+          </Flex>
+        )}
       </Content>
     </Container>
   );
