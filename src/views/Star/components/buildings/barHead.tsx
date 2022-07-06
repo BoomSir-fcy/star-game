@@ -6,6 +6,7 @@ import ScoringPanel from 'components/ScoringPanel';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 import { getPlanetRarity } from 'utils/planetRarity';
 import { useTranslation } from 'contexts/Localization';
+import { Globe } from 'components';
 
 export const BarHead: React.FC<{
   plant_info: Api.Planet.PlanetInfo;
@@ -13,12 +14,20 @@ export const BarHead: React.FC<{
   const { t } = useTranslation();
   return (
     <Flex mb='30px'>
-      <StarCom
+      {/* <StarCom
         scale='sm'
         variant='none'
         quality={plant_info?.rarity}
         picture={plant_info?.picture}
         mr='15px'
+        showUnion={plant_info?.in_alliance !== 0}
+        style={{ flexShrink: 1 }}
+      /> */}
+      <Globe
+        mr='15px'
+        scale='sm'
+        url={plant_info?.picture1}
+        shadow={QualityColor[plant_info?.rarity]}
         showUnion={plant_info?.in_alliance !== 0}
         style={{ flexShrink: 1 }}
       />

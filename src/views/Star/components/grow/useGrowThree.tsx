@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 const getImageUrl = (url?: string) => {
@@ -11,47 +11,71 @@ const getImageUrl = (url?: string) => {
     url ? url?.substring(url?.lastIndexOf('/') + 1) : '36.jpg'
   }`;
 };
-var renderer,
-  scene: THREE.Scene,
-  camera,
-  composer,
-  circle: THREE.Object3D,
-  geo_planet: THREE.SphereGeometry,
-  particle,
-  luminor,
-  halo,
-  galaxy,
-  width,
-  height;
-var lights = [];
-var timer = null;
+1;
+// var renderer,
+//   scene: THREE.Scene,
+//   camera,
+//   composer,
+//   circle: THREE.Object3D,
+//   geo_planet: THREE.SphereGeometry,
+//   particle,
+//   luminor,
+//   halo,
+//   galaxy,
+//   width,
+//   height;
+// var lights = [];
+// var timer = null;
 
 const useGrowThree = (dom: Element, url?: string) => {
+  const state = useRef({
+    renderer: null,
+    scene: null,
+    camera: null,
+    composer: null,
+    circle: null,
+    geo_planet: null,
+    particle: null,
+    luminor: null,
+    halo: null,
+    galaxy: null,
+    width: 800,
+    height: 800,
+    lights: [],
+    timer: null,
+  });
+
   useEffect(() => {
     if (dom) {
       console.log('----------初始化-----------');
       // const src = getImageUrl(url);
       init(url);
-      if (timer) {
-        cancelAnimationFrame(timer);
+      // if (timer) {
+      //   cancelAnimationFrame(timer);
+      // }
+      if (!state.current.timer) {
+        animate();
       }
-      animate();
     }
 
     return () => {
-      if (timer) {
-        cancelAnimationFrame(timer);
+      console.log('清除动画');
+
+      if (state.current.timer) {
+        cancelAnimationFrame(state.current.timer);
       }
     };
-  }, [dom, url]);
+  }, [dom]);
 
   function init(textureSrc) {
-    width = dom.clientWidth;
-    height = dom.clientHeight;
-    renderer = new THREE.WebGLRenderer({
+    state.current.width = dom.clientWidth;
+    state.current.height = dom.clientHeight;
+    state.current.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
     });
+
+    const { renderer, width, height } = state.current;
     renderer.setPixelRatio(
       window.devicePixelRatio ? window.devicePixelRatio : 1,
     );
@@ -60,24 +84,31 @@ const useGrowThree = (dom: Element, url?: string) => {
     renderer.setClearColor(0x000000, 0.0);
     dom.appendChild(renderer.domElement);
 
-    scene = new THREE.Scene();
+    state.current.scene = new THREE.Scene();
+    state.current.camera = new THREE.PerspectiveCamera(
+      75,
+      width / height,
+      1,
+      1000,
+    );
 
-    camera = new THREE.PerspectiveCamera(75, width / height, 1, 1000);
+    const { camera, scene } = state.current;
     camera.position.z = 400;
     scene.add(camera);
 
-    circle = new THREE.Object3D();
-    particle = new THREE.Object3D();
-    halo = new THREE.Object3D();
-    luminor = new THREE.Object3D();
+    state.current.circle = new THREE.Object3D();
+    state.current.particle = new THREE.Object3D();
+    state.current.halo = new THREE.Object3D();
+    state.current.luminor = new THREE.Object3D();
 
+    const { circle, particle, halo, luminor, lights } = state.current;
     scene.add(circle);
     scene.add(particle);
     scene.add(halo);
     scene.add(luminor);
 
     var geometry = new THREE.TetrahedronGeometry(1, 1);
-    geo_planet = new THREE.SphereGeometry(10, 64, 32);
+    state.current.geo_planet = new THREE.SphereGeometry(10, 64, 32);
     var geom3 = new THREE.SphereGeometry(16, 32, 16);
     var geo_star = new THREE.SphereGeometry(90, 64, 64);
 
@@ -131,7 +162,7 @@ const useGrowThree = (dom: Element, url?: string) => {
     var ambientLight = new THREE.AmbientLight(0x000000);
     scene.add(ambientLight);
 
-    var hemiLight = new THREE.HemisphereLight(0x000000, 0x1111111, 20);
+    var hemiLight = new THREE.HemisphereLight(0x090909, 0x1111111, 20);
     hemiLight.position.set(-1, -1, 2);
     luminor.add(hemiLight);
 
@@ -142,11 +173,10 @@ const useGrowThree = (dom: Element, url?: string) => {
 
     scene.add(lights[1]);
     scene.add(lights[2]);
-
-    // window.addEventListener('resize', onWindowResize, false);
   }
 
   function createPlanet(url: string) {
+    const { circle, geo_planet } = state.current;
     if (circle) {
       circle.clear();
       const textureSrc = getImageUrl(url);
@@ -170,19 +200,15 @@ const useGrowThree = (dom: Element, url?: string) => {
     }
   }
 
-  function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-
   function animate() {
+    const { circle, particle, halo, luminor, renderer, scene, camera } =
+      state.current;
     var timer = 0.0001 * Date.now();
     timer = requestAnimationFrame(animate);
 
     particle.rotation.x += 0.0;
     particle.rotation.y -= 0.004;
-    circle.rotation.x -= 0.001;
+    // circle.rotation.x -= 0.001;
     circle.rotation.y -= 0.001;
     // circle?.scale?.set(
     //   circle?.scale.x + 0.001,
