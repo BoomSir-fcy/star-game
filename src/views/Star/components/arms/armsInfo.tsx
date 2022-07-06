@@ -68,10 +68,11 @@ const PreviewNumber = styled(Text)`
 
 const Group = styled(Flex)`
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 `;
 const GroupInfo = styled(Flex)`
   width: 33%;
+  flex-direction: column;
 `;
 
 interface ArmsInfoProps extends BoxProps {
@@ -165,7 +166,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
 
   const getArms = React.useCallback(() => {
     const arms = raceData[game_base_unit?.race]?.children?.find(
-      ({ id }) => id === Number(game_base_unit?.unique_id),
+      ({ id }) => id === Number(game_base_unit?.index),
     );
     return arms;
   }, [game_base_unit]);
@@ -221,7 +222,6 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
             <Flex alignItems='center' justifyContent='space-between' mb='5px'>
               <Text
                 color={RaceTypeColor[game_base_unit?.race]}
-                mb='2px'
                 fontSize='22px'
                 bold
               >
@@ -239,39 +239,41 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
               <Group>
                 <GroupInfo>
                   <Text color='textSubtle'>HP</Text>
-                  <Text ml='10px'>{game_base_unit?.hp}</Text>
+                  <Text small>{game_base_unit?.hp}</Text>
                 </GroupInfo>
                 <GroupInfo>
                   <Text color='textSubtle'>{t('Defense')}</Text>
-                  <Text ml='10px'>{game_base_unit?.df}</Text>
+                  <Text>{game_base_unit?.df}</Text>
                 </GroupInfo>
                 <GroupInfo>
                   <Text color='textSubtle'>{t('Attack')}</Text>
-                  <Text ml='10px'>{game_base_unit?.ak}</Text>
+                  <Text small>{game_base_unit?.ak}</Text>
                 </GroupInfo>
               </Group>
               <Group>
                 <GroupInfo>
                   <Text color='textSubtle'>{t('dodge')}</Text>
-                  <Text ml='10px'>{game_base_unit?.dodge}%</Text>
+                  <Text small>{game_base_unit?.dodge}%</Text>
                 </GroupInfo>
                 <GroupInfo>
                   <Text color='textSubtle'>{t('hit')}</Text>
-                  <Text ml='10px'>{game_base_unit?.hit}%</Text>
+                  <Text>{game_base_unit?.hit}%</Text>
                 </GroupInfo>
                 <GroupInfo>
                   <Text color='textSubtle'>{t('Burst')}</Text>
-                  <Text ml='10px'>{game_base_unit?.crit}%</Text>
+                  <Text small>{game_base_unit?.crit}%</Text>
                 </GroupInfo>
               </Group>
               <Group>
                 <GroupInfo>
                   <Text color='textSubtle'>{t('firstMove')}</Text>
-                  <Text ml='10px'>{game_base_unit?.speed}</Text>
+                  <Text small>{game_base_unit?.speed}</Text>
                 </GroupInfo>
                 <GroupInfo>
                   <Text color='textSubtle'>{t('area')}</Text>
-                  <Text ml='10px'>{`${game_base_unit?.ak_range_min}-${game_base_unit?.ak_range_max}`}</Text>
+                  <Text
+                    small
+                  >{`${game_base_unit?.ak_range_min}-${game_base_unit?.ak_range_max}`}</Text>
                 </GroupInfo>
               </Group>
             </Flex>

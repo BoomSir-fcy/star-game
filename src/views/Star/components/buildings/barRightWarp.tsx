@@ -6,12 +6,13 @@ import { Flex, Box, MarkText, Image, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 
 const Container = styled(Box)`
-  position: relative;
+  position: absolute;
   width: 546px;
   height: 286px;
   background: url('/images/commons/dashboard/token-buff.png');
   background-size: 100% 100%;
   padding: 8px 13px;
+  top: 420px;
   &.active {
     animation: bounceInRight 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
       alternate forwards;
@@ -21,29 +22,29 @@ const Container = styled(Box)`
       alternate forwards;
     @keyframes bounceInLeft {
       0% {
-        transform: translate(0, 0);
+        transform: translateX(0);
       }
       100% {
-        transform: translate(585px, 0);
+        transform: translateX(585px);
       }
     }
     ${({ theme }) => theme.mediaQueries.md} {
       @keyframes bounceInLeft {
         0% {
-          transform: translate(0, 0);
+          transform: translateX(0);
         }
         100% {
-          transform: translate(545px, 0);
+          transform: translateX(545px);
         }
       }
     }
   }
   @keyframes bounceInRight {
     0% {
-      transform: translate(200px, 0);
+      transform: translateX(200px);
     }
     100% {
-      transform: translate(0, 0);
+      transform: translateX(0);
     }
   }
 `;

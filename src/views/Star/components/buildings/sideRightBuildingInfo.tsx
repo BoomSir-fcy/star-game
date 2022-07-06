@@ -312,13 +312,15 @@ export const SideRightBuildingInfo: React.FC<{
             )}
           </Box>
 
-          <BuildingUpgrade
-            planet={planet}
-            currnet_building={currentAttributes}
-            estimate={estimate}
-            onFinish={onClose}
-            onCreateBuilding={onCreateBuilding}
-          />
+          {Boolean(estimate) && (
+            <BuildingUpgrade
+              planet={planet}
+              currnet_building={currentAttributes}
+              estimate={estimate}
+              onFinish={onClose}
+              onCreateBuilding={onCreateBuilding}
+            />
+          )}
         </Flex>
       </Content>
     </Container>

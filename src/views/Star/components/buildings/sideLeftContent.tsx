@@ -127,11 +127,11 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   const buildings = useStore(p => p.buildling.buildings);
 
   const close = React.useCallback(() => {
-    if (!activeBuilder?.id && queueStore.visible) {
+    if (!activeBuilder?.id && queueStore.visible && !sideRightStatus) {
       dispatch(setNavZIndex(true));
       dispatch(storeAction.queueVisbleSide(false));
     }
-  }, [activeBuilder, dispatch, queueStore.visible]);
+  }, [activeBuilder, dispatch, queueStore.visible, sideRightStatus]);
 
   React.useEffect(() => {
     if (!sideRightStatus) {
