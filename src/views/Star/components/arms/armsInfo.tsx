@@ -94,47 +94,46 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
       colorPolygon: '#FFFFFF',
       colorText: '#FFFFFF',
       fillColor: 'rgba(211, 95, 96, 0.5)',
-      data: [
-        {
-          attr: 'HP',
-          value: game_base_unit?.hp,
-        },
-        {
-          attr: t('Defense'),
-          value: game_base_unit?.df,
-        },
-        {
-          attr: t('Attack'),
-          value: game_base_unit?.ak,
-        },
-        {
-          attr: t('dodge'),
-          value: game_base_unit?.dodge,
-        },
-        {
-          attr: t('hit'),
-          value: game_base_unit?.hit,
-        },
-        {
-          attr: t('Burst'),
-          value: game_base_unit?.crit,
-        },
-        {
-          attr: t('speed'),
-          value: game_base_unit?.speed,
-        },
-        {
-          attr: t('area'),
-          value: game_base_unit?.ak_range_max,
-        },
-      ],
+      data: [],
     }),
   );
 
-  // React.useEffect(() => {
-  //   radarChart.updateDate(armsAttr);
-  //   console.log(armsAttr);
-  // }, [armsAttr, radarChart]);
+  React.useEffect(() => {
+    radarChart.updateDate([
+      {
+        attr: 'HP',
+        value: game_base_unit?.hp,
+      },
+      {
+        attr: t('Defense'),
+        value: game_base_unit?.df,
+      },
+      {
+        attr: t('Attack'),
+        value: game_base_unit?.ak,
+      },
+      {
+        attr: t('dodge'),
+        value: game_base_unit?.dodge,
+      },
+      {
+        attr: t('hit'),
+        value: game_base_unit?.hit,
+      },
+      {
+        attr: t('Burst'),
+        value: game_base_unit?.crit,
+      },
+      {
+        attr: t('speed'),
+        value: game_base_unit?.speed,
+      },
+      {
+        attr: t('area'),
+        value: game_base_unit?.ak_range_max,
+      },
+    ]);
+  }, [game_base_unit, radarChart, t]);
 
   const ref = React.useRef<HTMLDivElement>(null);
 
