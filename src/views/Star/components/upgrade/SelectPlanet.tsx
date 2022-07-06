@@ -11,6 +11,7 @@ import {
   RefreshButton,
   Button,
   GraphicsCard,
+  Spinner,
 } from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import Layout from 'components/Layout';
@@ -36,17 +37,6 @@ const MaterialBox = styled(Box)<{ disabled?: boolean }>`
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
 `;
-const ChooseBox = styled(Flex)`
-  position: absolute;
-  right: 25px;
-  top: 22px;
-  width: 36px;
-  height: 36px;
-  justify-content: center;
-  align-items: center;
-  background: url('/images/commons/icon/choose.png') no-repeat;
-  background-size: 100% 100%;
-`;
 const LinkStyled = styled(Link)`
   :hover {
     text-decoration: underline;
@@ -62,13 +52,14 @@ const SelectPlanet = () => {
   const { t } = useTranslation();
   const { toastWarning } = useToast();
   const [starList, setStarList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [state, setState] = useState({
     page: 1,
     token: 0,
     race: 0,
   });
 
-  const { activeMaterialMap, activePlanet } = useStore(p => p.planet);
+  const { activeMaterialMap } = useStore(p => p.planet);
 
   const init = useCallback(async () => {
     try {
@@ -82,6 +73,7 @@ const SelectPlanet = () => {
       if (Api.isSuccess(res)) {
         setStarList(res.data?.Data || []);
       }
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -194,41 +186,55 @@ const SelectPlanet = () => {
               </Button>
             </Flex>
             <ScrollBox>
-              {(starList ?? []).map((item: any) => (
-                <React.Fragment key={`${item.id}_${item.name}`}>
-                  <MaterialBox
-                    mb='20px'
-                    onClick={() => {
-                      // addMaterialPlanet(item);
-                      navigate(`/star?id=${item.id}`);
-                    }}
-                  >
-                    <PlanetBox
-                      info={item}
-                      active={
-                        Object.keys(activeMaterialMap).indexOf(`${item.id}`) !==
-                        -1
-                      }
-                      onSelect={() => {
-                        addMaterialPlanet(item);
-                      }}
-                    />
-                  </MaterialBox>
-                </React.Fragment>
-              ))}
-              {!starList?.length && (
+              {loading ? (
                 <Flex
-                  mt='50px'
+                  height='500px'
                   width='100%'
-                  justifyContent='center'
                   alignItems='center'
+                  justifyContent='center'
                 >
-                  <LinkStyled to='/mystery-box'>
-                    <Text fontSize='18px'>
-                      {t('No data, Go to open the black hole')} &gt;
-                    </Text>
-                  </LinkStyled>
+                  <Spinner />
                 </Flex>
+              ) : (
+                <>
+                  {(starList ?? []).map((item: any) => (
+                    <React.Fragment key={`${item.id}_${item.name}`}>
+                      <MaterialBox
+                        mb='20px'
+                        onClick={() => {
+                          // addMaterialPlanet(item);
+                          navigate(`/star?id=${item.id}`);
+                        }}
+                      >
+                        <PlanetBox
+                          info={item}
+                          active={
+                            Object.keys(activeMaterialMap).indexOf(
+                              `${item.id}`,
+                            ) !== -1
+                          }
+                          onSelect={() => {
+                            addMaterialPlanet(item);
+                          }}
+                        />
+                      </MaterialBox>
+                    </React.Fragment>
+                  ))}
+                  {!starList?.length && (
+                    <Flex
+                      mt='50px'
+                      width='100%'
+                      justifyContent='center'
+                      alignItems='center'
+                    >
+                      <LinkStyled to='/mystery-box'>
+                        <Text fontSize='18px'>
+                          {t('No data, Go to open the black hole')} &gt;
+                        </Text>
+                      </LinkStyled>
+                    </Flex>
+                  )}
+                </>
               )}
             </ScrollBox>
             {/* {starList?.length && (
