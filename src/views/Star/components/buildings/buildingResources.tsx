@@ -165,7 +165,7 @@ export const BuildingResources: React.FC<{
       {currnet_building.detail_type ===
         BuildingDetailType.BuildingDetailTypeStore && (
         <Flex width='100%' flexDirection='column'>
-          <Box mb='20px'>
+          <Box mb='15px'>
             <BuildingProgress
               token='ORE'
               title={t('Ore')}
@@ -180,7 +180,7 @@ export const BuildingResources: React.FC<{
               }
             />
           </Box>
-          <Box mb='20px'>
+          <Box mb='15px'>
             <BuildingProgress
               token='ENG'
               title={t('Energy')}
@@ -195,7 +195,7 @@ export const BuildingResources: React.FC<{
               }
             />
           </Box>
-          <Box mb='20px'>
+          <Box mb='15px'>
             <BuildingProgress
               token='SPICES'
               title={t('Population')}

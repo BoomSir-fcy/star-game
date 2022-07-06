@@ -202,11 +202,11 @@ export const SideRightBuildingInfo: React.FC<{
           }}
         >
           <Box padding='20px'>
-            <Flex mb='20px' alignItems='flex-start'>
+            <Flex mb='15px' alignItems='flex-start'>
               <GameThing
                 src={currentAttributes?.picture}
                 level={currentAttributes?.propterty?.levelEnergy}
-                scale='md'
+                scale='sm'
                 border
               />
               <Flex
@@ -246,7 +246,7 @@ export const SideRightBuildingInfo: React.FC<{
                 </Destory>
               </Flex>
             </Flex>
-            <Box mb='20px'>
+            <Box mb='15px'>
               <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
                 {t('Basic properties')}
               </MarkText>

@@ -16,7 +16,7 @@ export const BuildingConsume: React.FC<{
 }> = ({ currnet_building }) => {
   const { t } = useTranslation();
   return (
-    <Box mb='20px'>
+    <Box mb='15px'>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
         {t('resource consumption')}
       </MarkText>

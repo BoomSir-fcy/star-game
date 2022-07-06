@@ -22,7 +22,8 @@ const Content = styled(Box)`
   z-index: 2;
 `;
 const Items = styled(Flex)`
-  width: 50%;
+  width: 48%;
+  justify-content: space-between;
 `;
 
 export const BuildingUpgrade: React.FC<{
@@ -98,115 +99,120 @@ export const BuildingUpgrade: React.FC<{
             mb='13px'
           >
             <Items alignItems='center'>
-              <Text>{t('EnergyRequiredBuild')}</Text>
-              <Text
-                ml='2px'
-                small
-                color={`${
-                  planetAssets?.energy <
-                  (estimate?.upgrade_need?.upgrade_energy ||
-                    currnet_building?.upgrade_need?.upgrade_energy)
-                    ? 'warning'
-                    : 'progressGreenBar'
-                }`}
-              >
-                {formatDisplayApr(
-                  new BigNumber(
-                    estimate?.upgrade_need?.upgrade_energy ||
-                      currnet_building?.upgrade_need?.upgrade_energy,
-                  ).toNumber(),
-                )}
-              </Text>
-              <Text small>
-                /
-                {formatDisplayApr(
-                  new BigNumber(planetAssets?.energy).toNumber(),
-                )}
-              </Text>
+              <Text ellipsis>{t('EnergyRequiredBuild')}</Text>
+              <Flex flex={1} justifyContent='flex-end' ml='2px'>
+                <Text
+                  small
+                  color={`${
+                    planetAssets?.energy <
+                    (estimate?.upgrade_need?.upgrade_energy ||
+                      currnet_building?.upgrade_need?.upgrade_energy)
+                      ? 'warning'
+                      : 'progressGreenBar'
+                  }`}
+                >
+                  {formatDisplayApr(
+                    new BigNumber(
+                      estimate?.upgrade_need?.upgrade_energy ||
+                        currnet_building?.upgrade_need?.upgrade_energy,
+                    ).toNumber(),
+                  )}
+                </Text>
+                <Text small>
+                  /
+                  {formatDisplayApr(
+                    new BigNumber(planetAssets?.energy).toNumber(),
+                  )}
+                </Text>
+              </Flex>
             </Items>
-            <Items alignItems='center' justifyContent='flex-end'>
-              <Text>{t('OreRequiredConstruction')}</Text>
-              <Text
-                ml='2px'
-                small
-                color={`${
-                  planetAssets?.stone <
-                  (estimate?.upgrade_need?.upgrade_stone ||
-                    currnet_building?.upgrade_need?.upgrade_stone)
-                    ? 'warning'
-                    : 'progressGreenBar'
-                }`}
-              >
-                {formatDisplayApr(
-                  new BigNumber(
-                    estimate?.upgrade_need?.upgrade_stone ||
-                      currnet_building?.upgrade_need?.upgrade_stone,
-                  ).toNumber(),
-                )}
-              </Text>
-              <Text small>
-                /
-                {formatDisplayApr(
-                  new BigNumber(planetAssets?.stone).toNumber(),
-                )}
-              </Text>
+            <Items alignItems='center'>
+              <Text ellipsis>{t('OreRequiredConstruction')}</Text>
+              <Flex flex={1} justifyContent='flex-end' ml='2px'>
+                <Text
+                  small
+                  color={`${
+                    planetAssets?.stone <
+                    (estimate?.upgrade_need?.upgrade_stone ||
+                      currnet_building?.upgrade_need?.upgrade_stone)
+                      ? 'warning'
+                      : 'progressGreenBar'
+                  }`}
+                >
+                  {formatDisplayApr(
+                    new BigNumber(
+                      estimate?.upgrade_need?.upgrade_stone ||
+                        currnet_building?.upgrade_need?.upgrade_stone,
+                    ).toNumber(),
+                  )}
+                </Text>
+                <Text small>
+                  /
+                  {formatDisplayApr(
+                    new BigNumber(planetAssets?.stone).toNumber(),
+                  )}
+                </Text>
+              </Flex>
             </Items>
           </Flex>
 
           <Flex alignItems='center' justifyContent='space-between' width='100%'>
             <Items alignItems='center'>
-              <Text>{t('SpicesNeededToBuild')}</Text>
-              <Text
-                ml='2px'
-                small
-                color={`${
-                  planetAssets?.population <
-                  (estimate?.upgrade_need?.upgrade_population ||
-                    currnet_building?.upgrade_need?.upgrade_population)
-                    ? 'warning'
-                    : 'progressGreenBar'
-                }`}
-              >
-                {formatDisplayApr(
-                  new BigNumber(
-                    estimate?.upgrade_need?.upgrade_population ||
-                      currnet_building?.upgrade_need?.upgrade_population,
-                  ).toNumber(),
-                )}
-              </Text>
-              <Text small>
-                /
-                {formatDisplayApr(
-                  new BigNumber(planetAssets?.population).toNumber(),
-                )}
-              </Text>
+              <Text ellipsis>{t('SpicesNeededToBuild')}</Text>
+              <Flex flex={1} justifyContent='flex-end' ml='2px'>
+                <Text
+                  small
+                  color={`${
+                    planetAssets?.population <
+                    (estimate?.upgrade_need?.upgrade_population ||
+                      currnet_building?.upgrade_need?.upgrade_population)
+                      ? 'warning'
+                      : 'progressGreenBar'
+                  }`}
+                >
+                  {formatDisplayApr(
+                    new BigNumber(
+                      estimate?.upgrade_need?.upgrade_population ||
+                        currnet_building?.upgrade_need?.upgrade_population,
+                    ).toNumber(),
+                  )}
+                </Text>
+                <Text small>
+                  /
+                  {formatDisplayApr(
+                    new BigNumber(planetAssets?.population).toNumber(),
+                  )}
+                </Text>
+              </Flex>
             </Items>
             <Items alignItems='center' justifyContent='flex-end'>
-              <Text>{t('BuildRequiredBOX')}</Text>
-              <Text
-                ml='2px'
-                small
-                color={`${
-                  planetAssets?.stone <
-                  (estimate?.upgrade_need?.upgrade_box ||
-                    currnet_building?.upgrade_need?.upgrade_box)
-                    ? 'warning'
-                    : 'progressGreenBar'
-                }`}
-              >
-                {formatDisplayApr(
-                  new BigNumber(
-                    estimate?.upgrade_need?.upgrade_box ||
-                      currnet_building?.upgrade_need?.upgrade_box,
-                  ).toNumber(),
-                )}
-              </Text>
-              <Text small>
-                /
-                {formatDisplayApr(
-                  new BigNumber(TokenBlance('BOX')?.amount).toNumber(),
-                )}
-              </Text>
+              <Text ellipsis>{t('BuildRequiredBOX')}</Text>
+              <Flex flex={1} justifyContent='flex-end' ml='2px'>
+                <Text
+                  ml='2px'
+                  small
+                  color={`${
+                    planetAssets?.stone <
+                    (estimate?.upgrade_need?.upgrade_box ||
+                      currnet_building?.upgrade_need?.upgrade_box)
+                      ? 'warning'
+                      : 'progressGreenBar'
+                  }`}
+                >
+                  {formatDisplayApr(
+                    new BigNumber(
+                      estimate?.upgrade_need?.upgrade_box ||
+                        currnet_building?.upgrade_need?.upgrade_box,
+                    ).toNumber(),
+                  )}
+                </Text>
+                <Text small>
+                  /
+                  {formatDisplayApr(
+                    new BigNumber(TokenBlance('BOX')?.amount).toNumber(),
+                  )}
+                </Text>
+              </Flex>
             </Items>
           </Flex>
         </Flex>

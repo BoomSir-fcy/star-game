@@ -87,6 +87,9 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
 }) => {
   const { t } = useTranslation();
   const { game_base_unit } = armsData;
+  const armsAttr = Object.keys(game_base_unit?.arms_attr).map(keys => {
+    return { attr: keys, value: game_base_unit?.arms_attr[keys] };
+  });
   const [radarChart] = React.useState(
     new RadarChart({
       width: 180,
@@ -94,32 +97,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
       colorPolygon: '#FFFFFF',
       colorText: '#FFFFFF',
       fillColor: 'rgba(211, 95, 96, 0.5)',
-      data: [
-        {
-          attr: '爆发',
-          value: 100,
-        },
-        {
-          attr: '防御',
-          value: 60,
-        },
-        {
-          attr: '治疗',
-          value: 50,
-        },
-        {
-          attr: '控制',
-          value: 60,
-        },
-        {
-          attr: '辅助',
-          value: 30,
-        },
-        {
-          attr: '机动',
-          value: 70,
-        },
-      ],
+      data: armsAttr,
     }),
   );
   const ref = React.useRef<HTMLDivElement>(null);
@@ -152,7 +130,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
 
   const getArms = React.useCallback(() => {
     const arms = raceData[game_base_unit?.race]?.children?.find(
-      ({ id }) => id === Number(game_base_unit?.index),
+      ({ id }) => id === Number(game_base_unit?.unique_id),
     );
     return arms;
   }, [game_base_unit]);
@@ -276,10 +254,10 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
         </Body>
         <Flex>
           <Box ref={ref} width={180} />
-          <Box ml='17px'>
-            <MarkText bold fontSize='18px' mb='20px' fontStyle='normal'>
+          <Box ml='17px' mt='10px'>
+            {/* <MarkText bold fontSize='18px' mb='20px' fontStyle='normal'>
               {t('Ability rating', { value: 'SS' })}
-            </MarkText>
+            </MarkText> */}
             <GraphicsCard stripe width='490px' height='110px'>
               <Text color='textSubtle'>{getArms()?.desc}</Text>
             </GraphicsCard>
