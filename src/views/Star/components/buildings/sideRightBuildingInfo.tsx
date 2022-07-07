@@ -312,7 +312,7 @@ export const SideRightBuildingInfo: React.FC<{
             )}
           </Box>
 
-          {Boolean(estimate) && (
+          {Boolean(estimate?._id) && (
             <BuildingUpgrade
               planet={planet}
               currnet_building={currentAttributes}
