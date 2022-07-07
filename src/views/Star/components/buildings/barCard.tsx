@@ -22,7 +22,7 @@ export const BarCard: React.FC<{
 }> = ({ title, children, onClick }) => {
   return (
     <RecordBox onClick={onClick}>
-      <MarkText ml='10px' mt='10px' fontSize='14px' bold fontStyle='normal'>
+      <MarkText ml='10px' fontSize='14px' bold fontStyle='normal'>
         {title}
       </MarkText>
       {children}
