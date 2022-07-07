@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Layout } from 'components';
 import { Flex, Box, Text } from 'uikit';
 import styled, { createGlobalStyle } from 'styled-components';
 import { GlobalVideo } from 'components/Video';
-import { useStore } from 'state';
-import { useNavigate } from 'react-router-dom';
+import { storeAction, useStore } from 'state';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   MysteryBoxCom,
   mysteryBoxQualities,
@@ -16,7 +16,38 @@ import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux';
 import { fetchBoxViewAsync } from 'state/mysteryBox/reducer';
 import eventBus from 'utils/eventBus';
+import { useGuide } from 'hooks/useGuide';
+import { Steps } from 'intro.js-react';
+import 'intro.js/introjs.css';
 
+const GlobalStyle = createGlobalStyle<{
+  interactive?: boolean;
+  noSelectBox?: boolean;
+}>`
+  ${({ interactive }) => {
+    return interactive
+      ? `
+    *{
+      pointer-events: none;
+    }
+    .introjs-showElement, .introjs-showElement *, .introjs-tooltip, .introjs-tooltip *{
+      pointer-events: auto;
+    }
+    `
+      : '';
+  }};
+  ${({ noSelectBox }) => {
+    return noSelectBox
+      ? `
+      .introjs-helperLayer{
+        border: none;
+        width: 0 !important;
+        height: 0 !important;
+      }
+    `
+      : '';
+  }}
+`;
 const ClickBox = styled(Box)`
   /* background-color: pink; */
   opacity: 0.2;
@@ -62,8 +93,34 @@ const MysteryBoxNew = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
-
   const { maxSales, sold } = useStore(p => p.mysteryBox.boxView);
+
+  // 控制是否开启新手指导的
+  const location = useLocation();
+  const { guides, setGuide } = useGuide(location.pathname);
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [activeStep, setActiveStep] = useState(guides.step);
+
+  const steps = useMemo(() => {
+    return [
+      {
+        element: '.mystery-index-step0',
+        intro: t('GuideMysteryIndexStep0'),
+        noSelectBox: true,
+      },
+      {
+        element: '.mystery-index-step1',
+        intro: t('GuideMysteryIndexStep1'),
+        interactive: true,
+      },
+    ];
+  }, [t]);
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    };
+  }, [dispatch]);
 
   const onRefreshClick = React.useCallback(() => {
     dispatch(fetchBoxViewAsync(account));
@@ -76,8 +133,54 @@ const MysteryBoxNew = () => {
       eventBus.removeEventListener('onRefresh', onRefreshClick);
     };
   }, [onRefreshClick]);
+
   return (
     <Layout>
+      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
+        <>
+          <GlobalStyle
+            interactive={steps[activeStep]?.interactive && stepsEnabled}
+            noSelectBox={steps[activeStep]?.noSelectBox}
+          />
+          <Steps
+            enabled={stepsEnabled}
+            steps={steps}
+            initialStep={guides.step}
+            options={{
+              exitOnOverlayClick: false,
+              tooltipPosition: 'top',
+              scrollPadding: 0,
+            }}
+            onChange={currentStep => {
+              if (currentStep > guides.step) {
+                setGuide(currentStep);
+              }
+            }}
+            onBeforeChange={event => {
+              setActiveStep(event);
+            }}
+            onExit={index => {
+              setStepsEnabled(false);
+              if (index < steps.length - 1) {
+                dispatch(
+                  storeAction.toggleVisible({
+                    visible: true,
+                    lastStep: steps.length,
+                  }),
+                );
+              }
+            }}
+          />
+        </>
+      )}
+      <Box
+        className='mystery-index-step0'
+        width={0}
+        height={0}
+        position='absolute'
+        top='-100px'
+        left='30%'
+      />
       <Flex position='relative'>
         <VipBox>
           <Flex width='80%' mt='60px' pl='10px' flexDirection='column'>
@@ -101,7 +204,18 @@ const MysteryBoxNew = () => {
             onClick={() => {
               navigate(`/mystery-box/state?q=${mysteryBoxQualities.ORDINARY}`);
             }}
-          />
+          >
+            <Box
+              className='mystery-index-step1'
+              position='absolute'
+              width={700}
+              height={400}
+              left={100}
+              top={0}
+              bottom={0}
+              style={{ transform: 'rotate(45deg)' }}
+            />
+          </ClickBox>
           <ClickBox
             left={450}
             onClick={() => {
@@ -114,6 +228,7 @@ const MysteryBoxNew = () => {
               navigate(`/mystery-box/state?q=${mysteryBoxQualities.SUPER}`);
             }}
           />
+
           <MysteryBoxCom
             left={-50}
             top={0}

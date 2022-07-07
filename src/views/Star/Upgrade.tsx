@@ -323,7 +323,7 @@ const Upgrade = () => {
             const errorMsg = msg?.substring(
               msg?.indexOf('execution reverted: ') + 20,
             );
-            if (errorMsg) toastError(t('errorMsg'));
+            if (errorMsg) toastError(errorMsg);
             else
               toastError(
                 'Please try again. Confirm the transaction and make sure you are paying enough gas!',
