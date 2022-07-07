@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Flex, Box, Image, TweenText } from 'uikit';
 
@@ -70,6 +70,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   const location = useLocation();
   const { t } = useTranslation();
   const params = useParsedQueryString();
+  const navigate = useNavigate();
 
   const { fetch: FetchBlance } = useFetchUserBalance();
   const { fetch: FetchProduct } = useFetchUserProduct();
@@ -93,6 +94,12 @@ const Dashboard: React.FC<DashboardProps> = ({
   const hideFooter = useMemo(() => {
     return getHideFooter(location.pathname) || params?.hide;
   }, [location.pathname, params]);
+
+  const onBackClick = React.useCallback(() => {
+    if (hideFooter) {
+      navigate('/star/planet');
+    }
+  }, [hideFooter, navigate]);
   return (
     <>
       {!hideHeader && (
@@ -102,7 +109,10 @@ const Dashboard: React.FC<DashboardProps> = ({
             <TokenInfo />
           </FlexLeftTop>
           <BoxRightTop scale={scale} index={zIndex}>
-            <HandleButtonGroup onRefresh={onRefreshClick} />
+            <HandleButtonGroup
+              onRefresh={onRefreshClick}
+              onBack={onBackClick}
+            />
           </BoxRightTop>
           {!hideFooter && (
             <BoxRightBottom scale={scale} index={zIndex}>
