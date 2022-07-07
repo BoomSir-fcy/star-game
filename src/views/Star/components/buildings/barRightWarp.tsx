@@ -12,7 +12,7 @@ const Container = styled(Box)`
   background: url('/images/commons/dashboard/token-buff.png');
   background-size: 100% 100%;
   padding: 8px 13px;
-  top: 420px;
+  top: 450px;
   &.active {
     animation: bounceInRight 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
       alternate forwards;

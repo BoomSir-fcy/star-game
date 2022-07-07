@@ -168,6 +168,7 @@ export const SideRightBuildingInfo: React.FC<{
     }
   }, [init, itemData]);
 
+  console.log(currentAttributes);
   return (
     <Container>
       <Content className={classNames(visible ? 'active' : 'removeActive')}>
@@ -312,7 +313,7 @@ export const SideRightBuildingInfo: React.FC<{
             )}
           </Box>
 
-          {Boolean(estimate?._id) && (
+          {currentAttributes?.propterty?.levelEnergy < 20 && (
             <BuildingUpgrade
               planet={planet}
               currnet_building={currentAttributes}
