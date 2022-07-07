@@ -28,7 +28,7 @@ import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import { queryMintEvent } from './event';
 
 const State = () => {
-  const { t } = useTranslation();
+  const { t, getHTML } = useTranslation();
   const paramsQs = useParsedQueryString();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
@@ -199,14 +199,23 @@ const State = () => {
   return (
     <Flex flexDirection='column' justifyContent='center' alignItems='center'>
       <MysteryBoxCom rotate={0} left={0} right={0} quality={quality} />
-      <Flex mt='180px' flexDirection='column' justifyContent='center'>
+      <Flex
+        mt='180px'
+        flexDirection='column'
+        justifyContent='center'
+        alignItems='center'
+      >
         <Text fontSize='22px' bold>
-          {t('OpenMysteryBoxDesc')}
+          {t('OpenMysteryBoxDesc1')}
         </Text>
+
         <Flex mt='20px'>
+          <Text mr='20px' fontSize='22px' bold>
+            {t('OpenMysteryBoxDesc2-1')}
+          </Text>
           {info.rarity.map(item => (
             <Text
-              mr='30px'
+              mr='20px'
               key={item}
               color={QualityColor[item]}
               fontSize='22px'
@@ -215,6 +224,9 @@ const State = () => {
               {t(`rarity-${item}`)}
             </Text>
           ))}
+          <Text fontSize='22px' bold>
+            {t('OpenMysteryBoxDesc2-2')}
+          </Text>
         </Flex>
         <Flex mt='85px' justifyContent='center'>
           <Box width={30}>

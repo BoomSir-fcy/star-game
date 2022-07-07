@@ -126,7 +126,7 @@ export const BarRight: React.FC<BarRightProps> = ({
             alignItems='center'
             width='42px'
             height='42px'
-            mr='8px'
+            // mr='8px'
             position='relative'
           >
             <ImgFlex justifyContent='center' alignItems='center'>

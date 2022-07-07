@@ -9,7 +9,9 @@ const RecordBox = styled(Flex)`
   background-size: 100% 100%;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px;
+  /* padding: 0 10px; */
+  padding-left: 10px;
+  padding-right: 20px;
   margin-bottom: 20px;
   cursor: pointer;
   position: relative;
@@ -22,9 +24,11 @@ export const BarCard: React.FC<{
 }> = ({ title, children, onClick }) => {
   return (
     <RecordBox onClick={onClick}>
-      <MarkText ml='24px' mt='10px' fontSize='16px' bold fontStyle='normal'>
-        {title}
-      </MarkText>
+      <Flex width='100%' justifyContent='center'>
+        <MarkText fontSize='15px' bold fontStyle='normal'>
+          {title}
+        </MarkText>
+      </Flex>
       {children}
     </RecordBox>
   );
