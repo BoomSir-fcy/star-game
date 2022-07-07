@@ -75,10 +75,10 @@ export const BarRight: React.FC<BarRightProps> = ({
             alignItems='center'
             width='42px'
             height='42px'
-            mr='8px'
+            mr='10px'
             position='relative'
           >
-            <MarkText fontSize='18px' bold fontStyle='italic'>
+            <MarkText bold fontStyle='italic' pl='0'>
               {planetInfo?.build_count}
             </MarkText>
           </Flex>
@@ -92,10 +92,10 @@ export const BarRight: React.FC<BarRightProps> = ({
             alignItems='center'
             width='42px'
             height='42px'
-            mr='8px'
+            mr='10px'
             position='relative'
           >
-            <MarkText fontSize='18px' bold fontStyle='italic'>
+            <MarkText bold fontStyle='italic' pl='0'>
               Lv{planetInfo?.level}
             </MarkText>
           </Flex>
@@ -109,10 +109,10 @@ export const BarRight: React.FC<BarRightProps> = ({
             alignItems='center'
             width='42px'
             height='42px'
-            mr='8px'
+            mr='10px'
             position='relative'
           >
-            <MarkText fontSize='18px' bold fontStyle='italic'>
+            <MarkText bold fontStyle='italic' pl='0'>
               +1
             </MarkText>
           </Flex>
@@ -126,7 +126,7 @@ export const BarRight: React.FC<BarRightProps> = ({
             alignItems='center'
             width='42px'
             height='42px'
-            // mr='8px'
+            mr='10px'
             position='relative'
           >
             <ImgFlex justifyContent='center' alignItems='center'>

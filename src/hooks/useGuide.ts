@@ -40,11 +40,11 @@ export const useGuide = (url: string) => {
     [url],
   );
 
-  // React.useEffect(() => {
-  //   if (url) {
-  //     getGuide();
-  //   }
-  // }, [getGuide, url]);
+  React.useEffect(() => {
+    if (url) {
+      getGuide();
+    }
+  }, [getGuide, url]);
 
   return {
     guides,
