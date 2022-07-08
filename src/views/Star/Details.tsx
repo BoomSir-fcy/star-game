@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import classNames from 'classnames';
 import { useImmer } from 'use-immer';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, usePrompt } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction } from 'state';
 import { Box } from 'uikit';
@@ -70,34 +70,31 @@ const GlobalStyle = createGlobalStyle<{
 `;
 
 const Details = () => {
+  const building = useBuilding({
+    width: 1920,
+    height: 900,
+  });
+
   const parsedQs = useParsedQueryString();
   const location = useLocation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const id = Number(parsedQs.id);
+  const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
+  const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
+  const upgrad = useStore(p => p.buildling.upgradesBuilding);
+  const destory = useStore(p => p.buildling.destroyBuilding);
+  const activeBuilder = useActiveBuilder(building);
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
   const { refreshWorkQueue } = useWorkqueue();
   const { destory: destoryHook } = useBuildingOperate();
   const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
-  const [dynamicEl, setDynamicEl] = React.useState(null);
   const [activeStep, setActiveStep] = React.useState(guides.step);
   const [serverDiffTime, setServerDiffTime] = React.useState<number>(0);
   const { screenMode } = useStore(p => p.user);
   const guideRef = React.useRef(null);
-
-  const building = useBuilding({
-    width: 1920,
-    height: 900,
-  });
   const ref = React.useRef<HTMLDivElement>(null);
-  const activeBuilder = useActiveBuilder(building);
-
-  const id = Number(parsedQs.id);
-  const planet = useStore(p => p.planet.planetInfo[id ?? 0]);
-  const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
-  const upgrad = useStore(p => p.buildling.upgradesBuilding);
-  const destory = useStore(p => p.buildling.destroyBuilding);
 
   const [stateBuilding, setStateBuilding] = useImmer({
     visible: false,
@@ -147,7 +144,6 @@ const Details = () => {
         element: '.guide_step_7',
         intro: t('guidePlanetStep_7'),
         interactive: true,
-        disabled: true,
       },
       {
         element: '.guide_step_8',
@@ -157,7 +153,6 @@ const Details = () => {
         element: '.guide_step_9',
         intro: t('guidePlanetStep_9'),
         interactive: true,
-        disabled: true,
       },
     ];
   }, [t]);
@@ -390,7 +385,6 @@ const Details = () => {
 
   React.useEffect(() => {
     return () => {
-      dispatch(storeAction.toggleVisible({ visible: false }));
       dispatch(storeAction.resetModal());
       dispatch(storeAction.toggleVisible({ visible: false }));
     };
@@ -403,47 +397,46 @@ const Details = () => {
       setGuide(activeStep + 1);
       onClickGuide();
     }
-    setGuide(1);
   }, [activeStep, setGuide, stateBuilding.visible, stepsEnabled]);
 
   return (
     <>
       <Container>
-        {guides.finish && !guides.guideFinish && (
-          <>
-            <GlobalStyle
-              interactive={steps[activeStep]?.interactive && stepsEnabled}
-              disabled={steps[activeStep]?.disabled}
-            />
-            <Steps
-              ref={guideRef}
-              enabled={stepsEnabled}
-              steps={steps}
-              initialStep={activeStep || guides.step}
-              options={{
-                exitOnOverlayClick: false,
-                disableInteraction: false,
-              }}
-              onBeforeChange={beforeStepChange}
-              // onChange={currentStep => {
-              //   if (currentStep > guides.step) {
-              //     setGuide(currentStep);
-              //   }
-              // }}
-              onExit={step => {
-                setStepsEnabled(false);
-                if (step < steps.length - 1) {
-                  dispatch(
-                    storeAction.toggleVisible({
-                      visible: true,
-                      lastStep: steps.length,
-                    }),
-                  );
-                }
-              }}
-            />
-          </>
-        )}
+        {guides.finish &&
+          !guides.guideFinish &&
+          steps.length - 1 > guides.step && (
+            <>
+              <GlobalStyle
+                interactive={steps[activeStep]?.interactive && stepsEnabled}
+                disabled={steps[activeStep]?.disabled}
+              />
+              <Steps
+                ref={guideRef}
+                enabled={stepsEnabled}
+                steps={steps}
+                initialStep={activeStep || guides.step}
+                options={{
+                  exitOnOverlayClick: false,
+                  disableInteraction: false,
+                }}
+                onBeforeChange={beforeStepChange}
+                onExit={step => {
+                  setStepsEnabled(false);
+                  if (step < steps.length - 1) {
+                    dispatch(
+                      storeAction.toggleVisible({
+                        visible: true,
+                        lastStep: steps.length,
+                      }),
+                    );
+                  }
+                  if (step === steps.length - 1) {
+                    setGuide(step);
+                  }
+                }}
+              />
+            </>
+          )}
         <SideLeftContent
           race={planet?.race}
           building={building}

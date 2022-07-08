@@ -190,7 +190,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
 
   const getBuildings = React.useCallback(
     index => {
-      const build = raceData[race][index];
+      const build = raceData[race][index] || { name: '' };
       return build;
     },
     [race],
@@ -243,6 +243,9 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                     handleGoIntoBattle(row);
                     onPreview(row);
                     onChangeGuide();
+
+                    dispatch(setNavZIndex(true));
+                    dispatch(storeAction.queueVisbleSide(false));
                   }}
                 />
               </BuildingsItem>
