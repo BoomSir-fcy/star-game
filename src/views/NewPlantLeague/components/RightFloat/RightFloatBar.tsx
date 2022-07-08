@@ -187,7 +187,7 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
           <img src='/images/commons/icon/icon-vip.png' alt='' />
         </ImgFlex>
       </RecordBox>
-      <RecordBox onClick={rechargeHandle}>
+      {/* <RecordBox onClick={rechargeHandle}>
         <MarkText
           ml='10px'
           maxWidth='120px'
@@ -216,7 +216,7 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
           <img src='/images/commons/icon/icon-vip.png' alt='' />
         </ImgFlex>
-      </RecordBox>
+      </RecordBox> */}
       <Link to='/platform-News'>
         <RecordBox>
           <MarkText
@@ -226,7 +226,7 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
             bold
             fontStyle='normal'
           >
-            {t('Platform Messages')}
+            {t('InBox')}
           </MarkText>
           <Flex
             justifyContent='center'
@@ -257,7 +257,7 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
             bold
             fontStyle='normal'
           >
-            {t('Alliance Messages')}
+            {t('Explore Report')}
           </MarkText>
           <Flex
             justifyContent='center'

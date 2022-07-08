@@ -7,7 +7,7 @@ import RightFloatBar from './RightFloatBar';
 const FloatBox = styled(Box)`
   position: fixed;
   right: 0;
-  top: 14%;
+  top: 20%;
 `;
 
 const RightFloatBox: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({

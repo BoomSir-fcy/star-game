@@ -54,7 +54,15 @@ const GlobeStyled = styled(PlanetBall)`
 const LeveBox = styled(Flex)`
   position: absolute;
   z-index: 1;
-  top: 40px;
+  top: -10px;
+  justify-content: center;
+  width: 100%;
+`;
+
+const PowerBox = styled(Flex)`
+  position: absolute;
+  z-index: 1;
+  top: 70px;
   justify-content: center;
   width: 100%;
 `;
@@ -92,6 +100,8 @@ interface StarAddBtnProps extends BoxProps {
   ballWorking?: boolean;
   resources?: boolean;
   resourcesText?: string;
+  showPower?: boolean;
+  power?: number;
 }
 
 const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
@@ -112,6 +122,8 @@ const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
   ballWorking,
   resources,
   resourcesText,
+  showPower,
+  power,
   ...props
 }) => {
   const { className, ...restProps } = props;
@@ -178,6 +190,24 @@ const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
             LV {Leve}
           </MarkText>
         </LeveBox>
+      )}
+      {showPower && (
+        <PowerBox>
+          <Flex
+            alignItems='center'
+            width='max-content'
+            background='rgb(0 0 0 / 50%)'
+            padding='0 10px'
+            borderRadius='10px'
+          >
+            <Text fontSize='18px' mr='10px'>
+              Power
+            </Text>
+            <MarkText fontStyle='normal' fontSize='20px' bold>
+              {power}
+            </MarkText>
+          </Flex>
+        </PowerBox>
       )}
       {renderChildren}
     </StyledStar>
