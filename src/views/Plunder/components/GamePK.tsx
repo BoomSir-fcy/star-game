@@ -101,12 +101,10 @@ const GamePK: React.FC<GamePKProps> = () => {
   }, [parsedQs]);
 
   useEffect(() => {
-    if (TerrainInfo?.length && ActiveTerrainInfo) {
-      game.creatTerrain(TerrainInfo[ActiveTerrainInfo?.value]?.terrains);
-    } else {
-      game.creatTerrain([]);
+    if (game) {
+      game.creatTerrain();
     }
-  }, [TerrainInfo, ActiveTerrainInfo]);
+  }, []);
 
   const startHandle = useCallback(() => {
     if (Number(pid0) && Number(pid1)) {

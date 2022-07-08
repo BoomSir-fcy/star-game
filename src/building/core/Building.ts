@@ -10,6 +10,8 @@ import Boards from './Boards';
 import Chequer, { stateType } from './Chequer';
 import {
   getAddActiveBuilderEvent,
+  getCancelBuilderEvent,
+  getConfirmBuilderEvent,
   getRemoveActiveBuilderEvent,
   getUpdateBuilderPosition,
 } from './event';
@@ -224,14 +226,26 @@ class Building extends EventTarget {
             this.dispatchEvent(getAddActiveBuilderEvent(builder));
           }
         }
-        this.activeBuilderFlag = true;
-        this.activeBuilder = builder;
-        builder.changeState(stateType.ACTIVE, true);
-        this.dispatchEvent(getAddActiveBuilderEvent(builder));
+        if (!builder.isRemove) {
+          this.activeBuilderFlag = true;
+          this.activeBuilder = builder;
+          builder.changeState(stateType.ACTIVE, true);
+          this.dispatchEvent(getAddActiveBuilderEvent(builder));
+        }
       })
       .on('click', (e: InteractionEvent) => {
         this.activeBuilderFlag = true;
       });
+
+    builder.addEventListener('cancel', () => {
+      this.removeBuilder(builder);
+      this.dispatchEvent(getCancelBuilderEvent(builder));
+    });
+
+    builder.addEventListener('confirm', () => {
+      this.dispatchEvent(getConfirmBuilderEvent(builder));
+      console.log(builder.position);
+    });
   }
 
   // 添加当前选中小人
@@ -264,9 +278,11 @@ class Building extends EventTarget {
 
   // 从棋盘上移除小人
   removeBuilder(builder: Builder) {
+    builder.setRemove(true);
+    builder.changeState(stateType.PREVIEW, false);
+    // console.log(888888888888888, builder);
     this.builders = this.builders.filter(item => item !== builder);
     this.boards.container.removeChild(builder.container);
-    builder.changeState(stateType.PREVIEW, false);
     this.dispatchEvent(getUpdateBuilderPosition(this.builders));
     this.removeActiveSolider();
   }
@@ -298,6 +314,7 @@ class Building extends EventTarget {
           options,
         );
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
+        builder.addHandleBtn();
       }
     } else if (options.areaX === 2) {
       const matrix4 = this.boards.matrix4s.find(item => {
@@ -312,6 +329,7 @@ class Building extends EventTarget {
           options,
         );
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
+        builder.addHandleBtn();
       }
     }
   }
@@ -341,6 +359,7 @@ class Building extends EventTarget {
             detail: { builders: this.builders },
           }),
         );
+        builder.addHandleBtn();
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
       }
       this.dragPreBuilder.setDragging(false);

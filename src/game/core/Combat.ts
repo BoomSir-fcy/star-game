@@ -544,7 +544,7 @@ class Combat extends EventTarget {
   }
 
   updateZIndex() {
-    if (this.axisPoint?.axisX && this.axisPoint?.axisY) {
+    if (this.axisPoint && this.axisPoint) {
       this.container.zIndex = this.axisPoint?.axisX + this.axisPoint?.axisY;
     }
   }
@@ -560,7 +560,6 @@ class Combat extends EventTarget {
     //   this.changeEffect(descType.RESTORE, target);
     // });
 
-    console.log(effect, '===effect');
     bullet.attack(effect, target);
     // bullet.addEventListener('moveEnd', () => {
     //   // target.effectBuff.addEffect(effect);
