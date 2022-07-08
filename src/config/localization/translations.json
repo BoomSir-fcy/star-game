@@ -779,6 +779,8 @@
   "http-error-300031": "Planetary alliance is occupying the stars",
   "http-error-300032": "No more cellars than storage tanks",
   "http-error-300033": "Work queue point error",
+  "http-error-300034": "Failed to delete last factory",
+  "http-error-300035": "Cannot delete last storage tank",
   "http-error-400001": "Failed to get user information",
   "http-error-500001": "The galaxy star is still inside the protector",
   "http-error-500002": "The galaxy already owns",

@@ -21,7 +21,7 @@ import { BuildingConsume } from './buildingConsume';
 
 const Container = styled(Box)`
   position: absolute;
-  right: -15px;
+  right: -18px;
   top: 0;
   height: 100%;
   z-index: 199;
@@ -166,7 +166,9 @@ export const SideRightBuildingInfo: React.FC<{
             arms: [],
           },
         },
-        estimate_building_detail: {},
+        estimate_building_detail: {
+          _id: itemData?._id,
+        },
       });
     }
   }, [init, itemData]);
@@ -180,9 +182,7 @@ export const SideRightBuildingInfo: React.FC<{
         <SideCloseButton
           variant='text'
           className='guide_step_4'
-          onClick={() => {
-            onClose(!currentAttributes?.isbuilding);
-          }}
+          onClick={() => onClose()}
         >
           <Box width='34px' height='42px'>
             <Image

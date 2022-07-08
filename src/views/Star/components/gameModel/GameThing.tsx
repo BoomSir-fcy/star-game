@@ -175,7 +175,16 @@ export const GameThing: React.FC<{
         )}
       </Container>
       {text && (
-        <MarkText mt='12px' bold small textAlign='center' fontStyle='normal'>
+        <MarkText
+          mt='12px'
+          bold
+          small
+          textAlign='center'
+          fontStyle='normal'
+          ellipsis
+          pl='0'
+          width={sizeBox.width}
+        >
           {text}
         </MarkText>
       )}

@@ -542,7 +542,8 @@ class Building extends EventTarget {
         item.position.from.y,
       );
       if (builder) {
-        builder.setIsBuilded(true);
+        builder.setIsBuilded(!!created);
+        builder.setIsBuilding(!created);
         builder.option.building = {
           ...item.building,
         };
