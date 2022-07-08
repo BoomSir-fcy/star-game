@@ -344,8 +344,10 @@ export const getTwoPointCenter = (p1: Point, p2: Point): Point => {
   return new Point(x, y);
 };
 
+const padLeftZero = str => `00${str}`.substr(str.length);
+
 export const getBuilderSpriteRes = (race: number, resId: string | number) => {
-  return `/assets/buildings/${race}/${resId}.png`;
+  return `/assets/buildings/${race}/${padLeftZero(`${resId}`)}.png`;
 };
 
 export const getBuildingOfRaceAndIndex = (

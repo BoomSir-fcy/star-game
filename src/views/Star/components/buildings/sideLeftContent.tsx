@@ -227,7 +227,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
           {(buildings[1] ?? []).map(
             (row: Api.Building.Building, index: number) => (
               <BuildingsItem key={row.buildings_number}>
-                {/* <Text>{getBuildings(row.index)?.name}</Text> */}
+                {/* <Text>{getBuilderSpriteRes(race, `${row.index}`)}</Text> */}
                 <GameThing
                   className={index === 0 && 'guide_step_6'}
                   scale='sm'
