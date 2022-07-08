@@ -248,6 +248,9 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                     handleGoIntoBattle(row);
                     onPreview(row);
                     onChangeGuide();
+
+                    dispatch(setNavZIndex(true));
+                    dispatch(storeAction.queueVisbleSide(false));
                   }}
                 />
               </BuildingsItem>
