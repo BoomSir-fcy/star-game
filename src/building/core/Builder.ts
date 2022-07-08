@@ -1,6 +1,7 @@
 import { Sprite } from '@pixi/sprite';
 import { InteractionEvent, InteractionData } from '@pixi/interaction';
 import { Point, Polygon } from '@pixi/math';
+import { FederatedPointerEvent } from '@pixi/events';
 import { Texture } from '@pixi/core';
 import { Graphics } from '@pixi/graphics';
 import { Container } from '@pixi/display';
@@ -60,6 +61,10 @@ class Builder extends EventTarget {
 
   sprite: Sprite = new Sprite();
 
+  cancelSprite: Sprite = new Sprite(Texture.from('/assets/cancel.png'));
+
+  confirmSprite: Sprite = new Sprite(Texture.from('/assets/confirm.png'));
+
   texture: Texture;
 
   container = new Container();
@@ -83,6 +88,8 @@ class Builder extends EventTarget {
   option: BuilderOption;
 
   moved = false; // 是否发生移动
+
+  isRemove = false; // 已经移除
 
   graphics = new Graphics();
 
@@ -120,6 +127,10 @@ class Builder extends EventTarget {
     this.container.buttonMode = true;
     this.container.interactive = true;
 
+    // if (!this.isBuilding && !this.builded) {
+    //   this.addHandleBtn();
+    // }
+
     this.container
       .on('pointerdown', e => this.onDragStart(e))
       .on('pointerup', () => this.onDragEnd())
@@ -132,11 +143,53 @@ class Builder extends EventTarget {
       .on('pointerout', () => this.onDragOut());
   }
 
+  addHandleBtn() {
+    this.container.sortableChildren = true;
+    this.cancelSprite.buttonMode = true;
+    this.cancelSprite.interactive = true;
+    this.cancelSprite.anchor.set(0.5);
+    this.cancelSprite.position.set(-20, -10);
+    this.cancelSprite.zIndex = 99;
+    this.cancelSprite.addListener('click', e => this.onCancel(e));
+    this.container.addChild(this.cancelSprite);
+
+    this.confirmSprite.buttonMode = true;
+    this.confirmSprite.interactive = true;
+    this.confirmSprite.anchor.set(0.5);
+    this.confirmSprite.position.set(20, -10);
+    this.confirmSprite.zIndex = 99;
+    this.confirmSprite.addListener('click', e => this.onConfirm(e));
+    this.container.addChild(this.confirmSprite);
+  }
+
+  removeHandleBtn() {
+    this.container.removeChild(this.cancelSprite);
+    this.container.removeChild(this.confirmSprite);
+  }
+
+  onConfirm(event: FederatedPointerEvent) {
+    // event.stopPropagation();
+    // event.stopImmediatePropagation();
+    console.log('confirm');
+    this.dispatchEvent(new Event('confirm'));
+  }
+
+  onCancel(event: FederatedPointerEvent) {
+    console.log('onCancel');
+    // event.stopPropagation();
+    // event.stopImmediatePropagation();
+    this.dispatchEvent(new Event('cancel'));
+  }
+
   setEnableDrag(enableDrag: boolean) {
     this.enableDrag = enableDrag;
     // this.sprite.buttonMode = false;
     // this.sprite.interactive = false;
     // this.sprite;
+  }
+
+  setRemove(isRemove?: boolean) {
+    this.isRemove = isRemove;
   }
 
   createGraphics() {
@@ -188,6 +241,7 @@ class Builder extends EventTarget {
   setIsBuilding(isBuilding: boolean) {
     // this.setIsBuilding(!isBuilding)
     this.isBuilding = isBuilding;
+    this.removeHandleBtn();
     if (isBuilding) {
       this.container.alpha = 0.5;
       this.enableDrag = false;
@@ -197,6 +251,7 @@ class Builder extends EventTarget {
   }
 
   setIsBuilded(builded: boolean) {
+    this.removeHandleBtn();
     if (builded) {
       this.setIsBuilding(false);
       this.enableDrag = false;
@@ -232,7 +287,7 @@ class Builder extends EventTarget {
     };
 
     this.createGraphics();
-    this.setEnableDrag(false);
+    // this.setEnableDrag(false);
   }
 
   // 重置位置 用于拖动的时候

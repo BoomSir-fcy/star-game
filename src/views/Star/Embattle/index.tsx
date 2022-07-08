@@ -98,7 +98,7 @@ const Embattle = () => {
   const game = useGame({ width: 1600, offsetStartX: -330 });
 
   useEffect(() => {
-    game.creatTerrain(); // 创建地形
+    game.creatTerrain(4, 8); // 创建地形
   }, [game]);
 
   // const race = Number(parsedQs.race) as Api.Game.race;

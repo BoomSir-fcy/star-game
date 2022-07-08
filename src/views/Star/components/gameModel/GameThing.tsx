@@ -128,7 +128,12 @@ export const GameThing: React.FC<{
   const sizeBox = scaleVariants[scale];
 
   return (
-    <Flex className={className} justifyContent='center' flexDirection='column'>
+    <Flex
+      position='relative'
+      className={className}
+      justifyContent='center'
+      flexDirection='column'
+    >
       <Container
         isRadius
         stripe
@@ -183,7 +188,6 @@ export const GameThing: React.FC<{
           left='0'
           bottom={36}
           onClick={() => {
-            console.log(66666);
             onAddClick();
           }}
         >

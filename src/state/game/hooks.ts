@@ -19,6 +19,7 @@ import {
   fetchGameterrainAsync,
   fetchGamePlunderPkAsync,
   fetchGameMatchUserAsync,
+  fetchTestUnitListAsync,
 } from './reducer';
 
 export const useFetchUnitList = (race?: Api.Game.race, planet_id?: number) => {
@@ -28,6 +29,23 @@ export const useFetchUnitList = (race?: Api.Game.race, planet_id?: number) => {
       dispatch(fetchUnitListAsync(race, planet_id));
     }
   }, [dispatch, race, planet_id]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return {
+    fetch,
+  };
+};
+
+export const useFetchTestUnitList = (race?: Api.Game.race) => {
+  const dispatch = useDispatch();
+  const fetch = useCallback(() => {
+    if (race) {
+      dispatch(fetchTestUnitListAsync(race));
+    }
+  }, [dispatch, race]);
 
   useEffect(() => {
     fetch();

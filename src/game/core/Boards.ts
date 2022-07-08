@@ -52,6 +52,10 @@ class Boards extends EventTarget {
 
   height;
 
+  row = config.BOARDS_ROW_COUNT;
+
+  col = config.BOARDS_COL_COUNT;
+
   chequers: Chequer[] = []; // 棋盘格子
 
   container = new Container();
@@ -74,8 +78,7 @@ class Boards extends EventTarget {
 
   init({ test }: { test?: boolean }) {
     this.container.position.set(this.width / 2, this.height / 2);
-    console.log(this.height);
-    console.log(this.width);
+
     // this.container.position.set(this.height / 2, this.width / 2);
     // this.container.position.set(this.width, this.height);
     this.container.width = this.width;
@@ -121,27 +124,22 @@ class Boards extends EventTarget {
   }
 
   // 绘制棋格
-  drawChequers(test?: boolean, TerrainInfo?: Api.Game.TerrainInfo[]) {
+  drawChequers(_col?: number, _row?: number) {
+    if (_col) {
+      this.col = _col;
+    }
+    if (_row) {
+      this.row = _row;
+    }
     this.chequers = [];
-    const terrains: {
-      [axis: string]: Api.Game.TerrainInfo;
-    } = {};
-    TerrainInfo?.forEach(item => {
-      item.terrain_areas.forEach(subItem => {
-        terrains[`${subItem.x},${subItem.y}`] = item;
-      });
-    });
 
-    for (let row = 0; row < config.BOARDS_ROW_COUNT; row++) {
-      for (let col = 0; col < config.BOARDS_COL_COUNT; col++) {
+    for (let row = 0; row < this.row; row++) {
+      for (let col = 0; col < this.col; col++) {
         const chequer = new Chequer({
-          type: terrains[`${row},${col}`]
-            ? terrains[`${row},${col}`].terrain_type
-            : mapType.MAP1,
+          type: mapType.MAP1,
           axisX: row,
           axisY: col,
           state: stateType.PREVIEW,
-          test,
           offsetStartX: this.offsetStartX,
           offsetStartY: this.offsetStartY,
         });

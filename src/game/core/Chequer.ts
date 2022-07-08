@@ -158,7 +158,7 @@ class Chequer {
     this.bunny.addChild(this.stateSprite);
     this.stateSprite.visible = false;
 
-    if (test) {
+    if (!test) {
       const text = new Text(`x${this.axisX}, ${this.axisY}`, {
         fill: 0xffffff,
         fontSize: 16,
