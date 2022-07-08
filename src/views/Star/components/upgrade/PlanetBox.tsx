@@ -15,9 +15,10 @@ const CardBox = styled(Card)<{ active?: boolean }>`
   height: 150px;
   padding: 16px 30px 16px 16px;
   margin-bottom: 24px;
-  border: 1px solid #89888859;
-  box-shadow: ${({ active }) =>
-    active ? '0 0 10px 1px #4ffffb' : 'inset 0px 7px 3px 0px rgb(0 0 0 / 35%)'};
+  border: 1px solid ${({ active }) => (active ? '#fff' : '#89888859')};
+  ${({ active }) =>
+    active &&
+    'box-shadow: 0px 0px 9px 0px #4ffffb, inset 0px 0px 9px 0px #4ffffb'};
 `;
 
 const Desc = styled(Flex)`

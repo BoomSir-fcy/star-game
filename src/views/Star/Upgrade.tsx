@@ -67,7 +67,6 @@ const Upgrade = () => {
   const location = useLocation();
   const parsedQs = useParsedQueryString();
   const planetId = Number(parsedQs.id);
-  const { guides, setGuide } = useGuide(location.pathname);
   const [isHighestLevel, setIsHighestLevel] = useState(false);
   const [visible, setVisible] = useState(false);
   const [pending, setPending] = useState(false);
@@ -86,14 +85,14 @@ const Upgrade = () => {
     upgrade_exp: 0,
   });
 
+  // 新手指导
+  const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const steps = useMemo(
     () => [
       {
-        element: '.planet_level_head',
-        intro: t(
-          'Upgrading the planet can build higher-level buildings and improve the basic attributes of the planet.',
-        ),
+        element: '.planet_upgrade',
+        intro: t('GuidePlanetUpgrade'),
       },
     ],
     [t],
@@ -405,59 +404,64 @@ const Upgrade = () => {
           alignItems='center'
           justifyContent='space-between'
         >
-          <Flex mt='15px' justifyContent='center' alignItems='center'>
-            <Flex width='301px' mr='20px' alignItems='center'>
-              <GradeBox>
-                <Text fontSize='31px' bold shadow='primary'>
-                  Lv {upgradeInfo.now_planet_info?.level}
-                </Text>
-              </GradeBox>
-              <Image
-                width={75}
-                height={40}
-                margin='0 26px'
-                src='/images/commons/icon/upgrade.png'
-              />
-              <GradeBox>
-                <Text fontSize='31px' bold color='up' shadow='secondary'>
-                  Lv {upgradeInfo.estimate_planet_info?.level}
-                </Text>
-              </GradeBox>
-            </Flex>
-            <Flex flexDirection='column' alignItems='center'>
-              {!!maxExp && (
-                <>
-                  <Flex
-                    width='100%'
-                    justifyContent='space-between'
-                    alignItems='center'
-                  >
-                    <Text fontSize='24px' fontStyle='normal' mark bold>
-                      {t('Upgrade experience')}
-                    </Text>
-                    {/* <Text fontSize='20px'>{t('升级需要吞噬同种族星球')}</Text> */}
-                  </Flex>
-                  <StripedProgress
-                    preStep={`${preExpStep}%`}
-                    step={`${expStep}%`}
-                  />
-                  <Flex
-                    width='100%'
-                    justifyContent='space-between'
-                    alignItems='center'
-                  >
-                    <Text fontSize='20px'>{`${curExp} / ${maxExp}`}</Text>
-                    {Object.keys(activeMaterialMap).length > 0 && (
-                      <Text fontSize='20px' color='textUp'>
-                        {t('Estimated +%value%', { value: expectedExp })}
+          <Box className='planet_upgrade'>
+            <Flex mt='15px' justifyContent='center' alignItems='center'>
+              <Flex width='301px' mr='20px' alignItems='center'>
+                <GradeBox>
+                  <Text fontSize='31px' bold shadow='primary'>
+                    Lv {upgradeInfo.now_planet_info?.level}
+                  </Text>
+                </GradeBox>
+                <Image
+                  width={75}
+                  height={40}
+                  margin='0 26px'
+                  src='/images/commons/icon/upgrade.png'
+                />
+                <GradeBox>
+                  <Text fontSize='31px' bold color='up' shadow='secondary'>
+                    {isHighestLevel
+                      ? ' MAX'
+                      : `Lv ${upgradeInfo.estimate_planet_info?.level}`}
+                  </Text>
+                </GradeBox>
+              </Flex>
+              <Flex flexDirection='column' alignItems='center'>
+                {!!maxExp && (
+                  <>
+                    <Flex
+                      width='100%'
+                      justifyContent='space-between'
+                      alignItems='center'
+                    >
+                      <Text fontSize='24px' fontStyle='normal' mark bold>
+                        {t('Upgrade experience')}
                       </Text>
-                    )}
-                  </Flex>
-                </>
-              )}
+                      {/* <Text fontSize='20px'>{t('升级需要吞噬同种族星球')}</Text> */}
+                    </Flex>
+                    <StripedProgress
+                      preStep={`${preExpStep}%`}
+                      step={`${expStep}%`}
+                    />
+                    <Flex
+                      width='100%'
+                      justifyContent='space-between'
+                      alignItems='center'
+                    >
+                      <Text fontSize='20px'>{`${curExp} / ${maxExp}`}</Text>
+                      {Object.keys(activeMaterialMap).length > 0 && (
+                        <Text fontSize='20px' color='textUp'>
+                          {t('Estimated +%value%', { value: expectedExp })}
+                        </Text>
+                      )}
+                    </Flex>
+                  </>
+                )}
+              </Flex>
             </Flex>
-          </Flex>
-          <Flex mt='10px'>{!!maxExp && StarAddBox}</Flex>
+            <Flex mt='10px'>{!!maxExp && StarAddBox}</Flex>
+          </Box>
+
           <GraphicsCard mt='47px' width='853px' height='178px' stripe isRadius>
             <Flex justifyContent='space-between' alignItems='flex-end'>
               <Box>
@@ -477,7 +481,7 @@ const Upgrade = () => {
                       </Text>
                       <Text small>
                         +{upInfo?.build_level}(Lv.
-                        {upInfo?.estimate_max_building_level + 1})
+                        {upInfo?.estimate_max_building_level})
                       </Text>
                     </Flex>
                   </Box>

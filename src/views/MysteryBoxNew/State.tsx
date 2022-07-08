@@ -187,7 +187,9 @@ const State = () => {
       const ids = await getPlanetId(res?.blockHash);
       dispatch(fetchUserKeysAsync(account));
       setHandleLoading(false);
-      navigate(`/mystery-box/list?q=${quality}&i=${ids?.join(',')}`);
+      navigate(`/mystery-box/list?q=${quality}&i=${ids?.join(',')}`, {
+        replace: true,
+      });
     } catch (e: any) {
       setHandleLoading(false);
       // toastError(
@@ -316,26 +318,29 @@ const State = () => {
           </Flex>
         </Flex>
 
-        <Box className='mystery-state-step1'>
-          <Flex mt='85px' justifyContent='center'>
-            <Box width={30}>
-              <TokenImage
-                width={30}
-                height={30}
-                tokenAddress={getWEtherAddress()}
-              />
-            </Box>
-            <Text ml='15px' fontSize='22px' bold>
-              {t('BNB')}
-            </Text>
-            {loading ? (
-              <Skeleton height={40} />
-            ) : (
-              <Text ml='15px' fontSize='22px' fontStyle='normal' bold mark>
-                {price}
+        <Box mt='85px' className='mystery-state-step1'>
+          {!existBox && (
+            <Flex justifyContent='center'>
+              <Box width={30}>
+                <TokenImage
+                  width={30}
+                  height={30}
+                  tokenAddress={getWEtherAddress()}
+                />
+              </Box>
+              <Text ml='15px' fontSize='22px' bold>
+                {t('BNB')}
               </Text>
-            )}
-          </Flex>
+              {loading ? (
+                <Skeleton height={40} />
+              ) : (
+                <Text ml='15px' fontSize='22px' fontStyle='normal' bold mark>
+                  {price}
+                </Text>
+              )}
+            </Flex>
+          )}
+
           <Flex mt='28px' justifyContent='center'>
             {existBox ? (
               <Button

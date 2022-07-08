@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex, Spinner, Box, Text } from 'uikit';
-import { QualityColor } from 'uikit/theme/colors';
+import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 import { Globe } from 'components';
 import { useStore } from 'state';
 import { useTranslation } from 'contexts/Localization';
@@ -42,30 +42,34 @@ const GlobeFlexList: React.FC<GlobeFlexListProps> = ({
               >
                 <Box className='ball'>
                   <Desc>
-                    {activePlanet?.id === item?.id && (
-                      <Flex
-                        pt='7px'
-                        flexDirection='column'
-                        justifyContent='center'
-                        alignItems='center'
-                      >
-                        <Flex justifyContent='center' alignItems='center'>
-                          <Text fontSize='0.001rem'>{t('Power')}</Text>
-                          <Text
-                            ml='0.4rem'
-                            fontSize='1rem'
-                            fontStyle='normal'
-                            mark
-                            bold
-                          >
-                            Lv {item?.level}
-                          </Text>
-                        </Flex>
-                        <Text fontSize='1rem' fontStyle='normal' mark bold>
-                          {formatDisplayApr(item?.power)}
+                    <Flex
+                      pt='15px'
+                      flexDirection='column'
+                      justifyContent='center'
+                      alignItems='center'
+                    >
+                      <Flex justifyContent='center' alignItems='center'>
+                        <Text
+                          color={RaceTypeColor[item?.race]}
+                          fontSize='0.001rem'
+                          bold
+                        >
+                          {item?.race ? t(`race-${item?.race}`) : ''}
+                        </Text>
+                        <Text
+                          ml='0.4rem'
+                          fontSize='1rem'
+                          fontStyle='normal'
+                          mark
+                          bold
+                        >
+                          Lv {item?.level}
                         </Text>
                       </Flex>
-                    )}
+                      <Text fontSize='1rem' fontStyle='normal' mark bold>
+                        {formatDisplayApr(item?.power)}
+                      </Text>
+                    </Flex>
                   </Desc>
                   <Globe
                     shadow={QualityColor[item?.rarity]}
