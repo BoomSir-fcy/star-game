@@ -39,7 +39,7 @@ const SideCloseButton = styled(Button)`
     transform: rotate(0deg) !important;
   }
 `;
-const Content = styled(Box)`
+const Content = styled(Box)<{ animation?: boolean }>`
   position: relative;
   width: 547px;
   height: 100%;
@@ -52,8 +52,9 @@ const Content = styled(Box)`
   &.active {
     opacity: 1;
     display: block;
-    animation: bounceInRight 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
-      alternate forwards;
+    animation: ${({ animation }) =>
+      animation &&
+      'bounceInRight 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 alternate forwards'};
   }
   &.removeActive {
     opacity: 0;
@@ -84,6 +85,7 @@ export const SideRightBuildingInfo: React.FC<{
   visible: boolean;
   itemData?: any;
   workQueue: any[];
+  animation?: boolean;
   onCreateBuilding: (building: Api.Building.Building) => void;
   onClose: (destory?: boolean) => void;
 }> = ({
@@ -93,6 +95,7 @@ export const SideRightBuildingInfo: React.FC<{
   buildingsId,
   itemData,
   workQueue,
+  animation,
   onCreateBuilding,
   onClose,
 }) => {
@@ -168,12 +171,15 @@ export const SideRightBuildingInfo: React.FC<{
     }
   }, [init, itemData]);
 
-  console.log(currentAttributes);
   return (
     <Container>
-      <Content className={classNames(visible ? 'active' : 'removeActive')}>
+      <Content
+        animation={animation}
+        className={classNames(visible ? 'active' : 'removeActive')}
+      >
         <SideCloseButton
           variant='text'
+          className='guide_step_4'
           onClick={() => {
             onClose(!currentAttributes?.isbuilding);
           }}

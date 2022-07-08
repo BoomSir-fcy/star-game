@@ -118,6 +118,7 @@ export const BarRight: React.FC<BarRightProps> = ({
           </Flex>
         </BarCard>
         <BarCard
+          className='guide_step_9'
           title={t('planetMenuEmbattle')}
           onClick={() => navigate(`/star/embattle?id=${planet_id}`)}
         >

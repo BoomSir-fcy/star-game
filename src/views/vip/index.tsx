@@ -236,18 +236,14 @@ const VipPage = () => {
                     'You are not yet a VIP, you can get more benefits after upgrading to VIP',
                   )}
                 </TextBox>
-                <TextBox fontSize='16px'>
-                  {t('Expire on')}
-                  {user?.vipBenefits?.is_vip
-                    ? dayjs(user?.vipBenefits?.expired_time * 1000).format(
-                        'YYYY.MM.DD',
-                      )
-                    : dayjs(
-                        (Number((new Date().getTime() / 1000).toFixed(0)) +
-                          state.list[0]?.vipDuration) *
-                          1000,
-                      ).format('YYYY.MM.DD')}
-                </TextBox>
+                {user?.vipBenefits?.is_vip && (
+                  <TextBox fontSize='16px'>
+                    {t('Expire on')}
+                    {dayjs(user?.vipBenefits?.expired_time * 1000).format(
+                      'YYYY.MM.DD',
+                    )}
+                  </TextBox>
+                )}
               </Flex>
             </Flex>
             <Content>
@@ -268,7 +264,7 @@ const VipPage = () => {
                   </Text>
                 </Items>
                 <Items>
-                  <Text shadow='primary' small>
+                  <Text shadow='primary' small textAlign='center'>
                     {t('Simultaneous jobs (upgrades/builds)')}
                   </Text>
                 </Items>
@@ -332,9 +328,20 @@ const VipPage = () => {
               })}
             </Content>
             <Flex justifyContent='center'>
-              <Submit variant='purple' onClick={debounce(() => buyVip(), 1000)}>
-                <Text bold fontSize='16px' color='#4FFFFB'>
-                  {t('Become VIP')}
+              <Submit
+                variant='purple'
+                disabled={user?.vipBenefits?.is_vip}
+                onClick={debounce(() => buyVip(), 1000)}
+              >
+                <Text
+                  bold
+                  fontSize='16px'
+                  color='#4FFFFB'
+                  textTransform='capitalize'
+                >
+                  {user?.vipBenefits?.is_vip
+                    ? t('you have become a VIP')
+                    : t('Become VIP')}
                 </Text>
               </Submit>
             </Flex>

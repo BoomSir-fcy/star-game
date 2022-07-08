@@ -14,21 +14,41 @@ import { useTranslation } from 'contexts/Localization';
 import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux';
 import { useFetchBoxView } from 'state/mysteryBox/hooks';
-import { useStore } from 'state';
+import { storeAction, useStore } from 'state';
 import { getBalanceNumber } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
 import {
   fetchUserKeysAsync,
   fetchBoxViewAsync,
 } from 'state/mysteryBox/reducer';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useToast } from 'contexts/ToastsContext';
 import eventBus from 'utils/eventBus';
+import { useGuide } from 'hooks/useGuide';
+import { Steps } from 'intro.js-react';
+import 'intro.js/introjs.css';
+import { createGlobalStyle } from 'styled-components';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import { queryMintEvent } from './event';
 
+const GlobalStyle = createGlobalStyle<{
+  interactive?: boolean;
+}>`
+  ${({ interactive }) => {
+    return interactive
+      ? `
+    *{
+      pointer-events: none;
+    }
+    .introjs-showElement, .introjs-showElement *, .introjs-tooltip, .introjs-tooltip *{
+      pointer-events: auto;
+    }
+    `
+      : '';
+  }};
+`;
 const State = () => {
-  const { t } = useTranslation();
+  const { t, getHTML } = useTranslation();
   const paramsQs = useParsedQueryString();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
@@ -41,6 +61,31 @@ const State = () => {
   const { priceBNB, maxHeld, boxCount, loading } = useStore(
     p => p.mysteryBox.boxView,
   );
+
+  // 控制是否开启新手指导的
+  const location = useLocation();
+  const { guides, setGuide } = useGuide(location.pathname);
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [activeStep, setActiveStep] = useState(guides.step);
+  const steps = useMemo(() => {
+    return [
+      {
+        element: '.mystery-state-step0',
+        intro: t('GuideMysteryStateStep0'),
+      },
+      {
+        element: '.mystery-state-step1',
+        intro: t('GuideMysteryStateStep1'),
+        interactive: true,
+      },
+    ];
+  }, [t]);
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    };
+  }, [dispatch]);
 
   const quality = useMemo(() => {
     const q = Number(paramsQs.q) as MysteryBoxQualities;
@@ -198,81 +243,138 @@ const State = () => {
 
   return (
     <Flex flexDirection='column' justifyContent='center' alignItems='center'>
+      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
+        <>
+          <GlobalStyle
+            interactive={steps[activeStep]?.interactive && stepsEnabled}
+          />
+          <Steps
+            enabled={stepsEnabled}
+            steps={steps}
+            initialStep={guides.step}
+            options={{
+              exitOnOverlayClick: false,
+              tooltipPosition: 'top',
+              scrollPadding: 0,
+            }}
+            onChange={currentStep => {
+              if (currentStep > guides.step) {
+                setGuide(currentStep);
+              }
+            }}
+            onBeforeChange={event => {
+              setActiveStep(event);
+            }}
+            onExit={index => {
+              setStepsEnabled(false);
+              if (index < steps.length - 1) {
+                dispatch(
+                  storeAction.toggleVisible({
+                    visible: true,
+                    lastStep: steps.length,
+                  }),
+                );
+              }
+            }}
+          />
+        </>
+      )}
       <MysteryBoxCom rotate={0} left={0} right={0} quality={quality} />
-      <Flex mt='180px' flexDirection='column' justifyContent='center'>
-        <Text fontSize='22px' bold>
-          {t('OpenMysteryBoxDesc')}
-        </Text>
-        <Flex mt='20px'>
-          {info.rarity.map(item => (
-            <Text
-              mr='30px'
-              key={item}
-              color={QualityColor[item]}
-              fontSize='22px'
-              bold
-            >
-              {t(`rarity-${item}`)}
-            </Text>
-          ))}
-        </Flex>
-        <Flex mt='85px' justifyContent='center'>
-          <Box width={30}>
-            <TokenImage
-              width={30}
-              height={30}
-              tokenAddress={getWEtherAddress()}
-            />
-          </Box>
-          <Text ml='15px' fontSize='22px' bold>
-            {t('BNB')}
+      <Flex
+        mt='180px'
+        flexDirection='column'
+        justifyContent='center'
+        alignItems='center'
+      >
+        <Flex
+          className='mystery-state-step0'
+          flexDirection='column'
+          justifyContent='center'
+          alignItems='center'
+        >
+          <Text fontSize='22px' bold>
+            {t('OpenMysteryBoxDesc1')}
           </Text>
-          {loading ? (
-            <Skeleton height={40} />
-          ) : (
-            <Text ml='15px' fontSize='22px' fontStyle='normal' bold mark>
-              {price}
+          <Flex mt='20px'>
+            <Text mr='20px' fontSize='22px' bold>
+              {t('OpenMysteryBoxDesc2-1')}
             </Text>
-          )}
+            {info.rarity.map(item => (
+              <Text
+                mr='20px'
+                key={item}
+                color={QualityColor[item]}
+                fontSize='22px'
+                bold
+              >
+                {t(`rarity-${item}`)}
+              </Text>
+            ))}
+            <Text fontSize='22px' bold>
+              {t('OpenMysteryBoxDesc2-2')}
+            </Text>
+          </Flex>
         </Flex>
-        <Flex mt='28px' justifyContent='center'>
-          {existBox ? (
-            <Button
-              width='280px'
-              height='91px'
-              variant='vs'
-              disabled={handleLoading || loading || !ownedNum}
-              onClick={() => {
-                // setVisible(true);
-                handleOpenBox();
-              }}
-            >
-              {handleLoading ? (
-                <Dots>{t('Opening')}</Dots>
-              ) : (
-                <Text fontSize='22px' bold>
-                  {t('Open')}
-                </Text>
-              )}
-            </Button>
-          ) : (
-            <Button
-              width='280px'
-              height='91px'
-              variant='vs'
-              disabled={handleLoading || loading || !maxNum}
-              onClick={onHandleBuy}
-            >
-              {handleLoading ? (
-                <Dots>{t('Purchasing')}</Dots>
-              ) : (
-                <Text fontSize='22px' bold>
-                  {t('Buy')}
-                </Text>
-              )}
-            </Button>
-          )}
-        </Flex>
+
+        <Box className='mystery-state-step1'>
+          <Flex mt='85px' justifyContent='center'>
+            <Box width={30}>
+              <TokenImage
+                width={30}
+                height={30}
+                tokenAddress={getWEtherAddress()}
+              />
+            </Box>
+            <Text ml='15px' fontSize='22px' bold>
+              {t('BNB')}
+            </Text>
+            {loading ? (
+              <Skeleton height={40} />
+            ) : (
+              <Text ml='15px' fontSize='22px' fontStyle='normal' bold mark>
+                {price}
+              </Text>
+            )}
+          </Flex>
+          <Flex mt='28px' justifyContent='center'>
+            {existBox ? (
+              <Button
+                width='280px'
+                height='91px'
+                variant='vs'
+                disabled={handleLoading || loading || !ownedNum}
+                onClick={() => {
+                  // setVisible(true);
+                  handleOpenBox();
+                }}
+              >
+                {handleLoading ? (
+                  <Dots>{t('Opening')}</Dots>
+                ) : (
+                  <Text fontSize='22px' bold>
+                    {t('Open')}
+                  </Text>
+                )}
+              </Button>
+            ) : (
+              <Button
+                width='280px'
+                height='91px'
+                variant='vs'
+                disabled={handleLoading || loading || !maxNum}
+                onClick={onHandleBuy}
+              >
+                {handleLoading ? (
+                  <Dots>{t('Purchasing')}</Dots>
+                ) : (
+                  <Text fontSize='22px' bold>
+                    {t('Buy')}
+                  </Text>
+                )}
+              </Button>
+            )}
+          </Flex>
+        </Box>
       </Flex>
     </Flex>
   );
