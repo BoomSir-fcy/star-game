@@ -78,14 +78,14 @@ const NewPlantLeague: React.FC = () => {
   };
 
   const ShowRound2 = useMemo(() => {
-    if (guides.step === 8) {
+    if (guides.round === 2) {
       if (unread_plunder_count > 0) {
         return true;
       }
       return false;
     }
     return true;
-  }, [guides.step, unread_plunder_count]);
+  }, [guides.round, unread_plunder_count]);
 
   // 新手引导步骤
   const steps = useMemo(() => {
@@ -146,6 +146,19 @@ const NewPlantLeague: React.FC = () => {
         element: '.Alliance_Messages',
         intro: t('指挥官! 联盟最新的战斗情况已生成，点击查看。'),
         interactive: true,
+        disabled: true,
+      },
+      {
+        element: '.Regenerate_END',
+        intro: t(
+          '战斗后，星球会有耐久度的损耗，需要即时修复才能保证星球探索。',
+        ),
+        interactive: true,
+        disabled: true,
+      },
+      {
+        element: '.planet',
+        intro: t('指挥官，接下来将由你来主宰整个星系了。'),
       },
     ];
     return FirstArr;
@@ -163,7 +176,7 @@ const NewPlantLeague: React.FC = () => {
 
   useEffect(() => {
     console.log(guides.step, '步骤');
-
+    // setGuide(0, false, 0);
     if (guides.step === 4 || guides.step === 6) {
       console.log(guides.step, '返回上一步');
       ToAddClick('introjs-prevbutton');
@@ -238,7 +251,11 @@ const NewPlantLeague: React.FC = () => {
                 return;
               }
               if (step === 8) {
-                setGuide(8, true, 2);
+                setGuide(9, false, 1);
+                return;
+              }
+              if (step === steps.length - 1) {
+                setGuide(steps.length, false, 1);
                 return;
               }
               if (step < steps.length - 1) {
@@ -279,7 +296,13 @@ const NewPlantLeague: React.FC = () => {
           }
         }}
       />
-      <RightFloatBox />
+      <RightFloatBox
+        Booting={Booting}
+        setGuide={step => {
+          setGuide(step);
+          ToAddClick('introjs-nextbutton');
+        }}
+      />
       <Box zIndex={1} position='relative'>
         <ExploreModule
           ShowModule={ShowModule}

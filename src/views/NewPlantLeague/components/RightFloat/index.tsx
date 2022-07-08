@@ -10,10 +10,13 @@ const FloatBox = styled(Box)`
   top: 14%;
 `;
 
-const RightFloatBox: React.FC = () => {
+const RightFloatBox: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
+  Booting,
+  setGuide,
+}) => {
   return (
     <FloatBox>
-      <RightFloatBar />
+      <RightFloatBar Booting={Booting} setGuide={setGuide} />
       <AllianceResources />
     </FloatBox>
   );

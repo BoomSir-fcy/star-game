@@ -76,7 +76,10 @@ const TipTriangle = styled(Box)`
   top: 0;
 `;
 
-const RightFloatBar: React.FC = () => {
+const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
+  Booting,
+  setGuide,
+}) => {
   const { t } = useTranslation();
   const { state, ExtractResources } = useExtract();
   const { setBatchRepair } = useBuildingRepair();
@@ -162,7 +165,15 @@ const RightFloatBar: React.FC = () => {
           <img src='/images/commons/icon/help.png' alt='' />
         </ImgFlex>
       </RecordBox>
-      <RecordBox onClick={repairHandle}>
+      <RecordBox
+        className='Regenerate_END'
+        onClick={() => {
+          if (Booting) {
+            setGuide(10);
+          }
+          repairHandle();
+        }}
+      >
         <MarkText
           ml='10px'
           maxWidth='120px'
