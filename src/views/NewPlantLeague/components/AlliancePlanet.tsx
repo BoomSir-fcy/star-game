@@ -15,9 +15,18 @@ import './AlliancePlanetAround.css';
 import { useRemoveAlliance } from '../hook';
 
 const AlliancePlanet: React.FC<{
+  guidesStep: number;
+  stopAround: boolean;
+  setGuide: (e) => void;
   setChoosePlant: (e) => void;
   setPlantManageModule: (e) => void;
-}> = ({ setPlantManageModule, setChoosePlant }) => {
+}> = ({
+  guidesStep,
+  stopAround,
+  setGuide,
+  setPlantManageModule,
+  setChoosePlant,
+}) => {
   const { t } = useTranslation();
   const { account } = useActiveWeb3React();
   const { onConnectWallet } = useConnectWallet();
@@ -93,7 +102,7 @@ const AlliancePlanet: React.FC<{
               </MarkText>
             </Flex>
           </CenterBox>
-          <Box className='base u_p3d'>
+          <Box className={stopAround ? 'base u_p3d' : 'turnAround base u_p3d'}>
             {/* <Box className='line1' /> */}
             <Box className='line2' />
             {PlantList.map((item, index) => (
@@ -102,13 +111,16 @@ const AlliancePlanet: React.FC<{
                 className={`ball_base u_p3d ${item.className}`}
               >
                 <Ball
-                  className='ball'
+                  className={stopAround ? 'ball' : 'turnAroundBall ball'}
                   ball
                   ballWorking={item.ballWorking}
                   name={item.name}
                   onPlantClick={() => {
                     setPlantManageModule(true);
                     setChoosePlant(allianceList[index]);
+                    if (stopAround) {
+                      setGuide(4);
+                    }
                   }}
                   callBack={() => {
                     if (!item.planetId) {
@@ -116,6 +128,9 @@ const AlliancePlanet: React.FC<{
                     } else {
                       setPlantManageModule(true);
                       setChoosePlant(allianceList[index]);
+                      if (stopAround) {
+                        setGuide(4);
+                      }
                     }
                   }}
                   imgBorder={item.rarity}

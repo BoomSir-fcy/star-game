@@ -234,6 +234,7 @@ const RightFloatBar: React.FC = () => {
       </Link>
       <Link to='/BattleReport'>
         <RecordBox
+          className='Alliance_Messages'
           onMouseEnter={() => {
             // setCloseTips(true)
           }}

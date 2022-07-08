@@ -98,6 +98,7 @@ const Explore: React.FC<{
   return (
     <Flex zIndex={1} position='relative' justifyContent='center'>
       <Button
+        className='Start_Exploration'
         variant='purple'
         width='300px'
         disabled={alliance.working !== 0 || max_work_count === now_work_count}
