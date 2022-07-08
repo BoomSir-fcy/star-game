@@ -99,6 +99,7 @@ export interface GalaxyInfo extends Api.Galaxy.GalaxyInfo {
   starTotal: number;
   starOwnerTotal: number;
   nickname: string;
+  power: number;
 }
 
 export interface StarLevelInfo {
@@ -127,6 +128,7 @@ export interface GalaxyState {
   OwnerInfo: OwnerInfoView;
   galaxy_total_box: number;
   planet_total_box: number;
+  galaxyNftList: GalaxyNft[];
 }
 
 export interface OwnerInfoView {
@@ -154,6 +156,7 @@ export interface AllLogsInfo {
 export interface PlanetState {
   mePlanet: Api.Planet.PlanetInfo[];
   mePlanetLoading: boolean;
+  assetsVisibleModal: boolean;
   planetInfo: { [x: number]: Api.Planet.PlanetInfo };
   activePlanet: Api.Planet.PlanetInfo;
   activeMaterialMap: { [x: number]: Api.Planet.PlanetInfo | null };

@@ -16,6 +16,7 @@ import {
 import { useToast } from 'contexts/ToastsContext';
 import { fetchUserInfoByAccountAsync } from 'state/userInfo/reducer';
 import { useTranslation } from 'contexts/Localization';
+import { TokenImage } from 'components/TokenImage';
 import { Api } from 'apis';
 
 import { useStore } from 'state';
@@ -327,6 +328,17 @@ const VipPage = () => {
                 );
               })}
             </Content>
+            {!user?.vipBenefits?.is_vip && (
+              <Flex alignItems='center' justifyContent='center' mt='10px'>
+                <TokenImage width={30} height={30} tokenAddress='BNB' />
+                <Text margin='0 10px' fontSize='22px'>
+                  BNB
+                </Text>
+                <Text shadow='primary' fontSize='22px'>
+                  $ {state.list?.[0]?.vipPrice}
+                </Text>
+              </Flex>
+            )}
             <Flex justifyContent='center'>
               <Submit
                 variant='purple'

@@ -19,6 +19,7 @@ import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { setNavZIndex } from 'state/userInfo/reducer';
+import { eventsType } from 'building/core/event';
 import { useBuildingOperate } from './components/gameModel/hooks';
 import {
   BarRight,
@@ -164,9 +165,10 @@ const Details = () => {
   const beforeStepChange = nextStepIndex => {
     if (nextStepIndex === 3) {
       dispatch(setNavZIndex(false));
+      guideRef?.current?.updateStepElement(nextStepIndex);
     }
+    setGuide(nextStepIndex);
     setActiveStep(nextStepIndex);
-    guideRef?.current?.updateStepElement(nextStepIndex);
   };
 
   React.useEffect(() => {
@@ -178,8 +180,6 @@ const Details = () => {
 
   const initBuilder = React.useCallback(() => {
     building.initBuilder(selfBuilding);
-    // setTimeout(() => {
-    // }, 2000);
   }, [building, selfBuilding]);
 
   React.useEffect(() => {
@@ -324,6 +324,26 @@ const Details = () => {
     toastSuccess,
   ]);
 
+  const createBuilding = React.useCallback(
+    async event => {
+      if (event?.detail?.builders?.id) {
+        const params = {
+          ...event?.detail?.builders?.option?.building,
+          position: event?.detail?.builders?.position,
+        };
+        const res = await saveWorkQueue(params);
+        if (res) {
+          building?.removeActiveSolider();
+          dispatch(setNavZIndex(true));
+          setStateBuilding(p => {
+            p.visible = false;
+          });
+        }
+      }
+    },
+    [building, dispatch, saveWorkQueue, setStateBuilding],
+  );
+
   const onClickGuide = () => {
     const nextButton = document.querySelector('.introjs-nextbutton');
     nextButton?.dispatchEvent(new Event('click'));
@@ -362,20 +382,28 @@ const Details = () => {
   }, []);
 
   React.useEffect(() => {
+    building.addEventListener(eventsType.CONFIRM_BUILDER, createBuilding);
+    return () => {
+      building.addEventListener(eventsType.CONFIRM_BUILDER, createBuilding);
+    };
+  }, [building, createBuilding]);
+
+  React.useEffect(() => {
     return () => {
       dispatch(storeAction.toggleVisible({ visible: false }));
       dispatch(storeAction.resetModal());
+      dispatch(storeAction.toggleVisible({ visible: false }));
     };
   }, [dispatch]);
 
   // 单独处理每个新手引导的操作
   React.useEffect(() => {
     if (stateBuilding.visible && stepsEnabled && activeStep === 2) {
-      setActiveStep(3);
-      setGuide(3);
+      setActiveStep(activeStep + 1);
+      setGuide(activeStep + 1);
       onClickGuide();
     }
-    setGuide(2);
+    setGuide(1);
   }, [activeStep, setGuide, stateBuilding.visible, stepsEnabled]);
 
   return (
@@ -397,11 +425,11 @@ const Details = () => {
                 disableInteraction: false,
               }}
               onBeforeChange={beforeStepChange}
-              onChange={currentStep => {
-                if (currentStep > guides.step) {
-                  setGuide(currentStep);
-                }
-              }}
+              // onChange={currentStep => {
+              //   if (currentStep > guides.step) {
+              //     setGuide(currentStep);
+              //   }
+              // }}
               onExit={step => {
                 setStepsEnabled(false);
                 if (step < steps.length - 1) {
@@ -451,8 +479,8 @@ const Details = () => {
               }
             }, 100);
           }}
-          onComplete={() => {
-            getWorkQueue();
+          onComplete={async () => {
+            await getWorkQueue();
             dispatch(fetchPlanetBuildingsAsync(id));
             dispatch(fetchPlanetInfoAsync([id]));
           }}
@@ -473,11 +501,6 @@ const Details = () => {
                   p.visible = false;
                 });
                 dispatch(setNavZIndex(true));
-                if (activeStep === 6) {
-                  setActiveStep(activeStep + 1);
-                  setGuide(activeStep + 1);
-                  onClickGuide();
-                }
               }
             }}
             onClose={bool => {
@@ -503,6 +526,7 @@ const Details = () => {
               'guide_step_1',
               'guide_step_2',
               'guide_step_3',
+              'guide_step_7',
             )}
             width='800px'
             height='700px'

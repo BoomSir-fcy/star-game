@@ -12,3 +12,6 @@ export const setUpgradePlanetId = createAction<number | null>(
   'planet/setUpgradePlanetId',
 );
 export const setActiveNavId = createAction<string>('planet/setActiveNavId');
+export const setAssetsVisible = createAction<boolean>(
+  'planet/setAssetsVisible',
+);

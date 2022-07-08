@@ -9,27 +9,29 @@ import { qualities } from 'uikit/theme/types';
 import { useDispatch } from 'react-redux';
 import { orderInfo } from 'state/types';
 import { useConnectWallet } from 'contexts/ConnectWallet';
-import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { Ball, CenterBox, Content } from './AlliancePlanetStyle';
 import './AlliancePlanetAround.css';
-import { useRemoveAlliance } from '../hook';
 
 const AlliancePlanet: React.FC<{
+  guidesStep: number;
+  stopAround: boolean;
+  setGuide: (e) => void;
   setChoosePlant: (e) => void;
   setPlantManageModule: (e) => void;
-}> = ({ setPlantManageModule, setChoosePlant }) => {
+}> = ({
+  guidesStep,
+  stopAround,
+  setGuide,
+  setPlantManageModule,
+  setChoosePlant,
+}) => {
   const { t } = useTranslation();
   const { account } = useActiveWeb3React();
   const { onConnectWallet } = useConnectWallet();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { toastError, toastSuccess, toastWarning } = useToast();
   const { order, alliance } = useStore(p => p.alliance.allianceView);
-  const workingList = useStore(p => p.alliance.workingPlanet);
   const [allianceList, setAllianceList] = useState<orderInfo[]>([]);
-  const [newIds, setNewIds] = useState<number[]>([]);
-  const { RemoveStar } = useRemoveAlliance();
-  const [Loading, setLoading] = useState(false);
+  const [ActiveId, setActiveId] = useState(0);
 
   const PlantList = useMemo(() => {
     const ballWorking = alliance.working > 0;
@@ -49,6 +51,7 @@ const AlliancePlanet: React.FC<{
             !allianceList[i]?.planet?.population_enough ||
             !allianceList[i]?.planet?.energy_enough
           : false,
+        power: allianceList[i]?.planet?.power || 0,
       };
       arr.push(obj);
     }
@@ -63,15 +66,6 @@ const AlliancePlanet: React.FC<{
     // callbackGuide();
     navigate('/choose-planet');
   };
-
-  // const getResourcesText = (ore,splce,energy)=>{
-  //   if(!ore){
-
-  //   }
-  // }
-  useEffect(() => {
-    setNewIds(workingList);
-  }, [workingList]);
 
   useEffect(() => {
     if (order?.length) {
@@ -93,7 +87,7 @@ const AlliancePlanet: React.FC<{
               </MarkText>
             </Flex>
           </CenterBox>
-          <Box className='base u_p3d'>
+          <Box className={stopAround ? 'base u_p3d' : 'turnAround base u_p3d'}>
             {/* <Box className='line1' /> */}
             <Box className='line2' />
             {PlantList.map((item, index) => (
@@ -102,25 +96,36 @@ const AlliancePlanet: React.FC<{
                 className={`ball_base u_p3d ${item.className}`}
               >
                 <Ball
-                  className='ball'
+                  className={stopAround ? 'ball' : 'turnAroundBall ball'}
                   ball
                   ballWorking={item.ballWorking}
                   name={item.name}
                   onPlantClick={() => {
+                    setActiveId(item.planetId);
                     setPlantManageModule(true);
                     setChoosePlant(allianceList[index]);
+                    if (stopAround) {
+                      setGuide(4);
+                    }
                   }}
                   callBack={() => {
+                    setActiveId(item.planetId);
+
                     if (!item.planetId) {
                       addStar(item.planetId);
                     } else {
                       setPlantManageModule(true);
                       setChoosePlant(allianceList[index]);
+                      if (stopAround) {
+                        setGuide(4);
+                      }
                     }
                   }}
                   imgBorder={item.rarity}
                   size='200px'
-                  width_height='160px'
+                  width_height='170px'
+                  showPower={ActiveId === item.planetId}
+                  power={item.power}
                   url={item.url}
                   No={item.No}
                   Leve={item.Leve}

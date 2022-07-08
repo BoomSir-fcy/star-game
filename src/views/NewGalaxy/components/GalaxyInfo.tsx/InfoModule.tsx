@@ -43,17 +43,17 @@ const InfoModule: React.FC<{
   const { onAuction } = useAuction();
   const { toastSuccess, toastError } = useToast();
 
-  const { currentGalaxy, auctionRecordList, OwnerInfo, galaxyNft } = useStore(
-    p => p.galaxy,
-  );
-  useGalaxyNft(currentGalaxy.id);
+  const { currentGalaxy, auctionRecordList, OwnerInfo, galaxyNftList } =
+    useStore(p => p.galaxy);
+  const galaxyNft = galaxyNftList[currentGalaxy?.id];
+  // useGalaxyNft(currentGalaxy.id);
 
   const [claimMax, setClaimMax] = useState(0);
   const [pending, setPending] = useState(false);
 
   // 星系主获得数量
   const incomingPrice = useMemo(() => {
-    const price = getGalaxyIncoming(galaxyNft.lastPrice);
+    const price = getGalaxyIncoming(galaxyNft?.lastPrice);
     const balance = getFullDisplayBalance(price, 18, 6);
     return Number(balance) ? balance : 0;
   }, [galaxyNft]);
@@ -61,7 +61,7 @@ const InfoModule: React.FC<{
   // 竞拍价格
   const currentPrice = useMemo(() => {
     const price = getFullDisplayBalance(
-      new BigNumber(galaxyNft.currentPrice),
+      new BigNumber(galaxyNft?.currentPrice),
       18,
       6,
     );
@@ -89,8 +89,8 @@ const InfoModule: React.FC<{
   }, [diffSeconds]);
 
   // 竞拍冷却时间
-  const cooldownTimestamp = new BigNumber(galaxyNft.lastTimestamp)
-    .plus(new BigNumber(galaxyNft.miniBuyDuration))
+  const cooldownTimestamp = new BigNumber(galaxyNft?.lastTimestamp)
+    .plus(new BigNumber(galaxyNft?.miniBuyDuration))
     .toNumber();
   const BiddingdiffSeconds = useCountdownTime(
     cooldownTimestamp,
@@ -121,7 +121,7 @@ const InfoModule: React.FC<{
   const handleAuction = useCallback(async () => {
     try {
       setPending(true);
-      await onAuction(currentGalaxy.id, galaxyNft.currentPrice);
+      await onAuction(currentGalaxy.id, galaxyNft?.currentPrice);
       dispatch(fetchGalaxyListAsync());
       dispatch(fetchGetNftViewAsync(currentGalaxy.id));
       dispatch(fetchAuctionRecordListAsync(currentGalaxy.id));

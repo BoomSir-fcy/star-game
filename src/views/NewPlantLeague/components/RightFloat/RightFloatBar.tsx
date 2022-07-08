@@ -76,7 +76,10 @@ const TipTriangle = styled(Box)`
   top: 0;
 `;
 
-const RightFloatBar: React.FC = () => {
+const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
+  Booting,
+  setGuide,
+}) => {
   const { t } = useTranslation();
   const { state, ExtractResources } = useExtract();
   const { setBatchRepair } = useBuildingRepair();
@@ -162,7 +165,15 @@ const RightFloatBar: React.FC = () => {
           <img src='/images/commons/icon/help.png' alt='' />
         </ImgFlex>
       </RecordBox>
-      <RecordBox onClick={repairHandle}>
+      <RecordBox
+        className='Regenerate_END'
+        onClick={() => {
+          if (Booting) {
+            setGuide(10);
+          }
+          repairHandle();
+        }}
+      >
         <MarkText
           ml='10px'
           maxWidth='120px'
@@ -176,7 +187,7 @@ const RightFloatBar: React.FC = () => {
           <img src='/images/commons/icon/icon-vip.png' alt='' />
         </ImgFlex>
       </RecordBox>
-      <RecordBox onClick={rechargeHandle}>
+      {/* <RecordBox onClick={rechargeHandle}>
         <MarkText
           ml='10px'
           maxWidth='120px'
@@ -205,7 +216,7 @@ const RightFloatBar: React.FC = () => {
         <ImgFlex mr='11px' justifyContent='center' alignItems='center'>
           <img src='/images/commons/icon/icon-vip.png' alt='' />
         </ImgFlex>
-      </RecordBox>
+      </RecordBox> */}
       <Link to='/platform-News'>
         <RecordBox>
           <MarkText
@@ -215,7 +226,7 @@ const RightFloatBar: React.FC = () => {
             bold
             fontStyle='normal'
           >
-            {t('Platform Messages')}
+            {t('InBox')}
           </MarkText>
           <Flex
             justifyContent='center'
@@ -234,6 +245,7 @@ const RightFloatBar: React.FC = () => {
       </Link>
       <Link to='/BattleReport'>
         <RecordBox
+          className='Alliance_Messages'
           onMouseEnter={() => {
             // setCloseTips(true)
           }}
@@ -245,7 +257,7 @@ const RightFloatBar: React.FC = () => {
             bold
             fontStyle='normal'
           >
-            {t('Alliance Messages')}
+            {t('Explore Report')}
           </MarkText>
           <Flex
             justifyContent='center'

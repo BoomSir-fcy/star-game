@@ -249,8 +249,8 @@ const OccupiedModul: React.FC<{
                   <ImgBox>
                     <img
                       src={
-                        item.ownerAvatar
-                          ? item.ownerAvatar
+                        item.ownerAvatar || item?.nick_name
+                          ? '/images/login/a-man.png'
                           : '/images/commons/36.png'
                       }
                       alt=''

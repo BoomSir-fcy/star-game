@@ -7,13 +7,14 @@ import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, Image, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
 import { setNavZIndex } from 'state/userInfo/reducer';
+import { raceData } from 'config/buildConfig';
 import { GameThing } from '../gameModel';
 import { useActiveBuilder } from '../../detailHooks';
 
 const Container = styled(Box)`
   position: fixed;
   top: 0;
-  left: -15px;
+  left: -18px;
   height: 100%;
   z-index: 199;
 `;
@@ -78,6 +79,8 @@ const ScrollView = styled(Flex)`
 `;
 
 const BuildingsItem = styled(Box)`
+  min-width: 0;
+  max-width: 48%;
   margin-right: 20px;
   margin-bottom: 15px;
   &:nth-child(2n) {
@@ -159,7 +162,6 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       });
       setMoving(true);
       building?.addDragPreBuilder(builder);
-      console.log(111, building);
     },
     [building, race],
   );
@@ -185,6 +187,14 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
     };
     building?.addDragPreBuilderApp(option);
   };
+
+  const getBuildings = React.useCallback(
+    index => {
+      const build = raceData[race][index];
+      return build;
+    },
+    [race],
+  );
 
   return (
     <Container>
@@ -213,7 +223,6 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
           {(buildings[1] ?? []).map(
             (row: Api.Building.Building, index: number) => (
               <BuildingsItem key={row.buildings_number}>
-                {/* <Text>{row.propterty.size.area_x}</Text> */}
                 <GameThing
                   className={index === 0 && 'guide_step_6'}
                   scale='sm'
@@ -221,7 +230,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                   itemData={row}
                   level={row.propterty.levelEnergy}
                   src={row.picture}
-                  text={row?.propterty.name_cn}
+                  text={getBuildings(row.index)?.name}
                   onClick={event => {
                     event.preventDefault();
                     event.stopPropagation();

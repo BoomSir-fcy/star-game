@@ -10,6 +10,7 @@ import {
   fetchUserBalanceAsync,
   fetchUserProductAsync,
 } from 'state/userInfo/reducer';
+import { raceData } from 'config/buildConfig';
 import { BuildingValue, GameThing } from '../gameModel';
 import { useBuildingUpgrade } from '../gameModel/hooks';
 import { BuildingUpgrade } from './buildingUpgrade';
@@ -21,7 +22,7 @@ import { BuildingConsume } from './buildingConsume';
 
 const Container = styled(Box)`
   position: absolute;
-  right: -15px;
+  right: -18px;
   top: 0;
   height: 100%;
   z-index: 199;
@@ -110,14 +111,17 @@ export const SideRightBuildingInfo: React.FC<{
     },
     estimate_building_detail: {},
   });
-  const currentAttributes = upgradeInfo?.building_detail?._id
-    ? {
-        ...upgradeInfo?.building_detail,
-        isbuilding: itemData?.isbuilding,
-        _id: itemData?._id,
-      }
-    : itemData;
+
   const estimate = upgradeInfo?.estimate_building_detail || {};
+  const currentAttributes = React.useMemo(() => {
+    return upgradeInfo?.building_detail?._id
+      ? {
+          ...upgradeInfo?.building_detail,
+          isbuilding: itemData?.isbuilding,
+          _id: itemData?._id,
+        }
+      : itemData;
+  }, [upgradeInfo, itemData]);
 
   const init = React.useCallback(
     async (target_level?: number) => {
@@ -156,6 +160,11 @@ export const SideRightBuildingInfo: React.FC<{
     [workQueue, itemData?._id, upgrade, planet_id, buildingsId],
   );
 
+  const getBuildings = React.useCallback(() => {
+    const build = raceData[currentAttributes?.race][currentAttributes?.index];
+    return build;
+  }, [currentAttributes]);
+
   React.useEffect(() => {
     if (itemData?.isbuilding) {
       init();
@@ -166,7 +175,9 @@ export const SideRightBuildingInfo: React.FC<{
             arms: [],
           },
         },
-        estimate_building_detail: {},
+        estimate_building_detail: {
+          _id: itemData?._id,
+        },
       });
     }
   }, [init, itemData]);
@@ -180,9 +191,7 @@ export const SideRightBuildingInfo: React.FC<{
         <SideCloseButton
           variant='text'
           className='guide_step_4'
-          onClick={() => {
-            onClose(!currentAttributes?.isbuilding);
-          }}
+          onClick={() => onClose()}
         >
           <Box width='34px' height='42px'>
             <Image
@@ -203,7 +212,11 @@ export const SideRightBuildingInfo: React.FC<{
             <Flex mb='15px' alignItems='flex-start'>
               <GameThing
                 src={currentAttributes?.picture}
-                level={currentAttributes?.propterty?.levelEnergy}
+                level={
+                  estimate?._id
+                    ? currentAttributes?.propterty?.levelEnergy
+                    : 'MAX'
+                }
                 scale='sm'
                 border
               />
@@ -214,14 +227,10 @@ export const SideRightBuildingInfo: React.FC<{
               >
                 <Flex flexDirection='column' ml='19px' flex={1}>
                   <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
-                    {currentAttributes?.propterty?.name_cn}
+                    {getBuildings()?.name ||
+                      currentAttributes?.propterty?.name_cn}
                   </MarkText>
-                  {currentAttributes.detail_type ===
-                    BuildingDetailType.BuildingDetailTypeStore && (
-                    <Text color='textSubtle'>
-                      {t('planetResourcesProducedPlanetaryBuildings')}
-                    </Text>
-                  )}
+                  <Text color='textSubtle'>{getBuildings()?.desc}</Text>
                 </Flex>
                 <Destory
                   variant='text'
@@ -319,7 +328,7 @@ export const SideRightBuildingInfo: React.FC<{
             )}
           </Box>
 
-          {currentAttributes?.propterty?.levelEnergy < 20 && (
+          {Boolean(estimate?._id) && (
             <BuildingUpgrade
               planet={planet}
               currnet_building={currentAttributes}
