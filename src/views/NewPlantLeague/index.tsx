@@ -92,73 +92,61 @@ const NewPlantLeague: React.FC = () => {
     const FirstArr = [
       {
         element: '.planet',
-        intro: t(
-          '指挥官！欢迎闪跃到星际空间，这里是你的联盟阵地（行星联盟），它们将为你生产资源和敌对战斗。联盟由5颗行星组成，让我们先获得行星。',
-        ),
+        intro: t('Alliance_Boot1'),
       },
       {
         element: '.tofind',
-        intro: t('在发现里，你可以获得各种品质的行星，点击让我们开始把！'),
+        intro: t('Alliance_Boot2'),
         interactive: true,
         disabled: true,
       },
       {
         element: '.planet',
-        intro: t(
-          '非常棒！行星联盟已经部署完毕。开始探索前我们必须对联盟上的行星进行有效管理，才能在探索中取得胜利及更多资源。',
-        ),
+        intro: t('Alliance_Boot3'),
       },
       {
         element: '.ball_1',
-        intro: t('点击当前行星，开始养成行星吧。'),
+        intro: t('Alliance_Boot4'),
         interactive: true,
         disabled: !PlantManageModule,
       },
       {
         element: '.Manage_planet',
-        intro: t('点击按钮，开始养成行星。'),
+        intro: t('Alliance_Boot5'),
         interactive: true,
         disabled: true,
       },
       {
         element: '.Start_Exploration',
-        intro: t(
-          '非常好！我们完成了探索前的一些准备，探索需要5个行星组成才可进行。点击探索',
-        ),
+        intro: t('Alliance_Boot6'),
         interactive: true,
         disabled: !ShowModule,
       },
       {
         element: '.Exploration_Difficulty',
-        intro: t(
-          '探索不同的难度，会有不同的遭遇和收货，选择想要挑战的难度吧！',
-        ),
+        intro: t('Alliance_Boot7'),
         interactive: true,
       },
       {
         element: '.leagueOutBox',
-        intro: t(
-          '即将开始探索，你可以选择立马探索，或者对其他星球进行战斗部署。完善的战斗部署才会让你在探索中获得优势。接下来将由指挥官你自己选择了',
-        ),
+        intro: t('Alliance_Boot8'),
         disabled: true,
       },
       {
         element: '.Alliance_Messages',
-        intro: t('指挥官! 联盟最新的战斗情况已生成，点击查看。'),
+        intro: t('Alliance_Boot9'),
         interactive: true,
         disabled: true,
       },
       {
         element: '.Regenerate_END',
-        intro: t(
-          '战斗后，星球会有耐久度的损耗，需要即时修复才能保证星球探索。',
-        ),
+        intro: t('Alliance_Boot10'),
         interactive: true,
         disabled: true,
       },
       {
         element: '.planet',
-        intro: t('指挥官，接下来将由你来主宰整个星系了。'),
+        intro: t('Alliance_Boot11'),
       },
     ];
     return FirstArr;

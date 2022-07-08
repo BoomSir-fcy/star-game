@@ -18,11 +18,13 @@ import {
 import { getFullDisplayBalance } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
 import { GalaxyInfo } from 'state/types';
+import { useTranslation } from 'contexts/Localization';
 import InfoModule from './InfoModule';
 import OccupiedModul from './OccupiedModul';
 
 const GalaxyInfoIndex: React.FC = () => {
   useGalaxyList();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const { galaxyList, galaxyNftList } = useStore(p => p.galaxy);
@@ -205,18 +207,18 @@ const GalaxyInfoIndex: React.FC = () => {
                   </Flex>
                 </GalaxyItemInfoTitle>
                 <Flex mb='6px' justifyContent='space-between'>
-                  <Text small>星系主</Text>
+                  <Text small>{t('Galaxy Lord')}</Text>
                   <MarkText fontSize='14px'>{item.nickname}</MarkText>
                 </Flex>
-                <Flex mb='6px' justifyContent='space-between'>
-                  <Text small>价格 BNB</Text>
+                <Flex mb='6px' justifyContent='space-between' flexWrap='wrap'>
+                  <Text small>{t('Current Price')} BNB</Text>
                   <MarkText fontSize='14px'>
                     {GetCurrentPrice(galaxyNftList[item.id]?.currentPrice) ||
                       '---'}
                   </MarkText>
                 </Flex>
                 <Flex mb='6px' justifyContent='space-between'>
-                  <Text small>Total Galaxy CE</Text>
+                  <Text small>{t('Total Galaxy CE')}</Text>
                   <MarkText fontSize='14px'>{item.power}</MarkText>
                 </Flex>
               </GalaxyItemInfo>

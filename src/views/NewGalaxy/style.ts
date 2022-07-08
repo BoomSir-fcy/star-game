@@ -107,8 +107,8 @@ export const AuctionBtn = styled(Button)``;
 
 export const GalaxyItemInfo = styled(Box)`
   position: absolute;
-  width: 200px;
-  height: 100px;
+  width: 240px;
+  height: max-content;
   top: 50%;
   left: 50%;
   background-color: rgba(0, 0, 0, 0.5);
@@ -120,7 +120,7 @@ export const GalaxyItemInfo = styled(Box)`
 export const GalaxyItemInfoTitle = styled(GraphicsCard)`
   position: absolute;
   top: -14px;
-  left: 60px;
+  left: 82px;
   width: 80px;
   height: 24px;
   padding: 0;
