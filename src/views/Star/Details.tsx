@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import classNames from 'classnames';
 import { useImmer } from 'use-immer';
-import { useLocation, usePrompt } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction } from 'state';
 import { Box } from 'uikit';
