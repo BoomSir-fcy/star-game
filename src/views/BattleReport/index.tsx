@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { BgCard, Box, Empty, Flex, Spinner, Text } from 'uikit';
@@ -9,7 +9,6 @@ import {
   useFetchCombatRecord,
 } from 'state/alliance/hooks';
 import moment from 'moment';
-
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import eventBus from 'utils/eventBus';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
@@ -18,6 +17,39 @@ import { useTranslation } from 'contexts/Localization';
 import { PkBox } from './pkBox';
 import { BattleTop } from './BattleTop';
 import { InProgress } from './components/inProgress';
+import 'intro.js/introjs.css';
+
+const GlobalStyle = createGlobalStyle<{
+  interactive?: boolean;
+  disabled?: boolean;
+}>`
+  ${({ disabled }) => {
+    return disabled
+      ? `
+    .introjs-nextbutton {
+      pointer-events: none !important;
+      color: #9e9e9e !important;
+      cursor: default !important;
+    }
+    `
+      : '';
+  }};
+
+
+  ${({ interactive }) => {
+    return interactive
+      ? `
+    *{
+      pointer-events: none;
+    }
+    .introjs-showElement, .introjs-showElement *, .introjs-tooltip, .introjs-tooltip *{
+      pointer-events: auto;
+    }
+    `
+      : '';
+  }};
+  
+`;
 
 const ScrollBox = styled(Box)`
   /* min-height: 400px;
@@ -30,12 +62,6 @@ const ScrollBox = styled(Box)`
   &::-webkit-scrollbar {
     height: 0;
   }
-`;
-
-const ItemBox = styled(Box)`
-  display: block;
-  height: auto;
-  margin-bottom: 20px;
 `;
 
 const RowFlex = styled(Flex)`
@@ -83,6 +109,7 @@ const BattleReport = () => {
         1000,
     ).unix(),
   );
+  const [activeStep, setActiveStep] = useState(guides.step);
 
   useFetchCombatRecord(Start_time, End_time);
 
@@ -106,6 +133,7 @@ const BattleReport = () => {
       {
         element: '.battle-items-0',
         intro: t('Click to view battle details.'),
+        interactive: true,
       },
     ],
     [t],
@@ -132,18 +160,26 @@ const BattleReport = () => {
         guides.finish &&
         steps.length - 1 >= guides.step &&
         RecordList.length > 0 && (
-          <Steps
-            enabled={stepsEnabled}
-            steps={steps}
-            initialStep={0}
-            options={{
-              exitOnOverlayClick: false,
-            }}
-            onExit={step => {
-              setStepsEnabled(false);
-              setGuide(step + 1);
-            }}
-          />
+          <>
+            <GlobalStyle
+              interactive={steps[activeStep]?.interactive && stepsEnabled}
+            />
+            <Steps
+              enabled={stepsEnabled}
+              steps={steps}
+              initialStep={0}
+              options={{
+                exitOnOverlayClick: false,
+              }}
+              onBeforeChange={event => {
+                setActiveStep(event);
+              }}
+              onExit={step => {
+                setStepsEnabled(false);
+                setGuide(step + 1);
+              }}
+            />
+          </>
         )}
 
       <BattleTop
@@ -164,8 +200,12 @@ const BattleReport = () => {
             {(RecordList ?? []).map((item, index) => (
               <RowFlex key={item.id}>
                 <InProgress info={item} />
-                {(item.plunder ?? []).map(info => (
-                  <PkBox key={info.createTime} info={info} />
+                {(item.plunder ?? []).map((info, index2) => (
+                  <PkBox
+                    First={index === 0 && index2 === 0}
+                    key={info.createTime}
+                    info={info}
+                  />
                 ))}
               </RowFlex>
             ))}

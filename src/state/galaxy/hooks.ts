@@ -2,12 +2,13 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useGalaxyContract } from 'hooks/useContract';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { GalaxyState } from 'state/types';
+import { GalaxyInfo, GalaxyState } from 'state/types';
 import {
   fetchAllLogsAsync,
   fetchGalaxyListAsync,
   fetchGalaxyStarListAsync,
   fetchGetNftViewAsync,
+  fetchGetNftViewListAsync,
   fetchOwnerInfoAsync,
 } from './reducer';
 
@@ -49,6 +50,17 @@ export const useGalaxyNft = (tokenId: number) => {
       dispatch(fetchGetNftViewAsync(tokenId));
     }
   }, [account, tokenId, dispatch]);
+};
+
+export const useGalaxyNftArr = (List: GalaxyInfo[]) => {
+  const dispatch = useDispatch();
+  const { account } = useActiveWeb3React();
+
+  useEffect(() => {
+    if (account && List.length) {
+      dispatch(fetchGetNftViewListAsync(List));
+    }
+  }, [account, List, dispatch]);
 };
 
 // 竞拍

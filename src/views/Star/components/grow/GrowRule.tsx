@@ -6,7 +6,7 @@ import { CardStyle } from './styled';
 const GrowRule = () => {
   const { t } = useTranslation();
   return (
-    <CardStyle mt='12px' width='380px' height='575px' padding='20px 25px'>
+    <CardStyle mt='12px' width='410px' height='575px' padding='20px 25px'>
       <Text fontStyle='normal' mark bold>
         {t('Cultivation Rule')}
       </Text>

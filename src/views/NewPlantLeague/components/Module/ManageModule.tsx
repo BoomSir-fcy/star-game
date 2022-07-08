@@ -29,8 +29,9 @@ const InfoFlex = styled(Flex)`
   flex: 1;
 `;
 const ManageModule: React.FC<{
+  PlantManageModule: boolean;
   ChoosePlant: orderInfo;
-}> = ({ ChoosePlant }) => {
+}> = ({ PlantManageModule, ChoosePlant = {} }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -53,7 +54,13 @@ const ManageModule: React.FC<{
   );
 
   return (
-    <Box zIndex={1} position='absolute' left={0} bottom={-20}>
+    <Box
+      display={PlantManageModule ? 'block' : 'none'}
+      zIndex={1}
+      position='absolute'
+      left={0}
+      bottom={-20}
+    >
       <OutBox padding='16px'>
         <Flex height='100%' justifyContent='space-between' alignItems='center'>
           <Box position='relative'>
@@ -94,7 +101,7 @@ const ManageModule: React.FC<{
                       : t('race-3')}
                   </Text>
                   <Text ml='12px' fontSize='18px' bold>
-                    Lv{planetInfo.level}
+                    Lv{planetInfo?.level}
                   </Text>
                 </Flex>
                 <ScoringPanel
@@ -108,6 +115,7 @@ const ManageModule: React.FC<{
             <Text fontSize='14px'>Token: {planetInfo?.id}</Text>
             <Flex justifyContent='space-between'>
               <Button
+                className='Manage_planet'
                 height='42px'
                 onClick={() => gotoPlantDetail(planetInfo?.id)}
               >

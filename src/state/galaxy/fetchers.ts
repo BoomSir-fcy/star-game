@@ -1,8 +1,11 @@
 import { Api } from 'apis';
 import BigNumber from 'bignumber.js';
-import { GalaxyNft } from 'state/types';
+import { GalaxyInfo, GalaxyNft } from 'state/types';
+import { getGalaxyAddress } from 'utils/addressHelpers';
 import { getGalaxyContract } from 'utils/contractHelpers';
 import { getBalanceAmount } from 'utils/formatBalance';
+import multicall from 'utils/multicall';
+import GalaxyAbi from 'config/abi/Galaxy.json';
 
 export const fetchGalaxyList = async () => {
   try {
@@ -62,6 +65,34 @@ export const fetchGetNftView = async (tokenId: number): Promise<GalaxyNft> => {
       miniBuyDuration: '0',
       lastTimestamp: '0',
     };
+  }
+};
+
+export const fetchGetNftViewList = async (List: GalaxyInfo[]) => {
+  const GalaxyAddress = getGalaxyAddress();
+  const calls = List.map(item => {
+    return {
+      address: GalaxyAddress,
+      name: 'getNftView',
+      params: [item.id],
+    };
+  });
+  try {
+    const Arr = await multicall(GalaxyAbi, calls);
+    const RtArr = Arr.map(item => {
+      const res = item[0];
+      return {
+        id: res.id.toJSON().hex,
+        lastPrice: res.lastPrice.toJSON().hex,
+        currentPrice: res.currentPrice.toJSON().hex,
+        miniBuyDuration: res.miniBuyDuration.toJSON().hex,
+        lastTimestamp: res.lastTimestamp.toJSON().hex,
+      };
+    });
+    return RtArr;
+  } catch (error) {
+    console.error(`fetch fetchGetNftView error: ${error}`);
+    return [];
   }
 };
 

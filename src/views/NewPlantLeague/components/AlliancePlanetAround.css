@@ -46,15 +46,12 @@
 }
 
 /* 外侧轨道线 */
-.section3 .base {
+.section3 .turnAround {
   -webkit-animation: cir 200s linear 0s infinite;
   -o-animation: cir 200s linear 0s infinite;
   -ms-animation: cir 200s linear 0s infinite;
   -moz-animation: cir 200s linear 0s infinite;
   animation: cir 200s linear 0s infinite;
-  /* border: 1px solid #ccc; */
-  border-radius: 50%;
-  position: relative;
 }
 /* 外侧轨道线 */
 .u_p3d {
@@ -78,6 +75,7 @@
   backface-visibility: hidden;
   top: 80px;
   left: 0px;
+  border-radius: 50%;
 }
 /* 轨迹线2 */
 .line1 {
@@ -281,7 +279,7 @@
   transition-delay: 300ms;
 }
 
-.section3 .ball_1 .ball {
+.section3 .ball_1 .turnAroundBall {
   -webkit-animation: cir1 200s linear 0s infinite;
   -o-animation: cir1 200s linear 0s infinite;
   -ms-animation: cir1 200s linear 0s infinite;
@@ -289,7 +287,7 @@
   animation: cir1 200s linear 0s infinite;
 }
 
-.section3 .ball_2 .ball {
+.section3 .ball_2 .turnAroundBall {
   -webkit-animation: cir2 200s linear 0s infinite;
   -o-animation: cir2 200s linear 0s infinite;
   -ms-animation: cir2 200s linear 0s infinite;
@@ -297,7 +295,7 @@
   animation: cir2 200s linear 0s infinite;
 }
 
-.section3 .ball_3 .ball {
+.section3 .ball_3 .turnAroundBall {
   -webkit-animation: cir3 200s linear 0s infinite;
   -o-animation: cir3 200s linear 0s infinite;
   -ms-animation: cir3 200s linear 0s infinite;
@@ -305,7 +303,7 @@
   animation: cir3 200s linear 0s infinite;
 }
 
-.section3 .ball_4 .ball {
+.section3 .ball_4 .turnAroundBall {
   -webkit-animation: cir4 200s linear 0s infinite;
   -o-animation: cir4 200s linear 0s infinite;
   -ms-animation: cir4 200s linear 0s infinite;
@@ -313,7 +311,7 @@
   animation: cir4 200s linear 0s infinite;
 }
 
-.section3 .ball_5 .ball {
+.section3 .ball_5 .turnAroundBall {
   -webkit-animation: cir5 200s linear 0s infinite;
   -o-animation: cir5 200s linear 0s infinite;
   -ms-animation: cir5 200s linear 0s infinite;

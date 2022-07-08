@@ -37,12 +37,20 @@ const RulesText = styled(Text)`
 `;
 
 const ExploreModule: React.FC<{
+  ShowModule: boolean;
   Difficulty: number;
   setDifficulty: (e) => void;
-}> = ({ Difficulty, setDifficulty }) => {
+}> = ({ ShowModule, Difficulty, setDifficulty }) => {
   const { t } = useTranslation();
   return (
-    <Box zIndex={1} position='absolute' left={0} bottom={-20}>
+    <Box
+      display={ShowModule ? 'block' : 'none'}
+      className='Exploration_Difficulty'
+      zIndex={1}
+      position='absolute'
+      left={0}
+      bottom={-20}
+    >
       <OutBox padding='16px'>
         <Flex mb='20px' justifyContent='space-between' alignItems='center'>
           <MarkText fontSize='22px' bold>

@@ -33,7 +33,6 @@ const getTranslateData = (path: string) => {
       const col1 = row[0]?.replace(/\t/g, "");
       let col2 = row[1]?.replace(/\t/g, "");
       const col3 = row[2];
-      console.log(col3, "----", col1);
 
       // 解决xlsx文件中描述一列合并的情况
       if (col2) {
@@ -66,25 +65,28 @@ const getTranslateData = (path: string) => {
   });
   return races;
 };
-
+const obj = {
+  19: {},
+};
 const writeRaceConfigFile = (res: any) => {
   const raceObj = JSON.parse(JSON.stringify(res));
   for (const obj in raceObj) {
-    const list = raceObj[obj].map((item) => {
+    const resObj = {};
+    raceObj[obj].forEach((item) => {
       if (LAN === "CN") {
-        return {
-          index: item.id,
+        resObj[Number(item.id)] = {
           name: item.nameCN,
           desc: item.descCN,
         };
+      } else {
+        resObj[Number(item.id)] = {
+          index: item.id,
+          name: item.name,
+          desc: item.desc,
+        };
       }
-      return {
-        index: item.id,
-        name: item.name,
-        desc: item.desc,
-      };
     });
-    raceObj[obj] = list;
+    raceObj[obj] = resObj;
   }
 
   fs.writeFile(
