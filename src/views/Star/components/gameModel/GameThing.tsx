@@ -175,7 +175,16 @@ export const GameThing: React.FC<{
         )}
       </Container>
       {text && (
-        <MarkText mt='12px' bold small textAlign='center' fontStyle='normal'>
+        <MarkText
+          mt='12px'
+          bold
+          small
+          textAlign='center'
+          fontStyle='normal'
+          ellipsis
+          pl='0'
+          width={sizeBox.width}
+        >
           {text}
         </MarkText>
       )}
@@ -186,7 +195,7 @@ export const GameThing: React.FC<{
           height={36}
           position='absolute'
           left='0'
-          bottom={36}
+          bottom={text ? 36 : 0}
           onClick={() => {
             onAddClick();
           }}

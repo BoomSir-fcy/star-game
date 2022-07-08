@@ -3,7 +3,10 @@ import styled from 'styled-components';
 import classNames from 'classnames';
 import { useImmer } from 'use-immer';
 import { Flex, Box, MarkText, Image, Button } from 'uikit';
+import { useStore } from 'state';
 import { useTranslation } from 'contexts/Localization';
+import { useDispatch } from 'react-redux';
+import { setAssetsVisible } from 'state/planet/actions';
 
 const Container = styled(Box)`
   position: absolute;
@@ -71,23 +74,18 @@ const Content = styled(Box)`
 export const BarRightWarp: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [state, setState] = useImmer({
-    visible: true,
-  });
+  const assetsVisibleModal = useStore(p => p.planet.assetsVisibleModal);
 
   return (
     <Container
       mt='20px'
-      className={classNames(state?.visible ? 'active' : 'removeActive')}
+      className={classNames(assetsVisibleModal ? 'active' : 'removeActive')}
     >
       <SideCloseButton
         variant='text'
-        onClick={() =>
-          setState(p => {
-            p.visible = !state.visible;
-          })
-        }
+        onClick={() => dispatch(setAssetsVisible(!assetsVisibleModal))}
       >
         <Box width='34px' height='42px'>
           <Image
@@ -97,10 +95,7 @@ export const BarRightWarp: React.FC<{
           />
         </Box>
       </SideCloseButton>
-      <Content>
-        {children}
-        {/* <Warp flexWrap='wrap'>wssss</Warp> */}
-      </Content>
+      <Content>{children}</Content>
     </Container>
   );
 };

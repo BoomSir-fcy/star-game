@@ -6,6 +6,7 @@ import { useStore, storeAction } from 'state';
 import { Flex, Box, GraphicsCard, Button, MarkText, Text, Image } from 'uikit';
 
 import { useTranslation } from 'contexts/Localization';
+import { useToast } from 'contexts/ToastsContext';
 import { formatDisplayApr } from 'utils/formatBalance';
 
 const Container = styled(GraphicsCard)`
@@ -26,6 +27,12 @@ const Items = styled(Flex)`
   justify-content: space-between;
 `;
 
+const ButtonItem = styled(Button)`
+  &:disabled {
+    opacity: 0.5;
+  }
+`;
+
 export const BuildingUpgrade: React.FC<{
   planet: Api.Planet.PlanetInfo;
   currnet_building: Api.Building.Building;
@@ -34,6 +41,7 @@ export const BuildingUpgrade: React.FC<{
   onFinish: () => void;
 }> = ({ planet, currnet_building, estimate, onCreateBuilding, onFinish }) => {
   const { t } = useTranslation();
+  const { toastError } = useToast();
   const dispatch = useDispatch();
   const planetAssets = useStore(p => p.buildling.planetAssets);
   const balanceList = useStore(p => p.userInfo.userBalance);
@@ -57,7 +65,7 @@ export const BuildingUpgrade: React.FC<{
 
   return (
     <Container stripe>
-      <Content className='guide_step_7'>
+      <Content>
         <Flex width='100%' justifyContent='space-between' alignItems='center'>
           <Flex alignItems='center'>
             <MarkText bold fontSize='18px' fontStyle='normal'>
@@ -219,14 +227,17 @@ export const BuildingUpgrade: React.FC<{
         {!currnet_building?.isPreview && (
           <Flex justifyContent='center' mt='34px'>
             {currnet_building?.isbuilding ? (
-              <Button
+              <ButtonItem
                 width='226px'
                 height='53px'
                 variant='purple'
-                disabled={
-                  planet?.level <= currnet_building?.propterty?.levelEnergy
-                }
                 onClick={() => {
+                  if (
+                    planet?.level <= currnet_building?.propterty?.levelEnergy
+                  ) {
+                    toastError(t('Please upgrade the planet level first'));
+                    return;
+                  }
                   dispatch(
                     storeAction.upgradesBuildingModal({
                       visible: true,
@@ -242,20 +253,21 @@ export const BuildingUpgrade: React.FC<{
                 <Text bold fontSize='16px' color='#4FFFFB'>
                   {t('planetBuildingUpgrades')}
                 </Text>
-              </Button>
+              </ButtonItem>
             ) : (
-              <Button
-                width='226px'
-                height='53px'
-                variant='purple'
-                onClick={() => {
-                  onCreateBuilding(currnet_building);
-                }}
-              >
-                <Text bold fontSize='16px' color='#4FFFFB'>
-                  {t('build buildings')}
-                </Text>
-              </Button>
+              <></>
+              // <ButtonItem
+              //   width='226px'
+              //   height='53px'
+              //   variant='purple'
+              //   onClick={() => {
+              //     onCreateBuilding(currnet_building);
+              //   }}
+              // >
+              //   <Text bold fontSize='16px' color='#4FFFFB'>
+              //     {t('build buildings')}
+              //   </Text>
+              // </ButtonItem>
             )}
           </Flex>
         )}

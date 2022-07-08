@@ -389,7 +389,7 @@ const Grow: React.FC = () => {
                     : t('CultivationConfirmDesc1'),
               })}
             </Text>
-            <Flex mt='30px' width='100%' justifyContent='center'>
+            <Flex mt='100px' width='100%' justifyContent='center'>
               <Button
                 variant='purple'
                 width='350px'
