@@ -88,6 +88,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
 }) => {
   const { t } = useTranslation();
   const { game_base_unit } = armsData;
+  // const { arms_attr } = game_base_unit || {}
   const [radarChart] = React.useState(
     new RadarChart({
       width: 180,
@@ -99,42 +100,49 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
     }),
   );
 
+  const arms_attr = React.useMemo(
+    () => game_base_unit?.arms_attr,
+    [game_base_unit],
+  );
+
+  console.log(game_base_unit);
+
   React.useEffect(() => {
     radarChart.updateDate([
       {
         attr: 'HP',
-        value: game_base_unit?.hp,
+        value: arms_attr?.hp,
       },
       {
         attr: t('Defense'),
-        value: game_base_unit?.df,
+        value: arms_attr?.df,
       },
       {
         attr: t('Attack'),
-        value: game_base_unit?.ak,
+        value: arms_attr?.ak,
       },
       {
         attr: t('dodge'),
-        value: game_base_unit?.dodge,
+        value: arms_attr?.dodge,
       },
       {
         attr: t('hit'),
-        value: game_base_unit?.hit,
+        value: arms_attr?.hit,
       },
       {
         attr: t('Burst'),
-        value: game_base_unit?.crit,
+        value: arms_attr?.crit,
       },
       {
         attr: t('speed'),
-        value: game_base_unit?.speed,
+        value: arms_attr?.speed,
       },
       {
         attr: t('area'),
-        value: game_base_unit?.ak_range_max,
+        value: arms_attr?.ak_range_max,
       },
     ]);
-  }, [game_base_unit, radarChart, t]);
+  }, [arms_attr, radarChart, t]);
 
   const ref = React.useRef<HTMLDivElement>(null);
 
