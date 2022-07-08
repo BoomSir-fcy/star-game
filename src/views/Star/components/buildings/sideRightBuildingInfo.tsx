@@ -203,7 +203,11 @@ export const SideRightBuildingInfo: React.FC<{
             <Flex mb='15px' alignItems='flex-start'>
               <GameThing
                 src={currentAttributes?.picture}
-                level={currentAttributes?.propterty?.levelEnergy}
+                level={
+                  estimate?._id
+                    ? currentAttributes?.propterty?.levelEnergy
+                    : 'MAX'
+                }
                 scale='sm'
                 border
               />
@@ -319,7 +323,7 @@ export const SideRightBuildingInfo: React.FC<{
             )}
           </Box>
 
-          {currentAttributes?.propterty?.levelEnergy < 20 && (
+          {Boolean(estimate?._id) && (
             <BuildingUpgrade
               planet={planet}
               currnet_building={currentAttributes}
