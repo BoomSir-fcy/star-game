@@ -45,7 +45,6 @@ class Builder extends EventTarget {
     this.areaY = areaY;
     this.areaX = areaX;
 
-    console.log(this.src);
     this.texture = Texture.from(this.src);
 
     this.enableDrag = Boolean(enableDrag);
@@ -171,16 +170,10 @@ class Builder extends EventTarget {
   }
 
   onConfirm(event: FederatedPointerEvent) {
-    // event.stopPropagation();
-    // event.stopImmediatePropagation();
-    console.log('confirm');
     this.dispatchEvent(new Event('confirm'));
   }
 
   onCancel(event: FederatedPointerEvent) {
-    console.log('onCancel');
-    // event.stopPropagation();
-    // event.stopImmediatePropagation();
     this.dispatchEvent(new Event('cancel'));
   }
 

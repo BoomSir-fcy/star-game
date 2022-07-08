@@ -162,7 +162,6 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
         if (Token === 'BNB') {
           isChainToken = true;
         }
-        console.log(TokenInfo?.coinId, addPrecisionNum, isChainToken);
 
         await Recharge(TokenInfo?.coinId, addPrecisionNum, isChainToken);
         toastSuccess(t('Recharge Succeeded'));
@@ -172,8 +171,6 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
         console.error(error);
       }
     } else {
-      console.log(val, TokenInfo?.coinId);
-
       const res = await drawCallback(val, TokenInfo?.coinId);
       if (Api.isSuccess(res)) {
         toastSuccess(t('Withdraw Succeeded'));
@@ -261,7 +258,6 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
     //   }
     // };
     if (account && TokenInfo?.coinId) {
-      console.log('更新授权', TokenInfo.symbol);
       getApproveNum(account, TokenInfo?.coinId);
     }
   }, [account, TokenInfo, getApproveNum]);

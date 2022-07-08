@@ -244,7 +244,6 @@ class Building extends EventTarget {
 
     builder.addEventListener('confirm', () => {
       this.dispatchEvent(getConfirmBuilderEvent(builder));
-      console.log(builder.position);
     });
   }
 
@@ -391,7 +390,6 @@ class Building extends EventTarget {
 
   // 移动小人
   onDrageMoveBuilder(event: InteractionEvent, builder: Builder) {
-    console.log(21112);
     if (builder.areaX === 2) {
       const matrix4 = this.boards.checkCollisionPointOfTow(event);
       matrix4?.setState(stateType.PLACE);

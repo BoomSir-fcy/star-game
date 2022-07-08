@@ -144,8 +144,6 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       // 处理高度不够显示不全bug
       const rate = Math.min(rateMax, rateMin);
 
-      console.log(rateMax, rateMin);
-
       // dispatch(setScale)
       setScale(rate);
       setMinHeight(Math.min(clientWidth, clientHeight));
@@ -168,7 +166,6 @@ const ScaleOrientContent: React.FC = ({ children }) => {
 
   const onFocusin = useCallback(
     (event: FocusEvent) => {
-      console.log(event.target, 'focusin');
       if ((event?.target as HTMLElement)?.nodeName === 'INPUT') {
         handleResize(true);
       }

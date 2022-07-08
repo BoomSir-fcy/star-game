@@ -73,8 +73,6 @@ export const PlanetQueue: React.FC<{
     (v, i) => i,
   );
 
-  console.log(currentQueue);
-
   return (
     <Layout>
       <MarkText mb='24px' fontSize='20px' bold>

@@ -8,7 +8,6 @@ class Matrix4 extends Point {
     this.chequers = [c1, c2, c3, c4];
     const x = (c1.centerPoint.x + c3.centerPoint.x) / 2;
     const y = (c1.centerPoint.y + c3.centerPoint.y) / 2;
-    console.log(x, y);
     this.set(x, y);
     this.points = Matrix4.getPoints(this.chequers);
   }
