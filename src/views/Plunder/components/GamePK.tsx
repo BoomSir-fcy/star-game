@@ -96,17 +96,15 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   useEffect(() => {
     if (parsedQs.terrain) {
-      setActiveTerrainInfo(JSON.parse(String(parsedQs.terrain)));
+      setActiveTerrainInfo(JSON.parse(JSON.stringify(parsedQs.terrain)));
     }
   }, [parsedQs]);
 
   useEffect(() => {
-    if (TerrainInfo?.length && ActiveTerrainInfo) {
-      game.creatTerrain(TerrainInfo[ActiveTerrainInfo?.value]?.terrains);
-    } else {
-      game.creatTerrain([]);
+    if (game) {
+      game.creatTerrain();
     }
-  }, [TerrainInfo, ActiveTerrainInfo]);
+  }, []);
 
   const startHandle = useCallback(() => {
     if (Number(pid0) && Number(pid1)) {
@@ -127,7 +125,9 @@ const GamePK: React.FC<GamePKProps> = () => {
     infoP0?.id,
     infoP1?.id,
     Number(maxRound),
-    parsedQs.terrain ? Number(JSON.parse(String(parsedQs.terrain))?.id) : 0,
+    parsedQs.terrain
+      ? Number(JSON.parse(JSON.stringify(parsedQs.terrain))?.id)
+      : 0,
   );
 
   const ref = useRef<HTMLDivElement>(null);

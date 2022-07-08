@@ -1,10 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
+import classNames from 'classnames';
 import { useImmer } from 'use-immer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useStore, storeAction, AppDispatch } from 'state';
-import { Box, Button } from 'uikit';
+import { useStore, storeAction } from 'state';
+import { Box } from 'uikit';
 import { Api } from 'apis';
 
 import { Steps } from 'intro.js-react'; // 引入我们需要的组件
@@ -35,6 +36,38 @@ const Container = styled(Box)`
   height: 100%;
 `;
 
+const GlobalStyle = createGlobalStyle<{
+  interactive?: boolean;
+  disabled?: boolean;
+}>`
+
+  ${({ disabled }) => {
+    return disabled
+      ? `
+    .introjs-nextbutton {
+      pointer-events: none !important;
+      color: #9e9e9e !important;
+      cursor: default !important;
+    }
+    `
+      : '';
+  }};
+
+  ${({ interactive }) => {
+    return interactive
+      ? `
+    *{
+      pointer-events: none;
+    }
+    .introjs-showElement, .introjs-showElement *, .introjs-tooltip, .introjs-tooltip *{
+      pointer-events: auto;
+    }
+    `
+      : '';
+  }};
+  
+`;
+
 const Details = () => {
   const parsedQs = useParsedQueryString();
   const location = useLocation();
@@ -46,53 +79,11 @@ const Details = () => {
   const { destory: destoryHook } = useBuildingOperate();
   const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = React.useState(true);
+  const [dynamicEl, setDynamicEl] = React.useState(null);
+  const [activeStep, setActiveStep] = React.useState(guides.step);
   const [serverDiffTime, setServerDiffTime] = React.useState<number>(0);
   const { screenMode } = useStore(p => p.user);
-
-  const steps = React.useMemo(() => {
-    return [
-      {
-        element: '.planet_header',
-        intro: t(
-          'Each planet has its own production capacity and resources, which comes from the construction strategy of buildings.',
-        ),
-      },
-      {
-        element: '.common_nav',
-        intro: t(
-          'The left navigation can manage the upgrading, cultivation and array arrangement of the planet.',
-        ),
-      },
-      {
-        element: '.star_manager',
-        intro: t(
-          'Each planet has a built grid, and the number of grids is linked to the quality. Reasonable construction strategy is also one of the ways to win.',
-        ),
-      },
-      {
-        element: '.buildings',
-        intro: t(
-          'The construction list will show the units that can be built, including consumption, type, capacity, etc',
-        ),
-      },
-      {
-        element: '.energy_tank_0',
-        intro: t(
-          'This is the energy tank of the planet. It is the core building for resource management. It can supplement its resources and store the resources plundered by the stars.',
-        ),
-      },
-      {
-        element: '.building_0',
-        intro: t(
-          'Start to create the first building of the planet and drag the building to the right place on the chessboard.',
-        ),
-      },
-      {
-        element: '.building_1',
-        intro: t('Continue to build a building.'),
-      },
-    ];
-  }, [t]);
+  const guideRef = React.useRef(null);
 
   const building = useBuilding({
     width: 1920,
@@ -116,6 +107,67 @@ const Details = () => {
   const [areaX, areaY] = React.useMemo(() => {
     return [planet?.areaX, planet?.areaY];
   }, [planet]);
+
+  const steps = React.useMemo(() => {
+    return [
+      {
+        element: '.guide_step_1',
+        intro: t('guidePlanetStep_1'),
+      },
+      {
+        element: '.guide_step_2',
+        intro: t('guidePlanetStep_2'),
+      },
+      {
+        element: '.guide_step_3',
+        intro: t('guidePlanetStep_3'),
+        interactive: true,
+        disabled: true,
+      },
+      {
+        element: '.guide_step_4',
+        intro: t('guidePlanetStep_4'),
+        interactive: true,
+        disabled: true,
+      },
+      {
+        element: '.guide_step_5',
+        intro: t('guidePlanetStep_5'),
+        interactive: true,
+        disabled: true,
+      },
+      {
+        element: '.guide_step_6',
+        intro: t('guidePlanetStep_6'),
+        interactive: true,
+        disabled: true,
+      },
+      {
+        element: '.guide_step_7',
+        intro: t('guidePlanetStep_7'),
+        interactive: true,
+        disabled: true,
+      },
+      {
+        element: '.guide_step_8',
+        intro: t('guidePlanetStep_8'),
+      },
+      {
+        element: '.guide_step_9',
+        intro: t('guidePlanetStep_9'),
+        interactive: true,
+        disabled: true,
+      },
+    ];
+  }, [t]);
+
+  const beforeStepChange = nextStepIndex => {
+    if (nextStepIndex === 3) {
+      dispatch(setNavZIndex(false));
+    }
+    setActiveStep(nextStepIndex);
+    guideRef?.current?.updateStepElement(nextStepIndex);
+  };
 
   React.useEffect(() => {
     if (ref.current && areaX && areaY) {
@@ -210,16 +262,18 @@ const Details = () => {
           work_queue_params: current,
         });
         if (Api.isSuccess(res)) {
-          // activeBuilder?.setIsBuilding(true);
           getWorkQueue();
           dispatch(fetchPlanetBuildingsAsync(id));
           dispatch(fetchPlanetInfoAsync([id]));
           toastSuccess(t('planetTipsSaveSuccess'));
-        } else if (activeBuilder) {
+          return true;
+        }
+        if (activeBuilder) {
           building?.removeBuilder(activeBuilder);
         }
-      } catch (error) {
-        console.error(error);
+        return false;
+      } catch (error: any) {
+        throw new Error(error);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -270,6 +324,11 @@ const Details = () => {
     toastSuccess,
   ]);
 
+  const onClickGuide = () => {
+    const nextButton = document.querySelector('.introjs-nextbutton');
+    nextButton?.dispatchEvent(new Event('click'));
+  };
+
   React.useEffect(() => {
     if (activeBuilder?.option?.id) {
       setStateBuilding(p => {
@@ -284,7 +343,15 @@ const Details = () => {
         dispatch(setNavZIndex(false));
       }, 100);
     }
-  }, [activeBuilder, dispatch, setStateBuilding]);
+  }, [
+    activeBuilder,
+    activeStep,
+    dispatch,
+    setGuide,
+    setStateBuilding,
+    steps,
+    stepsEnabled,
+  ]);
 
   React.useEffect(() => {
     if (id) {
@@ -301,20 +368,35 @@ const Details = () => {
     };
   }, [dispatch]);
 
+  // 单独处理每个新手引导的操作
+  React.useEffect(() => {
+    if (stateBuilding.visible && stepsEnabled && activeStep === 2) {
+      setActiveStep(3);
+      setGuide(3);
+      onClickGuide();
+    }
+    setGuide(2);
+  }, [activeStep, setGuide, stateBuilding.visible, stepsEnabled]);
+
   return (
     <>
       <Container>
-        {/* {!guides.guideFinish &&
-          guides.finish &&
-          steps.length - 1 > guides.step && (
+        {guides.finish && !guides.guideFinish && (
+          <>
+            <GlobalStyle
+              interactive={steps[activeStep]?.interactive && stepsEnabled}
+              disabled={steps[activeStep]?.disabled}
+            />
             <Steps
+              ref={guideRef}
               enabled={stepsEnabled}
               steps={steps}
-              initialStep={guides.step}
+              initialStep={activeStep || guides.step}
               options={{
                 exitOnOverlayClick: false,
                 disableInteraction: false,
               }}
+              onBeforeChange={beforeStepChange}
               onChange={currentStep => {
                 if (currentStep > guides.step) {
                   setGuide(currentStep);
@@ -322,10 +404,6 @@ const Details = () => {
               }}
               onExit={step => {
                 setStepsEnabled(false);
-                if (step === steps.length - 1) {
-                  navigate(`/star/upgrade?id=${id}`);
-                  return;
-                }
                 if (step < steps.length - 1) {
                   dispatch(
                     storeAction.toggleVisible({
@@ -336,24 +414,43 @@ const Details = () => {
                 }
               }}
             />
-          )} */}
+          </>
+        )}
         <SideLeftContent
           race={planet?.race}
           building={building}
           sideRightStatus={stateBuilding.visible}
+          animation={!stepsEnabled}
           onPreview={val => {
             setStateBuilding(p => {
               p.visible = true;
               p.building = {
                 ...val,
-                isPreview: true,
               };
             });
+          }}
+          onChangeGuide={() => {
+            setTimeout(() => {
+              if (stepsEnabled) {
+                setActiveStep(6);
+                setGuide(6);
+                onClickGuide();
+              }
+            }, 100);
           }}
         />
         <PlanetQueue
           serverTime={serverDiffTime}
           currentQueue={stateBuilding.workQueue}
+          onChangeGuide={() => {
+            setTimeout(() => {
+              if (stepsEnabled) {
+                setActiveStep(5);
+                setGuide(5);
+                onClickGuide();
+              }
+            }, 100);
+          }}
           onComplete={() => {
             getWorkQueue();
             dispatch(fetchPlanetBuildingsAsync(id));
@@ -368,15 +465,29 @@ const Details = () => {
             workQueue={stateBuilding.workQueue}
             buildingsId={stateBuilding.building?._id}
             itemData={stateBuilding?.building}
+            animation={!stepsEnabled}
             onCreateBuilding={async val => {
-              setStateBuilding(p => {
-                p.visible = false;
-              });
-              await saveWorkQueue(val);
+              const res = await saveWorkQueue(val);
+              if (res) {
+                setStateBuilding(p => {
+                  p.visible = false;
+                });
+                dispatch(setNavZIndex(true));
+                if (activeStep === 6) {
+                  setActiveStep(activeStep + 1);
+                  setGuide(activeStep + 1);
+                  onClickGuide();
+                }
+              }
             }}
             onClose={bool => {
               if (bool && activeBuilder) {
                 building?.removeBuilder(activeBuilder);
+              }
+              if (activeStep === 3) {
+                setActiveStep(activeStep + 1);
+                setGuide(activeStep + 1);
+                onClickGuide();
               }
               building?.removeActiveSolider();
               dispatch(setNavZIndex(true));
@@ -388,13 +499,27 @@ const Details = () => {
         )}
         <Box position='relative' width={1920} height={900}>
           <Box
-            // background='red'
-            position='absolute'
-            top={screenMode ? 0 : (900 - 1920) / 2}
-            left={screenMode ? 0 : (1920 - 900) / 2}
-            className={screenMode ? '' : 'reverse-rotate'}
-            ref={ref}
-          />
+            className={classNames(
+              'guide_step_1',
+              'guide_step_2',
+              'guide_step_3',
+            )}
+            width='800px'
+            height='700px'
+            margin='0 auto'
+            style={{
+              position: 'static',
+            }}
+          >
+            <Box
+              // background='red'
+              position='absolute'
+              top={screenMode ? 0 : (900 - 1920) / 2}
+              left={screenMode ? 0 : (1920 - 900) / 2}
+              className={screenMode ? '' : 'reverse-rotate'}
+              ref={ref}
+            />
+          </Box>
         </Box>
       </Container>
 
@@ -403,10 +528,10 @@ const Details = () => {
         visible={upgrad.visible}
         planet_id={id}
         onChange={async val => {
+          await saveWorkQueue(val);
           setStateBuilding(p => {
             p.visible = false;
           });
-          await saveWorkQueue(val);
         }}
         onClose={() => {
           dispatch(setNavZIndex(true));

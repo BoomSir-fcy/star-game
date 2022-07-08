@@ -47,6 +47,20 @@ export const fetchUnitListAsync =
     }
   };
 
+export const fetchTestUnitListAsync =
+  (race: number): AppThunk =>
+  async dispatch => {
+    const data = await Api.GameApi.getAllUnitList(race);
+    if (data) {
+      dispatch(
+        setUnits({
+          [race]: data.data.units,
+        }),
+      );
+      dispatch(setBaseSkill(data.data.base));
+    }
+  };
+
 export const fetchGamePlanetUnitsAsync =
   (id: number): AppThunk =>
   async dispatch => {

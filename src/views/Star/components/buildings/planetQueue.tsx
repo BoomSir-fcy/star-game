@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useStore, storeAction } from 'state';
@@ -58,8 +59,9 @@ export const PlanetQueue: React.FC<{
   currentQueue: any[];
   onSave?: () => void;
   onSelectCurrent?: (item: any) => void;
+  onChangeGuide?: () => void;
   onComplete?: () => void;
-}> = ({ serverTime, currentQueue, onComplete }) => {
+}> = ({ serverTime, currentQueue, onChangeGuide, onComplete }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -77,14 +79,16 @@ export const PlanetQueue: React.FC<{
       </MarkText>
       {(queueArr ?? []).map((item, index) => {
         return (
-          <QueueGroup key={item}>
+          <QueueGroup key={item} className='guide_step_8'>
             {!currentQueue[index]?._id ? (
               <QueueBox
+                className={classNames('guide_step_5')}
                 onClick={event => {
                   event.stopPropagation();
                   event.preventDefault();
                   dispatch(setNavZIndex(false));
                   dispatch(storeAction.queueVisbleSide(true));
+                  onChangeGuide();
                 }}
               >
                 <Image

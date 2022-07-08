@@ -8,6 +8,8 @@ export const eventsType = {
   REMOVE_ACTIVE_SOLDIER: 'removeActiveBuilder',
   ADD_ACTIVE_SOLDIER: 'addActiveBuilder',
   UPDATE_SOLDIER_POSITION: 'updateBuilderPosition',
+  CANCEL_BUILDER: 'cancelBuilder',
+  CONFIRM_BUILDER: 'confirmBuilder',
 };
 
 export const getBuilderEvent = (
@@ -25,3 +27,9 @@ export const getAddActiveBuilderEvent = (builder: Builder) =>
 
 export const getUpdateBuilderPosition = (builders: Builder[]) =>
   new CustomEvent(eventsType.UPDATE_SOLDIER_POSITION, { detail: { builders } });
+
+export const getCancelBuilderEvent = (builders: Builder) =>
+  new CustomEvent(eventsType.CANCEL_BUILDER, { detail: { builders } });
+
+export const getConfirmBuilderEvent = (builders: Builder) =>
+  new CustomEvent(eventsType.CONFIRM_BUILDER, { detail: { builders } });

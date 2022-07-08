@@ -57,7 +57,7 @@ export const BuildingUpgrade: React.FC<{
 
   return (
     <Container stripe>
-      <Content>
+      <Content className='guide_step_7'>
         <Flex width='100%' justifyContent='space-between' alignItems='center'>
           <Flex alignItems='center'>
             <MarkText bold fontSize='18px' fontStyle='normal'>
@@ -250,7 +250,6 @@ export const BuildingUpgrade: React.FC<{
                 variant='purple'
                 onClick={() => {
                   onCreateBuilding(currnet_building);
-                  onFinish();
                 }}
               >
                 <Text bold fontSize='16px' color='#4FFFFB'>

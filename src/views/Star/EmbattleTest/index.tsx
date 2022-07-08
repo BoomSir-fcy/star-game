@@ -15,6 +15,7 @@ import {
   useFetchGamePK,
   useFetchGamePlanetUnitsTest,
   useFetchGameTerrain,
+  useFetchTestUnitList,
 } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
 import { OptionProps, Select } from 'components/Select';
@@ -67,7 +68,8 @@ const Embattle = () => {
   }, [planetInfo, planetId]);
 
   const race = info?.race as Api.Game.race;
-  useFetchUnitList(race, info?.id);
+  // useFetchUnitList(race, info?.id);
+  useFetchTestUnitList(race);
 
   const baseUnits = useStore(p => p.game.baseUnits);
 
@@ -131,9 +133,9 @@ const Embattle = () => {
       game.boards.container.rotation = Math.PI / 2;
     }
     if (TerrainInfo?.length) {
-      game.creatTerrain(TerrainInfo[activeTerrain.value].terrains);
+      game.creatTerrain();
     } else {
-      game.creatTerrain([]);
+      game.creatTerrain();
     }
   }, [activeTerrain, ref, TerrainInfo, game]);
 
