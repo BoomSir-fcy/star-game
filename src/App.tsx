@@ -20,6 +20,8 @@ import {
   TestDragAndPut,
 } from './views/Test';
 
+const ChangeRate = lazy(() => import('./views/Test/ChangeRate'));
+
 const Home = lazy(() => import('./views/Home'));
 const Login = lazy(() => import('./views/Login'));
 
@@ -118,6 +120,8 @@ function App() {
               <Route path='/plunder-result' element={<PlunderResult />} />
 
               <Route path='/vip' element={<VipPage />} />
+
+              <Route path='/change-rate' element={<ChangeRate />} />
 
               <Route path='/test' element={<Test />}>
                 <Route path='drag-put' element={<TestDragAndPut />} />

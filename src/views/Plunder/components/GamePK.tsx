@@ -96,7 +96,7 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   useEffect(() => {
     if (parsedQs.terrain) {
-      setActiveTerrainInfo(JSON.parse(String(parsedQs.terrain)));
+      setActiveTerrainInfo(JSON.parse(JSON.stringify(parsedQs.terrain)));
     }
   }, [parsedQs]);
 
@@ -127,7 +127,9 @@ const GamePK: React.FC<GamePKProps> = () => {
     infoP0?.id,
     infoP1?.id,
     Number(maxRound),
-    parsedQs.terrain ? Number(JSON.parse(String(parsedQs.terrain))?.id) : 0,
+    parsedQs.terrain
+      ? Number(JSON.parse(JSON.stringify(parsedQs.terrain))?.id)
+      : 0,
   );
 
   const ref = useRef<HTMLDivElement>(null);
