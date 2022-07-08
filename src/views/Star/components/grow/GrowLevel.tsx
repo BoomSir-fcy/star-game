@@ -32,7 +32,7 @@ const GrowLevel: React.FC<GrowLevelProps> = ({
   const { t } = useTranslation();
 
   return (
-    <CardStyle width='380px' height='299px' padding='15px'>
+    <CardStyle width='410px' height='320px' padding='15px'>
       <ScoringPanel count={nowLevel} />
       <Flex mt='19px' justifyContent='center'>
         <Text fontSize='18px'>{t('Cultivation success rate')}</Text>
@@ -40,7 +40,7 @@ const GrowLevel: React.FC<GrowLevelProps> = ({
           {t(successRate(nowLevel))}
         </Text>
       </Flex>
-      <Flex justifyContent='space-between' alignItems='center'>
+      <Flex mt='15px' justifyContent='space-between' alignItems='center'>
         <TopBox1>
           <TopText1 bold color='legendText'>
             {nowLevel === 20 ? 'MAX' : `${t('Strengthen')} + ${nowLevel}`}

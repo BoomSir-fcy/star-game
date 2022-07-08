@@ -42,7 +42,6 @@ const Grow: React.FC = () => {
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
   const location = useLocation();
-  const { guides, setGuide } = useGuide(location.pathname);
   const { toastError, toastSuccess } = useToast();
   const id = Number(parsedQs.id);
   const planetInfo = useStore(p => p.planet.planetInfo[id ?? 0]);
@@ -83,14 +82,14 @@ const Grow: React.FC = () => {
     estimate_power: 0,
   });
 
+  // 新手引导
+  const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const steps = useMemo(
     () => [
       {
-        element: '.planet',
-        intro: t(
-          'Cultivation can greatly improve its combat effectiveness and capacity acquisition, including the growth of various attributes',
-        ),
+        element: '.planet_grow',
+        intro: t('GuidePlanetGrow'),
       },
     ],
     [t],
@@ -171,7 +170,7 @@ const Grow: React.FC = () => {
           }}
           onExit={step => {
             setStepsEnabled(false);
-            setGuide(step + 1);
+            setGuide(steps.length + 1);
             // dispatch(storeAction.toggleVisible({ visible: true }));
           }}
         />
@@ -318,133 +317,20 @@ const Grow: React.FC = () => {
         <Flex
           mt='80px'
           height='658px'
-          width='57%'
-          alignItems='flex-end'
-          justifyContent='flex-end'
+          width='100%'
+          alignItems='center'
+          justifyContent='center'
         >
-          <Box>
+          <Box className='planet_grow'>
             <GrowLevel
               nowLevel={estimateCost?.now_level}
               nextLevel={estimateCost?.next_level}
               now_power={estimateCost?.now_power}
               estimate_power={estimateCost?.estimate_power}
             />
-            <GrowRule />
           </Box>
-          <Box ml='150px'>
-            <Flex justifyContent='center'>
-              <Box width={30}>
-                <TokenImage
-                  width={30}
-                  height={30}
-                  tokenAddress={getWEtherAddress()}
-                />
-              </Box>
-              <Text ml='15px' fontSize='22px' bold>
-                {t('BNB')}
-              </Text>
-              <Text ml='15px' fontSize='22px' fontStyle='normal' bold mark>
-                {estimateCost?.consume_bnb?.toString()}
-              </Text>
-            </Flex>
-            <Button
-              mt='19px'
-              width='277px'
-              height='50px'
-              variant='purple'
-              onClick={() => setVisible(true)}
-            >
-              <Text fontSize='16px' color='textPrimary' bold>
-                {t('Cultivate')}
-              </Text>
-            </Button>
-          </Box>
-          {/* <Box>
-          <Extra info={estimateCost} />
-          <Arms info={estimateCost} />
-        </Box>  */}
-        </Flex>
-      )}
-      {/* <Flex
-        mt='80px'
-        height='658px'
-        width='57%'
-        alignItems='flex-end'
-        justifyContent='flex-end'
-      >
-        {isSuccess ? (
-          <Flex flexDirection='column' alignItems='flex-end'>
-            {isSuccess === 1 ? (
-              <Text mr='-30px' fontSize='34px' fontStyle='normal' mark bold>
-                {t('Cultivate Succeeded')}
-              </Text>
-            ) : (
-              <Text fontSize='34px' fontStyle='normal' mark bold>
-                {t('Cultivate Failed')}
-              </Text>
-            )}
-            <Flex flexDirection='column' alignItems='center'>
-              <Flex
-                mt='252px'
-                justifyContent='space-between'
-                alignItems='center'
-              >
-                <Box>
-                  <Text small>{isSuccess === 1 ? t('Power') : t('Level')}</Text>
-                  <Text fontSize='20px' fontStyle='normal' mark bold>
-                    {isSuccess === 1
-                      ? formatDisplayApr(estimateCost?.now_power)
-                      : estimateCost?.now_level}
-                  </Text>
-                </Box>
-                <Box margin='0 39px' width={58}>
-                  <Image
-                    width={58}
-                    height={28}
-                    src='/images/commons/icon/upgrade.png'
-                  />
-                </Box>
-                <Box>
-                  <Text small>{isSuccess === 1 ? t('Power') : t('Level')}</Text>
-                  <Text fontSize='20px' fontStyle='normal' mark bold>
-                    {isSuccess === 1
-                      ? formatDisplayApr(estimateCost?.estimate_power)
-                      : estimateCost?.now_level - downgrade}
-                  </Text>
-                </Box>
-              </Flex>
-              <Button
-                mt='19px'
-                width='277px'
-                height='50px'
-                variant='purple'
-                onClick={() => {
-                  setIsSuccess(0);
-                  if (isSuccess === 2) {
-                    createPlanet(planetInfo?.picture1);
-                  }
-                  dispatch(fetchPlanetInfoAsync([Number(parsedQs.id)]));
-                  getPlanetStrengthen();
-                }}
-              >
-                <Text fontSize='16px' color='textPrimary' bold>
-                  {t('Config')}
-                </Text>
-              </Button>
-            </Flex>
-          </Flex>
-        ) : (
-          <>
-            <Box>
-              <GrowLevel
-                nowLevel={estimateCost?.now_level}
-                nextLevel={estimateCost?.next_level}
-                now_power={estimateCost?.now_power}
-                estimate_power={estimateCost?.estimate_power}
-              />
-              <GrowRule />
-            </Box>
-            <Box ml='150px'>
+          <Flex alignItems='flex-end'>
+            <Box margin='0 120px'>
               <Flex justifyContent='center'>
                 <Box width={30}>
                   <TokenImage
@@ -472,13 +358,14 @@ const Grow: React.FC = () => {
                 </Text>
               </Button>
             </Box>
-            <Box>
+            <GrowRule />
+          </Flex>
+          {/* <Box>
           <Extra info={estimateCost} />
           <Arms info={estimateCost} />
-        </Box> 
-          </>
-        )}
-      </Flex> */}
+        </Box>  */}
+        </Flex>
+      )}
 
       <ModalWrapper
         title={t('Planet Cultivation')}

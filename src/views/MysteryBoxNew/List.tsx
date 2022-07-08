@@ -314,7 +314,7 @@ const List = () => {
                 toastSuccess(t('Join Succeeded'));
                 setTween(2);
                 setTimeout(() => {
-                  navigate('/plant-league');
+                  navigate('/plant-league', { replace: true });
                 }, 1200);
               } catch (e) {
                 console.error(e);
@@ -338,7 +338,7 @@ const List = () => {
             onClick={() => {
               setTween(1);
               setTimeout(() => {
-                navigate('/star/planet');
+                navigate('/star/planet', { replace: true });
               }, 1200);
             }}
           >
@@ -358,7 +358,7 @@ const List = () => {
         onClick={() => {
           setTween(1);
           setTimeout(() => {
-            navigate('/star/planet');
+            navigate('/star/planet', { replace: true });
           }, 1200);
         }}
       >
@@ -388,7 +388,7 @@ const List = () => {
       {visibleGuide &&
         !guides.guideFinish &&
         guides.finish &&
-        steps.length > guides.step && (
+        steps.length - 1 > guides.step && (
           <>
             <GlobalStyle
               interactive={steps[activeStep]?.interactive && stepsEnabled}
@@ -417,6 +417,7 @@ const List = () => {
               }}
               onExit={index => {
                 setStepsEnabled(false);
+                setArrowShow(false);
                 if (index < steps.length - 1) {
                   dispatch(
                     storeAction.toggleVisible({
