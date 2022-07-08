@@ -2,6 +2,7 @@ import React from 'react';
 import { Flex, Box, Text, Image, Progress } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useImmer } from 'use-immer';
+import { getBuildingOfRaceAndIndex } from 'building/core/utils';
 
 export const QueueBuilding: React.FC<{
   type: number;
@@ -80,7 +81,13 @@ export const QueueBuilding: React.FC<{
       <Flex flexDirection='column' style={{ flex: 1 }}>
         <Flex alignItems='flex-end' mb='16px'>
           <Text bold fontSize='18px'>
-            {currentBuilding?.propterty?.name_en}
+            {/* {currentBuilding?.propterty?.name_en} */}
+            {
+              getBuildingOfRaceAndIndex(
+                currentBuilding?.race,
+                currentBuilding?.index,
+              )?.name
+            }
           </Text>
           <Text small bold ml='11px' mb='1px'>
             {type === 2

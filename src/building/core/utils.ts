@@ -1,7 +1,7 @@
 // import { Point, Container, Graphics } from 'pixi.js';
 import { Container } from '@pixi/display';
 import { Point } from '@pixi/math';
-import { raceData } from 'config/raceConfig';
+import { raceData } from 'config/buildConfig';
 import { DescType, descType, Skill, TipsTextType } from '../types';
 
 export function onDragStart(this: any, event: any) {
@@ -344,13 +344,15 @@ export const getTwoPointCenter = (p1: Point, p2: Point): Point => {
   return new Point(x, y);
 };
 
-export const getSpriteRes = (race: number, resId: string, index: number) => {
-  if (!resId || Number(resId) === 99) {
-    return `/assets/modal/${race}/${1}-${index}.png`;
-  }
-  const info = raceData[race].children.find(item => item.id === Number(resId));
-  const img = index === 1 ? info?.thumb1 : info?.thumb2;
-  return img || `/assets/modal/${race}/${resId}-${index}.png`;
+export const getBuilderSpriteRes = (race: number, resId: string | number) => {
+  return `/assets/buildings/${race}/${resId}.png`;
+};
+
+export const getBuildingOfRaceAndIndex = (
+  race: number,
+  resId: string | number,
+): undefined | { name: string; desc: string } => {
+  return raceData[race]?.[resId];
 };
 
 export const getSpriteName = (race: number, resId: string) => {

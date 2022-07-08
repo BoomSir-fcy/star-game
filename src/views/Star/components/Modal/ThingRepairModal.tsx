@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Flex, Button, Text } from 'uikit';
 import ModalWrapper from 'components/Modal';
 import { Api } from 'apis';
+import { getBuilderSpriteRes } from 'building/core/utils';
 
 import { useTranslation } from 'contexts/Localization';
 
@@ -52,7 +53,12 @@ export const ThingRepairModal: React.FC<{
       <Box padding='30px 25px'>
         <Flex alignItems='flex-start'>
           {typeof planet_id !== 'object' && (
-            <GameThing src={itemData?.picture} scale='lg' border />
+            <GameThing
+              src={getBuilderSpriteRes(itemData?.race, `${itemData?.index}`)}
+              // src={itemData?.picture}
+              scale='lg'
+              border
+            />
           )}
           <Flex
             flex='1'

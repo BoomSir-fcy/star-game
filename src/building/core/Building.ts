@@ -505,7 +505,7 @@ class Building extends EventTarget {
     list?.forEach(item => {
       this.createBuilder(item.position.from.x, item.position.from.y, {
         building: item.building,
-        src: item.building.picture,
+        src: `${item.building.index}`,
         id: `${item.building._id}`,
         race: item.building.race,
         areaX: item.building.propterty.size.area_x,
@@ -524,7 +524,7 @@ class Building extends EventTarget {
     list.forEach(item => {
       this.createBuilder(item.position.from.x, item.position.from.y, {
         building: item.building,
-        src: item.building.picture,
+        src: `${item.building.index}`,
         id: `${item.building._id}`,
         race: item.building.race,
         areaX: item.building.propterty.size.area_x,
@@ -550,7 +550,7 @@ class Building extends EventTarget {
       } else {
         this.createBuilder(item.position.from.x, item.position.from.y, {
           building: item.building,
-          src: item.building.picture,
+          src: `${item.building.index}`,
           id: `${item.building._id}`,
           race: item.building.race,
           areaX: item.building.propterty.size.area_x,

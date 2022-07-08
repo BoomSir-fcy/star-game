@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useStore, storeAction } from 'state';
 import { Box, Flex, MarkText, Image, Text } from 'uikit';
+import { getBuilderSpriteRes } from 'building/core/utils';
 import { useTranslation } from 'contexts/Localization';
 import { setNavZIndex } from 'state/userInfo/reducer';
 import { QueueBuilding } from './queueBuilding';
@@ -72,6 +73,8 @@ export const PlanetQueue: React.FC<{
     (v, i) => i,
   );
 
+  console.log(currentQueue);
+
   return (
     <Layout>
       <MarkText mb='24px' fontSize='20px' bold>
@@ -101,7 +104,10 @@ export const PlanetQueue: React.FC<{
               <>
                 <QueueBox>
                   <Image
-                    src={currentQueue[index]?.work_build_picture}
+                    src={getBuilderSpriteRes(
+                      currentQueue[index]?.building?.race,
+                      currentQueue[index]?.building?.index,
+                    )}
                     width={95}
                     height={95}
                   />

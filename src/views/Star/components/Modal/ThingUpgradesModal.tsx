@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Box, Flex, Input, Button, Text, Image } from 'uikit';
 import ModalWrapper from 'components/Modal';
 import { useTranslation } from 'contexts/Localization';
-
+import { getBuildingOfRaceAndIndex } from 'building/core/utils';
 import { useStore } from 'state';
 import { TextList } from './TextList';
 import { ThingaddBlood, GameThing, ThingRepair } from '..';
@@ -78,7 +78,15 @@ export const ThingUpgradesModal: React.FC<{
     >
       <Box padding='30px 25px'>
         <Flex alignItems='center'>
-          <Text shadow='primary'>{building_detail?.propterty?.name_en}</Text>
+          <Text shadow='primary'>
+            {/* {building_detail?.propterty?.name_en} */}
+            {
+              getBuildingOfRaceAndIndex(
+                building_detail?.race,
+                building_detail?.index,
+              )?.name
+            }
+          </Text>
           <Text ml='27px' small>
             {`${building_detail?.propterty?.size.area_x}x${building_detail?.propterty?.size.area_y}`}
           </Text>

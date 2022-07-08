@@ -5,6 +5,7 @@ import { Flex, Box, Button, Image, Text, MarkText } from 'uikit';
 import { useStore, storeAction } from 'state';
 import { useTranslation } from 'contexts/Localization';
 import { BuildingDetailType } from 'state/types';
+import { getBuilderSpriteRes } from 'building/core/utils';
 import { useDispatch } from 'react-redux';
 import {
   fetchUserBalanceAsync,
@@ -211,7 +212,10 @@ export const SideRightBuildingInfo: React.FC<{
           <Box padding='20px'>
             <Flex mb='15px' alignItems='flex-start'>
               <GameThing
-                src={currentAttributes?.picture}
+                src={getBuilderSpriteRes(
+                  currentAttributes.race,
+                  `${currentAttributes.index}`,
+                )}
                 level={
                   estimate?._id
                     ? currentAttributes?.propterty?.levelEnergy
@@ -227,10 +231,12 @@ export const SideRightBuildingInfo: React.FC<{
               >
                 <Flex flexDirection='column' ml='19px' flex={1}>
                   <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
-                    {getBuildings()?.name ||
-                      currentAttributes?.propterty?.name_cn}
+                    {t(
+                      getBuildings()?.name ||
+                        currentAttributes?.propterty?.name_cn,
+                    )}
                   </MarkText>
-                  <Text color='textSubtle'>{getBuildings()?.desc}</Text>
+                  <Text color='textSubtle'>{t(getBuildings()?.desc)}</Text>
                 </Flex>
                 <Destory
                   variant='text'

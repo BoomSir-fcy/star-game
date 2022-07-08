@@ -6,7 +6,10 @@ import { Flex, Box, Card, Text, Image, Button, Progress } from 'uikit';
 import { useToast } from 'contexts/ToastsContext';
 import { useStore, storeAction } from 'state';
 import { Api } from 'apis';
-
+import {
+  getBuilderSpriteRes,
+  getBuildingOfRaceAndIndex,
+} from 'building/core/utils';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useTranslation } from 'contexts/Localization';
@@ -263,7 +266,11 @@ export const GameInfo: React.FC<{
             <CardContent>
               <Flex alignItems='flex-start'>
                 <GameThing
-                  src={currentAttributes?.picture}
+                  // src={currentAttributes?.picture}
+                  src={getBuilderSpriteRes(
+                    currentAttributes.race,
+                    `${currentAttributes.index}`,
+                  )}
                   level={currentAttributes?.propterty?.levelEnergy}
                   scale='md'
                   border
@@ -276,8 +283,14 @@ export const GameInfo: React.FC<{
                   >
                     <Flex alignItems='flex-end'>
                       <Text bold shadow='primary'>
-                        {currentAttributes?.propterty?.name_cn ||
-                          itemData?.propterty?.name_cn}
+                        {/* {currentAttributes?.propterty?.name_cn ||
+                          itemData?.propterty?.name_cn} */}
+                        {
+                          getBuildingOfRaceAndIndex(
+                            currentAttributes?.race || itemData?.race,
+                            currentAttributes?.index || itemData?.index,
+                          )?.name
+                        }
                       </Text>
                       <Text ml='27px' small>
                         {`${

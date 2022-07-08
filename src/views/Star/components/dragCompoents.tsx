@@ -23,6 +23,10 @@ import { GameInfo, GameThing, Building, Queue } from './gameModel';
 import { ThingRepairModal } from './Modal';
 import { BuffBonus } from './buff';
 import { useBuffer, useWorkqueue } from './hooks';
+import {
+  getBuilderSpriteRes,
+  getBuildingOfRaceAndIndex,
+} from 'building/core/utils';
 
 polyfill({
   dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
@@ -967,8 +971,11 @@ export const DragCompoents: React.FC<{
                         scale='sm'
                         round
                         itemData={row}
-                        src={row.picture}
-                        text={row?.propterty.name_cn}
+                        src={getBuilderSpriteRes(row.race, `${row.index}`)}
+                        text={
+                          getBuildingOfRaceAndIndex(row.race, `${row.index}`)
+                            ?.name
+                        }
                       />
                     </BuildingsItem>
                   ),
