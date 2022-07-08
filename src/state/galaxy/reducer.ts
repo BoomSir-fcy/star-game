@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppThunk, GalaxyState } from 'state/types';
+import BigNumber from 'bignumber.js';
+import { AppThunk, GalaxyInfo, GalaxyState } from 'state/types';
 import {
   fetchAllLogs,
   fetchAuctionRecordList,
   fetchGalaxyList,
   fetchGalaxyStarList,
   fetchGetNftView,
+  fetchGetNftViewList,
   fetchOwnerInfo,
 } from './fetchers';
 import { getGalaxyIncoming, sliceByLevels } from './util';
@@ -22,6 +24,7 @@ export const initialState: GalaxyState = {
     starTotal: 0,
     starOwnerTotal: 0,
     nickname: '',
+    power: 0,
   },
   currentStarPeriod: { id: 0, label: '', levels: [] },
   galaxyNft: {
@@ -44,6 +47,7 @@ export const initialState: GalaxyState = {
   },
   galaxy_total_box: 0,
   planet_total_box: 0,
+  galaxyNftList: [],
 };
 
 export const fetchGalaxyListAsync = (): AppThunk => async dispatch => {
@@ -76,6 +80,13 @@ export const fetchGetNftViewAsync =
   async dispatch => {
     const nft = await fetchGetNftView(tokenId);
     dispatch(setGalaxyNft(nft));
+  };
+
+export const fetchGetNftViewListAsync =
+  (List: GalaxyInfo[]): AppThunk =>
+  async dispatch => {
+    const list = await fetchGetNftViewList(List);
+    dispatch(setGalaxyNftList(list));
   };
 
 export const fetchAuctionRecordListAsync =
@@ -135,6 +146,13 @@ export const galaxySlice = createSlice({
       const { payload } = action;
       state.galaxyNft = payload;
     },
+    setGalaxyNftList: (state, action) => {
+      const { payload } = action;
+      for (let i = 0; i < payload.length; i++) {
+        state.galaxyNftList[new BigNumber(payload[i].id).toNumber()] =
+          payload[i];
+      }
+    },
     setAuctionRecordList: (state, action) => {
       const { payload } = action;
       state.auctionRecordList = payload;
@@ -166,6 +184,7 @@ export const {
   setAuctionRecordList,
   setAllLogsList,
   setOwnerInfo,
+  setGalaxyNftList,
 } = galaxySlice.actions;
 
 export default galaxySlice.reducer;

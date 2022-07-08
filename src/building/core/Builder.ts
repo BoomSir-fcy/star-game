@@ -8,6 +8,7 @@ import { Container } from '@pixi/display';
 import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
 import Matrix4 from './Matrix4';
+import { getBuilderSpriteRes } from './utils';
 
 export interface BuilderOption {
   src?: string;
@@ -36,14 +37,16 @@ class Builder extends EventTarget {
     } = option;
     this.id = id;
 
-    const img = `${window.location.origin}/assets/buildings/${race}/${
-      src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
-    }`;
+    // const img = `${window.location.origin}/assets/buildings/${race}/${
+    //   src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
+    // }`;
 
-    this.src = img;
+    this.src = getBuilderSpriteRes(race, src);
     this.areaY = areaY;
     this.areaX = areaX;
-    this.texture = Texture.from(img);
+
+    console.log(this.src);
+    this.texture = Texture.from(this.src);
 
     this.enableDrag = Boolean(enableDrag);
 

@@ -33,8 +33,9 @@ const TextStyle = styled(Text)`
 const FlexStyle = styled(Flex)``;
 
 export const PkBox: React.FC<{
+  First: boolean;
   info: PlunderInfo;
-}> = ({ info }) => {
+}> = ({ First, info }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
@@ -88,7 +89,7 @@ export const PkBox: React.FC<{
   }, [isFrom, info.success]);
 
   return (
-    <CardBox>
+    <CardBox className={First ? 'battle-items-0' : ''}>
       <Flex>
         <PkResult result={pkRes} />
         <Flex
@@ -126,48 +127,6 @@ export const PkBox: React.FC<{
         >
           <PlayImg src='/images/battleReport/play.png' alt='' />
         </Link>
-        {/* <Flex ml='29px' flex='1' flexDirection='column'>
-          <Flex alignItems='center' justifyContent='space-between'>
-            <Text fontSize='20px'>
-              {dayjs.unix(info.createTime).format('YY-MM-DD HH:mm:ss')}
-            </Text>
-            <Link
-              onClick={event => {
-                try {
-                  console.log(parseZip(info.detail), 'parseZip(info.detail)');
-                  dispatch(setPKInfo(parseZip(info.detail)));
-                  dispatch(setPKRes(pkRes));
-                } catch (error) {
-                  event.preventDefault();
-                  console.log('解析报错');
-                  console.error(error);
-                }
-              }}
-              to={`/plunder-pk?id=${info.id}&pid0=${
-                !isFrom ? info.fromAddress : info.toAddress
-              }`}
-            >
-              <PlayImg src='/images/battleReport/play.png' alt='' />
-            </Link>
-          </Flex>
-          <Flex flexWrap='wrap' height='100%' alignItems='stretch'>
-            {BoxList.map((item, index) => (
-              <Flex width='50%' key={item.title}>
-                <Image src={item.img} width={54} height={55} />
-                <Box ml='24px'>
-                  <Text fontSize='18px'>{item.title}</Text>
-                  <Text
-                    fontSize='20px'
-                    shadow={index < 2 ? 'green' : 'secondary'}
-                  >
-                    {index < 2 ? '+ ' : ''}
-                    {item.num || 0}
-                  </Text>
-                </Box>
-              </Flex>
-            ))}
-          </Flex>
-        </Flex> */}
       </Flex>
       <Box>
         <TextStyle mb='8px'>{t('Battle Losses')} :</TextStyle>

@@ -5,7 +5,9 @@ import Building from 'building/core/Building';
 import Builder from 'building/core/Builder';
 import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, Image, Text } from 'uikit';
+import { getBuilderSpriteRes } from 'building/core/utils';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'contexts/Localization';
 import { setNavZIndex } from 'state/userInfo/reducer';
 import { raceData } from 'config/buildConfig';
 import { GameThing } from '../gameModel';
@@ -151,7 +153,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
     ) => {
       event.preventDefault();
       const builder = new Builder({
-        src: item.picture,
+        src: `${item.index}`,
         id: `${item._id}`,
         building: item,
         race,
@@ -176,7 +178,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   // 上阵
   const handleGoIntoBattle = (item: Api.Building.Building) => {
     const option = {
-      src: item.picture,
+      src: `${item.index}`,
       id: `${item._id}`,
       building: item,
       race,
@@ -190,11 +192,13 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
 
   const getBuildings = React.useCallback(
     index => {
-      const build = raceData[race][index] || { name: '' };
+      const build = raceData[race]?.[index];
       return build;
     },
     [race],
   );
+
+  const { t } = useTranslation();
 
   return (
     <Container>
@@ -223,14 +227,15 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
           {(buildings[1] ?? []).map(
             (row: Api.Building.Building, index: number) => (
               <BuildingsItem key={row.buildings_number}>
+                {/* <Text>{getBuildings(row.index)?.name}</Text> */}
                 <GameThing
                   className={index === 0 && 'guide_step_6'}
                   scale='sm'
                   round
                   itemData={row}
                   level={row.propterty.levelEnergy}
-                  src={row.picture}
-                  text={getBuildings(row.index)?.name}
+                  src={getBuilderSpriteRes(race, `${row.index}`)}
+                  text={t(getBuildings(row.index)?.name)}
                   onClick={event => {
                     event.preventDefault();
                     event.stopPropagation();

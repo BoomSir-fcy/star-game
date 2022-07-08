@@ -1,26 +1,38 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'state';
-import { useGalaxyList } from 'state/galaxy/hooks';
-import { Text, Flex, Box } from 'uikit';
+import { useGalaxyList, useGalaxyNftArr } from 'state/galaxy/hooks';
+import { Text, Flex, Box, MarkText } from 'uikit';
 import { useDispatch } from 'react-redux';
 import {
   fetchGalaxyListAsync,
   fetchGalaxyStarListAsync,
   setCurrentGalaxy,
 } from 'state/galaxy/reducer';
-import { GalaxyImg, GalaxyInfoBox, ItemGalaxyBox } from 'views/NewGalaxy/style';
+import {
+  GalaxyImg,
+  GalaxyInfoBox,
+  GalaxyItemInfo,
+  GalaxyItemInfoTitle,
+  ItemGalaxyBox,
+} from 'views/NewGalaxy/style';
+import { getFullDisplayBalance } from 'utils/formatBalance';
+import BigNumber from 'bignumber.js';
 import { GalaxyInfo } from 'state/types';
+import { useTranslation } from 'contexts/Localization';
 import InfoModule from './InfoModule';
 import OccupiedModul from './OccupiedModul';
 
 const GalaxyInfoIndex: React.FC = () => {
   useGalaxyList();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const { galaxyList, currentGalaxy, loadingGalaxy } = useStore(p => p.galaxy);
+  const { galaxyList, galaxyNftList } = useStore(p => p.galaxy);
   const [OpenInfo, setOpenInfo] = useState(false);
   const [ShowListModule, setShowListModule] = useState(false);
   const [ActiveGalaxy, setActiveGalaxy] = useState(0);
+
+  useGalaxyNftArr(galaxyList);
 
   const ChangeActiveGalaxy = useCallback(
     (item: GalaxyInfo) => {
@@ -33,6 +45,11 @@ const GalaxyInfoIndex: React.FC = () => {
     },
     [ActiveGalaxy, dispatch],
   );
+
+  const GetCurrentPrice = useCallback(currentPrice => {
+    const price = getFullDisplayBalance(new BigNumber(currentPrice), 18, 6);
+    return Number(price) ? price : 0;
+  }, []);
 
   useEffect(() => {
     if (galaxyList.length) {
@@ -183,6 +200,28 @@ const GalaxyInfoIndex: React.FC = () => {
                 setShowListModule(true);
               }}
             >
+              <GalaxyItemInfo>
+                <GalaxyItemInfoTitle stripe isRadius>
+                  <Flex justifyContent='center'>
+                    <Text small>{item.name}</Text>
+                  </Flex>
+                </GalaxyItemInfoTitle>
+                <Flex mb='6px' justifyContent='space-between'>
+                  <Text small>{t('Galaxy Lord')}</Text>
+                  <MarkText fontSize='14px'>{item.nickname}</MarkText>
+                </Flex>
+                <Flex mb='6px' justifyContent='space-between' flexWrap='wrap'>
+                  <Text small>{t('Current Price')} BNB</Text>
+                  <MarkText fontSize='14px'>
+                    {GetCurrentPrice(galaxyNftList[item.id]?.currentPrice) ||
+                      '---'}
+                  </MarkText>
+                </Flex>
+                <Flex mb='6px' justifyContent='space-between'>
+                  <Text small>{t('Total Galaxy CE')}</Text>
+                  <MarkText fontSize='14px'>{item.power}</MarkText>
+                </Flex>
+              </GalaxyItemInfo>
               <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />
             </ItemGalaxyBox>
           ))}

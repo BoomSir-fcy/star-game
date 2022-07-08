@@ -1,7 +1,10 @@
 import React from 'react';
 import { Box, Flex, Button, Text, Image } from 'uikit';
 import { useStore } from 'state';
-
+import {
+  getBuilderSpriteRes,
+  getBuildingOfRaceAndIndex,
+} from 'building/core/utils';
 import { useTranslation } from 'contexts/Localization';
 
 import ModalWrapper from 'components/Modal';
@@ -24,11 +27,25 @@ export const ThingDestoryModal: React.FC<{
     >
       <Box padding='30px 25px'>
         <Flex>
-          <GameThing src={destory?.destory?.picture} scale='lg' border />
+          <GameThing
+            src={getBuilderSpriteRes(
+              destory?.destory?.race,
+              `${destory?.destory?.index}`,
+            )}
+            // src={destory?.destory?.picture}
+            scale='lg'
+            border
+          />
           <Flex ml='23px' justifyContent='space-between' flexDirection='column'>
             <Box>
               <Text shadow='primary' bold>
-                {destory?.destory?.propterty?.name_en}
+                {/* {destory?.destory?.propterty?.name_en} */}
+                {
+                  getBuildingOfRaceAndIndex(
+                    destory?.destory?.race,
+                    destory?.destory?.index,
+                  )?.name
+                }
               </Text>
               <Text color='textSubtle' mt='22px' small>
                 {t('planetDetailsTypeEffect')}

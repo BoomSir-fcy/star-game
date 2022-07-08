@@ -92,6 +92,7 @@ export const GameThing: React.FC<{
   src?: string;
   level?: number;
   text?: string;
+  desc?: string;
   active?: boolean;
   border?: boolean;
   round?: boolean;
