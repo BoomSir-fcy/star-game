@@ -195,7 +195,7 @@ export const GameThing: React.FC<{
           height={36}
           position='absolute'
           left='0'
-          bottom={36}
+          bottom={text ? 36 : 0}
           onClick={() => {
             onAddClick();
           }}

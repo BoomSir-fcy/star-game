@@ -7,6 +7,7 @@ import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, Image, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
 import { setNavZIndex } from 'state/userInfo/reducer';
+import { raceData } from 'config/buildConfig';
 import { GameThing } from '../gameModel';
 import { useActiveBuilder } from '../../detailHooks';
 
@@ -161,7 +162,6 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       });
       setMoving(true);
       building?.addDragPreBuilder(builder);
-      console.log(111, building);
     },
     [building, race],
   );
@@ -187,6 +187,14 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
     };
     building?.addDragPreBuilderApp(option);
   };
+
+  const getBuildings = React.useCallback(
+    index => {
+      const build = raceData[race][index];
+      return build;
+    },
+    [race],
+  );
 
   return (
     <Container>
@@ -222,7 +230,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                   itemData={row}
                   level={row.propterty.levelEnergy}
                   src={row.picture}
-                  text={row?.propterty.name_cn}
+                  text={getBuildings(row.index)?.name}
                   onClick={event => {
                     event.preventDefault();
                     event.stopPropagation();

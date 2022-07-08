@@ -10,6 +10,7 @@ import {
   fetchUserBalanceAsync,
   fetchUserProductAsync,
 } from 'state/userInfo/reducer';
+import { raceData } from 'config/buildConfig';
 import { BuildingValue, GameThing } from '../gameModel';
 import { useBuildingUpgrade } from '../gameModel/hooks';
 import { BuildingUpgrade } from './buildingUpgrade';
@@ -110,14 +111,17 @@ export const SideRightBuildingInfo: React.FC<{
     },
     estimate_building_detail: {},
   });
-  const currentAttributes = upgradeInfo?.building_detail?._id
-    ? {
-        ...upgradeInfo?.building_detail,
-        isbuilding: itemData?.isbuilding,
-        _id: itemData?._id,
-      }
-    : itemData;
+
   const estimate = upgradeInfo?.estimate_building_detail || {};
+  const currentAttributes = React.useMemo(() => {
+    return upgradeInfo?.building_detail?._id
+      ? {
+          ...upgradeInfo?.building_detail,
+          isbuilding: itemData?.isbuilding,
+          _id: itemData?._id,
+        }
+      : itemData;
+  }, [upgradeInfo, itemData]);
 
   const init = React.useCallback(
     async (target_level?: number) => {
@@ -155,6 +159,11 @@ export const SideRightBuildingInfo: React.FC<{
     },
     [workQueue, itemData?._id, upgrade, planet_id, buildingsId],
   );
+
+  const getBuildings = React.useCallback(() => {
+    const build = raceData[currentAttributes?.race][currentAttributes?.index];
+    return build;
+  }, [currentAttributes]);
 
   React.useEffect(() => {
     if (itemData?.isbuilding) {
@@ -218,14 +227,10 @@ export const SideRightBuildingInfo: React.FC<{
               >
                 <Flex flexDirection='column' ml='19px' flex={1}>
                   <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
-                    {currentAttributes?.propterty?.name_cn}
+                    {getBuildings()?.name ||
+                      currentAttributes?.propterty?.name_cn}
                   </MarkText>
-                  {currentAttributes.detail_type ===
-                    BuildingDetailType.BuildingDetailTypeStore && (
-                    <Text color='textSubtle'>
-                      {t('planetResourcesProducedPlanetaryBuildings')}
-                    </Text>
-                  )}
+                  <Text color='textSubtle'>{getBuildings()?.desc}</Text>
                 </Flex>
                 <Destory
                   variant='text'
