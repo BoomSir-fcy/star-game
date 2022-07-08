@@ -96,6 +96,7 @@ export const GameThing: React.FC<{
   border?: boolean;
   round?: boolean;
   draggable?: boolean;
+  className?: string;
   onClick?: (event) => void;
   onAddClick?: () => void;
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -114,6 +115,7 @@ export const GameThing: React.FC<{
   border,
   round,
   draggable,
+  className,
   onClick,
   onAddClick,
   onDragStart,
@@ -126,7 +128,12 @@ export const GameThing: React.FC<{
   const sizeBox = scaleVariants[scale];
 
   return (
-    <Flex justifyContent='center' flexDirection='column'>
+    <Flex
+      position='relative'
+      className={className}
+      justifyContent='center'
+      flexDirection='column'
+    >
       <Container
         isRadius
         stripe
@@ -168,7 +175,16 @@ export const GameThing: React.FC<{
         )}
       </Container>
       {text && (
-        <MarkText mt='12px' bold small textAlign='center' fontStyle='normal'>
+        <MarkText
+          mt='12px'
+          bold
+          small
+          textAlign='center'
+          fontStyle='normal'
+          ellipsis
+          pl='0'
+          width={sizeBox.width}
+        >
           {text}
         </MarkText>
       )}
@@ -179,9 +195,8 @@ export const GameThing: React.FC<{
           height={36}
           position='absolute'
           left='0'
-          bottom={36}
+          bottom={text ? 36 : 0}
           onClick={() => {
-            console.log(66666);
             onAddClick();
           }}
         >

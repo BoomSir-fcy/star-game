@@ -37,6 +37,12 @@ export class GameApi extends Http {
     return this.get('test/simulatewar/pk', { tag, max_round, terrain_id });
   }
 
+  async getAllUnitList(
+    race: number,
+  ): Promise<Api.Response<Api.Game.UnitListRes>> {
+    return this.get('game/unit/simulation/list', { race });
+  }
+
   // 获取地形
   async Gameterrain() {
     return this.get('game/war/terrain');

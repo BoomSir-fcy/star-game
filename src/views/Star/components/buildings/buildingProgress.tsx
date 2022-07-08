@@ -27,19 +27,23 @@ export const BuildingProgress: React.FC<{
                 {formatDisplayApr(new BigNumber(value).toNumber())}
               </Text>
             </Flex>
-            <Text
-              color={`${nextValue >= 0 ? 'progressGreenBar' : 'textDanger'}`}
-            >
-              {t('Next Lv. ', {
-                value: nextValue
-                  ? nextValue > 0
-                    ? `+${formatDisplayApr(
-                        new BigNumber(nextValue).toNumber(),
-                      )}`
-                    : `${formatDisplayApr(new BigNumber(nextValue).toNumber())}`
-                  : 0,
-              })}
-            </Text>
+            {Boolean(nextValue) && (
+              <Text
+                color={`${nextValue >= 0 ? 'progressGreenBar' : 'textDanger'}`}
+              >
+                {t('Next Lv. ', {
+                  value: nextValue
+                    ? nextValue > 0
+                      ? `+${formatDisplayApr(
+                          new BigNumber(nextValue).toNumber(),
+                        )}`
+                      : `${formatDisplayApr(
+                          new BigNumber(nextValue).toNumber(),
+                        )}`
+                    : 0,
+                })}
+              </Text>
+            )}
           </Flex>
         </Flex>
         <Progress

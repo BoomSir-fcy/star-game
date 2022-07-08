@@ -16,6 +16,7 @@ import {
 import { useToast } from 'contexts/ToastsContext';
 import { fetchUserInfoByAccountAsync } from 'state/userInfo/reducer';
 import { useTranslation } from 'contexts/Localization';
+import { TokenImage } from 'components/TokenImage';
 import { Api } from 'apis';
 
 import { useStore } from 'state';
@@ -236,18 +237,14 @@ const VipPage = () => {
                     'You are not yet a VIP, you can get more benefits after upgrading to VIP',
                   )}
                 </TextBox>
-                <TextBox fontSize='16px'>
-                  {t('Expire on')}
-                  {user?.vipBenefits?.is_vip
-                    ? dayjs(user?.vipBenefits?.expired_time * 1000).format(
-                        'YYYY.MM.DD',
-                      )
-                    : dayjs(
-                        (Number((new Date().getTime() / 1000).toFixed(0)) +
-                          state.list[0]?.vipDuration) *
-                          1000,
-                      ).format('YYYY.MM.DD')}
-                </TextBox>
+                {user?.vipBenefits?.is_vip && (
+                  <TextBox fontSize='16px'>
+                    {t('Expire on')}
+                    {dayjs(user?.vipBenefits?.expired_time * 1000).format(
+                      'YYYY.MM.DD',
+                    )}
+                  </TextBox>
+                )}
               </Flex>
             </Flex>
             <Content>
@@ -268,7 +265,7 @@ const VipPage = () => {
                   </Text>
                 </Items>
                 <Items>
-                  <Text shadow='primary' small>
+                  <Text shadow='primary' small textAlign='center'>
                     {t('Simultaneous jobs (upgrades/builds)')}
                   </Text>
                 </Items>
@@ -331,10 +328,32 @@ const VipPage = () => {
                 );
               })}
             </Content>
+            {!user?.vipBenefits?.is_vip && (
+              <Flex alignItems='center' justifyContent='center' mt='10px'>
+                <TokenImage width={30} height={30} tokenAddress='BNB' />
+                <Text margin='0 10px' fontSize='22px'>
+                  BNB
+                </Text>
+                <Text shadow='primary' fontSize='22px'>
+                  $ {state.list?.[0]?.vipPrice}
+                </Text>
+              </Flex>
+            )}
             <Flex justifyContent='center'>
-              <Submit variant='purple' onClick={debounce(() => buyVip(), 1000)}>
-                <Text bold fontSize='16px' color='#4FFFFB'>
-                  {t('Become VIP')}
+              <Submit
+                variant='purple'
+                disabled={user?.vipBenefits?.is_vip}
+                onClick={debounce(() => buyVip(), 1000)}
+              >
+                <Text
+                  bold
+                  fontSize='16px'
+                  color='#4FFFFB'
+                  textTransform='capitalize'
+                >
+                  {user?.vipBenefits?.is_vip
+                    ? t('you have become a VIP')
+                    : t('Become VIP')}
                 </Text>
               </Submit>
             </Flex>

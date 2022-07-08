@@ -3,23 +3,18 @@ import classNames from 'classnames';
 import styled from 'styled-components';
 import Building from 'building/core/Building';
 import Builder from 'building/core/Builder';
-import { polyfill } from 'mobile-drag-drop';
-import { scrollBehaviourDragImageTranslateOverride } from 'mobile-drag-drop/scroll-behaviour';
 import { useStore, storeAction } from 'state';
 import { Flex, Box, Button, Image, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
 import { setNavZIndex } from 'state/userInfo/reducer';
+import { raceData } from 'config/buildConfig';
 import { GameThing } from '../gameModel';
 import { useActiveBuilder } from '../../detailHooks';
-
-polyfill({
-  dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
-});
 
 const Container = styled(Box)`
   position: fixed;
   top: 0;
-  left: -15px;
+  left: -18px;
   height: 100%;
   z-index: 199;
 `;
@@ -37,7 +32,7 @@ const SideCloseButton = styled(Button)`
     transform: rotate(180deg) !important;
   }
 `;
-const Content = styled(Box)`
+const Content = styled(Box)<{ animation?: boolean }>`
   position: absolute;
   top: 0;
   width: 294px;
@@ -49,8 +44,9 @@ const Content = styled(Box)`
   &.active {
     opacity: 1;
     left: 0;
-    animation: bounceSideInLeft 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
-      alternate forwards;
+    animation: ${({ animation }) =>
+      animation &&
+      'bounceSideInLeft 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 alternate forwards'};
   }
   &.removeActive {
     animation: bounceSideInRight 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1
@@ -83,27 +79,10 @@ const ScrollView = styled(Flex)`
 `;
 
 const BuildingsItem = styled(Box)`
-  position: relative;
+  min-width: 0;
+  max-width: 48%;
   margin-right: 20px;
   margin-bottom: 15px;
-  &.active {
-    .game-thing {
-      background-color: #000;
-      &::after {
-        position: absolute;
-        display: block;
-        content: '';
-        top: -2px;
-        left: -2px;
-        width: calc(100% + 4px);
-        height: calc(100% + 4px);
-        border-radius: 10px;
-        border: 2px solid #fff;
-        box-shadow: ${({ theme }) => theme.shadows.highlight};
-        z-index: 5;
-      }
-    }
-  }
   &:nth-child(2n) {
     margin-right: 0;
   }
@@ -113,13 +92,17 @@ interface SideLeftContentProps {
   building: Building;
   race: number;
   sideRightStatus: boolean;
+  animation: boolean;
   onPreview: (val) => void;
+  onChangeGuide: () => void;
 }
 export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   building,
   race,
   sideRightStatus,
+  animation,
   onPreview,
+  onChangeGuide,
 }) => {
   const dispatch = useDispatch();
   const activeBuilder = useActiveBuilder(building);
@@ -127,11 +110,12 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   const buildings = useStore(p => p.buildling.buildings);
 
   const close = React.useCallback(() => {
+    if (!animation) return;
     if (!activeBuilder?.id && queueStore.visible && !sideRightStatus) {
       dispatch(setNavZIndex(true));
       dispatch(storeAction.queueVisbleSide(false));
     }
-  }, [activeBuilder, dispatch, queueStore.visible, sideRightStatus]);
+  }, [activeBuilder, dispatch, queueStore.visible, sideRightStatus, animation]);
 
   React.useEffect(() => {
     if (!sideRightStatus) {
@@ -178,7 +162,6 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       });
       setMoving(true);
       building?.addDragPreBuilder(builder);
-      console.log(111, building);
     },
     [building, race],
   );
@@ -205,9 +188,18 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
     building?.addDragPreBuilderApp(option);
   };
 
+  const getBuildings = React.useCallback(
+    index => {
+      const build = raceData[race][index];
+      return build;
+    },
+    [race],
+  );
+
   return (
     <Container>
       <Content
+        animation={animation}
         className={classNames(queueStore.visible ? 'active' : 'removeActive')}
       >
         <SideCloseButton
@@ -230,29 +222,27 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
         <ScrollView>
           {(buildings[1] ?? []).map(
             (row: Api.Building.Building, index: number) => (
-              <BuildingsItem
-                key={row.buildings_number}
-                className={classNames(`building_${index}`)}
-              >
-                {/* <Text>{row.propterty.size.area_x}</Text> */}
+              <BuildingsItem key={row.buildings_number}>
                 <GameThing
+                  className={index === 0 && 'guide_step_6'}
                   scale='sm'
                   round
                   itemData={row}
                   level={row.propterty.levelEnergy}
                   src={row.picture}
-                  text={row?.propterty.name_cn}
+                  text={getBuildings(row.index)?.name}
                   onClick={event => {
                     event.preventDefault();
                     event.stopPropagation();
-                    onPreview(row);
+                    onPreview({ ...row, isPreview: true });
                   }}
                   onPointerDown={e => {
                     dragStartHandle(e, row);
                   }}
                   onAddClick={() => {
-                    console.log(8888);
                     handleGoIntoBattle(row);
+                    onPreview(row);
+                    onChangeGuide();
                   }}
                 />
               </BuildingsItem>

@@ -155,8 +155,8 @@ class Game extends EventTarget {
     return this.loaders;
   }
 
-  creatTerrain(TerrainInfo?: Api.Game.TerrainInfo[]) {
-    this.boards.drawChequers(this.test, TerrainInfo);
+  creatTerrain(col?: number, row?: number) {
+    this.boards.drawChequers(col, row);
     this.boardsCreated = true;
     this.dispatchEvent(new Event('boardsCreated'));
   }
@@ -185,7 +185,8 @@ class Game extends EventTarget {
     this.boards.container.addChild(soldier.container);
     soldier.container
       .on('pointerdown', () => {
-        this.showSameSoliderState(soldier);
+        // this.showSameSoliderState(soldier);
+        soldier.changeState(stateType.ACTIVE, true);
         soldier.setMoved(false);
       })
       .on('pointermove', event => {
@@ -208,6 +209,7 @@ class Game extends EventTarget {
         this.activeSolider = soldier;
         soldier.changeState(stateType.ACTIVE, true);
         this.dispatchEvent(getAddActiveSoliderEvent(soldier));
+        soldier.updateZIndex();
       })
       .on('click', (e: InteractionEvent) => {
         this.activeSoliderFlag = true;

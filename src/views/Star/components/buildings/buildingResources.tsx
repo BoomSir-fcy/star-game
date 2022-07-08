@@ -110,7 +110,7 @@ export const BuildingResources: React.FC<{
           setState(p => {
             p.visible = false;
           });
-          toastSuccess(t('Recharge Succeeded'));
+          toastSuccess(t('Extract Succeeded'));
           onClose();
           dispatch(fetchPlanetInfoAsync([planet_id]));
           dispatch(fetchPlanetBuildingsAsync(planet_id));
@@ -157,7 +157,6 @@ export const BuildingResources: React.FC<{
     [account, dispatch, library, onClose, planet_id, setState, t, toastSuccess],
   );
 
-  console.log(Boolean(estimate), estimate);
   return (
     <Box>
       <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>
@@ -172,7 +171,6 @@ export const BuildingResources: React.FC<{
               title={t('Ore')}
               value={store?.store_stone + store?.charge_stone}
               nextValue={
-                Boolean(estimate?._id) &&
                 estimate?.store?.store_max_stone - store?.store_max_stone
               }
               progressbar={
@@ -188,7 +186,6 @@ export const BuildingResources: React.FC<{
               title={t('Energy')}
               value={store?.store_energy + store?.charge_energy}
               nextValue={
-                Boolean(estimate?._id) &&
                 estimate?.store?.store_max_energy - store?.store_max_energy
               }
               progressbar={
@@ -204,9 +201,8 @@ export const BuildingResources: React.FC<{
               title={t('Population')}
               value={store?.store_population + store?.charge_population}
               nextValue={
-                Boolean(estimate?._id) &&
                 estimate?.store?.store_max_population -
-                  store?.store_max_population
+                store?.store_max_population
               }
               progressbar={
                 ((store?.store_population + store?.charge_population) /

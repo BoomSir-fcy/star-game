@@ -209,12 +209,10 @@ const Pk = () => {
   }, [running, onRunningUpdate, onRunEnd]);
 
   useEffect(() => {
-    if (TerrainInfo?.length) {
-      game.creatTerrain(TerrainInfo[0].terrains);
-    } else {
-      game.creatTerrain([]);
+    if (game) {
+      game.creatTerrain();
     }
-  }, [TerrainInfo, game]);
+  }, [game]);
 
   const location = useLocation();
   const { guides, setGuide } = useGuide(location.pathname);

@@ -98,6 +98,8 @@ const Dashboard: React.FC<DashboardProps> = ({
   const onBackClick = React.useCallback(() => {
     if (hideFooter) {
       navigate('/star/planet');
+    } else {
+      navigate(-1);
     }
   }, [hideFooter, navigate]);
   return (

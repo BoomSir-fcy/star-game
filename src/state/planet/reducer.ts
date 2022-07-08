@@ -5,6 +5,7 @@ import {
   setActiveNavId,
   setActivePlanet,
   setUpgradePlanetId,
+  setAssetsVisible,
 } from './actions';
 
 import { fetchMePlanetAsync, fetchPlanetInfoAsync } from './fetchers';
@@ -12,6 +13,7 @@ import { fetchMePlanetAsync, fetchPlanetInfoAsync } from './fetchers';
 export const initialState: PlanetState = {
   mePlanet: [],
   mePlanetLoading: true,
+  assetsVisibleModal: true,
   planetInfo: {},
   activeMaterialMap: {},
   upgradePlanetId: null,
@@ -54,6 +56,9 @@ export const planet = createSlice({
       })
       .addCase(setUpgradePlanetId, (state, { payload }) => {
         state.upgradePlanetId = payload;
+      })
+      .addCase(setAssetsVisible, (state, { payload }) => {
+        state.assetsVisibleModal = payload;
       })
       .addCase(setActiveNavId, (state, { payload }) => {
         state.activeNavId = payload;

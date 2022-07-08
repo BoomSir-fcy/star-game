@@ -38,13 +38,18 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
           variant='s2-long'
           startIcon={
             <Image
-              width={42}
-              height={42}
+              width={tag === 'm-box1' ? 35 : 40}
+              height={tag === 'm-box1' ? 35 : 40}
               src={`/images/commons/btn/${tag}.png`}
             />
           }
         >
-          <Text fontSize='20px' bold shadow='secondary'>
+          <Text
+            ml={tag === 'm-box1' ? '-0.5rem' : ''}
+            fontSize='20px'
+            bold
+            shadow='secondary'
+          >
             {children}
           </Text>
         </Button>
@@ -63,6 +68,9 @@ const HandleButtonGroup: React.FC<HandleButtonGroupProps> = ({
   return (
     <Flex>
       {/* <RefreshButton mr='22px' onRefresh={onRefresh} /> */}
+      <SecondaryButton href='/change-rate' tag='m-box1'>
+        更改时间倍率
+      </SecondaryButton>
       <SecondaryButton className='tofind' href='/mystery-box' tag='m-box1'>
         {t('Explore').toLocaleUpperCase()}
       </SecondaryButton>

@@ -7,6 +7,7 @@ import { AllianceApi } from './alliance';
 import { BuildingApi } from './Building';
 import { GameApi } from './game';
 import { GuideApi } from './guide';
+import { CommonApi } from './common';
 
 export const Api = {
   isSuccess,
@@ -18,4 +19,5 @@ export const Api = {
   BuildingApi: new BuildingApi(),
   GameApi: new GameApi(),
   GuideApi: new GuideApi(),
+  CommonApi: new CommonApi(),
 };

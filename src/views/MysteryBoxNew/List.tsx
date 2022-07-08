@@ -6,10 +6,10 @@ import {
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Box, Flex, Text, Image, Button, Spinner, Dots } from 'uikit';
 import { ConnectWalletButton, Globe, RaceAvatar } from 'components';
-import styled, { keyframes } from 'styled-components';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { useStore } from 'state';
-import { useNavigate } from 'react-router-dom';
+import { storeAction, useStore } from 'state';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
@@ -18,6 +18,51 @@ import { useJoinAlliance } from 'views/Star/hook';
 import { useToast } from 'contexts/ToastsContext';
 import { useFetchAllianceView } from 'state/alliance/hooks';
 import { useWeb3React } from '@web3-react/core';
+import { useGuide } from 'hooks/useGuide';
+import { Steps } from 'intro.js-react';
+import 'intro.js/introjs.css';
+
+const GlobalStyle = createGlobalStyle<{
+  interactive?: boolean;
+}>`
+  ${({ interactive }) => {
+    return interactive
+      ? `
+    *{
+      pointer-events: none;
+    }
+    .introjs-custom-btn, .introjs-showElement, .introjs-showElement *, .introjs-tooltip, .introjs-tooltip *{
+      pointer-events: auto;
+    }
+    `
+      : '';
+  }};
+`;
+
+const moveKeyframes = keyframes`
+  0% {
+    transform: translate(0, -0);
+    opacity: 1;    
+    
+  }
+  50% {
+    opacity:1;    
+  }
+  100% {
+  transform: translate(100px, -100px);
+  opacity: 1;    
+  
+    
+  }
+`;
+
+const ArrowBox = styled(Box)`
+  opacity: 1;
+  animation: ${moveKeyframes} 2s linear infinite;
+  & img {
+    transform: rotate(90deg);
+  }
+`;
 
 const ContentTweenFrame1 = keyframes`
   0% {
@@ -83,26 +128,27 @@ const LightFrame = keyframes`
     opacity: 0.3;
   }
 `;
+const SPEED = 1;
 const AnimationStar = styled(Box)`
   &.star0 {
-    animation: ${StarFrame} 1.5s cubic-bezier(0.19, -0.54, 0.73, 1.35) 0.1s both;
+    animation: ${StarFrame} 1s cubic-bezier(0.19, -0.54, 0.73, 1.35) 0.1s both;
   }
   &.star1 {
-    animation: ${StarFrame} 1.5s cubic-bezier(0.19, -0.54, 0.73, 1.35) 1.4s both;
+    animation: ${StarFrame} 1s cubic-bezier(0.19, -0.54, 0.73, 1.35) 0.6s both;
   }
   &.star2 {
-    animation: ${StarFrame} 1.5s cubic-bezier(0.19, -0.54, 0.73, 1.35) 2.6s both;
+    animation: ${StarFrame} 1s cubic-bezier(0.19, -0.54, 0.73, 1.35) 1.1s both;
   }
   &.star3 {
-    animation: ${StarFrame} 1.5s cubic-bezier(0.19, -0.54, 0.73, 1.35) 3.9s both;
+    animation: ${StarFrame} 1s cubic-bezier(0.19, -0.54, 0.73, 1.35) 1.6s both;
   }
   &.star4 {
-    animation: ${StarFrame} 1.5s cubic-bezier(0.19, -0.54, 0.73, 1.35) 5s both;
+    animation: ${StarFrame} 1s cubic-bezier(0.19, -0.54, 0.73, 1.35) 2.1s both;
   }
 `;
 const ContentBox = styled(Box)<{ tween?: number }>`
   & .star-desc {
-    animation: ${StarDescFrame} 2s linear 6s both;
+    animation: ${StarDescFrame} 2s linear 3s both;
   }
   & .star-desc-cancel {
     animation: ${StarDescFrame2} 1s linear -1s both;
@@ -134,16 +180,16 @@ const Light = styled(Box)<{ tween?: number }>`
     animation: ${LightFrame} 1s ease-in-out both;
   }
   &.light-1 {
-    animation: ${LightFrame} 1s ease-in-out 1.3s both;
+    animation: ${LightFrame} 1s ease-in-out 0.5s both;
   }
   &.light-2 {
-    animation: ${LightFrame} 1s ease-in-out 2.5s both;
+    animation: ${LightFrame} 1s ease-in-out 1s both;
   }
   &.light-3 {
-    animation: ${LightFrame} 1s ease-in-out 3.7s both;
+    animation: ${LightFrame} 1s ease-in-out 1.5s both;
   }
   &.light-4 {
-    animation: ${LightFrame} 1s ease-in-out 4.9s both;
+    animation: ${LightFrame} 1s ease-in-out 2s both;
   }
 `;
 
@@ -165,6 +211,47 @@ const List = () => {
 
   const planetInfo = useStore(p => p.planet.planetInfo);
   const { order } = useStore(p => p.alliance.allianceView);
+  // 控制是否开启新手指导的
+  const location = useLocation();
+  const { guides, setGuide } = useGuide(location.pathname);
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [activeStep, setActiveStep] = useState(guides.step);
+  const [arrowShow, setArrowShow] = useState(false);
+  const [sleepShow, setSleepShow] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSleepShow(true);
+    }, 3500);
+  }, []);
+
+  const steps = useMemo(() => {
+    if (!order || order?.length <= 0) {
+      return [
+        {
+          element: '.mystery-list-step0',
+          intro: t('GuideMysteryListStep0'),
+        },
+        {
+          element: '.mystery-list-step1',
+          intro: t('GuideMysteryListStep1'),
+          interactive: true,
+        },
+      ];
+    }
+    return [
+      {
+        element: '.mystery-list-step0',
+        intro: t('GuideMysteryListStep0'),
+      },
+    ];
+  }, [t, order]);
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(storeAction.toggleVisible({ visible: false }));
+    };
+  }, [dispatch]);
 
   const planetIds = useMemo(() => {
     return String(paramsQs.i)
@@ -217,14 +304,17 @@ const List = () => {
             variant='purple'
             width='355px'
             height='68px'
+            className='introjs-custom-btn'
+            style={{ position: 'relative', zIndex: 99999999 }}
             onClick={async () => {
+              setArrowShow(false);
               setPending(true);
               try {
                 await SetWorking(planetList.map(v => v.id));
                 toastSuccess(t('Join Succeeded'));
                 setTween(2);
                 setTimeout(() => {
-                  navigate('/plant-league');
+                  navigate('/plant-league', { replace: true });
                 }, 1200);
               } catch (e) {
                 console.error(e);
@@ -248,7 +338,7 @@ const List = () => {
             onClick={() => {
               setTween(1);
               setTimeout(() => {
-                navigate('/star/planet');
+                navigate('/star/planet', { replace: true });
               }, 1200);
             }}
           >
@@ -268,7 +358,7 @@ const List = () => {
         onClick={() => {
           setTween(1);
           setTimeout(() => {
-            navigate('/star/planet');
+            navigate('/star/planet', { replace: true });
           }, 1200);
         }}
       >
@@ -289,8 +379,57 @@ const List = () => {
     t,
   ]);
 
+  const visibleGuide = useMemo(() => {
+    if (planetList?.length > 0 && sleepShow) return true;
+    return false;
+  }, [planetList, sleepShow]);
   return (
     <ContentBox tween={tween} className={tween ? `tween-animation2` : ''}>
+      {visibleGuide &&
+        !guides.guideFinish &&
+        guides.finish &&
+        steps.length - 1 > guides.step && (
+          <>
+            <GlobalStyle
+              interactive={steps[activeStep]?.interactive && stepsEnabled}
+            />
+            <Steps
+              enabled={stepsEnabled}
+              steps={steps}
+              initialStep={guides.step}
+              options={{
+                exitOnOverlayClick: false,
+                tooltipPosition: 'top',
+                scrollPadding: 0,
+              }}
+              onChange={currentStep => {
+                if (currentStep === 1) {
+                  setArrowShow(true);
+                } else {
+                  setArrowShow(false);
+                }
+                if (currentStep > guides.step) {
+                  setGuide(currentStep);
+                }
+              }}
+              onBeforeChange={event => {
+                setActiveStep(event);
+              }}
+              onExit={index => {
+                setStepsEnabled(false);
+                setArrowShow(false);
+                if (index < steps.length - 1) {
+                  dispatch(
+                    storeAction.toggleVisible({
+                      visible: true,
+                      lastStep: steps.length,
+                    }),
+                  );
+                }
+              }}
+            />
+          </>
+        )}
       <MysteryBoxCom
         rotate={0}
         left={0}
@@ -299,7 +438,7 @@ const List = () => {
         quality={quality}
         style={{ opacity: 0.3 }}
       />
-      <Flex justifyContent='space-evenly'>
+      <Flex className='mystery-list-step0' justifyContent='space-evenly'>
         {!planetList?.length && (
           <Flex width='100%' alignItems='center' justifyContent='center'>
             <Spinner />
@@ -354,7 +493,31 @@ const List = () => {
         className={tween ? 'star-desc-cancel' : 'star-desc'}
         mt='139px'
         justifyContent='center'
+        position='relative'
       >
+        <Box
+          className='mystery-list-step1'
+          position='absolute'
+          width='550px'
+          height='268px'
+          left={380}
+          top={-50}
+        />
+        {arrowShow && (
+          <ArrowBox
+            position='absolute'
+            top={100}
+            left={400}
+            width={100}
+            height={100}
+          >
+            <Image
+              width={100}
+              height={100}
+              src='/images/commons/icon/to-arrow-new.png'
+            />
+          </ArrowBox>
+        )}
         {rendeButton}
       </Flex>
     </ContentBox>
