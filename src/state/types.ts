@@ -99,6 +99,7 @@ export interface GalaxyInfo extends Api.Galaxy.GalaxyInfo {
   starTotal: number;
   starOwnerTotal: number;
   nickname: string;
+  power: number;
 }
 
 export interface StarLevelInfo {
@@ -127,6 +128,7 @@ export interface GalaxyState {
   OwnerInfo: OwnerInfoView;
   galaxy_total_box: number;
   planet_total_box: number;
+  galaxyNftList: GalaxyNft[];
 }
 
 export interface OwnerInfoView {

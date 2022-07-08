@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'state';
-import { useGalaxyList } from 'state/galaxy/hooks';
+import { useGalaxyList, useGalaxyNftArr } from 'state/galaxy/hooks';
 import { Text, Flex, Box, MarkText } from 'uikit';
 import { useDispatch } from 'react-redux';
 import {
@@ -15,6 +15,8 @@ import {
   GalaxyItemInfoTitle,
   ItemGalaxyBox,
 } from 'views/NewGalaxy/style';
+import { getFullDisplayBalance } from 'utils/formatBalance';
+import BigNumber from 'bignumber.js';
 import { GalaxyInfo } from 'state/types';
 import InfoModule from './InfoModule';
 import OccupiedModul from './OccupiedModul';
@@ -23,10 +25,12 @@ const GalaxyInfoIndex: React.FC = () => {
   useGalaxyList();
   const dispatch = useDispatch();
 
-  const { galaxyList, currentGalaxy, loadingGalaxy } = useStore(p => p.galaxy);
+  const { galaxyList, galaxyNftList } = useStore(p => p.galaxy);
   const [OpenInfo, setOpenInfo] = useState(false);
   const [ShowListModule, setShowListModule] = useState(false);
   const [ActiveGalaxy, setActiveGalaxy] = useState(0);
+
+  useGalaxyNftArr(galaxyList);
 
   const ChangeActiveGalaxy = useCallback(
     (item: GalaxyInfo) => {
@@ -39,6 +43,11 @@ const GalaxyInfoIndex: React.FC = () => {
     },
     [ActiveGalaxy, dispatch],
   );
+
+  const GetCurrentPrice = useCallback(currentPrice => {
+    const price = getFullDisplayBalance(new BigNumber(currentPrice), 18, 6);
+    return Number(price) ? price : 0;
+  }, []);
 
   useEffect(() => {
     if (galaxyList.length) {
@@ -201,11 +210,14 @@ const GalaxyInfoIndex: React.FC = () => {
                 </Flex>
                 <Flex mb='6px' justifyContent='space-between'>
                   <Text small>价格 BNB</Text>
-                  <MarkText fontSize='14px'>0.054688</MarkText>
+                  <MarkText fontSize='14px'>
+                    {GetCurrentPrice(galaxyNftList[item.id]?.currentPrice) ||
+                      '---'}
+                  </MarkText>
                 </Flex>
                 <Flex mb='6px' justifyContent='space-between'>
                   <Text small>Total Galaxy CE</Text>
-                  <MarkText fontSize='14px'>6523</MarkText>
+                  <MarkText fontSize='14px'>{item.power}</MarkText>
                 </Flex>
               </GalaxyItemInfo>
               <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />
