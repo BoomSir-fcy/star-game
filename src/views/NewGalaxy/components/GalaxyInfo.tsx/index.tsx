@@ -1,14 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'state';
 import { useGalaxyList } from 'state/galaxy/hooks';
-import { Text, Flex, Box } from 'uikit';
+import { Text, Flex, Box, MarkText } from 'uikit';
 import { useDispatch } from 'react-redux';
 import {
   fetchGalaxyListAsync,
   fetchGalaxyStarListAsync,
   setCurrentGalaxy,
 } from 'state/galaxy/reducer';
-import { GalaxyImg, GalaxyInfoBox, ItemGalaxyBox } from 'views/NewGalaxy/style';
+import {
+  GalaxyImg,
+  GalaxyInfoBox,
+  GalaxyItemInfo,
+  GalaxyItemInfoTitle,
+  ItemGalaxyBox,
+} from 'views/NewGalaxy/style';
 import { GalaxyInfo } from 'state/types';
 import InfoModule from './InfoModule';
 import OccupiedModul from './OccupiedModul';
@@ -183,6 +189,25 @@ const GalaxyInfoIndex: React.FC = () => {
                 setShowListModule(true);
               }}
             >
+              <GalaxyItemInfo>
+                <GalaxyItemInfoTitle stripe isRadius>
+                  <Flex justifyContent='center'>
+                    <Text small>{item.name}</Text>
+                  </Flex>
+                </GalaxyItemInfoTitle>
+                <Flex mb='6px' justifyContent='space-between'>
+                  <Text small>星系主</Text>
+                  <MarkText fontSize='14px'>{item.nickname}</MarkText>
+                </Flex>
+                <Flex mb='6px' justifyContent='space-between'>
+                  <Text small>价格 BNB</Text>
+                  <MarkText fontSize='14px'>0.054688</MarkText>
+                </Flex>
+                <Flex mb='6px' justifyContent='space-between'>
+                  <Text small>Total Galaxy CE</Text>
+                  <MarkText fontSize='14px'>6523</MarkText>
+                </Flex>
+              </GalaxyItemInfo>
               <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />
             </ItemGalaxyBox>
           ))}

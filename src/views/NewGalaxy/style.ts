@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-import { Box, Button, Flex, MarkText } from 'uikit';
+import { Box, Button, Flex, GraphicsCard, MarkText } from 'uikit';
 
 export const GalaxyBox = styled(Box)`
   position: relative;
@@ -104,3 +104,24 @@ export const ScrollBox = styled(Box)`
 `;
 
 export const AuctionBtn = styled(Button)``;
+
+export const GalaxyItemInfo = styled(Box)`
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  border-radius: 10px;
+  padding: 10px;
+  transform: translate(-50%, -50%) scale(0.6);
+`;
+export const GalaxyItemInfoTitle = styled(GraphicsCard)`
+  position: absolute;
+  top: -14px;
+  left: 60px;
+  width: 80px;
+  height: 24px;
+  padding: 0;
+`;
