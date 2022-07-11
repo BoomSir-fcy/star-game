@@ -4,6 +4,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { Text, Flex, Button, Box } from 'uikit';
 import useTheme from 'hooks/useTheme';
 import { MODAL_GLOBAL_ID_NAME } from 'config';
+import { useStore } from 'state';
 
 const BoxStyled = styled(Box)<{ overflow?: string }>`
   margin: 40px 0 0 0;
@@ -51,13 +52,13 @@ interface ModalWrapperProps {
   theme?: DefaultTheme;
 }
 
-const getCustomStyles = (themes: DefaultTheme) => ({
+const getCustomStyles = (themes: DefaultTheme, scale: number) => ({
   content: {
     top: '50%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    transform: 'translate(-50%, -50%) translateZ(1px)',
+    transform: `translate(-50%, -50%) translateZ(1px) scale(${scale})`,
     minWidth: '320px',
     border: 0,
     zIndex: 200,
@@ -84,12 +85,13 @@ const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     children,
     creactOnUse,
     title,
-    shouldCloseOnOverlayClick = true,
+    shouldCloseOnOverlayClick = false,
     theme,
   }) => {
     const { theme: defaultTheme } = useTheme();
 
     const themes = theme || defaultTheme;
+    const scale = useStore(p => p.user.scale);
 
     const onClose = useCallback(() => {
       if (setVisible) {
@@ -102,7 +104,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
         isOpen={visible}
         onRequestClose={onClose}
         ariaHideApp={false}
-        style={getCustomStyles(themes)}
+        style={getCustomStyles(themes, scale)}
         shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
         contentLabel='Example Modal'
         parentSelector={() =>
