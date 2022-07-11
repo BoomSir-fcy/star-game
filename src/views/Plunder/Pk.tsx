@@ -41,6 +41,7 @@ import {
 import { GamePkState } from 'state/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useDispatch } from 'react-redux';
+import { APP_HEIGHT } from 'config';
 import { TrackDetail } from 'game/core/Running';
 import { useWeb3React } from '@web3-react/core';
 import ModalWrapper from 'components/Modal';
@@ -85,7 +86,7 @@ const Pk = () => {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const game = useGame({ width: 1400, height: 600 });
+  const game = useGame({ width: 1400, height: 500 });
   const [progress, setProgress] = useState(0);
 
   // 蓝色方和红色方信息
@@ -162,7 +163,7 @@ const Pk = () => {
         ...prev,
         {
           id: 0,
-          text: `本场战斗结束`,
+          text: `本场战斗结束, 下场战斗即将开始`,
           type: 1,
           success,
           showResult: true,
@@ -345,7 +346,7 @@ const Pk = () => {
   ]);
 
   return (
-    <Layout>
+    <Layout height={900}>
       {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
         <Steps
           enabled={stepsEnabled}
@@ -438,7 +439,7 @@ const Pk = () => {
       {PKInfo && (
         <Flex alignItems='center' margin=' 36px auto' width='900px'>
           <Box width='900px'>
-            <Progress width={`${progress}%`} />
+            {progress < 100 && <Progress width={`${progress}%`} />}
           </Box>
           {/* <Text>{progress}</Text> */}
         </Flex>

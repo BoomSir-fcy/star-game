@@ -320,7 +320,7 @@ export const descType = {
   BEAT_MOVE: 13, // 击退产生位移
   BEAT_COLLISION: 14, // 击退碰撞伤害
   REMOVE_FIRING: 15, // 解除灼烧
-  REMOVE_STOP_MOVE: 16, // 解除灼烧
+  REMOVE_STOP_MOVE: 16, // 解除禁锢
   ADD_SHIELD: 17, // 添加护盾
   REMOVE_SHIELD: 18, // 减少护盾
   ADD_TERRAIN_FIRING: 19, // 地形灼烧DescUnitAddTerrainFiring

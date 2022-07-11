@@ -105,8 +105,6 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
     [game_base_unit],
   );
 
-  console.log(game_base_unit);
-
   React.useEffect(() => {
     radarChart.updateDate([
       {

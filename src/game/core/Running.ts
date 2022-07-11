@@ -103,6 +103,7 @@ class Running extends EventTarget {
     super();
 
     this.game = game;
+    this.game.setRunning(this);
     this.rounds = rounds.round;
     this.base = rounds.base;
     this.playLoop = loop || false;
@@ -150,8 +151,12 @@ class Running extends EventTarget {
 
   playLoop = false;
 
+  id = 0;
+
   init() {
+    this.id = new Date().getTime();
     this.getTracks();
+
     // this.runHandle();
   }
 
@@ -305,7 +310,6 @@ class Running extends EventTarget {
       this.playCount -= 1;
       this.runHandle();
     } else if (this.playLoop) {
-      console.log('循环播放');
       this.playLoop = false;
       this.trackIndex = 0;
       this.runHandle();

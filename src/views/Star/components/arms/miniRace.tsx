@@ -40,6 +40,7 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({ mock, show, ...props }) => {
 
   const [running, setRunning] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const [resLoaded, setResLoaded] = useState(false);
 
   const createSoldiers = React.useCallback(
     (
@@ -85,7 +86,7 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({ mock, show, ...props }) => {
           const { x, y } = soldier?.init?.ids[id];
           ids[`${x}${y}`] = id;
         });
-        game.addEventListener('lastSoldierCreated', () => {
+        game.once('lastSoldierCreated', () => {
           runGame({ round: soldier.slot });
         });
         createSoldiers(
@@ -134,10 +135,17 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({ mock, show, ...props }) => {
   }, [ref, game, setLoaded, loaded]);
 
   React.useEffect(() => {
-    if (loaded && mock) {
+    const loaders = game.loadResources();
+    loaders.addEventListener('complete', () => {
+      setResLoaded(true);
+    });
+  }, [setResLoaded, game]);
+
+  React.useEffect(() => {
+    if (loaded && mock?.init && resLoaded) {
       initHandle();
     }
-  }, [mock, loaded, initHandle]);
+  }, [mock, loaded, game, resLoaded, initHandle]);
 
   // 更新
   const onRunningUpdate = useCallback(event => {
