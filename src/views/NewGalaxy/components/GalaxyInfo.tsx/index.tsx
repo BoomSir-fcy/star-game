@@ -225,7 +225,9 @@ const GalaxyInfoIndex: React.FC = () => {
                   </Flex>
                   <Flex mb='6px' justifyContent='space-between'>
                     <Text small>{t('Total Galaxy CE')}</Text>
-                    <MarkText fontSize='14px'>{item.power}</MarkText>
+                    <MarkText maxWidth='50%' ellipsis fontSize='14px'>
+                      {item.power}
+                    </MarkText>
                   </Flex>
                 </TextInfoBox>
                 <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />

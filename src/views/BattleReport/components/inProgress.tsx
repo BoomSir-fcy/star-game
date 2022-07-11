@@ -15,7 +15,7 @@ dayjs.extend(utc);
 
 const CardBox = styled(Flex)`
   position: relative;
-  min-width: 490px;
+  width: 500px;
   height: 100%;
   padding: 22px 30px;
   border-right: 1px solid ${({ theme }) => theme.colors.borderPrimary};
