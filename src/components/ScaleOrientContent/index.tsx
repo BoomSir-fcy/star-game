@@ -111,12 +111,12 @@ const Content = styled(Box)<{ scale: number; hideHeader?: boolean }>`
 
 const ModalContent = styled(Box)<{ scale: number }>`
   /* width: 1px;
-  height: 1px; */
+  height: 1px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: ${({ scale }) => `translate(-50%, -50%) scale(${scale})`};
-  z-index: 100;
+  z-index: 100; */
 `;
 
 const ScaleOrientContent: React.FC = ({ children }) => {
