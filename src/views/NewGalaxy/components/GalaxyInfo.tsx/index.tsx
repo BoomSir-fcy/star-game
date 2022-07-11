@@ -200,9 +200,6 @@ const GalaxyInfoIndex: React.FC = () => {
                 setOpenInfo(true);
                 setShowListModule(true);
               }}
-              // background={`url(/images/galaxy/${index + 1}.png)`}
-              // backgroundRepeat='no-repeat'
-              // backgroundSize='100% 100%'
             >
               <GalaxyItemInfo
               // background={`url(/images/galaxy/${index + 1}.png)`}
