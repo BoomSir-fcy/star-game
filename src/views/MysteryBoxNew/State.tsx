@@ -183,7 +183,8 @@ const State = () => {
   const handleOpenBox = useCallback(async () => {
     try {
       setHandleLoading(true);
-      const res = await handleOpen(quality, '', buyNum);
+      // console.log(quality, buyNum);
+      const res = await handleOpen(quality, '', ownedNum);
       const ids = await getPlanetId(res?.blockHash);
       dispatch(fetchUserKeysAsync(account));
       setHandleLoading(false);
@@ -208,7 +209,7 @@ const State = () => {
     }
   }, [
     account,
-    buyNum,
+    ownedNum,
     quality,
     handleOpen,
     navigate,
