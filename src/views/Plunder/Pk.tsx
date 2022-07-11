@@ -222,6 +222,7 @@ const Pk = () => {
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
+  const guideState = useStore(p => p.guide);
   const [activeStep, setActiveStep] = useState(guides.step);
   const steps = useMemo(
     () => [
@@ -240,6 +241,12 @@ const Pk = () => {
         intro: t('Here is the basic information of the opponent.'),
       },
       {
+        element: '.plunder-pk-step2-1',
+        intro: t(
+          'Here is the battle arrangement of both sides and the display of combat effects.',
+        ),
+      },
+      {
         element: '.plunder-pk-step3',
         intro: t(
           'Here are the details of the battle report of the current battle process.',
@@ -248,6 +255,23 @@ const Pk = () => {
     ],
     [t],
   );
+
+  const showGuide = useMemo(() => {
+    return (
+      !guides.guideFinish &&
+      guides.finish &&
+      steps.length - 1 > guides.step &&
+      stepsEnabled
+    );
+  }, [guides, steps.length, stepsEnabled]);
+
+  useEffect(() => {
+    if (guideState.visible || showGuide) {
+      running?.pause();
+    } else {
+      running?.play();
+    }
+  }, [showGuide, guideState.visible, running]);
 
   const [loaders, setLoaders] = useState(null);
 
@@ -345,9 +369,11 @@ const Pk = () => {
     t,
   ]);
 
+  console.log(showGuide, stepsEnabled, 'showGuide');
+
   return (
     <Layout height={900}>
-      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
+      {showGuide && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
@@ -384,6 +410,18 @@ const Pk = () => {
         top={50}
         right={0}
         className='plunder-pk-step2'
+        zIndex={-1}
+      />
+      <Box
+        position='absolute'
+        width={900}
+        height={500}
+        top={0}
+        right={0}
+        left={0}
+        bottom={0}
+        margin='auto'
+        className='plunder-pk-step2-1'
         zIndex={-1}
       />
       <Flex mb='20px'>
