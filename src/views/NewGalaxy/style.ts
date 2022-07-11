@@ -34,22 +34,6 @@ export const ItemGalaxyBox = styled(Box)`
   position: absolute;
 `;
 
-export const GalaxyImg = styled.img`
-  width: 100%;
-  animation: box 20s ease-in-out infinite;
-  @keyframes box {
-    0% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
-  }
-`;
-
 export const InfoModuleBox = styled(Box)`
   position: fixed;
   width: 582px;
@@ -105,17 +89,27 @@ export const ScrollBox = styled(Box)`
 
 export const AuctionBtn = styled(Button)``;
 
-export const GalaxyItemInfo = styled(Box)`
-  position: absolute;
+export const TextInfoBox = styled(Box)`
+  position: relative;
   width: 240px;
-  height: max-content;
-  top: 50%;
-  left: 50%;
+  min-height: 100px;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
   border-radius: 10px;
   padding: 10px;
-  transform: translate(-50%, -50%) scale(0.6);
+  z-index: 1;
+  transform: scale(0.4);
+  margin-top: 100px;
+`;
+
+export const GalaxyItemInfo = styled(Flex)`
+  /* position: relative; */
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  /* top: 50%;
+  left: 50%; */
+  /* transform: translate(-50%, -50%) scale(0.8); */
 `;
 export const GalaxyItemInfoTitle = styled(GraphicsCard)`
   position: absolute;
@@ -124,4 +118,25 @@ export const GalaxyItemInfoTitle = styled(GraphicsCard)`
   width: 80px;
   height: 24px;
   padding: 0;
+`;
+
+export const GalaxyImg = styled.img`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  height: 220px;
+  width: 220px;
+  /* animation: box 20s ease-in-out infinite;
+  @keyframes box {
+    0% {
+      transform: translateY(0px) translate(-50%, -50%) scale(0.8);
+    }
+    50% {
+      transform: translateY(-20px) translate(-50%, -50%) scale(0.8);
+    }
+    100% {
+      transform: translateY(0px) translate(-50%, -50%) scale(0.8);
+    }
+  } */
 `;
