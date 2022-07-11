@@ -26,7 +26,7 @@ const StyledContainer = styled(ToastContainer)<{ scale: number }>`
   }
   .Toastify__toast {
     background: url('/images/commons/modal/toast.png') no-repeat;
-    background-size: 100%;
+    background-size: 100% 100%;
     min-height: 150px;
   }
   .Toastify__toast-body {
@@ -38,6 +38,9 @@ const StyledContainer = styled(ToastContainer)<{ scale: number }>`
   .Toastify__toast-icon {
     width: 30px;
     margin-bottom: 10px;
+  }
+  .Toastify__toast-body > div:last-child {
+    word-break: break-all;
   }
 `;
 

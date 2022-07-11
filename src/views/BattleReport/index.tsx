@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -124,6 +124,13 @@ const BattleReport = () => {
   //   [loading, Start_time, setEnd_time, end],
   // );
 
+  const ShowBoot = useMemo(() => {
+    if (RecordList.length > 0 && RecordList[0]?.plunder.length > 0) {
+      return true;
+    }
+    return false;
+  }, [RecordList]);
+
   const onRefreshClick = useCallback(() => {
     dispatch(fetchAllianceViewAsync());
   }, [dispatch]);
@@ -159,7 +166,7 @@ const BattleReport = () => {
       {!guides.guideFinish &&
         guides.finish &&
         steps.length - 1 >= guides.step &&
-        RecordList.length > 0 && (
+        ShowBoot && (
           <>
             <GlobalStyle
               interactive={steps[activeStep]?.interactive && stepsEnabled}

@@ -113,7 +113,7 @@ export const BarRight: React.FC<BarRightProps> = ({
             position='relative'
           >
             <MarkText bold fontStyle='italic' pl='0'>
-              +1
+              +{planetInfo?.strengthenLevel}
             </MarkText>
           </Flex>
         </BarCard>
