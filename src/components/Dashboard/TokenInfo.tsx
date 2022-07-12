@@ -255,7 +255,7 @@ const TokenInfo = () => {
         </TokenGroupBox>
       </Flex>
       <Modal
-        title={OperationType === 1 ? t('充值') : t('提取')}
+        title={OperationType === 1 ? t('Deposit') : t('Withdraw')}
         visible={visible}
         setVisible={setVisible}
       >
