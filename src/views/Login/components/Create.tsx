@@ -15,6 +15,11 @@ import { useTranslation } from 'contexts/Localization';
 
 const chance = new Chance();
 
+const LabelStyle = styled(Label)`
+  height: 60px;
+  padding-left: 30px;
+`;
+
 const BoxStyled = styled(Box)`
   background: url('/images/login/b1.png') no-repeat center;
   height: 788px;
@@ -71,21 +76,21 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
           from=''
         />
       </TopBox>
-      <Flex width='540px' mt='28px' justifyContent='space-between'>
+      <Flex width='480px' mt='28px' justifyContent='space-between'>
         <KingAvatar
           onClick={() => {
             return setGender(Gender.MAN);
           }}
-          width={gender === Gender.MAN ? '241px' : '200px'}
-          height={gender === Gender.MAN ? '236px' : '200px'}
+          width={gender === Gender.MAN ? '220px' : '180px'}
+          height={gender === Gender.MAN ? '210px' : '170px'}
           sex='man'
         />
         <KingAvatar
           onClick={() => {
             return setGender(Gender.WOMAN);
           }}
-          width={gender === Gender.WOMAN ? '241px' : '200px'}
-          height={gender === Gender.WOMAN ? '236px' : '200px'}
+          width={gender === Gender.WOMAN ? '220px' : '180px'}
+          height={gender === Gender.WOMAN ? '210px' : '170px'}
           sex='woman'
         />
         {/* <ManAvatar
@@ -102,7 +107,7 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
           active={gender === Gender.WOMAN}
         /> */}
       </Flex>
-      <Label mt={22} width={603} pr='18px'>
+      <LabelStyle mt={22} width={503} pr='18px'>
         <Input
           value={name}
           className='login-step0'
@@ -110,22 +115,24 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
             setName(event.target.value);
           }}
           placeholder={t('Enter a name you want')}
+          style={{ fontSize: '20px' }}
         />
         <Button variant='text'>
           <Box onClick={randomName} width='37px'>
             <img alt='' src='/images/login/round.png' />
           </Box>
         </Button>
-      </Label>
-      <Label mt={22} width={603} pr='18px'>
+      </LabelStyle>
+      <LabelStyle mt={22} width={503} pr='18px'>
         <Input
           value={superior}
           onChange={event => {
             setSuperior(event.target.value);
           }}
           placeholder={t("Enter the inviter's address (optional)")}
+          style={{ fontSize: '20px' }}
         />
-      </Label>
+      </LabelStyle>
       <Text mt={32} small>
         {t(
           'Create an identity will consume 100 DSG, the system will automatically exchange BNB for this amount of DSG using a real-time exchange rate.',
