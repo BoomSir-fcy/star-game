@@ -23,7 +23,7 @@ import { BuildingConsume } from './buildingConsume';
 
 const Container = styled(Box)`
   position: absolute;
-  right: -18px;
+  right: -10px;
   top: -25px;
   height: 950px;
   z-index: 199;
@@ -245,7 +245,10 @@ export const SideRightBuildingInfo: React.FC<{
                       dispatch(
                         storeAction.destoryBuildingModal({
                           visible: true,
-                          destory: currentAttributes,
+                          destory: {
+                            ...currentAttributes,
+                            describe: t(getBuildings()?.desc),
+                          },
                         }),
                       );
                     }}
