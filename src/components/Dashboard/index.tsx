@@ -96,12 +96,19 @@ const Dashboard: React.FC<DashboardProps> = ({
   }, [location.pathname, params]);
 
   const onBackClick = React.useCallback(() => {
-    if (hideFooter) {
+    const starPath = [
+      '/star',
+      '/star/upgrade',
+      '/star/grow',
+      '/star/embattle',
+      '/star/embattle-test',
+    ];
+    if (starPath.indexOf(location.pathname) > -1) {
       navigate('/star/planet');
     } else {
       navigate(-1);
     }
-  }, [hideFooter, navigate]);
+  }, [location.pathname, navigate]);
   return (
     <>
       {!hideHeader && (

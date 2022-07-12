@@ -12,6 +12,8 @@ export interface MysteryBoxComProps extends BoxProps {
   quality: Qualities;
   text?: string;
   rotate?: number;
+  width?: number;
+  height?: number;
   handleClick?: () => void;
 }
 

@@ -237,12 +237,12 @@ class Building extends EventTarget {
         this.activeBuilderFlag = true;
       });
 
-    builder.addEventListener('cancel', () => {
+    builder.once('cancel', () => {
       this.removeBuilder(builder);
       this.dispatchEvent(getCancelBuilderEvent(builder));
     });
 
-    builder.addEventListener('confirm', () => {
+    builder.once('confirm', () => {
       this.dispatchEvent(getConfirmBuilderEvent(builder));
     });
   }

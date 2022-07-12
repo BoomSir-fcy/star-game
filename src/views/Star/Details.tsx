@@ -358,7 +358,6 @@ const Details = () => {
 
   const cancelBuilding = React.useCallback(() => {
     if (activeBuilder) {
-      console.log(activeBuilder);
       building?.removeBuilder(activeBuilder);
     }
     setStateBuilding(p => {
@@ -401,8 +400,8 @@ const Details = () => {
     building.addEventListener(eventsType.CONFIRM_BUILDER, createBuilding);
     building.addEventListener(eventsType.CANCEL_BUILDER, cancelBuilding);
     return () => {
-      building.addEventListener(eventsType.CONFIRM_BUILDER, createBuilding);
-      building.addEventListener(eventsType.CANCEL_BUILDER, cancelBuilding);
+      building.removeEventListener(eventsType.CONFIRM_BUILDER, createBuilding);
+      building.removeEventListener(eventsType.CANCEL_BUILDER, cancelBuilding);
     };
   }, [building, cancelBuilding, createBuilding]);
 

@@ -14,7 +14,7 @@ const Search: React.FC<{ onSearchCallback: (params: any) => void }> = ({
   return (
     <Flex
       width='100%'
-      mb='10px'
+      mt='10px'
       alignItems='center'
       justifyContent='space-between'
     >

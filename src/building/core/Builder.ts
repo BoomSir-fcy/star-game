@@ -368,6 +368,14 @@ class Builder extends EventTarget {
       this.container.zIndex = this.axisPoint?.axisX + this.axisPoint?.axisY;
     }
   }
+
+  once(event: string, handle: any) {
+    // const callback = () => {
+    //   handle();
+    //   this.removeEventListener(event, callback);
+    // };
+    this.addEventListener(event, handle, { once: true });
+  }
 }
 
 export default Builder;

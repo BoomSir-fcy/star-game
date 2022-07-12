@@ -48,7 +48,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
             ml={tag === 'm-box1' ? '-0.5rem' : ''}
             fontSize='20px'
             bold
-            shadow='secondary'
+            shadow='primary'
           >
             {children}
           </Text>
