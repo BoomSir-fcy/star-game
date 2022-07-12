@@ -20,6 +20,7 @@ import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { setNavZIndex } from 'state/userInfo/reducer';
 import { eventsType } from 'building/core/event';
+import { useCallbackPrompt } from 'hooks/useCallbackPrompt';
 import { useBuildingOperate } from './components/gameModel/hooks';
 import {
   BarRight,
@@ -108,6 +109,10 @@ const Details = () => {
   const { screenMode } = useStore(p => p.user);
   const guideRef = React.useRef(null);
   const ref = React.useRef<HTMLDivElement>(null);
+
+  const [showDialog, setShowDialog] = React.useState<boolean>(false);
+  const [showPrompt, confirmNavigation, cancelNavigation] =
+    useCallbackPrompt(showDialog);
 
   const [stateBuilding, setStateBuilding] = useImmer({
     visible: false,
@@ -358,7 +363,6 @@ const Details = () => {
 
   const cancelBuilding = React.useCallback(() => {
     if (activeBuilder) {
-      console.log(activeBuilder);
       building?.removeBuilder(activeBuilder);
     }
     setStateBuilding(p => {
@@ -401,8 +405,8 @@ const Details = () => {
     building.addEventListener(eventsType.CONFIRM_BUILDER, createBuilding);
     building.addEventListener(eventsType.CANCEL_BUILDER, cancelBuilding);
     return () => {
-      building.addEventListener(eventsType.CONFIRM_BUILDER, createBuilding);
-      building.addEventListener(eventsType.CANCEL_BUILDER, cancelBuilding);
+      building.removeEventListener(eventsType.CONFIRM_BUILDER, createBuilding);
+      building.removeEventListener(eventsType.CANCEL_BUILDER, cancelBuilding);
     };
   }, [building, cancelBuilding, createBuilding]);
 

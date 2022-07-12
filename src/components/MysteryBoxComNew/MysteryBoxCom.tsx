@@ -17,14 +17,17 @@ const MysteryBoxCom: React.FC<MysteryBoxComProps> = ({
   quality,
   text,
   rotate = -30,
+  width = 900,
+  height = 500,
   handleClick,
   ...props
 }) => {
   const { scale } = useStore(p => p.user);
-  const { width, height, left, top, bottom, right, ...rest } = props;
+  const { left, top, bottom, right, ...rest } = props;
   return (
     <GlobalVideo
-      width={900}
+      width={width}
+      height={height}
       src={`/video/mbox${quality}.mp4`}
       loop
       left={left}

@@ -5,7 +5,7 @@ import {
   MysteryBoxQualities,
 } from 'components/MysteryBoxComNew';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { Box, Button, Dots, Flex, Skeleton, Text } from 'uikit';
+import { BackButton, Box, Button, Dots, Flex, Skeleton, Text } from 'uikit';
 import { getWEtherAddress } from 'utils/addressHelpers';
 import { TokenImage } from 'components/TokenImage';
 import { mysteryConfig } from 'components/MysteryBoxComNew/config';
@@ -27,7 +27,7 @@ import eventBus from 'utils/eventBus';
 import { useGuide } from 'hooks/useGuide';
 import { Steps } from 'intro.js-react';
 import 'intro.js/introjs.css';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import { queryMintEvent } from './event';
 
@@ -46,6 +46,17 @@ const GlobalStyle = createGlobalStyle<{
     `
       : '';
   }};
+`;
+const StateFlex = styled(Flex)`
+  height: 100vw;
+  ${({ theme }) => theme.mediaQueries.md} {
+    height: 100vh;
+  }
+`;
+const BackButtonStyled = styled(BackButton)`
+  position: absolute;
+  top: 15px;
+  right: 22px;
 `;
 const State = () => {
   const { t, getHTML } = useTranslation();
@@ -245,7 +256,11 @@ const State = () => {
   }, [onRefreshClick]);
 
   return (
-    <Flex flexDirection='column' justifyContent='center' alignItems='center'>
+    <StateFlex
+      flexDirection='column'
+      justifyContent='center'
+      alignItems='center'
+    >
       {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
         <>
           <GlobalStyle
@@ -282,9 +297,18 @@ const State = () => {
           />
         </>
       )}
-      <MysteryBoxCom rotate={0} left={0} right={0} quality={quality} />
+      <BackButtonStyled />
+      <MysteryBoxCom
+        width={1440}
+        height={800}
+        rotate={0}
+        left={0}
+        right={0}
+        top={-200}
+        quality={quality}
+      />
       <Flex
-        mt='180px'
+        mt='300px'
         flexDirection='column'
         justifyContent='center'
         alignItems='center'
@@ -319,7 +343,7 @@ const State = () => {
           </Flex>
         </Flex>
 
-        <Box mt='85px' className='mystery-state-step1'>
+        <Box mt='90px' className='mystery-state-step1'>
           {!existBox && (
             <Flex justifyContent='center'>
               <Box width={30}>
@@ -382,7 +406,7 @@ const State = () => {
           </Flex>
         </Box>
       </Flex>
-    </Flex>
+    </StateFlex>
   );
 };
 

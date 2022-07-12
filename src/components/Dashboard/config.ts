@@ -18,6 +18,7 @@ export const getHideHeader = (url: string) => {
       '/vip',
       '/choose-planet',
       '/platform-News',
+      '/mystery-box/state',
     ],
     url,
   );
@@ -31,6 +32,7 @@ export const getHideFooter = (url: string) => {
       '/star/grow',
       '/star/embattle',
       '/star/embattle-test',
+      '/mystery-box/state',
     ],
     url,
   );

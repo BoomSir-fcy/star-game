@@ -123,6 +123,7 @@ const PlanetList = () => {
       </PlanetBox>
 
       <LeftBox>
+        {visibleInfo && <PlanetInfo info={activePlanet} />}
         <Search
           onSearchCallback={params => {
             setState(p => {
@@ -130,7 +131,6 @@ const PlanetList = () => {
             });
           }}
         />
-        {visibleInfo && <PlanetInfo info={activePlanet} />}
       </LeftBox>
     </DragBox>
   );
