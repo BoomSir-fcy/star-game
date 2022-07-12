@@ -358,6 +358,7 @@ const Details = () => {
 
   const cancelBuilding = React.useCallback(() => {
     if (activeBuilder) {
+      console.log(activeBuilder);
       building?.removeBuilder(activeBuilder);
     }
     setStateBuilding(p => {
@@ -437,16 +438,17 @@ const Details = () => {
     }
   }, [stepsEnabled, guides.step]);
 
-  // React.useEffect(() => {
-  //   setGuide(0);
-  // }, [setGuide]);
-
   React.useEffect(() => {
     if (stepsEnabled && (guides.step === 2 || guides.step === 3)) {
       setActiveStep(4);
       setGuide(4);
       onClickGuide();
     }
+
+    if (guides.guideFinish || steps.length - 1 === guides.step) {
+      setStepsEnabled(false);
+    }
+
     const bullets = document.getElementsByClassName('introjs-bullets');
     if (bullets.length > 0) {
       bullets[0].setAttribute('style', 'opacity:0');
@@ -456,7 +458,11 @@ const Details = () => {
         setGuide(4);
       }
     };
-  }, [activeStep, guides, setGuide, stepsEnabled, dispatch]);
+  }, [activeStep, steps, guides, setGuide, stepsEnabled, dispatch]);
+
+  // React.useEffect(() => {
+  //   setGuide(0);
+  // }, [setGuide]);
 
   return (
     <>
