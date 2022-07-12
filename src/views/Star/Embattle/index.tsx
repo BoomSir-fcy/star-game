@@ -71,7 +71,7 @@ const moveKeyframes = keyframes`
     opacity:1;    
   }
   100% {
-  transform: translate(100px, -100px);
+  transform: translate(-155px, -100px);
   opacity: 0.5;    
   
     
@@ -81,7 +81,7 @@ const moveKeyframes = keyframes`
 const ArrowBox = styled(Box)`
   animation: ${moveKeyframes} 2s linear infinite;
   & img {
-    transform: rotate(-45deg);
+    transform: rotate(-155deg);
   }
 `;
 
@@ -203,12 +203,12 @@ const Embattle = () => {
         ),
         interactive: true,
       },
-      // {
-      //   element: '.star-embattle-step6',
-      //   intro: t(
-      //     'All right, deployment is over! Here is the order of attack in combat.',
-      //   ),
-      // },
+      {
+        element: '.star-embattle-step6',
+        intro: t(
+          'Well, the latest combat effectiveness will be displayed after deployment! Click and finish to end the deployment.',
+        ),
+      },
     ],
     [t],
   );
@@ -286,7 +286,12 @@ const Embattle = () => {
         </Flex>
       </Box> */}
       <Box position='absolute' bottom={0} left={0}>
-        <GraphicsCard width='740px' height='75px' padding={0}>
+        <GraphicsCard
+          className='star-embattle-step6'
+          width='740px'
+          height='75px'
+          padding={0}
+        >
           <Flex
             alignItems='center'
             justifyContent='space-between'
@@ -330,6 +335,7 @@ const Embattle = () => {
         />
       </Box>
       <ArmsInfo
+        className='star-embattle-step4'
         armsData={{ game_base_unit: activeSoldier?.options?.unitInfo }}
         sid={activeSoldier?.id}
         right='0'
@@ -385,10 +391,11 @@ const Embattle = () => {
       {arrowShow && (
         <ArrowBox
           position='absolute'
-          top={400}
-          left={100}
+          top={480}
+          left={800}
           width={200}
           height={200}
+          zIndex={99}
         >
           <Image
             width={200}

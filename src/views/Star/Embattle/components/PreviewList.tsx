@@ -120,7 +120,6 @@ const PreviewList: React.FC<PreviewListProps> = ({
 
   const activeNum = useCallback(
     id => {
-      console.log(gameSoldiers, id);
       return gameSoldiers.filter(item => item.soldier.id === id)?.length || 0;
     },
     [gameSoldiers],

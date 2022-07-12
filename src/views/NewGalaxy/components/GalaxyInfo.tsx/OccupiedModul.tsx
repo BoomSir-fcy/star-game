@@ -249,7 +249,9 @@ const OccupiedModul: React.FC<{
                   <ImgBox>
                     <img
                       src={
-                        item.ownerAvatar || item?.nick_name
+                        item.ownerAvatar
+                          ? item.ownerAvatar
+                          : item?.nick_name
                           ? '/images/login/a-man.png'
                           : '/images/commons/36.png'
                       }
@@ -305,9 +307,9 @@ const OccupiedModul: React.FC<{
                   height='100%'
                   width='30%'
                 >
-                  <Flex alignItems='baseline'>
+                  <Flex alignItems='baseline' flexWrap='wrap'>
                     <SmText mr='10px'>{t('Power')}</SmText>
-                    <MarkText fontStyle='normal' fontSize='20px' bold>
+                    <MarkText ellipsis fontStyle='normal' fontSize='20px' bold>
                       {splitThousandSeparator(item.power)}
                     </MarkText>
                   </Flex>

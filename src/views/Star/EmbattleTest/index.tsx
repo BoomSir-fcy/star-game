@@ -29,6 +29,7 @@ import SortBoard, { SortSoldier } from './components/SortBoard';
 import useUpdatePos from './hooks/useUpdatePos';
 import useActiveSoldier from './hooks/useActiveSoldier';
 import useSimulation from './hooks/useSimulation';
+import { ArmsInfo } from '../components/arms';
 
 const Embattle = () => {
   const parsedQs = useParsedQueryString();
@@ -139,6 +140,12 @@ const Embattle = () => {
     }
   }, [activeTerrain, ref, TerrainInfo, game]);
 
+  const removeHandle = useCallback(() => {
+    if (activeSoldier) {
+      game.removeSoldier(activeSoldier);
+    }
+  }, [activeSoldier, game]);
+
   return (
     <Box position='relative' width='100%'>
       <Box ref={ref} />
@@ -148,7 +155,7 @@ const Embattle = () => {
         top='0'
         right='18px'
       >
-        <Preview game={game} activeSoldier={activeSoldier} />
+        {/* <Preview game={game} activeSoldier={activeSoldier} /> */}
         {/* <SortBoard
           sortSoldiers={gameSoldiers}
           activeSoldier={activeSoldier}
@@ -160,6 +167,12 @@ const Embattle = () => {
           }}
         /> */}
       </Flex>
+      <ArmsInfo
+        armsData={{ game_base_unit: activeSoldier?.options?.unitInfo }}
+        sid={activeSoldier?.id}
+        right='0'
+        removeHandle={removeHandle}
+      />
       <Box
         style={{ userSelect: 'none' }}
         position='absolute'

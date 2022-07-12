@@ -58,7 +58,9 @@ const NewPlantLeague: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { unread_plunder_count } = useStore(p => p.alliance.allianceView);
+  const { unread_plunder_count, order } = useStore(
+    p => p.alliance.allianceView,
+  );
   const { guides, setGuide } = useGuide(location.pathname);
 
   const [ShowModule, setShowModule] = useState(false);
@@ -153,23 +155,27 @@ const NewPlantLeague: React.FC = () => {
   }, [t, PlantManageModule, ShowModule]);
 
   const Booting = useMemo(() => {
+    let HavePlanet = true;
+    if (order?.length === 0 && guides.step === 2) {
+      HavePlanet = false;
+    }
     return (
       stepsEnabled &&
       !guides.guideFinish &&
       guides.finish &&
       steps.length - 1 >= guides.step &&
-      ShowRound2
+      ShowRound2 &&
+      HavePlanet
     );
-  }, [stepsEnabled, guides, steps, ShowRound2]);
+  }, [stepsEnabled, guides, steps, ShowRound2, order]);
 
   useEffect(() => {
     console.log(guides.step, '步骤');
-    // setGuide(0, false, 0);
     if (guides.step === 4 || guides.step === 6) {
       console.log(guides.step, '返回上一步');
       ToAddClick('introjs-prevbutton');
     }
-    if (guides.step === 5) {
+    if (guides.step === 5 || guides.step === 2) {
       document
         .getElementsByClassName('introjs-prevbutton')[0]
         .setAttribute('style', 'display:none !important');
@@ -177,7 +183,7 @@ const NewPlantLeague: React.FC = () => {
     if (guides.step === 7) {
       setShowModule(true);
     }
-  }, [guides.step, setGuide]);
+  }, [guides.step]);
 
   useEffect(() => {
     if (Booting) {
@@ -205,7 +211,7 @@ const NewPlantLeague: React.FC = () => {
             }}
             ref={guideRef}
             onBeforeChange={event => {
-              if (event === 5) {
+              if (event === 5 || event === 2) {
                 document
                   .getElementsByClassName('introjs-prevbutton')[0]
                   .setAttribute('style', 'display:none !important');

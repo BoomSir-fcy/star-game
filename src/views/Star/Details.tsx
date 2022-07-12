@@ -40,12 +40,25 @@ const Container = styled(Box)`
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
   disabled?: boolean;
+  backDisabled?: boolean;
 }>`
 
   ${({ disabled }) => {
     return disabled
       ? `
     .introjs-nextbutton {
+      pointer-events: none !important;
+      color: #9e9e9e !important;
+      cursor: default !important;
+    }
+    `
+      : '';
+  }};
+
+  ${({ backDisabled }) => {
+    return backDisabled
+      ? `
+    .introjs-prevbutton {
       pointer-events: none !important;
       color: #9e9e9e !important;
       cursor: default !important;
@@ -115,39 +128,46 @@ const Details = () => {
       {
         element: '.guide_step_2',
         intro: t('guidePlanetStep_2'),
+        interactive: true,
+        backDisabled: true,
+        disabled: true,
       },
       {
         element: '.guide_step_3',
         intro: t('guidePlanetStep_3'),
-        interactive: true,
-        disabled: true,
+        backDisabled: true,
       },
       {
         element: '.guide_step_4',
         intro: t('guidePlanetStep_4'),
         interactive: true,
+        backDisabled: true,
         disabled: true,
       },
       {
         element: '.guide_step_5',
         intro: t('guidePlanetStep_5'),
         interactive: true,
+        backDisabled: true,
         disabled: true,
       },
       {
         element: '.guide_step_6',
         intro: t('guidePlanetStep_6'),
         interactive: true,
+        backDisabled: true,
         disabled: true,
       },
       {
         element: '.guide_step_7',
         intro: t('guidePlanetStep_7'),
+        backDisabled: true,
         interactive: true,
       },
       {
         element: '.guide_step_8',
         intro: t('guidePlanetStep_8'),
+        backDisabled: true,
       },
       {
         element: '.guide_step_9',
@@ -157,7 +177,7 @@ const Details = () => {
     ];
   }, [t]);
 
-  const beforeStepChange = nextStepIndex => {
+  const beforeStepChange = (nextStepIndex, nextElement) => {
     if (nextStepIndex === 3) {
       dispatch(setNavZIndex(false));
       guideRef?.current?.updateStepElement(nextStepIndex);
@@ -300,8 +320,6 @@ const Details = () => {
         dispatch(setNavZIndex(true));
         dispatch(storeAction.resetModal());
         building?.removeBuilder(activeBuilder);
-      } else {
-        toastError(res.message);
       }
     } catch (error) {
       console.error(error);
@@ -315,7 +333,6 @@ const Details = () => {
     id,
     setStateBuilding,
     t,
-    toastError,
     toastSuccess,
   ]);
 
@@ -339,6 +356,16 @@ const Details = () => {
     [building, dispatch, saveWorkQueue, setStateBuilding],
   );
 
+  const cancelBuilding = React.useCallback(() => {
+    if (activeBuilder) {
+      building?.removeBuilder(activeBuilder);
+    }
+    setStateBuilding(p => {
+      p.visible = false;
+    });
+    dispatch(setNavZIndex(true));
+  }, [activeBuilder, building, dispatch, setStateBuilding]);
+
   const onClickGuide = () => {
     const nextButton = document.querySelector('.introjs-nextbutton');
     nextButton?.dispatchEvent(new Event('click'));
@@ -352,6 +379,7 @@ const Details = () => {
           ...activeBuilder?.option?.building,
           position: activeBuilder.position,
           isbuilding: activeBuilder?.builded,
+          isqueue: activeBuilder?.isBuilding,
         };
       });
       setTimeout(() => {
@@ -378,26 +406,67 @@ const Details = () => {
 
   React.useEffect(() => {
     building.addEventListener(eventsType.CONFIRM_BUILDER, createBuilding);
+    building.addEventListener(eventsType.CANCEL_BUILDER, cancelBuilding);
     return () => {
       building.addEventListener(eventsType.CONFIRM_BUILDER, createBuilding);
+      building.addEventListener(eventsType.CANCEL_BUILDER, cancelBuilding);
     };
-  }, [building, createBuilding]);
+  }, [building, cancelBuilding, createBuilding]);
 
   React.useEffect(() => {
     return () => {
       dispatch(storeAction.resetModal());
+      dispatch(storeAction.resetSelfBuildings());
       dispatch(storeAction.toggleVisible({ visible: false }));
     };
   }, [dispatch]);
 
   // 单独处理每个新手引导的操作
   React.useEffect(() => {
-    if (stateBuilding.visible && stepsEnabled && activeStep === 2) {
+    if (stateBuilding.visible && stepsEnabled && activeStep === 1) {
       setActiveStep(activeStep + 1);
       setGuide(activeStep + 1);
       onClickGuide();
     }
-  }, [activeStep, setGuide, stateBuilding.visible, stepsEnabled]);
+    // setGuide(5);
+    if (activeStep > 5) {
+      setStateBuilding(p => {
+        p.visible = false;
+      });
+      dispatch(setNavZIndex(true));
+    }
+  }, [
+    activeStep,
+    dispatch,
+    guides.guideFinish,
+    setGuide,
+    setStateBuilding,
+    stateBuilding.visible,
+    stepsEnabled,
+  ]);
+
+  React.useEffect(() => {
+    if (stepsEnabled && guides.step === 5) {
+      onClickGuide();
+    }
+  }, [stepsEnabled, guides.step]);
+
+  React.useEffect(() => {
+    if (stepsEnabled && (guides.step === 2 || guides.step === 3)) {
+      setActiveStep(4);
+      setGuide(4);
+      onClickGuide();
+    }
+    const bullets = document.getElementsByClassName('introjs-bullets');
+    if (bullets.length > 0) {
+      bullets[0].setAttribute('style', 'opacity:0');
+    }
+    return () => {
+      if (guides.step === 2 || activeStep === 2) {
+        setGuide(4);
+      }
+    };
+  }, [activeStep, guides, setGuide, stepsEnabled, dispatch]);
 
   return (
     <>
@@ -409,6 +478,7 @@ const Details = () => {
               <GlobalStyle
                 interactive={steps[activeStep]?.interactive && stepsEnabled}
                 disabled={steps[activeStep]?.disabled}
+                backDisabled={steps[activeStep]?.backDisabled}
               />
               <Steps
                 ref={guideRef}
@@ -447,6 +517,7 @@ const Details = () => {
               p.visible = true;
               p.building = {
                 ...val,
+                isqueue: true,
               };
             });
           }}
@@ -456,6 +527,9 @@ const Details = () => {
                 setActiveStep(6);
                 setGuide(6);
                 onClickGuide();
+                setStateBuilding(p => {
+                  p.visible = false;
+                });
               }
             }, 100);
           }}
@@ -469,6 +543,9 @@ const Details = () => {
                 setActiveStep(5);
                 setGuide(5);
                 onClickGuide();
+                setStateBuilding(p => {
+                  p.visible = false;
+                });
               }
             }, 100);
           }}
@@ -478,52 +555,63 @@ const Details = () => {
             dispatch(fetchPlanetInfoAsync([id]));
           }}
         />
-        {stateBuilding.visible && (
-          <SideRightBuildingInfo
-            visible={stateBuilding.visible}
-            planet={planet}
-            planet_id={id}
-            workQueue={stateBuilding.workQueue}
-            buildingsId={stateBuilding.building?._id}
-            itemData={stateBuilding?.building}
-            animation={!stepsEnabled}
-            onCreateBuilding={async val => {
-              const res = await saveWorkQueue(val);
-              if (res) {
+        <Box
+          className='guide_step_3'
+          width='547px'
+          height='100%'
+          style={{
+            position: 'fixed',
+            right: '-18px',
+            top: 0,
+            zIndex: stateBuilding.visible && 199,
+          }}
+        >
+          {stateBuilding.visible && (
+            <SideRightBuildingInfo
+              visible={stateBuilding.visible}
+              planet={planet}
+              planet_id={id}
+              workQueue={stateBuilding.workQueue}
+              buildingsId={stateBuilding.building?._id}
+              itemData={stateBuilding?.building}
+              animation={!stepsEnabled}
+              onCreateBuilding={async val => {
+                const res = await saveWorkQueue(val);
+                if (res) {
+                  setStateBuilding(p => {
+                    p.visible = false;
+                  });
+                  dispatch(setNavZIndex(true));
+                }
+              }}
+              onClose={bool => {
+                if (bool && activeBuilder) {
+                  building?.removeBuilder(activeBuilder);
+                }
+                if (activeStep === 3) {
+                  setActiveStep(activeStep + 1);
+                  setGuide(activeStep + 1);
+                  onClickGuide();
+                }
+                building?.removeActiveSolider();
+                dispatch(setNavZIndex(true));
                 setStateBuilding(p => {
                   p.visible = false;
                 });
-                dispatch(setNavZIndex(true));
-              }
-            }}
-            onClose={bool => {
-              if (bool && activeBuilder) {
-                building?.removeBuilder(activeBuilder);
-              }
-              if (activeStep === 3) {
-                setActiveStep(activeStep + 1);
-                setGuide(activeStep + 1);
-                onClickGuide();
-              }
-              building?.removeActiveSolider();
-              dispatch(setNavZIndex(true));
-              setStateBuilding(p => {
-                p.visible = false;
-              });
-            }}
-          />
-        )}
+              }}
+            />
+          )}
+        </Box>
         <Box position='relative' width={1920} height={900}>
           <Box
             className={classNames(
               'guide_step_1',
               'guide_step_2',
-              'guide_step_3',
               'guide_step_7',
             )}
-            width='800px'
+            width='700px'
             height='700px'
-            margin='0 auto'
+            margin='0 auto 0'
             style={{
               position: 'static',
             }}

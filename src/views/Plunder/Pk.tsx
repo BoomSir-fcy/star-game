@@ -41,6 +41,7 @@ import {
 import { GamePkState } from 'state/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useDispatch } from 'react-redux';
+import { APP_HEIGHT } from 'config';
 import { TrackDetail } from 'game/core/Running';
 import { useWeb3React } from '@web3-react/core';
 import ModalWrapper from 'components/Modal';
@@ -85,7 +86,7 @@ const Pk = () => {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const game = useGame({ width: 1400, height: 600 });
+  const game = useGame({ width: 1400, height: 500 });
   const [progress, setProgress] = useState(0);
 
   // 蓝色方和红色方信息
@@ -162,7 +163,7 @@ const Pk = () => {
         ...prev,
         {
           id: 0,
-          text: `本场战斗结束`,
+          text: `本场战斗结束, 下场战斗即将开始`,
           type: 1,
           success,
           showResult: true,
@@ -221,6 +222,7 @@ const Pk = () => {
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
+  const guideState = useStore(p => p.guide);
   const [activeStep, setActiveStep] = useState(guides.step);
   const steps = useMemo(
     () => [
@@ -239,6 +241,12 @@ const Pk = () => {
         intro: t('Here is the basic information of the opponent.'),
       },
       {
+        element: '.plunder-pk-step2-1',
+        intro: t(
+          'Here is the battle arrangement of both sides and the display of combat effects.',
+        ),
+      },
+      {
         element: '.plunder-pk-step3',
         intro: t(
           'Here are the details of the battle report of the current battle process.',
@@ -247,6 +255,23 @@ const Pk = () => {
     ],
     [t],
   );
+
+  const showGuide = useMemo(() => {
+    return (
+      !guides.guideFinish &&
+      guides.finish &&
+      steps.length - 1 > guides.step &&
+      stepsEnabled
+    );
+  }, [guides, steps.length, stepsEnabled]);
+
+  useEffect(() => {
+    if (guideState.visible || showGuide) {
+      running?.pause();
+    } else {
+      running?.play();
+    }
+  }, [showGuide, guideState.visible, running]);
 
   const [loaders, setLoaders] = useState(null);
 
@@ -344,9 +369,11 @@ const Pk = () => {
     t,
   ]);
 
+  console.log(showGuide, stepsEnabled, 'showGuide');
+
   return (
-    <Layout>
-      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
+    <Layout height={900}>
+      {showGuide && (
         <Steps
           enabled={stepsEnabled}
           steps={steps}
@@ -383,6 +410,18 @@ const Pk = () => {
         top={50}
         right={0}
         className='plunder-pk-step2'
+        zIndex={-1}
+      />
+      <Box
+        position='absolute'
+        width={900}
+        height={500}
+        top={0}
+        right={0}
+        left={0}
+        bottom={0}
+        margin='auto'
+        className='plunder-pk-step2-1'
         zIndex={-1}
       />
       <Flex mb='20px'>
@@ -438,7 +477,7 @@ const Pk = () => {
       {PKInfo && (
         <Flex alignItems='center' margin=' 36px auto' width='900px'>
           <Box width='900px'>
-            <Progress width={`${progress}%`} />
+            {progress < 100 && <Progress width={`${progress}%`} />}
           </Box>
           {/* <Text>{progress}</Text> */}
         </Flex>

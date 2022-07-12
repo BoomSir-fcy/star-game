@@ -20,6 +20,7 @@ import {
 import LinearMove from './LinearMove';
 import loaders from './Loaders';
 import { SpeederType } from '../types';
+import type Running from './Running';
 
 export interface GameOptionsProps {
   height?: number;
@@ -125,6 +126,8 @@ class Game extends EventTarget {
 
   activeSoliderFlag?: boolean; // 表示事件触发源未activeSolider
 
+  running?: Running;
+
   private lastCreateSoldierId = '';
 
   private enemyOfSoldierId: { [id: string]: boolean } = {};
@@ -148,6 +151,14 @@ class Game extends EventTarget {
       }
     });
     this.addEventListenerOfWindow();
+  }
+
+  setRunning(running: Running) {
+    if (this.running) {
+      this.running.pause();
+      delete this.running;
+    }
+    this.running = running;
   }
 
   loadResources() {

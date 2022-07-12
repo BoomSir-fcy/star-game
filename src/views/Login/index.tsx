@@ -208,10 +208,10 @@ const Login = () => {
           if (planetNum > 0) {
             navigate('/star/planet');
           } else {
-            navigate('/mystery-box');
+            navigate('/plant-league');
           }
         } else {
-          navigate('/mystery-box');
+          navigate('/plant-league');
         }
       }
 
