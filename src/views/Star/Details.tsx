@@ -386,15 +386,7 @@ const Details = () => {
         dispatch(setNavZIndex(false));
       }, 100);
     }
-  }, [
-    activeBuilder,
-    activeStep,
-    dispatch,
-    setGuide,
-    setStateBuilding,
-    steps,
-    stepsEnabled,
-  ]);
+  }, [activeBuilder, dispatch, setStateBuilding]);
 
   React.useEffect(() => {
     if (id) {
@@ -428,14 +420,8 @@ const Details = () => {
       setGuide(activeStep + 1);
       onClickGuide();
     }
-    // setGuide(5);
-    if (activeStep > 5) {
-      setStateBuilding(p => {
-        p.visible = false;
-      });
-      dispatch(setNavZIndex(true));
-    }
   }, [
+    steps,
     activeStep,
     dispatch,
     guides.guideFinish,
@@ -450,6 +436,10 @@ const Details = () => {
       onClickGuide();
     }
   }, [stepsEnabled, guides.step]);
+
+  // React.useEffect(() => {
+  //   setGuide(0);
+  // }, [setGuide]);
 
   React.useEffect(() => {
     if (stepsEnabled && (guides.step === 2 || guides.step === 3)) {
@@ -501,6 +491,9 @@ const Details = () => {
                     );
                   }
                   if (step === steps.length - 1) {
+                    setActiveStep(0);
+                  }
+                  if (step === steps.length - 1) {
                     setGuide(step);
                   }
                 }}
@@ -524,6 +517,7 @@ const Details = () => {
           onChangeGuide={() => {
             setTimeout(() => {
               if (stepsEnabled) {
+                building?.removeActiveSolider();
                 setActiveStep(6);
                 setGuide(6);
                 onClickGuide();
@@ -540,6 +534,7 @@ const Details = () => {
           onChangeGuide={() => {
             setTimeout(() => {
               if (stepsEnabled) {
+                building?.removeActiveSolider();
                 setActiveStep(5);
                 setGuide(5);
                 onClickGuide();
@@ -588,12 +583,12 @@ const Details = () => {
                 if (bool && activeBuilder) {
                   building?.removeBuilder(activeBuilder);
                 }
+                building?.removeActiveSolider();
                 if (activeStep === 3) {
                   setActiveStep(activeStep + 1);
                   setGuide(activeStep + 1);
                   onClickGuide();
                 }
-                building?.removeActiveSolider();
                 dispatch(setNavZIndex(true));
                 setStateBuilding(p => {
                   p.visible = false;
