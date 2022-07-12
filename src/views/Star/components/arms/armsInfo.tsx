@@ -121,7 +121,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
       },
       {
         attr: t('dodge'),
-        value: arms_attr?.dodge,
+        value: arms_attr?.miss,
       },
       {
         attr: t('hit'),
@@ -133,11 +133,11 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
       },
       {
         attr: t('speed'),
-        value: arms_attr?.speed,
+        value: arms_attr?.move,
       },
       {
         attr: t('area'),
-        value: arms_attr?.ak_range_max,
+        value: arms_attr?.range,
       },
     ]);
   }, [arms_attr, radarChart, t]);
