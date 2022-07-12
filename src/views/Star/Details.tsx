@@ -363,7 +363,6 @@ const Details = () => {
 
   const cancelBuilding = React.useCallback(() => {
     if (activeBuilder) {
-      console.log(activeBuilder);
       building?.removeBuilder(activeBuilder);
     }
     setStateBuilding(p => {

@@ -204,7 +204,7 @@ const TokenInfo = () => {
           >
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
-                <TokenImage width={30} height={32} tokenAddress='ORE' />
+                <TokenImage width={35} height={35} tokenAddress='ORE' />
                 <Text small ml='8px' ellipsis title={`${Product.stone}`}>
                   {format(Product.stone)}
                 </Text>
@@ -223,7 +223,7 @@ const TokenInfo = () => {
           >
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
-                <TokenImage width={30} height={32} tokenAddress='SPICES' />
+                <TokenImage width={35} height={35} tokenAddress='SPICES' />
                 <Text small ml='8px' ellipsis title={`${Product.population}`}>
                   {format(Product.population)}
                 </Text>
@@ -242,7 +242,7 @@ const TokenInfo = () => {
           >
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
-                <TokenImage width={30} height={32} tokenAddress='ENG' />
+                <TokenImage width={35} height={35} tokenAddress='ENG' />
                 <Text small ml='8px' ellipsis title={`${Product.energy}`}>
                   {format(Product.energy)}
                 </Text>
