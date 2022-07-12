@@ -15,9 +15,9 @@ import { useActiveBuilder } from '../../detailHooks';
 
 const Container = styled(Box)`
   position: fixed;
-  top: 0;
   left: -18px;
-  height: 100%;
+  top: -25px;
+  height: 950px;
   z-index: 199;
 `;
 const SideCloseButton = styled(Button)`

@@ -24,8 +24,8 @@ import { BuildingConsume } from './buildingConsume';
 const Container = styled(Box)`
   position: absolute;
   right: -18px;
-  top: 0;
-  height: 100%;
+  top: -25px;
+  height: 950px;
   z-index: 199;
 `;
 const SideCloseButton = styled(Button)`
