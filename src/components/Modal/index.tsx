@@ -7,7 +7,7 @@ import { MODAL_GLOBAL_ID_NAME } from 'config';
 import { useStore } from 'state';
 
 const BoxStyled = styled(Box)<{ overflow?: string }>`
-  margin: 40px 0 0 0;
+  margin: 20px 0 0 0;
 `;
 
 interface ModalHeaderProps {
@@ -23,11 +23,12 @@ const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose, theme }) => {
       mb='8px'
       justifyContent='space-between'
       alignItems='center'
+      mt='12px'
     >
-      <Text fontSize='30px' mt='8px' pl='20px' bold>
+      <Text fontSize='24px' pl='20px' bold>
         {title}
       </Text>
-      <Button padding='0' onClick={onClose} variant='text'>
+      <Button padding='0' onClick={onClose} variant='text' mr='16px'>
         <Box width='55px'>
           <img alt='' src='/images/commons/modal/cancle.png' />
         </Box>
@@ -64,10 +65,12 @@ const getCustomStyles = (themes: DefaultTheme, scale: number) => ({
     zIndex: 200,
     inset: '50% auto auto 50%',
     background: 'url(/images/commons/modal/bg.png)',
-    padding: '60px',
+    backgroundSize: '100% 100%',
+    padding: '24px',
     margin: '0',
-    width: '1032px',
-    height: '802px',
+    width: '832px',
+    height: '602px',
+    overflow: 'hidden',
   },
   overlay: {
     backgroundColor: themes.colors.overlay,

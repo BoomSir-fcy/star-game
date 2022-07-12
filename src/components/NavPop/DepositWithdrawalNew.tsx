@@ -263,10 +263,10 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
   }, [account, TokenInfo, getApproveNum]);
 
   return (
-    <Box width='100%' padding='30px 15px'>
+    <Box width='100%' padding='15px'>
       <Flex
         width='80%'
-        margin='100px auto 0'
+        margin='80px auto 0'
         flexDirection='column'
         justifyContent='center'
       >

@@ -51,7 +51,7 @@ const EnterBoxMove = styled(Box)<{ move?: boolean }>`
   transition: 0.3s;
   transform: translateY(${({ move }) => (move ? '200px' : '0')}) translateZ(1px);
   position: absolute;
-  bottom: 240px;
+  bottom: 340px;
 `;
 
 const CreateBoxShow = styled(Box)<{ show?: boolean }>`
@@ -323,6 +323,7 @@ const Login = () => {
             onClick={handleEnter}
             variant='login'
             disabled={account && userInfoView.loading}
+            style={{ fontSize: '24px' }}
           >
             {account ? 'ENTER' : t('Connect Wallet')}
           </Button>

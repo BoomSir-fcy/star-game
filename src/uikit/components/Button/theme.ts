@@ -29,8 +29,7 @@ export const styleVariants = {
     background: `url(/images/commons/btn/enter.png)`,
     backgroundPosition: '0 0',
     width: '210px',
-    height: '123px',
-    paddingBottom: '48px',
+    height: '76px',
     color: 'black',
   },
   [variants.PRIMARY]: {
