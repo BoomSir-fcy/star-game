@@ -428,7 +428,7 @@ const Details = () => {
       setGuide(activeStep + 1);
       onClickGuide();
     }
-    // setGuide(0);
+    // setGuide(5);
     if (activeStep > 5) {
       setStateBuilding(p => {
         p.visible = false;
@@ -446,12 +446,17 @@ const Details = () => {
   ]);
 
   React.useEffect(() => {
+    if (stepsEnabled && guides.step === 5) {
+      onClickGuide();
+    }
+  }, [stepsEnabled, guides.step]);
+
+  React.useEffect(() => {
     if (stepsEnabled && (guides.step === 2 || guides.step === 3)) {
       setActiveStep(4);
       setGuide(4);
       onClickGuide();
     }
-
     const bullets = document.getElementsByClassName('introjs-bullets');
     if (bullets.length > 0) {
       bullets[0].setAttribute('style', 'opacity:0');
