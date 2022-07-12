@@ -169,7 +169,7 @@ const Embattle = () => {
       </Flex>
       <ArmsInfo
         armsData={{ game_base_unit: activeSoldier?.options?.unitInfo }}
-        sid={activeSoldier?.id}
+        sid={activeSoldier?.options?.unitInfo?.number}
         right='0'
         removeHandle={removeHandle}
       />

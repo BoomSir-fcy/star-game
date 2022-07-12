@@ -23,6 +23,7 @@ const useSimulation = () => {
         },
         speed: item.speed, // 出手顺序
         unit_id: item.id,
+        unit_number: item.options?.unitInfo?.number,
       };
     });
 
@@ -34,6 +35,7 @@ const useSimulation = () => {
         },
         speed: item.speed, // 出手顺序
         unit_id: item.id,
+        unit_number: item.options?.unitInfo?.number,
       };
     });
     const { race } = soldiers?.[0]?.options || {};
