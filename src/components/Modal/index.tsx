@@ -69,7 +69,7 @@ const getCustomStyles = (themes: DefaultTheme, scale: number) => ({
     padding: '24px',
     margin: '0',
     width: '832px',
-    height: '502px',
+    height: '602px',
     overflow: 'hidden',
   },
   overlay: {

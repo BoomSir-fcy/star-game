@@ -266,7 +266,7 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
     <Box width='100%' padding='15px'>
       <Flex
         width='80%'
-        margin='50px auto 0'
+        margin='80px auto 0'
         flexDirection='column'
         justifyContent='center'
       >
