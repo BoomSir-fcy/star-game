@@ -170,10 +170,12 @@ class Builder extends EventTarget {
   }
 
   onConfirm(event: FederatedPointerEvent) {
+    event.stopPropagation();
     this.dispatchEvent(new Event('confirm'));
   }
 
   onCancel(event: FederatedPointerEvent) {
+    event.stopPropagation();
     this.dispatchEvent(new Event('cancel'));
   }
 
