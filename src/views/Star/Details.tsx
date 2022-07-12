@@ -416,6 +416,7 @@ const Details = () => {
   React.useEffect(() => {
     return () => {
       dispatch(storeAction.resetModal());
+      dispatch(storeAction.resetSelfBuildings());
       dispatch(storeAction.toggleVisible({ visible: false }));
     };
   }, [dispatch]);
