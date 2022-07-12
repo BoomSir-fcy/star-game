@@ -7,7 +7,7 @@ import { MODAL_GLOBAL_ID_NAME } from 'config';
 import { useStore } from 'state';
 
 const BoxStyled = styled(Box)<{ overflow?: string }>`
-  margin: 20px 0 0 0;
+  margin: 30px 0 0 0;
 `;
 
 interface ModalHeaderProps {
@@ -20,10 +20,9 @@ const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose, theme }) => {
   return (
     <Flex
       theme={theme}
-      mb='8px'
       justifyContent='space-between'
       alignItems='center'
-      mt='12px'
+      mt='24px'
     >
       <Text fontSize='24px' pl='20px' bold>
         {title}

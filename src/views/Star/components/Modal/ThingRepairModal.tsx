@@ -98,6 +98,8 @@ export const ThingRepairModal: React.FC<{
               />
             </Box>
             <Button
+              width='50%'
+              variant='purple'
               onClick={onChange}
               style={{
                 margin: 'auto',
