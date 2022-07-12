@@ -48,12 +48,10 @@ const Content = styled(Box)<{ animation?: boolean }>`
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid #4ffffb;
   opacity: 0;
-  display: none;
   transition: all 0.5s ease;
   padding-bottom: 0;
   &.active {
     opacity: 1;
-    display: block;
     animation: ${({ animation }) =>
       animation &&
       'bounceInRight 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 alternate forwards'};
@@ -238,25 +236,27 @@ export const SideRightBuildingInfo: React.FC<{
                   </MarkText>
                   <Text color='textSubtle'>{t(getBuildings()?.desc)}</Text>
                 </Flex>
-                <Destory
-                  variant='text'
-                  onClick={event => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    dispatch(
-                      storeAction.destoryBuildingModal({
-                        visible: true,
-                        destory: currentAttributes,
-                      }),
-                    );
-                  }}
-                >
-                  <Image
-                    src='../images/commons/icon/icon-destory.png'
-                    width={30}
-                    height={30}
-                  />
-                </Destory>
+                {!currentAttributes?.isqueue && (
+                  <Destory
+                    variant='text'
+                    onClick={event => {
+                      event.stopPropagation();
+                      event.preventDefault();
+                      dispatch(
+                        storeAction.destoryBuildingModal({
+                          visible: true,
+                          destory: currentAttributes,
+                        }),
+                      );
+                    }}
+                  >
+                    <Image
+                      src='../images/commons/icon/icon-destory.png'
+                      width={30}
+                      height={30}
+                    />
+                  </Destory>
+                )}
               </Flex>
             </Flex>
             <Box mb='15px'>

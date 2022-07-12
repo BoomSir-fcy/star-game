@@ -71,7 +71,6 @@ export const BuildingRechargeModal: React.FC<{
 
   React.useEffect(() => {
     if (Object.keys(maxValue).length > 0) {
-      console.log('Object.keys(maxValue): ', Object.keys(maxValue), maxValue);
       setState(p => {
         p.stone =
           (maxValue[StoreType.STONE].already / maxValue[StoreType.STONE].max) *
@@ -150,10 +149,12 @@ export const BuildingRechargeModal: React.FC<{
             variant='purple'
             onClick={() => {
               if (
-                state.energy === 100 &&
-                state.stone === 100 &&
-                state.population === 100
+                defaultValue.energy === maxValue[StoreType.ENERGY].max &&
+                defaultValue.stone === maxValue[StoreType.STONE].max &&
+                defaultValue.population === maxValue[StoreType.POPULATION].max
               ) {
+                console.log(defaultValue, maxValue);
+
                 toastError(
                   t(
                     'The resource has reached the upper limit and cannot be recharged',
