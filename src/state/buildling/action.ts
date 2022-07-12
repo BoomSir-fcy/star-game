@@ -12,12 +12,14 @@ export const queueVisbleSide = createAction<boolean>(
   'buildling/queueVisbleSide',
 );
 export const resetModal = createAction('buildling/resetModal');
+export const resetSelfBuildings = createAction('buildling/resetSelfBuildings');
 
 const buildingAction = {
   destoryBuildingModal,
   upgradesBuildingModal,
   queueVisbleSide,
   resetModal,
+  resetSelfBuildings,
 };
 
 export default buildingAction;

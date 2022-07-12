@@ -15,13 +15,12 @@ import {
 const InfoFlex = styled(Flex)`
   margin-top: 13px;
   flex-wrap: wrap;
-  justify-content: flex-end;
   & > :nth-child(n) {
     margin-bottom: 14px;
   }
 `;
 const InfoValueFlex = styled(Flex)`
-  width: 207px;
+  width: 224px;
 `;
 const ImageStyled = styled.img`
   width: 45px;
@@ -34,7 +33,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (
-    <GraphicsCard padding='29px 37px' borderWidth={2}>
+    <GraphicsCard padding='20px 10px 20px 30px' borderWidth={2}>
       <Flex justifyContent='space-between'>
         <Box>
           <Flex mb='17px' justifyContent='center' alignItems='center'>
@@ -209,7 +208,7 @@ const PlanetInfo: React.FC<{ info: Api.Planet.PlanetInfo }> = ({ info }) => {
               </Text>
             </InfoValueFlex>
             <Button
-              width='207px'
+              width='224px'
               height='53px'
               variant='purple'
               onClick={() => {

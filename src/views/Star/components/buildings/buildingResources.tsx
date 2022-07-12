@@ -62,10 +62,9 @@ export const BuildingResources: React.FC<{
         setState(p => {
           p.visible = true;
           p.type = 1;
-          p.needMax.stone = store?.store_stone + store?.charge_stone;
-          p.needMax.population =
-            store?.store_population + store?.charge_population;
-          p.needMax.energy = store?.store_energy + store?.charge_energy;
+          p.needMax.stone = planet?.stone;
+          p.needMax.population = planet?.population;
+          p.needMax.energy = planet?.energy;
         });
         setStoreAssets({
           [StoreType.STONE]: {
@@ -85,7 +84,7 @@ export const BuildingResources: React.FC<{
     } catch (error) {
       console.error(error);
     }
-  }, [planet_id, setState, store]);
+  }, [planet?.energy, planet?.population, planet?.stone, planet_id, setState]);
 
   const extractChange = React.useCallback(
     async val => {

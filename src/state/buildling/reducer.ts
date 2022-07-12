@@ -5,6 +5,7 @@ import {
   destoryBuildingModal,
   upgradesBuildingModal,
   resetModal,
+  resetSelfBuildings,
   queueVisbleSide,
 } from './action';
 
@@ -90,6 +91,8 @@ export const buildling = createSlice({
           visible: false,
           upgrad: {},
         };
+      })
+      .addCase(resetSelfBuildings, (state, action) => {
         state.selfBuildings = {
           building_type: 0,
           buildings: [],
