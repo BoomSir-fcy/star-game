@@ -92,7 +92,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
   const [radarChart] = React.useState(
     new RadarChart({
       width: 180,
-      height: 200,
+      height: 180,
       colorPolygon: '#FFFFFF',
       colorText: '#FFFFFF',
       fillColor: 'rgba(211, 95, 96, 0.5)',
@@ -128,12 +128,12 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
         value: arms_attr?.hit,
       },
       {
-        attr: t('Burst'),
-        value: arms_attr?.crit,
-      },
-      {
         attr: t('speed'),
         value: arms_attr?.move,
+      },
+      {
+        attr: t('Burst'),
+        value: arms_attr?.crit,
       },
       {
         attr: t('area'),
@@ -291,8 +291,10 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
             {/* <MarkText bold fontSize='18px' mb='20px' fontStyle='normal'>
               {t('Ability rating', { value: 'SS' })}
             </MarkText> */}
-            <GraphicsCard stripe width='490px' height='110px'>
-              <Text color='textSubtle'>{getArms()?.desc}</Text>
+            <GraphicsCard stripe width='490px' height='150px'>
+              <Text color='textSubtle' ellipsis maxLine={5}>
+                {getArms()?.desc}
+              </Text>
             </GraphicsCard>
           </Box>
         </Flex>

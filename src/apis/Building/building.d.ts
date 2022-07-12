@@ -60,7 +60,7 @@ declare namespace Api {
       isbuilding?: boolean;
       isactive?: boolean; // 是否激活
       iscreate?: boolean; // 是否已经保存创建建筑了
-      isqueue?: boolean; // 是否加入队列中，可以取消
+      isqueue?: boolean; // 是否加入队列中
       isPreview?: boolean; // 预览
     }
 

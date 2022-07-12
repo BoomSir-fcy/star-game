@@ -99,7 +99,7 @@
   "No Data": "No Data",
   "Features": "Features",
   "The planet is under cultivating, it has no capacity yet": "The planet is under cultivating, it has no capacity yet",
-  "Supplement Resources": "Supplement Resources",
+  "Supplement Resources": "Supplement Recharge",
   "Planet storage tank": "Planet storage tank",
   "There are working planets": "There are working planets",
   "There are upgrading planets": "There are upgrading planets",
@@ -814,5 +814,6 @@
   "http-error-200037": "Planet upgrade fail in planetary alliance",
   "http-error-1000004": "Game unit count over.",
   "http-error-200029": "Planetary Alliance is working, unable to occupy stars",
+  "http-error-200030": "Lack of upgrade experience",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }
