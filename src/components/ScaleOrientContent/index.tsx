@@ -91,6 +91,7 @@ window.addEventListener(
 
 const Content = styled(Box)<{ scale: number; hideHeader?: boolean }>`
   width: 1920px;
+  height: 100%;
   /* height: ${({ scale, hideHeader }) => (hideHeader ? 900 - 176 : 900)}px; */
   /* padding-top: ${({ scale, hideHeader }) =>
     hideHeader ? 0 : scale * 176}px; */
