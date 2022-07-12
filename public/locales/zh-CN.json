@@ -803,6 +803,7 @@
   "http-error-500002": "星系已经拥有者",
   "http-error-1000001": "游戏初始化失败",
   "http-error-1000002": "设置游戏单位失败",
+  "http-error-1000003": "没有对应单元的demo信息",
   "http-error-400004": "余额不足",
   "http-error-400008": "BNB余额不足",
   "http-error-400010": "资源不足",

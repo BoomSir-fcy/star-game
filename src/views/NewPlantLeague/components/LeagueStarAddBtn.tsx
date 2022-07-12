@@ -199,6 +199,7 @@ const LeagueStarAddBtn: React.FC<StarAddBtnProps> = ({
             background='rgb(0 0 0 / 50%)'
             padding='0 10px'
             borderRadius='10px'
+            flexWrap='wrap'
           >
             <Text fontSize='18px' mr='10px'>
               Power

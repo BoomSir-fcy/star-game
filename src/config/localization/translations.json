@@ -802,6 +802,7 @@
   "http-error-500002": "The galaxy already owns",
   "http-error-1000001": "Game initialization failed",
   "http-error-1000002": "Failed to set game units",
+  "http-error-1000003": "There is no demo information for the corresponding unit",
   "http-error-400004": "Insufficient balance",
   "http-error-400008": "Insufficient BNB balance",
   "http-error-400010": "Insufficient resources",

@@ -38,8 +38,8 @@ const RecordBox = styled(Flex)`
   .DateRangePickerInput {
     margin-top: 10px;
     background-color: transparent;
-    display: flex;
-    align-items: center;
+    /* display: flex;
+    align-items: center; */
     .DateInput {
       background: transparent;
       .DateInput_input {
@@ -70,6 +70,7 @@ const RecordBox = styled(Flex)`
       line-height: 38px;
     }
     .DateRangePickerInput_arrow {
+      display: none;
       color: #79c6c4;
       .DateRangePickerInput_arrow_svg {
         fill: #79c6c4;
@@ -84,7 +85,7 @@ const RecordBox = styled(Flex)`
 `;
 
 const DownImg = styled.img`
-  width: 42px;
+  width: 36px;
   transform: rotate(90deg);
   cursor: pointer;
 `;
@@ -165,7 +166,7 @@ export const BattleTop: React.FC<{
           </MarkText>
         </Flex>
       </RecordBox>
-      <RecordBox width='550px'>
+      <RecordBox width='320px'>
         {/* <SingleDatePicker
           id='date_input'
           date={date}
@@ -198,10 +199,9 @@ export const BattleTop: React.FC<{
           onClick={() => setIsFocused('startDate')}
           justifyContent='center'
           alignItems='center'
-          width='110px'
+          width='80px'
           height='60px'
           position='relative'
-          mr='20px'
         >
           <DownImg src='/images/commons/icon/back.png' />
         </Flex>

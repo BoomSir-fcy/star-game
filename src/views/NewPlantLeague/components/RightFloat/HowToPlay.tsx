@@ -7,7 +7,7 @@ const BoxStyle = styled(Box)`
   background: url('/images/planetary_alliance/pool-card.png') no-repeat;
   background-size: 100% 100%;
   width: 518px;
-  /* height: 480px; */
+  height: 480px;
   box-shadow: 0px 4px 18px 0px rgba(0, 0, 0, 0.31);
   position: absolute;
   left: -452px;
@@ -45,6 +45,11 @@ const BoxStyle = styled(Box)`
   }
 `;
 
+const ScrollBox = styled(Box)`
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+`;
 const RulsText = styled(Text)`
   font-size: 16px;
 `;
@@ -60,17 +65,19 @@ const HowToPlay: React.FC<{
       onMouseEnter={() => setShowPlay(true)}
       onMouseLeave={() => setShowPlay(false)}
     >
-      <MarkText mb='20px' fontSize='20px' bold fontStyle='normal'>
-        {t('Gameplay – Planet Alliance')}
-      </MarkText>
-      <Box mb='20px'>
-        <RulsText>{t('PlayRules1')}</RulsText>
-        <RulsText>{t('PlayRules2')}</RulsText>
-        <RulsText>{t('PlayRules3')}</RulsText>
-        <RulsText>{t('PlayRules4')}</RulsText>
-        <RulsText>{t('PlayRules5')}</RulsText>
-        <RulsText>{t('PlayRules6')}</RulsText>
-      </Box>
+      <ScrollBox>
+        <MarkText mb='20px' fontSize='20px' bold fontStyle='normal'>
+          {t('Gameplay – Planet Alliance')}
+        </MarkText>
+        <Box mb='20px'>
+          <RulsText>{t('PlayRules1')}</RulsText>
+          <RulsText>{t('PlayRules2')}</RulsText>
+          <RulsText>{t('PlayRules3')}</RulsText>
+          <RulsText>{t('PlayRules4')}</RulsText>
+          <RulsText>{t('PlayRules5')}</RulsText>
+          <RulsText>{t('PlayRules6')}</RulsText>
+        </Box>
+      </ScrollBox>
     </BoxStyle>
   );
 };

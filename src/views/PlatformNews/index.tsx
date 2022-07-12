@@ -84,28 +84,28 @@ const PlatformNews: React.FC = () => {
           </MarkText>
         </TitleBox>
       </Flex>
-      <ScrollBox onScroll={loadMore}>
-        {MessageList.length > 0 ? (
-          <>
-            {(MessageList ?? []).map(item => (
-              <ItemFlex key={item.id}>
-                <Img src='/images/commons/icon/news.png' alt='' />
-                <Box ml='30px'>
-                  <Flex alignItems='flex-end'>
-                    <MarkText mr='28px' fontSize='20px' bold fontStyle='normal'>
-                      {item.title}
-                    </MarkText>
-                    <Text>{dayjs(item.addTime).format('YYYY-MM-DD')}</Text>
-                  </Flex>
-                  <Text>{item?.msgContent}</Text>
-                </Box>
-              </ItemFlex>
-            ))}
-          </>
-        ) : (
+      {MessageList.length > 0 ? (
+        <ScrollBox onScroll={loadMore}>
+          {(MessageList ?? []).map(item => (
+            <ItemFlex key={item.id}>
+              <Img src='/images/commons/icon/news.png' alt='' />
+              <Box ml='30px'>
+                <Flex alignItems='flex-end'>
+                  <MarkText mr='28px' fontSize='20px' bold fontStyle='normal'>
+                    {item.title}
+                  </MarkText>
+                  <Text>{dayjs(item.addTime).format('YYYY-MM-DD')}</Text>
+                </Flex>
+                <Text>{item?.msgContent}</Text>
+              </Box>
+            </ItemFlex>
+          ))}
+        </ScrollBox>
+      ) : (
+        <Box height='calc(940px - 160px)'>
           <Empty />
-        )}
-      </ScrollBox>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -52,9 +52,7 @@ const GlobalStyle = createGlobalStyle<{
 `;
 
 const ScrollBox = styled(Box)`
-  /* min-height: 400px;
-  max-height: 650px; */
-  height: 650px;
+  height: calc(940px - 160px);
   margin-top: 22px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -162,7 +160,7 @@ const BattleReport = () => {
   }, [dispatch, steps.length]);
 
   return (
-    <Box pt='20px'>
+    <Box pt='20px' height='940px'>
       {!guides.guideFinish &&
         guides.finish &&
         steps.length - 1 >= guides.step &&

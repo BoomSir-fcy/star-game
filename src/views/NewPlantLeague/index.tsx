@@ -156,7 +156,7 @@ const NewPlantLeague: React.FC = () => {
 
   const Booting = useMemo(() => {
     let HavePlanet = true;
-    if (order?.length === 0 && guides.step === 2) {
+    if (order?.length === 0 && (guides.step === 2 || guides.step === 3)) {
       HavePlanet = false;
     }
     return (
@@ -170,6 +170,7 @@ const NewPlantLeague: React.FC = () => {
   }, [stepsEnabled, guides, steps, ShowRound2, order]);
 
   useEffect(() => {
+    if (!Booting) return;
     console.log(guides.step, '步骤');
     if (guides.step === 4 || guides.step === 6) {
       console.log(guides.step, '返回上一步');
@@ -183,7 +184,7 @@ const NewPlantLeague: React.FC = () => {
     if (guides.step === 7) {
       setShowModule(true);
     }
-  }, [guides.step]);
+  }, [guides.step, Booting]);
 
   useEffect(() => {
     if (Booting) {

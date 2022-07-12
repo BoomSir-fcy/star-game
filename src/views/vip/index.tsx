@@ -54,14 +54,15 @@ const VipLevel = styled(Box)`
   width: 357px;
   height: 345px;
   top: 0;
+  z-index: 1;
 `;
 
 const VipBase = styled(Box)`
   position: absolute;
-  width: 300px;
+  width: 500px;
   height: 400px;
   bottom: -50px;
-  z-index: -1;
+  z-index: 0;
 `;
 
 const Title = styled(Text)`
@@ -216,7 +217,7 @@ const VipPage = () => {
             </VipLevel>
             <VipBase>
               <Image
-                width={300}
+                width={500}
                 height={400}
                 src='/images/mystery-box/base-super.png'
               />
