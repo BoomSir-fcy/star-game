@@ -78,9 +78,12 @@ const RecordBox = styled(Flex)`
         height: 34px;
       }
     }
-    /* .SingleDatePicker_picker__directionLeft {
-      top: 64px !important;
-    } */
+    .DateRangePicker_picker__directionLeft {
+      top: 78px !important;
+    }
+    .DateInput_fang {
+      display: none;
+    }
   }
 `;
 

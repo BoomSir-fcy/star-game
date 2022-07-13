@@ -1,10 +1,12 @@
 import { Api } from 'apis';
 import { useToast } from 'contexts/ToastsContext';
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { useRef } from 'react';
 import { Text, Label, Box, Flex, Input, Button, Dots, Skeleton } from 'uikit';
 
 const ChangeRate: React.FC = () => {
+  const timer = useRef<ReturnType<typeof setTimeout>>();
+
   const [timeInfo, setTimeInfo] = React.useState<
     Api.Common.Info & { loaded: boolean }
   >({
@@ -40,8 +42,13 @@ const ChangeRate: React.FC = () => {
   }, [value, fetchRate, toastError, toastSuccess]);
 
   React.useEffect(() => {
-    fetchRate();
-  }, [fetchRate]);
+    if (timer.current) {
+      clearInterval(timer.current);
+    }
+    timer.current = setInterval(() => {
+      fetchRate();
+    }, 4000);
+  }, [fetchRate, timer]);
 
   return (
     <Box>
