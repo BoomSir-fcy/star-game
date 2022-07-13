@@ -1,5 +1,6 @@
 import { Api } from 'apis';
 import { useToast } from 'contexts/ToastsContext';
+import dayjs from 'dayjs';
 import React from 'react';
 import { Text, Label, Box, Flex, Input, Button, Dots, Skeleton } from 'uikit';
 
@@ -46,6 +47,9 @@ const ChangeRate: React.FC = () => {
     <Box>
       <Flex alignItems='center' justifyContent='center'>
         <Box>
+          <Text fontSize='46px'>
+            {dayjs(timeInfo.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
+          </Text>
           <Flex width='600px'>
             <Text fontSize='46px'>当前倍速：</Text>
             {timeInfo.loaded ? (
