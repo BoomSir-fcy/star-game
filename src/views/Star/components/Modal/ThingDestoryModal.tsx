@@ -49,7 +49,7 @@ export const ThingDestoryModal: React.FC<{
               </Text>
               <Text color='textSubtle' mt='22px' small>
                 {t('planetDetailsTypeEffect')}
-                {t('planetDetailsType1')}
+                {destory?.destory?.describe}
               </Text>
             </Box>
             <Button onClick={onChange}>{t('planetConfirmDestroy')}</Button>

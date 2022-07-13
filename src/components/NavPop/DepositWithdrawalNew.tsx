@@ -164,10 +164,10 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
         }
 
         await Recharge(TokenInfo?.coinId, addPrecisionNum, isChainToken);
-        toastSuccess(t('Recharge Succeeded'));
+        toastSuccess(t('Deposit Succeeded'));
         close();
       } catch (error) {
-        toastError(t('Recharge failed'));
+        toastError(t('Deposit failed'));
         console.error(error);
       }
     } else {
@@ -306,7 +306,7 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
                   onChange={handleChange}
                   placeholder={
                     OperationType === 1
-                      ? t('Please enter the recharge amount')
+                      ? t('Please enter the deposit amount')
                       : t('Please enter the transfer amount')
                   }
                 />
@@ -378,9 +378,9 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
               {OperationType === 1 ? (
                 approvedNum > 0 || Token === 'BNB' ? (
                   pending ? (
-                    <Dots>{t('Recharging')}</Dots>
+                    <Dots>{t('Depositing')}</Dots>
                   ) : (
-                    t('Confirm Recharge')
+                    t('Confirm Deposit')
                   )
                 ) : pending ? (
                   <Dots>{t('Approving')}</Dots>
