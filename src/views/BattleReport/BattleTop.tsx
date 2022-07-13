@@ -186,7 +186,7 @@ export const BattleTop: React.FC<{
           focusedInput={isFocused}
           onFocusChange={onFocusChange}
           onDatesChange={onDateChange}
-          maxDate={moment(new Date(new Date().toLocaleDateString()).getTime())}
+          // maxDate={moment(new Date(new Date().toLocaleDateString()).getTime())}
           minimumNights={0}
           // disabled='endDate'
           numberOfMonths={1}
