@@ -8,12 +8,12 @@ import { Api } from 'apis';
 
 const ShaDowBox = styled(Flex)`
   width: 100%;
-  height: 124px;
+  height: 100px;
   background: ${({ theme }) => theme.colors.backgroundCard};
   box-shadow: inset 0px -1px 3px 0px rgba(255, 255, 255, 35%);
   border-radius: 10px;
-  padding: 22px 40px;
-  margin-bottom: 40px;
+  padding: 10px 20px;
+  margin-bottom: 20px;
 `;
 
 const InvitePop: React.FC = () => {
@@ -56,8 +56,8 @@ const InvitePop: React.FC = () => {
   }, []);
 
   return (
-    <Box width='100%' padding='50px 20px'>
-      <Text mb='60px' fontSize='22px'>
+    <Box width='100%' padding='10px 30px'>
+      <Text mb='16px' fontSize='22px'>
         {t(
           'After inviting a friend to register a character and open a blind box, you can get 5% of the cost of each blind box opened by your friend as a reward',
         )}
@@ -83,13 +83,13 @@ const InvitePop: React.FC = () => {
             <Text color='textSubtle' fontSize='24px'>
               {t('My inviter’s address')}
             </Text>
-            <Text fontSize='22px' ellipsis maxWidth='350px'>
+            <Text fontSize='22px' ellipsis maxWidth='320px'>
               {Url}
             </Text>
           </Box>
         </Flex>
         <Box>
-          <Button variant='vs' onClick={() => Copy()}>
+          <Button variant='vs' width='250px' onClick={() => Copy()}>
             {t('Copy Link')}
           </Button>
         </Box>

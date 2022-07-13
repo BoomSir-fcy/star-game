@@ -27,11 +27,11 @@ const UserInfo: React.FC = () => {
 
   return (
     <Box width='100%' padding='100px 30px'>
-      <Flex>
-        <Box mr='40px' position='relative' width='300px' height='300px'>
+      <Flex justifyContent='space-around'>
+        <Box mr='40px' position='relative' width='200px' height='200px'>
           <KingAvatar
-            width='300px'
-            height='300px'
+            width='200px'
+            height='200px'
             sex='normal'
             url={userInfo?.avatar}
           />
