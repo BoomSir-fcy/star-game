@@ -20,6 +20,7 @@ const ChangeRate: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
   const [pending, setPending] = React.useState(false);
   const [value, setValue] = React.useState('');
+  const [value2, setValue2] = React.useState('');
   const [visible, setVisible] = useState(false);
 
   const { toastSuccess, toastError } = useToast();
@@ -42,19 +43,23 @@ const ChangeRate: React.FC = () => {
     setPending(false);
   }, [fetchRate, toastSuccess]);
 
-  const changeHandle = React.useCallback(async () => {
-    if (!Number(value)) {
-      toastError('请输入正确的数字');
-      return;
-    }
-    setLoading(true);
-    const res = await Api.CommonApi.setTimeRate(Number(value));
-    setLoading(false);
-    if (Api.isSuccess(res)) {
-      fetchRate();
-      toastSuccess('修改成功');
-    }
-  }, [value, fetchRate, toastError, toastSuccess]);
+  const changeHandle = React.useCallback(
+    async (InputValue: number, afterTime?: number) => {
+      // if (!InputValue) {
+      //   toastError('请输入正确倍数数字');
+      //   return;
+      // }
+      const num = InputValue || 1;
+      setLoading(true);
+      const res = await Api.CommonApi.setTimeRate(num, afterTime);
+      setLoading(false);
+      if (Api.isSuccess(res)) {
+        fetchRate();
+        toastSuccess('修改成功');
+      }
+    },
+    [fetchRate, toastSuccess],
+  );
 
   React.useEffect(() => {
     if (timer.current) {
@@ -62,7 +67,7 @@ const ChangeRate: React.FC = () => {
     }
     timer.current = setInterval(() => {
       fetchRate();
-    }, 4000);
+    }, 1000);
   }, [fetchRate, timer]);
 
   return (
@@ -89,7 +94,21 @@ const ChangeRate: React.FC = () => {
               }}
               width={400}
             />
-            <Button onClick={() => changeHandle()} disabled={loading}>
+          </Flex>
+          <Flex alignItems='center' width='1000px'>
+            <Text fontSize='46px'>加速过期时间：</Text>
+            <Input
+              value={value2}
+              onChange={e => {
+                setValue2(e.target.value);
+              }}
+              width={400}
+            />
+            <Text fontSize='46px'>(秒)</Text>
+            <Button
+              onClick={() => changeHandle(Number(value), Number(value2))}
+              disabled={loading}
+            >
               {loading ? <Dots>确定中。。。</Dots> : '确定'}
             </Button>
           </Flex>

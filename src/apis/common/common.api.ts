@@ -8,8 +8,8 @@ export class CommonApi extends Http {
   }
 
   // 设置时间速率
-  async setTimeRate(rate: number) {
-    const res = await this.post('time/timestamp/rate', { rate });
+  async setTimeRate(rate: number, afterTime?: number) {
+    const res = await this.post('time/timestamp/rate', { rate, afterTime });
     return res;
   }
 

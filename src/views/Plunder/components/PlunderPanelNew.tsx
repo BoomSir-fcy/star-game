@@ -1,6 +1,11 @@
 import { useTranslation } from 'contexts/Localization';
 import { DescInfo, TrackDetail } from 'game/core/Running';
-import { getEffectDescText, getEffectDescTypeText } from 'game/core/utils';
+import {
+  getEffectDescText,
+  getEffectDescTextNew,
+  getEffectDescTypeText,
+  getSpriteName,
+} from 'game/core/utils';
 import { descType, DescType, RoundDescAxis } from 'game/types';
 import React, {
   useMemo,
@@ -65,37 +70,6 @@ const PanelAxis = ({ axis }: { axis?: RoundDescAxis }) => {
 // hp
 
 const PanelType = ({ detail }: { detail: TrackDetail }) => {
-  if (detail?.type === descType.MOVE) {
-    return (
-      <PanelText>
-        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-        从坐标
-        <PanelAxis axis={detail.descInfo?.sender.pos} />
-        移动到坐标
-        <PanelAxis axis={detail.descInfo?.moveTo} />
-      </PanelText>
-    );
-  }
-  if (detail?.type === descType.TOTAL_INFO) {
-    return (
-      <PanelText>
-        <PanelSide />
-        总血量: <PanelTextHp>{detail.info?.blue_total_hp || 0}</PanelTextHp>
-        ;&nbsp;&nbsp;
-        <PanelSide isEnemy />
-        总血量: <PanelTextHp>{detail.info?.red_total_hp || 0}</PanelTextHp>
-      </PanelText>
-    );
-  }
-  if (detail?.type === descType.REMOVE) {
-    return (
-      <PanelText>
-        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-        <PanelAxis axis={detail.descInfo?.sender?.pos} />
-        阵亡
-      </PanelText>
-    );
-  }
   if (detail?.type === descType.FIRING) {
     return (
       <PanelText>
@@ -103,9 +77,11 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
           return (
             <PanelText key={`${item.pos.x}_${item.pos.y}`}>
               <PanelSide isEnemy={item.isEnemy} />
+              兵种
               <PanelAxis axis={item.pos} />
-              建筑
-              {getEffectDescText(detail.descInfo?.type)}
+              {/* {getSpriteName()} */}
+              使用
+              {getEffectDescTextNew(detail.descInfo?.type)}
               {item.receive_sub_hp && (
                 <PanelTextHp>{item.receive_sub_hp}</PanelTextHp>
               )}
@@ -343,7 +319,41 @@ const PlunderPanelNew: React.FC<PlunderPanelProps> = ({
           overflow='auto'
           height='150px'
         >
-          123
+          {renderDetails.map(item => {
+            return (
+              <Flex key={item.id} flex={1}>
+                <Flex flexDirection='column' flex={1} pl='20px' mt='10px'>
+                  <Flex>
+                    <PanelText style={{ whiteSpace: 'nowrap' }}>
+                      [{item.descInfo?.id || item.id}]:&nbsp;
+                    </PanelText>
+
+                    <PanelType detail={item} />
+                  </Flex>
+                </Flex>
+              </Flex>
+            );
+          })}
+          {others?.map(item => {
+            return (
+              <Flex key={item.id} flex={1}>
+                <Flex flexDirection='column' flex={1} pl='20px' mt='10px'>
+                  <PanelText style={{ whiteSpace: 'nowrap' }}>
+                    {item.text}
+                    {item.showResult && (
+                      <>
+                        <PanelText>
+                          ,{' '}
+                          {item.success ? <PanelSide /> : <PanelSide isEnemy />}
+                        </PanelText>
+                        <PanelText>胜利</PanelText>
+                      </>
+                    )}
+                  </PanelText>
+                </Flex>
+              </Flex>
+            );
+          })}
         </Box>
       </BorderCard>
     </BoxStyled>

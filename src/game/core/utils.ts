@@ -217,6 +217,31 @@ export const getEffectDescText = (effect?: DescType) => {
   if (effect === descType.IMMUNITY_FIRING) return '冰冻灼烧';
   return '未知';
 };
+
+export const getEffectDescTextNew = (effect?: DescType) => {
+  if (effect === descType.ATTACK) return '普通攻击';
+  if (effect === descType.STOP_MOVE) return '禁锢技能';
+  // if (effect === descType.ICE_END) return '解除冰冻';
+  // if (effect === descType.FIRING) return '被灼烧,造成';
+  if (effect === descType.BOOM) return '炸弹攻击';
+  if (effect === descType.ICE_START) return '冰冻攻击';
+  if (effect === descType.ADD_FIRING) return '灼烧攻击';
+  // if (effect === descType.ADD_BOOM) return '放置炸弹';
+  if (effect === descType.REMOVE_FIRING) return '灭火技能';
+  if (effect === descType.ADD_SHIELD) return '添加护盾';
+  if (effect === descType.REMOVE_SHIELD) return '减少护盾';
+  if (effect === descType.REMOVE_STOP_MOVE) return '解除禁锢';
+  if (effect === descType.REMOVE_BOMB) return '拆除炸弹';
+  if (effect === descType.ADD_TERRAIN_FIRING) return '产生地形灼烧';
+  if (effect === descType.TERRAIN_FIRING) return '灼烧造成';
+  if (effect === descType.ATTACK_DODGE) return '触发闪避';
+  if (effect === descType.ATTACK_MISS) return '攻击未命中';
+  if (effect === descType.IMMUNITY_ICE) return '免疫冰冻';
+  if (effect === descType.IMMUNITY_LOCK_MOVE) return '冰冻禁锢';
+  if (effect === descType.IMMUNITY_FIRING) return '冰冻灼烧';
+  return '未知';
+};
+
 export const getEffectDescTypeText = (effect?: DescType) => {
   if (effect === descType.ATTACK) return '伤害';
   if (effect === descType.STOP_MOVE) return '效果';
