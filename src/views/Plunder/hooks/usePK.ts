@@ -54,7 +54,7 @@ export const usePK = (game: Game) => {
           base: PKInfo.init.base_unit,
         });
         setRunning(_running);
-        _running.play();
+        _running.run();
       });
     },
     [game, createSoldiers],
