@@ -135,7 +135,6 @@ const Pk = () => {
   );
 
   const newRoundHandle = useCallback(() => {
-    console.log('重新开始');
     game.clearSoldier();
     setTotalInfo(null);
     setOthers([]);
@@ -313,7 +312,6 @@ const Pk = () => {
   }, [loaderLoading, loaderLoaded, loaders]);
 
   useEffect(() => {
-    console.log(mounted);
     if (!mounted) {
       if (ref.current && game && PKInfo) {
         console.log(PKInfo);
@@ -368,8 +366,6 @@ const Pk = () => {
     loaderRemoveEventListener,
     t,
   ]);
-
-  console.log(showGuide, stepsEnabled, 'showGuide');
 
   return (
     <Layout height={900}>

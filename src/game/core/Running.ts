@@ -165,6 +165,14 @@ class Running extends EventTarget {
   // }
 
   play() {
+    if (this.paused) {
+      this.paused = false;
+      this.runHandle();
+      this.dispatchEvent(new Event('play'));
+    }
+  }
+
+  run() {
     this.paused = false;
     this.runHandle();
     this.dispatchEvent(new Event('play'));
