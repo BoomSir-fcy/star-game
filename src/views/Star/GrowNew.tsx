@@ -375,7 +375,7 @@ const Grow: React.FC = () => {
         <Box padding='30px 25px'>
           <Flex
             flex='1'
-            mt='100px'
+            mt='50px'
             justifyContent='center'
             alignItems='center'
             flexDirection='column'
