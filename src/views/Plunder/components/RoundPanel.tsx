@@ -70,7 +70,7 @@ const RoundPanel: React.FC<RoundPanelProps> = ({
       </FlexStyled>
       <Modal title={t('Kind tips')} visible={visible} setVisible={setVisible}>
         <Flex
-          height='500px'
+          height='350px'
           flexDirection='column'
           justifyContent='space-around'
         >

@@ -511,8 +511,10 @@ const Pk = () => {
         setVisible={() => setVisibleGameFailed(false)}
       >
         <Flex pt='100px' flexDirection='column' alignItems='center'>
-          <Text color='warning'>{t('Failed to plunder the planet!')}</Text>
-          <Button mt='30px' onClick={() => navigate(-1)}>
+          <Text fontSize='30px' color='warning'>
+            {t('Failed to plunder the planet!')}
+          </Text>
+          <Button mt='70px' onClick={() => navigate(-1)}>
             {t('Confirm')}
           </Button>
         </Flex>
