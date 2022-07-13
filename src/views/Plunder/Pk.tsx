@@ -51,7 +51,7 @@ import {
   PKProgress,
   RoundPanel,
   WaitPlunderList,
-  PlunderPanel,
+  PlunderPanelNew,
   OtherDetail,
 } from './components';
 import { usePK } from './hooks/usePK';
@@ -491,7 +491,7 @@ const Pk = () => {
       >
         {/* <WaitPlunderList /> */}
         <Flex flex={1}>
-          <PlunderPanel
+          <PlunderPanelNew
             className='plunder-pk-step3'
             width='100%'
             details={roundInfos}

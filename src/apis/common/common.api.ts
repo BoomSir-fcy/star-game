@@ -12,4 +12,9 @@ export class CommonApi extends Http {
     const res = await this.post('time/timestamp/rate', { rate });
     return res;
   }
+
+  async setReset() {
+    const res = await this.lang_get('reset', 10 * 60 * 1000);
+    return res;
+  }
 }

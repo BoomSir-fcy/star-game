@@ -1,8 +1,11 @@
 import { Api } from 'apis';
+import Modal from 'components/Modal';
 import { useToast } from 'contexts/ToastsContext';
 import dayjs from 'dayjs';
-import React, { useRef } from 'react';
+import { truncate } from 'fs';
+import React, { useRef, useState } from 'react';
 import { Text, Label, Box, Flex, Input, Button, Dots, Skeleton } from 'uikit';
+import ResetModule from './ResetModule';
 
 const ChangeRate: React.FC = () => {
   const timer = useRef<ReturnType<typeof setTimeout>>();
@@ -15,7 +18,9 @@ const ChangeRate: React.FC = () => {
     loaded: false,
   });
   const [loading, setLoading] = React.useState(false);
+  const [pending, setPending] = React.useState(false);
   const [value, setValue] = React.useState('');
+  const [visible, setVisible] = useState(false);
 
   const { toastSuccess, toastError } = useToast();
 
@@ -26,6 +31,16 @@ const ChangeRate: React.FC = () => {
       setTimeInfo({ ...res.data, loaded: true });
     }
   }, [setTimeInfo]);
+
+  const SetReset = React.useCallback(async () => {
+    setPending(true);
+    const res = await Api.CommonApi.setReset();
+    if (Api.isSuccess(res)) {
+      fetchRate();
+      toastSuccess('重置成功');
+    }
+    setPending(false);
+  }, [fetchRate, toastSuccess]);
 
   const changeHandle = React.useCallback(async () => {
     if (!Number(value)) {
@@ -78,8 +93,22 @@ const ChangeRate: React.FC = () => {
               {loading ? <Dots>确定中。。。</Dots> : '确定'}
             </Button>
           </Flex>
+          <Flex alignItems='center' width='1000px'>
+            <Text fontSize='46px'>重置数据时间会很长 请耐心等待</Text>
+            <Button onClick={() => setVisible(true)} disabled={pending}>
+              {pending ? <Dots>重置数据中。。。</Dots> : '重置数据'}
+            </Button>
+          </Flex>
         </Box>
       </Flex>
+      <Modal title='重置数据' visible={visible} setVisible={setVisible}>
+        <ResetModule
+          callBack={() => {
+            setVisible(false);
+            SetReset();
+          }}
+        />
+      </Modal>
     </Box>
   );
 };
