@@ -15,7 +15,7 @@ const Group = styled(Flex)`
 `;
 
 const AssetsContent = styled(Flex)`
-  width: 330px;
+  width: 250px;
   flex-direction: column;
   border-right: 1px solid #3a5050;
 `;
@@ -36,6 +36,7 @@ export const PlanetAssets: React.FC<{
   current_buff?: Api.Building.BuildingBuffer;
 }> = ({ plant_info, current_buff }) => {
   const { t } = useTranslation();
+
   return (
     <BarRightWarp>
       <Flex width='100%' alignItems='flex-start'>
@@ -146,7 +147,12 @@ export const PlanetAssets: React.FC<{
             </Flex>
           </Group>
         </AssetsContent>
-        <Warp flexDirection='column'>
+        <Warp
+          flexDirection='column'
+          style={{
+            borderRight: '1px solid #3a5050',
+          }}
+        >
           <MarkText
             fontSize='14px'
             mb='20px'
@@ -209,6 +215,80 @@ export const PlanetAssets: React.FC<{
               {t('Defense')}: +
               {formatDisplayApr(
                 new BigNumber(current_buff?.defense).toNumber(),
+                0,
+              )}
+            </Text>
+          </Items>
+        </Warp>
+        <Warp flexDirection='column'>
+          <MarkText
+            fontSize='14px'
+            mb='20px'
+            fontStyle='normal'
+            bold
+            textAlign='center'
+          >
+            {t('Nurturing bonus')}
+          </MarkText>
+          <Items>
+            <Text>
+              HP: +
+              {formatDisplayApr(
+                new BigNumber(plant_info?.strengthen?.hp).toNumber(),
+                0,
+              )}
+            </Text>
+          </Items>
+          <Items>
+            <Text>
+              {t('Attack')}: +
+              {formatDisplayApr(
+                new BigNumber(plant_info?.strengthen?.attack).toNumber(),
+                0,
+              )}
+            </Text>
+          </Items>
+          <Items>
+            <Text>
+              {t('hit')}: +
+              {formatDisplayApr(
+                new BigNumber(plant_info?.strengthen?.hit).toNumber(),
+                0,
+              )}
+            </Text>
+          </Items>
+          <Items>
+            <Text>
+              {t('firstMove')}: +
+              {formatDisplayApr(
+                new BigNumber(plant_info?.strengthen?.speed).toNumber(),
+                0,
+              )}
+            </Text>
+          </Items>
+          <Items>
+            <Text>
+              {t('dodge')}: +
+              {formatDisplayApr(
+                new BigNumber(plant_info?.strengthen?.miss).toNumber(),
+                0,
+              )}
+            </Text>
+          </Items>
+          <Items>
+            <Text>
+              {t('Burst')}: +
+              {formatDisplayApr(
+                new BigNumber(plant_info?.strengthen?.critical).toNumber(),
+                0,
+              )}
+            </Text>
+          </Items>
+          <Items>
+            <Text>
+              {t('Defense')}: +
+              {formatDisplayApr(
+                new BigNumber(plant_info?.strengthen?.defense).toNumber(),
                 0,
               )}
             </Text>
