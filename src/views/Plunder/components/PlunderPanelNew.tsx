@@ -4,6 +4,7 @@ import {
   getEffectDescText,
   getEffectDescTextNew,
   getEffectDescTypeText,
+  getEffectText,
   getSpriteName,
 } from 'game/core/utils';
 import { descType, DescType, RoundDescAxis } from 'game/types';
@@ -70,46 +71,34 @@ const PanelAxis = ({ axis }: { axis?: RoundDescAxis }) => {
 // hp
 
 const PanelType = ({ detail }: { detail: TrackDetail }) => {
-  if (detail?.type === descType.FIRING) {
+  const rounds = (
+    <PanelText style={{ whiteSpace: 'nowrap' }}>
+      [{detail.descInfo?.id || detail.id}]:&nbsp;
+    </PanelText>
+  );
+  if (detail?.type === descType.REMOVE) {
     return (
-      <PanelText>
-        {detail.descInfo?.receives.map((item, index) => {
-          return (
-            <PanelText key={`${item.pos.x}_${item.pos.y}`}>
-              <PanelSide isEnemy={item.isEnemy} />
-              兵种
-              <PanelAxis axis={item.pos} />
-              {/* {getSpriteName()} */}
-              使用
-              {getEffectDescTextNew(detail.descInfo?.type)}
-              {item.receive_sub_hp && (
-                <PanelTextHp>{item.receive_sub_hp}</PanelTextHp>
-              )}
-              {getEffectDescTypeText(detail.descInfo?.type)}
-              {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
-            </PanelText>
-          );
-        })}
-      </PanelText>
+      <Flex pl='20px' mt='10px'>
+        {rounds}
+        <PanelText>
+          <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+          <PanelAxis axis={detail.descInfo?.sender?.pos} />
+          阵亡
+        </PanelText>
+      </Flex>
     );
   }
   if (detail?.type === descType.ADD_SHIELD) {
     return (
-      <PanelText>
-        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-        <PanelAxis axis={detail.descInfo?.sender?.pos} />
-        向队友添加护盾
-      </PanelText>
-    );
-  }
-  if (detail?.type === descType.ATTACK_DODGE) {
-    return (
-      <PanelText>
-        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-        发起进攻,
-        <PanelSide isEnemy={detail.descInfo?.receives?.[0]?.isEnemy} />
-        位移闪避
-      </PanelText>
+      <Flex pl='20px' mt='10px'>
+        {rounds}
+        <PanelText>
+          <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+          兵种 <PanelAxis axis={detail.descInfo?.sender?.pos} />
+          向<PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+          单位添加护盾
+        </PanelText>
+      </Flex>
     );
   }
   if (
@@ -120,74 +109,80 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
     detail?.type === descType.ICE_START
   ) {
     return (
-      <PanelText>
-        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-        发起进攻，对{' '}
-        {detail.descInfo?.receives.map((item, index) => {
-          return (
-            <PanelText key={`${item.pos.x}_${item.pos.y}`}>
-              <PanelSide isEnemy={item.isEnemy} />
-              <PanelAxis axis={item.pos} />
-              建筑
-              {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
-            </PanelText>
-          );
-        })}
-        {}
-        <PanelText
-          color={
-            detail.descInfo?.type === descType.ATTACK_MISS ? 'missTxt' : ''
-          }
-        >
-          {getEffectDescText(detail.descInfo?.type)}
+      <Flex pl='20px' mt='10px'>
+        <PanelText>111</PanelText>
+        {rounds}
+        <PanelText>
+          <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+          兵种 <PanelAxis axis={detail.descInfo?.sender?.pos} />
+          {getEffectDescTextNew(detail.descInfo?.type)},
+          {detail.descInfo?.receives.map((item, index) => {
+            return (
+              <PanelText key={`${item.pos.x}_${item.pos.y}`}>
+                对
+                <PanelSide isEnemy={item.isEnemy} />
+                <PanelAxis axis={item.pos} />
+                单位造成
+                {getEffectText(detail.descInfo?.type)}
+                {getEffectDescTypeText(detail.descInfo?.type)}
+                {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
+              </PanelText>
+            );
+          })}
         </PanelText>
-        {detail.attackInfo?.attack_crit ? (
-          <PanelText color='redSide'>&nbsp;暴击&nbsp;</PanelText>
-        ) : (
-          ''
-        )}
-        {getEffectDescTypeText(detail.descInfo?.type)}
-      </PanelText>
-    );
-  }
-  if (detail?.type === descType.BEAT) {
-    return (
-      <PanelText>
-        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-        发起进攻，对{' '}
-        {detail.descInfo?.receives.map((item, index) => {
-          return (
-            <PanelText key={`${item.pos.x}_${item.pos.y}`}>
-              <PanelSide isEnemy={item.isEnemy} />
-              <PanelAxis axis={item.pos} />
-              建筑
-              {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
-            </PanelText>
-          );
-        })}
-        <PanelText
-          color={
-            detail.descInfo?.type === descType.ATTACK_MISS ? 'missTxt' : ''
-          }
-        >
-          造成群体伤害
-        </PanelText>
-      </PanelText>
+      </Flex>
     );
   }
 
-  if (detail?.type) {
+  if (detail?.type === descType.BEAT) {
     return (
-      <PanelText>
-        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-        发起进攻，对{' '}
+      <Flex pl='20px' mt='10px'>
+        <PanelText>222</PanelText>
+        {rounds}
+        <PanelText>
+          <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+          兵种 <PanelAxis axis={detail.descInfo?.sender?.pos} />
+          {getEffectDescTextNew(detail.descInfo?.type)},
+          {detail.descInfo?.receives.map((item, index) => {
+            return (
+              <PanelText key={`${item.pos.x}_${item.pos.y}`}>
+                对
+                <PanelSide isEnemy={item.isEnemy} />
+                <PanelAxis axis={item.pos} />
+                单位造成
+                {item.receive_sub_hp && (
+                  <PanelTextHp>{item.receive_sub_hp}</PanelTextHp>
+                )}
+                {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
+              </PanelText>
+            );
+          })}
+          <PanelText
+            color={
+              detail.descInfo?.type === descType.ATTACK_MISS ? 'missTxt' : ''
+            }
+          >
+            的群体伤害
+          </PanelText>
+        </PanelText>
+      </Flex>
+    );
+  }
+  if (
+    detail?.type === descType.FIRING ||
+    detail?.type === descType.TERRAIN_FIRING
+  ) {
+    return (
+      <Flex pl='20px' mt='10px'>
+        {rounds}
         {detail.descInfo?.receives.map((item, index) => {
           return (
             <PanelText key={`${item.pos.x}_${item.pos.y}`}>
               <PanelSide isEnemy={item.isEnemy} />
+              兵种
               <PanelAxis axis={item.pos} />
-              建筑
               {getEffectDescText(detail.descInfo?.type)}
+              造成
               {item.receive_sub_hp && (
                 <PanelTextHp>{item.receive_sub_hp}</PanelTextHp>
               )}
@@ -196,11 +191,120 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
             </PanelText>
           );
         })}
+      </Flex>
+    );
+  }
+  // 净化、解除技能类
+  if (
+    detail?.type === descType.REMOVE_FIRING ||
+    detail?.type === descType.PURIFY ||
+    detail?.type === descType.REMOVE_STOP_MOVE
+  ) {
+    return (
+      <PanelText>
+        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+        兵种
+        <PanelAxis axis={detail.descInfo?.sender?.pos} />
+        {getEffectDescTextNew(detail.descInfo?.type)},
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <PanelText key={`${item.pos.x}_${item.pos.y}`}>
+              对
+              <PanelSide isEnemy={item.isEnemy} />
+              单位
+              <PanelAxis axis={item.pos} />
+              造成
+              {getEffectText(detail.descInfo?.type)}
+              {getEffectDescTypeText(detail.descInfo?.type)}
+            </PanelText>
+          );
+        })}
       </PanelText>
     );
   }
-
-  return <PanelText>未知&nbsp;</PanelText>;
+  // 触发位移闪避
+  if (detail?.type === descType.ATTACK_DODGE) {
+    return (
+      <PanelText>
+        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+        兵种
+        <PanelAxis axis={detail.descInfo?.sender?.pos} />
+        使用普通攻击,
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <PanelText key={`${item.pos.x}_${item.pos.y}`}>
+              <PanelSide isEnemy={item.isEnemy} />
+              单位
+              <PanelAxis axis={item.pos} />
+              {getEffectDescTextNew(detail.descInfo?.type)}
+            </PanelText>
+          );
+        })}
+      </PanelText>
+    );
+  }
+  // 攻击未命中
+  if (detail?.type === descType.ATTACK_MISS) {
+    return (
+      <PanelText>
+        <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+        兵种
+        <PanelAxis axis={detail.descInfo?.sender?.pos} />
+        使用普通攻击,对
+        {detail.descInfo?.receives.map((item, index) => {
+          return (
+            <PanelText key={`${item.pos.x}_${item.pos.y}`}>
+              <PanelSide isEnemy={item.isEnemy} />
+              单位
+              <PanelAxis axis={item.pos} />
+              <PanelText color='missTxt'>
+                {getEffectDescTextNew(detail.descInfo?.type)}
+              </PanelText>
+            </PanelText>
+          );
+        })}
+      </PanelText>
+    );
+  }
+  // 伤害类
+  if (detail?.type !== descType.MOVE && detail?.type !== descType.TOTAL_INFO) {
+    return (
+      <Flex pl='20px' mt='10px'>
+        <PanelText>33333</PanelText>
+        {rounds}
+        <PanelText>
+          <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+          兵种
+          <PanelAxis axis={detail.descInfo?.sender?.pos} />
+          {getEffectDescTextNew(detail.descInfo?.type)},
+          {detail.descInfo?.receives.map((item, index) => {
+            return (
+              <PanelText key={`${item.pos.x}_${item.pos.y}`}>
+                {item.receive_sub_hp && (
+                  <>
+                    对
+                    <PanelSide isEnemy={item.isEnemy} />
+                    单位
+                    <PanelAxis axis={item.pos} />
+                    造成
+                    <PanelTextHp>{item.receive_sub_hp}</PanelTextHp>
+                    {detail.attackInfo?.attack_crit ? (
+                      <PanelText color='redSide'>&nbsp;暴击&nbsp;</PanelText>
+                    ) : (
+                      ''
+                    )}
+                    {getEffectDescTypeText(detail.descInfo?.type)}
+                    {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
+                  </>
+                )}
+              </PanelText>
+            );
+          })}
+        </PanelText>
+      </Flex>
+    );
+  }
+  return null;
 };
 /* 
   TYPE === 2:
@@ -322,14 +426,8 @@ const PlunderPanelNew: React.FC<PlunderPanelProps> = ({
           {renderDetails.map(item => {
             return (
               <Flex key={item.id} flex={1}>
-                <Flex flexDirection='column' flex={1} pl='20px' mt='10px'>
-                  <Flex>
-                    <PanelText style={{ whiteSpace: 'nowrap' }}>
-                      [{item.descInfo?.id || item.id}]:&nbsp;
-                    </PanelText>
-
-                    <PanelType detail={item} />
-                  </Flex>
+                <Flex flexDirection='column' flex={1}>
+                  <PanelType detail={item} />
                 </Flex>
               </Flex>
             );
