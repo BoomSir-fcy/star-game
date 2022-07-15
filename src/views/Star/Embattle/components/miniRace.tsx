@@ -6,7 +6,7 @@ import { MapBaseUnits } from 'game/types';
 
 import Running, { RoundsProps } from 'game/core/Running';
 
-const Container = styled(Box) <{ show: boolean }>`
+const Container = styled(Box)<{ show: boolean }>`
   position: absolute;
   border: 4px solid #f9feff;
   box-shadow: 0px 0px 10px 2px #41b7ff;
@@ -67,7 +67,7 @@ const MiniRaceAni: React.FC<{
     (slot: RoundsProps) => {
       const run = new Running(game, slot);
       setRunning(run);
-      run.play();
+      run.run();
     },
     [game, setRunning],
   );
