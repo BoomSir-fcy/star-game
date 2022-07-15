@@ -68,7 +68,7 @@ export const BarRight: React.FC<BarRightProps> = ({
         <BarHead plant_info={planetInfo} />
         <BarCard
           title={t('planetMenuBuilding')}
-          onClick={() => navigate(`/star?id=${planet_id}`)}
+          onClick={() => navigate(`/star?id=${planet_id}`, { replace: true })}
         >
           <Flex
             justifyContent='center'
@@ -85,7 +85,9 @@ export const BarRight: React.FC<BarRightProps> = ({
         </BarCard>
         <BarCard
           title={t('planetMenuUpgrade')}
-          onClick={() => navigate(`/star/upgrade?id=${planet_id}`)}
+          onClick={() =>
+            navigate(`/star/upgrade?id=${planet_id}`, { replace: true })
+          }
         >
           <Flex
             justifyContent='center'
@@ -102,7 +104,9 @@ export const BarRight: React.FC<BarRightProps> = ({
         </BarCard>
         <BarCard
           title={t('planetMenuGrow')}
-          onClick={() => navigate(`/star/grow?id=${planet_id}`)}
+          onClick={() =>
+            navigate(`/star/grow?id=${planet_id}`, { replace: true })
+          }
         >
           <Flex
             justifyContent='center'
@@ -120,7 +124,9 @@ export const BarRight: React.FC<BarRightProps> = ({
         <BarCard
           className='guide_step_9'
           title={t('planetMenuEmbattle')}
-          onClick={() => navigate(`/star/embattle?id=${planet_id}`)}
+          onClick={() =>
+            navigate(`/star/embattle?id=${planet_id}`, { replace: true })
+          }
         >
           <Flex
             justifyContent='center'

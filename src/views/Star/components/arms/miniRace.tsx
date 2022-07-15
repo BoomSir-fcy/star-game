@@ -72,7 +72,7 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({ mock, show, ...props }) => {
     (slot: RoundsProps) => {
       const run = new Running(game, slot);
       setRunning(run);
-      run.play();
+      run.run();
     },
     [game, setRunning],
   );

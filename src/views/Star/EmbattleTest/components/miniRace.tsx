@@ -67,7 +67,7 @@ const MiniRaceAni: React.FC<{
     (slot: RoundsProps) => {
       const run = new Running(game, slot);
       setRunning(run);
-      run.play();
+      run.run();
     },
     [game, setRunning],
   );

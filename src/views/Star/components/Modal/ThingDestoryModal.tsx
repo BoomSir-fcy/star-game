@@ -47,7 +47,7 @@ export const ThingDestoryModal: React.FC<{
                   )?.name
                 }
               </Text>
-              <Text color='textSubtle' mt='22px' small>
+              <Text color='textSubtle' mt='22px'>
                 {t('planetDetailsTypeEffect')}
                 {destory?.destory?.describe}
               </Text>
