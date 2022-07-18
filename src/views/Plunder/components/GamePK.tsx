@@ -38,6 +38,7 @@ import effectConfig from 'game/effectConfig';
 import Progress from 'components/Progress';
 import speeder from 'game/core/Speeder';
 import PlunderPanel, { OtherDetail } from './PlunderPanel';
+import PlunderPanelNew from './PlunderPanelNew';
 
 const sleep = (handle: any, delay: number) => {
   return new Promise<void>((res, rej) => {
@@ -548,7 +549,7 @@ const GamePK: React.FC<GamePKProps> = () => {
           </Box>
         </Box>
       </Flex>
-      <PlunderPanel
+      <PlunderPanelNew
         className='plunder-pk-step3'
         width='100%'
         details={roundInfos}
