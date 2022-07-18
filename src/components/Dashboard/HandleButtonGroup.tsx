@@ -68,9 +68,9 @@ const HandleButtonGroup: React.FC<HandleButtonGroupProps> = ({
   return (
     <Flex>
       {/* <RefreshButton mr='22px' onRefresh={onRefresh} /> */}
-      {/* <SecondaryButton href='/change-rate' tag='m-box1'>
+      <SecondaryButton href='/change-rate' tag='m-box1'>
         更改时间倍率
-      </SecondaryButton> */}
+      </SecondaryButton>
       <SecondaryButton className='tofind' href='/mystery-box' tag='m-box1'>
         {t('Explore').toLocaleUpperCase()}
       </SecondaryButton>
