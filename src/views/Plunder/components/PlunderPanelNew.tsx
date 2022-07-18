@@ -102,7 +102,8 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
   };
 
   if (
-    (detail?.type === descType.MOVE && detail?.type === descType.TOTAL_INFO) ||
+    detail?.type === descType.MOVE ||
+    detail?.type === descType.TOTAL_INFO ||
     detail?.type === descType.BEAT_MOVE ||
     detail?.type === descType.BEAT_COLLISION ||
     detail?.type === descType.IMMUNITY_ICE ||
