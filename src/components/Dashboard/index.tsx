@@ -8,7 +8,7 @@ import eventBus from 'utils/eventBus';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'state';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { useFetchUserBalance, useFetchUserProduct } from 'state/userInfo/hooks';
+
 import Avatar from './Avatar';
 import Info from './Info';
 import TokenInfo from './TokenInfo';
@@ -71,9 +71,6 @@ const Dashboard: React.FC<DashboardProps> = ({
   const { t } = useTranslation();
   const params = useParsedQueryString();
   const navigate = useNavigate();
-
-  const { fetch: FetchBlance } = useFetchUserBalance();
-  const { fetch: FetchProduct } = useFetchUserProduct();
 
   const onRefreshClick = () => {
     eventBus.dispatchEvent(new MessageEvent('onRefresh'));

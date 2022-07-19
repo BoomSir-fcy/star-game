@@ -1,24 +1,17 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-
-import Modal from 'components/Modal';
-import InvitePop from 'components/NavPop/Invite';
-import UserInfo from 'components/NavPop/userInfo';
 import { useTranslation } from 'contexts/Localization';
 import { Box, Flex, Text, Button, Image } from 'uikit';
-import { useStore } from 'state/util';
 import { UserBalanceView } from 'state/types';
 import { useToast } from 'contexts/ToastsContext';
 import { getBoxAddress } from 'utils/addressHelpers';
 import { TokenImage } from 'components/TokenImage';
-import DepositWithdrawal from 'components/NavPop/DepositWithdrawal';
 import {
-  splitThousandSeparator,
   formatLocalisedCompactBalance,
   formatDisplayApr,
 } from 'utils/formatBalance';
-import BigNumber from 'bignumber.js';
-import DepositWithdrawalModule from 'components/NavPop/DepositWithdrawalNew';
+import { storeAction, useStore } from 'state';
+import { useDispatch } from 'react-redux';
 
 const TokenGroupBox = styled(Box)`
   width: 261px;
@@ -56,6 +49,7 @@ const DepositWithdrawalBtn = styled(Flex)`
 
 const TokenInfo = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
   const [ActiveToken, setActiveToken] = useState<UserBalanceView>();
@@ -101,8 +95,10 @@ const TokenInfo = () => {
               height={36}
               src='/images/commons/icon/add.png'
               onClick={() => {
-                setOperationType(1);
-                setVisible(true);
+                dispatch(
+                  storeAction.setRechargeOperationType({ OperationType: 1 }),
+                );
+                dispatch(storeAction.setToRechargeVisible({ visible: true }));
               }}
             />
             <Image
@@ -111,18 +107,14 @@ const TokenInfo = () => {
               height={36}
               src='/images/commons/icon/withDrawal.png'
               onClick={() => {
-                setOperationType(2);
-                setVisible(true);
+                dispatch(
+                  storeAction.setRechargeOperationType({ OperationType: 2 }),
+                );
+                dispatch(storeAction.setToRechargeVisible({ visible: true }));
               }}
             />
           </DepositWithdrawalBtn>
-          <ButtonLeft
-            disabled
-            onClick={() => {
-              openModalHandle(TokenBlance('BOX'));
-            }}
-            variant='custom'
-          >
+          <ButtonLeft disabled variant='custom'>
             <Flex width='100%' alignItems='center'>
               <Flex justifyContent='space-between' alignItems='center' flex={1}>
                 <Text ml='5px'>{t('Power')}</Text>
@@ -141,13 +133,7 @@ const TokenInfo = () => {
               </Flex>
             </Flex>
           </ButtonLeft>
-          <ButtonLeft
-            disabled
-            onClick={() => {
-              openModalHandle(TokenBlance('BOX'));
-            }}
-            variant='custom'
-          >
+          <ButtonLeft disabled variant='custom'>
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
                 <TokenImage
@@ -169,13 +155,7 @@ const TokenInfo = () => {
               </Text>
             </Flex>
           </ButtonLeft>
-          <ButtonLeft
-            disabled
-            onClick={() => {
-              openModalHandle(TokenBlance('BNB'));
-            }}
-            variant='custom'
-          >
+          <ButtonLeft disabled variant='custom'>
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={30} height={32} tokenAddress='BNB' />
@@ -195,13 +175,7 @@ const TokenInfo = () => {
           </ButtonLeft>
         </TokenGroupBox>
         <TokenGroupBox>
-          <ButtonLeft
-            disabled
-            onClick={() => {
-              openModalHandle(TokenBlance('ORE'));
-            }}
-            variant='custom'
-          >
+          <ButtonLeft disabled variant='custom'>
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={35} height={35} tokenAddress='ORE' />
@@ -214,13 +188,7 @@ const TokenInfo = () => {
               </Text>
             </Flex>
           </ButtonLeft>
-          <ButtonLeft
-            disabled
-            onClick={() => {
-              openModalHandle(TokenBlance('SPICES'));
-            }}
-            variant='custom'
-          >
+          <ButtonLeft disabled variant='custom'>
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={35} height={35} tokenAddress='SPICES' />
@@ -233,13 +201,7 @@ const TokenInfo = () => {
               </Text>
             </Flex>
           </ButtonLeft>
-          <ButtonLeft
-            disabled
-            onClick={() => {
-              openModalHandle(TokenBlance('ENG'));
-            }}
-            variant='custom'
-          >
+          <ButtonLeft disabled variant='custom'>
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
                 <TokenImage width={35} height={35} tokenAddress='ENG' />
@@ -254,7 +216,7 @@ const TokenInfo = () => {
           </ButtonLeft>
         </TokenGroupBox>
       </Flex>
-      <Modal
+      {/* <Modal
         title={OperationType === 1 ? t('Deposit') : t('Withdraw')}
         visible={visible}
         setVisible={setVisible}
@@ -265,7 +227,7 @@ const TokenInfo = () => {
             setVisible(false);
           }}
         />
-      </Modal>
+      </Modal> */}
     </Box>
   );
 };

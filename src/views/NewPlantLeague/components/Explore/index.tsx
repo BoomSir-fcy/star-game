@@ -60,38 +60,51 @@ const Explore: React.FC<{
     return `${t('Start Exploration')}(${now_work_count}/${max_work_count})`;
   }, [alliance, t, now_work_count, max_work_count, userInfo]);
 
-  // 开始工作
-  const StartOrStopWorking = useCallback(async () => {
-    await Api.AllianceApi.AllianceWorking({ difficulty: Difficulty })
-      .then(res => {
-        if (Api.isSuccess(res)) {
-          toastSuccess(t('Operate Succeeded'));
-          dispatch(fetchAllianceViewAsync());
-        }
-      })
-      .catch(err => {
-        toastError(t('Operate Failed'));
-        console.error(err);
-      });
-  }, [toastSuccess, toastError, t, dispatch, Difficulty]);
+  // // 开始工作
+  // const StartOrStopWorking = useCallback(async () => {
+  //   await Api.AllianceApi.AllianceWorking({ difficulty: Difficulty })
+  //     .then(res => {
+  //       if (Api.isSuccess(res)) {
+  //         toastSuccess(t('Operate Succeeded'));
+  //         dispatch(fetchAllianceViewAsync());
+  //       }
+  //     })
+  //     .catch(err => {
+  //       toastError(t('Operate Failed'));
+  //       console.error(err);
+  //     });
+  // }, [toastSuccess, toastError, t, dispatch, Difficulty]);
 
   useEffect(() => {
     // 已经停止工作 清除倒计时
-    if (alliance.working === 0 || diffSeconds > 0) {
-      if (timer.current) {
-        clearInterval(timer.current);
-      }
-      return;
-    }
+    // if (alliance.working === 0 || diffSeconds > 0) {
+    //   if (timer.current) {
+    //     clearInterval(timer.current);
+    //   }
+    //   return;
+    // }
+    // 停止工作
+    const StopWorking = async () => {
+      await Api.AllianceApi.AllianceStopWork()
+        .then(res => {
+          if (Api.isSuccess(res)) {
+            dispatch(fetchAllianceViewAsync());
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    };
     // 倒计时为0并且在工作状态
     console.log(diffSeconds, alliance.working);
-    if (diffSeconds === 0 && alliance.working === 1) {
-      if (timer) {
-        clearInterval(timer.current);
-      }
-      timer.current = setInterval(() => {
-        dispatch(fetchAllianceViewAsync());
-      }, 5000);
+    if (diffSeconds <= 0 && alliance.working === 1) {
+      StopWorking();
+      // if (timer) {
+      //   clearInterval(timer.current);
+      // }
+      // timer.current = setInterval(() => {
+      //   StopWorking();
+      // }, 3000);
     }
   }, [diffSeconds, alliance.working, dispatch]);
 
@@ -103,9 +116,9 @@ const Explore: React.FC<{
         width='300px'
         disabled={alliance.working !== 0 || max_work_count === now_work_count}
         onClick={() => {
-          if (ShowModule) {
-            StartOrStopWorking();
-          }
+          // if (ShowModule) {
+          //   StartOrStopWorking();
+          // }
           setShowModule(true);
         }}
       >

@@ -14,3 +14,5 @@ export enum ResponseCode {
   PLANET_UPGRADE_FAIL = 200012,
   PLANET_BUILDING_NOT_FOUND = 300003,
 }
+
+export const InsufficientBalance = [200032, 400004, 400008, 400002, 400011];

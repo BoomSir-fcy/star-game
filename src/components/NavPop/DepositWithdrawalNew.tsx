@@ -27,6 +27,7 @@ import { ConnectWalletButton } from 'components';
 import { Api } from 'apis';
 import { useStore } from 'state';
 import { Select } from 'components/Select';
+import Modal from 'components/Modal';
 import { shortenAddress } from 'utils/contract';
 import { FetchApproveNum, useRWA } from './hook';
 
@@ -43,11 +44,13 @@ interface DepositWithdrawalProps {
   decimals?: number;
   OperationType: number;
   close: () => void;
+  visible: boolean;
 }
 
 const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
   decimals = 18,
   OperationType = 1,
+  visible,
   close,
 }) => {
   const { toastError, toastSuccess, toastWarning } = useToast();
@@ -263,138 +266,146 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
   }, [account, TokenInfo, getApproveNum]);
 
   return (
-    <Box width='100%' padding='15px'>
-      <Flex
-        width='80%'
-        margin='80px auto 0'
-        flexDirection='column'
-        justifyContent='center'
-      >
-        <Flex mb='20px' height='54px' justifyContent='space-between'>
-          <Select
-            height='100%'
-            Isradius
-            childrenHeight='200px'
-            width='180px'
-            options={TokenOption}
-            defaultId={TokenInfo.coinId}
-            onChange={option => {
-              setVal('');
-              setapprovedNum(0);
-              setTokenInfo(BalanceList[option.value]);
-            }}
-          />
-          <Flex ml='16px' flex='1'>
-            <GraphicsCard
-              padding={0}
-              isRadius
-              stripe
-              width='100%'
+    <Modal
+      title={OperationType === 1 ? t('Deposit') : t('Withdraw')}
+      visible={visible}
+      setVisible={close}
+    >
+      <Box width='100%' padding='15px'>
+        <Flex
+          width='80%'
+          margin='80px auto 0'
+          flexDirection='column'
+          justifyContent='center'
+        >
+          <Flex mb='20px' height='54px' justifyContent='space-between'>
+            <Select
               height='100%'
-            >
-              <Flex height='100%' alignItems='center'>
-                <InputStyle
-                  style={{ fontSize: '20px' }}
-                  width={ShowMaxBtn ? '80%' : '100%'}
-                  height='100%'
-                  disabled={
-                    approvedNum === 0 && OperationType === 1 && Token !== 'BNB'
-                  }
-                  pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
-                  inputMode='decimal'
-                  value={val}
-                  onChange={handleChange}
-                  placeholder={
-                    OperationType === 1
-                      ? t('Please enter the deposit amount')
-                      : t('Please enter the transfer amount')
-                  }
-                />
-                {ShowMaxBtn && (
-                  <Button
-                    variant='text'
-                    onClick={() => {
-                      const max =
-                        OperationType === 1
-                          ? String(TokenBalance)
-                          : String(withdrawalBalance);
-                      setVal(max);
-                    }}
-                  >
-                    <Text color='textPrimary' fontSize='18px'>
-                      MAX
-                    </Text>
-                  </Button>
-                )}
-              </Flex>
-            </GraphicsCard>
+              Isradius
+              childrenHeight='200px'
+              width='180px'
+              options={TokenOption}
+              defaultId={TokenInfo.coinId}
+              onChange={option => {
+                setVal('');
+                setapprovedNum(0);
+                setTokenInfo(BalanceList[option.value]);
+              }}
+            />
+            <Flex ml='16px' flex='1'>
+              <GraphicsCard
+                padding={0}
+                isRadius
+                stripe
+                width='100%'
+                height='100%'
+              >
+                <Flex height='100%' alignItems='center'>
+                  <InputStyle
+                    style={{ fontSize: '20px' }}
+                    width={ShowMaxBtn ? '80%' : '100%'}
+                    height='100%'
+                    disabled={
+                      approvedNum === 0 &&
+                      OperationType === 1 &&
+                      Token !== 'BNB'
+                    }
+                    pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
+                    inputMode='decimal'
+                    value={val}
+                    onChange={handleChange}
+                    placeholder={
+                      OperationType === 1
+                        ? t('Please enter the deposit amount')
+                        : t('Please enter the transfer amount')
+                    }
+                  />
+                  {ShowMaxBtn && (
+                    <Button
+                      variant='text'
+                      onClick={() => {
+                        const max =
+                          OperationType === 1
+                            ? String(TokenBalance)
+                            : String(withdrawalBalance);
+                        setVal(max);
+                      }}
+                    >
+                      <Text color='textPrimary' fontSize='18px'>
+                        MAX
+                      </Text>
+                    </Button>
+                  )}
+                </Flex>
+              </GraphicsCard>
+            </Flex>
           </Flex>
-        </Flex>
-        <Flex justifyContent='space-between' alignItems='flex-end'>
-          <Text fontSize='18px'>
-            {t('Balance')} :{' '}
-            {OperationType === 1 ? TokenBalance : withdrawalBalance}
-          </Text>
           <Flex justifyContent='space-between' alignItems='flex-end'>
-            <Text ellipsis fontSize='18px'>
-              {shortenAddress(account, 8)}
+            <Text fontSize='18px'>
+              {t('Balance')} :{' '}
+              {OperationType === 1 ? TokenBalance : withdrawalBalance}
             </Text>
-            <Text
-              ml='6px'
-              onClick={() => {
-                Copy();
-              }}
-              style={{ cursor: 'pointer' }}
-              fontSize='18px'
-              color='textPrimary'
-            >
-              {t('Copy')}
-            </Text>
+            <Flex justifyContent='space-between' alignItems='flex-end'>
+              <Text ellipsis fontSize='18px'>
+                {shortenAddress(account, 8)}
+              </Text>
+              <Text
+                ml='6px'
+                onClick={() => {
+                  Copy();
+                }}
+                style={{ cursor: 'pointer' }}
+                fontSize='18px'
+                color='textPrimary'
+              >
+                {t('Copy')}
+              </Text>
+            </Flex>
+          </Flex>
+          <Flex justifyContent='center' mt='40px'>
+            {!account ? (
+              <ConnectWalletButton scale='ld' width='270px' padding='0 10px' />
+            ) : (
+              <Button
+                padding='0 20px'
+                variant='purple'
+                width='max-content'
+                disabled={pending}
+                onClick={() => {
+                  if (OperationType === 2) {
+                    handSure();
+                    return;
+                  }
+                  if (approvedNum > 0 || Token === 'BNB') {
+                    // 充值、提现
+                    handSure();
+                  } else {
+                    // 授权
+                    handleApprove();
+                  }
+                }}
+              >
+                {OperationType === 1 ? (
+                  approvedNum > 0 || Token === 'BNB' ? (
+                    pending ? (
+                      <Dots>{t('Depositing')}</Dots>
+                    ) : (
+                      t('Confirm Deposit')
+                    )
+                  ) : pending ? (
+                    <Dots>{t('Approving')}</Dots>
+                  ) : (
+                    t('Approve')
+                  )
+                ) : (
+                  t('Confirm Transfer-out')
+                )}
+              </Button>
+            )}
           </Flex>
         </Flex>
-        <Flex justifyContent='center' mt='40px'>
-          {!account ? (
-            <ConnectWalletButton scale='ld' width='270px' padding='0 10px' />
-          ) : (
-            <Button
-              padding='0 20px'
-              variant='purple'
-              width='max-content'
-              disabled={pending}
-              onClick={() => {
-                if (OperationType === 2) {
-                  handSure();
-                  return;
-                }
-                if (approvedNum > 0 || Token === 'BNB') {
-                  // 充值、提现
-                  handSure();
-                } else {
-                  // 授权
-                  handleApprove();
-                }
-              }}
-            >
-              {OperationType === 1 ? (
-                approvedNum > 0 || Token === 'BNB' ? (
-                  pending ? (
-                    <Dots>{t('Depositing')}</Dots>
-                  ) : (
-                    t('Confirm Deposit')
-                  )
-                ) : pending ? (
-                  <Dots>{t('Approving')}</Dots>
-                ) : (
-                  t('Approve')
-                )
-              ) : (
-                t('Confirm Transfer-out')
-              )}
-            </Button>
-          )}
-        </Flex>
-      </Flex>
-    </Box>
+      </Box>
+    </Modal>
   );
 };
 

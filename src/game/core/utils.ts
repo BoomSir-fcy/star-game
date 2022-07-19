@@ -188,7 +188,7 @@ export const getEffectText = (effect?: DescType) => {
   if (effect === descType.RESTORE) return '治疗';
   if (effect === descType.ATTACK_DODGE) return '闪避';
   if (effect === descType.ATTACK_MISS) return '未命中';
-  if (effect === descType.IMMUNITY_ICE) return '冰冻免疫';
+  if (effect === descType.IMMUNITY_ICE) return '免疫冰冻';
   if (effect === descType.IMMUNITY_LOCK_MOVE) return '免疫禁锢';
   if (effect === descType.IMMUNITY_FIRING) return '免疫灼烧';
   return '未知';
@@ -223,7 +223,7 @@ export const getEffectDescTextNew = (effect?: DescType) => {
   if (effect === descType.STOP_MOVE) return '使用禁锢技能';
   if (effect === descType.ICE_START) return '使用冰冻攻击';
   if (effect === descType.ICE_END) return '解除冰冻';
-  if (effect === descType.ADD_FIRING) return '使用灼烧攻击';
+  if (effect === descType.ADD_FIRING) return '添加灼烧';
   if (effect === descType.FIRING) return '被灼烧';
   if (effect === descType.ADD_BOOM) return '放置炸弹';
   if (effect === descType.BOOM) return '使用炸弹攻击';
@@ -238,9 +238,9 @@ export const getEffectDescTextNew = (effect?: DescType) => {
   if (effect === descType.RESTORE) return '使用治疗';
   if (effect === descType.ATTACK_DODGE) return '触发位移闪避';
   if (effect === descType.ATTACK_MISS) return '攻击未命中';
-  if (effect === descType.IMMUNITY_ICE) return '免疫冰冻';
-  if (effect === descType.IMMUNITY_LOCK_MOVE) return '免疫禁锢';
-  if (effect === descType.IMMUNITY_FIRING) return '免疫灼烧';
+  if (effect === descType.IMMUNITY_ICE) return '冰冻攻击';
+  if (effect === descType.IMMUNITY_LOCK_MOVE) return '禁锢攻击';
+  if (effect === descType.IMMUNITY_FIRING) return '灼烧攻击';
   return '未知';
 };
 
@@ -252,11 +252,11 @@ export const getEffectDescTypeText = (effect?: DescType) => {
   if (effect === descType.BOOM) return '伤害';
   if (effect === descType.ICE_START) return '效果';
   if (effect === descType.ADD_FIRING) return '效果';
-  if (effect === descType.ADD_BOOM) return '伤害';
+  if (effect === descType.ADD_BOOM) return '效果';
   if (effect === descType.REMOVE_FIRING) return '效果';
   if (effect === descType.PURIFY) return '效果';
   if (effect === descType.RESTORE) return '效果';
-  if (effect === descType.ADD_SHIELD) return '';
+  if (effect === descType.ADD_SHIELD) return '效果';
   if (effect === descType.REMOVE_SHIELD) return '';
   if (effect === descType.REMOVE_BOMB) return '';
   if (effect === descType.REMOVE_STOP_MOVE) return '效果';

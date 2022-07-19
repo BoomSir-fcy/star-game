@@ -30,6 +30,10 @@ import Dashboard from 'components/Dashboard';
 import { GuideModal } from 'components/Modal/guideModal';
 import { getHideHeader } from 'components/Dashboard/config';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { ToRechargeModal } from 'components/Modal/ToRechargeModal';
+import eventBus from 'utils/eventBus';
+import DepositWithdrawalModule from 'components/NavPop/DepositWithdrawalNew';
+import { useFetchUserBalance, useFetchUserProduct } from 'state/userInfo/hooks';
 
 // .introjs-tooltip{
 //   transform-origin: ${({ rotate }) => (rotate ? 'center' : '0  0')};
@@ -124,6 +128,9 @@ const ScaleOrientContent: React.FC = ({ children }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
+  const { fetch: FetchBlance } = useFetchUserBalance();
+  const { fetch: FetchProduct } = useFetchUserProduct();
+
   const { client } = useStore(p => p.user);
   const guideState = useStore(p => p.guide);
 
@@ -205,6 +212,21 @@ const ScaleOrientContent: React.FC = ({ children }) => {
     };
   }, [handleResize, onFocusout, onFocusin]);
 
+  const OpenRechargeVisible = useCallback(() => {
+    dispatch(
+      storeAction.toggleRechargeVisible({
+        visible: true,
+      }),
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    eventBus.addEventListener('insufficient', OpenRechargeVisible);
+    return () => {
+      eventBus.removeEventListener('insufficient', OpenRechargeVisible);
+    };
+  }, [OpenRechargeVisible]);
+
   const bgType = useMemo(() => {
     const secondList = [
       '/mystery-box/state',
@@ -253,9 +275,28 @@ const ScaleOrientContent: React.FC = ({ children }) => {
             }
           />
         )}
+        {guideState.recharge_visible && (
+          <ToRechargeModal
+            visible={guideState.recharge_visible}
+            onClose={() =>
+              dispatch(storeAction.toggleRechargeVisible({ visible: false }))
+            }
+            Recharge={() => {
+              dispatch(storeAction.toggleRechargeVisible({ visible: false }));
+              dispatch(storeAction.setToRechargeVisible({ visible: true }));
+            }}
+          />
+        )}
+        {guideState.toRechargeVisible && (
+          <DepositWithdrawalModule
+            visible={guideState.toRechargeVisible}
+            OperationType={guideState.RechargeOperationType}
+            close={() => {
+              dispatch(storeAction.setToRechargeVisible({ visible: false }));
+            }}
+          />
+        )}
       </Content>
-      {/* <Box>
-      </Box> */}
     </Box>
   );
 };

@@ -411,6 +411,10 @@ export interface GuideState {
   visible: boolean;
   lastStep: number;
   pathname?: string;
+  recharge_visible: boolean;
+  toRechargeVisible: boolean;
+  errorCode: string;
+  RechargeOperationType: number;
 }
 
 export enum BuildingDetailType {

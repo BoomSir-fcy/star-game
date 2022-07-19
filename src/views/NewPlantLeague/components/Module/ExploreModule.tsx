@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button, Flex, Box, BgCard, MarkText, Text, GraphicsCard } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
+import { useStore } from 'state';
+import { useToast } from 'contexts/ToastsContext';
+import { Api } from 'apis';
+import { useDispatch } from 'react-redux';
+import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 
 const OutBox = styled(Box)`
   width: 682px;
@@ -42,6 +47,27 @@ const ExploreModule: React.FC<{
   setDifficulty: (e) => void;
 }> = ({ ShowModule, Difficulty, setDifficulty }) => {
   const { t } = useTranslation();
+  const { toastError, toastSuccess } = useToast();
+  const dispatch = useDispatch();
+
+  const { max_work_count, now_work_count, end_time, free_time, alliance } =
+    useStore(p => p.alliance.allianceView);
+
+  // 开始工作
+  const StartOrStopWorking = useCallback(async () => {
+    await Api.AllianceApi.AllianceWorking({ difficulty: Difficulty })
+      .then(res => {
+        if (Api.isSuccess(res)) {
+          toastSuccess(t('Operate Succeeded'));
+          dispatch(fetchAllianceViewAsync());
+        }
+      })
+      .catch(err => {
+        toastError(t('Operate Failed'));
+        console.error(err);
+      });
+  }, [toastSuccess, toastError, t, dispatch, Difficulty]);
+
   return (
     <Box
       display={ShowModule ? 'block' : 'none'}
@@ -100,7 +126,27 @@ const ExploreModule: React.FC<{
             <RulesText>{t('ExploreRules4')}</RulesText>
             <RulesText>{t('ExploreRules5')}</RulesText>
           </Box>
-          <RulesText color='redText'>{t('ExploreRules6')}</RulesText>
+          <RulesText mb='20px' color='redText'>
+            {t('ExploreRules6')}
+          </RulesText>
+          <Button
+            variant='purple'
+            width='260px'
+            disabled={
+              alliance.working !== 0 || max_work_count === now_work_count
+            }
+            onClick={() => {
+              if (ShowModule) {
+                StartOrStopWorking();
+              }
+            }}
+          >
+            <Flex flexDirection='column'>
+              <Text color='textPrimary' fontSize='22px'>
+                {t('Start Exploration')}
+              </Text>
+            </Flex>
+          </Button>
         </RulesFlex>
       </OutBox>
     </Box>
