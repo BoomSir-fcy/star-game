@@ -88,7 +88,9 @@ const Explore: React.FC<{
       await Api.AllianceApi.AllianceStopWork()
         .then(res => {
           if (Api.isSuccess(res)) {
-            dispatch(fetchAllianceViewAsync());
+            setTimeout(() => {
+              dispatch(fetchAllianceViewAsync());
+            }, 2000);
           }
         })
         .catch(err => {

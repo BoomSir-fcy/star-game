@@ -28,9 +28,9 @@ const Items = styled(Flex)`
 `;
 
 const ButtonItem = styled(Button)`
-  &:disabled {
+  /* &:disabled {
     opacity: 0.5;
-  }
+  } */
 `;
 
 export const BuildingUpgrade: React.FC<{
@@ -231,6 +231,9 @@ export const BuildingUpgrade: React.FC<{
                 width='226px'
                 height='53px'
                 variant='purple'
+                disabled={
+                  planet?.level <= currnet_building?.propterty?.levelEnergy
+                }
                 onClick={() => {
                   if (
                     planet?.level <= currnet_building?.propterty?.levelEnergy
