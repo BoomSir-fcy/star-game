@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import classNames from 'classnames';
 import { useImmer } from 'use-immer';
@@ -7,6 +7,7 @@ import { useStore } from 'state';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { setAssetsVisible } from 'state/planet/actions';
+import { useLocation } from 'react-router-dom';
 
 const Container = styled(Box)`
   position: absolute;
@@ -77,6 +78,13 @@ export const BarRightWarp: React.FC<{
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const assetsVisibleModal = useStore(p => p.planet.assetsVisibleModal);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (assetsVisibleModal && pathname === '/star/upgrade') {
+      dispatch(setAssetsVisible(!assetsVisibleModal));
+    }
+  }, [assetsVisibleModal, pathname, dispatch]);
 
   return (
     <Container

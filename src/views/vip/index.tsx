@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -21,6 +21,7 @@ import { Api } from 'apis';
 
 import { useStore } from 'state';
 import { debounce } from 'lodash';
+import { ConfirmBuyModule } from './ConfirmBuyModule';
 
 const Container = styled(Box)`
   position: relative;
@@ -147,6 +148,8 @@ const VipPage = () => {
     config: [],
   });
 
+  const [visible, setvisible] = useState(false);
+
   const getVipList = React.useCallback(async () => {
     try {
       const [list, config] = await Promise.all([
@@ -174,8 +177,10 @@ const VipPage = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setvisible(false);
     }
-  }, [dispatch, state.list, t, toastSuccess, user?.address]);
+  }, [dispatch, setvisible, state.list, t, toastSuccess, user?.address]);
 
   React.useEffect(() => {
     getVipList();
@@ -233,11 +238,22 @@ const VipPage = () => {
                 mb='5px'
                 style={{ flex: 1 }}
               >
-                <TextBox fontSize='16px'>
-                  {t(
-                    'You are not yet a VIP, you can get more benefits after upgrading to VIP',
-                  )}
-                </TextBox>
+                <Flex>
+                  <TextBox fontSize='16px'>
+                    {t(
+                      'You are not yet a VIP, you can get more benefits after upgrading to VIP',
+                    )}
+                  </TextBox>
+                  <Button
+                    variant='text'
+                    height='max-content'
+                    onClick={() => setvisible(true)}
+                  >
+                    <TextBox color='#4FFFFB' fontSize='16px'>
+                      {t('Renewal')}
+                    </TextBox>
+                  </Button>
+                </Flex>
                 {user?.vipBenefits?.is_vip && (
                   <TextBox fontSize='16px'>
                     {t('Expire on')}
@@ -344,7 +360,7 @@ const VipPage = () => {
               <Submit
                 variant='purple'
                 disabled={user?.vipBenefits?.is_vip}
-                onClick={debounce(() => buyVip(), 1000)}
+                onClick={() => setvisible(true)}
               >
                 <Text
                   bold
@@ -361,6 +377,15 @@ const VipPage = () => {
           </Box>
         </Flex>
       </Container>
+      {visible && (
+        <ConfirmBuyModule
+          visible={visible}
+          Renewal={user?.vipBenefits?.is_vip}
+          onClose={() => setvisible(false)}
+          buy={debounce(() => buyVip(), 1000)}
+          vipPrice={state.list?.[0]?.vipPrice}
+        />
+      )}
     </Box>
   );
 };

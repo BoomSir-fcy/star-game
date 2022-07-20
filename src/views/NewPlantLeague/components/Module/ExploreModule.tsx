@@ -143,7 +143,7 @@ const ExploreModule: React.FC<{
           >
             <Flex flexDirection='column'>
               <Text color='textPrimary' fontSize='22px'>
-                {t('Start Exploration')}
+                {t('Confirm Exploration')}
               </Text>
             </Flex>
           </Button>

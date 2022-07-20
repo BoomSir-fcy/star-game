@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Flex,
   Button,
@@ -64,6 +64,15 @@ const HandleButtonGroup: React.FC<HandleButtonGroupProps> = ({
   className,
 }) => {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+
+  const ShowBack = useMemo(() => {
+    const pathList = ['/star/planet', '/plant-league', '/galaxy'];
+    if (pathList.indexOf(pathname) !== -1) {
+      return false;
+    }
+    return true;
+  }, [pathname]);
 
   return (
     <Flex>
@@ -77,7 +86,7 @@ const HandleButtonGroup: React.FC<HandleButtonGroupProps> = ({
       <SecondaryButton href='/vip' tag='vip'>
         VIP
       </SecondaryButton>
-      <BackButton mr='22px' onBack={onBack} />
+      {ShowBack && <BackButton mr='22px' onBack={onBack} />}
     </Flex>
   );
 };

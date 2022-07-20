@@ -98,7 +98,6 @@ const Explore: React.FC<{
         });
     };
     // 倒计时为0并且在工作状态
-    console.log(diffSeconds, alliance.working);
     if (diffSeconds <= 0 && alliance.working === 1) {
       StopWorking();
       // if (timer) {

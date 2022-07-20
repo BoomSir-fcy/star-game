@@ -1,5 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, Flex, Image, BgCard, Text, Button, Label, Skeleton } from 'uikit';
+import {
+  Box,
+  Flex,
+  Image,
+  BgCard,
+  Text,
+  Button,
+  Label,
+  GraphicsCard,
+} from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
@@ -45,6 +54,7 @@ const Grow: React.FC = () => {
   const { toastError, toastSuccess } = useToast();
   const id = Number(parsedQs.id);
   const planetInfo = useStore(p => p.planet.planetInfo[id ?? 0]);
+  const Balance = useStore(p => p.userInfo.userBalance);
 
   const [pending, setPending] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -81,6 +91,13 @@ const Grow: React.FC = () => {
     now_power: 0,
     estimate_power: 0,
   });
+
+  const BNBBlance = React.useMemo(() => {
+    const balance = Balance.filter(item => {
+      return item.symbol === 'BNB';
+    });
+    return balance[0]?.amount;
+  }, [Balance]);
 
   // 新手引导
   const { guides, setGuide } = useGuide(location.pathname);
@@ -380,7 +397,7 @@ const Grow: React.FC = () => {
             alignItems='center'
             flexDirection='column'
           >
-            <Text fontSize='24px'>
+            <Text mb='20px' fontSize='24px'>
               {t('CultivationConfirmDesc', {
                 rate: t(successRate(estimateCost?.now_level)),
                 value:
@@ -389,7 +406,48 @@ const Grow: React.FC = () => {
                     : t('CultivationConfirmDesc1'),
               })}
             </Text>
-            <Flex mt='100px' width='100%' justifyContent='center'>
+            <GraphicsCard
+              mb='40px'
+              style={{ padding: '10px' }}
+              width='90%'
+              height='max-content'
+              stripe
+              isRadius
+            >
+              <Flex alignItems='center' justifyContent='space-between'>
+                <Flex flex={1} alignItems='center'>
+                  <TokenImage width={30} height={30} tokenAddress='BNB' />
+                  <Text margin='0 10px' fontSize='22px'>
+                    BNB
+                  </Text>
+                  <Text fontSize='22px' pl='10px'>
+                    {t('Balance')} : {BNBBlance}
+                  </Text>
+                </Flex>
+                <Flex alignItems='center' width='154px'>
+                  <Text margin='0 10px' fontSize='22px' color='#4FFFFB'>
+                    {t('Recharge')}
+                  </Text>
+                  <Image
+                    style={{ cursor: 'pointer' }}
+                    width={36}
+                    height={36}
+                    src='/images/commons/icon/add.png'
+                    onClick={() => {
+                      dispatch(
+                        storeAction.setRechargeOperationType({
+                          OperationType: 1,
+                        }),
+                      );
+                      dispatch(
+                        storeAction.setToRechargeVisible({ visible: true }),
+                      );
+                    }}
+                  />
+                </Flex>
+              </Flex>
+            </GraphicsCard>
+            <Flex width='100%' justifyContent='center'>
               <Button
                 variant='purple'
                 width='350px'
