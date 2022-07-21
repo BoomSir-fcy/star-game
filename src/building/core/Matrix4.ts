@@ -57,6 +57,18 @@ class Matrix4 extends Point {
       item.displayState(visible);
     });
   }
+
+  addText() {
+    this.chequers.forEach(item => {
+      item.addText();
+    });
+  }
+
+  removeText() {
+    this.chequers.forEach(item => {
+      item.removeText();
+    });
+  }
 }
 
 export default Matrix4;

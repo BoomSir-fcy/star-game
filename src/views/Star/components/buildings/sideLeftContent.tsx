@@ -161,6 +161,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
         areaY: item.propterty.size.area_y,
         isBuilding: false,
         enableDrag: true,
+        Lv: item.propterty.levelEnergy,
       });
       setMoving(true);
       building?.addDragPreBuilder(builder);
@@ -186,6 +187,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       areaY: item.propterty.size.area_y,
       isBuilding: false,
       enableDrag: true,
+      Lv: item.propterty.levelEnergy,
     };
     building?.addDragPreBuilderApp(option);
   };

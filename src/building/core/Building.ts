@@ -112,6 +112,8 @@ class Building extends EventTarget {
 
   activeBuilderFlag?: boolean; // 表示事件触发源未activeSolider
 
+  activeChequer?: Chequer; // 当前选中格子
+
   init() {
     this.view = this.app.view;
 
@@ -277,9 +279,10 @@ class Building extends EventTarget {
 
   // 从棋盘上移除小人
   removeBuilder(builder: Builder) {
+    builder.axisPoint?.chequer?.addText();
+    builder.matrix4?.addText();
     builder.setRemove(true);
     builder.changeState(stateType.PREVIEW, false);
-    // console.log(888888888888888, builder);
     this.builders = this.builders.filter(item => item !== builder);
     this.boards.container.removeChild(builder.container);
     this.dispatchEvent(getUpdateBuilderPosition(this.builders));
@@ -449,6 +452,9 @@ class Building extends EventTarget {
 
     builder.changeState(stateType.DISABLE, false);
 
+    builder.axisPoint?.chequer?.removeText();
+    builder.matrix4?.removeText();
+
     return builder;
   }
 
@@ -500,6 +506,7 @@ class Building extends EventTarget {
       this.updateBuilderState(list, true);
       return;
     }
+
     list?.forEach(item => {
       this.createBuilder(item.position.from.x, item.position.from.y, {
         building: item.building,
@@ -510,6 +517,8 @@ class Building extends EventTarget {
         areaY: item.building.propterty.size.area_y,
         isBuilding: false,
         builded: true,
+        Lv: item.building.propterty.levelEnergy,
+        IsUpgrade: false,
       });
     });
   }
@@ -519,6 +528,7 @@ class Building extends EventTarget {
       this.updateBuilderState(list);
       return;
     }
+
     list.forEach(item => {
       this.createBuilder(item.position.from.x, item.position.from.y, {
         building: item.building,
@@ -529,11 +539,39 @@ class Building extends EventTarget {
         areaY: item.building.propterty.size.area_y,
         isBuilding: true,
         builded: false,
+        Lv: item.building.propterty.levelEnergy,
+        IsUpgrade: false,
       });
     });
   }
 
-  updateBuilderState(list: BuilderInfoOfApi[], created?: boolean) {
+  upgradeBuildingBuilder(list: BuilderInfoOfApi[], IsUpgrade?: boolean) {
+    if (this.builders.length) {
+      this.updateBuilderState(list, true, true);
+      return;
+    }
+
+    list.forEach(item => {
+      this.createBuilder(item.position.from.x, item.position.from.y, {
+        building: item.building,
+        src: `${item.building.index}`,
+        id: `${item.building._id}`,
+        race: item.building.race,
+        areaX: item.building.propterty.size.area_x,
+        areaY: item.building.propterty.size.area_y,
+        isBuilding: false,
+        builded: true,
+        Lv: item.building.propterty.levelEnergy,
+        IsUpgrade,
+      });
+    });
+  }
+
+  updateBuilderState(
+    list: BuilderInfoOfApi[],
+    created?: boolean,
+    IsUpgrade?: boolean,
+  ) {
     list.forEach(item => {
       const builder = this.findBuilderByXY(
         item.position.from.x,
@@ -542,6 +580,7 @@ class Building extends EventTarget {
       if (builder) {
         builder.setIsBuilded(!!created);
         builder.setIsBuilding(!created);
+        builder.setIsUpgrade(!!IsUpgrade);
         builder.option.building = {
           ...item.building,
         };
@@ -555,6 +594,8 @@ class Building extends EventTarget {
           areaY: item.building.propterty.size.area_y,
           isBuilding: !created,
           builded: !!created,
+          Lv: item.building.propterty.levelEnergy,
+          IsUpgrade,
         });
       }
     });

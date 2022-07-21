@@ -4,7 +4,9 @@ import { Point, Polygon } from '@pixi/math';
 import { FederatedPointerEvent } from '@pixi/events';
 import { Texture } from '@pixi/core';
 import { Graphics } from '@pixi/graphics';
+import { Text } from '@pixi/text';
 import { Container } from '@pixi/display';
+import { raceData } from 'config/buildConfig';
 import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
 import Matrix4 from './Matrix4';
@@ -17,9 +19,11 @@ export interface BuilderOption {
   building: Api.Building.Building;
   areaY: number;
   areaX: number;
+  Lv: number;
   isBuilding?: boolean;
   builded?: boolean;
   enableDrag?: boolean;
+  IsUpgrade?: boolean;
 }
 
 class Builder extends EventTarget {
@@ -34,8 +38,14 @@ class Builder extends EventTarget {
       enableDrag,
       isBuilding,
       builded,
+      Lv,
+      IsUpgrade,
     } = option;
     this.id = id;
+    this.race = race;
+    this.resId = src;
+    this.Lv = Lv;
+    this.IsUpgrade = Boolean(IsUpgrade);
 
     // const img = `${window.location.origin}/assets/buildings/${race}/${
     //   src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
@@ -77,7 +87,13 @@ class Builder extends EventTarget {
 
   startPoint = new Point();
 
+  Lv = 1;
+
   id = '1';
+
+  resId = '1';
+
+  race = 1;
 
   src = '';
 
@@ -87,6 +103,8 @@ class Builder extends EventTarget {
 
   builded = false;
 
+  IsUpgrade = false;
+
   option: BuilderOption;
 
   moved = false; // 是否发生移动
@@ -94,6 +112,24 @@ class Builder extends EventTarget {
   isRemove = false; // 已经移除
 
   graphics = new Graphics();
+
+  BuildingText = new Text('Building...', {
+    fill: 0xffffff,
+    fontSize: 14,
+    breakWords: true,
+    wordWrap: true,
+    wordWrapWidth: 170,
+    lineHeight: 18,
+  });
+
+  UpgradeText = new Text('during Upgrade...', {
+    fill: 0xffffff,
+    fontSize: 14,
+    breakWords: true,
+    wordWrap: true,
+    wordWrapWidth: 170,
+    lineHeight: 18,
+  });
 
   position: {
     from: {
@@ -129,6 +165,7 @@ class Builder extends EventTarget {
     this.container.buttonMode = true;
     this.container.interactive = true;
 
+    this.drawInfoBox();
     // if (!this.isBuilding && !this.builded) {
     //   this.addHandleBtn();
     // }
@@ -202,7 +239,7 @@ class Builder extends EventTarget {
       -Chequer.WIDTH * Chequer.X_RATIO * this.areaX,
       Chequer.HEIGHT * Chequer.Y_RATIO * this.areaX + offsetY,
     ];
-    const polygon = new Polygon(path);
+    // const polygon = new Polygon(path);
     // polygon
     // this.graphics.lineStyle(1, 0xff0000, 0.7);
     // this.graphics.beginFill(0xff0000, 0.2);
@@ -220,10 +257,35 @@ class Builder extends EventTarget {
     // this.graphics.interactive = true;
 
     // this.centerPoint.set(x, y);
-    this.container.addChild(this.graphics);
 
     this.container.hitArea = new Polygon(path);
     return this.graphics;
+  }
+
+  drawInfoBox() {
+    this.graphics.beginFill(0x434343, 0.5);
+    this.graphics.drawRoundedRect(-64, 20, 130, 70, 10);
+    this.graphics.endFill();
+    this.container.addChild(this.graphics);
+    this.addBuilderText();
+  }
+
+  addBuilderText() {
+    const text = new Text(
+      `${raceData[this.race]?.[this.resId]?.name}    Lv${this.Lv}`,
+      {
+        fill: 0xffffff,
+        fontSize: 14,
+        breakWords: true,
+        wordWrap: true,
+        wordWrapWidth: 124,
+        lineHeight: 18,
+      },
+    );
+    text.x = -60;
+    text.y = 28;
+    // text.zIndex = 999;
+    this.container.addChild(text);
   }
 
   setPointAsXY(x: number, y: number) {
@@ -236,6 +298,16 @@ class Builder extends EventTarget {
     this.setPosition(axisPoint);
   }
 
+  // 设置升级中状态
+  setIsUpgrade(IsUpgrade: boolean) {
+    this.IsUpgrade = IsUpgrade;
+    if (IsUpgrade) {
+      this.addIsUpgradeText();
+    } else {
+      this.container.removeChild(this.UpgradeText);
+    }
+  }
+
   setIsBuilding(isBuilding: boolean) {
     // this.setIsBuilding(!isBuilding)
     this.isBuilding = isBuilding;
@@ -243,9 +315,25 @@ class Builder extends EventTarget {
     if (isBuilding) {
       this.container.alpha = 0.5;
       this.enableDrag = false;
+      this.addIsBuildingText();
     } else {
       this.container.alpha = 1;
+      this.container.removeChild(this.BuildingText);
     }
+  }
+
+  addIsUpgradeText() {
+    // 状态文字
+    this.UpgradeText.x = -60;
+    this.UpgradeText.y = 68;
+    this.container.addChild(this.UpgradeText);
+  }
+
+  addIsBuildingText() {
+    // 状态文字
+    this.BuildingText.x = -60;
+    this.BuildingText.y = 68;
+    this.container.addChild(this.BuildingText);
   }
 
   setIsBuilded(builded: boolean) {
@@ -259,6 +347,8 @@ class Builder extends EventTarget {
 
   // 设置位置
   setPosition(point: AxisPoint, matrix4?: Matrix4) {
+    this.axisPoint?.chequer?.addText();
+    this.matrix4?.addText();
     if (matrix4) {
       this.matrix4 = matrix4;
       this.axisPoint = point;
@@ -266,13 +356,18 @@ class Builder extends EventTarget {
       this.startPoint.set(matrix4.x, matrix4.y);
       matrix4.setState(stateType.DISABLE);
       matrix4.displayState(false);
+      matrix4.removeText();
     } else {
       this.axisPoint = point;
       this.container.position.set(point.x, point.y);
       this.startPoint.set(point.x, point.y);
       point.chequer?.setState(stateType.DISABLE);
       point.chequer?.displayState(false);
+      point.chequer?.removeText();
     }
+
+    // this.container.removeChild(this.graphics);
+
     this.position = {
       from: {
         x: point.axisX,

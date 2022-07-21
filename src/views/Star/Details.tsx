@@ -109,6 +109,7 @@ const Details = () => {
   const { screenMode } = useStore(p => p.user);
   const guideRef = React.useRef(null);
   const ref = React.useRef<HTMLDivElement>(null);
+  const [toUpdate, setToUpdate] = React.useState(false);
 
   const [showDialog, setShowDialog] = React.useState<boolean>(false);
   const [showPrompt, confirmNavigation, cancelNavigation] =
@@ -200,7 +201,8 @@ const Details = () => {
 
   const initBuilder = React.useCallback(() => {
     building.initBuilder(selfBuilding);
-  }, [building, selfBuilding]);
+    setToUpdate(true);
+  }, [building, selfBuilding, setToUpdate]);
 
   React.useEffect(() => {
     if (building.boardsCreated) {
@@ -213,11 +215,20 @@ const Details = () => {
   }, [initBuilder, building]);
 
   const initBuildingBuilder = React.useCallback(() => {
-    const createWorks = stateBuilding.workQueue.filter(
-      item => item.work_type === 1,
-    );
-    building.initBuildingBuilder(createWorks);
-  }, [building, stateBuilding.workQueue]);
+    if (toUpdate) {
+      const createWorks = stateBuilding.workQueue.filter(
+        item => item.work_type === 1,
+      );
+      const Upgrade = stateBuilding.workQueue.filter(
+        item => item.work_type === 2,
+      );
+      building.initBuildingBuilder(createWorks);
+      if (Upgrade.length) {
+        building.upgradeBuildingBuilder(Upgrade, true);
+      }
+      setToUpdate(false);
+    }
+  }, [building, stateBuilding.workQueue, setToUpdate, toUpdate]);
 
   React.useEffect(() => {
     if (building.boardsCreated) {

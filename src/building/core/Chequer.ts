@@ -82,6 +82,18 @@ class Chequer {
 
   isOver = false;
 
+  text = new Text('Waiting to be built', {
+    fill: [0xffffff, 0x4ffffb],
+    fontSize: 16,
+    dropShadow: true,
+    dropShadowColor: 'rgba(0,0,0,0.9500)',
+    dropShadowBlur: 4,
+    dropShadowAngle: Math.PI / 6,
+    dropShadowDistance: 6,
+    stroke: 'rgba(225,225,225,0.5)',
+    strokeThickness: 1,
+  });
+
   state: StateType = stateType.PREVIEW;
 
   static [stateType.PREVIEW] = Texture.from('/assets/map/state1.png');
@@ -126,15 +138,29 @@ class Chequer {
     this.stateSprite.visible = false;
 
     this.centerPoint.set(x, y);
+    this.addText();
+    this.addActiveEvent(true);
     // this.centerPoint.set(x, y - (Chequer.HEIGHT * Chequer.Y_RATIO) / 2);
+  }
 
-    // const text = new Text(`x${this.axisX}, ${this.axisY}`, {
-    //   fill: 0xffffff,
-    //   fontSize: 16,
-    // });
-    // text.x = -30;
-    // text.y = 28;
-    // this.bunny.addChild(text);
+  addText() {
+    this.text.x = -64;
+    this.text.y = 28;
+    this.text.buttonMode = true;
+    this.text.interactive = true;
+    this.bunny.addChild(this.text);
+  }
+
+  removeText() {
+    this.bunny.removeChild(this.text);
+  }
+
+  addActiveEvent(add: boolean) {
+    this.graphics.on('click', e => {
+      if (add) {
+        console.log(this.axisY, this.axisX);
+      }
+    });
   }
 
   // 底色是不规则渲染 所以事件范围也不规则
@@ -160,6 +186,7 @@ class Chequer {
     this.graphics.y = y;
 
     this.graphics.interactive = true;
+    this.graphics.buttonMode = true;
 
     // this.centerPoint.set(x, y);
 
