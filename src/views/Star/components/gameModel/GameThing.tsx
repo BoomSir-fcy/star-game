@@ -59,7 +59,15 @@ const Container = styled(GraphicsCard)<{
   cursor: pointer;
   overflow: visible;
   padding: 0;
-  ${({ theme, active, border, round }) => {
+  &.noBg {
+    border-color: transparent;
+    box-shadow: none;
+    background: none;
+    &::before {
+      background: none;
+    }
+  }
+  /* ${({ theme, active, border, round }) => {
     if (border) {
       return css`
         border: 1px solid #4ffffb;
@@ -76,7 +84,7 @@ const Container = styled(GraphicsCard)<{
       `;
     }
     return css``;
-  }}
+  }} */
   div {
     pointer-events: none;
   }
@@ -136,6 +144,7 @@ export const GameThing: React.FC<{
       flexDirection='column'
     >
       <Container
+        className={active ? '' : 'noBg'}
         isRadius
         stripe
         width={`${sizeBox.width}px`}
@@ -189,7 +198,7 @@ export const GameThing: React.FC<{
           {text}
         </MarkText>
       )}
-      {onAddClick && (
+      {/* {onAddClick && (
         <Box
           zIndex={100}
           width={36}
@@ -208,7 +217,7 @@ export const GameThing: React.FC<{
             src='/images/commons/icon/add.png'
           />
         </Box>
-      )}
+      )} */}
     </Flex>
   );
 };

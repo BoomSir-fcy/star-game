@@ -97,7 +97,8 @@ const Details = () => {
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
   const upgrad = useStore(p => p.buildling.upgradesBuilding);
   const destory = useStore(p => p.buildling.destroyBuilding);
-  const activeBuilder = useActiveBuilder(building);
+  const { activeSolider: activeBuilder, ActiveCheqer } =
+    useActiveBuilder(building);
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
   const { refreshWorkQueue } = useWorkqueue();
@@ -550,6 +551,7 @@ const Details = () => {
           }}
         />
         <PlanetQueue
+          ActiveCheqer={ActiveCheqer}
           serverTime={serverDiffTime}
           currentQueue={stateBuilding.workQueue}
           onChangeGuide={() => {

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 import Building from 'building/core/Building';
 import Builder from 'building/core/Builder';
 import { useStore, storeAction } from 'state';
-import { Flex, Box, Button, Image, Text } from 'uikit';
+import { Flex, Box, Button, Image, Text, MarkText } from 'uikit';
 import { getBuilderSpriteRes } from 'building/core/utils';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
@@ -22,7 +22,7 @@ const Container = styled(Box)`
 `;
 const SideCloseButton = styled(Button)`
   position: absolute;
-  left: 290px;
+  right: -43px;
   top: calc(50% - 87px);
   width: 43px;
   height: 173px;
@@ -37,7 +37,7 @@ const SideCloseButton = styled(Button)`
 const Content = styled(Box)<{ animation?: boolean }>`
   position: absolute;
   top: 0;
-  width: 294px;
+  width: 450px;
   height: 100%;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid #4ffffb;
@@ -56,7 +56,7 @@ const Content = styled(Box)<{ animation?: boolean }>`
   }
   @keyframes bounceSideInLeft {
     0% {
-      transform: translate(-200px, 0);
+      transform: translate(-300px, 0);
     }
     100% {
       transform: translate(0, 0);
@@ -72,20 +72,20 @@ const Content = styled(Box)<{ animation?: boolean }>`
   }
 `;
 
-const ScrollView = styled(Flex)`
+const ScrollView = styled(Box)`
   padding: 20px;
   width: 100%;
   height: calc(100% - 20px);
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   overflow: hidden scroll;
 `;
 
 const BuildingsItem = styled(Box)`
   min-width: 0;
   max-width: 48%;
-  margin-right: 20px;
+  margin-right: 30px;
   margin-bottom: 15px;
-  &:nth-child(2n) {
+  &:nth-child(3n) {
     margin-right: 0;
   }
 `;
@@ -107,9 +107,10 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   onChangeGuide,
 }) => {
   const dispatch = useDispatch();
-  const activeBuilder = useActiveBuilder(building);
+  const { activeSolider: activeBuilder } = useActiveBuilder(building);
   const queueStore = useStore(p => p.buildling.queue);
   const buildings = useStore(p => p.buildling.buildings);
+  const [Active, setActive] = useState<null | number>(null);
 
   const close = React.useCallback(() => {
     if (!animation) return;
@@ -126,12 +127,12 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
     }
   }, [dispatch, sideRightStatus]);
 
-  React.useEffect(() => {
-    window.addEventListener('click', close);
-    return () => {
-      window.removeEventListener('click', close);
-    };
-  }, [close]);
+  // React.useEffect(() => {
+  //   window.addEventListener('click', close);
+  //   return () => {
+  //     window.removeEventListener('click', close);
+  //   };
+  // }, [close]);
 
   const [moving, setMoving] = React.useState(false);
 
@@ -202,6 +203,22 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
 
   const { t } = useTranslation();
 
+  const resourceBuildings = useMemo(() => {
+    const all = buildings[1];
+    const arr = all?.filter(item => {
+      return getBuildings(item.index)?.type === 1;
+    });
+    return arr;
+  }, [buildings, getBuildings]);
+
+  const BuffBuildings = useMemo(() => {
+    const all = buildings[1];
+    const arr = all?.filter(item => {
+      return getBuildings(item.index)?.type === 2;
+    });
+    return arr;
+  }, [buildings, getBuildings]);
+
   return (
     <Container>
       <Content
@@ -214,7 +231,9 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
             if (!activeBuilder?.id && !sideRightStatus) {
               dispatch(setNavZIndex(true));
             }
-            dispatch(storeAction.queueVisbleSide(false));
+            setTimeout(() => {
+              dispatch(storeAction.queueVisbleSide(false));
+            }, 100);
           }}
         >
           <Box width='34px' height='42px'>
@@ -226,38 +245,84 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
           </Box>
         </SideCloseButton>
         <ScrollView>
-          {(buildings[1] ?? []).map(
-            (row: Api.Building.Building, index: number) => (
-              <BuildingsItem key={row.buildings_number}>
-                {/* <Text>{getBuilderSpriteRes(race, `${row.index}`)}</Text> */}
-                <GameThing
-                  className={index === 0 && 'guide_step_6'}
-                  scale='sm'
-                  round
-                  itemData={row}
-                  level={row.propterty.levelEnergy}
-                  src={getBuilderSpriteRes(race, `${row.index}`)}
-                  text={t(getBuildings(row.index)?.name)}
-                  onClick={event => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    onPreview({ ...row, isPreview: true });
-                  }}
-                  onPointerDown={e => {
-                    dragStartHandle(e, row);
-                  }}
-                  onAddClick={() => {
-                    handleGoIntoBattle(row);
-                    onPreview(row);
-                    onChangeGuide();
+          <MarkText mb='20px' bold fontSize='22px' fontStyle='normal'>
+            {t('Resource Production and Storage')}
+          </MarkText>
+          <Flex mb='30px' flexWrap='wrap'>
+            {(resourceBuildings ?? []).map(
+              (row: Api.Building.Building, index: number) => (
+                <BuildingsItem key={row.buildings_number}>
+                  {/* <Text>{getBuilderSpriteRes(race, `${row.index}`)}</Text> */}
+                  <GameThing
+                    active={Active === row.index}
+                    className={index === 0 && 'guide_step_6'}
+                    scale='sm'
+                    round
+                    itemData={row}
+                    level={row.propterty.levelEnergy}
+                    src={getBuilderSpriteRes(race, `${row.index}`)}
+                    text={t(getBuildings(row.index)?.name)}
+                    onClick={event => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      setActive(row.index);
+                      onPreview({ ...row, isPreview: true });
+                    }}
+                    onPointerDown={e => {
+                      dragStartHandle(e, row);
+                    }}
+                    onAddClick={() => {
+                      handleGoIntoBattle(row);
+                      onPreview(row);
+                      onChangeGuide();
 
-                    dispatch(setNavZIndex(true));
-                    dispatch(storeAction.queueVisbleSide(false));
-                  }}
-                />
-              </BuildingsItem>
-            ),
-          )}
+                      dispatch(setNavZIndex(true));
+                      dispatch(storeAction.queueVisbleSide(false));
+                    }}
+                  />
+                </BuildingsItem>
+              ),
+            )}
+          </Flex>
+          <MarkText mb='20px' bold fontSize='22px' fontStyle='normal'>
+            {t('Battle Units and Buffs')}
+          </MarkText>
+          <Flex flexWrap='wrap'>
+            {(BuffBuildings ?? []).map(
+              (row: Api.Building.Building, index: number) => (
+                <BuildingsItem key={row.buildings_number}>
+                  {/* <Text>{getBuilderSpriteRes(race, `${row.index}`)}</Text> */}
+                  <GameThing
+                    active={Active === row.index}
+                    className={index === 0 && 'guide_step_6'}
+                    scale='sm'
+                    round
+                    itemData={row}
+                    level={row.propterty.levelEnergy}
+                    src={getBuilderSpriteRes(race, `${row.index}`)}
+                    text={t(getBuildings(row.index)?.name)}
+                    onClick={event => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      setActive(row.index);
+                      onPreview({ ...row, isPreview: true });
+                    }}
+                    onPointerDown={e => {
+                      dragStartHandle(e, row);
+                    }}
+                    onAddClick={() => {
+                      handleGoIntoBattle(row);
+                      onPreview(row);
+                      onChangeGuide();
+
+                      dispatch(setNavZIndex(true));
+                      dispatch(storeAction.queueVisbleSide(false));
+                    }}
+                  />
+                </BuildingsItem>
+              ),
+            )}
+          </Flex>
         </ScrollView>
       </Content>
     </Container>

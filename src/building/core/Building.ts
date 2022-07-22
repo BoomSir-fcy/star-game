@@ -14,6 +14,8 @@ import {
   getConfirmBuilderEvent,
   getRemoveActiveBuilderEvent,
   getUpdateBuilderPosition,
+  getAddActiveChequerEvent,
+  getErrorEvent,
 } from './event';
 import LinearMove from './LinearMove';
 import { SpeederType } from '../types';
@@ -35,6 +37,10 @@ interface BuilderInfoOfApi {
     from: { x: number; y: number };
     to: { x: number; y: number };
   };
+}
+export interface ChequerPosition {
+  x: number;
+  y: number;
 }
 /**
  * 游戏入口
@@ -112,7 +118,7 @@ class Building extends EventTarget {
 
   activeBuilderFlag?: boolean; // 表示事件触发源未activeSolider
 
-  activeChequer?: Chequer; // 当前选中格子
+  activeChequer?: ChequerPosition; // 当前选中格子
 
   init() {
     this.view = this.app.view;
@@ -135,10 +141,29 @@ class Building extends EventTarget {
     this.addEventListenerOfWindow();
   }
 
+  addActiveChequer() {
+    this.boards.chequers.forEach(item => {
+      item.graphics.on('click', e => {
+        // 清除其他格子颜色
+        this.boards.chequers.forEach(item2 => {
+          item2.displayState(false);
+        });
+        const position = {
+          x: item.axisX,
+          y: item.axisY,
+        };
+        this.activeChequer = position;
+        this.dispatchEvent(getAddActiveChequerEvent(position));
+        item.displayState(true);
+      });
+    });
+  }
+
   creatTerrain(areaX: number, areaY: number) {
     this.boards.drawChequers(areaX, areaY);
     this.boardsCreated = true;
     this.dispatchEvent(new Event('boardsCreated'));
+    this.addActiveChequer();
   }
 
   // 取消选中
@@ -309,14 +334,27 @@ class Building extends EventTarget {
       const chequer = this.boards.chequers.find(
         item => item.state === stateType.PREVIEW,
       ) as Chequer;
+
       if (chequer) {
+        let builder_axisX = chequer.axisX;
+        let builder_axisY = chequer.axisY;
+        if (this.activeChequer) {
+          builder_axisX = this.activeChequer.x;
+          builder_axisY = this.activeChequer.y;
+          // 清除选中位置
+          this.activeChequer = null;
+          this.dispatchEvent(getAddActiveChequerEvent(null));
+        }
         const builder = this.createBuilder(
-          chequer.axisX,
-          chequer.axisY,
+          builder_axisX,
+          builder_axisY,
           options,
         );
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
         builder.addHandleBtn();
+      } else {
+        // 棋盘空位不足
+        this.dispatchEvent(getErrorEvent('Insufficient chessboard space'));
       }
     } else if (options.areaX === 2) {
       const matrix4 = this.boards.matrix4s.find(item => {
@@ -332,6 +370,9 @@ class Building extends EventTarget {
         );
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
         builder.addHandleBtn();
+      } else {
+        // 棋盘空位不足
+        this.dispatchEvent(getErrorEvent('Insufficient chessboard space'));
       }
     }
   }

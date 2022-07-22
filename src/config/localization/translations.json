@@ -754,6 +754,7 @@
   "Insufficient_BNB": "Insufficient BNB balance, please recharge",
   "******endNew*****@FCY********": "@FCY end of new translation",
   "Renewal": "Renewal",
+  "Insufficient chessboard space": "Insufficient chessboard space",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",
   "http-error-200001": "Not planet owner",

@@ -164,7 +164,12 @@ export const BuildingUpgrade: React.FC<{
             </Items>
           </Flex>
 
-          <Flex alignItems='center' justifyContent='space-between' width='100%'>
+          <Flex
+            mb='13px'
+            alignItems='center'
+            justifyContent='space-between'
+            width='100%'
+          >
             <Items alignItems='center'>
               <Text ellipsis>{t('SpicesNeededToBuild')}</Text>
               <Flex flex={1} justifyContent='flex-end' ml='2px'>
@@ -223,9 +228,28 @@ export const BuildingUpgrade: React.FC<{
               </Flex>
             </Items>
           </Flex>
+          <Flex alignItems='center' justifyContent='space-between' width='100%'>
+            <Items alignItems='center' justifyContent='flex-end'>
+              <Text ellipsis>{t('Planet Level')}</Text>
+              <Flex flex={1} justifyContent='flex-end' ml='2px'>
+                <Text
+                  ml='2px'
+                  small
+                  color={`${
+                    currnet_building?.propterty?.levelEnergy + 1 >= planet.level
+                      ? 'warning'
+                      : 'progressGreenBar'
+                  }`}
+                >
+                  Lv{currnet_building?.propterty?.levelEnergy + 1}
+                </Text>
+                <Text small>/Lv{planet.level}</Text>
+              </Flex>
+            </Items>
+          </Flex>
         </Flex>
         {!currnet_building?.isPreview && (
-          <Flex justifyContent='center' mt='34px'>
+          <Flex justifyContent='center' mt='10px'>
             {currnet_building?.isbuilding ? (
               <ButtonItem
                 width='226px'

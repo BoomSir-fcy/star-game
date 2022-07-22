@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
@@ -8,6 +8,7 @@ import { Box, Flex, MarkText, Image, Text } from 'uikit';
 import { getBuilderSpriteRes } from 'building/core/utils';
 import { useTranslation } from 'contexts/Localization';
 import { setNavZIndex } from 'state/userInfo/reducer';
+import { ChequerPosition } from 'building/core/Building';
 import { QueueBuilding } from './queueBuilding';
 
 const Layout = styled(Box)`
@@ -56,22 +57,38 @@ const QueueBox = styled(Flex)`
 `;
 
 export const PlanetQueue: React.FC<{
+  ActiveCheqer: null | ChequerPosition;
   serverTime: number;
   currentQueue: any[];
   onSave?: () => void;
   onSelectCurrent?: (item: any) => void;
   onChangeGuide?: () => void;
   onComplete?: () => void;
-}> = ({ serverTime, currentQueue, onChangeGuide, onComplete }) => {
+}> = ({
+  ActiveCheqer,
+  serverTime,
+  currentQueue,
+  onChangeGuide,
+  onComplete,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const vipBenefite = useStore(p => p.userInfo.userInfo.vipBenefits);
+  const { visible } = useStore(p => p.buildling.queue);
   const queueArr = Array.from(
     { length: vipBenefite?.building_queue_capacity },
     (v, i) => i,
   );
+
+  useEffect(() => {
+    if (ActiveCheqer !== null) {
+      dispatch(setNavZIndex(false));
+      dispatch(storeAction.queueVisbleSide(true));
+      onChangeGuide();
+    }
+  }, [dispatch, onChangeGuide, ActiveCheqer]);
 
   return (
     <Layout>

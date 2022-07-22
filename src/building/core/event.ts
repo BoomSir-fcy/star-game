@@ -4,12 +4,19 @@ export type BuilderCustomEvent = CustomEvent<{
   builder: Builder;
 }>;
 
+interface chequerXY {
+  x: number;
+  y: number;
+}
+
 export const eventsType = {
   REMOVE_ACTIVE_SOLDIER: 'removeActiveBuilder',
   ADD_ACTIVE_SOLDIER: 'addActiveBuilder',
   UPDATE_SOLDIER_POSITION: 'updateBuilderPosition',
   CANCEL_BUILDER: 'cancelBuilder',
   CONFIRM_BUILDER: 'confirmBuilder',
+  ADD_ACTIVE_CHEQUER: 'addActiveChequer',
+  ERROR_MESSAGE: 'errorMessage',
 };
 
 export const getBuilderEvent = (
@@ -33,3 +40,9 @@ export const getCancelBuilderEvent = (builders: Builder) =>
 
 export const getConfirmBuilderEvent = (builders: Builder) =>
   new CustomEvent(eventsType.CONFIRM_BUILDER, { detail: { builders } });
+
+export const getAddActiveChequerEvent = (chequerXY: chequerXY) =>
+  new CustomEvent(eventsType.ADD_ACTIVE_CHEQUER, { detail: { chequerXY } });
+
+export const getErrorEvent = (errText: string) =>
+  new CustomEvent(eventsType.ERROR_MESSAGE, { detail: { errText } });

@@ -50,8 +50,9 @@ interface ChequerOptions {
   offsetStartX?: number;
   offsetStartY?: number;
 }
-class Chequer {
+class Chequer extends EventTarget {
   constructor(option: ChequerOptions) {
+    super();
     this.offsetStartX = option.offsetStartX ?? config.OFFSET_START_X;
     this.offsetStartY = option.offsetStartY ?? config.OFFSET_START_Y;
     this.init(option);
@@ -139,7 +140,6 @@ class Chequer {
 
     this.centerPoint.set(x, y);
     this.addText();
-    this.addActiveEvent(true);
     // this.centerPoint.set(x, y - (Chequer.HEIGHT * Chequer.Y_RATIO) / 2);
   }
 
@@ -153,14 +153,6 @@ class Chequer {
 
   removeText() {
     this.bunny.removeChild(this.text);
-  }
-
-  addActiveEvent(add: boolean) {
-    this.graphics.on('click', e => {
-      if (add) {
-        console.log(this.axisY, this.axisX);
-      }
-    });
   }
 
   // 底色是不规则渲染 所以事件范围也不规则
