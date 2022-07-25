@@ -388,6 +388,22 @@ const Details = () => {
     nextButton?.dispatchEvent(new Event('click'));
   };
 
+  // 上阵
+  const handleGoIntoBattle = (item: Api.Building.Building) => {
+    const option = {
+      src: `${item.index}`,
+      id: `${item._id}`,
+      building: item,
+      race: planet?.race,
+      areaX: item.propterty.size.area_x,
+      areaY: item.propterty.size.area_y,
+      isBuilding: false,
+      enableDrag: true,
+      Lv: item.propterty.levelEnergy,
+    };
+    building?.addDragPreBuilderApp(option);
+  };
+
   React.useEffect(() => {
     if (activeBuilder?.option?.id) {
       setStateBuilding(p => {
@@ -527,6 +543,7 @@ const Details = () => {
           building={building}
           sideRightStatus={stateBuilding.visible}
           animation={!stepsEnabled}
+          handleGoIntoBattle={val => handleGoIntoBattle(val)}
           onPreview={val => {
             setStateBuilding(p => {
               p.visible = true;
@@ -593,6 +610,30 @@ const Details = () => {
               buildingsId={stateBuilding.building?._id}
               itemData={stateBuilding?.building}
               animation={!stepsEnabled}
+              OnAddBuildings={() => {
+                handleGoIntoBattle(stateBuilding.building);
+                setStateBuilding(p => {
+                  p.visible = true;
+                  p.building = {
+                    ...stateBuilding.building,
+                    isPreview: false,
+                    isqueue: true,
+                  };
+                });
+                setTimeout(() => {
+                  if (stepsEnabled) {
+                    building?.removeActiveSolider();
+                    setActiveStep(6);
+                    setGuide(6);
+                    onClickGuide();
+                    setStateBuilding(p => {
+                      p.visible = false;
+                    });
+                  }
+                }, 100);
+                dispatch(setNavZIndex(true));
+                dispatch(storeAction.queueVisbleSide(false));
+              }}
               onCreateBuilding={async val => {
                 const res = await saveWorkQueue(val);
                 if (res) {

@@ -358,10 +358,27 @@ class Building extends EventTarget {
       }
     } else if (options.areaX === 2) {
       const matrix4 = this.boards.matrix4s.find(item => {
+        if (this.activeChequer) {
+          return (
+            item.chequers.every(
+              chequer => chequer.state === stateType.PREVIEW,
+            ) &&
+            item.chequers.some(
+              chequer =>
+                chequer.axisX === this.activeChequer.x &&
+                chequer.axisY === this.activeChequer.y,
+            )
+          );
+        }
         return item.chequers.every(
           chequer => chequer.state === stateType.PREVIEW,
         );
       });
+      if (this.activeChequer) {
+        // 清除选中位置
+        this.activeChequer = null;
+        this.dispatchEvent(getAddActiveChequerEvent(null));
+      }
       if (matrix4) {
         const builder = this.createBuilder(
           matrix4.chequers[0].axisX,

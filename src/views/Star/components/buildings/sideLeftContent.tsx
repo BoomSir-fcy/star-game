@@ -96,6 +96,7 @@ interface SideLeftContentProps {
   sideRightStatus: boolean;
   animation: boolean;
   onPreview: (val) => void;
+  handleGoIntoBattle: (val) => void;
   onChangeGuide: () => void;
 }
 export const SideLeftContent: React.FC<SideLeftContentProps> = ({
@@ -105,6 +106,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
   animation,
   onPreview,
   onChangeGuide,
+  handleGoIntoBattle,
 }) => {
   const dispatch = useDispatch();
   const { activeSolider: activeBuilder } = useActiveBuilder(building);
@@ -176,22 +178,6 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       window.removeEventListener('pointerup', dragEndHandle);
     };
   }, [dragEndHandle]);
-
-  // 上阵
-  const handleGoIntoBattle = (item: Api.Building.Building) => {
-    const option = {
-      src: `${item.index}`,
-      id: `${item._id}`,
-      building: item,
-      race,
-      areaX: item.propterty.size.area_x,
-      areaY: item.propterty.size.area_y,
-      isBuilding: false,
-      enableDrag: true,
-      Lv: item.propterty.levelEnergy,
-    };
-    building?.addDragPreBuilderApp(option);
-  };
 
   const getBuildings = React.useCallback(
     index => {
