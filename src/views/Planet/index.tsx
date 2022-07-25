@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { Globe } from 'components';
 import { Box, Flex, Spinner, Text, Image } from 'uikit';
 import { useImmer } from 'use-immer';
-import { fetchMePlanetAsync } from 'state/planet/fetchers';
+import { fetchMePlanetAsync } from 'state/planet/reducer';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';

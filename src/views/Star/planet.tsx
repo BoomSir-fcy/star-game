@@ -23,7 +23,7 @@ import { useTranslation } from 'contexts/Localization';
 import Layout from 'components/Layout';
 import Nav from 'components/Nav';
 import { storeAction, useStore } from 'state';
-import { fetchMePlanetAsync } from 'state/planet/fetchers';
+import { fetchMePlanetAsync } from 'state/planet/reducer';
 import { setActivePlanet } from 'state/planet/actions';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useToast } from 'contexts/ToastsContext';

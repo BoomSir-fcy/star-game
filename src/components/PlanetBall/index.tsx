@@ -53,6 +53,8 @@ export interface PlanetBallProps extends BoxProps {
   rotate?: boolean;
   theme?: DefaultTheme;
   showUnion?: boolean;
+  IconWidth?: number;
+  IconHeight?: number;
 }
 
 const PlanetBall: React.FC<PlanetBallProps> = ({
@@ -62,6 +64,8 @@ const PlanetBall: React.FC<PlanetBallProps> = ({
   url,
   theme,
   showUnion,
+  IconWidth = 47,
+  IconHeight = 45,
   ...props
 }) => {
   const { width, height } = React.useMemo(() => {
@@ -76,8 +80,8 @@ const PlanetBall: React.FC<PlanetBallProps> = ({
       <Planet url={url} color={getColor} className={rotate ? 'rotate' : ''} />
       {showUnion && (
         <IconUnion
-          width={47}
-          height={45}
+          width={IconWidth}
+          height={IconHeight}
           src='/images/commons/icon/union.png'
         />
       )}

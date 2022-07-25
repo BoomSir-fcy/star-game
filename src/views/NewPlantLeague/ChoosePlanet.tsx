@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import { PlanetRaceTabs, PlanetSearch } from 'views/Star/components';
 import { useStore } from 'state';
 import { useDispatch } from 'react-redux';
-import { fetchMePlanetAsync } from 'state/planet/fetchers';
+import { fetchMePlanetAsync } from 'state/planet/reducer';
 import { useFetchAllianceView } from 'state/alliance/hooks';
 
 import ModalQueue from 'views/Star/components/planet/ModalQueue';

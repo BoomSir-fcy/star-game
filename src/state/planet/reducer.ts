@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { PlanetState } from 'state/types';
+import { AppThunk, PlanetState } from 'state/types';
 import {
   setActiveMaterialMap,
   setActiveNavId,
@@ -8,7 +8,7 @@ import {
   setAssetsVisible,
 } from './actions';
 
-import { fetchMePlanetAsync, fetchPlanetInfoAsync } from './fetchers';
+import { fetchPlanetInfoAsync, fetchPlanetList } from './fetchers';
 
 export const initialState: PlanetState = {
   mePlanet: [],
@@ -21,16 +21,32 @@ export const initialState: PlanetState = {
   activePlanet: {} as Api.Planet.PlanetInfo,
 };
 
+// 我的星球列表
+export const fetchMePlanetAsync =
+  (params: Api.Planet.PageParams): AppThunk =>
+  async dispatch => {
+    dispatch(setPlanetLoading(true));
+    const list = await fetchPlanetList(params);
+    dispatch(setPlanetList(list));
+  };
+
 export const planet = createSlice({
   name: 'planet',
   initialState,
-  reducers: {},
+  reducers: {
+    setPlanetLoading: (state, action) => {
+      state.mePlanetLoading = action.payload;
+    },
+    setPlanetList: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        state.mePlanet = payload;
+        state.mePlanetLoading = false;
+      }
+    },
+  },
   extraReducers: builder => {
     builder
-      .addCase(fetchMePlanetAsync.fulfilled, (state, action) => {
-        state.mePlanet = action.payload;
-        state.mePlanetLoading = false;
-      })
       .addCase(setActivePlanet, (state, { payload }) => {
         state.activePlanet = payload;
       })
@@ -65,5 +81,8 @@ export const planet = createSlice({
       });
   },
 });
+
+// Actions
+export const { setPlanetList, setPlanetLoading } = planet.actions;
 
 export default planet.reducer;
