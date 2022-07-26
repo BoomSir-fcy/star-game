@@ -225,7 +225,9 @@ const Details = () => {
       );
       building.initBuildingBuilder(createWorks);
       if (Upgrade.length) {
-        building.upgradeBuildingBuilder(Upgrade, true);
+        console.log(stateBuilding.workQueue);
+
+        building.upgradeBuildingBuilder(Upgrade, true, stateBuilding.workQueue);
       }
       setToUpdate(false);
     }
@@ -253,8 +255,11 @@ const Details = () => {
           );
           return { ...item, building: buildings };
         });
+        const sortList = queueList.sort(
+          (a, b) => a?.work_status - b?.work_status,
+        );
         setStateBuilding(p => {
-          p.workQueue = queueList;
+          p.workQueue = sortList;
         });
         setServerDiffTime(res.data.time);
         dispatch(storeAction.resetModal());
@@ -410,6 +415,7 @@ const Details = () => {
         p.visible = true;
         p.building = {
           ...activeBuilder?.option?.building,
+          _id: activeBuilder?.option?.id,
           position: activeBuilder.position,
           isbuilding: activeBuilder?.builded,
           isqueue: activeBuilder?.isBuilding,

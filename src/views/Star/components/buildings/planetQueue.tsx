@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
@@ -77,10 +77,13 @@ export const PlanetQueue: React.FC<{
 
   const vipBenefite = useStore(p => p.userInfo.userInfo.vipBenefits);
   const { visible } = useStore(p => p.buildling.queue);
-  const queueArr = Array.from(
-    { length: vipBenefite?.building_queue_capacity },
-    (v, i) => i,
-  );
+  const queueArr = useMemo(() => {
+    const arr = Array.from(
+      { length: vipBenefite?.building_queue_capacity },
+      (v, i) => i,
+    );
+    return arr;
+  }, [vipBenefite]);
 
   useEffect(() => {
     if (ActiveCheqer !== null) {

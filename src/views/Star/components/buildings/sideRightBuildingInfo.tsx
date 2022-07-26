@@ -112,6 +112,23 @@ export const SideRightBuildingInfo: React.FC<{
     },
     estimate_building_detail: {},
   });
+  const [NowLevel, setNowLevel] = React.useState(0);
+
+  const isInQueue = React.useMemo(() => {
+    if (workQueue.length > 0) {
+      const taregtBuildings = workQueue.filter(
+        ({ _id, buildings_id, work_type }) =>
+          (_id === itemData?._id || buildings_id === itemData?._id) &&
+          work_type === 2,
+      );
+      if (taregtBuildings.length) {
+        setNowLevel(taregtBuildings[0].target_level);
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }, [workQueue, itemData]);
 
   const estimate = upgradeInfo?.estimate_building_detail || {};
   const currentAttributes = React.useMemo(() => {
@@ -127,34 +144,38 @@ export const SideRightBuildingInfo: React.FC<{
   const init = React.useCallback(
     async (target_level?: number) => {
       // 获取当前建筑的最高等级
-      // let selfLevel = '';
+      let selfLevel = '';
       // 已经创建建筑加入队列，获取加入队列的最高建筑信息
-      // if (workQueue.length > 0) {
-      //   const taregtBuildings = workQueue.filter(
-      //     ({ _id, buildings_id, work_type }) =>
-      //       (_id === itemData?._id || buildings_id === itemData?._id) &&
-      //       work_type === 2,
-      //   );
-      //   const taregtBuildingLevel = taregtBuildings?.sort(
-      //     (a, b) =>
-      //       b?.propterty?.levelEnergy - a?.propterty?.levelEnergy ||
-      //       b?.target_level - a?.target_level,
-      //   );
-      //   if (taregtBuildingLevel.length > 0) {
-      //     selfLevel =
-      //       taregtBuildingLevel[0]?.propterty?.levelEnergy + 2 ||
-      //       taregtBuildingLevel[0]?.target_level + 1;
-      //   }
-      // }
+      if (workQueue.length > 0) {
+        const taregtBuildings = workQueue.filter(
+          ({ _id, buildings_id, work_type }) =>
+            (_id === itemData?._id || buildings_id === itemData?._id) &&
+            work_type === 2,
+        );
+        const taregtBuildingLevel = taregtBuildings?.sort(
+          (a, b) =>
+            b?.propterty?.levelEnergy - a?.propterty?.levelEnergy ||
+            b?.target_level - a?.target_level,
+        );
+        if (taregtBuildingLevel.length > 0) {
+          selfLevel =
+            taregtBuildingLevel[0]?.propterty?.levelEnergy + 2 ||
+            taregtBuildingLevel[0]?.target_level + 1;
+        }
+      }
 
       try {
-        const res = await upgrade(planet_id, buildingsId, target_level);
+        const res = await upgrade(
+          planet_id,
+          buildingsId,
+          target_level || selfLevel,
+        );
         setUpgradeInfo(res);
       } catch (error) {
         console.log('error: ', error);
       }
     },
-    [upgrade, planet_id, buildingsId],
+    [workQueue, itemData?._id, upgrade, planet_id, buildingsId],
   );
 
   const getBuildings = React.useCallback(() => {
@@ -214,7 +235,9 @@ export const SideRightBuildingInfo: React.FC<{
                 )}
                 level={
                   estimate?._id
-                    ? currentAttributes?.propterty?.levelEnergy
+                    ? isInQueue && currentAttributes?.propterty?.levelEnergy > 1
+                      ? NowLevel - 1
+                      : currentAttributes?.propterty?.levelEnergy
                     : 'MAX'
                 }
                 scale='sm'

@@ -131,6 +131,8 @@ class Builder extends EventTarget {
     lineHeight: 18,
   });
 
+  BuildingInfoText = new Text('');
+
   position: {
     from: {
       x: number;
@@ -271,7 +273,7 @@ class Builder extends EventTarget {
   }
 
   addBuilderText() {
-    const text = new Text(
+    this.BuildingInfoText = new Text(
       `${raceData[this.race]?.[this.resId]?.name}    Lv${this.Lv}`,
       {
         fill: 0xffffff,
@@ -282,10 +284,10 @@ class Builder extends EventTarget {
         lineHeight: 18,
       },
     );
-    text.x = -60;
-    text.y = 28;
-    // text.zIndex = 999;
-    this.container.addChild(text);
+    this.BuildingInfoText.x = -60;
+    this.BuildingInfoText.y = 28;
+    // this.BuildingInfoText.zIndex = 999;
+    this.container.addChild(this.BuildingInfoText);
   }
 
   setPointAsXY(x: number, y: number) {
@@ -296,6 +298,13 @@ class Builder extends EventTarget {
 
     const axisPoint = new AxisPoint(x, y, chequer);
     this.setPosition(axisPoint);
+  }
+
+  // 更新等级
+  updateLv(lv: number) {
+    this.Lv = lv;
+    this.container.removeChild(this.BuildingInfoText);
+    this.addBuilderText();
   }
 
   // 设置升级中状态

@@ -1,33 +1,26 @@
 import React, { useState, useCallback } from 'react';
-import { Button, Flex, Box, BgCard, MarkText, Text, Image } from 'uikit';
+import { Button, Flex, Box, MarkText, Text, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
 import { orderInfo } from 'state/types';
-import { Globe, PlanetBall, RaceAvatar } from 'components';
+import { PlanetBall, RaceAvatar } from 'components';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
-import ScoringPanel from 'components/ScoringPanel';
-import { getPlanetRarity } from 'utils/planetRarity';
 import { useNavigate } from 'react-router-dom';
+import { PlanetDesc } from 'views/NewPlanet/components/PlanetDesc';
+import { getPlanetRarity } from 'utils/planetRarity';
 
 const OutBox = styled(Box)`
   width: 680px;
-  height: 264px;
+  height: 350px;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
 `;
 
-const IconUnion = styled(Image)`
-  position: absolute;
-  bottom: 0;
-  right: 0;
+const StarImg = styled.img`
+  width: 15px;
+  height: 13px;
 `;
-const InfoFlex = styled(Flex)`
-  height: 100%;
-  margin-left: 28px;
-  flex-direction: column;
-  justify-content: space-around;
-  flex: 1;
-`;
+
 const ManageModule: React.FC<{
   PlantManageModule: boolean;
   ChoosePlant: orderInfo;
@@ -43,7 +36,7 @@ const ManageModule: React.FC<{
     //   return;
     // }
     // callbackGuide();
-    navigate('/choose-planet');
+    navigate('/star/planet');
   };
 
   const gotoPlantDetail = useCallback(
@@ -61,75 +54,144 @@ const ManageModule: React.FC<{
       left={0}
       bottom={-20}
     >
-      <OutBox padding='16px'>
-        <Flex height='100%' justifyContent='space-between' alignItems='center'>
-          <Box position='relative'>
+      <OutBox padding='26px'>
+        <Flex
+          mb='20px'
+          height='77%'
+          justifyContent='space-between'
+          alignItems='center'
+        >
+          <Flex
+            height='100%'
+            flexDirection='column'
+            justifyContent='space-between'
+            width='33%'
+          >
             <PlanetBall
               rotate
               scale='xl'
               shadow={QualityColor[planetInfo?.rarity]}
               url={planetInfo?.picture1}
+              showUnion
+              IconHeight={58}
+              IconWidth={60}
             />
-            <IconUnion
-              width={60}
-              height={58}
-              src='/images/commons/icon/union.png'
-            />
-          </Box>
-          <InfoFlex>
-            <Flex alignItems='flex-end' justifyContent='space-between'>
-              <Box>
-                <Flex alignItems='baseline' mb='18px'>
-                  <Text
-                    fontSize='28px'
-                    color={QualityColor[planetInfo?.rarity]}
-                    bold
-                    small
-                  >
-                    {t(getPlanetRarity(planetInfo?.rarity))}
-                  </Text>
-                  <Text
-                    fontSize='18px'
-                    ml='12px'
-                    color={RaceTypeColor[planetInfo?.race || 3]}
-                    bold
-                  >
-                    {planetInfo?.race === 1
-                      ? t('race-1')
-                      : planetInfo?.race === 2
-                      ? t('race-2')
-                      : t('race-3')}
-                  </Text>
-                  <Text ml='12px' fontSize='18px' bold>
-                    Lv{planetInfo?.level}
-                  </Text>
-                </Flex>
-                <ScoringPanel
-                  scale='el'
-                  ellipsis
-                  count={planetInfo?.strengthenLevel}
-                />
-              </Box>
-              <RaceAvatar width='80px' height='80px' race={planetInfo?.race} />
+            <Flex alignItems='baseline' pt='16px'>
+              <Text mr='10px'>{t('Power')}</Text>
+              <MarkText fontStyle='normal' fontSize='20px' bold>
+                {planetInfo?.power}
+              </MarkText>
             </Flex>
-            <Text fontSize='14px'>Token: {planetInfo?.id}</Text>
-            <Flex justifyContent='space-between'>
-              <Button
-                className='Manage_planet'
-                height='42px'
-                onClick={() => gotoPlantDetail(planetInfo?.id)}
-              >
-                <Text>{t('Manage')}</Text>
-              </Button>
-              <Button
-                onClick={() => addStar(planetInfo?.id)}
-                variant='danger'
-                height='42px'
-              >
-                <Text>{t('Replace')}</Text>
-              </Button>
+          </Flex>
+          <Flex
+            flexDirection='column'
+            justifyContent='space-between'
+            height='100%'
+            width='43%'
+          >
+            <Flex alignItems='baseline'>
+              <MarkText padding={0} bold fontStyle='normal' color='textSubtle'>
+                {t('Production')}
+              </MarkText>
             </Flex>
-          </InfoFlex>
+            <PlanetDesc info={planetInfo} />
+          </Flex>
+          <Flex
+            flexDirection='column'
+            justifyContent='space-between'
+            height='100%'
+            width='22%'
+          >
+            <MarkText padding={0} fontStyle='normal' bold>
+              {t('Battle Attribute')}
+            </MarkText>
+            <Box>
+              <Text small color='textSubtle'>
+                {t('Building Count')}
+              </Text>
+              <Text small>{planetInfo?.build_count}</Text>
+            </Box>
+            <Box>
+              <Text small color='textSubtle'>
+                {t('Biohack')}
+              </Text>
+              <Text small>
+                {t('Power')} +{planetInfo?.ak_buff}
+              </Text>
+            </Box>
+            <Box>
+              <Text small color='textSubtle'>
+                {t('Planet Cultivation')}
+              </Text>
+              <Text small>
+                {t('Power')} +{planetInfo?.strengthen_buff}
+              </Text>
+            </Box>
+          </Flex>
+        </Flex>
+        <Flex height='17%' justifyContent='space-between' alignItems='center'>
+          <Flex height='100%' width='33%' justifyContent='space-between'>
+            <RaceAvatar width='46px' height='46px' race={planetInfo?.race} />
+            <Flex
+              ml='10px'
+              flexDirection='column'
+              justifyContent='space-between'
+            >
+              <Text
+                fontSize='16px'
+                color={QualityColor[planetInfo?.rarity]}
+                bold
+              >
+                {t(getPlanetRarity(planetInfo?.rarity))}
+              </Text>
+              <Text
+                fontSize='16px'
+                color={RaceTypeColor[planetInfo?.race || 3]}
+                bold
+              >
+                {planetInfo?.race === 1
+                  ? t('race-1')
+                  : planetInfo?.race === 2
+                  ? t('race-2')
+                  : t('race-3')}
+              </Text>
+            </Flex>
+            <Flex
+              ml='10px'
+              flexDirection='column'
+              justifyContent='space-between'
+            >
+              <Text fontSize='16px' bold>
+                Lv {planetInfo?.level}
+              </Text>
+              <Flex justifyContent='space-between' alignItems='center'>
+                <StarImg src='/images/commons/icon/star-a.png' />
+                <Text fontSize='14px' bold>
+                  x{planetInfo?.strengthenLevel}
+                </Text>
+              </Flex>
+            </Flex>
+          </Flex>
+          <Flex
+            height='100%'
+            flexDirection='column'
+            justifyContent='space-between'
+          >
+            <Text fontSize='16px'>{t('Token')}:</Text>
+            <Text fontSize='14px'>{planetInfo?.id}</Text>
+          </Flex>
+          <Button
+            width='200px'
+            height='45px'
+            variant='purple'
+            onClick={() => {
+              navigate(`/star?id=${planetInfo?.id}`);
+            }}
+          >
+            <Text color='textPrimary' bold>
+              {t('Manage Planet')}
+            </Text>
+          </Button>
         </Flex>
       </OutBox>
     </Box>

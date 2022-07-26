@@ -114,12 +114,14 @@ const PlanetListBox: React.FC<{
                       </Text>
                     </Flex>
                   </LeveFlex>
-                  <PlanetBall
-                    rotate
-                    scale='xl'
-                    shadow={QualityColor[item?.rarity]}
-                    url={item?.picture1}
-                  />
+                  <Flex flex={1} justifyContent='center' alignItems='center'>
+                    <PlanetBall
+                      rotate
+                      scale='xl'
+                      shadow={QualityColor[item?.rarity]}
+                      url={item?.picture1}
+                    />
+                  </Flex>
                   <Flex alignItems='baseline'>
                     <Text small mr='10px'>
                       {t('Power')}

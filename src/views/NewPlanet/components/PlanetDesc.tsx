@@ -2,6 +2,7 @@ import React from 'react';
 import { Flex, Box, Text, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { formatLocalisedCompactBalance } from 'utils/formatBalance';
+import { SubString_1 } from 'utils/DecimalPlaces';
 
 export const PlanetDesc: React.FC<{
   info: Api.Planet.PlanetInfo;
@@ -24,7 +25,7 @@ export const PlanetDesc: React.FC<{
               {t('Capacity')}
             </Text>
             <Text small ml='6px'>
-              +{info?.oreYield}/s
+              +{SubString_1(info?.oreYield, 3)}/s
             </Text>
           </Flex>
           <Flex>
@@ -52,7 +53,7 @@ export const PlanetDesc: React.FC<{
               {t('Capacity')}
             </Text>
             <Text small ml='6px'>
-              +{info?.populationYield}/s
+              +{SubString_1(info?.populationYield, 3)}/s
             </Text>
           </Flex>
           <Flex>
@@ -61,7 +62,7 @@ export const PlanetDesc: React.FC<{
             </Text>
             <Text small ellipsis>
               {formatLocalisedCompactBalance(info?.population)}/
-              {formatLocalisedCompactBalance(info.max_population)}
+              {formatLocalisedCompactBalance(info?.max_population)}
             </Text>
           </Flex>
         </Flex>
@@ -80,7 +81,7 @@ export const PlanetDesc: React.FC<{
               {t('Capacity')}
             </Text>
             <Text small ml='6px'>
-              +{info?.energyYield}/s
+              +{SubString_1(info?.energyYield, 3)}/s
             </Text>
           </Flex>
           <Flex>
@@ -89,7 +90,7 @@ export const PlanetDesc: React.FC<{
             </Text>
             <Text small ellipsis>
               {formatLocalisedCompactBalance(info?.energy)}/
-              {formatLocalisedCompactBalance(info.max_energy)}
+              {formatLocalisedCompactBalance(info?.max_energy)}
             </Text>
           </Flex>
         </Flex>

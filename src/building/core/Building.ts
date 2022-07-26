@@ -603,9 +603,13 @@ class Building extends EventTarget {
     });
   }
 
-  upgradeBuildingBuilder(list: BuilderInfoOfApi[], IsUpgrade?: boolean) {
+  upgradeBuildingBuilder(
+    list: BuilderInfoOfApi[],
+    IsUpgrade?: boolean,
+    workQueue?: any[],
+  ) {
     if (this.builders.length) {
-      this.updateBuilderState(list, true, true);
+      this.updateBuilderState(list, true, IsUpgrade, workQueue);
       return;
     }
 
@@ -629,6 +633,7 @@ class Building extends EventTarget {
     list: BuilderInfoOfApi[],
     created?: boolean,
     IsUpgrade?: boolean,
+    workQueue?: any[],
   ) {
     list.forEach(item => {
       const builder = this.findBuilderByXY(
@@ -639,6 +644,25 @@ class Building extends EventTarget {
         builder.setIsBuilded(!!created);
         builder.setIsBuilding(!created);
         builder.setIsUpgrade(!!IsUpgrade);
+        if (workQueue?.length) {
+          console.log(workQueue);
+
+          const taregtBuildings = workQueue.filter(
+            ({ _id, buildings_id, work_type }) => {
+              return (
+                (_id === item.building?._id ||
+                  buildings_id === item.building?._id) &&
+                work_type === 2
+              );
+            },
+          );
+          if (taregtBuildings?.length) {
+            console.log(taregtBuildings);
+
+            builder.updateLv(taregtBuildings[0]?.target_level);
+          }
+        }
+        // builder.updateLv(item.building.propterty.levelEnergy);
         builder.option.building = {
           ...item.building,
         };

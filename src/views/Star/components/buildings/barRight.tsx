@@ -10,6 +10,7 @@ import { BarHead } from './barHead';
 import { PlanetAssets } from './planetAssets';
 import { PlanetBuff } from './planetBuff';
 import { useBuffer } from '../hooks';
+import { NewPlanetAssets } from './NewPlanetAssets';
 
 const BarLayout = styled(Box)<{ top: number | string }>`
   position: fixed;
@@ -142,7 +143,11 @@ export const BarRight: React.FC<BarRightProps> = ({
           </Flex>
         </BarCard>
 
-        <PlanetAssets plant_info={planetInfo} current_buff={currentBufffer} />
+        {/* <PlanetAssets plant_info={planetInfo} current_buff={currentBufffer} /> */}
+        <NewPlanetAssets
+          plant_info={planetInfo}
+          current_buff={currentBufffer}
+        />
       </Flex>
     </BarLayout>
   );

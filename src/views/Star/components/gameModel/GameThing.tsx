@@ -98,7 +98,7 @@ export const GameThing: React.FC<{
   scale?: Scale;
   itemData?: Api.Building.Building;
   src?: string;
-  level?: number;
+  level?: number | string;
   text?: string;
   desc?: string;
   active?: boolean;

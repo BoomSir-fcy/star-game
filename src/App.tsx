@@ -104,7 +104,7 @@ function App() {
               {/* 星球联盟 */}
               {/* <Route path='/plant-league' element={<PlantLeague />} /> */}
               <Route path='/plant-league' element={<NewPlantLeague />} />
-              <Route path='/choose-planet' element={<ChoosePlanet />} />
+              {/* <Route path='/choose-planet' element={<ChoosePlanet />} /> */}
               <Route path='/platform-News' element={<PlatformNews />} />
 
               <Route path='/battleReport' element={<BattleReport />} />

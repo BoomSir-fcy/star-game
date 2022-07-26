@@ -70,6 +70,7 @@ const SideCloseButton = styled(Button)`
 const Content = styled(Box)`
   position: relative;
   padding: 20px 25px 30px;
+  height: 100%;
 `;
 
 export const BarRightWarp: React.FC<{

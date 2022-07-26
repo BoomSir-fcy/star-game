@@ -64,7 +64,7 @@ const AlliancePlanet: React.FC<{
       return;
     }
     // callbackGuide();
-    navigate('/choose-planet');
+    navigate('/star/planet');
   };
 
   useEffect(() => {
