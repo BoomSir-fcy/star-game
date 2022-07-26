@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { useImmer } from 'use-immer';
 import { Flex, Box, GraphicsCard, Button, MarkText, Text, Image } from 'uikit';
 
+import { useStore, storeAction } from 'state';
 import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'contexts/ToastsContext';
+import { useDispatch } from 'react-redux';
 import { ResourceSlider } from './buildingResourceModal';
 
 const Container = styled(GraphicsCard)`
@@ -44,6 +46,11 @@ export const BuildingRechargeModal: React.FC<{
 }> = ({ type, maxValue, defaultValue, onClose, onFinish }) => {
   const { t } = useTranslation();
   const { toastError } = useToast();
+  const dispatch = useDispatch();
+
+  const Product = useStore(p => p.userInfo.userProduct);
+  const guideState = useStore(p => p.guide);
+
   const [state, setState] = useImmer({
     stone: 0,
     population: 0,
@@ -68,6 +75,36 @@ export const BuildingRechargeModal: React.FC<{
       100
     ).toFixed(2),
   );
+
+  const OreBalanceProportion = useMemo(() => {
+    return Number(
+      new BigNumber(Product.stone)
+        .plus(maxValue[StoreType.STONE].already)
+        .div(maxValue[StoreType.STONE].max)
+        .times(100)
+        .toFixed(0),
+    );
+  }, [Product, maxValue]);
+
+  const ENEBalanceProportion = useMemo(() => {
+    return Number(
+      new BigNumber(Product.energy)
+        .plus(maxValue[StoreType.ENERGY].already)
+        .div(maxValue[StoreType.ENERGY].max)
+        .times(100)
+        .toFixed(0),
+    );
+  }, [Product, maxValue]);
+
+  const POPBalanceProportion = useMemo(() => {
+    return Number(
+      new BigNumber(Product.population)
+        .plus(maxValue[StoreType.POPULATION].already)
+        .div(maxValue[StoreType.POPULATION].max)
+        .times(100)
+        .toFixed(0),
+    );
+  }, [Product, maxValue]);
 
   React.useEffect(() => {
     if (Object.keys(maxValue).length > 0) {
@@ -108,6 +145,14 @@ export const BuildingRechargeModal: React.FC<{
             maxValue={maxValue[StoreType.STONE].max}
             onChange={val => {
               if (val < stoneProportion) return;
+              if (val >= OreBalanceProportion) {
+                if (!guideState.recharge_visible) {
+                  dispatch(
+                    storeAction.toggleRechargeVisible({ visible: true }),
+                  );
+                }
+                return;
+              }
               setState(p => {
                 p.stone = Number(val.toFixed(0));
               });
@@ -122,6 +167,14 @@ export const BuildingRechargeModal: React.FC<{
             maxValue={maxValue[StoreType.ENERGY].max}
             onChange={val => {
               if (val < energyProportion) return;
+              if (val >= ENEBalanceProportion) {
+                if (!guideState.recharge_visible) {
+                  dispatch(
+                    storeAction.toggleRechargeVisible({ visible: true }),
+                  );
+                }
+                return;
+              }
               setState(p => {
                 p.energy = Number(val.toFixed(0));
               });
@@ -136,6 +189,14 @@ export const BuildingRechargeModal: React.FC<{
             maxValue={maxValue[StoreType.POPULATION].max}
             onChange={val => {
               if (val < populationProportion) return;
+              if (val >= POPBalanceProportion) {
+                if (!guideState.recharge_visible) {
+                  dispatch(
+                    storeAction.toggleRechargeVisible({ visible: true }),
+                  );
+                }
+                return;
+              }
               setState(p => {
                 p.population = Number(val.toFixed(0));
               });
