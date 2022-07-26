@@ -155,6 +155,7 @@ export interface AllLogsInfo {
 
 export interface PlanetState {
   mePlanet: Api.Planet.PlanetInfo[];
+  mePlanetEnd: boolean;
   mePlanetLoading: boolean;
   assetsVisibleModal: boolean;
   planetInfo: { [x: number]: Api.Planet.PlanetInfo };

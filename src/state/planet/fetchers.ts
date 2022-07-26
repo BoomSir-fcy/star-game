@@ -16,7 +16,7 @@ export const fetchPlanetList = async (params: Api.Planet.PageParams) => {
   try {
     const res = await Api.PlanetApi.getMePlanet(params);
     if (Api.isSuccess(res)) {
-      return res.data.Data || [];
+      return res.data || [];
     }
     return [];
   } catch (error) {

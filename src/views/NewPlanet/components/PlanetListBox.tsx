@@ -65,7 +65,10 @@ const PlanetListBox: React.FC<{
       {planetList.length ? (
         <>
           {(planetList ?? []).map(item => (
-            <PlanetItem key={item?.id} onClick={() => setActive(item)}>
+            <PlanetItem
+              key={`${item?.id}_${item.addTime}`}
+              onClick={() => setActive(item)}
+            >
               <Flex
                 justifyContent='space-between'
                 alignItems='center'

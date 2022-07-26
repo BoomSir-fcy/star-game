@@ -12,6 +12,7 @@ import { fetchPlanetInfoAsync, fetchPlanetList } from './fetchers';
 
 export const initialState: PlanetState = {
   mePlanet: [],
+  mePlanetEnd: false,
   mePlanetLoading: true,
   assetsVisibleModal: true,
   planetInfo: {},
@@ -40,7 +41,17 @@ export const planet = createSlice({
     setPlanetList: (state, action) => {
       const { payload } = action;
       if (payload) {
-        state.mePlanet = payload;
+        const { Data, count, page, page_size } = payload;
+        if (page > 1) {
+          state.mePlanet = [...state.mePlanet, ...Data];
+        } else {
+          state.mePlanet = Data;
+        }
+        if (page * page_size >= count) {
+          state.mePlanetEnd = true;
+        } else {
+          state.mePlanetEnd = false;
+        }
         state.mePlanetLoading = false;
       }
     },

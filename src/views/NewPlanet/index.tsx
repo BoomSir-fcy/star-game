@@ -25,23 +25,19 @@ const PlanetList = () => {
   });
   const [planetList, setPlanetList] = useState([]);
   const [NowAllianceListId, setNowAllianceListId] = useState<number[]>([]);
-  const { mePlanet, mePlanetLoading } = useStore(p => p.planet);
-
-  const [end, setEnd] = useState(false);
-
-  console.log(mePlanetLoading);
+  const { mePlanet, mePlanetLoading, mePlanetEnd } = useStore(p => p.planet);
 
   const loadMore = useCallback(
     (e: any) => {
       const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
       if (offsetHeight + scrollTop >= scrollHeight) {
-        if (mePlanetLoading || end) return; // 判断是否在请求状态或者已到最后一页
+        if (mePlanetLoading || mePlanetEnd) return; // 判断是否在请求状态或者已到最后一页
         setState(p => {
           return { ...p, page: p.page + 1 };
         });
       }
     },
-    [mePlanetLoading, end, setState],
+    [mePlanetLoading, mePlanetEnd, setState],
   );
 
   useEffect(() => {
