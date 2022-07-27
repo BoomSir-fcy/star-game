@@ -639,7 +639,9 @@ class Building extends EventTarget {
         builder.setIsBuilded(!!created);
         builder.setIsBuilding(!created);
         builder.setIsUpgrade(!!IsUpgrade);
-        builder.updateLv(item.building.propterty.levelEnergy);
+        if (!IsUpgrade) {
+          builder.updateLv(item.building.propterty.levelEnergy);
+        }
         builder.option.building = {
           ...item.building,
         };

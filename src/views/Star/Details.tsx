@@ -410,24 +410,33 @@ const Details = () => {
   };
 
   React.useEffect(() => {
-    console.log(activeBuilder);
-
     if (activeBuilder?.option?.id) {
+      // 解决升级后id变化 建筑id不对的情况
+      const activeInfo = selfBuilding.filter(item => {
+        return (
+          item.building._id === activeBuilder?.option?.id ||
+          item.building._id === activeBuilder?.option?.building._id
+        );
+      });
+      const buildingObj = {
+        ...activeBuilder?.option?.building,
+        // _id: activeBuilder?.option?.id,
+        position: activeBuilder.position,
+        isbuilding: activeBuilder?.builded,
+        isqueue: activeBuilder?.isBuilding,
+      };
+      if (activeInfo.length) {
+        buildingObj._id = activeInfo[0].building._id;
+      }
       setStateBuilding(p => {
         p.visible = true;
-        p.building = {
-          ...activeBuilder?.option?.building,
-          _id: activeBuilder?.option?.id,
-          position: activeBuilder.position,
-          isbuilding: activeBuilder?.builded,
-          isqueue: activeBuilder?.isBuilding,
-        };
+        p.building = buildingObj;
       });
       setTimeout(() => {
         dispatch(setNavZIndex(false));
       }, 100);
     }
-  }, [activeBuilder, dispatch, setStateBuilding]);
+  }, [selfBuilding, activeBuilder, dispatch, setStateBuilding]);
 
   React.useEffect(() => {
     if (id) {
@@ -630,6 +639,8 @@ const Details = () => {
                 });
                 setTimeout(() => {
                   if (stepsEnabled) {
+                    console.log(123123);
+
                     building?.removeActiveSolider();
                     setActiveStep(6);
                     setGuide(6);
