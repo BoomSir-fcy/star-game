@@ -202,8 +202,8 @@ const Details = () => {
 
   const initBuilder = React.useCallback(() => {
     building.initBuilder(selfBuilding);
-    setToUpdate(true);
-  }, [building, selfBuilding, setToUpdate]);
+    // setToUpdate(true);
+  }, [building, selfBuilding]);
 
   React.useEffect(() => {
     if (building.boardsCreated) {
@@ -216,22 +216,22 @@ const Details = () => {
   }, [initBuilder, building]);
 
   const initBuildingBuilder = React.useCallback(() => {
-    if (toUpdate) {
-      const createWorks = stateBuilding.workQueue.filter(
-        item => item.work_type === 1,
-      );
-      const Upgrade = stateBuilding.workQueue.filter(
-        item => item.work_type === 2,
-      );
-      building.initBuildingBuilder(createWorks);
-      if (Upgrade.length) {
-        console.log(stateBuilding.workQueue);
-
-        building.upgradeBuildingBuilder(Upgrade, true, stateBuilding.workQueue);
-      }
-      setToUpdate(false);
+    const createWorks = stateBuilding.workQueue.filter(
+      item => item.work_type === 1,
+    );
+    building.initBuildingBuilder(createWorks);
+    const Upgrade = stateBuilding.workQueue.filter(
+      item => item.work_type === 2,
+    );
+    if (Upgrade.length) {
+      setTimeout(() => {
+        building.upgradeBuildingBuilder(Upgrade, true);
+      }, 1000);
     }
-  }, [building, stateBuilding.workQueue, setToUpdate, toUpdate]);
+    // if (toUpdate) {
+    //   setToUpdate(false);
+    // }
+  }, [building, stateBuilding.workQueue]);
 
   React.useEffect(() => {
     if (building.boardsCreated) {
@@ -410,6 +410,8 @@ const Details = () => {
   };
 
   React.useEffect(() => {
+    console.log(activeBuilder);
+
     if (activeBuilder?.option?.id) {
       setStateBuilding(p => {
         p.visible = true;
@@ -616,13 +618,13 @@ const Details = () => {
               buildingsId={stateBuilding.building?._id}
               itemData={stateBuilding?.building}
               animation={!stepsEnabled}
-              OnAddBuildings={() => {
-                handleGoIntoBattle(stateBuilding.building);
+              OnAddBuildings={val => {
+                handleGoIntoBattle(val);
                 setStateBuilding(p => {
                   p.visible = true;
                   p.building = {
-                    ...stateBuilding.building,
-                    isPreview: false,
+                    ...val,
+                    // isPreview: false,
                     isqueue: true,
                   };
                 });

@@ -88,7 +88,7 @@ export const SideRightBuildingInfo: React.FC<{
   animation?: boolean;
   onCreateBuilding: (building: Api.Building.Building) => void;
   onClose: (destory?: boolean) => void;
-  OnAddBuildings: () => void;
+  OnAddBuildings: (data) => void;
 }> = ({
   visible,
   planet,
@@ -365,7 +365,7 @@ export const SideRightBuildingInfo: React.FC<{
               estimate={estimate}
               onFinish={onClose}
               onCreateBuilding={onCreateBuilding}
-              OnAddBuildings={OnAddBuildings}
+              OnAddBuildings={() => OnAddBuildings(itemData)}
             />
           )}
         </Flex>
