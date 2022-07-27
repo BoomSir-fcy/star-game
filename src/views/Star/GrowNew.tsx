@@ -44,6 +44,37 @@ const BgFlex = styled(Flex)`
   box-shadow: 0px 4px 18px 0px rgba(0, 0, 0, 0.31);
 `;
 
+const ContentBox = styled(Box)`
+  .isSuccess {
+    animation: success 2s;
+    @keyframes success {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.5);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  }
+  .fail {
+    animation: fail 2s;
+    @keyframes fail {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(0.5);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  }
+`;
+
 const Grow: React.FC = () => {
   const ref = React.useRef(null);
 
@@ -175,7 +206,7 @@ const Grow: React.FC = () => {
   }, [parsedQs.id, t, toastError, toastSuccess, createPlanet]);
 
   return (
-    <Box width='100%' height='100%'>
+    <ContentBox width='100%' height='100%'>
       {!guides.guideFinish && guides.finish && steps.length - 1 >= guides.step && (
         <Steps
           enabled={stepsEnabled}
@@ -193,6 +224,9 @@ const Grow: React.FC = () => {
         />
       )}
       <Box
+        className={
+          isSuccess === 1 ? 'isSuccess' : isSuccess === 2 ? 'fail' : ''
+        }
         ref={ref}
         position='absolute'
         width='800px'
@@ -459,7 +493,7 @@ const Grow: React.FC = () => {
           </Flex>
         </Box>
       </ModalWrapper>
-    </Box>
+    </ContentBox>
   );
 };
 

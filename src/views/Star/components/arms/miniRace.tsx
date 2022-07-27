@@ -12,30 +12,38 @@ const Container = styled(Box)<{ show: boolean }>`
   border: 4px solid #f9feff;
   box-shadow: 0px 0px 10px 2px #41b7ff;
   background-color: #161920;
-  width: 208px;
-  height: 208px;
+  width: 250px;
+  height: 250px;
   /* top: 0; */
   transition: 0.3s all;
-  transform: translateX(-215px);
+  transform: translateX(-254px);
   visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
 `;
 
-const GridWidth = 200;
-const GridHeight = 200;
+const GridWidth = 240;
+const GridHeight = 240;
 
 interface MiniRaceAniProps extends BoxProps {
   mock: any;
   show: boolean;
+  scale?: number;
 }
 
-const MiniRaceAni: React.FC<MiniRaceAniProps> = ({ mock, show, ...props }) => {
+const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
+  scale,
+  mock,
+  show,
+  ...props
+}) => {
   const ref = React.useRef<HTMLDivElement>(null);
 
   const game = useGame({
     width: GridWidth,
     height: GridHeight,
     enableDrag: false,
-    scale: 0.8,
+    scale: 0.5,
+    offsetStartX: 100,
+    offsetStartY: 100,
   });
 
   const [running, setRunning] = useState(null);

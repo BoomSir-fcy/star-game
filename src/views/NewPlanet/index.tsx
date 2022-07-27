@@ -41,10 +41,10 @@ const PlanetList = () => {
   );
 
   useEffect(() => {
-    const Arr = mePlanet.filter(item => {
+    const Arr = mePlanet?.filter(item => {
       return !NowAllianceListId.includes(item.id);
     });
-    setPlanetList(Arr);
+    setPlanetList(Arr || []);
     setActivePlanet(null);
   }, [mePlanet, NowAllianceListId]);
 

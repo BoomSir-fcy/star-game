@@ -82,7 +82,7 @@ const TokenInfo = () => {
   );
 
   const format = useCallback((number: number) => {
-    return formatLocalisedCompactBalance(number);
+    return formatLocalisedCompactBalance(number) || 0;
   }, []);
   return (
     <Box mt='-8px' position='relative'>
