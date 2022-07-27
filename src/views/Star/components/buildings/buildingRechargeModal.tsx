@@ -145,8 +145,13 @@ export const BuildingRechargeModal: React.FC<{
             maxValue={maxValue[StoreType.STONE].max}
             onChange={val => {
               if (val < stoneProportion) return;
+              console.log(OreBalanceProportion, stoneProportion);
+
               if (val >= OreBalanceProportion) {
-                if (!guideState.recharge_visible) {
+                if (
+                  !guideState.recharge_visible &&
+                  stoneProportion === OreBalanceProportion
+                ) {
                   dispatch(
                     storeAction.toggleRechargeVisible({ visible: true }),
                   );
@@ -168,7 +173,10 @@ export const BuildingRechargeModal: React.FC<{
             onChange={val => {
               if (val < energyProportion) return;
               if (val >= ENEBalanceProportion) {
-                if (!guideState.recharge_visible) {
+                if (
+                  !guideState.recharge_visible &&
+                  energyProportion === ENEBalanceProportion
+                ) {
                   dispatch(
                     storeAction.toggleRechargeVisible({ visible: true }),
                   );
@@ -190,7 +198,10 @@ export const BuildingRechargeModal: React.FC<{
             onChange={val => {
               if (val < populationProportion) return;
               if (val >= POPBalanceProportion) {
-                if (!guideState.recharge_visible) {
+                if (
+                  !guideState.recharge_visible &&
+                  populationProportion === POPBalanceProportion
+                ) {
                   dispatch(
                     storeAction.toggleRechargeVisible({ visible: true }),
                   );

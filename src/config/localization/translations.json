@@ -759,6 +759,8 @@
   "Biohack": "Biohack",
   "Production": "Production",
   "Battle Attribute": "Battle Attribute",
+  "Your Alliance is not complete, you may not be able to explore, are you sure?": "Your Alliance is not complete, you may not be able to explore, are you sure",
+  "StopWorkWarn": "Your alliance is currently being explored. If you change alliances, you will stop exploring and lose all resources obtained from exploration,are you sure",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",
   "http-error-200001": "Not planet owner",

@@ -30,7 +30,8 @@ const PlanetList = () => {
   const loadMore = useCallback(
     (e: any) => {
       const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
-      if (offsetHeight + scrollTop >= scrollHeight) {
+
+      if (offsetHeight + scrollTop >= scrollHeight - 150) {
         if (mePlanetLoading || mePlanetEnd) return; // 判断是否在请求状态或者已到最后一页
         setState(p => {
           return { ...p, page: p.page + 1 };
@@ -67,7 +68,7 @@ const PlanetList = () => {
           <Search
             onSearchCallback={params => {
               setState(p => {
-                return { ...p, ...params };
+                return { ...p, ...params, page: 1 };
               });
             }}
           />

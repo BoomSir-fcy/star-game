@@ -25,8 +25,12 @@ export const ToRechargeModal: React.FC<{
           {t('Insufficient platform balance')}
         </Text>
         <Flex justifyContent='space-around' mt='150px'>
-          <Button onClick={Recharge}>{t('Recharge')}</Button>
-          <Button onClick={onClose}>{t('Close')}</Button>
+          <Button width='200px' variant='purple' onClick={Recharge}>
+            {t('Recharge')}
+          </Button>
+          <Button width='200px' variant='purple' onClick={onClose}>
+            {t('Close')}
+          </Button>
         </Flex>
       </Box>
     </ModalWrapper>

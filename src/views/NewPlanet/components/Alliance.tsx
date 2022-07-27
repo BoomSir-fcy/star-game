@@ -11,6 +11,7 @@ import { useJoinAlliance } from 'views/Star/hook';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useFetchAllianceView } from 'state/alliance/hooks';
 import { setActivePlanet } from 'state/planet/actions';
+import ModalWrapper from 'components/Modal';
 
 const DeleteBtnImg = styled.img`
   width: 38px;
@@ -58,13 +59,15 @@ const Alliance: React.FC<{
   const { toastError, toastSuccess, toastWarning } = useToast();
 
   const { SetWorking } = useJoinAlliance();
-  const { order } = useStore(p => p.alliance.allianceView);
+  const { order, alliance } = useStore(p => p.alliance.allianceView);
   const workingList = useStore(p => p.alliance.workingPlanet);
   const activePlanet = useStore(p => p.planet.activePlanet);
   const [ChooseList, setChooseList] = useState<number[]>([]);
   const [StarList, setStarList] = useState<Api.Planet.PlanetInfo[]>([]);
   const [AddBtnList, setAddBtnList] = useState([]);
   const [pending, setpending] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [StopWorkVisible, setStopWorkVisible] = useState(false);
 
   // 添加、替换、删除
   const addPlanetToList = useCallback(
@@ -100,6 +103,7 @@ const Alliance: React.FC<{
     if (pending) {
       return;
     }
+
     setpending(true);
     try {
       const ChooseListStr = ChooseList.join();
@@ -258,7 +262,18 @@ const Alliance: React.FC<{
         <Button
           variant='purple'
           width='180px'
-          onClick={ToSetWorking}
+          onClick={() => {
+            if (alliance.working === 1) {
+              setStopWorkVisible(true);
+              return;
+            }
+            if (ChooseList.length < 5) {
+              setVisible(true);
+              return;
+            }
+
+            ToSetWorking();
+          }}
           height='45px'
           disabled={pending}
         >
@@ -271,6 +286,76 @@ const Alliance: React.FC<{
         <LoadingBox>
           <Spinner size={200} />
         </LoadingBox>
+      )}
+      {visible && (
+        <ModalWrapper
+          title={t('Tips')}
+          visible={visible}
+          setVisible={() => setVisible(false)}
+        >
+          <Box padding='80px 25px'>
+            <Text textAlign='center' fontSize='28px'>
+              {t(
+                'Your Alliance is not complete, you may not be able to explore, are you sure?',
+              )}
+            </Text>
+            <Flex justifyContent='space-around' mt='150px'>
+              <Button
+                width='200px'
+                variant='purple'
+                onClick={() => setVisible(false)}
+              >
+                {t('Cancel')}
+              </Button>
+              <Button
+                width='200px'
+                variant='purple'
+                onClick={() => {
+                  setVisible(false);
+                  ToSetWorking();
+                }}
+              >
+                {t('Confirm')}
+              </Button>
+            </Flex>
+          </Box>
+        </ModalWrapper>
+      )}
+      {StopWorkVisible && (
+        <ModalWrapper
+          title={t('Tips')}
+          visible={StopWorkVisible}
+          setVisible={() => setStopWorkVisible(false)}
+        >
+          <Box padding='80px 25px'>
+            <Text textAlign='center' fontSize='28px'>
+              {t('StopWorkWarn')}
+            </Text>
+            <Flex justifyContent='space-around' mt='120px'>
+              <Button
+                width='200px'
+                variant='purple'
+                onClick={() => setStopWorkVisible(false)}
+              >
+                {t('Cancel')}
+              </Button>
+              <Button
+                variant='purple'
+                width='200px'
+                onClick={() => {
+                  setStopWorkVisible(false);
+                  if (ChooseList.length < 5) {
+                    setVisible(true);
+                    return;
+                  }
+                  ToSetWorking();
+                }}
+              >
+                {t('Confirm')}
+              </Button>
+            </Flex>
+          </Box>
+        </ModalWrapper>
       )}
     </Box>
   );

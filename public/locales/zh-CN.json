@@ -759,6 +759,8 @@
   "Biohack": "基因",
   "Production": "生产属性",
   "Battle Attribute": "战斗属性",
+  "Your Alliance is not complete, you may not be able to explore, are you sure?": "您的联盟不完整，您可能无法探索，您确定确认吗？",
+  "StopWorkWarn": "您的联盟正在探索中，如果更换联盟则会停止探索，并失去所有探索得到的资源,您确定确认吗？",
   "******endNew*****@FCY********": "@FCY翻译新版结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",
