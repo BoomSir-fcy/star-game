@@ -186,9 +186,10 @@ const PlanetListBox: React.FC<{
                       {t('Power')} +{item?.strengthen_buff}
                     </Text>
                   </Box>
-                  <Text small ellipsis>
-                    {t('Token')} {item?.id}
-                  </Text>
+                  <Box>
+                    <Text small>{t('Token')}</Text>
+                    <Text small>{item?.id}</Text>
+                  </Box>
                 </Flex>
               </Flex>
               {activePlanet?.id === item?.id && (

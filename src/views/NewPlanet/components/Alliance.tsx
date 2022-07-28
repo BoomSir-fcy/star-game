@@ -171,6 +171,8 @@ const Alliance: React.FC<{
     if (activePlanet?.id) {
       if (StarList.length === 5) {
         toastError(t('Choose up to 5 planets'));
+        dispatch(setActivePlanet(null));
+
         return;
       }
       addPlanetToList(activePlanet.id, StarList.length, 1);
