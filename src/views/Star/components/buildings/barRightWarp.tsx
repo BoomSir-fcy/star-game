@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import classNames from 'classnames';
 import { useImmer } from 'use-immer';
@@ -80,12 +80,13 @@ export const BarRightWarp: React.FC<{
   const { t } = useTranslation();
   const assetsVisibleModal = useStore(p => p.planet.assetsVisibleModal);
   const { pathname } = useLocation();
+  const [Visible, setVisible] = useState(assetsVisibleModal);
 
   useEffect(() => {
-    if (assetsVisibleModal && pathname === '/star/upgrade') {
-      dispatch(setAssetsVisible(!assetsVisibleModal));
+    if (Visible && pathname === '/star/upgrade') {
+      dispatch(setAssetsVisible(!Visible));
     }
-  }, [assetsVisibleModal, pathname, dispatch]);
+  }, [Visible, pathname, dispatch]);
 
   return (
     <Container

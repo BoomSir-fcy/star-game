@@ -83,7 +83,7 @@ class Chequer extends EventTarget {
 
   isOver = false;
 
-  text = new Text('Waiting to be built', {
+  text = new Text('Available', {
     fill: [0xffffff, 0x4ffffb],
     fontSize: 16,
     dropShadow: true,
@@ -144,7 +144,7 @@ class Chequer extends EventTarget {
   }
 
   addText() {
-    this.text.x = -64;
+    this.text.x = -34;
     this.text.y = 28;
     this.text.buttonMode = true;
     this.text.interactive = true;

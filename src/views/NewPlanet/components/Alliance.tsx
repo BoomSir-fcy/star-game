@@ -255,7 +255,9 @@ const Alliance: React.FC<{
           //   }
           // }}
           />
-          <Text width='68%'>{t('从列表选择星球加入联盟')}</Text>
+          <Text width='68%'>
+            {t('Select planet from list to join alliance')}
+          </Text>
         </Flex>
       ))}
       <Flex justifyContent='center'>
