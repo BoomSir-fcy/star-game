@@ -99,9 +99,10 @@ const Dashboard: React.FC<DashboardProps> = ({
       // '/star/grow',
       // '/star/embattle',
       // '/star/embattle-test',
+      '/upgrade-list',
     ];
     if (starPath.indexOf(location.pathname) > -1) {
-      navigate('/star/planet');
+      navigate(-2);
     } else {
       navigate(-1);
     }

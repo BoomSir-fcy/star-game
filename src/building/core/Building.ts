@@ -478,6 +478,8 @@ class Building extends EventTarget {
       } else {
         builder.resetPosition();
       }
+      this.restoreActiveChequer();
+
       return !!matrix4;
       // builder.setPosition(new AxisPoint(item.axisX, item.axisY, item));
     }
@@ -488,7 +490,22 @@ class Building extends EventTarget {
     } else {
       builder.resetPosition();
     }
+    this.restoreActiveChequer();
     return !!chequer;
+  }
+
+  restoreActiveChequer() {
+    // 恢复所选格子颜色
+    if (this.activeChequer) {
+      this.boards.chequers.forEach(item => {
+        if (
+          item.axisX === this.activeChequer.x &&
+          item.axisY === this.activeChequer.y
+        ) {
+          item.displayState(true);
+        }
+      });
+    }
   }
 
   /**

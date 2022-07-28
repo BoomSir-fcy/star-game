@@ -112,7 +112,8 @@ const SelectPlanet = () => {
             <BackButton
               onBack={() => {
                 // dispatch(setActiveMaterialMap(null));
-                navigate(`/star/upgrade?id=${planetId}`);
+                // navigate(`/star/upgrade?id=${planetId}`);
+                navigate(-1);
               }}
             />
             {/* <RefreshButton onRefresh={() => init()} ml='33px' /> */}

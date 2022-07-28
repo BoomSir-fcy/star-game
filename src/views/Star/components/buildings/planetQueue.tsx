@@ -89,9 +89,8 @@ export const PlanetQueue: React.FC<{
     if (ActiveCheqer !== null) {
       dispatch(setNavZIndex(false));
       dispatch(storeAction.queueVisbleSide(true));
-      onChangeGuide();
     }
-  }, [dispatch, onChangeGuide, ActiveCheqer]);
+  }, [dispatch, ActiveCheqer]);
 
   return (
     <Layout>
@@ -109,6 +108,7 @@ export const PlanetQueue: React.FC<{
                   event.preventDefault();
                   dispatch(setNavZIndex(false));
                   dispatch(storeAction.queueVisbleSide(true));
+
                   onChangeGuide();
                 }}
               >

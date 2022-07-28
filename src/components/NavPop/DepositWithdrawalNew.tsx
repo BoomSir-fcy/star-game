@@ -303,7 +303,7 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
                 <Flex height='100%' alignItems='center'>
                   <InputStyle
                     style={{ fontSize: '20px' }}
-                    width={ShowMaxBtn ? '80%' : '100%'}
+                    width={ShowMaxBtn ? '86%' : '100%'}
                     height='100%'
                     disabled={
                       approvedNum === 0 &&
@@ -323,6 +323,7 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
                   {ShowMaxBtn && (
                     <Button
                       variant='text'
+                      padding={0}
                       onClick={() => {
                         const max =
                           OperationType === 1

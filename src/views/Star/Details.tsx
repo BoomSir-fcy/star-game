@@ -639,8 +639,6 @@ const Details = () => {
                 });
                 setTimeout(() => {
                   if (stepsEnabled) {
-                    console.log(123123);
-
                     building?.removeActiveSolider();
                     setActiveStep(6);
                     setGuide(6);
