@@ -73,7 +73,7 @@ export const BuildingRechargeModal: React.FC<{
     (
       (maxValue[StoreType.ENERGY].already / maxValue[StoreType.ENERGY].max) *
       100
-    ).toFixed(2),
+    ).toFixed(0),
   );
 
   const OreBalanceProportion = useMemo(() => {
@@ -145,8 +145,6 @@ export const BuildingRechargeModal: React.FC<{
             maxValue={maxValue[StoreType.STONE].max}
             onChange={val => {
               if (val < stoneProportion) return;
-              console.log(OreBalanceProportion, stoneProportion);
-
               if (val >= OreBalanceProportion) {
                 if (
                   !guideState.recharge_visible &&
