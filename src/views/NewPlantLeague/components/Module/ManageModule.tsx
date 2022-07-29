@@ -103,7 +103,7 @@ const ManageModule: React.FC<{
             width='22%'
           >
             <MarkText padding={0} fontStyle='normal' bold>
-              {t('Battle Attribute')}
+              {t('Battle Attributes')}
             </MarkText>
             <Box>
               <Text small color='textSubtle'>

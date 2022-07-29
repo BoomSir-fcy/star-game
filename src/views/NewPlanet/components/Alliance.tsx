@@ -258,7 +258,7 @@ const Alliance: React.FC<{
           // }}
           />
           <Text width='68%'>
-            {t('Select planet from list to join alliance')}
+            {t('Select planets from list to join Alliance')}
           </Text>
         </Flex>
       ))}
@@ -300,7 +300,7 @@ const Alliance: React.FC<{
           <Box padding='80px 25px'>
             <Text textAlign='center' fontSize='28px'>
               {t(
-                'Your Alliance is not complete, you may not be able to explore, are you sure?',
+                'Your Alliance is incomplete and may not be able to start Exploration, are you sure you want to confirm?',
               )}
             </Text>
             <Flex justifyContent='space-around' mt='150px'>

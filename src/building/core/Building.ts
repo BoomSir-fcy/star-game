@@ -354,7 +354,7 @@ class Building extends EventTarget {
         builder.addHandleBtn();
       } else {
         // 棋盘空位不足
-        this.dispatchEvent(getErrorEvent('Insufficient chessboard space'));
+        this.dispatchEvent(getErrorEvent('Insufficient Chessboard Space'));
       }
     } else if (options.areaX === 2) {
       const matrix4 = this.boards.matrix4s.find(item => {
@@ -389,7 +389,7 @@ class Building extends EventTarget {
         builder.addHandleBtn();
       } else {
         // 棋盘空位不足
-        this.dispatchEvent(getErrorEvent('Insufficient chessboard space'));
+        this.dispatchEvent(getErrorEvent('Insufficient Chessboard Space'));
       }
     }
   }

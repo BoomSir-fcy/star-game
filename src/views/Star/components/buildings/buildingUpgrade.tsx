@@ -333,7 +333,7 @@ export const BuildingUpgrade: React.FC<{
               }}
             >
               <Text bold fontSize='16px' color='#4FFFFB'>
-                {t('Add buildings')}
+                {t('Add Buildings')}
               </Text>
             </ButtonItem>
           </Flex>
