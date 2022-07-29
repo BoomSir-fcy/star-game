@@ -393,9 +393,13 @@ export enum bulletTypeIndex {
   IMMUNITY_ICE,
   IMMUNITY_LOCK_MOVE,
   IMMUNITY_FIRING,
+  FIREBALLMOVE,
+  QJ,
 }
 
 export const bulletType = {
+  QJ: 'qj', // 冰块
+  [bulletTypeIndex.QJ]: 'qj', // 冰块
   ICE: 'ice', // 冰块
   [bulletTypeIndex.ICE]: 'ice', // 冰块
   ROCK: 'rock', // 岩石
@@ -406,6 +410,8 @@ export const bulletType = {
   [bulletTypeIndex.CURVE_BULLET]: 'curve_bullet', // 曲线子弹
   FIREBALL: 'fireball', // 火球
   [bulletTypeIndex.FIREBALL]: 'fireball', // 火球
+  FIREBALLMOVE: 'fireballmove', // 火球移动
+  [bulletTypeIndex.FIREBALLMOVE]: 'fireballmove', // 火球
   FIRING: 'firing', // 火焰灼烧
   [bulletTypeIndex.FIRING]: 'firing', // 火焰灼烧
   MECHANICAL_BULLET: 'mechanical_bullet', // 机械子弹

@@ -1,0 +1,252 @@
+{
+  "skeleton": {
+    "hash": "eBPMCXfRmSrPfDUUSqDisfrFdqU",
+    "spine": "3.7.94",
+    "width": 263.58,
+    "height": 263.58,
+    "images": "../特效/星际项目制作/子弹击中效果/",
+    "audio": ""
+  },
+  "bones": [
+    {
+      "name": "root"
+    },
+    {
+      "name": "bone",
+      "parent": "root",
+      "length": 133.06,
+      "rotation": 88.28,
+      "x": 49,
+      "y": 72
+    }
+  ],
+  "slots": [
+    {
+      "name": "爆炸_001",
+      "bone": "bone",
+      "attachment": "爆炸_001"
+    },
+    {
+      "name": "爆炸_002",
+      "bone": "bone",
+      "attachment": "爆炸_002"
+    },
+    {
+      "name": "爆炸_003",
+      "bone": "bone",
+      "attachment": "爆炸_003"
+    },
+    {
+      "name": "爆炸_004",
+      "bone": "bone",
+      "attachment": "爆炸_004"
+    },
+    {
+      "name": "爆炸_005",
+      "bone": "bone",
+      "attachment": "爆炸_005"
+    },
+    {
+      "name": "爆炸_006",
+      "bone": "bone",
+      "attachment": "爆炸_006"
+    }
+  ],
+  "skins": {
+    "default": {
+      "爆炸_001": {
+        "爆炸_001": {
+          "width": 256,
+          "height": 256
+        }
+      },
+      "爆炸_002": {
+        "爆炸_002": {
+          "width": 256,
+          "height": 256
+        }
+      },
+      "爆炸_003": {
+        "爆炸_003": {
+          "width": 256,
+          "height": 256
+        }
+      },
+      "爆炸_004": {
+        "爆炸_004": {
+          "width": 256,
+          "height": 256
+        }
+      },
+      "爆炸_005": {
+        "爆炸_005": {
+          "width": 256,
+          "height": 256
+        }
+      },
+      "爆炸_006": {
+        "爆炸_006": {
+          "width": 256,
+          "height": 256
+        }
+      }
+    }
+  },
+  "animations": {
+    "play": {
+      "slots": {
+        "爆炸_001": {
+          "attachment": [
+            {
+              "time": 0,
+              "name": "爆炸_001"
+            },
+            {
+              "time": 0.0667,
+              "name": null
+            }
+          ]
+        },
+        "爆炸_002": {
+          "attachment": [
+            {
+              "time": 0,
+              "name": null
+            },
+            {
+              "time": 0.0667,
+              "name": "爆炸_002"
+            },
+            {
+              "time": 0.1333,
+              "name": null
+            }
+          ]
+        },
+        "爆炸_003": {
+          "attachment": [
+            {
+              "time": 0,
+              "name": null
+            },
+            {
+              "time": 0.1333,
+              "name": "爆炸_003"
+            },
+            {
+              "time": 0.2,
+              "name": null
+            }
+          ]
+        },
+        "爆炸_004": {
+          "attachment": [
+            {
+              "time": 0,
+              "name": null
+            },
+            {
+              "time": 0.2,
+              "name": "爆炸_004"
+            },
+            {
+              "time": 0.2667,
+              "name": null
+            }
+          ]
+        },
+        "爆炸_005": {
+          "attachment": [
+            {
+              "time": 0,
+              "name": null
+            },
+            {
+              "time": 0.2667,
+              "name": "爆炸_005"
+            },
+            {
+              "time": 0.3333,
+              "name": null
+            }
+          ]
+        },
+        "爆炸_006": {
+          "color": [
+            {
+              "time": 0,
+              "color": "ffffffff"
+            },
+            {
+              "time": 0.4,
+              "color": "ffffff01"
+            }
+          ],
+          "attachment": [
+            {
+              "time": 0,
+              "name": null
+            },
+            {
+              "time": 0.3333,
+              "name": "爆炸_006"
+            }
+          ]
+        }
+      },
+      "bones": {
+        "bone": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0,
+              "curve": "stepped"
+            },
+            {
+              "time": 0.6667,
+              "angle": 0
+            }
+          ],
+          "translate": [
+            {
+              "time": 0,
+              "x": 4,
+              "y": 28,
+              "curve": "stepped"
+            },
+            {
+              "time": 0.6667,
+              "x": 4,
+              "y": 28
+            }
+          ],
+          "scale": [
+            {
+              "time": 0,
+              "x": 0.6,
+              "y": 0.6
+            },
+            {
+              "time": 0.6667,
+              "x": 1,
+              "y": 1
+            }
+          ],
+          "shear": [
+            {
+              "time": 0,
+              "x": 0,
+              "y": 0,
+              "curve": "stepped"
+            },
+            {
+              "time": 0.6667,
+              "x": 0,
+              "y": 0
+            }
+          ]
+        }
+      }
+    }
+  }
+}

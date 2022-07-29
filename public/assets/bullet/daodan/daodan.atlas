@@ -1,41 +1,181 @@
 
 daodan.png
-size: 513,121
+size: 1738,335
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-dust_after
+70000
   rotate: false
-  xy: 239, 12
-  size: 107, 107
-  orig: 122, 135
-  offset: 6, 19
+  xy: 935, 3
+  size: 45, 159
+  orig: 90, 177
+  offset: 25, 18
   index: -1
-dust_after2
+70002
   rotate: false
-  xy: 348, 11
-  size: 101, 108
-  orig: 110, 115
-  offset: 6, 3
+  xy: 982, 7
+  size: 63, 155
+  orig: 90, 177
+  offset: 16, 18
   index: -1
-eff_Light00
+70009
   rotate: false
-  xy: 451, 19
-  size: 38, 38
-  orig: 42, 42
-  offset: 2, 2
+  xy: 1217, 21
+  size: 86, 147
+  orig: 90, 177
+  offset: 4, 4
   index: -1
-eff_circle
+Ls_001
   rotate: false
-  xy: 451, 59
-  size: 60, 60
-  orig: 60, 60
+  xy: 486, 3
+  size: 133, 138
+  orig: 133, 138
   offset: 0, 0
   index: -1
-eff_paticle01
+bz2_01
   rotate: false
-  xy: 2, 2
-  size: 235, 117
-  orig: 235, 117
+  xy: 1305, 59
+  size: 110, 123
+  orig: 153, 142
+  offset: 22, 6
+  index: -1
+bz2_02
+  rotate: false
+  xy: 1289, 206
+  size: 143, 127
+  orig: 153, 142
+  offset: 6, 7
+  index: -1
+bz2_03
+  rotate: false
+  xy: 2, 3
+  size: 148, 134
+  orig: 153, 142
+  offset: 4, 4
+  index: -1
+bz2_04
+  rotate: false
+  xy: 780, 6
+  size: 153, 140
+  orig: 153, 142
+  offset: 0, 0
+  index: -1
+bz2_05
+  rotate: false
+  xy: 346, 2
+  size: 138, 139
+  orig: 153, 142
+  offset: 7, 3
+  index: -1
+d_001
+  rotate: false
+  xy: 1549, 116
+  size: 184, 103
+  orig: 184, 103
+  offset: 0, 0
+  index: -1
+d_002
+  rotate: false
+  xy: 1549, 221
+  size: 187, 112
+  orig: 187, 112
+  offset: 0, 0
+  index: -1
+d_003
+  rotate: false
+  xy: 1549, 5
+  size: 167, 109
+  orig: 167, 109
+  offset: 0, 0
+  index: -1
+dimian_004
+  rotate: false
+  xy: 1417, 84
+  size: 130, 120
+  orig: 130, 120
+  offset: 0, 0
+  index: -1
+hewu_001
+  rotate: false
+  xy: 1047, 8
+  size: 168, 154
+  orig: 168, 154
+  offset: 0, 0
+  index: -1
+hewu_002
+  rotate: false
+  xy: 898, 164
+  size: 218, 169
+  orig: 218, 169
+  offset: 0, 0
+  index: -1
+hewu_003
+  rotate: false
+  xy: 671, 148
+  size: 225, 185
+  orig: 225, 185
+  offset: 0, 0
+  index: -1
+hyan_01
+  rotate: false
+  xy: 1118, 170
+  size: 169, 163
+  orig: 203, 197
+  offset: 17, 17
+  index: -1
+hyan_02
+  rotate: false
+  xy: 229, 143
+  size: 221, 190
+  orig: 227, 196
+  offset: 3, 3
+  index: -1
+hyan_03
+  rotate: false
+  xy: 2, 139
+  size: 225, 194
+  orig: 227, 196
+  offset: 1, 1
+  index: -1
+hyan_04
+  rotate: false
+  xy: 452, 143
+  size: 217, 190
+  orig: 227, 196
+  offset: 5, 3
+  index: -1
+hyan_05
+  rotate: false
+  xy: 452, 143
+  size: 217, 190
+  orig: 227, 196
+  offset: 5, 3
+  index: -1
+suikuai
+  rotate: false
+  xy: 1289, 184
+  size: 16, 20
+  orig: 16, 20
+  offset: 0, 0
+  index: -1
+tx-02
+  rotate: false
+  xy: 621, 5
+  size: 157, 136
+  orig: 350, 350
+  offset: 80, 67
+  index: -1
+tx-05
+  rotate: false
+  xy: 152, 6
+  size: 192, 131
+  orig: 350, 350
+  offset: 72, 116
+  index: -1
+xing
+  rotate: false
+  xy: 1305, 21
+  size: 36, 36
+  orig: 36, 36
   offset: 0, 0
   index: -1

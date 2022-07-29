@@ -1,90 +1,90 @@
 
 bindog.png
-size: 512,1024
+size: 1086,270
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-b2
+001
   rotate: false
-  xy: 1, 1
-  size: 348, 206
-  orig: 348, 206
+  xy: 272, 28
+  size: 243, 64
+  orig: 243, 64
   offset: 0, 0
   index: -1
-b1
+002
   rotate: false
-  xy: 1, 406
-  size: 299, 162
-  orig: 299, 162
+  xy: 1047, 95
+  size: 36, 36
+  orig: 36, 36
   offset: 0, 0
   index: -1
-b7
+003
   rotate: false
-  xy: 266, 710
-  size: 139, 130
-  orig: 139, 130
+  xy: 738, 119
+  size: 128, 149
+  orig: 128, 163
+  offset: 0, 7
+  index: -1
+004
+  rotate: false
+  xy: 2, 14
+  size: 60, 254
+  orig: 60, 254
   offset: 0, 0
   index: -1
-b6
+005
   rotate: false
-  xy: 302, 359
-  size: 141, 143
-  orig: 141, 143
+  xy: 517, 2
+  size: 142, 110
+  orig: 142, 110
   offset: 0, 0
   index: -1
-b3
+006
   rotate: false
-  xy: 1, 209
-  size: 277, 195
-  orig: 277, 195
+  xy: 779, 6
+  size: 104, 111
+  orig: 104, 111
   offset: 0, 0
   index: -1
-b5
+007
   rotate: false
-  xy: 280, 209
-  size: 179, 148
-  orig: 179, 148
+  xy: 64, 30
+  size: 206, 238
+  orig: 206, 238
   offset: 0, 0
   index: -1
-b8
+b-002
   rotate: false
-  xy: 154, 842
-  size: 142, 121
-  orig: 142, 121
+  xy: 885, 12
+  size: 160, 119
+  orig: 199, 135
+  offset: 14, 9
+  index: -1
+b_001
+  rotate: false
+  xy: 661, 11
+  size: 116, 101
+  orig: 199, 135
+  offset: 38, 19
+  index: -1
+b_003
+  rotate: false
+  xy: 885, 133
+  size: 199, 135
+  orig: 199, 135
   offset: 0, 0
   index: -1
-b4
+d-001
   rotate: false
-  xy: 1, 570
-  size: 263, 174
-  orig: 263, 174
+  xy: 480, 114
+  size: 256, 154
+  orig: 256, 154
   offset: 0, 0
   index: -1
-冰4
+d-002
   rotate: false
-  xy: 266, 570
-  size: 152, 138
-  orig: 160, 160
-  offset: 2, 17
-  index: -1
-冰3
-  rotate: false
-  xy: 351, 1
-  size: 154, 149
-  orig: 160, 160
-  offset: 0, 6
-  index: -1
-冰2
-  rotate: false
-  xy: 1, 746
-  size: 151, 118
-  orig: 160, 160
-  offset: 8, 16
-  index: -1
-冰1
-  rotate: false
-  xy: 351, 152
-  size: 95, 50
-  orig: 160, 160
-  offset: 30, 19
+  xy: 272, 94
+  size: 206, 174
+  orig: 206, 174
+  offset: 0, 0
   index: -1

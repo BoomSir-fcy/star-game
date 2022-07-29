@@ -1,0 +1,48 @@
+
+qj.png
+size: 894,241
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+爆炸_001
+  rotate: false
+  xy: 714, 67
+  size: 178, 172
+  orig: 256, 256
+  offset: 37, 45
+  index: -1
+爆炸_002
+  rotate: false
+  xy: 2, 2
+  size: 242, 237
+  orig: 256, 256
+  offset: 6, 14
+  index: -1
+爆炸_003
+  rotate: false
+  xy: 2, 2
+  size: 242, 237
+  orig: 256, 256
+  offset: 6, 14
+  index: -1
+爆炸_004
+  rotate: false
+  xy: 246, 22
+  size: 251, 217
+  orig: 256, 256
+  offset: 0, 22
+  index: -1
+爆炸_006
+  rotate: false
+  xy: 499, 37
+  size: 213, 202
+  orig: 256, 256
+  offset: 19, 31
+  index: -1
+爆炸_005
+  rotate: false
+  xy: 499, 37
+  size: 213, 202
+  orig: 256, 256
+  offset: 19, 31
+  index: -1

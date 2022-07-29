@@ -1,202 +1,160 @@
 
 yans.png
-size: 1024,2048
+size: 852,277
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-岩石5
+d-01
   rotate: false
-  xy: 767, 174
-  size: 163, 126
-  orig: 200, 200
-  offset: 18, 41
-  index: -1
-岩石8
-  rotate: false
-  xy: 1, 1074
-  size: 196, 138
-  orig: 200, 200
-  offset: 0, 34
-  index: -1
-岩石15
-  rotate: false
-  xy: 838, 1103
-  size: 151, 79
-  orig: 200, 200
-  offset: 22, 30
-  index: -1
-岩石1
-  rotate: false
-  xy: 726, 1216
-  size: 102, 102
-  orig: 200, 200
-  offset: 54, 50
-  index: -1
-岩石14
-  rotate: false
-  xy: 838, 1184
-  size: 151, 79
-  orig: 200, 200
-  offset: 21, 30
-  index: -1
-岩石3
-  rotate: false
-  xy: 1, 1439
-  size: 113, 111
-  orig: 200, 200
-  offset: 46, 47
-  index: -1
-岩石9
-  rotate: false
-  xy: 563, 1103
-  size: 161, 138
-  orig: 200, 200
-  offset: 33, 31
-  index: -1
-岩石12
-  rotate: false
-  xy: 183, 1215
-  size: 143, 123
-  orig: 200, 200
-  offset: 23, 30
-  index: -1
-岩石11
-  rotate: false
-  xy: 392, 1078
-  size: 169, 132
-  orig: 200, 200
-  offset: 29, 30
-  index: -1
-岩石2
-  rotate: false
-  xy: 726, 1103
-  size: 110, 111
-  orig: 200, 200
-  offset: 46, 51
-  index: -1
-岩石4
-  rotate: false
-  xy: 183, 1340
-  size: 144, 115
-  orig: 200, 200
-  offset: 32, 44
-  index: -1
-岩石13
-  rotate: false
-  xy: 1, 1346
-  size: 148, 91
-  orig: 200, 200
-  offset: 21, 30
-  index: -1
-岩石10
-  rotate: false
-  xy: 392, 1212
-  size: 168, 132
-  orig: 200, 200
-  offset: 30, 30
-  index: -1
-岩石6
-  rotate: false
-  xy: 1, 1214
-  size: 180, 130
-  orig: 200, 200
-  offset: 10, 42
-  index: -1
-岩石16
-  rotate: false
-  xy: 562, 1243
-  size: 151, 79
-  orig: 200, 200
-  offset: 22, 30
-  index: -1
-岩石7
-  rotate: false
-  xy: 199, 1078
-  size: 191, 135
-  orig: 200, 200
-  offset: 4, 38
-  index: -1
-烟雾1
-  rotate: false
-  xy: 767, 1
-  size: 231, 171
-  orig: 231, 171
+  xy: 2, 3
+  size: 158, 133
+  orig: 158, 133
   offset: 0, 0
   index: -1
-烟雾7
+d-02
   rotate: false
-  xy: 394, 1
-  size: 371, 301
-  orig: 371, 301
+  xy: 556, 173
+  size: 132, 102
+  orig: 132, 102
   offset: 0, 0
   index: -1
-烟雾5
+d-03
   rotate: false
-  xy: 372, 304
-  size: 357, 279
-  orig: 357, 279
+  xy: 2, 138
+  size: 123, 137
+  orig: 123, 137
   offset: 0, 0
   index: -1
-烟雾3
+feihui-001
   rotate: false
-  xy: 1, 857
-  size: 303, 215
-  orig: 303, 215
+  xy: 632, 2
+  size: 47, 70
+  orig: 83, 126
+  offset: 20, 16
+  index: -1
+feihui-002
+  rotate: false
+  xy: 746, 5
+  size: 68, 84
+  orig: 83, 126
+  offset: 3, 12
+  index: -1
+feihui-003
+  rotate: false
+  xy: 263, 149
+  size: 66, 126
+  orig: 83, 126
   offset: 0, 0
   index: -1
-烟雾8
+feihui-004
   rotate: false
-  xy: 1, 300
-  size: 369, 297
-  orig: 369, 297
+  xy: 544, 51
+  size: 71, 109
+  orig: 83, 126
+  offset: 12, 9
+  index: -1
+h_001
+  rotate: false
+  xy: 681, 10
+  size: 63, 62
+  orig: 117, 113
+  offset: 27, 26
+  index: -1
+h_002
+  rotate: false
+  xy: 453, 162
+  size: 101, 113
+  orig: 117, 113
+  offset: 8, 0
+  index: -1
+h_003
+  rotate: false
+  xy: 425, 44
+  size: 117, 113
+  orig: 117, 113
   offset: 0, 0
   index: -1
-烟雾2
+h_004
   rotate: false
-  xy: 306, 869
-  size: 271, 207
-  orig: 271, 207
+  xy: 727, 91
+  size: 106, 97
+  orig: 117, 113
+  offset: 5, 8
+  index: -1
+h_005
+  rotate: false
+  xy: 617, 74
+  size: 108, 97
+  orig: 117, 113
+  offset: 4, 8
+  index: -1
+shuisi-001
+  rotate: false
+  xy: 690, 190
+  size: 158, 85
+  orig: 158, 85
   offset: 0, 0
   index: -1
-烟雾4
+sk-001
   rotate: false
-  xy: 671, 585
-  size: 325, 249
-  orig: 325, 249
+  xy: 425, 2
+  size: 65, 40
+  orig: 65, 40
   offset: 0, 0
   index: -1
-烟雾6
+sk-002
   rotate: false
-  xy: 1, 1
-  size: 391, 297
-  orig: 391, 297
+  xy: 582, 19
+  size: 48, 30
+  orig: 48, 30
   offset: 0, 0
   index: -1
-石爆4
+sk_003
   rotate: false
-  xy: 372, 585
-  size: 297, 282
-  orig: 297, 282
+  xy: 530, 10
+  size: 50, 32
+  orig: 50, 32
   offset: 0, 0
   index: -1
-石爆1
+sk_006
   rotate: false
-  xy: 1, 599
-  size: 268, 256
-  orig: 268, 256
+  xy: 816, 64
+  size: 34, 25
+  orig: 34, 25
   offset: 0, 0
   index: -1
-石爆3
+xing
   rotate: false
-  xy: 731, 304
-  size: 281, 271
-  orig: 281, 271
+  xy: 492, 6
+  size: 36, 36
+  orig: 36, 36
   offset: 0, 0
   index: -1
-石爆2
+yz_001
   rotate: false
-  xy: 671, 836
-  size: 274, 265
-  orig: 274, 265
-  offset: 0, 0
+  xy: 301, 23
+  size: 122, 124
+  orig: 147, 143
+  offset: 10, 9
+  index: -1
+yz_002
+  rotate: false
+  xy: 127, 144
+  size: 134, 131
+  orig: 147, 143
+  offset: 4, 0
+  index: -1
+yz_003
+  rotate: false
+  xy: 162, 13
+  size: 137, 129
+  orig: 147, 143
+  offset: 10, 14
+  index: -1
+yz_004
+  rotate: false
+  xy: 331, 159
+  size: 120, 116
+  orig: 147, 143
+  offset: 0, 16
   index: -1

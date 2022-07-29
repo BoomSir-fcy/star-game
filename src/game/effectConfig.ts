@@ -10,6 +10,18 @@ import {
 const effectConfig: EffectConfig = {
   bullet: [
     {
+      name: bulletType.QJ,
+      id: bulletTypeIndex.QJ,
+      bombSpineSrc: '/assets/bullet/qj/qj.json',
+      bombSpine: bulletType.QJ,
+      // moveSpine: bulletType.FENG,
+      moveSpineSrc: '',
+      bombSpriteSrc: '',
+      moveSpriteSrc: '',
+      label: 'QJ',
+    },
+
+    {
       name: bulletType.ICE,
       id: bulletTypeIndex.ICE,
       bombSpine: bulletType.ICE,
@@ -58,11 +70,12 @@ const effectConfig: EffectConfig = {
       name: bulletType.FIREBALL,
       id: bulletTypeIndex.FIREBALL,
       bombSpine: bulletType.FIREBALL,
+      moveSpine: bulletType.FIREBALLMOVE,
       // moveSpine: bulletType.CURVE_BULLET,
       bombSpineSrc: '/assets/bullet/fireball/huoqiu.json',
       bombSpriteSrc: '',
-      moveSpineSrc: '',
-      moveSpriteSrc: '/assets/bullet/fireball/fireball.png',
+      moveSpineSrc: '/assets/bullet/fireball/fireball.json',
+      moveSpriteSrc: '',
       label: '火球',
       flip: true,
     },
@@ -493,6 +506,10 @@ export const descOfEffect = {
 
 export const spines = [
   {
+    name: bulletType.QJ,
+    src: '/assets/bullet/qj/qj.json',
+  },
+  {
     name: commonSpineType.FLYING_END,
     src: '/assets/effects/feiluo/feiluo.json',
   },
@@ -531,6 +548,10 @@ export const spines = [
   {
     name: bulletType.MISSILE_BOOM,
     src: '/assets/bullet/missile/bom/daod.json',
+  },
+  {
+    name: bulletType.FIREBALLMOVE,
+    src: '/assets/bullet/fireball/fireball.json',
   },
   {
     name: bulletType.STING,

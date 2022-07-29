@@ -1,118 +1,181 @@
 
 daod.png
-size: 1024,1024
+size: 1738,335
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-爆炸6
+70000
   rotate: false
-  xy: 471, 872
-  size: 154, 145
-  orig: 154, 145
+  xy: 935, 3
+  size: 45, 159
+  orig: 90, 177
+  offset: 25, 18
+  index: -1
+70002
+  rotate: false
+  xy: 982, 7
+  size: 63, 155
+  orig: 90, 177
+  offset: 16, 18
+  index: -1
+70009
+  rotate: false
+  xy: 1217, 21
+  size: 86, 147
+  orig: 90, 177
+  offset: 4, 4
+  index: -1
+Ls_001
+  rotate: false
+  xy: 486, 3
+  size: 133, 138
+  orig: 133, 138
   offset: 0, 0
   index: -1
-爆炸3
+bz2_01
   rotate: false
-  xy: 1, 888
-  size: 118, 127
-  orig: 118, 127
+  xy: 1305, 59
+  size: 110, 123
+  orig: 153, 142
+  offset: 22, 6
+  index: -1
+bz2_02
+  rotate: false
+  xy: 1289, 206
+  size: 143, 127
+  orig: 153, 142
+  offset: 6, 7
+  index: -1
+bz2_03
+  rotate: false
+  xy: 2, 3
+  size: 148, 134
+  orig: 153, 142
+  offset: 4, 4
+  index: -1
+bz2_04
+  rotate: false
+  xy: 780, 6
+  size: 153, 140
+  orig: 153, 142
   offset: 0, 0
   index: -1
-爆炸2
+bz2_05
   rotate: false
-  xy: 765, 304
-  size: 186, 161
-  orig: 186, 161
+  xy: 346, 2
+  size: 138, 139
+  orig: 153, 142
+  offset: 7, 3
+  index: -1
+d_001
+  rotate: false
+  xy: 1549, 116
+  size: 184, 103
+  orig: 184, 103
   offset: 0, 0
   index: -1
-爆炸7
+d_002
   rotate: false
-  xy: 767, 1
-  size: 138, 150
-  orig: 138, 150
+  xy: 1549, 221
+  size: 187, 112
+  orig: 187, 112
   offset: 0, 0
   index: -1
-爆炸1
+d_003
   rotate: false
-  xy: 911, 467
-  size: 104, 107
-  orig: 104, 107
+  xy: 1549, 5
+  size: 167, 109
+  orig: 167, 109
   offset: 0, 0
   index: -1
-爆炸4
+dimian_004
   rotate: false
-  xy: 767, 153
-  size: 142, 137
-  orig: 142, 137
+  xy: 1417, 84
+  size: 130, 120
+  orig: 130, 120
   offset: 0, 0
   index: -1
-爆炸5
+hewu_001
   rotate: false
-  xy: 306, 872
-  size: 163, 149
-  orig: 163, 149
+  xy: 1047, 8
+  size: 168, 154
+  orig: 168, 154
   offset: 0, 0
   index: -1
-爆炸8
+hewu_002
   rotate: false
-  xy: 765, 467
-  size: 144, 109
-  orig: 144, 109
+  xy: 898, 164
+  size: 218, 169
+  orig: 218, 169
   offset: 0, 0
   index: -1
-烟雾a8
+hewu_003
   rotate: false
-  xy: 394, 304
-  size: 369, 297
-  orig: 400, 400
-  offset: 16, 51
+  xy: 671, 148
+  size: 225, 185
+  orig: 225, 185
+  offset: 0, 0
   index: -1
-烟雾a3
+hyan_01
   rotate: false
-  xy: 1, 635
-  size: 303, 251
-  orig: 400, 400
-  offset: 49, 74
+  xy: 1118, 170
+  size: 169, 163
+  orig: 203, 197
+  offset: 17, 17
   index: -1
-烟雾a4
+hyan_02
   rotate: false
-  xy: 360, 603
-  size: 325, 267
-  orig: 400, 400
-  offset: 38, 66
+  xy: 229, 143
+  size: 221, 190
+  orig: 227, 196
+  offset: 3, 3
   index: -1
-烟雾a7
+hyan_03
   rotate: false
-  xy: 394, 1
-  size: 371, 301
-  orig: 400, 400
-  offset: 15, 49
+  xy: 2, 139
+  size: 225, 194
+  orig: 227, 196
+  offset: 1, 1
   index: -1
-烟雾a1
+hyan_04
   rotate: false
-  xy: 687, 818
-  size: 231, 181
-  orig: 400, 400
-  offset: 85, 109
+  xy: 452, 143
+  size: 217, 190
+  orig: 227, 196
+  offset: 5, 3
   index: -1
-烟雾a6
+hyan_05
   rotate: false
-  xy: 1, 1
-  size: 391, 329
-  orig: 400, 400
-  offset: 5, 35
+  xy: 452, 143
+  size: 217, 190
+  orig: 227, 196
+  offset: 5, 3
   index: -1
-烟雾a5
+suikuai
   rotate: false
-  xy: 1, 332
-  size: 357, 301
-  orig: 400, 400
-  offset: 22, 49
+  xy: 1289, 184
+  size: 16, 20
+  orig: 16, 20
+  offset: 0, 0
   index: -1
-烟雾a2
+tx-02
   rotate: false
-  xy: 687, 603
-  size: 271, 213
-  orig: 400, 400
-  offset: 65, 93
+  xy: 621, 5
+  size: 157, 136
+  orig: 350, 350
+  offset: 80, 67
+  index: -1
+tx-05
+  rotate: false
+  xy: 152, 6
+  size: 192, 131
+  orig: 350, 350
+  offset: 72, 116
+  index: -1
+xing
+  rotate: false
+  xy: 1305, 21
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
   index: -1
