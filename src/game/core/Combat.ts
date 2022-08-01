@@ -420,7 +420,6 @@ class Combat extends EventTarget {
 
       // 暴击
       if (attackInfo?.attack_crit) {
-        // console.log(attackInfo, '暴击');
         let hp = attackInfo?.receive_sub_hp;
         if (attackInfo?.around?.length) {
           hp = attackInfo.around[0].receive_sub_hp;
@@ -477,7 +476,6 @@ class Combat extends EventTarget {
       this.onAttackEnd();
     });
 
-    // console.log('effect=========', effect);
     if (
       effect === descType.ATTACK ||
       descType.ATTACK_DODGE ||
@@ -559,7 +557,6 @@ class Combat extends EventTarget {
     // bullet.addEventListener('attackEnd', () => {
     //   this.changeEffect(descType.RESTORE, target);
     // });
-
     bullet.attack(effect, target);
     // bullet.addEventListener('moveEnd', () => {
     //   // target.effectBuff.addEffect(effect);

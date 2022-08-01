@@ -83,8 +83,6 @@ const PanelName = ({ soldier }: { soldier?: Soldier }) => {
 // hp
 
 const PanelType = ({ detail }: { detail: TrackDetail }) => {
-  console.log(detail);
-
   const rounds = (
     <PanelText style={{ whiteSpace: 'nowrap' }}>
       [{detail.descInfo?.id || detail.id}]:&nbsp;

@@ -78,15 +78,15 @@ const effectConfig: EffectConfig = {
       moveSpineSrc: '/assets/bullet/fireball/fireball.json',
       moveSpriteSrc: '',
       label: '火球',
-      flip: true,
     },
     {
       name: bulletType.FIRING,
       id: bulletTypeIndex.FIRING,
+      moveSpine: bulletType.FIREBALLMOVE,
       bombSpineSrc: '',
       bombSpriteSrc: '',
-      moveSpineSrc: '',
-      moveSpriteSrc: '/assets/bullet/fireball/fireball.png',
+      moveSpineSrc: '/assets/bullet/fireball/fireball.json',
+      moveSpriteSrc: '',
       label: '火焰灼烧',
     },
     {
