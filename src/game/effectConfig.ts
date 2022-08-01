@@ -232,7 +232,7 @@ const effectConfig: EffectConfig = {
       // spriteRes: '/assets/bullet/sting/jianc.png',
       bombSpineSrc: '/assets/bullet/sting/jianc.json',
       bombSpine: bulletType.STING,
-      // moveSpine: bulletType.MISSILE_BOOM,
+      // moveSpine: '',
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '',
