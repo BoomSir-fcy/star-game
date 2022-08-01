@@ -1,33 +1,33 @@
 
 yans.png
-size: 330,145
+size: 469,145
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 bZ_01
   rotate: false
-  xy: 209, 2
+  xy: 416, 91
   size: 51, 52
   orig: 51, 52
   offset: 0, 0
   index: -1
 bZ_02
   rotate: false
-  xy: 209, 56
-  size: 119, 87
+  xy: 2, 2
+  size: 205, 141
   orig: 205, 141
-  offset: 37, 32
+  offset: 0, 0
   index: -1
 bZ_03
   rotate: false
-  xy: 2, 2
+  xy: 209, 2
   size: 205, 141
   orig: 205, 141
   offset: 0, 0
   index: -1
 xing2
   rotate: false
-  xy: 262, 16
+  xy: 416, 51
   size: 37, 38
   orig: 37, 38
   offset: 0, 0

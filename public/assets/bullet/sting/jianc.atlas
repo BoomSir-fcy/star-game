@@ -1,47 +1,47 @@
 
 jianc.png
-size: 336,258
+size: 322,283
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 002
   rotate: false
-  xy: 269, 220
+  xy: 179, 111
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 dimiao-001
   rotate: false
-  xy: 64, 152
+  xy: 2, 30
   size: 175, 104
   orig: 175, 104
   offset: 0, 0
   index: -1
 dimiao2
   rotate: false
-  xy: 211, 18
+  xy: 135, 149
   size: 123, 132
   orig: 123, 132
   offset: 0, 0
   index: -1
 gm-002
   rotate: false
-  xy: 2, 2
+  xy: 260, 27
   size: 60, 254
   orig: 60, 254
   offset: 0, 0
   index: -1
 jc_0010013
-  rotate: false
-  xy: 241, 164
+  rotate: true
+  xy: 2, 2
   size: 26, 92
   orig: 26, 92
   offset: 0, 0
   index: -1
 tt
-  rotate: false
-  xy: 64, 19
+  rotate: true
+  xy: 2, 136
   size: 145, 131
   orig: 145, 131
   offset: 0, 0

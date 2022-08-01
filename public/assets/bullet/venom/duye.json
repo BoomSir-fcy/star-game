@@ -1,11 +1,11 @@
 {
   "skeleton": {
-    "hash": "WJZnAMhin+WUqi+3lieJj61FBiw",
+    "hash": "u+CBQwipZPpcDAudrHJQLga49F8",
     "spine": "3.7.94",
     "width": 372.99,
     "height": 372.99,
     "images": "../特效/星际项目制作/毒气弹/dx_01/",
-    "audio": ""
+    "audio": "G:/外包项目/陈鸿锦-外包需求7.11/spine"
   },
   "bones": [
     {
@@ -16,88 +16,88 @@
       "parent": "root",
       "length": 135.03,
       "rotation": 88.73,
-      "x": 69,
-      "y": 139
+      "x": 0.33,
+      "y": -39.93
     },
     {
       "name": "bone2",
       "parent": "root",
       "length": 118.04,
       "rotation": 88.54,
-      "x": 99,
-      "y": 137
+      "x": 30.33,
+      "y": -41.93
     },
     {
       "name": "bone3",
       "parent": "root",
       "length": 166.49,
       "rotation": 92.12,
-      "x": 72.46,
-      "y": 102.55
+      "x": 3.79,
+      "y": -76.38
     },
     {
       "name": "bone4",
       "parent": "root",
       "length": 174.09,
       "rotation": 91.66,
-      "x": 72.1,
-      "y": 145.67
+      "x": 3.42,
+      "y": -33.26
     },
     {
       "name": "bone5",
       "parent": "root",
       "length": 151.72,
       "rotation": 92.37,
-      "x": 57.76,
-      "y": 142.82
+      "x": -10.91,
+      "y": -36.11
     },
     {
       "name": "bone6",
       "parent": "root",
       "length": 83.42,
       "rotation": 91.15,
-      "x": 102.09,
-      "y": 164.55
+      "x": 33.42,
+      "y": -14.39
     },
     {
       "name": "bone7",
       "parent": "root",
       "length": 83.42,
       "rotation": 91.15,
-      "x": 102.09,
-      "y": 164.55
+      "x": 33.42,
+      "y": -14.39
     },
     {
       "name": "bone8",
       "parent": "root",
       "length": 83.42,
       "rotation": 91.15,
-      "x": 102.09,
-      "y": 164.55
+      "x": 33.42,
+      "y": -14.39
     },
     {
       "name": "bone9",
       "parent": "root",
       "length": 83.42,
       "rotation": 91.15,
-      "x": 102.09,
-      "y": 164.55
+      "x": 33.42,
+      "y": -14.39
     },
     {
       "name": "bone10",
       "parent": "root",
       "length": 104.65,
       "rotation": 85.82,
-      "x": 69.27,
-      "y": 107.72
+      "x": 0.6,
+      "y": -71.21
     },
     {
       "name": "bone11",
       "parent": "root",
       "length": 8.22,
       "rotation": 92.12,
-      "x": 70.06,
-      "y": 177.06,
+      "x": 1.39,
+      "y": -1.88,
       "color": "0baaf9ff"
     },
     {
@@ -135,8 +135,8 @@
       "parent": "root",
       "length": 8.22,
       "rotation": 78.08,
-      "x": 90.8,
-      "y": 173.66,
+      "x": 22.13,
+      "y": -5.28,
       "color": "0baaf9ff"
     },
     {
@@ -174,8 +174,8 @@
       "parent": "root",
       "length": 8.22,
       "rotation": 92.12,
-      "x": 59.46,
-      "y": 153.62,
+      "x": -9.21,
+      "y": -25.31,
       "scaleX": 0.48,
       "color": "0baaf9ff"
     },
@@ -214,8 +214,8 @@
       "parent": "root",
       "length": 179.93,
       "rotation": 90,
-      "x": 79.93,
-      "y": 116.64,
+      "x": 11.26,
+      "y": -62.3,
       "color": "6cd0fcff"
     }
   ],

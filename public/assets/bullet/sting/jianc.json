@@ -1,11 +1,11 @@
 {
   "skeleton": {
-    "hash": "POfvh3Ggsa4A9QN8kuGqUb/dHdc",
+    "hash": "g3XutICJ9rWk0bvuoNwBoixIiYY",
     "spine": "3.7.94",
     "width": 175,
     "height": 290.4,
     "images": "../特效/星际项目制作/尖刺/jianci/",
-    "audio": ""
+    "audio": "G:/外包项目/陈鸿锦-外包需求7.11/spine"
   },
   "bones": [
     {
@@ -16,16 +16,16 @@
       "parent": "root",
       "length": 170.03,
       "rotation": 88.99,
-      "x": 153,
-      "y": 94
+      "x": -5.8,
+      "y": -37.34
     },
     {
       "name": "bone2",
       "parent": "root",
       "length": 79.98,
       "rotation": 90.37,
-      "x": 129.43,
-      "y": 109.14,
+      "x": -29.37,
+      "y": -22.2,
       "color": "426fffff"
     },
     {
@@ -39,8 +39,8 @@
       "parent": "root",
       "length": 79.98,
       "rotation": 90.37,
-      "x": 187.37,
-      "y": 97.34,
+      "x": 28.57,
+      "y": -34,
       "color": "426fffff"
     },
     {
@@ -54,16 +54,16 @@
       "parent": "root",
       "length": 110.52,
       "rotation": 90,
-      "x": 177.17,
-      "y": 127.33
+      "x": 18.37,
+      "y": -4.01
     },
     {
       "name": "bone7",
       "parent": "root",
       "length": 101,
       "rotation": 86.96,
-      "x": 158.93,
-      "y": 109.09,
+      "x": 0.12,
+      "y": -22.25,
       "color": "ff0000ff"
     },
     {
@@ -71,8 +71,8 @@
       "parent": "root",
       "length": 101,
       "rotation": 86.96,
-      "x": 158.93,
-      "y": 109.09,
+      "x": 0.12,
+      "y": -22.25,
       "color": "ff0000ff"
     },
     {
@@ -80,8 +80,8 @@
       "parent": "root",
       "length": 101,
       "rotation": 86.96,
-      "x": 158.93,
-      "y": 109.09,
+      "x": 0.12,
+      "y": -22.25,
       "color": "ff0000ff"
     },
     {
@@ -89,8 +89,8 @@
       "parent": "root",
       "length": 101,
       "rotation": 86.96,
-      "x": 158.93,
-      "y": 109.09,
+      "x": 0.12,
+      "y": -22.25,
       "color": "ff0000ff"
     },
     {
@@ -98,16 +98,16 @@
       "parent": "root",
       "length": 131.06,
       "rotation": 92.82,
-      "x": 156.78,
-      "y": 97.29
+      "x": -2.02,
+      "y": -34.05
     },
     {
       "name": "bone12",
       "parent": "root",
       "length": 182.42,
       "rotation": 89.33,
-      "x": 157.85,
-      "y": 76.9
+      "x": -0.95,
+      "y": -54.44
     }
   ],
   "slots": [

@@ -1,11 +1,11 @@
 {
   "skeleton": {
-    "hash": "WhrkYJgNQmDRqzo3Fg3NHOKZsms",
+    "hash": "xb3CLnmJJAEFpNwLbRbwbNSIyM0",
     "spine": "3.7.94",
     "width": 152.77,
     "height": 107.79,
     "images": "../特效/星际项目制作/子弹轨迹/",
-    "audio": ""
+    "audio": "G:/外包项目/陈鸿锦-外包需求7.11/spine"
   },
   "bones": [
     {
@@ -16,16 +16,16 @@
       "parent": "root",
       "length": 41.61,
       "rotation": -138.97,
-      "x": 106.72,
-      "y": 84.45
+      "x": 1.91,
+      "y": 6.62
     },
     {
       "name": "bone2",
       "parent": "root",
       "length": 22.74,
       "rotation": -140.76,
-      "x": 131.31,
-      "y": 101.06,
+      "x": 26.5,
+      "y": 23.23,
       "scaleX": 1.009,
       "scaleY": 1.009
     },
@@ -43,8 +43,8 @@
       "parent": "root",
       "length": 19.33,
       "rotation": -139.47,
-      "x": 130.32,
-      "y": 100.45,
+      "x": 25.51,
+      "y": 22.62,
       "color": "f91b60ff"
     },
     {
@@ -68,8 +68,8 @@
       "parent": "root",
       "length": 25.64,
       "rotation": 76.09,
-      "x": 126.06,
-      "y": 68.93,
+      "x": 21.25,
+      "y": -8.9,
       "scaleX": 0.567,
       "scaleY": 0.567,
       "color": "00c7ffff"
@@ -79,8 +79,8 @@
       "parent": "root",
       "length": 20.92,
       "rotation": 80.22,
-      "x": 167.06,
-      "y": 40.02,
+      "x": 62.25,
+      "y": -37.82,
       "color": "0f89ffff"
     },
     {
@@ -88,8 +88,8 @@
       "parent": "root",
       "length": 22.51,
       "rotation": 90,
-      "x": 152.6,
-      "y": 67.03,
+      "x": 47.79,
+      "y": -10.8,
       "scaleX": 0.563,
       "scaleY": 0.563,
       "color": "5bb5ffff"
@@ -99,8 +99,8 @@
       "parent": "root",
       "length": 25.64,
       "rotation": 76.09,
-      "x": 126.06,
-      "y": 68.93,
+      "x": 21.25,
+      "y": -8.9,
       "scaleX": 0.567,
       "scaleY": 0.567,
       "color": "00c7ffff"
@@ -110,8 +110,8 @@
       "parent": "root",
       "length": 25.64,
       "rotation": 76.09,
-      "x": 126.06,
-      "y": 68.93,
+      "x": 21.25,
+      "y": -8.9,
       "scaleX": 0.567,
       "scaleY": 0.567,
       "color": "00c7ffff"
@@ -121,8 +121,8 @@
       "parent": "root",
       "length": 25.64,
       "rotation": 76.09,
-      "x": 126.06,
-      "y": 68.93,
+      "x": 21.25,
+      "y": -8.9,
       "scaleX": 0.567,
       "scaleY": 0.567,
       "color": "00c7ffff"
@@ -132,8 +132,8 @@
       "parent": "root",
       "length": 22.51,
       "rotation": 90,
-      "x": 152.6,
-      "y": 67.03,
+      "x": 47.79,
+      "y": -10.8,
       "scaleX": 0.563,
       "scaleY": 0.563,
       "color": "5bb5ffff"
@@ -143,8 +143,8 @@
       "parent": "root",
       "length": 22.51,
       "rotation": 90,
-      "x": 152.6,
-      "y": 67.03,
+      "x": 47.79,
+      "y": -10.8,
       "scaleX": 0.563,
       "scaleY": 0.563,
       "color": "5bb5ffff"
@@ -154,8 +154,8 @@
       "parent": "root",
       "length": 19.33,
       "rotation": -139.47,
-      "x": 130.32,
-      "y": 100.45,
+      "x": 25.51,
+      "y": 22.62,
       "color": "e82368ff"
     },
     {
@@ -191,8 +191,8 @@
       "parent": "root",
       "length": 25.64,
       "rotation": 76.09,
-      "x": 126.06,
-      "y": 68.93,
+      "x": 21.25,
+      "y": -8.9,
       "scaleX": 0.567,
       "scaleY": 0.567,
       "color": "00c7ffff"
@@ -202,8 +202,8 @@
       "parent": "root",
       "length": 25.64,
       "rotation": 76.09,
-      "x": 126.06,
-      "y": 68.93,
+      "x": 21.25,
+      "y": -8.9,
       "scaleX": 0.567,
       "scaleY": 0.567,
       "color": "00c7ffff"

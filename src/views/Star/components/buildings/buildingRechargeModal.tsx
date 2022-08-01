@@ -9,6 +9,7 @@ import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'contexts/ToastsContext';
 import { useDispatch } from 'react-redux';
+import { SubString_1 } from 'utils/DecimalPlaces';
 import { ResourceSlider } from './buildingResourceModal';
 
 const Container = styled(GraphicsCard)`
@@ -57,52 +58,60 @@ export const BuildingRechargeModal: React.FC<{
     energy: 0,
   });
   const stoneProportion = Number(
-    (
-      (maxValue[StoreType.STONE].already / maxValue[StoreType.STONE].max) *
-      100
-    ).toFixed(0),
+    SubString_1(
+      (maxValue[StoreType.STONE].already / maxValue[StoreType.STONE].max) * 100,
+      10,
+    ),
   );
   const populationProportion = Number(
-    (
+    SubString_1(
       (maxValue[StoreType.POPULATION].already /
         maxValue[StoreType.POPULATION].max) *
-      100
-    ).toFixed(0),
+        100,
+      10,
+    ),
   );
   const energyProportion = Number(
-    (
+    SubString_1(
       (maxValue[StoreType.ENERGY].already / maxValue[StoreType.ENERGY].max) *
-      100
-    ).toFixed(0),
+        100,
+      10,
+    ),
   );
 
   const OreBalanceProportion = useMemo(() => {
-    return Number(
-      new BigNumber(Product.stone)
-        .plus(maxValue[StoreType.STONE].already)
-        .div(maxValue[StoreType.STONE].max)
-        .times(100)
-        .toFixed(0),
+    return SubString_1(
+      Number(
+        new BigNumber(Product.stone)
+          .plus(maxValue[StoreType.STONE].already)
+          .div(maxValue[StoreType.STONE].max)
+          .times(100),
+      ),
+      10,
     );
   }, [Product, maxValue]);
 
   const ENEBalanceProportion = useMemo(() => {
-    return Number(
-      new BigNumber(Product.energy)
-        .plus(maxValue[StoreType.ENERGY].already)
-        .div(maxValue[StoreType.ENERGY].max)
-        .times(100)
-        .toFixed(0),
+    return SubString_1(
+      Number(
+        new BigNumber(Product.energy)
+          .plus(maxValue[StoreType.ENERGY].already)
+          .div(maxValue[StoreType.ENERGY].max)
+          .times(100),
+      ),
+      10,
     );
   }, [Product, maxValue]);
 
   const POPBalanceProportion = useMemo(() => {
-    return Number(
-      new BigNumber(Product.population)
-        .plus(maxValue[StoreType.POPULATION].already)
-        .div(maxValue[StoreType.POPULATION].max)
-        .times(100)
-        .toFixed(0),
+    return SubString_1(
+      Number(
+        new BigNumber(Product.population)
+          .plus(maxValue[StoreType.POPULATION].already)
+          .div(maxValue[StoreType.POPULATION].max)
+          .times(100),
+      ),
+      10,
     );
   }, [Product, maxValue]);
 
@@ -157,7 +166,7 @@ export const BuildingRechargeModal: React.FC<{
                 return;
               }
               setState(p => {
-                p.stone = Number(val.toFixed(0));
+                p.stone = Number(SubString_1(val, 10));
               });
             }}
           />
@@ -182,7 +191,7 @@ export const BuildingRechargeModal: React.FC<{
                 return;
               }
               setState(p => {
-                p.energy = Number(val.toFixed(0));
+                p.energy = Number(SubString_1(val, 10));
               });
             }}
           />
@@ -207,7 +216,7 @@ export const BuildingRechargeModal: React.FC<{
                 return;
               }
               setState(p => {
-                p.population = Number(val.toFixed(0));
+                p.population = Number(SubString_1(val, 10));
               });
             }}
           />
@@ -238,31 +247,34 @@ export const BuildingRechargeModal: React.FC<{
                   state.stone === 100
                     ? maxValue[StoreType.STONE].max -
                       maxValue[StoreType.STONE].already
-                    : Number(
-                        (
+                    : SubString_1(
+                        Number(
                           ((state.stone - stoneProportion) / 100) *
-                          maxValue[StoreType.STONE].max
-                        ).toFixed(0),
+                            maxValue[StoreType.STONE].max,
+                        ),
+                        10,
                       ),
                 population:
                   state.population === 100
                     ? maxValue[StoreType.POPULATION].max -
                       maxValue[StoreType.POPULATION].already
-                    : Number(
-                        (
+                    : SubString_1(
+                        Number(
                           ((state.population - populationProportion) / 100) *
-                          maxValue[StoreType.POPULATION].max
-                        ).toFixed(0),
+                            maxValue[StoreType.POPULATION].max,
+                        ),
+                        10,
                       ),
                 energy:
                   state.energy === 100
                     ? maxValue[StoreType.ENERGY].max -
                       maxValue[StoreType.ENERGY].already
-                    : Number(
-                        (
+                    : SubString_1(
+                        Number(
                           ((state.energy - energyProportion) / 100) *
-                          maxValue[StoreType.ENERGY].max
-                        ).toFixed(0),
+                            maxValue[StoreType.ENERGY].max,
+                        ),
+                        10,
                       ),
               };
               onFinish(params);

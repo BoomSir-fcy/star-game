@@ -9,17 +9,17 @@ import {
 
 const effectConfig: EffectConfig = {
   bullet: [
-    {
-      name: bulletType.QJ,
-      id: bulletTypeIndex.QJ,
-      bombSpineSrc: '/assets/bullet/qj/qj.json',
-      bombSpine: bulletType.QJ,
-      // moveSpine: bulletType.FENG,
-      moveSpineSrc: '',
-      bombSpriteSrc: '',
-      moveSpriteSrc: '',
-      label: 'QJ',
-    },
+    // {
+    //   name: bulletType.QJ,
+    //   id: bulletTypeIndex.QJ,
+    //   bombSpineSrc: '/assets/bullet/qj/qj.json',
+    //   bombSpine: bulletType.QJ,
+    //   // moveSpine: bulletType.FENG,
+    //   moveSpineSrc: '',
+    //   bombSpriteSrc: '',
+    //   moveSpriteSrc: '',
+    //   label: 'QJ',
+    // },
 
     {
       name: bulletType.ICE,
@@ -47,13 +47,14 @@ const effectConfig: EffectConfig = {
     {
       name: bulletType.BULLET,
       id: bulletTypeIndex.BULLET,
-      // bombSpine: bulletType.ROCK,
+      bombSpine: bulletType.QJ,
       moveSpine: bulletType.BULLET,
-      bombSpineSrc: '',
+      bombSpineSrc: '/assets/bullet/qj/qj.json',
       bombSpriteSrc: '',
       moveSpineSrc: '/assets/bullet/bullet/zidan.json',
       moveSpriteSrc: '',
       label: '子弹',
+      flip: true,
     },
     {
       name: bulletType.CURVE_BULLET,
@@ -244,10 +245,10 @@ const effectConfig: EffectConfig = {
       // spriteRes: '/assets/bullet/venom/venom.png',
       bombSpineSrc: '/assets/bullet/venom/duye.json',
       bombSpine: bulletType.VENOM,
-      // moveSpine: bulletType.MISSILE_BOOM,
+      moveSpine: bulletType.VENOM_MOVE,
       bombSpriteSrc: '',
-      moveSpineSrc: '',
-      moveSpriteSrc: '/assets/bullet/venom/venom.png',
+      moveSpineSrc: '/assets/bullet/venom/venom.json',
+      moveSpriteSrc: '',
       label: '毒液攻击',
     },
     {
@@ -616,5 +617,9 @@ export const spines = [
   {
     name: bulletType.ATTACK_START,
     src: '/assets/bullet/space-start/kua1.json',
+  },
+  {
+    name: bulletType.VENOM_MOVE,
+    src: '/assets/bullet/venom/venom.json',
   },
 ];

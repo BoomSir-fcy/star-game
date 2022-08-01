@@ -395,6 +395,7 @@ export enum bulletTypeIndex {
   IMMUNITY_FIRING,
   FIREBALLMOVE,
   QJ,
+  VENOM_MOVE,
 }
 
 export const bulletType = {
@@ -424,6 +425,8 @@ export const bulletType = {
   [bulletTypeIndex.STING]: 'sting', // 尖刺攻击
   VENOM: 'venom', // 毒液攻击
   [bulletTypeIndex.VENOM]: 'venom', // 毒液攻击
+  VENOM_MOVE: 'venom_move', // 毒液攻击
+  [bulletTypeIndex.VENOM_MOVE]: 'venom', // 毒液攻击
   FIGHT: 'fight', // 肉搏
   [bulletTypeIndex.FIGHT]: 'fight', // 肉搏
   DRAGON: 'dragon', // 岩石

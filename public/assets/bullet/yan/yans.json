@@ -1,11 +1,11 @@
 {
   "skeleton": {
-    "hash": "NznlHK8amXpb0GT2MoG3TEGBHDw",
+    "hash": "R9kppcLvfM0SwquElgmwCq67Gf4",
     "spine": "3.7.94",
     "width": 144.77,
     "height": 207.58,
     "images": "../特效/星际项目制作/碰撞效果-xiugai/",
-    "audio": ""
+    "audio": "G:/外包项目/陈鸿锦-外包需求7.11/spine"
   },
   "bones": [
     {
@@ -16,16 +16,16 @@
       "parent": "root",
       "length": 162.03,
       "rotation": 88.94,
-      "x": 89,
-      "y": 57
+      "x": 7.15,
+      "y": 1.92
     },
     {
       "name": "bone2",
       "parent": "root",
       "length": 50.25,
       "rotation": 95.71,
-      "x": 85,
-      "y": 54,
+      "x": 3.15,
+      "y": -1.08,
       "color": "0e3effff"
     },
     {
@@ -33,8 +33,8 @@
       "parent": "root",
       "length": 50.25,
       "rotation": 95.71,
-      "x": 85,
-      "y": 54,
+      "x": 3.15,
+      "y": -1.08,
       "color": "0e3effff"
     },
     {
@@ -42,8 +42,8 @@
       "parent": "root",
       "length": 50.25,
       "rotation": 95.71,
-      "x": 85,
-      "y": 54,
+      "x": 3.15,
+      "y": -1.08,
       "color": "0e3effff"
     },
     {
@@ -51,8 +51,8 @@
       "parent": "root",
       "length": 50.25,
       "rotation": 95.71,
-      "x": 85,
-      "y": 54,
+      "x": 3.15,
+      "y": -1.08,
       "color": "0e3effff"
     }
   ],
@@ -171,25 +171,13 @@
               "name": "bZ_01"
             },
             {
-              "time": 0.0667,
-              "name": "bZ_01"
-            },
-            {
               "time": 0.1333,
-              "name": null
-            },
-            {
-              "time": 0.1667,
               "name": null
             }
           ]
         },
         "bZ_02": {
           "attachment": [
-            {
-              "time": 0,
-              "name": "bZ_02"
-            },
             {
               "time": 0.0333,
               "name": null
@@ -206,10 +194,6 @@
         },
         "bZ_03": {
           "attachment": [
-            {
-              "time": 0,
-              "name": "bZ_03"
-            },
             {
               "time": 0.0333,
               "name": null
@@ -228,11 +212,6 @@
           "color": [
             {
               "time": 0,
-              "color": "ffffff00",
-              "curve": "stepped"
-            },
-            {
-              "time": 0.0667,
               "color": "ffffff00",
               "curve": "stepped"
             },
@@ -275,11 +254,6 @@
               "curve": "stepped"
             },
             {
-              "time": 0.0667,
-              "color": "ffffff00",
-              "curve": "stepped"
-            },
-            {
               "time": 0.1,
               "color": "ffffff00"
             },
@@ -293,11 +267,6 @@
           "color": [
             {
               "time": 0,
-              "color": "ffffff00",
-              "curve": "stepped"
-            },
-            {
-              "time": 0.0667,
               "color": "ffffff00",
               "curve": "stepped"
             },
@@ -318,26 +287,9 @@
       },
       "bones": {
         "bone": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
-              "angle": 0
-            }
-          ],
           "translate": [
             {
               "time": 0,
-              "x": -6,
-              "y": -4,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
               "x": -6,
               "y": -4
             }
@@ -373,33 +325,9 @@
               "x": 1.268,
               "y": 1.268
             }
-          ],
-          "shear": [
-            {
-              "time": 0,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
-              "x": 0,
-              "y": 0
-            }
           ]
         },
         "bone2": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
-              "angle": 0
-            }
-          ],
           "translate": [
             {
               "time": 0,
@@ -439,33 +367,9 @@
               "x": 0.1,
               "y": 0.1
             }
-          ],
-          "shear": [
-            {
-              "time": 0,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
-              "x": 0,
-              "y": 0
-            }
           ]
         },
         "bone3": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
-              "angle": 0
-            }
-          ],
           "translate": [
             {
               "time": 0,
@@ -505,33 +409,9 @@
               "x": 0.1,
               "y": 0.1
             }
-          ],
-          "shear": [
-            {
-              "time": 0,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
-              "x": 0,
-              "y": 0
-            }
           ]
         },
         "bone4": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
-              "angle": 0
-            }
-          ],
           "translate": [
             {
               "time": 0,
@@ -571,33 +451,9 @@
               "x": 0.1,
               "y": 0.1
             }
-          ],
-          "shear": [
-            {
-              "time": 0,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
-              "x": 0,
-              "y": 0
-            }
           ]
         },
         "bone5": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
-              "angle": 0
-            }
-          ],
           "translate": [
             {
               "time": 0,
@@ -637,18 +493,14 @@
               "x": 0.1,
               "y": 0.1
             }
-          ],
-          "shear": [
+          ]
+        },
+        "root": {
+          "translate": [
             {
               "time": 0,
               "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.1667,
-              "x": 0,
-              "y": 0
+              "y": 1.53
             }
           ]
         }

@@ -1,11 +1,11 @@
 {
   "skeleton": {
-    "hash": "LMSmcmO/KiXol1KbvHiLTWSraks",
+    "hash": "Gm1C+bU00yqCB8Fejoodz/t95mQ",
     "spine": "3.7.94",
-    "width": 749,
-    "height": 654,
+    "width": 62.38,
+    "height": 63.36,
     "images": "../特效/星际项目制作/火球-1/",
-    "audio": ""
+    "audio": "G:/外包项目/陈鸿锦-外包需求7.11/spine"
   },
   "bones": [
     {
@@ -16,32 +16,32 @@
       "parent": "root",
       "length": 160,
       "rotation": 90,
-      "x": 25,
-      "y": 45
+      "x": -15.53,
+      "y": -23.74
     },
     {
       "name": "bone2",
       "parent": "root",
       "length": 63.54,
       "rotation": 39.38,
-      "x": 7.09,
-      "y": 55.87
+      "x": -33.44,
+      "y": -12.87
     },
     {
       "name": "bone3",
       "parent": "root",
       "length": 63.54,
       "rotation": 39.38,
-      "x": 7.09,
-      "y": 55.87
+      "x": -33.44,
+      "y": -12.87
     },
     {
       "name": "bone4",
       "parent": "root",
       "length": 63.54,
       "rotation": 39.38,
-      "x": 7.09,
-      "y": 55.87
+      "x": -33.44,
+      "y": -12.87
     }
   ],
   "slots": [

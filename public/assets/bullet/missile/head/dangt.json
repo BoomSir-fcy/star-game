@@ -1,9 +1,9 @@
 {
   "skeleton": {
-    "hash": "eyXCfMh3mmJ+wX56Mea3gW/G80A",
+    "hash": "ZEU6iYsp3SB12SdyDOhj8rK4Fwk",
     "spine": "3.7.94",
-    "width": 749,
-    "height": 654,
+    "width": 165.01,
+    "height": 145.24,
     "images": "../特效/星际项目制作/导弹/daod0an1/",
     "audio": ""
   },
@@ -16,8 +16,8 @@
       "parent": "root",
       "length": 111.87,
       "rotation": 92.4,
-      "x": -35.65,
-      "y": 111.92,
+      "x": -25.24,
+      "y": -19.44,
       "scaleX": 0.377,
       "scaleY": 0.377
     },
@@ -26,8 +26,8 @@
       "parent": "root",
       "length": 164.06,
       "rotation": 91.45,
-      "x": 4.8,
-      "y": 137.49,
+      "x": 15.22,
+      "y": 6.13,
       "scaleX": 0.597,
       "scaleY": 0.597
     },
@@ -36,208 +36,208 @@
       "parent": "root",
       "length": 32.76,
       "rotation": 89.45,
-      "x": -29.23,
-      "y": 111.08
+      "x": -18.81,
+      "y": -20.28
     },
     {
       "name": "bone4",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone5",
       "parent": "root",
       "length": 32.76,
       "rotation": 89.45,
-      "x": -29.23,
-      "y": 111.08
+      "x": -18.81,
+      "y": -20.28
     },
     {
       "name": "bone6",
       "parent": "root",
       "length": 32.76,
       "rotation": 89.45,
-      "x": -29.23,
-      "y": 111.08
+      "x": -18.81,
+      "y": -20.28
     },
     {
       "name": "bone7",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone8",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone9",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone10",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone11",
       "parent": "root",
       "length": 32.76,
       "rotation": 89.45,
-      "x": -29.23,
-      "y": 111.08
+      "x": -18.81,
+      "y": -20.28
     },
     {
       "name": "bone12",
       "parent": "root",
       "length": 32.76,
       "rotation": 89.45,
-      "x": -29.23,
-      "y": 111.08
+      "x": -18.81,
+      "y": -20.28
     },
     {
       "name": "bone13",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone14",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone15",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone16",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone17",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone18",
       "parent": "root",
       "length": 32.76,
       "rotation": 89.45,
-      "x": -29.23,
-      "y": 111.08
+      "x": -18.81,
+      "y": -20.28
     },
     {
       "name": "bone19",
       "parent": "root",
       "length": 32.76,
       "rotation": 89.45,
-      "x": -29.23,
-      "y": 111.08
+      "x": -18.81,
+      "y": -20.28
     },
     {
       "name": "bone20",
       "parent": "root",
       "length": 32.76,
       "rotation": 89.45,
-      "x": -29.23,
-      "y": 111.08
+      "x": -18.81,
+      "y": -20.28
     },
     {
       "name": "bone21",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone22",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone23",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone24",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone25",
       "parent": "root",
       "length": 32.76,
       "rotation": 89.45,
-      "x": -29.23,
-      "y": 111.08
+      "x": -18.81,
+      "y": -20.28
     },
     {
       "name": "bone26",
       "parent": "root",
       "length": 39.16,
       "rotation": 45.56,
-      "x": -23.56,
-      "y": 106.98
+      "x": -13.14,
+      "y": -24.38
     },
     {
       "name": "bone27",
       "parent": "root",
       "length": 32.76,
       "rotation": 89.45,
-      "x": -29.23,
-      "y": 111.08
+      "x": -18.81,
+      "y": -20.28
     },
     {
       "name": "bone28",
       "parent": "root",
       "length": 96.24,
       "rotation": 78.04,
-      "x": -86.23,
-      "y": 50.1,
+      "x": -75.81,
+      "y": -81.26,
       "scaleX": 0.767,
       "scaleY": 0.767
     },
@@ -246,8 +246,8 @@
       "parent": "root",
       "length": 97.97,
       "rotation": 87.73,
-      "x": -61.15,
-      "y": 29.8,
+      "x": -50.74,
+      "y": -101.56,
       "scaleX": 0.698,
       "scaleY": 0.698
     }

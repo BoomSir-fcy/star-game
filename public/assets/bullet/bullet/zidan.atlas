@@ -1,40 +1,40 @@
 
 zidan.png
-size: 156,139
+size: 261,88
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 g-002
   rotate: false
-  xy: 2, 57
+  xy: 2, 6
   size: 114, 80
   orig: 114, 80
   offset: 0, 0
   index: -1
 g_002
-  rotate: false
-  xy: 2, 2
+  rotate: true
+  xy: 118, 14
   size: 72, 53
   orig: 72, 53
   offset: 0, 0
   index: -1
 xing
   rotate: false
-  xy: 118, 101
+  xy: 223, 50
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 z-001
-  rotate: false
-  xy: 76, 7
+  rotate: true
+  xy: 173, 29
   size: 57, 48
   orig: 57, 48
   offset: 0, 0
   index: -1
 zd
-  rotate: false
-  xy: 118, 73
+  rotate: true
+  xy: 173, 2
   size: 25, 26
   orig: 25, 26
   offset: 0, 0

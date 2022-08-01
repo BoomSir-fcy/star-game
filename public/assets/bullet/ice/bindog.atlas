@@ -1,89 +1,89 @@
 
 bindog.png
-size: 1086,270
+size: 1462,220
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 001
   rotate: false
-  xy: 272, 28
+  xy: 1217, 154
   size: 243, 64
   orig: 243, 64
   offset: 0, 0
   index: -1
 002
   rotate: false
-  xy: 1047, 95
+  xy: 829, 17
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 003
   rotate: false
-  xy: 738, 119
-  size: 128, 149
+  xy: 829, 55
+  size: 128, 163
   orig: 128, 163
-  offset: 0, 7
+  offset: 0, 0
   index: -1
 004
-  rotate: false
-  xy: 2, 14
+  rotate: true
+  xy: 959, 2
   size: 60, 254
   orig: 60, 254
   offset: 0, 0
   index: -1
 005
-  rotate: false
-  xy: 517, 2
+  rotate: true
+  xy: 1217, 10
   size: 142, 110
   orig: 142, 110
   offset: 0, 0
   index: -1
 006
-  rotate: false
-  xy: 779, 6
+  rotate: true
+  xy: 1329, 48
   size: 104, 111
   orig: 104, 111
   offset: 0, 0
   index: -1
 007
-  rotate: false
-  xy: 64, 30
+  rotate: true
+  xy: 2, 12
   size: 206, 238
   orig: 206, 238
   offset: 0, 0
   index: -1
 b-002
-  rotate: false
-  xy: 885, 12
-  size: 160, 119
+  rotate: true
+  xy: 555, 19
+  size: 199, 135
   orig: 199, 135
-  offset: 14, 9
+  offset: 0, 0
   index: -1
 b_001
-  rotate: false
-  xy: 661, 11
-  size: 116, 101
+  rotate: true
+  xy: 418, 19
+  size: 199, 135
   orig: 199, 135
-  offset: 38, 19
+  offset: 0, 0
   index: -1
 b_003
-  rotate: false
-  xy: 885, 133
+  rotate: true
+  xy: 692, 19
   size: 199, 135
   orig: 199, 135
   offset: 0, 0
   index: -1
 d-001
   rotate: false
-  xy: 480, 114
+  xy: 959, 64
   size: 256, 154
   orig: 256, 154
   offset: 0, 0
   index: -1
 d-002
-  rotate: false
-  xy: 272, 94
+  rotate: true
+  xy: 242, 12
   size: 206, 174
   orig: 206, 174
   offset: 0, 0

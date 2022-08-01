@@ -1,152 +1,152 @@
 
 duye.png
-size: 1107,412
+size: 1734,706
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 DY_01
   rotate: false
-  xy: 257, 208
-  size: 43, 40
+  xy: 1530, 564
+  size: 137, 140
   orig: 137, 140
-  offset: 37, 70
+  offset: 0, 0
   index: -1
 DY_02
   rotate: false
-  xy: 429, 28
-  size: 71, 64
+  xy: 1410, 358
+  size: 137, 140
   orig: 137, 140
-  offset: 20, 53
+  offset: 0, 0
   index: -1
 DY_03
-  rotate: false
-  xy: 331, 2
-  size: 96, 90
+  rotate: true
+  xy: 1428, 219
+  size: 137, 140
   orig: 137, 140
-  offset: 11, 38
+  offset: 0, 0
   index: -1
 DY_04
   rotate: false
-  xy: 936, 34
-  size: 120, 112
+  xy: 1444, 77
+  size: 137, 140
   orig: 137, 140
-  offset: 4, 24
+  offset: 0, 0
   index: -1
 DY_05
   rotate: false
-  xy: 885, 278
-  size: 134, 132
+  xy: 1549, 422
+  size: 137, 140
   orig: 137, 140
-  offset: 0, 8
+  offset: 0, 0
   index: -1
 DY_06
   rotate: false
-  xy: 589, 130
-  size: 137, 139
+  xy: 1570, 280
+  size: 137, 140
   orig: 137, 140
-  offset: 0, 1
+  offset: 0, 0
   index: -1
 DY_07
   rotate: false
-  xy: 887, 148
-  size: 112, 128
+  xy: 1583, 138
+  size: 137, 140
   orig: 137, 140
-  offset: 4, 0
+  offset: 0, 0
   index: -1
 db_001
   rotate: false
-  xy: 331, 94
+  xy: 1058, 63
   size: 256, 154
   orig: 256, 154
   offset: 0, 0
   index: -1
 dm_001
-  rotate: false
-  xy: 589, 2
+  rotate: true
+  xy: 1316, 66
   size: 151, 126
   orig: 151, 126
   offset: 0, 0
   index: -1
 dm_002
   rotate: false
-  xy: 502, 37
-  size: 80, 55
+  xy: 1444, 6
+  size: 92, 69
   orig: 92, 69
-  offset: 12, 10
+  offset: 0, 0
   index: -1
 g-001
-  rotate: false
-  xy: 1001, 165
+  rotate: true
+  xy: 1583, 32
   size: 104, 111
   orig: 104, 111
   offset: 0, 0
   index: -1
 s-001
   rotate: false
-  xy: 137, 206
+  xy: 1410, 500
   size: 118, 204
   orig: 118, 204
   offset: 0, 0
   index: -1
 s-002
   rotate: false
-  xy: 2, 4
+  xy: 1696, 100
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 tx-01
   rotate: false
-  xy: 257, 250
-  size: 112, 160
+  xy: 2, 2
+  size: 350, 350
   orig: 350, 350
-  offset: 114, 86
+  offset: 0, 0
   index: -1
 tx-02
   rotate: false
-  xy: 565, 271
-  size: 145, 139
+  xy: 354, 354
+  size: 350, 350
   orig: 350, 350
-  offset: 85, 64
+  offset: 0, 0
   index: -1
 tx-03
   rotate: false
-  xy: 728, 135
-  size: 157, 136
+  xy: 354, 2
+  size: 350, 350
   orig: 350, 350
-  offset: 80, 67
+  offset: 0, 0
   index: -1
 tx-04
   rotate: false
-  xy: 371, 263
-  size: 192, 147
+  xy: 706, 354
+  size: 350, 350
   orig: 350, 350
-  offset: 72, 71
+  offset: 0, 0
   index: -1
 tx-05
   rotate: false
-  xy: 137, 26
-  size: 192, 178
+  xy: 706, 2
+  size: 350, 350
   orig: 350, 350
-  offset: 72, 69
+  offset: 0, 0
   index: -1
 tx-06
   rotate: false
-  xy: 712, 273
-  size: 171, 137
+  xy: 1058, 354
+  size: 350, 350
   orig: 350, 350
-  offset: 81, 110
+  offset: 0, 0
   index: -1
 tx-07
   rotate: false
-  xy: 742, 2
-  size: 192, 131
+  xy: 2, 354
+  size: 350, 350
   orig: 350, 350
-  offset: 72, 116
+  offset: 0, 0
   index: -1
 yan-001
-  rotate: false
-  xy: 2, 42
+  rotate: true
+  xy: 1058, 219
   size: 133, 368
   orig: 133, 368
   offset: 0, 0
