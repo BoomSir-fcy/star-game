@@ -271,35 +271,27 @@ export const BuildingRechargeModal: React.FC<{
                   state.stone === 100
                     ? maxValue[StoreType.STONE].max -
                       maxValue[StoreType.STONE].already
-                    : SubString_1(
-                        Number(
-                          ((state.stone - stoneProportion) / 100) *
-                            maxValue[StoreType.STONE].max,
-                        ),
-                        0,
-                      ),
+                    : Number(
+                        ((state.stone - stoneProportion) / 100) *
+                          maxValue[StoreType.STONE].max,
+                      ).toFixed(0),
                 population:
                   state.population === 100
                     ? maxValue[StoreType.POPULATION].max -
                       maxValue[StoreType.POPULATION].already
-                    : SubString_1(
-                        Number(
-                          ((state.population - populationProportion) / 100) *
-                            maxValue[StoreType.POPULATION].max,
-                        ),
-                        0,
-                      ),
+                    : Number(
+                        ((state.population - populationProportion) / 100) *
+                          maxValue[StoreType.POPULATION].max,
+                      ).toFixed(0),
+
                 energy:
                   state.energy === 100
                     ? maxValue[StoreType.ENERGY].max -
                       maxValue[StoreType.ENERGY].already
-                    : SubString_1(
-                        Number(
-                          ((state.energy - energyProportion) / 100) *
-                            maxValue[StoreType.ENERGY].max,
-                        ),
-                        0,
-                      ),
+                    : Number(
+                        ((state.energy - energyProportion) / 100) *
+                          maxValue[StoreType.ENERGY].max,
+                      ).toFixed(0),
               };
               onFinish(params);
             }}
