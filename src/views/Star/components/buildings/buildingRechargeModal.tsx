@@ -60,7 +60,7 @@ export const BuildingRechargeModal: React.FC<{
   const stoneProportion = Number(
     SubString_1(
       (maxValue[StoreType.STONE].already / maxValue[StoreType.STONE].max) * 100,
-      10,
+      50,
     ),
   );
   const populationProportion = Number(
@@ -68,14 +68,14 @@ export const BuildingRechargeModal: React.FC<{
       (maxValue[StoreType.POPULATION].already /
         maxValue[StoreType.POPULATION].max) *
         100,
-      10,
+      50,
     ),
   );
   const energyProportion = Number(
     SubString_1(
       (maxValue[StoreType.ENERGY].already / maxValue[StoreType.ENERGY].max) *
         100,
-      10,
+      50,
     ),
   );
 
@@ -87,7 +87,7 @@ export const BuildingRechargeModal: React.FC<{
           .div(maxValue[StoreType.STONE].max)
           .times(100),
       ),
-      10,
+      50,
     );
   }, [Product, maxValue]);
 
@@ -99,7 +99,7 @@ export const BuildingRechargeModal: React.FC<{
           .div(maxValue[StoreType.ENERGY].max)
           .times(100),
       ),
-      10,
+      50,
     );
   }, [Product, maxValue]);
 
@@ -111,7 +111,7 @@ export const BuildingRechargeModal: React.FC<{
           .div(maxValue[StoreType.POPULATION].max)
           .times(100),
       ),
-      10,
+      50,
     );
   }, [Product, maxValue]);
 
@@ -153,7 +153,12 @@ export const BuildingRechargeModal: React.FC<{
             defaultValue={state.stone}
             maxValue={maxValue[StoreType.STONE].max}
             onChange={val => {
-              if (val < stoneProportion) return;
+              if (val < stoneProportion) {
+                setState(p => {
+                  p.stone = Number(stoneProportion);
+                });
+                return;
+              }
               if (val >= OreBalanceProportion) {
                 if (
                   !guideState.recharge_visible &&
@@ -163,10 +168,13 @@ export const BuildingRechargeModal: React.FC<{
                     storeAction.toggleRechargeVisible({ visible: true }),
                   );
                 }
+                setState(p => {
+                  p.stone = Number(OreBalanceProportion);
+                });
                 return;
               }
               setState(p => {
-                p.stone = Number(SubString_1(val, 10));
+                p.stone = Number(SubString_1(val, 50));
               });
             }}
           />
@@ -178,7 +186,12 @@ export const BuildingRechargeModal: React.FC<{
             defaultValue={state.energy}
             maxValue={maxValue[StoreType.ENERGY].max}
             onChange={val => {
-              if (val < energyProportion) return;
+              if (val < energyProportion) {
+                setState(p => {
+                  p.energy = Number(energyProportion);
+                });
+                return;
+              }
               if (val >= ENEBalanceProportion) {
                 if (
                   !guideState.recharge_visible &&
@@ -188,10 +201,13 @@ export const BuildingRechargeModal: React.FC<{
                     storeAction.toggleRechargeVisible({ visible: true }),
                   );
                 }
+                setState(p => {
+                  p.energy = Number(ENEBalanceProportion);
+                });
                 return;
               }
               setState(p => {
-                p.energy = Number(SubString_1(val, 10));
+                p.energy = Number(SubString_1(val, 50));
               });
             }}
           />
@@ -203,7 +219,12 @@ export const BuildingRechargeModal: React.FC<{
             defaultValue={state.population}
             maxValue={maxValue[StoreType.POPULATION].max}
             onChange={val => {
-              if (val < populationProportion) return;
+              if (val < populationProportion) {
+                setState(p => {
+                  p.population = Number(populationProportion);
+                });
+                return;
+              }
               if (val >= POPBalanceProportion) {
                 if (
                   !guideState.recharge_visible &&
@@ -213,10 +234,13 @@ export const BuildingRechargeModal: React.FC<{
                     storeAction.toggleRechargeVisible({ visible: true }),
                   );
                 }
+                setState(p => {
+                  p.population = Number(POPBalanceProportion);
+                });
                 return;
               }
               setState(p => {
-                p.population = Number(SubString_1(val, 10));
+                p.population = Number(SubString_1(val, 50));
               });
             }}
           />
@@ -252,7 +276,7 @@ export const BuildingRechargeModal: React.FC<{
                           ((state.stone - stoneProportion) / 100) *
                             maxValue[StoreType.STONE].max,
                         ),
-                        10,
+                        0,
                       ),
                 population:
                   state.population === 100
@@ -263,7 +287,7 @@ export const BuildingRechargeModal: React.FC<{
                           ((state.population - populationProportion) / 100) *
                             maxValue[StoreType.POPULATION].max,
                         ),
-                        10,
+                        0,
                       ),
                 energy:
                   state.energy === 100
@@ -274,7 +298,7 @@ export const BuildingRechargeModal: React.FC<{
                           ((state.energy - energyProportion) / 100) *
                             maxValue[StoreType.ENERGY].max,
                         ),
-                        10,
+                        0,
                       ),
               };
               onFinish(params);
