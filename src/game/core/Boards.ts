@@ -69,9 +69,9 @@ class Boards extends EventTarget {
 
   enableDrag = true;
 
-  bg1 = new Sprite(Texture.from('/assets/map/1.png'));
+  bg1 = new Sprite(Texture.from('/assets/map/p1.png'));
 
-  bg2 = new Sprite(Texture.from('/assets/map/2.png'));
+  bg2 = new Sprite(Texture.from('/assets/map/p1.png'));
 
   private dragData: InteractionData = new InteractionData();
 
@@ -85,7 +85,6 @@ class Boards extends EventTarget {
     this.container.width = this.width;
     this.container.height = this.height;
     // this.drawChequers(test);
-    // this.drawBg();
     // this.container.scale.set(0.5);
     this.container.interactive = true;
     this.container.on('wheel', e => {
@@ -133,6 +132,7 @@ class Boards extends EventTarget {
       this.row = _row;
     }
     this.chequers = [];
+    this.drawBg();
 
     for (let row = 0; row < this.row; row++) {
       for (let col = 0; col < this.col; col++) {
@@ -171,16 +171,21 @@ class Boards extends EventTarget {
       axisX: 7,
       axisY: 2,
     });
-    this.bg1.position.set(chequer.centerPoint.x, chequer.centerPoint.y);
+    this.bg1.position.set(chequer.centerPoint.x + 5, chequer.centerPoint.y);
     this.bg1.anchor.set(0.5);
+    this.bg1.scale.set(0.559);
+    // this.bg1.rotation = -Math.PI * 0.000001;
     this.container.addChild(this.bg1);
 
-    this.bg2.position.set(
-      chequer1.centerPoint.x + config.TWO_BOARDS_OFFSET,
-      chequer1.centerPoint.y + config.TWO_BOARDS_OFFSET,
-    );
-    this.bg2.anchor.set(0.5);
-    this.container.addChild(this.bg2);
+    if (this.col === 8) {
+      this.bg2.position.set(
+        chequer1.centerPoint.x + config.TWO_BOARDS_OFFSET + 5,
+        chequer1.centerPoint.y + config.TWO_BOARDS_OFFSET,
+      );
+      this.bg2.anchor.set(0.5);
+      this.bg2.scale.set(0.559);
+      this.container.addChild(this.bg2);
+    }
   }
 
   onDragStart(event: InteractionEvent) {
