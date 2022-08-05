@@ -9,7 +9,7 @@ import { CloseButton } from 'uikit';
 const StyledContainer = styled(ToastContainer)<{ scale: number }>`
   &.Toastify__toast-container {
     z-index: 99999;
-    transform: translateZ(1px) scale(${({ scale }) => scale});
+    transform: translateZ(1px) scale(${({ scale }) => scale + 0.2});
     left: auto;
     right: -80px;
     top: 10px;

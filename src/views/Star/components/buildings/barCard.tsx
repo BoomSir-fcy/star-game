@@ -10,7 +10,7 @@ const RecordBox = styled(Flex)`
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
-  margin-bottom: 25px;
+  margin-bottom: 12px;
   cursor: pointer;
   position: relative;
 `;

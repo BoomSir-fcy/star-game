@@ -5,12 +5,16 @@ import { Flex, Box, MarkText, BoxProps } from 'uikit';
 
 import { useTranslation } from 'contexts/Localization';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from 'contexts/ToastsContext';
+import { BuyVipModal } from 'components/Modal/buyVipModal';
 import { BarCard } from './barCard';
 import { BarHead } from './barHead';
 import { PlanetAssets } from './planetAssets';
 import { PlanetBuff } from './planetBuff';
 import { useBuffer } from '../hooks';
 import { NewPlanetAssets } from './NewPlanetAssets';
+import { ThingRepairModal } from '../Modal';
+import { useBuildingRepair } from '../gameModel/hooks';
 
 const BarLayout = styled(Box)<{ top: number | string }>`
   position: fixed;
@@ -62,6 +66,34 @@ export const BarRight: React.FC<BarRightProps> = ({
   React.useEffect(() => {
     getBuffer();
   }, [getBuffer]);
+
+  const { setBatchRepair } = useBuildingRepair();
+  const { toastSuccess } = useToast();
+
+  const { userInfo } = useStore(p => p.userInfo);
+  const [repairVisible, setRepairVisible] = React.useState(false);
+  const [modalTips, setModalTips] = React.useState('');
+  const [visible, setVisible] = React.useState(false);
+
+  // 行星联盟一键修复耐久
+  const repairHandle = React.useCallback(() => {
+    if (userInfo.vipBenefits?.is_vip) {
+      setRepairVisible(true);
+      return;
+    }
+    setModalTips(
+      t(
+        'One-click repair durability, you can repair the durability of all buildings on the planet faster',
+      ),
+    );
+    setVisible(true);
+  }, [
+    t,
+    setVisible,
+    setRepairVisible,
+    userInfo.vipBenefits?.is_vip,
+    setModalTips,
+  ]);
 
   return (
     <BarLayout top={top} {...props}>
@@ -142,6 +174,26 @@ export const BarRight: React.FC<BarRightProps> = ({
             </ImgFlex>
           </Flex>
         </BarCard>
+        <BarCard
+          className='Regenerate_END'
+          title={t('Regenerate END')}
+          onClick={() => {
+            repairHandle();
+          }}
+        >
+          <Flex
+            justifyContent='center'
+            alignItems='center'
+            width='42px'
+            height='42px'
+            mr='10px'
+            position='relative'
+          >
+            <ImgFlex justifyContent='center' alignItems='center'>
+              <img src='/images/commons/icon/icon-vip.png' alt='' />
+            </ImgFlex>
+          </Flex>
+        </BarCard>
 
         {/* <PlanetAssets plant_info={planetInfo} current_buff={currentBufffer} /> */}
         <NewPlanetAssets
@@ -149,6 +201,28 @@ export const BarRight: React.FC<BarRightProps> = ({
           current_buff={currentBufffer}
         />
       </Flex>
+      <BuyVipModal
+        tips={modalTips}
+        visible={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+      />
+
+      {repairVisible && (
+        <ThingRepairModal
+          planet_id={[planet_id]}
+          visible={repairVisible}
+          onChange={async () => {
+            const res = await setBatchRepair([planet_id]);
+            if (res) {
+              setRepairVisible(false);
+              toastSuccess(t('planetQuickFixSuccessful'));
+            }
+          }}
+          onClose={() => setRepairVisible(false)}
+        />
+      )}
     </BarLayout>
   );
 };
