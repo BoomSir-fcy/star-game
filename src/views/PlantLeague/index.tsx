@@ -10,6 +10,7 @@ import eventBus from 'utils/eventBus';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { BuyVipModal } from 'components/Modal/buyVipModal';
 import { useTranslation } from 'contexts/Localization';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useToast } from 'contexts/ToastsContext';
 import { useGuide } from 'hooks/useGuide';
 import { useLocation } from 'react-router-dom';
@@ -319,6 +320,7 @@ const PlantLeague = () => {
           onChange={async () => {
             const res = await setBatchRepair(workingList);
             if (res) {
+              dispatch(fetchPlanetInfoAsync(workingList));
               setRepairVisible(false);
               toastSuccess(t('planetQuickFixSuccessful'));
             }

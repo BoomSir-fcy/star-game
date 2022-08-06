@@ -253,6 +253,8 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                       event.stopPropagation();
                       setActive(row.index);
                       onPreview({ ...row, isPreview: true });
+
+                      onChangeGuide();
                     }}
                     onPointerDown={e => {
                       dragStartHandle(e, row);

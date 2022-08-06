@@ -164,14 +164,17 @@ class Boards extends EventTarget {
 
   drawBg() {
     const chequer = new Chequer({
-      axisX: 7,
-      axisY: -2,
+      axisX: 6,
+      axisY: 4,
     });
     const chequer1 = new Chequer({
-      axisX: 7,
+      axisX: 6,
       axisY: 2,
     });
-    this.bg1.position.set(chequer.centerPoint.x + 5, chequer.centerPoint.y);
+    this.bg1.position.set(
+      chequer.centerPoint.x + this.offsetStartX - config.TWO_BOARDS_OFFSET,
+      chequer.centerPoint.y + this.offsetStartY - 5,
+    );
     this.bg1.anchor.set(0.5);
     this.bg1.scale.set(0.559);
     // this.bg1.rotation = -Math.PI * 0.000001;
@@ -179,10 +182,10 @@ class Boards extends EventTarget {
 
     if (this.col === 8) {
       this.bg2.position.set(
-        chequer1.centerPoint.x + config.TWO_BOARDS_OFFSET + 5,
-        chequer1.centerPoint.y + config.TWO_BOARDS_OFFSET,
+        chequer1.centerPoint.x + this.offsetStartX + config.TWO_BOARDS_OFFSET,
+        chequer1.centerPoint.y + this.offsetStartY,
       );
-      this.bg2.anchor.set(0.5);
+      // this.bg2.anchor.set(0.5);
       this.bg2.scale.set(0.559);
       this.container.addChild(this.bg2);
     }

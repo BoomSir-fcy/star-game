@@ -104,7 +104,7 @@ class Game extends EventTarget {
 
   app: Application;
 
-  boards;
+  boards: Boards;
 
   boardsCreated = false;
 

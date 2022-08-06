@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Box, BoxProps } from 'uikit';
 import useGame from 'game/hooks/useGame';
@@ -49,6 +49,12 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
   const [running, setRunning] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [resLoaded, setResLoaded] = useState(false);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     game.app.stage.scale.set(0.8);
+  //   }, 2000);
+  // }, [game]);
 
   const createSoldiers = React.useCallback(
     (
