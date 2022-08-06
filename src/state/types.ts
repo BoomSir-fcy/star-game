@@ -185,6 +185,7 @@ export interface BuildlingState {
   queue: {
     visible: boolean;
   };
+  upgradeUnsuccessful: boolean;
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<

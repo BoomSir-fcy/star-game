@@ -7,6 +7,7 @@ import {
   resetModal,
   resetSelfBuildings,
   queueVisbleSide,
+  setUpgradeUnsuccessful,
 } from './action';
 
 export const initialState: BuildlingState = {
@@ -34,6 +35,7 @@ export const initialState: BuildlingState = {
   queue: {
     visible: false,
   },
+  upgradeUnsuccessful: false,
 };
 
 export const buildling = createSlice({
@@ -102,6 +104,9 @@ export const buildling = createSlice({
       })
       .addCase(queueVisbleSide, (state, action) => {
         state.queue.visible = action.payload;
+      })
+      .addCase(setUpgradeUnsuccessful, (state, action) => {
+        state.upgradeUnsuccessful = action.payload;
       });
   },
 });

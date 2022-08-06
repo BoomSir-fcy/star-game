@@ -7,6 +7,8 @@ const dispatchHttpErrorEvent = (data: Api.Error) => {
     return;
   }
   if (data?.code === ResponseCode.PLANET_STRENGTHEN_NOT_RECORD) return;
+  if (data?.code === ResponseCode.GRID_UTILIZATION) return;
+  if (data?.code === ResponseCode.UPGRADE_LEVEL) return;
   if (data?.code === ResponseCode.PLANET_UPGRADE_FAIL) return;
   if (InsufficientBalance.indexOf(Number(data?.code)) !== -1) {
     eventBus.dispatchEvent(

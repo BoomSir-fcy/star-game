@@ -31,6 +31,7 @@ import { PlanetQueue } from './components/buildings/planetQueue';
 import { useWorkqueue } from './components/hooks';
 import { ThingDestoryModal, ThingUpgradesModal } from './components/Modal';
 import { useActiveBuilder } from './detailHooks';
+import { NoUpgradeModal } from './components/Modal/NoUpgradeModal';
 
 const Container = styled(Box)`
   position: relative;
@@ -97,6 +98,7 @@ const Details = () => {
   const selfBuilding = useStore(p => p.buildling?.selfBuildings?.buildings);
   const upgrad = useStore(p => p.buildling.upgradesBuilding);
   const destory = useStore(p => p.buildling.destroyBuilding);
+  const { upgradeUnsuccessful } = useStore(p => p.buildling);
   const { activeSolider: activeBuilder, ActiveCheqer } =
     useActiveBuilder(building);
   const { t } = useTranslation();
@@ -121,6 +123,9 @@ const Details = () => {
     building: {} as Api.Building.Building,
     workQueue: [],
   });
+
+  const [visibleNoUpgrade, setVisibleNoUpgrade] =
+    React.useState(upgradeUnsuccessful);
 
   const [areaX, areaY] = React.useMemo(() => {
     return [planet?.areaX, planet?.areaY];
@@ -412,7 +417,7 @@ const Details = () => {
   React.useEffect(() => {
     if (activeBuilder?.option?.id) {
       // 解决升级后id变化 建筑id不对的情况
-      const activeInfo = selfBuilding.filter(item => {
+      const activeInfo = selfBuilding?.filter(item => {
         return (
           item.building._id === activeBuilder?.option?.id ||
           item.building._id === activeBuilder?.option?.building._id
@@ -425,7 +430,7 @@ const Details = () => {
         isbuilding: activeBuilder?.builded,
         isqueue: activeBuilder?.isBuilding,
       };
-      if (activeInfo.length) {
+      if (activeInfo?.length) {
         buildingObj._id = activeInfo[0].building._id;
       }
       setStateBuilding(p => {
@@ -737,6 +742,15 @@ const Details = () => {
           );
         }}
       />
+      {visibleNoUpgrade && (
+        <NoUpgradeModal
+          planetId={id}
+          visible={visibleNoUpgrade}
+          onClose={() => {
+            setVisibleNoUpgrade(false);
+          }}
+        />
+      )}
     </>
   );
 };

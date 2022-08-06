@@ -41,6 +41,7 @@ import { useUpgrade } from './components/upgrade/hooks';
 
 import 'intro.js/introjs.css';
 import { UpgradeCost } from './components/upgrade/UpgradeCost';
+import { UpUnsuccessfulModal } from './components/Modal/UpUnsuccessfulModal';
 
 const MysteryBoxFlexStyled = styled(MysteryBoxStyled)`
   width: 374px;
@@ -287,6 +288,9 @@ const Upgrade = () => {
                 getStarUpgradeInfo();
                 dispatch(fetchPlanetInfoAsync([planetId]));
               }
+              if (res.code === 200018 || res.code === 200009) {
+                setVisible(true);
+              }
             } catch (error: any) {
               console.log(error);
             } finally {
@@ -506,6 +510,13 @@ const Upgrade = () => {
         </Flex>
       </Flex>
 
+      <UpUnsuccessfulModal
+        planetId={planetId}
+        visible={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+      />
       {/* <ModalWrapper
         title={t('Upgrade Planet')}
         visible={visible}
