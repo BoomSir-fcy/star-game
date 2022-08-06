@@ -416,6 +416,7 @@ export interface GuideState {
   toRechargeVisible: boolean;
   errorCode: string;
   RechargeOperationType: number;
+  buyPrice: string;
 }
 
 export enum BuildingDetailType {

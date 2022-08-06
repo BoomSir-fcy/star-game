@@ -87,6 +87,7 @@ export const ConfirmBuyModule: React.FC<{
                   dispatch(
                     storeAction.setRechargeOperationType({ OperationType: 1 }),
                   );
+                  dispatch(storeAction.setBuyPrice({ price: vipPrice }));
                   dispatch(storeAction.setToRechargeVisible({ visible: true }));
                 }}
               />

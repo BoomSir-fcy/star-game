@@ -474,6 +474,11 @@ const Grow: React.FC = () => {
                         }),
                       );
                       dispatch(
+                        storeAction.setBuyPrice({
+                          price: estimateCost?.consume_bnb?.toString(),
+                        }),
+                      );
+                      dispatch(
                         storeAction.setToRechargeVisible({ visible: true }),
                       );
                     }}

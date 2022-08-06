@@ -58,6 +58,8 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const Balance = useStore(p => p.userInfo.userBalance);
+  const { buyPrice } = useStore(p => p.guide);
+
   const [BalanceList, setBalanceList] = useState<UserBalanceView[]>(Balance);
   const [TokenInfo, setTokenInfo] = useState<UserBalanceView>(BalanceList[0]);
 
@@ -68,7 +70,7 @@ const DepositWithdrawalModule: React.FC<DepositWithdrawalProps> = ({
   const { Recharge, onApprove, drawCallback } = useRWA(TokenInfo?.coinId);
 
   const [approvedNum, setapprovedNum] = useState(0);
-  const [val, setVal] = useState('');
+  const [val, setVal] = useState(buyPrice);
   const [pending, setpending] = useState(false);
   const [LoadApprovedNum, setLoadApprovedNum] = useState(false);
 

@@ -22,8 +22,13 @@ export const setRechargeOperationType = createAction<{
   OperationType: number;
 }>('guide/setRechargeOperationType');
 
+export const setBuyPrice = createAction<{
+  price: string;
+}>('guide/setBuyPrice');
+
 export default {
   toggleVisible,
+  setBuyPrice,
   toggleRechargeVisible,
   setErrCode,
   setToRechargeVisible,

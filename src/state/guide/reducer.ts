@@ -5,6 +5,7 @@ import {
   setErrCode,
   setToRechargeVisible,
   setRechargeOperationType,
+  setBuyPrice,
 } from './actions';
 import { GuideState } from '../types';
 
@@ -12,6 +13,7 @@ export const initialState: GuideState = {
   visible: false,
   lastStep: 0,
   pathname: '',
+  buyPrice: '',
   recharge_visible: false,
   toRechargeVisible: false,
   RechargeOperationType: 1,
@@ -36,7 +38,13 @@ export const guide = createSlice({
         state.errorCode = payload.code;
       })
       .addCase(setToRechargeVisible, (state, { payload }) => {
+        if (!payload.visible) {
+          state.buyPrice = '';
+        }
         state.toRechargeVisible = payload.visible;
+      })
+      .addCase(setBuyPrice, (state, { payload }) => {
+        state.buyPrice = payload.price;
       })
       .addCase(setRechargeOperationType, (state, { payload }) => {
         state.RechargeOperationType = payload.OperationType;
