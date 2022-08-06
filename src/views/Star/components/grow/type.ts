@@ -45,6 +45,7 @@ export interface StrengthenConsumeType {
     miss: number;
     critical: number;
   };
+  max_level: number;
   now_level: number;
   next_level: number;
   now_units: any;

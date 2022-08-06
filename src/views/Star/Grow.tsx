@@ -82,6 +82,7 @@ const Grow: React.FC = () => {
       miss: null,
       critical: null,
     },
+    max_level: 0,
     now_level: null,
     next_level: null,
     now_units: [],

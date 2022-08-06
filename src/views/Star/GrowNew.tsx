@@ -115,6 +115,7 @@ const Grow: React.FC = () => {
       miss: null,
       critical: null,
     },
+    max_level: 0,
     now_level: 0,
     next_level: 0,
     now_units: [],
@@ -374,6 +375,7 @@ const Grow: React.FC = () => {
         >
           <Box className='planet_grow'>
             <GrowLevel
+              max_level={estimateCost?.max_level}
               nowLevel={estimateCost?.now_level}
               nextLevel={estimateCost?.next_level}
               now_power={estimateCost?.now_power}
