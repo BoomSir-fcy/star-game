@@ -7,6 +7,8 @@ import { useStore } from 'state';
 import { EasyformatTime } from 'utils/timeFormat';
 import { useToast } from 'contexts/ToastsContext';
 import { ThingRepairModal } from 'views/Star/components/Modal';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { useDispatch } from 'react-redux';
 import { useBuildingRepair } from 'views/Star/components/gameModel/hooks';
 import { BuyVipModal } from 'components/Modal/buyVipModal';
 
@@ -84,6 +86,8 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
   const { state, ExtractResources } = useExtract();
   const { setBatchRepair } = useBuildingRepair();
   const { toastSuccess } = useToast();
+
+  const dispatch = useDispatch();
 
   const { unread_plunder_count, message_count, later_extract_time } = useStore(
     p => p.alliance.allianceView,
@@ -305,6 +309,7 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
           onChange={async () => {
             const res = await setBatchRepair(workingList);
             if (res) {
+              dispatch(fetchPlanetInfoAsync(workingList));
               setRepairVisible(false);
               toastSuccess(t('planetQuickFixSuccessful'));
             }

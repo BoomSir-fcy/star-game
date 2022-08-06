@@ -248,7 +248,8 @@ class Chequer {
   }
 
   displayState(visible: boolean) {
-    this.stateSprite.visible = visible;
+    // this.stateSprite.visible = visible;
+    this.stateSprite.visible = false;
   }
 
   // 检测一个点是否在当前格子里

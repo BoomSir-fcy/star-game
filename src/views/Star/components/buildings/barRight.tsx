@@ -7,6 +7,9 @@ import { useTranslation } from 'contexts/Localization';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from 'contexts/ToastsContext';
 import { BuyVipModal } from 'components/Modal/buyVipModal';
+import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
+import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
+import { useDispatch } from 'react-redux';
 import { BarCard } from './barCard';
 import { BarHead } from './barHead';
 import { PlanetAssets } from './planetAssets';
@@ -44,6 +47,8 @@ export const BarRight: React.FC<BarRightProps> = ({
   const { getPlanetBuff } = useBuffer();
   const [currentBufffer, setCurrentBuffer] = React.useState({});
   const planetInfo = useStore(p => p.planet.planetInfo[planet_id ?? 0]);
+
+  const dispatch = useDispatch();
 
   const getBuffer = React.useCallback(async () => {
     const res = await getPlanetBuff({ planet_id });
@@ -216,6 +221,7 @@ export const BarRight: React.FC<BarRightProps> = ({
           onChange={async () => {
             const res = await setBatchRepair([planet_id]);
             if (res) {
+              dispatch(fetchPlanetInfoAsync([planet_id]));
               setRepairVisible(false);
               toastSuccess(t('planetQuickFixSuccessful'));
             }
