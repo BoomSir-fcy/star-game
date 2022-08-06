@@ -46,9 +46,15 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
           <Text small color='textSubtle'>
             {t('Ore')}
           </Text>
-          <Text bold color={planetInfo?.stone < stone ? 'warning' : 'white'}>
-            -{stone}
-          </Text>
+          <Flex>
+            <Text
+              small
+              color={planetInfo?.stone < stone ? 'warning' : 'progressGreenBar'}
+            >
+              {stone}
+            </Text>
+            <Text small>/{planetInfo?.stone}</Text>
+          </Flex>
         </ItemInfoFlex>
       </ItemFlex>
       <ItemFlex>
@@ -61,12 +67,17 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
           <Text small color='textSubtle'>
             {t('Population')}
           </Text>
-          <Text
-            bold
-            color={planetInfo?.population < spices ? 'warning' : 'white'}
-          >
-            -{spices}
-          </Text>
+          <Flex>
+            <Text
+              small
+              color={
+                planetInfo?.population < spices ? 'warning' : 'progressGreenBar'
+              }
+            >
+              {spices}
+            </Text>
+            <Text small>/{planetInfo?.population}</Text>
+          </Flex>
         </ItemInfoFlex>
       </ItemFlex>
       <ItemFlex>
@@ -79,9 +90,17 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
           <Text small color='textSubtle'>
             {t('Energy')}
           </Text>
-          <Text bold color={planetInfo?.energy < energy ? 'warning' : 'white'}>
-            -{energy}
-          </Text>
+          <Flex>
+            <Text
+              small
+              color={
+                planetInfo?.energy < energy ? 'warning' : 'progressGreenBar'
+              }
+            >
+              {energy}
+            </Text>
+            <Text small>/{planetInfo?.energy}</Text>
+          </Flex>
         </ItemInfoFlex>
       </ItemFlex>
     </Flex>

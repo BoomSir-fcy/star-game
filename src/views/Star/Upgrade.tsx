@@ -467,28 +467,42 @@ const Upgrade = () => {
           </Box>
 
           <GraphicsCard mt='47px' width='853px' height='178px' stripe isRadius>
-            <Flex justifyContent='space-between' alignItems='flex-end'>
-              <Box>
-                <Flex>
-                  <Image
-                    width={31}
-                    height={35}
-                    src='/images/commons/star/LV.png'
-                  />
-                  <Box ml='10px'>
-                    <Text bold mark fontStyle='normal'>
-                      {t('Effect after upgrade')}
-                    </Text>
-                    <Flex justifyContent='space-between' alignItems='center'>
-                      <Text small color='textSubtle'>
-                        {t('Building grade up limit')}
+            <Flex
+              width='100%'
+              justifyContent='space-between'
+              alignItems='flex-end'
+            >
+              <Box width='100%'>
+                <Flex mb='20px' width='100%' alignItems='center'>
+                  <Flex flex={1}>
+                    <Image
+                      width={31}
+                      height={35}
+                      src='/images/commons/star/LV.png'
+                    />
+                    <Box ml='10px'>
+                      <Text bold mark fontStyle='normal'>
+                        {t('Effect after upgrade')}
                       </Text>
-                      <Text small>
-                        +{upInfo?.build_level}(Lv.
-                        {upInfo?.estimate_max_building_level})
+                      <Flex justifyContent='space-between' alignItems='center'>
+                        <Text small color='textSubtle'>
+                          {t('Building grade up limit')}
+                        </Text>
+                        <Text small>
+                          +{upInfo?.build_level}(Lv.
+                          {upInfo?.estimate_max_building_level})
+                        </Text>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                  <Flex flexDirection='column' alignItems='center'>
+                    {maxExp && curExp < maxExp ? (
+                      <Text mb='4px' fontSize='16px' color='failure'>
+                        *{t('Lack of upgrade experience')}
                       </Text>
-                    </Flex>
-                  </Box>
+                    ) : null}
+                    {rendeButton}
+                  </Flex>
                 </Flex>
                 <UpgradeCost
                   stone={upgradeInfo.consume_stone}
@@ -497,14 +511,6 @@ const Upgrade = () => {
                   planetInfo={planetInfo[planetId]}
                 />
               </Box>
-              <Flex mt='30px' flexDirection='column' alignItems='center'>
-                {maxExp && curExp < maxExp ? (
-                  <Text mb='4px' fontSize='16px' color='failure'>
-                    *{t('Lack of upgrade experience')}
-                  </Text>
-                ) : null}
-                {rendeButton}
-              </Flex>
             </Flex>
           </GraphicsCard>
         </Flex>
