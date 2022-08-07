@@ -255,8 +255,6 @@ class Builder extends EventTarget {
     this.graphics.y = 0;
     this.graphics.y = -Chequer.HEIGHT * Chequer.Y_RATIO * (this.areaX - 0.5);
 
-    console.log(this.graphics.position);
-
     this.graphics.interactive = true;
 
     // this.centerPoint.set(x, y);
