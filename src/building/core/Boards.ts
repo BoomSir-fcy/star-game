@@ -2,7 +2,8 @@ import { Point } from '@pixi/math';
 import { Graphics } from '@pixi/graphics';
 import { Container } from '@pixi/display';
 import { InteractionEvent, InteractionData } from '@pixi/interaction';
-
+import { Sprite } from '@pixi/sprite';
+import { Texture } from '@pixi/core';
 import config from '../config';
 import Chequer, { mapType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
@@ -13,6 +14,27 @@ interface BoardsProps {
   height?: number;
   test?: boolean;
   enableDrag?: boolean;
+}
+
+// 格子偏移量 针对背景偏移
+const CHEQUER_OFFSET_BY_BG = {
+  x44: 76, // offsetStartX: 76, // 4
+  y44: -344, // offsetStartY: -344, // 4
+
+  x34: 132, // offsetStartX: 132, // 3
+  y34: -290, // offsetStartY: -290, // 3
+
+  x33: 58, // offsetStartX: 58, // 3
+  y33: -260, // offsetStartY: -260, // 3
+
+  x23: 112, // offsetStartX: 112, // 2
+  y23: -201, // offsetStartY: -201, // 2
+
+  x24: 187, // offsetStartX: 187, // 2
+  y24: -230, // offsetStartY: -230, // 2
+
+  x25: 264, // offsetStartX: 264, // 2
+  y25: -258, // offsetStartY: -258, // 2
 }
 /**
  * 棋盘
@@ -41,6 +63,8 @@ class Boards extends EventTarget {
 
   container = new Container();
 
+  containerChe = new Container();
+
   scale = 1;
 
   axis: AxisPoint[][] = []; // 坐标轴
@@ -57,6 +81,8 @@ class Boards extends EventTarget {
 
   private dragging = false;
 
+  bg1 = new Sprite();
+
   init() {
     this.container.position.set(this.width / 2, this.height / 2);
 
@@ -64,6 +90,31 @@ class Boards extends EventTarget {
     this.container.height = this.height;
 
     this.container.interactive = true;
+
+    // this.containerChe.width = this.width;
+    // this.containerChe.height = this.height;
+
+    this.containerChe.interactive = true;
+
+  }
+
+  drawBg(row, col) {
+    this.bg1.texture = Texture.from(`/assets/map/${col}-${row}.png`)
+    // this.bg1.position.set(20, 34);
+    this.bg1.position.set(0, 0);
+    this.bg1.anchor.set(0.5);
+    this.bg1.scale.set(1.02);
+    // this.bg1.rotation = -Math.PI * 0.000001;
+    this.container.zIndex = 0;
+    this.containerChe.zIndex = 10;
+    // this.containerChe.width = 100;
+    // this.containerChe.height = 100;
+    // this.containerChe.scale.set(1.37)
+    // this.containerChe.position.set(50, 50)
+    this.bg1.zIndex = 2;
+    this.container.addChild(this.bg1);
+    this.container.addChild(this.containerChe);
+
   }
 
   // 绘制棋格
@@ -75,11 +126,14 @@ class Boards extends EventTarget {
       [axis: string]: Api.Game.TerrainInfo;
     } = {};
 
-    this.axisX = areaX;
-    this.axisY = areaY;
+    // this.axisX = areaX;
+    // this.axisY = areaY;
+    this.axisX = 4;
+    this.axisY = 4;
+    this.drawBg(this.axisX, this.axisY);
 
-    for (let row = 0; row < areaX; row++) {
-      for (let col = 0; col < areaY; col++) {
+    for (let row = 0; row < this.axisX; row++) {
+      for (let col = 0; col < this.axisY; col++) {
         const chequer = new Chequer({
           type: terrains[`${row},${col}`]
             ? terrains[`${row},${col}`].terrain_type
@@ -87,18 +141,42 @@ class Boards extends EventTarget {
           axisX: row,
           axisY: col,
           state: stateType.PREVIEW,
-          // offsetStartX: 100,
+          
+          offsetStartX: CHEQUER_OFFSET_BY_BG[`x${this.axisX}${this.axisY}`], // 4
+          offsetStartY: CHEQUER_OFFSET_BY_BG[`y${this.axisX}${this.axisY}`], // 4
+
+          // offsetStartX: 76, // 4
+          // offsetStartY: -344, // 4
+
+          // offsetStartX: 132, // 3
+          // offsetStartY: -290, // 4
+
+          // offsetStartX: 58, // 3
+          // offsetStartY: -260, // 3
+
+          // offsetStartX: 112, // 2
+          // offsetStartY: -201, // 3
+
+          // offsetStartX: 187, // 2
+          // offsetStartY: -230, // 4
+
+          // offsetStartX: 264, // 2
+          // offsetStartY: -258, // 5
+          // 160 0.5
+          // 76 58
+          // offsetStartX: -(this.axisX - this.axisY) * Chequer.WIDTH / 2 + Chequer.WIDTH * Chequer.X_RATIO * (this.axisX + this.axisY) / 16,
+          // offsetStartY: -(this.axisX + this.axisY) * Chequer.HEIGHT / 4 + Chequer.HEIGHT * Chequer.Y_RATIO / 4,
         });
         chequer.displayState(false);
         this.chequers.push(chequer);
       }
     }
     this.chequers.forEach((s, index) => {
-      this.container.addChild(s.bunny);
+      this.containerChe.addChild(s.bunny);
     });
     this.chequers.forEach((s, index) => {
       const createGraphic = s.createGraphics();
-      this.container.addChild(createGraphic);
+      this.containerChe.addChild(createGraphic);
       if (!this.axis[s.axisX]) {
         this.axis[s.axisX] = [];
       }

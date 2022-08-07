@@ -82,6 +82,7 @@ class Building extends EventTarget {
       backgroundAlpha: test ? 0.5 : 0,
     });
     this.enableSoliderDrag = enableSoliderDrag;
+    this.app.stage.sortableChildren = true;
     // 添加棋盘
     this.app.stage.addChild(this.boards.container);
     this.test = test;

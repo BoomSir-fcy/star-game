@@ -113,6 +113,8 @@ class Builder extends EventTarget {
 
   graphics = new Graphics();
 
+  graphicsBox = new Graphics();
+
   BuildingText = new Text('Building...', {
     fill: 0xffffff,
     fontSize: 14,
@@ -159,6 +161,7 @@ class Builder extends EventTarget {
     this.sprite.width = 150 * this.areaX;
     this.sprite.height = 150 * this.areaY;
     this.sprite.anchor.set(0.5);
+    this.sprite.position.set(-20*this.areaX, 30*this.areaY)
 
     this.container.addChild(this.sprite);
 
@@ -166,6 +169,8 @@ class Builder extends EventTarget {
 
     this.container.buttonMode = true;
     this.container.interactive = true;
+    this.container.zIndex = 99;
+    // this.container.scale.set(1.37)
 
     this.drawInfoBox();
     // if (!this.isBuilding && !this.builded) {
@@ -241,34 +246,33 @@ class Builder extends EventTarget {
       -Chequer.WIDTH * Chequer.X_RATIO * this.areaX,
       Chequer.HEIGHT * Chequer.Y_RATIO * this.areaX + offsetY,
     ];
-    // const polygon = new Polygon(path);
-    // polygon
-    // this.graphics.lineStyle(1, 0xff0000, 0.7);
-    // this.graphics.beginFill(0xff0000, 0.2);
-    // this.graphics.drawPolygon(polygon);
-    // this.graphics.endFill();
-    // const { x, y } = this?.matrix4 || this.axisPoint || {};
-    // // const { x } = this.bunny;
-    // // const y = y - (Chequer.HEIGHT * Chequer.Y_RATIO) / 2;
-    // this.graphics.x = 0;
-    // this.graphics.y = 0;
-    // this.graphics.y = -Chequer.HEIGHT * Chequer.Y_RATIO * (this.areaX - 0.5);
+    const polygon = new Polygon(Chequer.getPath(this.areaX));
+    // this.graphics.lineStyle(1, 0xfff000, 0.7);
+    // this.graphics.beginFill(0xff0f00, 0.2);
+    this.graphics.drawPolygon(polygon);
+    this.graphics.endFill();
+    this.graphics.x = 0;
+    this.graphics.y = 0;
+    this.graphics.y = -Chequer.HEIGHT * Chequer.Y_RATIO * (this.areaX - 0.5);
 
-    // console.log(this.graphics.position);
+    console.log(this.graphics.position);
 
-    // this.graphics.interactive = true;
+    this.graphics.interactive = true;
 
     // this.centerPoint.set(x, y);
 
-    this.container.hitArea = new Polygon(path);
+    this.container.hitArea = this.graphics.hitArea;
+    this.container.addChild(this.graphics);
+    
     return this.graphics;
   }
 
   drawInfoBox() {
-    this.graphics.beginFill(0x434343, 0.5);
-    this.graphics.drawRoundedRect(-64, 20, 130, 70, 10);
-    this.graphics.endFill();
-    this.container.addChild(this.graphics);
+    this.graphicsBox.beginFill(0x434343, 0.5);
+    this.graphicsBox.drawRoundedRect(-64, 20, 130, 70, 10);
+    this.graphicsBox.endFill();
+    this.graphicsBox.position.set(-20*this.areaX, 30*this.areaY)
+    this.container.addChild(this.graphicsBox);
     this.addBuilderText();
   }
 
@@ -285,9 +289,9 @@ class Builder extends EventTarget {
       },
     );
     this.BuildingInfoText.x = -60;
-    this.BuildingInfoText.y = 28;
+    this.BuildingInfoText.y = 50;
     // this.BuildingInfoText.zIndex = 999;
-    this.container.addChild(this.BuildingInfoText);
+    this.graphicsBox.addChild(this.BuildingInfoText);
   }
 
   setPointAsXY(x: number, y: number) {
