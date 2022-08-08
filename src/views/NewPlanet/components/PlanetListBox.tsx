@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useCallback,
+  useState,
+  useMemo,
+} from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Spinner, Text, Image, MarkText, Button } from 'uikit';
 import { useDispatch } from 'react-redux';
@@ -59,6 +65,15 @@ const PlanetListBox: React.FC<{
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const WorkCount = useCallback((time: number, count: number) => {
+    let num = 0;
+    const toDay = new Date(new Date().toLocaleDateString()).getTime() / 1000;
+    if (time >= toDay) {
+      num = count;
+    }
+    return num;
+  }, []);
 
   return (
     <ScrollBox onScroll={loadMore}>
@@ -146,6 +161,11 @@ const PlanetListBox: React.FC<{
                     >
                       {t('Production')}
                     </MarkText>
+                    <Text ml='20px' small>
+                      {t('24h Exploration Times:')}
+                      &nbsp;
+                      {WorkCount(item.work_time, item.work_count)}
+                    </Text>
                   </Flex>
                   <PlanetDesc info={item} />
                   <Flex>

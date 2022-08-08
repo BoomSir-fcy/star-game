@@ -70,6 +70,8 @@ declare namespace Api {
       ak_buff: number; // buff建筑加成
       strengthen_buff: number; // 培育强化加成
       strengthen: Buffer;
+      work_time: number; // 上次工作时间
+      work_count: number; // 工作次数
     }
 
     interface UpgradePlanetInfo {

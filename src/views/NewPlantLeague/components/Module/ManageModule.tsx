@@ -45,7 +45,14 @@ const ManageModule: React.FC<{
     },
     [navigate],
   );
-
+  const WorkCount = useCallback((time: number, count: number) => {
+    let num = 0;
+    const toDay = new Date(new Date().toLocaleDateString()).getTime() / 1000;
+    if (time >= toDay) {
+      num = count;
+    }
+    return num;
+  }, []);
   return (
     <Box
       display={PlantManageModule ? 'block' : 'none'}
@@ -93,6 +100,11 @@ const ManageModule: React.FC<{
               <MarkText padding={0} bold fontStyle='normal' color='textSubtle'>
                 {t('Production')}
               </MarkText>
+              <Text ml='20px' small>
+                {t('24h Exploration Times:')}
+                &nbsp;
+                {WorkCount(planetInfo?.work_time, planetInfo?.work_count)}
+              </Text>
             </Flex>
             <PlanetDesc info={planetInfo} />
           </Flex>
