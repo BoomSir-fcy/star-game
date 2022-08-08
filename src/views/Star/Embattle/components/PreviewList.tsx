@@ -13,6 +13,7 @@ import {
   BorderCard,
   GraphicsCardProps,
   Image,
+  MarkText,
 } from 'uikit';
 import orderBy from 'lodash/orderBy';
 import { useToast } from 'contexts/ToastsContext';
@@ -170,7 +171,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, []);
 
   return (
-    <GraphicsCard width='627px' height='222px' padding='0 16px' {...props}>
+    <GraphicsCard width='627px' height='230px' padding='0 16px' {...props}>
       <Flex
         className='star-embattle-step1'
         style={{ overflow: 'auto' }}
@@ -272,9 +273,15 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   />
                 </Box>
               </BorderCard>
-              <Text mt='8px' textAlign='center' fontSize='20' bold>
+              <Text mt='8px' textAlign='center' bold>
                 {getSoldierName(item)}
               </Text>
+              <Flex>
+                <Text bold>{t('Power')}</Text>{' '}
+                <MarkText fontStyle='normal' bold>
+                  {item?.power}
+                </MarkText>
+              </Flex>
             </Box>
           );
         })}

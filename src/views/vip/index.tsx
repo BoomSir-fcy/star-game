@@ -328,7 +328,7 @@ const VipPage = () => {
                     </Items>
                     <Items>
                       <TView small>{row?.planetExploreFrequency}</TView>
-                      <Text
+                      {/* <Text
                         fontSize='16px'
                         color='textSubtle'
                         textAlign='center'
@@ -339,7 +339,7 @@ const VipPage = () => {
                           { num: row?.planetExploreFrequency - 1 },
                         )}
                         )
-                      </Text>
+                      </Text> */}
                     </Items>
                   </GroupItem>
                 );
