@@ -58,13 +58,21 @@ class Chequer extends EventTarget {
     this.init(option);
   }
 
-  static Y_RATIO = 0.5;
+  static Y_RATIO = 0.4;
 
-  static X_RATIO = 0.5;
+  static X_RATIO = 0.7;
 
-  static WIDTH = 100 * 2;
+  static WIDTH = 80 * 2;
 
-  static HEIGHT = 79 * 2;
+  static HEIGHT = 86 * 2;
+
+  static OFFSET_X = -28;
+
+  static OFFSET_Y = 46;
+
+  static OFFSET_X1 = -0;
+
+  static OFFSET_Y1 = 46;
 
   offsetStartX;
 
@@ -135,7 +143,7 @@ class Chequer extends EventTarget {
     this.stateSprite.y = (Chequer.HEIGHT * Chequer.Y_RATIO) / 2;
     this.stateSprite.width = Chequer.WIDTH + 3;
     this.stateSprite.height = Chequer.HEIGHT + 3;
-    this.bunny.addChild(this.stateSprite);
+    // this.bunny.addChild(this.stateSprite);
     this.stateSprite.visible = false;
 
     this.centerPoint.set(x, y);
@@ -155,22 +163,25 @@ class Chequer extends EventTarget {
     this.bunny.removeChild(this.text);
   }
 
+  static getPath(x) {
+    return [
+      0,
+      0,
+      Chequer.WIDTH * Chequer.X_RATIO * x,
+      Chequer.HEIGHT * Chequer.Y_RATIO * x + Chequer.OFFSET_Y,
+      0 + Chequer.OFFSET_X - 10,
+      Chequer.HEIGHT * Chequer.Y_RATIO * 2 *x + Chequer.OFFSET_Y - 10,
+      -Chequer.WIDTH * Chequer.X_RATIO * x+ Chequer.OFFSET_X + -10,
+      Chequer.HEIGHT * Chequer.Y_RATIO * x - 10,
+    ]
+  }
+
   // 底色是不规则渲染 所以事件范围也不规则
   // 使用 Graphics 绑定事件 进行hack处理
   createGraphics() {
-    const path = [
-      0,
-      0,
-      Chequer.WIDTH * Chequer.X_RATIO,
-      Chequer.HEIGHT * Chequer.Y_RATIO,
-      0,
-      Chequer.HEIGHT * Chequer.Y_RATIO * 2,
-      -Chequer.WIDTH * Chequer.X_RATIO,
-      Chequer.HEIGHT * Chequer.Y_RATIO,
-    ];
-    this.graphics.lineStyle(1, 0x4ffffb, 0.7);
-    this.graphics.beginFill(0x4ffffb, 0.2);
-    this.graphics.drawPolygon(path);
+    this.graphics.lineStyle(1, 0x778fb8, 1);
+    // this.graphics.beginFill(0x4ffffb, 0.2);
+    this.graphics.drawPolygon(Chequer.getPath(1));
     this.graphics.endFill();
     const { x } = this.bunny;
     const y = this.bunny.y - (Chequer.HEIGHT * Chequer.Y_RATIO) / 2;
@@ -187,8 +198,14 @@ class Chequer extends EventTarget {
 
   getXY(axisX: number, axisY: number) {
     return {
-      x: this.offsetStartX - (axisX - axisY) * Chequer.WIDTH * Chequer.X_RATIO,
-      y: this.offsetStartY + (axisX + axisY) * Chequer.HEIGHT * Chequer.Y_RATIO,
+      x:
+        this.offsetStartX -
+        (axisX - axisY) * Chequer.WIDTH * Chequer.X_RATIO +
+        Chequer.OFFSET_X * axisX - (axisX * 10),
+      y:
+        this.offsetStartY +
+        (axisX + axisY) * Chequer.HEIGHT * Chequer.Y_RATIO +
+        axisY * Chequer.OFFSET_Y - (axisX * 10),
     };
   }
 
