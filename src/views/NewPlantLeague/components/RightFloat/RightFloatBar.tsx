@@ -247,7 +247,7 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
           </Flex>
         </RecordBox>
       </Link>
-      <Link to='/BattleReport'>
+      {/* <Link to='/BattleReport'>
         <RecordBox
           className='Alliance_Messages'
           onMouseEnter={() => {
@@ -288,7 +288,7 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
             <TipTriangle />
           </TipBox>
         </RecordBox>
-      </Link>
+      </Link> */}
       <HowToPlay ShowPlay={ShowPlay} setShowPlay={e => setShowPlay(e)} />
       <BuyVipModal
         tips={modalTips}

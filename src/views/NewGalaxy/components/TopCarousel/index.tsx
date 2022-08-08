@@ -12,8 +12,8 @@ import { AllLogsInfo } from 'state/types';
 import { SubString_1 } from 'utils/DecimalPlaces';
 
 const Content = styled(Box)`
-  width: 900px;
-  padding-left: 200px;
+  /* width: 1270px;
+  padding-left: 570px; */
   margin: 0 auto;
   padding-top: 10px;
 `;
@@ -38,7 +38,10 @@ const SwiperBox = styled(Box)`
   }
 `;
 
-const TopCarousel: React.FC = () => {
+const TopCarousel: React.FC<{
+  width?: string;
+  pl?: string;
+}> = ({ width = '1270px', pl = '570px' }) => {
   useFetchAllLogsView();
   const { t } = useTranslation();
   const { AllLogs, galaxy_total_box, planet_total_box } = useStore(
@@ -47,7 +50,7 @@ const TopCarousel: React.FC = () => {
   const [index, setIndex] = useState(1);
 
   return (
-    <Content>
+    <Content width={width} pl={pl}>
       <Flex mb='20px' justifyContent='space-around' alignItems='flex-end'>
         <Box>
           <Text>{t('Star Lord get')} BOX</Text>

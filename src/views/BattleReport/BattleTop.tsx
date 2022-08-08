@@ -15,11 +15,11 @@ import { useDispatch } from 'react-redux';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { DateRangePicker } from 'react-dates';
-import dayjs from 'dayjs';
 import moment from 'moment';
+import TopCarousel from 'views/NewGalaxy/components/TopCarousel';
 
 const TitleBox = styled(Flex)`
-  width: 512px;
+  width: 380px;
   height: 52px;
   background: url('/images/battleReport/top.png') no-repeat;
   background-size: 100% 100%;
@@ -138,15 +138,9 @@ export const BattleTop: React.FC<{
   };
 
   return (
-    <Flex padding='0 20px' mb='16px' alignItems='center' flex={1}>
+    <Flex pl='20px' mb='16px' alignItems='center' flex={1}>
       <Box mr='40px'>
         <BackButton />
-        {/* <RefreshButton
-          ml='33px'
-          onRefresh={() => {
-            // upDate(new Date(new Date().toLocaleDateString()).getTime() / 1000);
-          }}
-        /> */}
       </Box>
       <TitleBox>
         <MarkText fontSize='18px' bold fontStyle='italic'>
@@ -170,18 +164,6 @@ export const BattleTop: React.FC<{
         </Flex>
       </RecordBox>
       <RecordBox width='320px'>
-        {/* <SingleDatePicker
-          id='date_input'
-          date={date}
-          focused={isFocused}
-          onDateChange={onDateChange}
-          onFocusChange={onFocusChange}
-          numberOfMonths={1}
-          isOutsideRange={() => {}}
-          placeholder={dayjs().format('MM/DD/YYYY')}
-          readOnly
-          maxDate={new Date(new Date().toLocaleDateString()).getTime() / 1000}
-        /> */}
         <DateRangePicker
           readOnly
           startDate={initialStartDate}
@@ -209,6 +191,7 @@ export const BattleTop: React.FC<{
           <DownImg src='/images/commons/icon/back.png' />
         </Flex>
       </RecordBox>
+      <TopCarousel width='max-content' pl='0px' />
     </Flex>
   );
 };

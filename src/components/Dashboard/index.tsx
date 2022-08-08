@@ -16,6 +16,7 @@ import ButtonGroup, { ButtonGroupProps } from './ButtonGroup';
 
 import { getHideFooter, getHideHeader } from './config';
 import HandleButtonGroup from './HandleButtonGroup';
+import BattleReport from './BattleReport';
 
 interface ScaleProps {
   scale: number;
@@ -114,6 +115,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           <FlexLeftTop scale={scale} index={zIndex}>
             <Avatar />
             <TokenInfo />
+            <BattleReport />
           </FlexLeftTop>
           <BoxRightTop scale={scale} index={zIndex}>
             <HandleButtonGroup
