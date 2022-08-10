@@ -81,7 +81,7 @@ const HandleButtonGroup: React.FC<HandleButtonGroupProps> = ({
         更改时间倍率
       </SecondaryButton> */}
       <SecondaryButton className='tofind' href='/mystery-box' tag='m-box1'>
-        {t('Explore').toLocaleUpperCase()}
+        {t('Discovers').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/vip' tag='vip'>
         VIP

@@ -19,6 +19,7 @@ import eventBus from 'utils/eventBus';
 import { useGuide } from 'hooks/useGuide';
 import { Steps } from 'intro.js-react';
 import 'intro.js/introjs.css';
+import BlindInfo from './BlindInfo';
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -58,7 +59,7 @@ const ClickBox = styled(Box)`
   top: 0;
   bottom: 0;
   margin: auto;
-  cursor: pointer;
+  /* cursor: pointer; */
 `;
 const VipBox = styled(Box)`
   position: absolute;
@@ -87,6 +88,24 @@ const Title = styled(Text)`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
+
+const PageTitle = styled(Box)`
+  position: fixed;
+  top: -460px;
+  left: 930px;
+  width: 600px;
+`;
+
+const SurprisesBox = styled(Box)`
+  position: fixed;
+  top: -360px;
+  right: 0;
+  width: 230px;
+  border-radius: 10px;
+  background: #43434380;
+  padding: 18px;
+`;
+
 const MysteryBoxNew = () => {
   useFetchBoxView();
   const navigate = useNavigate();
@@ -201,9 +220,9 @@ const MysteryBoxNew = () => {
         >
           <ClickBox
             left={-100}
-            onClick={() => {
-              navigate(`/mystery-box/state?q=${mysteryBoxQualities.ORDINARY}`);
-            }}
+            // onClick={() => {
+            //   navigate(`/mystery-box/state?q=${mysteryBoxQualities.ORDINARY}`);
+            // }}
           >
             <Box
               className='mystery-index-step1'
@@ -218,37 +237,70 @@ const MysteryBoxNew = () => {
           </ClickBox>
           <ClickBox
             left={450}
-            onClick={() => {
-              navigate(`/mystery-box/state?q=${mysteryBoxQualities.ADVANCED}`);
-            }}
+            // onClick={() => {
+            //   navigate(`/mystery-box/state?q=${mysteryBoxQualities.ADVANCED}`);
+            // }}
           />
           <ClickBox
             left={1050}
-            onClick={() => {
-              navigate(`/mystery-box/state?q=${mysteryBoxQualities.SUPER}`);
-            }}
+            // onClick={() => {
+            //   navigate(`/mystery-box/state?q=${mysteryBoxQualities.SUPER}`);
+            // }}
           />
 
           <MysteryBoxCom
             left={-50}
-            top={0}
+            top={-200}
             bottom={0}
             quality={mysteryBoxQualities.ORDINARY}
           />
           <MysteryBoxCom
             left={500}
-            top={0}
+            top={-200}
             bottom={0}
             quality={mysteryBoxQualities.ADVANCED}
           />
           <MysteryBoxCom
             left={1100}
-            top={0}
+            top={-200}
             bottom={0}
             quality={mysteryBoxQualities.SUPER}
           />
         </Flex>
       </Flex>
+      <Flex position='fixed' bottom={-300}>
+        <BlindInfo quality={mysteryBoxQualities.ORDINARY} />
+        <BlindInfo quality={mysteryBoxQualities.ADVANCED} />
+        <BlindInfo quality={mysteryBoxQualities.SUPER} />
+      </Flex>
+      <PageTitle>
+        <Text
+          mb='16px'
+          fontSize='38px'
+          padding={0}
+          fontStyle='normal'
+          bold
+          mark
+          // textAlign='center'
+        >
+          {t('Discover')}
+        </Text>
+        <Text mb='10px' bold>
+          {t('OpenMysteryBoxDesc1')}
+        </Text>
+        <Text bold>{t('OpenMysteryBoxDesc1-2')}</Text>
+      </PageTitle>
+      <SurprisesBox>
+        <Text mb='20px' bold>
+          {t('SurprisesDesc1')}
+        </Text>
+        <Text fontSize='20px' color='#FFD63E' mb='6px' bold>
+          {t('SurprisesDesc2')}
+        </Text>
+        <Text fontSize='20px' color='#FF02C5' bold>
+          {t('SurprisesDesc3')}
+        </Text>
+      </SurprisesBox>
     </Layout>
   );
 };

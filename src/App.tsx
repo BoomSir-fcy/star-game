@@ -90,7 +90,7 @@ function App() {
                 path='/mystery-box/detail'
                 element={<MysteryBoxDetail />}
               />
-              <Route path='/mystery-box/state' element={<MysteryBoxState />} />
+              {/* <Route path='/mystery-box/state' element={<MysteryBoxState />} /> */}
               <Route path='/mystery-box/list' element={<MysteryBoxList />} />
 
               {/* 升级星球背包 */}
