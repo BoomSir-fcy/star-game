@@ -201,7 +201,7 @@ const MysteryBoxNew = () => {
         left='30%'
       />
       <Flex position='relative'>
-        <VipBox>
+        {/* <VipBox>
           <Flex width='80%' mt='60px' pl='10px' flexDirection='column'>
             <Text fontSize='20px'>{t('Max sales: ')}&nbsp;</Text>
             <Title>{new BigNumber(maxSales).toNumber()}</Title>
@@ -210,7 +210,7 @@ const MysteryBoxNew = () => {
             <Text fontSize='20px'>{t('Sold: ')}&nbsp;</Text>
             <Title>{new BigNumber(sold).toNumber()}</Title>
           </Flex>
-        </VipBox>
+        </VipBox> */}
         <Flex
           position='relative'
           width='100%'
@@ -281,7 +281,6 @@ const MysteryBoxNew = () => {
           fontStyle='normal'
           bold
           mark
-          // textAlign='center'
         >
           {t('Discover')}
         </Text>
