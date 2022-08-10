@@ -92,29 +92,19 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
   );
 
   const initSoldiers = React.useCallback(
-    soldier => {
+    _mock => {
       const ids: { [xy: string]: string } = {};
 
-      if (soldier?.init) {
-        Object.keys(soldier?.init?.ids).forEach(id => {
-          const { x, y } = soldier?.init?.ids[id];
+      if (_mock?.init) {
+        Object.keys(_mock?.init?.ids).forEach(id => {
+          const { x, y } = _mock?.init?.ids[id];
           ids[`${x}${y}`] = id;
         });
         game.once('lastSoldierCreated', () => {
-          runGame({ round: soldier.slot });
+          runGame({ round: _mock.slot });
         });
-        createSoldiers(
-          soldier.init.blue_units,
-          soldier.init.base_unit,
-          ids,
-          false,
-        );
-        createSoldiers(
-          soldier.init.red_units,
-          soldier.init.base_unit,
-          ids,
-          true,
-        );
+        createSoldiers(_mock.init.blue_units, _mock.init.base_unit, ids, false);
+        createSoldiers(_mock.init.red_units, _mock.init.base_unit, ids, true);
       }
     },
     [createSoldiers, runGame, game],
@@ -181,22 +171,22 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
     setTimer(
       setTimeout(() => {
         initHandle();
-      }, 3000),
+      }, 1000),
     );
   }, [initHandle, timer]);
 
   React.useEffect(() => {
     if (running) {
-      running.addEventListener('updateTrack', onRunningUpdate);
+      // running.addEventListener('updateTrack', onRunningUpdate);
       running.addEventListener('runEnd', onRunEnd);
     }
     return () => {
       if (running) {
-        running.removeEventListener('updateTrack', onRunningUpdate);
+        // running.removeEventListener('updateTrack', onRunningUpdate);
         running.removeEventListener('runEnd', onRunEnd);
       }
     };
-  }, [running, onRunningUpdate, onRunEnd]);
+  }, [running, onRunEnd]);
 
   // React.useEffect(() => {
   //   return () => {
@@ -212,4 +202,4 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
   );
 };
 
-export default MiniRaceAni;
+export default React.memo(MiniRaceAni);

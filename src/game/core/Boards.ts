@@ -61,6 +61,8 @@ class Boards extends EventTarget {
 
   container = new Container();
 
+  solderContainer = new Container();
+
   scale = 1;
 
   axis: AxisPoint[][] = []; // 坐标轴
@@ -84,9 +86,16 @@ class Boards extends EventTarget {
     // this.container.position.set(this.width, this.height);
     this.container.width = this.width;
     this.container.height = this.height;
+
+    this.solderContainer.width = this.width;
+    this.solderContainer.height = this.height;
     // this.drawChequers(test);
     // this.container.scale.set(0.5);
     this.container.interactive = true;
+    this.container.sortableChildren = true;
+    this.solderContainer.interactive = true;
+    this.solderContainer.zIndex = 9999;
+    this.container.addChild(this.solderContainer);
     this.container.on('wheel', e => {
       this.onHandleWheel(e);
     });

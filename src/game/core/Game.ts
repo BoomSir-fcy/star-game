@@ -191,9 +191,9 @@ class Game extends EventTarget {
   // 添加小人
   addSoldier(soldier: Soldier) {
     this.soldiers.push(soldier);
-    this.boards.container.sortableChildren = true;
-    this.boards.container.zIndex = 1;
-    this.boards.container.addChild(soldier.container);
+    this.boards.solderContainer.sortableChildren = true;
+    this.boards.solderContainer.zIndex = 1;
+    this.boards.solderContainer.addChild(soldier.container);
     soldier.container
       .on('pointerdown', () => {
         // this.showSameSoliderState(soldier);
@@ -270,7 +270,7 @@ class Game extends EventTarget {
   // 从棋盘上移除小人
   removeSoldier(soldier: Soldier) {
     this.soldiers = this.soldiers.filter(item => item !== soldier);
-    this.boards.container.removeChild(soldier.container);
+    this.boards.solderContainer.removeChild(soldier.container);
     soldier.changeState(stateType.PREVIEW, false);
     this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
     this.removeActiveSolider();
@@ -280,10 +280,16 @@ class Game extends EventTarget {
   clearSoldier() {
     this.soldiers.forEach(item => {
       item.changeState(stateType.PREVIEW, false);
-      this.boards.container.removeChild(item.container);
+      this.boards.solderContainer.removeChild(item.container);
     });
     this.soldiers = [];
     this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
+    this.clearBullet();
+  }
+
+  // 清空所有子弹及效果
+  clearBullet() {
+    this.boards.solderContainer.removeChildren();
   }
 
   setEnableDrag(state: boolean) {
