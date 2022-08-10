@@ -170,17 +170,17 @@ class Chequer extends EventTarget {
       Chequer.WIDTH * Chequer.X_RATIO * x,
       Chequer.HEIGHT * Chequer.Y_RATIO * x + Chequer.OFFSET_Y,
       0 + Chequer.OFFSET_X - 10,
-      Chequer.HEIGHT * Chequer.Y_RATIO * 2 *x + Chequer.OFFSET_Y - 10,
-      -Chequer.WIDTH * Chequer.X_RATIO * x+ Chequer.OFFSET_X + -10,
+      Chequer.HEIGHT * Chequer.Y_RATIO * 2 * x + Chequer.OFFSET_Y - 10,
+      -Chequer.WIDTH * Chequer.X_RATIO * x + Chequer.OFFSET_X + -10,
       Chequer.HEIGHT * Chequer.Y_RATIO * x - 10,
-    ]
+    ];
   }
 
   // 底色是不规则渲染 所以事件范围也不规则
   // 使用 Graphics 绑定事件 进行hack处理
   createGraphics() {
     this.graphics.lineStyle(1, 0x778fb8, 1);
-    // this.graphics.beginFill(0x4ffffb, 0.2);
+    this.graphics.beginFill(0x4ffffb, 0.0000002);
     this.graphics.drawPolygon(Chequer.getPath(1));
     this.graphics.endFill();
     const { x } = this.bunny;
@@ -201,11 +201,13 @@ class Chequer extends EventTarget {
       x:
         this.offsetStartX -
         (axisX - axisY) * Chequer.WIDTH * Chequer.X_RATIO +
-        Chequer.OFFSET_X * axisX - (axisX * 10),
+        Chequer.OFFSET_X * axisX -
+        axisX * 10,
       y:
         this.offsetStartY +
         (axisX + axisY) * Chequer.HEIGHT * Chequer.Y_RATIO +
-        axisY * Chequer.OFFSET_Y - (axisX * 10),
+        axisY * Chequer.OFFSET_Y -
+        axisX * 10,
     };
   }
 
