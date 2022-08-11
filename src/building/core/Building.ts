@@ -353,6 +353,7 @@ class Building extends EventTarget {
         );
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
         builder.addHandleBtn();
+        builder.setEnableDrag(false);
         builder.addConsumeText();
       } else {
         // 棋盘空位不足
@@ -389,6 +390,7 @@ class Building extends EventTarget {
         );
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
         builder.addHandleBtn();
+        builder.setEnableDrag(false);
         builder.addConsumeText();
       } else {
         // 棋盘空位不足
@@ -423,6 +425,7 @@ class Building extends EventTarget {
           }),
         );
         builder.addHandleBtn();
+        builder.setEnableDrag(false);
         builder.addConsumeText();
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
       }
