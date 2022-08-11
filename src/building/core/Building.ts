@@ -353,8 +353,7 @@ class Building extends EventTarget {
         );
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
         builder.addHandleBtn();
-        console.log(options);
-
+        builder.setEnableDrag(false);
         builder.addConsumeText(options.Estimated_Time);
       } else {
         // 棋盘空位不足
@@ -391,6 +390,7 @@ class Building extends EventTarget {
         );
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
         builder.addHandleBtn();
+        builder.setEnableDrag(false);
         builder.addConsumeText(options.Estimated_Time);
       } else {
         // 棋盘空位不足
@@ -425,7 +425,7 @@ class Building extends EventTarget {
           }),
         );
         builder.addHandleBtn();
-        console.log('关闭拖拽中的小人', builder);
+        builder.setEnableDrag(false);
 
         builder.addConsumeText(
           builder.option.building.upgrade_need.upgrade_time,
