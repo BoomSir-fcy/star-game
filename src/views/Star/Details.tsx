@@ -400,8 +400,6 @@ const Details = () => {
 
   // 上阵
   const handleGoIntoBattle = (item: Api.Building.Building) => {
-    console.log(item);
-
     const option = {
       src: `${item.index}`,
       id: `${item._id}`,
