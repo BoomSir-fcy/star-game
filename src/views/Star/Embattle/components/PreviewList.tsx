@@ -49,6 +49,22 @@ const PreviewList: React.FC<PreviewListProps> = ({
 
   const { toastError } = useToast();
 
+  const activeNum = useCallback(
+    id => {
+      return gameSoldiers.filter(item => item.soldier.id === id)?.length || 0;
+    },
+    [gameSoldiers],
+  );
+
+  const UseSoldierNum = useCallback(
+    (item: Api.Game.UnitInfo, add?: boolean) => {
+      return `${
+        add ? activeNum(item.unique_id) + 1 : activeNum(item.unique_id)
+      }/${item.default_unit ? '6' : item.count}`;
+    },
+    [activeNum],
+  );
+
   useEffect(() => {
     setdDisableDragSoilder(isApp() || disableDrag);
   }, [disableDrag]);
@@ -74,6 +90,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   useEffect(() => {
     if (list.length) {
       const [item] = list;
+
       const soldier = new Soldier({
         x: 0,
         y: 0,
@@ -81,11 +98,12 @@ const PreviewList: React.FC<PreviewListProps> = ({
         race,
         id: item?.unique_id,
         unique_id: item?.unique_id,
-        unitInfo: unitMaps?.[item?.unique_id],
+        unitInfo: { ...unitMaps?.[item?.unique_id], hp: 0 },
+        activeCountText: UseSoldierNum(unitMaps?.[item?.unique_id]),
       });
       game.addActiveSolider(soldier);
     }
-  }, [list, game, race, unitMaps]);
+  }, [list, game, race, unitMaps, UseSoldierNum]);
 
   const [moving, setMoving] = useState(false);
 
@@ -111,24 +129,17 @@ const PreviewList: React.FC<PreviewListProps> = ({
         enableDrag: false,
         id: item.unique_id,
         unique_id: item.unique_id,
-        unitInfo: item,
+        unitInfo: { ...item, hp: 0 },
+        activeCountText: UseSoldierNum(item, true),
       });
       setMoving(true);
       game?.addDragPreSoldier(soldier);
     },
-    [game, race],
-  );
-
-  const activeNum = useCallback(
-    id => {
-      return gameSoldiers.filter(item => item.soldier.id === id)?.length || 0;
-    },
-    [gameSoldiers],
+    [game, race, UseSoldierNum],
   );
 
   const checkCreateSoldier = useCallback(
     (item: Api.Game.UnitInfo) => {
-      console.log(gameSoldiers.length);
       if (gameSoldiers.length >= config.MAX_SOLDIER_COUNT) {
         toastError(t('http-error-1000004'));
         return false;
@@ -150,7 +161,8 @@ const PreviewList: React.FC<PreviewListProps> = ({
       enableDrag: true,
       id: item.unique_id,
       unique_id: item.unique_id,
-      unitInfo: item,
+      unitInfo: { ...item, hp: 0 },
+      activeCountText: UseSoldierNum(item, true),
     };
     game.addDragPreSoldierApp(options);
   };
@@ -203,7 +215,6 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 onClick={() => {
                   if (!disableClick) {
                     // if (!checkCreateSoldier(item)) return;
-
                     const soldier = new Soldier({
                       x: 0,
                       y: 0,
@@ -211,7 +222,8 @@ const PreviewList: React.FC<PreviewListProps> = ({
                       race,
                       id: item.unique_id,
                       unique_id: item.unique_id,
-                      unitInfo: unitMaps?.[item.unique_id],
+                      unitInfo: { ...unitMaps?.[item.unique_id], hp: 0 },
+                      activeCountText: UseSoldierNum(item, true),
                     });
                     game.addActiveSolider(soldier);
                     // if (isApp()) {
@@ -230,8 +242,9 @@ const PreviewList: React.FC<PreviewListProps> = ({
                     LV {item.level}
                   </Text>
                   <Text shadow='primary' fontSize='22' mr='13px' mt='2px' bold>
-                    {activeNum(item.unique_id)}/
-                    {isBaseUnit(item) ? '6' : item.count}
+                    {/* {activeNum(item.unique_id)}/
+                    {isBaseUnit(item) ? '6' : item.count} */}
+                    {UseSoldierNum(item)}
                   </Text>
                 </Flex>
                 <PreviewSoldier
@@ -276,7 +289,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
               <Text mt='8px' textAlign='center' bold>
                 {getSoldierName(item)}
               </Text>
-              <Flex>
+              <Flex justifyContent='center'>
                 <Text bold>{t('Power')}</Text>{' '}
                 <MarkText fontStyle='normal' bold>
                   {item?.power}

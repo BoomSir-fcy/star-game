@@ -29,6 +29,7 @@ export interface AttrSoldierOptions extends CombatOptions {
   unitInfo?: Api.Game.UnitInfo;
   enableDrag?: boolean;
   test?: boolean;
+  activeCountText?: string;
 }
 export interface SoldierOptions extends AttrSoldierOptions {
   x: number;
@@ -65,6 +66,8 @@ class Soldier extends Combat {
 
   options?: SoldierOptions;
 
+  activeCountText = new Text('');
+
   init(options: SoldierOptions) {
     const {
       x,
@@ -82,12 +85,17 @@ class Soldier extends Combat {
       sid,
       zIndex = 0,
       unitInfo,
+      activeCountText,
     } = options;
 
     this.options = {
       ...this.options,
       ...options,
     };
+
+    if (activeCountText) {
+      this.addActiveCountText(activeCountText);
+    }
     this.id = id;
 
     this.sid = sid;
@@ -116,7 +124,6 @@ class Soldier extends Combat {
     this.container.addChild(this.spriteShadow);
     this.container.addChild(this.displaySprite);
     this.shield = shield;
-
     this.hp = hp || unitInfo?.hp;
     this.activePh = activePh || this.hp;
     if (this.hp) {
@@ -166,6 +173,28 @@ class Soldier extends Combat {
           this.dispatchEvent(new Event('enemyChange'));
         });
     }
+  }
+
+  upDateActiveCountText(activeCountText) {
+    this.container.removeChild(this.activeCountText);
+    this.addActiveCountText(activeCountText);
+  }
+
+  addActiveCountText(activeCountText) {
+    this.activeCountText = new Text(activeCountText, {
+      fill: [0xffffff, 0x4ffffb],
+      fontSize: 30,
+      dropShadow: true,
+      dropShadowColor: 'rgba(0,0,0,0.9500)',
+      dropShadowBlur: 4,
+      dropShadowAngle: Math.PI / 6,
+      dropShadowDistance: 6,
+      stroke: 'rgba(225,225,225,0.5)',
+      strokeThickness: 1,
+    });
+    this.activeCountText.x = -30;
+    this.activeCountText.y = -100;
+    this.container.addChild(this.activeCountText);
   }
 
   createAttackId() {
