@@ -240,6 +240,7 @@ class Builder extends EventTarget {
   removeHandleBtn() {
     this.container.removeChild(this.cancelSprite);
     this.container.removeChild(this.confirmSprite);
+    this.Estimated_Time = 0;
   }
 
   onConfirm(event: FederatedPointerEvent) {
