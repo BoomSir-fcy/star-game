@@ -180,7 +180,7 @@ class Chequer extends EventTarget {
   // 使用 Graphics 绑定事件 进行hack处理
   createGraphics() {
     this.graphics.lineStyle(1, 0x778fb8, 1);
-    this.graphics.beginFill(0x4ffffb, 0.0000002);
+    this.graphics.beginFill(0x4ffffb, 0.0000000005);
     this.graphics.drawPolygon(Chequer.getPath(1));
     this.graphics.endFill();
     const { x } = this.bunny;
@@ -217,7 +217,7 @@ class Chequer extends EventTarget {
   }
 
   displayState(visible: boolean) {
-    this.stateSprite.visible = visible;
+    this.stateSprite.visible = false;
   }
 
   // 检测一个点是否在当前格子里

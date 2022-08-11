@@ -276,13 +276,14 @@ class Builder extends EventTarget {
       Chequer.HEIGHT * Chequer.Y_RATIO * this.areaX + offsetY,
     ];
     const polygon = new Polygon(Chequer.getPath(this.areaX));
-    // this.graphics.lineStyle(1, 0xfff000, 0.7);
-    // this.graphics.beginFill(0xff0f00, 0.2);
+    this.graphics.lineStyle(1, 0xfff000, 0.0000000001);
+    this.graphics.beginFill(0xff0f00, 0.000000000001);
     this.graphics.drawPolygon(polygon);
     this.graphics.endFill();
     this.graphics.x = 0;
     this.graphics.y = 0;
     this.graphics.y = -Chequer.HEIGHT * Chequer.Y_RATIO * (this.areaX - 0.5);
+    this.graphics.zIndex = 999;
 
     this.graphics.interactive = true;
 
@@ -540,8 +541,9 @@ class Builder extends EventTarget {
   }
 
   updateZIndex() {
-    if (this.axisPoint?.axisX && this.axisPoint?.axisY) {
-      this.container.zIndex = this.axisPoint?.axisX + this.axisPoint?.axisY;
+    if (this.axisPoint?.axisX + this.axisPoint?.axisY + 1) {
+      this.container.zIndex =
+        this.axisPoint?.axisX + this.axisPoint?.axisY + 999;
     }
   }
 
