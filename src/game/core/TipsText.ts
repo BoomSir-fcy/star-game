@@ -46,7 +46,7 @@ class TipsText extends EventTarget {
     this.alpha -= 0.02;
 
     if (this.alpha <= 0.5) {
-      this.text.parent.removeChild(this.text);
+      this.text.parent?.removeChild(this.text);
       return;
     }
     if (this.type === TipsTextType.NORMAL) {

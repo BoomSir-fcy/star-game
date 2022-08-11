@@ -218,9 +218,9 @@ class EffectBuff extends EventTarget {
     if (type === EffectType.RESTORE) {
       this[type].alpha -= 0.02;
       if (this[type].alpha <= 0.5) {
-        this.container.removeChild(this[type].sprint);
-        this.container.removeChild(this[type].sprint1);
-        this.container.removeChild(this[type].sprint2);
+        this.container?.removeChild(this[type].sprint);
+        this.container?.removeChild(this[type].sprint1);
+        this.container?.removeChild(this[type].sprint2);
         return;
       }
       this[type].sprint.alpha = this[type].alpha;

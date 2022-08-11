@@ -75,7 +75,20 @@ const Embattle = () => {
   const baseUnits = useStore(p => p.game.baseUnits);
 
   const unitMaps = useMemo(() => {
-    if (baseUnits[race]) return baseUnits[race];
+    if (baseUnits[race]) {
+      const baseUnit = baseUnits[race];
+      return (baseUnit as unknown as Api.Game.UnitInfo[]).reduce(
+        (pre, next) => {
+          return {
+            ...pre,
+            [next.unique_id]: {
+              ...next,
+            },
+          };
+        },
+        {},
+      );
+    }
     return null;
   }, [baseUnits, race]);
 
@@ -219,7 +232,12 @@ const Embattle = () => {
             }}
           />
         </Flex>
-        <PreviewList race={race} game={game} activeSoldier={activeSoldier} />
+        <PreviewList
+          unitMaps={unitMaps}
+          race={race}
+          game={game}
+          activeSoldier={activeSoldier}
+        />
       </Box>
     </Box>
   );

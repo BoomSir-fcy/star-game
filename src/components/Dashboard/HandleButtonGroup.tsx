@@ -77,9 +77,12 @@ const HandleButtonGroup: React.FC<HandleButtonGroupProps> = ({
   return (
     <Flex>
       {/* <RefreshButton mr='22px' onRefresh={onRefresh} /> */}
-      {/* <SecondaryButton href='/change-rate' tag='m-box1'>
-        更改时间倍率
-      </SecondaryButton> */}
+
+      {process.env.REACT_APP_API_HOST?.includes('tsapi2') && (
+        <SecondaryButton href='/change-rate' tag='m-box1'>
+          更改时间倍率
+        </SecondaryButton>
+      )}
       <SecondaryButton className='tofind' href='/mystery-box' tag='m-box1'>
         {t('Discovers').toLocaleUpperCase()}
       </SecondaryButton>
