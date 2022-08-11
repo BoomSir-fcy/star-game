@@ -90,11 +90,13 @@ class Boards extends EventTarget {
     this.container.height = this.height;
 
     this.container.interactive = true;
+    this.container.sortableChildren = true;
 
     // this.containerChe.width = this.width;
     // this.containerChe.height = this.height;
 
     this.containerChe.interactive = true;
+    this.containerChe.sortableChildren = true;
   }
 
   drawBg(row, col) {
