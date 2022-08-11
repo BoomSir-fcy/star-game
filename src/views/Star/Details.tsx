@@ -400,6 +400,8 @@ const Details = () => {
 
   // 上阵
   const handleGoIntoBattle = (item: Api.Building.Building) => {
+    console.log(item);
+
     const option = {
       src: `${item.index}`,
       id: `${item._id}`,
@@ -410,6 +412,10 @@ const Details = () => {
       isBuilding: false,
       enableDrag: true,
       Lv: item.propterty.levelEnergy,
+      ore: item.upgrade_need.upgrade_stone,
+      energy: item.upgrade_need.upgrade_energy,
+      spice: item.upgrade_need.upgrade_population,
+      Estimated_Time: item.upgrade_need.upgrade_time,
     };
     building?.addDragPreBuilderApp(option);
   };

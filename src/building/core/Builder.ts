@@ -7,10 +7,14 @@ import { Graphics } from '@pixi/graphics';
 import { Text } from '@pixi/text';
 import { Container } from '@pixi/display';
 import { raceData } from 'config/buildConfig';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import Chequer, { StateType, stateType } from './Chequer';
 import AxisPoint from './AxisPoint';
 import Matrix4 from './Matrix4';
 import { getBuilderSpriteRes } from './utils';
+
+dayjs.extend(duration);
 
 export interface BuilderOption {
   src?: string;
@@ -24,6 +28,10 @@ export interface BuilderOption {
   builded?: boolean;
   enableDrag?: boolean;
   IsUpgrade?: boolean;
+  ore?: number;
+  energy?: number;
+  spice?: number;
+  Estimated_Time?: number;
 }
 
 class Builder extends EventTarget {
@@ -40,13 +48,20 @@ class Builder extends EventTarget {
       builded,
       Lv,
       IsUpgrade,
+      ore,
+      energy,
+      spice,
+      Estimated_Time,
     } = option;
     this.id = id;
     this.race = race;
     this.resId = src;
     this.Lv = Lv;
     this.IsUpgrade = Boolean(IsUpgrade);
-
+    this.ore = ore;
+    this.energy = energy;
+    this.spice = spice;
+    this.Estimated_Time = Estimated_Time;
     // const img = `${window.location.origin}/assets/buildings/${race}/${
     //   src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
     // }`;
@@ -66,6 +81,14 @@ class Builder extends EventTarget {
 
     this.init();
   }
+
+  ore = 0;
+
+  energy = 0;
+
+  spice = 0;
+
+  Estimated_Time = 0;
 
   areaY = 1;
 
@@ -135,6 +158,8 @@ class Builder extends EventTarget {
 
   BuildingInfoText = new Text('');
 
+  BuildConsumptionText = new Text('');
+
   position: {
     from: {
       x: number;
@@ -161,7 +186,7 @@ class Builder extends EventTarget {
     this.sprite.width = 150 * this.areaX;
     this.sprite.height = 150 * this.areaY;
     this.sprite.anchor.set(0.5);
-    this.sprite.position.set(-20*this.areaX, 30*this.areaY)
+    this.sprite.position.set(-20 * this.areaX, 30 * this.areaY);
 
     this.container.addChild(this.sprite);
 
@@ -194,7 +219,9 @@ class Builder extends EventTarget {
     this.cancelSprite.buttonMode = true;
     this.cancelSprite.interactive = true;
     this.cancelSprite.anchor.set(0.5);
-    this.cancelSprite.position.set(-20, -10);
+    this.cancelSprite.position.set(-60, 10);
+    this.cancelSprite.width = 70;
+    this.cancelSprite.height = 70;
     this.cancelSprite.zIndex = 99;
     this.cancelSprite.addListener('click', e => this.onCancel(e));
     this.container.addChild(this.cancelSprite);
@@ -202,7 +229,9 @@ class Builder extends EventTarget {
     this.confirmSprite.buttonMode = true;
     this.confirmSprite.interactive = true;
     this.confirmSprite.anchor.set(0.5);
-    this.confirmSprite.position.set(20, -10);
+    this.confirmSprite.width = 70;
+    this.confirmSprite.height = 70;
+    this.confirmSprite.position.set(20, 10);
     this.confirmSprite.zIndex = 99;
     this.confirmSprite.addListener('click', e => this.onConfirm(e));
     this.container.addChild(this.confirmSprite);
@@ -261,17 +290,56 @@ class Builder extends EventTarget {
 
     this.container.hitArea = this.graphics.hitArea;
     this.container.addChild(this.graphics);
-    
+
     return this.graphics;
   }
 
   drawInfoBox() {
-    this.graphicsBox.beginFill(0x434343, 0.5);
-    this.graphicsBox.drawRoundedRect(-64, 20, 130, 70, 10);
+    if (this.Estimated_Time) {
+      // 准备建造
+      this.graphicsBox.beginFill(0x434343, 0.8);
+      this.graphicsBox.drawRoundedRect(-64, 20, 130, 170, 10);
+    } else {
+      this.graphicsBox.beginFill(0x434343, 0.5);
+      this.graphicsBox.drawRoundedRect(-64, 20, 130, 70, 10);
+    }
     this.graphicsBox.endFill();
-    this.graphicsBox.position.set(-20*this.areaX, 30*this.areaY)
+    this.graphicsBox.position.set(-20 * this.areaX, 30 * this.areaY);
     this.container.addChild(this.graphicsBox);
     this.addBuilderText();
+  }
+
+  addConsumeText() {
+    let Estimated = '00:00:00';
+    const Time = dayjs.duration(this.Estimated_Time * 1000);
+    const hours = Time.hours();
+    const minutes = Time.minutes();
+    const seconds = Time.seconds();
+
+    if (hours <= 0 && minutes <= 0 && seconds <= 0) {
+      Estimated = '00:00:00';
+    } else {
+      Estimated = Time.format('HH:mm:ss');
+    }
+
+    this.BuildConsumptionText = new Text(
+      `Resource Consumption:\nOre: ${this.ore}\nEnergy: ${this.energy}\nSpice: ${this.spice}\nEstimated Time: ${Estimated}`,
+      {
+        fill: 0xffffff,
+        fontSize: 14,
+        breakWords: true,
+        wordWrap: true,
+        wordWrapWidth: 124,
+        lineHeight: 18,
+      },
+    );
+    this.BuildConsumptionText.x = -60;
+    this.BuildConsumptionText.y = 60;
+    this.graphicsBox.addChild(this.BuildConsumptionText);
+  }
+
+  removeConsumeText() {
+    this.graphicsBox.removeChild(this.BuildConsumptionText);
   }
 
   addBuilderText() {
@@ -287,7 +355,7 @@ class Builder extends EventTarget {
       },
     );
     this.BuildingInfoText.x = -60;
-    this.BuildingInfoText.y = 50;
+    this.BuildingInfoText.y = 24;
     // this.BuildingInfoText.zIndex = 999;
     this.graphicsBox.addChild(this.BuildingInfoText);
   }
@@ -305,7 +373,7 @@ class Builder extends EventTarget {
   // 更新等级
   updateLv(lv: number) {
     this.Lv = lv;
-    this.container.removeChild(this.BuildingInfoText);
+    this.graphicsBox.removeChild(this.BuildingInfoText);
     this.addBuilderText();
   }
 
@@ -315,7 +383,7 @@ class Builder extends EventTarget {
     if (IsUpgrade) {
       this.addIsUpgradeText();
     } else {
-      this.container.removeChild(this.UpgradeText);
+      this.graphicsBox.removeChild(this.UpgradeText);
     }
   }
 
@@ -323,13 +391,14 @@ class Builder extends EventTarget {
     // this.setIsBuilding(!isBuilding)
     this.isBuilding = isBuilding;
     this.removeHandleBtn();
+    this.removeConsumeText();
     if (isBuilding) {
       this.container.alpha = 0.5;
       this.enableDrag = false;
       this.addIsBuildingText();
     } else {
       this.container.alpha = 1;
-      this.container.removeChild(this.BuildingText);
+      this.graphicsBox.removeChild(this.BuildingText);
     }
   }
 
@@ -337,18 +406,19 @@ class Builder extends EventTarget {
     // 状态文字
     this.UpgradeText.x = -60;
     this.UpgradeText.y = 68;
-    this.container.addChild(this.UpgradeText);
+    this.graphicsBox.addChild(this.UpgradeText);
   }
 
   addIsBuildingText() {
     // 状态文字
     this.BuildingText.x = -60;
     this.BuildingText.y = 68;
-    this.container.addChild(this.BuildingText);
+    this.graphicsBox.addChild(this.BuildingText);
   }
 
   setIsBuilded(builded: boolean) {
     this.removeHandleBtn();
+    this.removeConsumeText();
     if (builded) {
       this.setIsBuilding(false);
       this.enableDrag = false;

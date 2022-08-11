@@ -353,6 +353,7 @@ class Building extends EventTarget {
         );
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
         builder.addHandleBtn();
+        builder.addConsumeText();
       } else {
         // 棋盘空位不足
         this.dispatchEvent(getErrorEvent('Insufficient Chessboard Space'));
@@ -388,6 +389,7 @@ class Building extends EventTarget {
         );
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
         builder.addHandleBtn();
+        builder.addConsumeText();
       } else {
         // 棋盘空位不足
         this.dispatchEvent(getErrorEvent('Insufficient Chessboard Space'));
@@ -421,6 +423,7 @@ class Building extends EventTarget {
           }),
         );
         builder.addHandleBtn();
+        builder.addConsumeText();
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
       }
       this.dragPreBuilder.setDragging(false);

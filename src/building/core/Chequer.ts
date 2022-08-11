@@ -152,8 +152,8 @@ class Chequer extends EventTarget {
   }
 
   addText() {
-    this.text.x = -34;
-    this.text.y = 28;
+    this.text.x = -44;
+    this.text.y = 40;
     this.text.buttonMode = true;
     this.text.interactive = true;
     this.bunny.addChild(this.text);
