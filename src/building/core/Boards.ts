@@ -35,7 +35,7 @@ const CHEQUER_OFFSET_BY_BG = {
 
   x25: 264, // offsetStartX: 264, // 2
   y25: -258, // offsetStartY: -258, // 2
-}
+};
 /**
  * 棋盘
  */
@@ -95,11 +95,10 @@ class Boards extends EventTarget {
     // this.containerChe.height = this.height;
 
     this.containerChe.interactive = true;
-
   }
 
   drawBg(row, col) {
-    this.bg1.texture = Texture.from(`/assets/map/${col}-${row}.png`)
+    this.bg1.texture = Texture.from(`/assets/map/${col}-${row}.png`);
     // this.bg1.position.set(20, 34);
     this.bg1.position.set(0, 0);
     this.bg1.anchor.set(0.5);
@@ -114,7 +113,6 @@ class Boards extends EventTarget {
     this.bg1.zIndex = 2;
     this.container.addChild(this.bg1);
     this.container.addChild(this.containerChe);
-
   }
 
   // 绘制棋格
@@ -126,10 +124,10 @@ class Boards extends EventTarget {
       [axis: string]: Api.Game.TerrainInfo;
     } = {};
 
-    // this.axisX = areaX;
-    // this.axisY = areaY;
-    this.axisX = 4;
-    this.axisY = 4;
+    this.axisX = areaX;
+    this.axisY = areaY;
+    // this.axisX = 4;
+    // this.axisY = 4;
     this.drawBg(this.axisX, this.axisY);
 
     for (let row = 0; row < this.axisX; row++) {
@@ -141,7 +139,7 @@ class Boards extends EventTarget {
           axisX: row,
           axisY: col,
           state: stateType.PREVIEW,
-          
+
           offsetStartX: CHEQUER_OFFSET_BY_BG[`x${this.axisX}${this.axisY}`], // 4
           offsetStartY: CHEQUER_OFFSET_BY_BG[`y${this.axisX}${this.axisY}`], // 4
 
