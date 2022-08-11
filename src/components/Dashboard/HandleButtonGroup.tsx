@@ -84,7 +84,7 @@ const HandleButtonGroup: React.FC<HandleButtonGroupProps> = ({
         </SecondaryButton>
       )}
       <SecondaryButton className='tofind' href='/mystery-box' tag='m-box1'>
-        {t('Explore').toLocaleUpperCase()}
+        {t('Discovers').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/vip' tag='vip'>
         VIP

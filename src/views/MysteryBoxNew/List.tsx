@@ -1,4 +1,10 @@
-import React, { useMemo, useEffect, useCallback, useState } from 'react';
+import React, {
+  useMemo,
+  useEffect,
+  useCallback,
+  useState,
+  useRef,
+} from 'react';
 import {
   MysteryBoxCom,
   MysteryBoxQualities,
@@ -219,6 +225,8 @@ const List = () => {
   const [arrowShow, setArrowShow] = useState(false);
   const [sleepShow, setSleepShow] = useState(false);
 
+  const timer = useRef<ReturnType<typeof setTimeout>>();
+
   useEffect(() => {
     setTimeout(() => {
       setSleepShow(true);
@@ -275,11 +283,19 @@ const List = () => {
   }, [planetIds, dispatch]);
 
   useEffect(() => {
-    if (!planetList) {
-      setTimeout(() => {
-        dispatch(fetchPlanetInfoAsync(planetIds));
-      }, 10000);
+    if (timer.current) {
+      clearInterval(timer.current);
     }
+    if (!planetList) {
+      timer.current = setInterval(() => {
+        dispatch(fetchPlanetInfoAsync(planetIds));
+      }, 5000);
+    }
+    return () => {
+      if (timer.current) {
+        clearInterval(timer.current);
+      }
+    };
   }, [planetList, planetIds, dispatch]);
 
   const shortenToken = useCallback((str: string, chars = 4): string => {
