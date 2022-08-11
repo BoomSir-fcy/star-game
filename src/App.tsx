@@ -30,17 +30,17 @@ const MysteryBoxDetail = lazy(() => import('./views/MysteryBoxNew/Detail'));
 const MysteryBoxState = lazy(() => import('./views/MysteryBoxNew/State'));
 const MysteryBoxList = lazy(() => import('./views/MysteryBoxNew/List'));
 
-const PlantLeague = lazy(() => import('./views/PlantLeague'));
+// const PlantLeague = lazy(() => import('./views/PlantLeague'));
 const BattleReport = lazy(() => import('./views/BattleReport'));
-const ChoosePlanet = lazy(() => import('./views/NewPlantLeague/ChoosePlanet'));
+// const ChoosePlanet = lazy(() => import('./views/NewPlantLeague/ChoosePlanet'));
 
 const Plunder = lazy(() => import('./views/Plunder'));
 const PlunderPk = lazy(() => import('./views/Plunder/Pk'));
 const PlunderResult = lazy(() => import('./views/Plunder/Result'));
 const PlunderTest = lazy(() => import('./views/Plunder/Test'));
-const Galaxy = lazy(() => import('./views/Galaxy'));
-const Auction = lazy(() => import('./views/Galaxy/Auction'));
-const Stars = lazy(() => import('./views/Galaxy/Stars'));
+// const Galaxy = lazy(() => import('./views/Galaxy'));
+// const Auction = lazy(() => import('./views/Galaxy/Auction'));
+// const Stars = lazy(() => import('./views/Galaxy/Stars'));
 
 const Start = lazy(() => import('./views/Star/Layout'));
 // const StartPlanet = lazy(() => import('./views/Planet'));
