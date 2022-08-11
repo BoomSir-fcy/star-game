@@ -165,6 +165,10 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
         isBuilding: false,
         enableDrag: true,
         Lv: item.propterty.levelEnergy,
+        ore: item.upgrade_need.upgrade_stone,
+        energy: item.upgrade_need.upgrade_energy,
+        spice: item.upgrade_need.upgrade_population,
+        Estimated_Time: item.upgrade_need.upgrade_time,
       });
       setMoving(true);
       building?.addDragPreBuilder(builder);

@@ -311,12 +311,14 @@ class Builder extends EventTarget {
     this.addBuilderText();
   }
 
-  addConsumeText() {
+  addConsumeText(initEstimated_Time) {
+    this.Estimated_Time = initEstimated_Time;
     let Estimated = '00:00:00';
-    const Time = dayjs.duration(this.Estimated_Time * 1000);
+    const Time = dayjs.duration(initEstimated_Time * 1000);
     const hours = Time.hours();
     const minutes = Time.minutes();
     const seconds = Time.seconds();
+    console.log(Time, hours, minutes, seconds);
 
     if (hours <= 0 && minutes <= 0 && seconds <= 0) {
       Estimated = '00:00:00';
