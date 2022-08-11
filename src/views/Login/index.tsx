@@ -79,6 +79,7 @@ const Login = () => {
 
   const { toastSuccess, toastWarning, toastError } = useToast();
   const { fetch } = useFetchUserInfo();
+  const timer = useRef<ReturnType<typeof setTimeout>>(null);
 
   useFetchUserInfo();
   useFetchInfoView();
@@ -137,7 +138,6 @@ const Login = () => {
 
   const onHandleRegister = useCallback(
     async (payType: string) => {
-      let timer: any = 0;
       if (pending) {
         return;
       }
@@ -155,13 +155,13 @@ const Login = () => {
             payType,
             BNB_price: infoView?.priceBnb_,
           });
-          timer = setInterval(async () => {
+          timer.current = setInterval(async () => {
             toastWarning(t('loginSigninSearch'));
             const result = await Api.UserApi.getCheck({
               address: String(account),
             });
             if (Api.isSuccess(result) && result?.data?.register) {
-              if (timer) clearInterval(timer);
+              if (timer.current) clearInterval(timer.current);
               fetch();
             }
           }, 6000);
@@ -184,8 +184,18 @@ const Login = () => {
       pending,
       account,
       infoView,
+      timer,
     ],
   );
+
+  useEffect(() => {
+    if (account) {
+      if (timer.current) clearInterval(timer.current);
+    }
+    return () => {
+      clearInterval(timer.current);
+    };
+  }, [account, timer]);
 
   const handleEnter = useCallback(async () => {
     if (!account) {
