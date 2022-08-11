@@ -222,7 +222,7 @@ class Builder extends EventTarget {
     this.cancelSprite.position.set(-60, 10);
     this.cancelSprite.width = 70;
     this.cancelSprite.height = 70;
-    this.cancelSprite.zIndex = 99;
+    this.cancelSprite.zIndex = 1000;
     this.cancelSprite.addListener('click', e => this.onCancel(e));
     this.container.addChild(this.cancelSprite);
 
@@ -232,7 +232,7 @@ class Builder extends EventTarget {
     this.confirmSprite.width = 70;
     this.confirmSprite.height = 70;
     this.confirmSprite.position.set(20, 10);
-    this.confirmSprite.zIndex = 99;
+    this.confirmSprite.zIndex = 1000;
     this.confirmSprite.addListener('click', e => this.onConfirm(e));
     this.container.addChild(this.confirmSprite);
   }
