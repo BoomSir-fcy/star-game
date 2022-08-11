@@ -138,6 +138,22 @@ const Embattle = () => {
 
   const activeSoldier = useActiveSoldier(game);
 
+  const activeNum = useCallback(
+    id => {
+      return gameSoldiers.filter(item => item.soldier.id === id)?.length || 0;
+    },
+    [gameSoldiers],
+  );
+
+  const UseSoldierNum = useCallback(
+    (item: Api.Game.UnitInfo) => {
+      return `${activeNum(item?.unique_id)}/${
+        item?.default_unit ? '6' : item?.count
+      }`;
+    },
+    [activeNum],
+  );
+
   const createSoldiers = useCallback(
     (poses: Api.Game.UnitPlanetPos[]) => {
       poses.forEach(item => {
@@ -146,12 +162,24 @@ const Embattle = () => {
           race,
           id: item.base_unit_id,
           unique_id: item.base_unit_id,
-          unitInfo: unitMaps?.[item.base_unit_id],
+          unitInfo: { ...unitMaps?.[item.base_unit_id], hp: 0 },
+          activeCountText: UseSoldierNum(unitMaps?.[item.base_unit_id]),
         });
       });
     },
-    [unitMaps, race, game],
+    [unitMaps, race, game, UseSoldierNum],
   );
+
+  useEffect(() => {
+    // 更新棋盘上显示的士兵可摆放数量
+    if (gameSoldiers.length && plantUnits[planetId] && unitMaps) {
+      gameSoldiers.forEach(item => {
+        item.soldier.upDateActiveCountText(
+          UseSoldierNum(unitMaps?.[item.soldier.unique_id]),
+        );
+      });
+    }
+  }, [plantUnits, planetId, gameSoldiers, unitMaps, UseSoldierNum]);
 
   useEffect(() => {
     if (plantUnits[planetId] && unitMaps && game.soldiers.length === 0) {
