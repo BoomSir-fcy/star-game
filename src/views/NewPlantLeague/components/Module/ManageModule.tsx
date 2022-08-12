@@ -101,7 +101,7 @@ const ManageModule: React.FC<{
                 {t('Production')}
               </MarkText>
               <Text ml='20px' small>
-                {t('24h Exploration Times:')}
+                {t('Explorations in 24h:')}
                 &nbsp;
                 {WorkCount(planetInfo?.work_time, planetInfo?.work_count)}
               </Text>
