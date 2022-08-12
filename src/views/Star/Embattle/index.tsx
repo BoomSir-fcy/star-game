@@ -34,6 +34,7 @@ import { useTranslation } from 'contexts/Localization';
 import useGame from 'game/hooks/useGame';
 import { useStore, storeAction } from 'state';
 import { useDispatch } from 'react-redux';
+import { setEmptyUnits } from 'state/game/reducer';
 import Game from 'game/core/Game';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import PreviewList from './components/PreviewList';
@@ -96,6 +97,15 @@ const Embattle = () => {
   const { t } = useTranslation();
 
   const game = useGame({ width: 1600, offsetStartX: -330 });
+
+  const [CanCreate, setCanCreate] = useState(false);
+
+  useEffect(() => {
+    dispatch(setEmptyUnits({}));
+    setTimeout(() => {
+      setCanCreate(true);
+    }, 100);
+  }, [dispatch]);
 
   useEffect(() => {
     game.creatTerrain(4, 8); // 创建地形
@@ -182,11 +192,24 @@ const Embattle = () => {
   }, [plantUnits, planetId, gameSoldiers, unitMaps, UseSoldierNum]);
 
   useEffect(() => {
-    if (plantUnits[planetId] && unitMaps && game.soldiers.length === 0) {
+    if (
+      plantUnits[planetId] &&
+      unitMaps &&
+      game.soldiers.length === 0 &&
+      CanCreate
+    ) {
       createSoldiers(plantUnits[planetId]);
       setSortSoldiers(game.soldiers);
     }
-  }, [plantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers, game]);
+  }, [
+    plantUnits,
+    planetId,
+    unitMaps,
+    createSoldiers,
+    setSortSoldiers,
+    game,
+    CanCreate,
+  ]);
 
   const location = useLocation();
   const { guides, setGuide } = useGuide(location.pathname);

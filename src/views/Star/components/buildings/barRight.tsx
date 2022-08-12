@@ -10,6 +10,7 @@ import { BuyVipModal } from 'components/Modal/buyVipModal';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useDispatch } from 'react-redux';
+import { setEmptyUnits } from 'state/game/reducer';
 import { BarCard } from './barCard';
 import { BarHead } from './barHead';
 import { PlanetAssets } from './planetAssets';
@@ -162,9 +163,10 @@ export const BarRight: React.FC<BarRightProps> = ({
         <BarCard
           className='guide_step_9'
           title={t('planetMenuEmbattle')}
-          onClick={() =>
-            navigate(`/star/embattle?id=${planet_id}`, { replace: true })
-          }
+          onClick={() => {
+            dispatch(setEmptyUnits({}));
+            navigate(`/star/embattle?id=${planet_id}`, { replace: true });
+          }}
         >
           <Flex
             justifyContent='center'
