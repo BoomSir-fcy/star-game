@@ -206,6 +206,8 @@ const Details = () => {
   }, [building, ref, areaX, areaY]);
 
   const initBuilder = React.useCallback(() => {
+    console.log(selfBuilding, 'selfBuilding');
+
     building.initBuilder(selfBuilding);
     // setToUpdate(true);
   }, [building, selfBuilding]);
@@ -451,7 +453,9 @@ const Details = () => {
     if (id) {
       getWorkQueue();
     }
-    dispatch(fetchPlanetBuildingsAsync(id));
+    setTimeout(() => {
+      dispatch(fetchPlanetBuildingsAsync(id));
+    }, 300);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
