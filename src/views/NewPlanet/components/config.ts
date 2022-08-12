@@ -4,7 +4,7 @@ export const RaceOptions = (t: any) => {
   return [
     {
       value: 0,
-      label: t('All race'),
+      label: t('All Races'),
     },
     {
       value: RaceType.PROTOSS,
@@ -25,7 +25,7 @@ export const RarityOptions = (t: any) => {
   return [
     {
       value: 0,
-      label: t('All rarity'),
+      label: t('All Rarities'),
     },
     {
       value: Qualities.ORDINARY,
@@ -58,7 +58,7 @@ export const LevelOptions = (t: any, maxLevel = 20) => {
   const LevelList = [
     {
       value: 0,
-      label: t('All level'),
+      label: t('All Levels'),
     },
   ];
   for (let i = 1; i <= maxLevel; i++) {

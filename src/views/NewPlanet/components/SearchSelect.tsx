@@ -42,7 +42,7 @@ const SearchSelect: React.FC<{ onSelectCallback: (values: any) => void }> = ({
     <Flex>
       <Select
         width='180px'
-        direction='up'
+        // direction='up'
         options={RaceOption}
         defaultId={state.race}
         onChange={option => handleSelect('race', option.value)}
@@ -50,7 +50,7 @@ const SearchSelect: React.FC<{ onSelectCallback: (values: any) => void }> = ({
       <Select
         ml='14px'
         width='180px'
-        direction='up'
+        // direction='up'
         options={RarityOption}
         defaultId={state.rarity}
         onChange={option => handleSelect('rarity', option.value)}
@@ -58,7 +58,7 @@ const SearchSelect: React.FC<{ onSelectCallback: (values: any) => void }> = ({
       <Select
         ml='14px'
         width='180px'
-        direction='up'
+        // direction='up'
         options={LevelOption}
         defaultId={state.level}
         onChange={option => handleSelect('level', option.value)}

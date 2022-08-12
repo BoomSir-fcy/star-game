@@ -14,10 +14,8 @@ const RecordBox = styled(Flex)`
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
-  margin-top: 20px;
-  margin-left: 20px;
   cursor: pointer;
-  position: relative;
+  /* position: relative; */
 `;
 const MessageBox = styled(Box)`
   position: absolute;
@@ -69,48 +67,56 @@ const BattleReport = () => {
   }, [CloseTips, unread_plunder_count]);
 
   return (
-    <Link to='/BattleReport'>
-      <RecordBox
-        className='Alliance_Messages'
-        onMouseEnter={() => {
-          // setCloseTips(true)
-        }}
-      >
-        <MarkText
-          padding={0}
-          maxWidth='122px'
-          fontSize='16px'
-          bold
-          fontStyle='normal'
+    <Box
+      mt='20px'
+      ml='20px'
+      height='max-content'
+      width='max-content'
+      position='relative'
+    >
+      <Link to='/BattleReport'>
+        <RecordBox
+          className='Alliance_Messages'
+          onMouseEnter={() => {
+            // setCloseTips(true)
+          }}
         >
-          {t('Explore Report')}
-        </MarkText>
-        <Flex
-          justifyContent='center'
-          alignItems='center'
-          width='42px'
-          height='42px'
-          mr='8px'
-          position='relative'
-        >
-          <MarkText fontSize='18px' bold fontStyle='italic'>
-            {unread_plunder_count}
+          <MarkText
+            padding={0}
+            maxWidth='122px'
+            fontSize='16px'
+            bold
+            fontStyle='normal'
+          >
+            {t('Explore Report')}
           </MarkText>
-          {unread_plunder_count > 0 && <MessageBox />}
-        </Flex>
-        <TipBox
-          height={ShowTip ? 'max-content' : '0px'}
-          style={
-            ShowTip
-              ? { opacity: 0.6, overflow: 'inherit', padding: '6px 16px' }
-              : {}
-          }
-        >
-          <Text fontSize='14px'>{t('New exploration completed')}</Text>
-          <TipTriangle />
-        </TipBox>
-      </RecordBox>
-    </Link>
+          <Flex
+            justifyContent='center'
+            alignItems='center'
+            width='42px'
+            height='42px'
+            mr='8px'
+            position='relative'
+          >
+            <MarkText fontSize='18px' bold fontStyle='italic'>
+              {unread_plunder_count}
+            </MarkText>
+            {unread_plunder_count > 0 && <MessageBox />}
+          </Flex>
+        </RecordBox>
+      </Link>
+      <TipBox
+        height={ShowTip ? 'max-content' : '0px'}
+        style={
+          ShowTip
+            ? { opacity: 0.6, overflow: 'inherit', padding: '6px 16px' }
+            : {}
+        }
+      >
+        <Text fontSize='14px'>{t('New exploration completed')}</Text>
+        <TipTriangle />
+      </TipBox>
+    </Box>
   );
 };
 
