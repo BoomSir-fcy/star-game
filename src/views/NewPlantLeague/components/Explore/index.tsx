@@ -12,7 +12,7 @@ import { Api } from 'apis';
 import { useToast } from 'contexts/ToastsContext';
 import { useDispatch } from 'react-redux';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
-import { useCountdownTime, getTimePeriod } from 'components';
+import { useCountdownTime, getTimePeriod, TooltipTrigger } from 'components';
 
 const Explore: React.FC<{
   Difficulty: number;
@@ -111,29 +111,36 @@ const Explore: React.FC<{
 
   return (
     <Flex zIndex={1} position='relative' justifyContent='center'>
-      <Button
-        className='Start_Exploration'
-        variant='purple'
-        width='300px'
-        disabled={alliance.working !== 0 || max_work_count === now_work_count}
-        onClick={() => {
-          // if (ShowModule) {
-          //   StartOrStopWorking();
-          // }
-          setShowModule(true);
-        }}
+      <TooltipTrigger
+        overlay={<Text color='textPrimary'>{t('Earn Resources')}</Text>}
+        defaultVisible
+        trigger={[]}
+        placement='topRight'
       >
-        <Flex flexDirection='column'>
-          <Text color='textPrimary' fontSize='22px'>
-            {BtnShowText}
-          </Text>
-          {alliance.working !== 0 && (
-            <Text>
-              {`( ${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')} )`}
+        <Button
+          className='Start_Exploration'
+          variant='purple'
+          width='300px'
+          disabled={alliance.working !== 0 || max_work_count === now_work_count}
+          onClick={() => {
+            // if (ShowModule) {
+            //   StartOrStopWorking();
+            // }
+            setShowModule(true);
+          }}
+        >
+          <Flex flexDirection='column'>
+            <Text color='textPrimary' fontSize='22px'>
+              {BtnShowText}
             </Text>
-          )}
-        </Flex>
-      </Button>
+            {alliance.working !== 0 && (
+              <Text>
+                {`( ${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')} )`}
+              </Text>
+            )}
+          </Flex>
+        </Button>
+      </TooltipTrigger>
     </Flex>
   );
 };

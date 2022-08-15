@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Flex,
   Button,
@@ -13,6 +13,7 @@ import {
   Text,
 } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
+import TooltipTrigger from 'components/Tooltip';
 
 export interface ButtonGroupProps {
   onRefresh?: () => void;
@@ -59,6 +60,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
   className,
 }) => {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
 
   return (
     <Flex>
@@ -72,9 +74,22 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
       >
         {t('Alliance').toLocaleUpperCase()}
       </SecondaryButton>
-      <SecondaryButton href='/galaxy' tag='flag'>
-        {t('Galaxy').toLocaleUpperCase()}
-      </SecondaryButton>
+      {pathname === '/plant-league' ? (
+        <TooltipTrigger
+          overlay={<Text color='textPrimary'>{t('Earn BOX')}</Text>}
+          defaultVisible
+          trigger={[]}
+          placement='topRight'
+        >
+          <SecondaryButton href='/galaxy' tag='flag'>
+            {t('Galaxy').toLocaleUpperCase()}
+          </SecondaryButton>
+        </TooltipTrigger>
+      ) : (
+        <SecondaryButton href='/galaxy' tag='flag'>
+          {t('Galaxy').toLocaleUpperCase()}
+        </SecondaryButton>
+      )}
 
       {/* <BackButton onBack={onBack} /> */}
       {/* <RefreshButton mr='23px' onRefresh={onRefresh} /> */}
