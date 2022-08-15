@@ -5,15 +5,16 @@ import { useTranslation } from 'contexts/Localization';
 import { useWeb3React } from '@web3-react/core';
 import { useToast } from 'contexts/ToastsContext';
 import { Api } from 'apis';
+import { TokenImage } from 'components/TokenImage';
+import { getBoxAddress } from 'utils/addressHelpers';
 
 const ShaDowBox = styled(Flex)`
-  width: 100%;
+  width: 32%;
   height: 100px;
   background: ${({ theme }) => theme.colors.backgroundCard};
   box-shadow: inset 0px -1px 3px 0px rgba(255, 255, 255, 35%);
   border-radius: 10px;
-  padding: 10px 20px;
-  margin-bottom: 20px;
+  padding: 10px;
 `;
 
 const InvitePop: React.FC = () => {
@@ -25,15 +26,15 @@ const InvitePop: React.FC = () => {
     invite_user_num: 0,
     bnb_income: '0',
   });
-  const Url = `${window.location.origin}?InviteAddress=${account}`;
+  const Url = `Crypto Galaxy is a blockchain SLG game built on BNBChain.\nGamers can create accounts to purchase, upgrade and cultivate planets, and develop their Planet Alliances to start Galaxy Exploration, discover resources, fight against other planets' lords, or make a fortune by occupying stars.\nJoin your friend via link:\n${window.location.origin}?InviteAddress=${account}`;
+
   const Copy = () => {
-    const aux = document.createElement('input');
-    const content = Url;
-    aux.setAttribute('value', content);
-    document.body.appendChild(aux);
-    aux.select();
-    document.execCommand('copy');
-    document.body.removeChild(aux);
+    const textarea = document.createElement('textarea');
+    textarea.value = Url;
+    document.body.appendChild(textarea); // 添加临时实例
+    textarea.select(); // 选择实例内容
+    document.execCommand('Copy'); // 执行复制
+    document.body.removeChild(textarea); // 删除临时实例
     toastSuccess(t('Copy Succeeded'));
   };
 
@@ -56,44 +57,47 @@ const InvitePop: React.FC = () => {
   }, []);
 
   return (
-    <Box width='100%' padding='10px 30px'>
-      <Text mb='16px' fontSize='22px'>
-        {t(
-          'After inviting a friend to register a character and open a blind box, you can get 5% of the cost of each blind box opened by your friend as a reward',
-        )}
-      </Text>
-      <ShaDowBox alignItems='center' justifyContent='space-between'>
-        <Box>
-          <Text mb='10px' color='textSubtle' fontSize='24px'>
-            {t('Number of invitees')}
-          </Text>
-          <Text fontSize='22px'>{InviteInfo.invite_user_num}</Text>
-        </Box>
-        <Box>
-          <Text mb='10px' color='textSubtle' fontSize='24px'>
-            {t('Rebate')}
-          </Text>
-          <Text fontSize='22px'>{InviteInfo.bnb_income || 0} BNB</Text>
-        </Box>
-      </ShaDowBox>
-      <ShaDowBox alignItems='center' justifyContent='space-between'>
-        <Flex flex='1' maxWidth='60%'>
-          <Image src='/images/commons/icon/plane.png' width={60} height={60} />
+    <Box width='100%' padding='30px'>
+      <Box mb='30px'>
+        <Text>{t('InviteDesc1')}</Text>
+        <Text>{t('InviteDesc1-1')}</Text>
+        <Text>{t('InviteDesc1-2')}</Text>
+      </Box>
+      <Flex mb='40px' justifyContent='space-between'>
+        <ShaDowBox alignItems='center'>
+          <Image src='/images/commons/icon/plane.png' width={30} height={30} />
           <Box ml='30px'>
-            <Text color='textSubtle' fontSize='24px'>
-              {t('My inviter’s address')}
+            <Text mb='10px' color='textSubtle'>
+              {t('Number of invitees')}
             </Text>
-            <Text fontSize='22px' ellipsis maxWidth='320px'>
-              {Url}
-            </Text>
+            <Text>{InviteInfo.invite_user_num}</Text>
           </Box>
-        </Flex>
-        <Box>
-          <Button variant='vs' width='250px' onClick={() => Copy()}>
-            {t('Copy Link')}
-          </Button>
-        </Box>
-      </ShaDowBox>
+        </ShaDowBox>
+        <ShaDowBox alignItems='center'>
+          <TokenImage tokenAddress='BNB' width={30} height={30} />
+          <Box ml='30px'>
+            <Text mb='10px' color='textSubtle'>
+              {t('Rebate')}
+            </Text>
+            <Text>{InviteInfo.bnb_income || 0} BNB</Text>
+          </Box>
+        </ShaDowBox>
+
+        <ShaDowBox alignItems='center'>
+          <TokenImage tokenAddress={getBoxAddress()} width={30} height={30} />
+          <Box ml='30px'>
+            <Text mb='10px' color='textSubtle'>
+              {t('Rebate')}
+            </Text>
+            <Text>{InviteInfo.bnb_income || 0} BOX</Text>
+          </Box>
+        </ShaDowBox>
+      </Flex>
+      <Flex flex={1} justifyContent='center'>
+        <Button variant='purple' width='250px' onClick={() => Copy()}>
+          {t('Copy Link')}
+        </Button>
+      </Flex>
     </Box>
   );
 };
