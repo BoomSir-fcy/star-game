@@ -9,8 +9,8 @@ import { TokenImage } from 'components/TokenImage';
 import { getBoxAddress } from 'utils/addressHelpers';
 
 const ShaDowBox = styled(Flex)`
-  width: 32%;
-  height: 100px;
+  width: 48%;
+  height: 100%;
   background: ${({ theme }) => theme.colors.backgroundCard};
   box-shadow: inset 0px -1px 3px 0px rgba(255, 255, 255, 35%);
   border-radius: 10px;
@@ -57,7 +57,7 @@ const InvitePop: React.FC = () => {
   }, []);
 
   return (
-    <Box width='100%' padding='30px'>
+    <Box width='100%' padding='50px 40px'>
       <Box mb='30px'>
         <Text>{t('InviteDesc1')}</Text>
         <Text>{t('InviteDesc1-1')}</Text>
@@ -83,7 +83,7 @@ const InvitePop: React.FC = () => {
           </Box>
         </ShaDowBox>
 
-        <ShaDowBox alignItems='center'>
+        {/* <ShaDowBox alignItems='center'>
           <TokenImage tokenAddress={getBoxAddress()} width={30} height={30} />
           <Box ml='30px'>
             <Text mb='10px' color='textSubtle'>
@@ -91,7 +91,7 @@ const InvitePop: React.FC = () => {
             </Text>
             <Text>{InviteInfo.bnb_income || 0} BOX</Text>
           </Box>
-        </ShaDowBox>
+        </ShaDowBox> */}
       </Flex>
       <Flex flex={1} justifyContent='center'>
         <Button variant='purple' width='250px' onClick={() => Copy()}>
