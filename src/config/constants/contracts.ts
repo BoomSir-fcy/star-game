@@ -27,39 +27,39 @@ const contracts = {
   },
   UserAgent: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0x380F9e3F556e1F568e66aF16EAe49dF38313Fb57',
+    [ChainId.BSC_TESTNET]: '0x3ae6c786e5198c11Af43C257790a57a3D35Bf435',
   },
   MysteryBox: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0xBdbe5995d5C760247ABc32183D3be0ea41cE310b',
+    [ChainId.BSC_TESTNET]: '0xCA8496eE9d30FA508cbe039381A7A185F716B7C5',
   },
   Galaxy: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0x29b4b2e169EFA9ABF5C90E012D81694FB2D5D7e4',
+    [ChainId.BSC_TESTNET]: '0x9bf20baFEFA712DC4FBC7c78c827CFE92D212044',
   },
   Planet: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0x59F71c8a1082EE1329486464206330f307565089',
+    [ChainId.BSC_TESTNET]: '0x25DE1D8d993Bd60a77E13479162B267b4Ee49fd1',
   },
   UserVault: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0xb4980C5121dce73BC7E554ffe6ab6262598774CC',
+    [ChainId.BSC_TESTNET]: '0x3f32e1FD8170911c52D3a664E9dD41e9efa80038',
   },
   BoxToken: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0x2bf6502a30Af3378ACb51F056F47fc5e24aB8961',
+    [ChainId.BSC_TESTNET]: '0xf259DEec42ef3C579Ab189D2aa6986a671335691',
   },
   EnergyToken: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0xf7562ba09a99635f1420df0652ec23aad2b8b718',
+    [ChainId.BSC_TESTNET]: '0x7392365a78405534920a7AdAEd5640290A550b16',
   },
   PopToken: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0xe0b773b980ec1de9d097b577124b35396aca532b',
+    [ChainId.BSC_TESTNET]: '0x7A39FD7605C16f3e0Dc106CA05c772Ca3aB5e11A',
   },
   OreToken: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0xcc1454d0e42c47e80baa532c08f81be3e136c6ea',
+    [ChainId.BSC_TESTNET]: '0xB7A7AE871d40d1bd45b071e9568D0070cA31C3db',
   },
 };
 export default contracts;

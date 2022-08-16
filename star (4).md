@@ -1,4 +1,3 @@
-
 ### 用户代理合约
 
 合约地址：0x380F9e3F556e1F568e66aF16EAe49dF38313Fb57
@@ -56,11 +55,23 @@ contract MysteryBox {
         uint256 bnbPoolRatio; // 给bnb质押池的比例
         uint256 superiorRatio; // 给邀请人的比例
         address defaultSuperior; // 默认邀请人
-        uint256 miniDistributeAmount; // 
+        uint256 miniDistributeAmount; //
         uint256 totalBurnt; // 总销毁量dsg
         uint256 totalVDsgDonated; // 总给vdsg的量dsg
         uint256 totalPoolSent; // 总给质押池的量dsg
         uint256 totalPoolSentBNB; // 总给质押池的量bnb
+
+        ---new----
+        uint256[3] priceBNB; // 三种盲盒对应的bnb价格
+        uint256[3] seedBlocks; // 三种盲盒对应的预定区块, 与当前区块相差超过230个区块应让用户重新预定
+        uint256 bnbPoolRatio; // 销毁比例
+        uint256 superiorRatio; // 给邀请人的比例
+        address defaultSuperior; // 默认邀请人
+        uint256 totalPoolSentBNB; // 总给质押池的量bnb
+        uint maxSales; // 最大可销售量
+        uint sold; // 已销售量
+        uint maxHeld; // 每种盲盒最大可持有的数量
+
     }
 
 
@@ -82,7 +93,6 @@ contract MysteryBox {
 
 
 ```
-
 
 ### 星系合约
 
@@ -120,7 +130,6 @@ contract Galaxy {
 }
 ```
 
-
 ### 星球合约
 
 合约地址: 0x59F71c8a1082EE1329486464206330f307565089
@@ -150,7 +159,6 @@ contract Planet {
 
 }
 ```
-
 
 ### 金库合约
 
@@ -186,9 +194,3 @@ contract UserVault {
 
 }
 ```
-
-
-
-
-
-
