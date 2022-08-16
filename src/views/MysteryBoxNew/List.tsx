@@ -158,22 +158,6 @@ const AnimationStar = styled(Box)`
   }
 `;
 
-const VideoBox = styled(GlobalVideo)<{ scale?: number }>`
-  & .star-desc {
-    animation: ${StarDescFrame} 2s linear 3s both;
-  }
-  & .star-desc-cancel {
-    animation: ${StarDescFrame2} 1s linear -1s both;
-  }
-  & .MyPlanetBall {
-    transform: ${({ scale }) => `scale(${scale})`};
-    position: absolute;
-    left: ${({ scale }) => `${-88 * scale}px`};
-    top: ${({ scale }) => `${-22 * scale}px`};
-    z-index: -1;
-  }
-`;
-
 const ContentBox = styled(Box)<{ tween?: number }>`
   &.tween-animation2 {
     animation: ${({ tween }) =>
@@ -213,6 +197,14 @@ const Light = styled(Box)<{ tween?: number }>`
   &.light-4 {
     animation: ${LightFrame} 1s ease-in-out 2s both;
   }
+`;
+
+const VideoBox = styled(Box)`
+  position: absolute;
+  background: url('/images/commons/123.png') no-repeat;
+  background-size: 0%;
+  top: -3%;
+  left: -39%;
 `;
 
 const List = () => {
@@ -498,141 +490,71 @@ const List = () => {
           planetList?.map((item, index) => (
             <Box position='relative' key={item?.id}>
               <Light tween={tween} className={`light-${index}`} />
-
               {openBlindIds?.indexOf(item.id) !== -1 && (
-                <VideoBox
-                  width={260}
-                  height={260}
-                  src={`/video/${item?.rarity}rarity.mp4`}
-                  loop
-                  left={GetVideoPosition(index)}
-                  top={240}
-                  margin='auto'
-                  scale={scale}
+                <Text
+                  className={tween ? 'star-desc-cancel' : 'star-desc'}
+                  mb='36px'
+                  textAlign='center'
+                  fontSize='26px'
+                  bold
+                  color={QualityColor[item?.rarity]}
                 >
-                  <Box className='MyPlanetBall'>
-                    {openBlindIds?.indexOf(item.id) !== -1 && (
-                      <Text
-                        className={tween ? 'star-desc-cancel' : 'star-desc'}
-                        mb='16px'
-                        textAlign='center'
-                        fontSize='26px'
-                        bold
-                        color={QualityColor[item?.rarity]}
-                      >
-                        {item?.rarity ? t(`rarity-${item?.rarity}`) : ''}
-                      </Text>
-                    )}
-                    <AnimationStar
-                      mt={openBlindIds?.indexOf(item.id) !== -1 ? '' : '75px'}
-                      className={`star${index}`}
-                      onClick={() => {
-                        if (openBlindIds?.indexOf(item.id) !== -1) {
-                          navigate(`/mystery-box/detail?i=${item?.id}`);
-                          return;
-                        }
-                        dispatch(setActivePlanet(item));
-                        dispatch(EditOpenBlindModalAsync(true));
-                      }}
-                    >
-                      <PlanetBall
-                        shadow={
-                          openBlindIds?.indexOf(item.id) !== -1
-                            ? QualityColor[item?.rarity]
-                            : 0
-                        }
-                        scale='ld'
-                        rotate={openBlindIds?.indexOf(item.id) !== -1}
-                        url={item?.picture1}
-                      />
-                    </AnimationStar>
-                    <Flex
-                      className={tween ? 'star-desc-cancel' : 'star-desc'}
-                      mt='30px'
-                      alignItems='center'
-                    >
-                      <RaceAvatar
-                        width='44px'
-                        height='44px'
-                        race={item?.race}
-                      />
-                      <Box ml='9px'>
-                        <Text
-                          color={RaceTypeColor[item?.race]}
-                          fontSize='18px'
-                          bold
-                        >
-                          {item?.race ? t(raceData[item?.race]?.name) : ''}
-                        </Text>
-                        <Text small>
-                          <span>Token: </span>{' '}
-                          {shortenToken(item?.id?.toString())}
-                        </Text>
-                      </Box>
-                    </Flex>
-                  </Box>
-                </VideoBox>
+                  {item?.rarity ? t(`rarity-${item?.rarity}`) : ''}
+                </Text>
               )}
-              <Box
-                style={{
-                  opacity: openBlindIds?.indexOf(item.id) !== -1 ? 0 : 1,
+              <AnimationStar
+                mt={openBlindIds?.indexOf(item.id) !== -1 ? '' : '75px'}
+                className={`star${index}`}
+                onClick={() => {
+                  if (openBlindIds?.indexOf(item.id) !== -1) {
+                    navigate(`/mystery-box/detail?i=${item?.id}`);
+                    return;
+                  }
+                  dispatch(setActivePlanet(item));
+                  dispatch(EditOpenBlindModalAsync(true));
                 }}
               >
-                {openBlindIds?.indexOf(item.id) !== -1 && (
-                  <Text
-                    className={tween ? 'star-desc-cancel' : 'star-desc'}
-                    mb='36px'
-                    textAlign='center'
-                    fontSize='26px'
-                    bold
-                    color={QualityColor[item?.rarity]}
-                  >
-                    {item?.rarity ? t(`rarity-${item?.rarity}`) : ''}
+                <PlanetBall
+                  shadow={
+                    openBlindIds?.indexOf(item.id) !== -1
+                      ? QualityColor[item?.rarity]
+                      : 0
+                  }
+                  scale='ld'
+                  rotate={openBlindIds?.indexOf(item.id) !== -1}
+                  url={item?.picture1}
+                />
+              </AnimationStar>
+              <Flex
+                className={tween ? 'star-desc-cancel' : 'star-desc'}
+                mt='30px'
+                alignItems='center'
+              >
+                <RaceAvatar width='44px' height='44px' race={item?.race} />
+                <Box ml='9px'>
+                  <Text color={RaceTypeColor[item?.race]} fontSize='18px' bold>
+                    {item?.race ? t(raceData[item?.race]?.name) : ''}
                   </Text>
+                  <Text small>
+                    <span>Token: </span> {shortenToken(item?.id?.toString())}
+                  </Text>
+                </Box>
+              </Flex>
+              {openBlindIds?.indexOf(item.id) !== -1 &&
+                item?.rarity !== 1 &&
+                item?.rarity !== 2 && (
+                  <VideoBox width={410} height={410}>
+                    <VideoStyled
+                      width='100%'
+                      height='100%'
+                      src={`/video/${item?.rarity}rarity.mp4`}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                    />
+                  </VideoBox>
                 )}
-                <AnimationStar
-                  mt={openBlindIds?.indexOf(item.id) !== -1 ? '' : '75px'}
-                  className={`star${index}`}
-                  onClick={() => {
-                    if (openBlindIds?.indexOf(item.id) !== -1) {
-                      navigate(`/mystery-box/detail?i=${item?.id}`);
-                      return;
-                    }
-                    dispatch(setActivePlanet(item));
-                    dispatch(EditOpenBlindModalAsync(true));
-                  }}
-                >
-                  <PlanetBall
-                    shadow={
-                      openBlindIds?.indexOf(item.id) !== -1
-                        ? QualityColor[item?.rarity]
-                        : 0
-                    }
-                    scale='ld'
-                    rotate={openBlindIds?.indexOf(item.id) !== -1}
-                    url={item?.picture1}
-                  />
-                </AnimationStar>
-                <Flex
-                  className={tween ? 'star-desc-cancel' : 'star-desc'}
-                  mt='30px'
-                  alignItems='center'
-                >
-                  <RaceAvatar width='44px' height='44px' race={item?.race} />
-                  <Box ml='9px'>
-                    <Text
-                      color={RaceTypeColor[item?.race]}
-                      fontSize='18px'
-                      bold
-                    >
-                      {item?.race ? t(raceData[item?.race]?.name) : ''}
-                    </Text>
-                    <Text small>
-                      <span>Token: </span> {shortenToken(item?.id?.toString())}
-                    </Text>
-                  </Box>
-                </Flex>
-              </Box>
             </Box>
           ))}
       </Flex>
