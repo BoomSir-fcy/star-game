@@ -37,7 +37,7 @@ export const ConfirmBuyModule: React.FC<{
     const balance = Balance.filter(item => {
       return item.symbol === 'BNB';
     });
-    return balance[0].amount;
+    return balance[0]?.amount || 0;
   }, [Balance]);
 
   return (
