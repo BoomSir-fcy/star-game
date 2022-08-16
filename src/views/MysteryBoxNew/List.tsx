@@ -199,12 +199,21 @@ const Light = styled(Box)<{ tween?: number }>`
   }
 `;
 
-const VideoBox = styled(Box)`
-  position: absolute;
-  background: url('/images/commons/123.png') no-repeat;
-  background-size: 0%;
-  top: -3%;
-  left: -39%;
+// const VideoBox = styled(Box)`
+//   position: absolute;
+//   background: url('/images/commons/123.png') no-repeat;
+//   background-size: 0%;
+//   top: -3%;
+//   left: -39%;
+// `;
+const VideoBox = styled(GlobalVideo)<{ scale?: number }>`
+  & .MyPlanetBall {
+    transform: ${({ scale }) => `scale(${scale})`};
+    position: absolute;
+    left: ${({ scale }) => `${10 * scale}px`};
+    top: ${({ scale }) => `${10 * scale}px`};
+    z-index: -1;
+  }
 `;
 
 const List = () => {
@@ -414,12 +423,15 @@ const List = () => {
   const GetVideoPosition = useCallback((index: number) => {
     switch (index) {
       case 0:
-        return 120;
+        return 114;
       case 1:
-        return 460;
+        return 472;
       case 2:
-        return 120;
-
+        return 830;
+      case 3:
+        return 1190;
+      case 4:
+        return 1548;
       default:
         return null;
     }
@@ -503,6 +515,9 @@ const List = () => {
                 </Text>
               )}
               <AnimationStar
+                // style={{
+                //   opacity: openBlindIds?.indexOf(item.id) !== -1 ? 0 : 1,
+                // }}
                 mt={openBlindIds?.indexOf(item.id) !== -1 ? '' : '75px'}
                 className={`star${index}`}
                 onClick={() => {
@@ -543,16 +558,38 @@ const List = () => {
               {openBlindIds?.indexOf(item.id) !== -1 &&
                 item?.rarity !== 1 &&
                 item?.rarity !== 2 && (
-                  <VideoBox width={410} height={410}>
-                    <VideoStyled
-                      width='100%'
-                      height='100%'
-                      src={`/video/${item?.rarity}rarity.mp4`}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                    />
+                  // <VideoBox width={410} height={410}>
+                  //   <VideoStyled
+                  //     width='100%'
+                  //     height='100%'
+                  //     src={`/video/${item?.rarity}rarity.mp4`}
+                  //     autoPlay
+                  //     muted
+                  //     loop
+                  //     playsInline
+                  //   />
+                  // </VideoBox>
+                  <VideoBox
+                    width={260}
+                    height={260}
+                    src={`/video/${item?.rarity}rarity.mp4`}
+                    loop
+                    left={GetVideoPosition(index)}
+                    top={242}
+                    margin='auto'
+                    scale={scale}
+                  >
+                    {/* <PlanetBall
+                      className='MyPlanetBall'
+                      shadow={
+                        openBlindIds?.indexOf(item.id) !== -1
+                          ? QualityColor[item?.rarity]
+                          : 0
+                      }
+                      scale='ld'
+                      rotate={openBlindIds?.indexOf(item.id) !== -1}
+                      url={item?.picture1}
+                    /> */}
                   </VideoBox>
                 )}
             </Box>
