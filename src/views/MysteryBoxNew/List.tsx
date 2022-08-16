@@ -11,7 +11,7 @@ import {
 } from 'components/MysteryBoxComNew';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { Box, Flex, Text, Image, Button, Spinner, Dots } from 'uikit';
-import { ConnectWalletButton, Globe, RaceAvatar } from 'components';
+import { ConnectWalletButton, Globe, PlanetBall, RaceAvatar } from 'components';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { storeAction, useStore } from 'state';
@@ -27,6 +27,10 @@ import { useWeb3React } from '@web3-react/core';
 import { useGuide } from 'hooks/useGuide';
 import { Steps } from 'intro.js-react';
 import 'intro.js/introjs.css';
+import { setActivePlanet } from 'state/planet/actions';
+import { EditOpenBlindModalAsync } from 'state/mysteryBox/reducer';
+import { VideoStyled } from 'components/OpenBlindPlanet/BlindPlanetBox';
+import { GlobalVideo } from 'components/Video';
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -136,6 +140,7 @@ const LightFrame = keyframes`
 `;
 const SPEED = 1;
 const AnimationStar = styled(Box)`
+  cursor: pointer;
   &.star0 {
     animation: ${StarFrame} 1s cubic-bezier(0.19, -0.54, 0.73, 1.35) 0.1s both;
   }
@@ -152,13 +157,8 @@ const AnimationStar = styled(Box)`
     animation: ${StarFrame} 1s cubic-bezier(0.19, -0.54, 0.73, 1.35) 2.1s both;
   }
 `;
+
 const ContentBox = styled(Box)<{ tween?: number }>`
-  & .star-desc {
-    animation: ${StarDescFrame} 2s linear 3s both;
-  }
-  & .star-desc-cancel {
-    animation: ${StarDescFrame2} 1s linear -1s both;
-  }
   &.tween-animation2 {
     animation: ${({ tween }) =>
         tween === 2 ? ContentTweenFrame2 : ContentTweenFrame1}
@@ -199,6 +199,23 @@ const Light = styled(Box)<{ tween?: number }>`
   }
 `;
 
+// const VideoBox = styled(Box)`
+//   position: absolute;
+//   background: url('/images/commons/123.png') no-repeat;
+//   background-size: 0%;
+//   top: -3%;
+//   left: -39%;
+// `;
+const VideoBox = styled(GlobalVideo)<{ scale?: number }>`
+  & .MyPlanetBall {
+    transform: ${({ scale }) => `scale(${scale})`};
+    position: absolute;
+    left: ${({ scale }) => `${10 * scale}px`};
+    top: ${({ scale }) => `${10 * scale}px`};
+    z-index: -1;
+  }
+`;
+
 const List = () => {
   useFetchAllianceView();
   const { account } = useWeb3React();
@@ -217,6 +234,9 @@ const List = () => {
 
   const planetInfo = useStore(p => p.planet.planetInfo);
   const { order } = useStore(p => p.alliance.allianceView);
+  const { openBlindIds } = useStore(p => p.mysteryBox);
+  const { scale } = useStore(p => p.user);
+
   // 控制是否开启新手指导的
   const location = useLocation();
   const { guides, setGuide } = useGuide(location.pathname);
@@ -399,6 +419,24 @@ const List = () => {
     if (planetList?.length > 0 && sleepShow) return true;
     return false;
   }, [planetList, sleepShow]);
+
+  const GetVideoPosition = useCallback((index: number) => {
+    switch (index) {
+      case 0:
+        return 114;
+      case 1:
+        return 472;
+      case 2:
+        return 830;
+      case 3:
+        return 1190;
+      case 4:
+        return 1548;
+      default:
+        return null;
+    }
+  }, []);
+
   return (
     <ContentBox tween={tween} className={tween ? `tween-animation2` : ''}>
       {visibleGuide &&
@@ -462,28 +500,43 @@ const List = () => {
         )}
         {planetList?.length > 0 &&
           planetList?.map((item, index) => (
-            <Box key={item?.id}>
+            <Box position='relative' key={item?.id}>
               <Light tween={tween} className={`light-${index}`} />
-              <Text
-                className={tween ? 'star-desc-cancel' : 'star-desc'}
-                mb='6px'
-                textAlign='center'
-                fontSize='26px'
-                bold
-                color={QualityColor[item?.rarity]}
-              >
-                {item?.rarity ? t(`rarity-${item?.rarity}`) : ''}
-              </Text>
+              {openBlindIds?.indexOf(item.id) !== -1 && (
+                <Text
+                  className={tween ? 'star-desc-cancel' : 'star-desc'}
+                  mb='36px'
+                  textAlign='center'
+                  fontSize='26px'
+                  bold
+                  color={QualityColor[item?.rarity]}
+                >
+                  {item?.rarity ? t(`rarity-${item?.rarity}`) : ''}
+                </Text>
+              )}
               <AnimationStar
+                // style={{
+                //   opacity: openBlindIds?.indexOf(item.id) !== -1 ? 0 : 1,
+                // }}
+                mt={openBlindIds?.indexOf(item.id) !== -1 ? '' : '75px'}
                 className={`star${index}`}
                 onClick={() => {
-                  navigate(`/mystery-box/detail?i=${item?.id}`);
+                  if (openBlindIds?.indexOf(item.id) !== -1) {
+                    navigate(`/mystery-box/detail?i=${item?.id}`);
+                    return;
+                  }
+                  dispatch(setActivePlanet(item));
+                  dispatch(EditOpenBlindModalAsync(true));
                 }}
               >
-                <Globe
-                  shadow={QualityColor[item?.rarity]}
+                <PlanetBall
+                  shadow={
+                    openBlindIds?.indexOf(item.id) !== -1
+                      ? QualityColor[item?.rarity]
+                      : 0
+                  }
                   scale='ld'
-                  rotate
+                  rotate={openBlindIds?.indexOf(item.id) !== -1}
                   url={item?.picture1}
                 />
               </AnimationStar>
@@ -502,6 +555,43 @@ const List = () => {
                   </Text>
                 </Box>
               </Flex>
+              {openBlindIds?.indexOf(item.id) !== -1 &&
+                item?.rarity !== 1 &&
+                item?.rarity !== 2 && (
+                  // <VideoBox width={410} height={410}>
+                  //   <VideoStyled
+                  //     width='100%'
+                  //     height='100%'
+                  //     src={`/video/${item?.rarity}rarity.mp4`}
+                  //     autoPlay
+                  //     muted
+                  //     loop
+                  //     playsInline
+                  //   />
+                  // </VideoBox>
+                  <VideoBox
+                    width={260}
+                    height={260}
+                    src={`/video/${item?.rarity}rarity.mp4`}
+                    loop
+                    left={GetVideoPosition(index)}
+                    top={242}
+                    margin='auto'
+                    scale={scale}
+                  >
+                    {/* <PlanetBall
+                      className='MyPlanetBall'
+                      shadow={
+                        openBlindIds?.indexOf(item.id) !== -1
+                          ? QualityColor[item?.rarity]
+                          : 0
+                      }
+                      scale='ld'
+                      rotate={openBlindIds?.indexOf(item.id) !== -1}
+                      url={item?.picture1}
+                    /> */}
+                  </VideoBox>
+                )}
             </Box>
           ))}
       </Flex>

@@ -90,6 +90,8 @@ export interface MysteryBoxView {
 
 export interface MysteryBoxState {
   boxView: MysteryBoxView;
+  openBlind: boolean;
+  openBlindIds: number[];
 }
 
 export interface GalaxyInfo extends Api.Galaxy.GalaxyInfo {

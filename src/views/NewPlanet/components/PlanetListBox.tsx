@@ -96,7 +96,7 @@ const PlanetListBox: React.FC<{
                   height='100%'
                   flexDirection='column'
                   justifyContent='space-between'
-                  width='33%'
+                  width='35%'
                 >
                   <LeveFlex>
                     <Text
