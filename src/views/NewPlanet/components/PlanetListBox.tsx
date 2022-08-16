@@ -106,7 +106,7 @@ const PlanetListBox: React.FC<{
                     >
                       {t(getPlanetRarity(item?.rarity))}
                     </Text>
-                    <Text fontSize='16px' bold>
+                    <Text fontSize='16px' style={{ whiteSpace: 'nowrap' }} bold>
                       Lv {item?.level}
                     </Text>
                     <Flex alignItems='center'>
