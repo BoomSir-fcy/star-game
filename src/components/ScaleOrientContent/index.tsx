@@ -34,6 +34,7 @@ import { ToRechargeModal } from 'components/Modal/ToRechargeModal';
 import eventBus from 'utils/eventBus';
 import DepositWithdrawalModule from 'components/NavPop/DepositWithdrawalNew';
 import { useFetchUserBalance, useFetchUserProduct } from 'state/userInfo/hooks';
+import BlindPlanetBox from 'components/OpenBlindPlanet/BlindPlanetBox';
 
 // .introjs-tooltip{
 //   transform-origin: ${({ rotate }) => (rotate ? 'center' : '0  0')};
@@ -133,7 +134,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
 
   const { client } = useStore(p => p.user);
   const guideState = useStore(p => p.guide);
-
+  const { openBlind } = useStore(p => p.mysteryBox);
   const [minHeight, setMinHeight] = useState(900);
   const [cHeight, setCHeight] = useState(900);
   const [scale, setScale] = useState(1);
@@ -261,7 +262,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       <ModalContent scale={scale} id={MODAL_GLOBAL_ID_NAME} />
       <Dashboard scale={scale} />
       <Toast />
-
+      {openBlind && <BlindPlanetBox scale={scale} />}
       <Content id='scale-content' scale={scale} hideHeader={!!hideHeader}>
         {children}
         {/* 引导提示框 */}
