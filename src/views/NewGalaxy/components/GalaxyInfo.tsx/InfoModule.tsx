@@ -262,7 +262,8 @@ const InfoModule: React.FC<{
           height='45px'
           minWidth='45%'
           width='45%'
-          disabled={!claimMax || diffSeconds <= 0}
+          // disabled={!claimMax || diffSeconds <= 0}
+          disabled={!claimMax}
           onClick={handleClaim}
         >
           <Text color='textPrimary' bold>
@@ -270,14 +271,14 @@ const InfoModule: React.FC<{
             {`(${SubString_1(claimMax, 6)}BOX)`}
           </Text>
         </AuctionBtn>
-        <Box ml='20px'>
+        {/* <Box ml='20px'>
           <Text color='textTips' small>
             {t('Remaining time for claiming (24:00 UTC)')}
           </Text>
           <Text fontSize='18px'>
             {`${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')}`}
           </Text>
-        </Box>
+        </Box> */}
       </Flex>
       <Flex alignItems='center'>
         <AuctionBtn
