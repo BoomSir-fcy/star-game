@@ -15,7 +15,7 @@ import { Api } from 'apis';
 
 const SmText = styled(Text)`
   font-size: 16px;
-  width: 48%;
+  /* width: 48%; */
 `;
 
 const TipsOccupiedModul: React.FC<{
@@ -107,7 +107,7 @@ const TipsOccupiedModul: React.FC<{
         {t('Challenge ticket %num%BOX', { num: info.cost_star })}
       </Text>
       <Flex
-        padding='0 30px'
+        padding='0 20px'
         mb='120px'
         flexWrap='wrap'
         justifyContent='space-around'
@@ -117,13 +117,13 @@ const TipsOccupiedModul: React.FC<{
           &nbsp; &nbsp;
           {info.planet_owner_star}BOX
         </SmText>
-        <SmText>
+        {/* <SmText>
           {t('Rewards Storage Pool get:')}
           &nbsp; &nbsp;
           {info.storage_pool_star}BOX
-        </SmText>
+        </SmText> */}
         <SmText>
-          {t('Rewards Staking Pool get:')}
+          {t('Rewards Pool get:')}
           &nbsp; &nbsp;
           {info.staking_pool_star}BOX
         </SmText>

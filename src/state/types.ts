@@ -354,6 +354,7 @@ export interface AllianceState {
   allianceView: AllianceView;
   workingPlanet: number[];
   pkRecord: PkRecord;
+  DifficultyToExplore: number;
 }
 
 export interface PkRecord {

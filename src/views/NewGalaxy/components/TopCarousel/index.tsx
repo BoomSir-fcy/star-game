@@ -66,7 +66,7 @@ const TopCarousel: React.FC<{
         </Box>
       </Flex>
       <SwiperBox>
-        {AllLogs.length && (
+        {AllLogs.length ? (
           <Swiper
             initialSlide={0}
             effect='coverflow'
@@ -110,6 +110,8 @@ const TopCarousel: React.FC<{
               </SwiperSlide>
             ))}
           </Swiper>
+        ) : (
+          <></>
         )}
       </SwiperBox>
     </Content>

@@ -37,16 +37,28 @@ export class GalaxyApi extends Http {
     return this.get(`galaxy/auction-logs/${galaxyId}`);
   }
 
-  // 获取最大领取数量
+  // 获取星系最大领取数量
   async getClaimMax(
     galaxyId: number,
   ): Promise<Api.Response<{ amount: number }>> {
     return this.get(`galaxy/claim/max`, { galaxy_id: galaxyId });
   }
 
-  // 领取奖励
+  // 领取星系奖励
   async ClaimRewards(galaxyId: number) {
     return this.post(`galaxy/claim`, { galaxy_id: galaxyId });
+  }
+
+  // 获取恒星最大领取数量
+  async getPlanetClaimMax(
+    galaxyId: number,
+  ): Promise<Api.Response<{ amount: number }>> {
+    return this.get(`galaxy_planet/claim/max`, { galaxy_id: galaxyId });
+  }
+
+  // 领取恒星奖励
+  async ClaimPlanetRewards(galaxyId: number) {
+    return this.post(`galaxy/planet/claim`, { galaxy_id: galaxyId });
   }
 
   // 获取所有星系拍卖记录列表

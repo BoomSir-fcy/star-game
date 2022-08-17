@@ -43,6 +43,7 @@ export const initialState: AllianceState = {
     isEnd: false,
     loading: false,
   },
+  DifficultyToExplore: 0,
 };
 
 export const fetchAllianceViewAsync = (): AppThunk => async dispatch => {
@@ -98,11 +99,18 @@ export const allianceSlice = createSlice({
     setRecordLoad: state => {
       state.pkRecord.loading = true;
     },
+    setDifficultyToExplore: (state, action) => {
+      state.DifficultyToExplore = action.payload;
+    },
   },
 });
 
 // Actions
-export const { setAllianceView, setPkRecord, setRecordLoad } =
-  allianceSlice.actions;
+export const {
+  setAllianceView,
+  setPkRecord,
+  setRecordLoad,
+  setDifficultyToExplore,
+} = allianceSlice.actions;
 
 export default allianceSlice.reducer;

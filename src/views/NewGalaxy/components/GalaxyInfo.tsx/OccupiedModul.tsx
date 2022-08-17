@@ -17,6 +17,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Api } from 'apis';
 import usePlunder from 'views/NewGalaxy/hook';
 import { fetchGalaxyStarListAsync } from 'state/galaxy/reducer';
+import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
 import TipsOccupiedModul from './TipsOccupiedModul';
 
 const OutModule = styled(Box)`
@@ -84,9 +85,10 @@ const ListBox = styled(Box)`
 `;
 
 const ScrollBox = styled(Box)`
-  min-height: calc(100% - 60px);
-  max-height: calc(100% - 60px);
+  min-height: calc(100% - 60px - 50px);
+  max-height: calc(100% - 60px - 50px);
   overflow-y: auto;
+  margin-bottom: 16px;
 `;
 
 const LeveFlex = styled(Flex)`
@@ -128,12 +130,12 @@ const OccupiedModul: React.FC<{
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { handleGiveup } = usePlunder();
-
-  const { galaxyStarList } = useStore(p => p.galaxy);
+  const { galaxyStarList, currentGalaxy } = useStore(p => p.galaxy);
   const [pending, setPending] = useState(false);
   const [TotalReward, setTotalReward] = useState(0);
   const [visible, setVisible] = useState(false);
   const [ActiveInfo, setActiveInfo] = useState<Api.Galaxy.StarInfo>();
+  const [claimMax, setClaimMax] = useState(0);
 
   const GetRewardFactor = useCallback(
     (disapth_box: number) => {
@@ -211,6 +213,33 @@ const OccupiedModul: React.FC<{
     [handleGiveup, dispatch, setVisible, t, toastError, toastSuccess],
   );
 
+  // 获取领取Box数量
+  const getClaimMax = useCallback(async (id: number) => {
+    try {
+      const res = await Api.GalaxyApi.getPlanetClaimMax(id);
+      if (Api.isSuccess(res)) {
+        setClaimMax(res.data?.amount);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  const handleClaim = useCallback(async () => {
+    const galaxy_id = currentGalaxy.id;
+    try {
+      const res = await Api.GalaxyApi.ClaimPlanetRewards(galaxy_id);
+      if (Api.isSuccess(res)) {
+        toastSuccess(t('Claim Succeeded'));
+        getClaimMax(galaxy_id);
+        dispatch(fetchUserBalanceAsync());
+      }
+    } catch (error) {
+      console.error(error);
+      toastError(t('Claim Failed'));
+    }
+  }, [currentGalaxy.id, toastSuccess, toastError, t, getClaimMax, dispatch]);
+
   useEffect(() => {
     let num = 0;
     for (let i = 0; i < galaxyStarList.length; i++) {
@@ -220,6 +249,10 @@ const OccupiedModul: React.FC<{
     const ScrollDom = document.getElementById('ScrollDom');
     ScrollDom.scrollTop = 0;
   }, [galaxyStarList]);
+
+  useEffect(() => {
+    getClaimMax(currentGalaxy.id);
+  }, [currentGalaxy, getClaimMax]);
 
   return (
     <OutModule className={ShowListModule ? 'active' : 'removeActive'}>
@@ -370,12 +403,20 @@ const OccupiedModul: React.FC<{
             </Box>
           ))}
         </ScrollBox>
+        <Flex justifyContent='center'>
+          <Button
+            variant='purple'
+            height='45px'
+            disabled={!claimMax}
+            onClick={handleClaim}
+          >
+            <Text color='textPrimary' bold>
+              {t('Claim')}
+              {`(${SubString_1(claimMax, 6)}BOX)`}
+            </Text>
+          </Button>
+        </Flex>
       </ListBox>
-      {/* {pending && (
-        <LoadingBox>
-          <Spinner size={200} />
-        </LoadingBox>
-      )} */}
       {visible && (
         <Modal title='TIPS' visible={visible} setVisible={setVisible}>
           <TipsOccupiedModul
