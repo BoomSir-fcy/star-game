@@ -72,6 +72,8 @@ declare namespace Api {
       strengthen: Buffer;
       work_time: number; // 上次工作时间
       work_count: number; // 工作次数
+      give_build_index: number; // 赠送建造index
+      give_level: number; // 赠送建造等级
     }
 
     interface UpgradePlanetInfo {

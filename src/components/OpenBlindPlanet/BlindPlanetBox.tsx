@@ -58,7 +58,17 @@ const starVideoFrame = keyframes`
     opacity: 1;
   }
 `;
-
+const LightFrame = keyframes`
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+  }
+`;
 export const VideoStyled = styled.video<VideoSystem>`
   /* position: absolute; */
   ${layout}
@@ -73,8 +83,52 @@ const OutBox = styled(Box)`
   top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   z-index: 999;
+  & .shock {
+    animation: shake 2s ease-in-out;
+  }
+  @keyframes shake {
+    5%,
+    95% {
+      transform: translate3d(-20px, -20px, 0);
+    }
+    10%,
+    90% {
+      transform: translate3d(20px, 20px, 0);
+    }
+    15%,
+    85% {
+      transform: translate3d(-20px, -20px, 0);
+    }
+    20%,
+    80% {
+      transform: translate3d(20px, 20px, 0);
+    }
+    25%,
+    75% {
+      transform: translate3d(-20px, -20px, 0);
+    }
+    30%,
+    70% {
+      transform: translate3d(20px, 20px, 0);
+    }
+    35%,
+    65% {
+      transform: translate3d(-20px, -20px, 0);
+    }
+    40%,
+    60% {
+      transform: translate3d(20px, 20px, 0);
+    }
+    45%,
+    55% {
+      transform: translate3d(-20px, -20px, 0);
+    }
+    50% {
+      transform: translate3d(20px, 20px, 0);
+    }
+  }
 `;
 
 const PlanetInfoBox = styled(Box)<{ scale: number }>`
@@ -94,7 +148,27 @@ const PlanetInfoBox = styled(Box)<{ scale: number }>`
     animation: ${starVideoFrame} 2s linear;
   }
   & .no-video {
-    opacity: 0;
+    display: none;
+  }
+`;
+
+const Light = styled(Box)<{ Open?: boolean }>`
+  ${({ Open }) => (!Open ? `display: none;` : '')}
+  position: absolute;
+  top: -330px;
+  width: 220px;
+  height: 580px;
+  filter: blur(10px);
+  animation: ${LightFrame} 2s ease-in-out both;
+  ::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #ffeab1, transparent);
+    clip-path: polygon(35% 0, 65% 0, 100% 100%, 0% 100%);
   }
 `;
 
@@ -126,12 +200,14 @@ const BlindPlanetBox: React.FC<{
       }}
     >
       <PlanetInfoBox
+        className={PlayingBegin && info?.rarity === 6 ? 'shock' : ''}
         onClick={e => {
           e.preventDefault();
           e.stopPropagation();
         }}
         scale={scale}
       >
+        {info?.rarity !== 1 && <Light Open={Open} />}
         <Text
           className={Open ? 'star-desc' : 'star-desc-cancel'}
           mb='36px'

@@ -10,7 +10,7 @@ import {
   MysteryBoxQualities,
 } from 'components/MysteryBoxComNew';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { Box, Flex, Text, Image, Button, Spinner, Dots } from 'uikit';
+import { Box, Flex, Text, Image, Button, Spinner, Dots, MarkText } from 'uikit';
 import { ConnectWalletButton, Globe, PlanetBall, RaceAvatar } from 'components';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -31,6 +31,7 @@ import { setActivePlanet } from 'state/planet/actions';
 import { EditOpenBlindModalAsync } from 'state/mysteryBox/reducer';
 import { VideoStyled } from 'components/OpenBlindPlanet/BlindPlanetBox';
 import { GlobalVideo } from 'components/Video';
+import { getBuilderSpriteRes } from 'building/core/utils';
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -138,8 +139,20 @@ const LightFrame = keyframes`
     opacity: 0.3;
   }
 `;
+const LightFrame2 = keyframes`
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+  }
+`;
 const SPEED = 1;
 const AnimationStar = styled(Box)`
+  position: relative;
   cursor: pointer;
   &.star0 {
     animation: ${StarFrame} 1s cubic-bezier(0.19, -0.54, 0.73, 1.35) 0.1s both;
@@ -165,7 +178,7 @@ const ContentBox = styled(Box)<{ tween?: number }>`
       1s linear 0s both;
   }
 `;
-const Light = styled(Box)<{ tween?: number }>`
+const Light = styled(Box)<{ tween?: number; haveGift: boolean }>`
   ${({ tween }) => (tween ? `display: none;` : '')}
   position: absolute;
   top: -330px;
@@ -183,19 +196,24 @@ const Light = styled(Box)<{ tween?: number }>`
     clip-path: polygon(35% 0, 65% 0, 100% 100%, 0% 100%);
   }
   &.light-0 {
-    animation: ${LightFrame} 1s ease-in-out both;
+    animation: ${({ haveGift }) => (haveGift ? LightFrame2 : LightFrame)} 1s
+      ease-in-out both;
   }
   &.light-1 {
-    animation: ${LightFrame} 1s ease-in-out 0.5s both;
+    animation: ${({ haveGift }) => (haveGift ? LightFrame2 : LightFrame)} 1s
+      ease-in-out 0.5s both;
   }
   &.light-2 {
-    animation: ${LightFrame} 1s ease-in-out 1s both;
+    animation: ${({ haveGift }) => (haveGift ? LightFrame2 : LightFrame)} 1s
+      ease-in-out 1s both;
   }
   &.light-3 {
-    animation: ${LightFrame} 1s ease-in-out 1.5s both;
+    animation: ${({ haveGift }) => (haveGift ? LightFrame2 : LightFrame)} 1s
+      ease-in-out 1.5s both;
   }
   &.light-4 {
-    animation: ${LightFrame} 1s ease-in-out 2s both;
+    animation: ${({ haveGift }) => (haveGift ? LightFrame2 : LightFrame)} 1s
+      ease-in-out 2s both;
   }
 `;
 
@@ -214,6 +232,22 @@ const VideoBox = styled(GlobalVideo)<{ scale?: number }>`
     top: ${({ scale }) => `${10 * scale}px`};
     z-index: -1;
   }
+`;
+
+const CheckText = styled(MarkText)`
+  position: absolute;
+  font-style: normal;
+  font-size: 18px;
+  font-weight: bold;
+  top: 102px;
+  left: 20px;
+`;
+
+const LightBox = styled(Box)<{ type: number }>`
+  border: 1px solid ${({ type }) => (type === 1 ? '#FFD63E' : '#FF02C5')};
+  box-shadow: 0px 0px 7px 3px
+    ${({ type }) => (type === 1 ? '#FFD63E' : '#FF02C5')};
+  padding: 6px;
 `;
 
 const List = () => {
@@ -292,6 +326,11 @@ const List = () => {
       const list = Object.values(planetInfo).filter(
         item => planetIds.indexOf(item.id) !== -1,
       );
+      console.log(
+        raceData[list[0]?.race]?.children[list[0]?.give_build_index],
+        list[0]?.give_build_index,
+      );
+
       setPlanetList(list.length > 0 ? list : null);
     }
   }, [planetInfo, planetIds, planetList]);
@@ -492,7 +531,11 @@ const List = () => {
         quality={quality}
         style={{ opacity: 0.3 }}
       />
-      <Flex className='mystery-list-step0' justifyContent='space-evenly'>
+      <Flex
+        className='mystery-list-step0'
+        pt='124px'
+        justifyContent='space-evenly'
+      >
         {!planetList?.length && (
           <Flex width='100%' alignItems='center' justifyContent='center'>
             <Spinner />
@@ -501,7 +544,11 @@ const List = () => {
         {planetList?.length > 0 &&
           planetList?.map((item, index) => (
             <Box position='relative' key={item?.id}>
-              <Light tween={tween} className={`light-${index}`} />
+              <Light
+                tween={tween}
+                haveGift={item.give_level > 1 || item.give_build_index !== 0}
+                className={`light-${index}`}
+              />
               {openBlindIds?.indexOf(item.id) !== -1 && (
                 <Text
                   className={tween ? 'star-desc-cancel' : 'star-desc'}
@@ -539,11 +586,15 @@ const List = () => {
                   rotate={openBlindIds?.indexOf(item.id) !== -1}
                   url={item?.picture1}
                 />
+                {openBlindIds?.indexOf(item.id) === -1 && (
+                  <CheckText>{t('Click to reveal rarity')}</CheckText>
+                )}
               </AnimationStar>
               <Flex
                 className={tween ? 'star-desc-cancel' : 'star-desc'}
-                mt='30px'
+                pt='30px'
                 alignItems='center'
+                justifyContent='center'
               >
                 <RaceAvatar width='44px' height='44px' race={item?.race} />
                 <Box ml='9px'>
@@ -551,10 +602,55 @@ const List = () => {
                     {item?.race ? t(raceData[item?.race]?.name) : ''}
                   </Text>
                   <Text small>
-                    <span>Token: </span> {shortenToken(item?.id?.toString())}
+                    <span>Token: </span> {item?.id}
                   </Text>
                 </Box>
               </Flex>
+              {(item.give_level > 1 || item.give_build_index !== 0) && (
+                <Flex
+                  className={tween ? 'star-desc-cancel' : 'star-desc'}
+                  pt='20px'
+                  justifyContent='center'
+                  flexDirection='column'
+                >
+                  <Text
+                    fontSize='18px'
+                    mark
+                    fontStyle='normal'
+                    bold
+                    mb='16px'
+                    width='230px'
+                    textAlign='center'
+                  >
+                    {t('Congratulations for getting extra')}
+                  </Text>
+                  {item.give_level > 1 && (
+                    <LightBox mb={16} type={1}>
+                      <Text color='#FFD63E'>
+                        {t('Planet level gift')}:&nbsp;
+                        {`Lv.1 > Lv.${item.give_level}`}
+                      </Text>
+                      {/* <Text color='#FFD63E'>
+                        
+                      </Text> */}
+                    </LightBox>
+                  )}
+                  {item.give_build_index !== 0 && (
+                    <LightBox type={2}>
+                      <Text color='#FF02C5'>
+                        {t('Extra Building Gift')}:&nbsp;
+                      </Text>
+                      <Text color='#FF02C5'>
+                        {t(
+                          raceData[item?.race]?.children[item?.give_build_index]
+                            ?.name,
+                        )}
+                        *1
+                      </Text>
+                    </LightBox>
+                  )}
+                </Flex>
+              )}
               {openBlindIds?.indexOf(item.id) !== -1 &&
                 item?.rarity !== 1 &&
                 item?.rarity !== 2 && (
@@ -597,7 +693,7 @@ const List = () => {
       </Flex>
       <Flex
         className={tween ? 'star-desc-cancel' : 'star-desc'}
-        mt='139px'
+        mt='60px'
         justifyContent='center'
         position='relative'
       >
