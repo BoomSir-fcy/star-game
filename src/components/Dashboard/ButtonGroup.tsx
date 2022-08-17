@@ -14,6 +14,7 @@ import {
 } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import TooltipTrigger from 'components/Tooltip';
+import { useStore } from 'state';
 
 export interface ButtonGroupProps {
   onRefresh?: () => void;
@@ -61,6 +62,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
 }) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
+  const { scale, TooltipTriggerZIndex } = useStore(p => p.user);
 
   return (
     <Flex>
@@ -76,7 +78,12 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
       </SecondaryButton>
       {pathname === '/plant-league' ? (
         <TooltipTrigger
-          overlay={<Text color='textPrimary'>{t('Earn BOX')}</Text>}
+          zIndex={TooltipTriggerZIndex}
+          overlay={
+            <Text fontSize={`${16 * scale}px`} color='textPrimary'>
+              {t('Earn BOX')}
+            </Text>
+          }
           defaultVisible
           trigger={[]}
           placement='topRight'

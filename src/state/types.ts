@@ -298,6 +298,7 @@ export interface UserState {
     width: number;
     height: number;
   };
+  TooltipTriggerZIndex: number;
 }
 export interface State {
   user: UserState;

@@ -10,14 +10,18 @@ import { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { storeAction, useStore } from 'state';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { setDifficultyToExplore } from 'state/alliance/reducer';
+import 'intro.js/introjs.css';
+import { setTooltipTriggerZIndex } from 'state/user/actions';
+import { setNavZIndex } from 'state/userInfo/reducer';
 
 import AlliancePlanet from './components/AlliancePlanet';
 import Explore from './components/Explore';
 import RightFloatBox from './components/RightFloat';
 import ExploreModule from './components/Module/ExploreModule';
 import ManageModule from './components/Module/ManageModule';
-import 'intro.js/introjs.css';
 import { PlanetLeague, ToFind } from './components/AlliancePlanetStyle';
+import Formation from './components/Module/Formation';
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -61,11 +65,13 @@ const NewPlantLeague: React.FC = () => {
   const { unread_plunder_count, order } = useStore(
     p => p.alliance.allianceView,
   );
+  const { DifficultyToExplore } = useStore(p => p.alliance);
   const { guides, setGuide } = useGuide(location.pathname);
 
   const [ShowModule, setShowModule] = useState(false);
-  const [Difficulty, setDifficulty] = useState(0);
+  // const [Difficulty, setDifficulty] = useState(0);
   const [PlantManageModule, setPlantManageModule] = useState(false);
+  const [FormationModule, setFormation] = useState(false);
   const [ChoosePlant, setChoosePlant] = useState<orderInfo>();
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const [activeStep, setActiveStep] = useState(guides.step);
@@ -194,6 +200,17 @@ const NewPlantLeague: React.FC = () => {
     }
   }, [Booting]);
 
+  // 控制气泡弹窗层级
+  useEffect(() => {
+    if (FormationModule) {
+      dispatch(setTooltipTriggerZIndex(0));
+      dispatch(setNavZIndex(false));
+    } else {
+      dispatch(setTooltipTriggerZIndex(1070));
+      dispatch(setNavZIndex(true));
+    }
+  }, [FormationModule, dispatch]);
+
   return (
     <Layout height='940px' className='leagueOutBox'>
       {Booting && (
@@ -281,7 +298,7 @@ const NewPlantLeague: React.FC = () => {
         }}
       />
       <Explore
-        Difficulty={Difficulty}
+        Difficulty={DifficultyToExplore}
         ShowModule={ShowModule}
         setShowModule={e => {
           setPlantManageModule(false);
@@ -301,12 +318,18 @@ const NewPlantLeague: React.FC = () => {
       <Box zIndex={1} position='relative'>
         <ExploreModule
           ShowModule={ShowModule}
-          Difficulty={Difficulty}
-          setDifficulty={e => setDifficulty(e)}
+          Difficulty={DifficultyToExplore}
+          setDifficulty={e => dispatch(setDifficultyToExplore(e))}
+          setFormation={e => setFormation(e)}
         />
         <ManageModule
           PlantManageModule={PlantManageModule}
           ChoosePlant={ChoosePlant}
+        />
+        <Formation
+          Difficulty={DifficultyToExplore}
+          FormationModule={FormationModule}
+          setFormation={e => setFormation(e)}
         />
       </Box>
     </Layout>

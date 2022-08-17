@@ -6,6 +6,7 @@ import {
   setGlobalScale,
   setScreenMode,
   toggleTheme,
+  setTooltipTriggerZIndex,
 } from './actions';
 
 const currentTimestamp = () => new Date().getTime();
@@ -18,6 +19,7 @@ export const initialState: UserState = {
     width: 1920,
     height: 900,
   },
+  TooltipTriggerZIndex: 1070,
 };
 
 export default createReducer(initialState, builder =>
@@ -36,6 +38,10 @@ export default createReducer(initialState, builder =>
 
     .addCase(setScreenMode, (state, { payload }) => {
       state.screenMode = payload;
+    })
+
+    .addCase(setTooltipTriggerZIndex, (state, { payload }) => {
+      state.TooltipTriggerZIndex = payload;
     })
 
     .addCase(setGlobalClient, (state, { payload }: { payload: any }) => {

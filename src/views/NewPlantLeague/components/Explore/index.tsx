@@ -26,6 +26,8 @@ const Explore: React.FC<{
   const { max_work_count, now_work_count, end_time, free_time, alliance } =
     useStore(p => p.alliance.allianceView);
   const { userInfo } = useStore(p => p.userInfo);
+  const { scale, TooltipTriggerZIndex } = useStore(p => p.user);
+
   const timer = useRef<ReturnType<typeof setTimeout>>();
 
   const diffSeconds = useCountdownTime(0, 0, free_time);
@@ -112,7 +114,12 @@ const Explore: React.FC<{
   return (
     <Flex zIndex={1} position='relative' justifyContent='center'>
       <TooltipTrigger
-        overlay={<Text color='textPrimary'>{t('Earn Resources')}</Text>}
+        zIndex={TooltipTriggerZIndex}
+        overlay={
+          <Text fontSize={`${16 * scale}px`} color='textPrimary'>
+            {t('Earn Resources')}
+          </Text>
+        }
         defaultVisible
         trigger={[]}
         placement='topRight'

@@ -45,28 +45,14 @@ const ExploreModule: React.FC<{
   ShowModule: boolean;
   Difficulty: number;
   setDifficulty: (e) => void;
-}> = ({ ShowModule, Difficulty, setDifficulty }) => {
+  setFormation: (e) => void;
+}> = ({ ShowModule, Difficulty, setDifficulty, setFormation }) => {
   const { t } = useTranslation();
   const { toastError, toastSuccess } = useToast();
   const dispatch = useDispatch();
 
   const { max_work_count, now_work_count, end_time, free_time, alliance } =
     useStore(p => p.alliance.allianceView);
-
-  // 开始工作
-  const StartOrStopWorking = useCallback(async () => {
-    await Api.AllianceApi.AllianceWorking({ difficulty: Difficulty })
-      .then(res => {
-        if (Api.isSuccess(res)) {
-          toastSuccess(t('Operate Succeeded'));
-          dispatch(fetchAllianceViewAsync());
-        }
-      })
-      .catch(err => {
-        toastError(t('Operate Failed'));
-        console.error(err);
-      });
-  }, [toastSuccess, toastError, t, dispatch, Difficulty]);
 
   return (
     <Box
@@ -137,7 +123,8 @@ const ExploreModule: React.FC<{
             }
             onClick={() => {
               if (ShowModule) {
-                StartOrStopWorking();
+                setFormation(true);
+                // StartOrStopWorking();
               }
             }}
           >
