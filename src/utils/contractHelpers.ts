@@ -11,6 +11,7 @@ import {
   getPlanetAddress,
   getUserVaultAddress,
   getDsgAddress,
+  getGetCoinTextAddress,
 } from 'utils/addressHelpers';
 
 // ABI
@@ -22,6 +23,7 @@ import MysteryBoxAbi from 'config/abi/MysteryBox.json';
 import GalaxyAbi from 'config/abi/Galaxy.json';
 import PlanetAbi from 'config/abi/Planet.json';
 import UserVaultAbi from 'config/abi/UserVault.json';
+import GetTestCoin from 'config/abi/GetTestCoin.json';
 
 const getContract = (
   abi: any,
@@ -85,4 +87,10 @@ export const getDsgContract = (
   signer?: ethers.Signer | ethers.providers.Provider,
 ) => {
   return getContract(bep20Abi, getDsgAddress(), signer);
+};
+
+export const getCoinContract = (
+  signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+  return getContract(GetTestCoin, getGetCoinTextAddress(), signer);
 };

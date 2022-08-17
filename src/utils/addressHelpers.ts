@@ -57,3 +57,7 @@ export const getUserVaultAddress = () => {
 export const getBoxAddress = () => {
   return getAddress(addresses.BoxToken);
 };
+
+export const getGetCoinTextAddress = () => {
+  return getAddress(addresses.GetCoinTest);
+};

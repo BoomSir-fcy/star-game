@@ -88,7 +88,7 @@ const Login = () => {
   const { userInfoView, allowance, infoView } = useStore(p => p.userInfo);
 
   const { handleCheck } = useCheckName();
-  const { handleRegister } = useRegisterWithDsg();
+  const { handleRegister, TestToGetCoin } = useRegisterWithDsg();
   const { handleLogin, getPlanetNum } = useLogin();
 
   const createRef = useRef<ForwardRefRenderProps>(null);
@@ -187,6 +187,16 @@ const Login = () => {
       timer,
     ],
   );
+
+  const onHandleGetTestCoins = useCallback(async () => {
+    try {
+      const res = await TestToGetCoin();
+      toastSuccess(t('Claim Succeeded'));
+    } catch (error: any) {
+      console.error(error);
+      toastError(error?.data?.message);
+    }
+  }, [TestToGetCoin, toastError, toastSuccess, t]);
 
   useEffect(() => {
     if (account) {
@@ -307,6 +317,8 @@ const Login = () => {
           }}
         />
       )}
+      <Button onClick={onHandleGetTestCoins}>领取测试币</Button>
+
       <Flex
         height='100%'
         flexDirection='column'

@@ -61,5 +61,9 @@ const contracts = {
     [ChainId.BSC_MAINNET]: '',
     [ChainId.BSC_TESTNET]: '0xB7A7AE871d40d1bd45b071e9568D0070cA31C3db',
   },
+  GetCoinTest: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0x243AfD5010498f91288F1AF749988aF20F88827a',
+  },
 };
 export default contracts;
