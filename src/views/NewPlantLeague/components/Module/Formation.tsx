@@ -10,6 +10,7 @@ import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { PlanetBall } from 'components';
 import { QualityColor } from 'uikit/theme/colors';
 import { useNavigate } from 'react-router-dom';
+import GameFormation from './GameFormation';
 
 const OutBox = styled(Box)`
   width: 1918px;
@@ -35,7 +36,7 @@ const OutBox = styled(Box)`
 `;
 
 const FormationBox = styled(Box)`
-  width: 315px;
+  width: 316px;
   height: 276px;
   background: url('/images/commons/sky-bg3.jpg') no-repeat;
   background-size: cover;
@@ -94,7 +95,9 @@ const Formation: React.FC<{
                   </MarkText>
                 </Box>
               </Flex>
-              <FormationBox>123</FormationBox>
+              <FormationBox>
+                <GameFormation planetInfo={item} />
+              </FormationBox>
               <Flex pt='30px' justifyContent='center'>
                 <Button
                   variant='purple'

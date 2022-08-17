@@ -413,7 +413,12 @@ class Game extends EventTarget {
    * @param option 参数
    * @returns 小人
    */
-  createSoldier(_x: number, _y: number, option: AttrSoldierOptions) {
+  createSoldier(
+    _x: number,
+    _y: number,
+    option: AttrSoldierOptions,
+    enableDrag?: boolean,
+  ) {
     const axis = this.getAxis(_x, _y);
     let zIndex = 0;
     if (axis) {
@@ -426,6 +431,7 @@ class Game extends EventTarget {
       y: axis.y - 1000,
       axisPoint: axis,
       zIndex,
+      enableDrag,
     });
 
     this.addSoldier(soldier);

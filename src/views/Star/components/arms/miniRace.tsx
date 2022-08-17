@@ -42,8 +42,8 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
     height: GridHeight,
     enableDrag: false,
     scale: 0.5,
-    offsetStartX: 100,
-    offsetStartY: 100,
+    offsetStartX: 200,
+    offsetStartY: -100,
   });
 
   const [running, setRunning] = useState(null);
