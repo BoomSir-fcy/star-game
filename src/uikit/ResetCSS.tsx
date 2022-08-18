@@ -391,6 +391,11 @@ const ResetCSS = createGlobalStyle`
     background-size: 100% auto;
     background-repeat: no-repeat;
   }
+
+  /* 右上角提示框 */
+  .Toastify__toast-body > div:last-child{
+    word-break:break-word !important;
+  }
 `;
 
 export default ResetCSS;

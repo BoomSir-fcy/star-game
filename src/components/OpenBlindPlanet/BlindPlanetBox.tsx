@@ -267,6 +267,7 @@ const BlindPlanetBox: React.FC<{
         </VideoBox>
       </PlanetInfoBox>
       <VideoBeginBox
+        className={PlayingBegin && info?.rarity === 6 ? 'shock' : ''}
         display={PlayingBegin ? '' : 'none'}
         onClick={e => {
           e.preventDefault();

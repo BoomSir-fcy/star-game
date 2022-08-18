@@ -79,7 +79,7 @@ const Formation: React.FC<{
         {(order || []).map(planet => {
           const item = planet?.planet;
           return (
-            <Box>
+            <Box key={item.id}>
               <Flex mb='24px'>
                 <PlanetBall
                   scale='xs'

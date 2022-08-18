@@ -206,8 +206,6 @@ const Details = () => {
   }, [building, ref, areaX, areaY]);
 
   const initBuilder = React.useCallback(() => {
-    console.log(selfBuilding, 'selfBuilding');
-
     building.initBuilder(selfBuilding);
     // setToUpdate(true);
   }, [building, selfBuilding]);

@@ -35,7 +35,6 @@ class Boards extends EventTarget {
     const { width, height, test, enableDrag } = options || {};
     this.offsetStartX = options?.offsetStartX ?? config.OFFSET_START_X;
     this.offsetStartY = options?.offsetStartY ?? config.OFFSET_START_Y;
-    console.log(this.offsetStartX, this.offsetStartY);
 
     this.width = width || config.WIDTH;
     this.height = height || config.HEIGHT;

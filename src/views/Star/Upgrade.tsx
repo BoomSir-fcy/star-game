@@ -36,6 +36,7 @@ import { useGuide } from 'hooks/useGuide';
 import eventBus from 'utils/eventBus';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { QualityColor } from 'uikit/theme/colors';
+import { SubString_1 } from 'utils/DecimalPlaces';
 import { GradeBox, UpgradeCard, Upgrading } from './components/upgrade';
 import { useUpgrade } from './components/upgrade/hooks';
 
@@ -452,10 +453,14 @@ const Upgrade = () => {
                       justifyContent='space-between'
                       alignItems='center'
                     >
-                      <Text fontSize='20px'>{`${curExp} / ${maxExp}`}</Text>
+                      <Text fontSize='20px'>{`${SubString_1(
+                        curExp,
+                      )} / ${maxExp}`}</Text>
                       {Object.keys(activeMaterialMap).length > 0 && (
                         <Text fontSize='20px' color='textUp'>
-                          {t('Estimated +%value%', { value: expectedExp })}
+                          {t('Estimated +%value%', {
+                            value: SubString_1(expectedExp),
+                          })}
                         </Text>
                       )}
                     </Flex>

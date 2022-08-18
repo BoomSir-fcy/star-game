@@ -318,7 +318,6 @@ class Builder extends EventTarget {
     const hours = Time.hours();
     const minutes = Time.minutes();
     const seconds = Time.seconds();
-    console.log(Time, hours, minutes, seconds);
 
     if (hours <= 0 && minutes <= 0 && seconds <= 0) {
       Estimated = '00:00:00';

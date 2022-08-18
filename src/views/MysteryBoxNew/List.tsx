@@ -326,12 +326,8 @@ const List = () => {
       const list = Object.values(planetInfo).filter(
         item => planetIds.indexOf(item.id) !== -1,
       );
-      console.log(
-        raceData[list[0]?.race]?.children[list[0]?.give_build_index],
-        list[0]?.give_build_index,
-      );
-
-      setPlanetList(list.length > 0 ? list : null);
+      // 确保一次性渲染5个星球
+      setPlanetList(list.length === 5 ? list : null);
     }
   }, [planetInfo, planetIds, planetList]);
 
