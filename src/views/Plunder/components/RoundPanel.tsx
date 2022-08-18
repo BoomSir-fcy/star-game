@@ -83,8 +83,16 @@ const RoundPanel: React.FC<RoundPanelProps> = ({
             </Text>
           </Box>
           <Flex justifyContent='space-around'>
-            <Button onClick={() => setVisible(false)}>{t('Cancel')}</Button>
-            <Button onClick={handleEnd}>{t('Confirm')}</Button>
+            <Button
+              width='180px'
+              variant='purple'
+              onClick={() => setVisible(false)}
+            >
+              {t('Cancel')}
+            </Button>
+            <Button width='180px' variant='purple' onClick={handleEnd}>
+              {t('Confirm')}
+            </Button>
           </Flex>
         </Flex>
       </Modal>

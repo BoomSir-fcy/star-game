@@ -146,7 +146,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
   ) {
     return (
       <Flex pl='20px' mt='10px'>
-        <PanelText color='redSide'>加护盾</PanelText>
+        {/* <PanelText color='redSide'>加护盾</PanelText> */}
 
         {rounds}
         <PanelText>
@@ -178,7 +178,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
   ) {
     return (
       <Flex pl='20px' mt='10px'>
-        <PanelText color='redSide'>技能类</PanelText>
+        {/* <PanelText color='redSide'>技能类</PanelText> */}
 
         {rounds}
         <PanelText>
@@ -216,7 +216,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
               {round?.descInfo?.receives?.length > 0 &&
                 round?.type !== descType.BEAT_COLLISION && (
                   <Flex pl='20px' mt='10px'>
-                    <PanelText color='redSide'>范围类</PanelText>
+                    {/* <PanelText color='redSide'>范围类</PanelText> */}
                     <PanelText style={{ whiteSpace: 'nowrap' }}>
                       [{round?.id || detail?.id}]:&nbsp;
                     </PanelText>
@@ -292,7 +292,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
   ) {
     return (
       <Flex pl='20px' mt='10px'>
-        <PanelText color='redSide'>触发类</PanelText>
+        {/* <PanelText color='redSide'>触发类</PanelText> */}
 
         {rounds}
         {detail.descInfo?.receives.map((item, index) => {
@@ -331,7 +331,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
   ) {
     return (
       <Flex pl='20px' mt='10px'>
-        <PanelText color='redSide'>净化类</PanelText>
+        {/* <PanelText color='redSide'>净化类</PanelText> */}
 
         {rounds}
         <PanelText>
@@ -367,7 +367,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
   ) {
     return (
       <Flex pl='20px' mt='10px'>
-        <PanelText color='redSide'>免疫类</PanelText>
+        {/* <PanelText color='redSide'>免疫类</PanelText> */}
 
         {rounds}
         <PanelText>
@@ -400,7 +400,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
   ) {
     return (
       <Flex pl='20px' mt='10px'>
-        <PanelText color='redSide'>闪避类</PanelText>
+        {/* <PanelText color='redSide'>闪避类</PanelText> */}
 
         {rounds}
         <PanelText>
@@ -457,7 +457,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
   if (detail?.type) {
     return (
       <Flex pl='20px' mt='10px'>
-        <PanelText color='redSide'>伤害类</PanelText>
+        {/* <PanelText color='redSide'>伤害类</PanelText> */}
         {rounds}
         <PanelText>
           <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />

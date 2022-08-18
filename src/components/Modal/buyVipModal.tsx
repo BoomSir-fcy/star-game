@@ -61,7 +61,9 @@ export const BuyVipModal: React.FC<{
         </Text>
         <Flex justifyContent='space-between' mt='60px'>
           <Link to='/vip'>
-            <Button>{t('Become VIP')}</Button>
+            <Button variant='purple' width='260px'>
+              {t('Become VIP')}
+            </Button>
           </Link>
         </Flex>
       </Flex>

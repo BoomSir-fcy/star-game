@@ -437,7 +437,7 @@ const Pk = () => {
             active
             {...mineUser}
           />
-          <Energy />
+          {/* <Energy /> */}
         </Flex>
         <Flex flex='1' flexDirection='column'>
           <Flex mt='-52px' justifyContent='space-between'>
@@ -468,7 +468,7 @@ const Pk = () => {
 
         <Flex flexDirection='column' alignItems='center'>
           <PeopleCard mb='10px' {...matchUser} />
-          <Energy />
+          {/* <Energy /> */}
         </Flex>
       </Flex>
       {PKInfo && (
@@ -517,7 +517,12 @@ const Pk = () => {
           <Text fontSize='30px' color='warning'>
             {t('Failed to plunder the planet!')}
           </Text>
-          <Button mt='70px' onClick={() => navigate(-1)}>
+          <Button
+            width='180px'
+            variant='purple'
+            mt='70px'
+            onClick={() => navigate(-1)}
+          >
             {t('Confirm')}
           </Button>
         </Flex>
