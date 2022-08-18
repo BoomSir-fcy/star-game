@@ -54,6 +54,13 @@ export interface userProductView {
   power: number;
 }
 
+export interface userInviteInfoView {
+  bnb_income: string;
+  invite_reward: { [address: string]: string };
+  invite_user_num: number;
+  page: number;
+  page_size: number;
+}
 export interface UserInfoState {
   userBalance: UserBalanceView[];
   infoView: UserAgentInfoView;
@@ -65,6 +72,9 @@ export interface UserInfoState {
   };
   userProduct: userProductView;
   zIndex: boolean; // 导航层级
+  userInviteInfo: userInviteInfoView;
+  InviteInfoEnd: boolean;
+  InviteInfoLoading: boolean;
 }
 
 export interface MysteryBoxView {

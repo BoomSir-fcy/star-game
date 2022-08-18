@@ -31,8 +31,8 @@ export class UserApi extends Http {
   }
 
   // 获取用户邀请信息
-  async getInvite() {
-    const res = await this.get('user/invite');
+  async getInvite(params: Api.User.InviteParams) {
+    const res = await this.get('user/invite', params);
     return res;
   }
 

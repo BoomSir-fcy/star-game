@@ -114,3 +114,16 @@ export const fetchUserProduct = async () => {
     return null;
   }
 };
+
+export const fetchUserInviteInfo = async (params: Api.User.InviteParams) => {
+  try {
+    const res = await Api.UserApi.getInvite(params);
+    if (Api.isSuccess(res)) {
+      return res.data;
+    }
+    return null;
+  } catch (error) {
+    console.error(`fetch fetchUserInviteInfo error: ${error}`);
+    return null;
+  }
+};

@@ -8,6 +8,7 @@ import {
   fetchUserBalance,
   fetchUserInfoByAccount,
   fetchUserProduct,
+  fetchUserInviteInfo,
 } from './fetchers';
 
 const currentTimestamp = () => new Date().getTime();
@@ -60,8 +61,16 @@ export const initialState: UserInfoState = {
     population: 0,
     power: 0,
   },
-
   zIndex: true,
+  userInviteInfo: {
+    bnb_income: '0',
+    invite_reward: {},
+    invite_user_num: 0,
+    page: 1,
+    page_size: 10,
+  },
+  InviteInfoEnd: false,
+  InviteInfoLoading: true,
 };
 
 export const fetchInfoViewAsync =
@@ -109,6 +118,13 @@ export const fetchUserProductAsync = (): AppThunk => async dispatch => {
   const Product = await fetchUserProduct();
   dispatch(setProduct(Product));
 };
+
+export const fetchInviteInfoViewAsync =
+  (params: Api.User.InviteParams): AppThunk =>
+  async dispatch => {
+    const infoView = await fetchUserInviteInfo(params);
+    dispatch(setUserInviteInfo(infoView));
+  };
 
 export const userInfoSlice = createSlice({
   name: 'userInfo',
@@ -163,6 +179,26 @@ export const userInfoSlice = createSlice({
         state.userProduct = payload;
       }
     },
+    setUserInviteInfo: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        const { invite_reward, invite_user_num, page, page_size } = payload;
+        if (page > 1) {
+          state.userInviteInfo.invite_reward = {
+            ...state.userInviteInfo.invite_reward,
+            ...invite_reward,
+          };
+        } else {
+          state.userInviteInfo.invite_reward = invite_reward;
+        }
+        if (page * page_size >= invite_user_num) {
+          state.InviteInfoEnd = true;
+        } else {
+          state.InviteInfoEnd = false;
+        }
+        state.InviteInfoLoading = false;
+      }
+    },
   },
 });
 
@@ -175,6 +211,7 @@ export const {
   setAllowance,
   setBalance,
   setProduct,
+  setUserInviteInfo,
 } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;
