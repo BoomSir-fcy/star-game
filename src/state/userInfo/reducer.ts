@@ -122,6 +122,7 @@ export const fetchUserProductAsync = (): AppThunk => async dispatch => {
 export const fetchInviteInfoViewAsync =
   (params: Api.User.InviteParams): AppThunk =>
   async dispatch => {
+    dispatch(setInviteLoading(true));
     const infoView = await fetchUserInviteInfo(params);
     dispatch(setUserInviteInfo(infoView));
   };
@@ -179,6 +180,9 @@ export const userInfoSlice = createSlice({
         state.userProduct = payload;
       }
     },
+    setInviteLoading: (state, action) => {
+      state.InviteInfoLoading = action.payload;
+    },
     setUserInviteInfo: (state, action) => {
       const { payload } = action;
       if (payload) {
@@ -212,6 +216,7 @@ export const {
   setBalance,
   setProduct,
   setUserInviteInfo,
+  setInviteLoading,
 } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;
