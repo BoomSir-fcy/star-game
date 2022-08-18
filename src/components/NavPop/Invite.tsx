@@ -82,12 +82,8 @@ const InvitePop: React.FC = () => {
 
   useEffect(() => {
     const data = userInviteInfo.invite_reward;
-    if (data) {
-      const arr = [];
-      Object.keys(data).forEach(key => {
-        arr.push(key);
-      });
-      setInviteInfo(arr);
+    if (data.length) {
+      setInviteInfo(data);
     }
   }, [userInviteInfo.invite_reward]);
 
@@ -124,13 +120,13 @@ const InvitePop: React.FC = () => {
           <ScrollBox onScroll={loadMore}>
             {(InviteInfo || []).map(item => (
               <Flex
-                key={item}
+                key={item.sender}
                 mb='10px'
                 justifyContent='space-between'
                 alignItems='center'
               >
-                <Text>{item}</Text>
-                <Text>{userInviteInfo.invite_reward[item]}</Text>
+                <Text>{item.sender}</Text>
+                <Text>{item.reward}</Text>
               </Flex>
             ))}
           </ScrollBox>

@@ -54,9 +54,13 @@ export interface userProductView {
   power: number;
 }
 
+export interface invite_reward {
+  reward: string;
+  sender: string;
+}
 export interface userInviteInfoView {
   bnb_income: string;
-  invite_reward: { [address: string]: string };
+  invite_reward: invite_reward[];
   invite_user_num: number;
   page: number;
   page_size: number;

@@ -64,7 +64,7 @@ export const initialState: UserInfoState = {
   zIndex: true,
   userInviteInfo: {
     bnb_income: '0',
-    invite_reward: {},
+    invite_reward: [],
     invite_user_num: 0,
     page: 1,
     page_size: 10,
@@ -188,10 +188,10 @@ export const userInfoSlice = createSlice({
       if (payload) {
         const { invite_reward, invite_user_num, page, page_size } = payload;
         if (page > 1) {
-          state.userInviteInfo.invite_reward = {
+          state.userInviteInfo.invite_reward = [
             ...state.userInviteInfo.invite_reward,
             ...invite_reward,
-          };
+          ];
         } else {
           state.userInviteInfo.invite_reward = invite_reward;
         }
