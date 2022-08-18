@@ -326,11 +326,13 @@ const NewPlantLeague: React.FC = () => {
           PlantManageModule={PlantManageModule}
           ChoosePlant={ChoosePlant}
         />
-        <Formation
-          Difficulty={DifficultyToExplore}
-          FormationModule={FormationModule}
-          setFormation={e => setFormation(e)}
-        />
+        {(FormationModule || ShowModule) && (
+          <Formation
+            Difficulty={DifficultyToExplore}
+            FormationModule={FormationModule}
+            setFormation={e => setFormation(e)}
+          />
+        )}
       </Box>
     </Layout>
   );

@@ -18,6 +18,7 @@ import { Api } from 'apis';
 import usePlunder from 'views/NewGalaxy/hook';
 import { fetchGalaxyStarListAsync } from 'state/galaxy/reducer';
 import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
+import { TooltipTrigger } from 'components';
 import TipsOccupiedModul from './TipsOccupiedModul';
 
 const OutModule = styled(Box)`
@@ -131,6 +132,8 @@ const OccupiedModul: React.FC<{
   const { account } = useWeb3React();
   const { handleGiveup } = usePlunder();
   const { galaxyStarList, currentGalaxy } = useStore(p => p.galaxy);
+  const { scale, TooltipTriggerZIndex } = useStore(p => p.user);
+
   const [pending, setPending] = useState(false);
   const [TotalReward, setTotalReward] = useState(0);
   const [visible, setVisible] = useState(false);
@@ -260,10 +263,29 @@ const OccupiedModul: React.FC<{
         <CloseBox onClick={() => setShowListModule(false)}>
           <CloseImg src='/images/commons/icon/back.png' alt='' />
         </CloseBox>
-        <Flex mb='20px' justifyContent='space-between' alignItems='flex-end'>
+        <Flex mb='20px' alignItems='flex-end'>
           <MarkText fontSize='20px' bold fontStyle='normal'>
             {t('Occupy')}
           </MarkText>
+          <TooltipTrigger
+            overlay={
+              <Text
+                width={300}
+                fontSize={`${16 * scale}px`}
+                color='textPrimary'
+              >
+                {t('occupationRules')}
+              </Text>
+            }
+            placement='leftBottom'
+          >
+            <Image
+              ml='10px'
+              width={25}
+              height={25}
+              src='/images/commons/icon/help-new.png'
+            />
+          </TooltipTrigger>
         </Flex>
         <ScrollBox id='ScrollDom'>
           {(galaxyStarList ?? []).map((item, index) => (
