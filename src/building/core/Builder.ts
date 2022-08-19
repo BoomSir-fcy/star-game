@@ -223,8 +223,13 @@ class Builder extends EventTarget {
     this.cancelSprite.width = 70;
     this.cancelSprite.height = 70;
     this.cancelSprite.zIndex = 1000;
-    this.cancelSprite.addListener('click', e => this.onCancel(e));
     this.container.addChild(this.cancelSprite);
+    // this.cancelSprite.addListener('click', e => this.onCancel(e));
+    this.cancelSprite
+        .on('pointerdown', (e) => Builder.onDragStart(e))
+        .on('pointerup', (e) => this.onBtnDragEnd(e))
+        .on('pointerupoutside', (e) => this.onBtnDragEnd(e))
+        .on('pointermove', (e) => Builder.onDragMove(e));
 
     this.confirmSprite.buttonMode = true;
     this.confirmSprite.interactive = true;
@@ -233,9 +238,59 @@ class Builder extends EventTarget {
     this.confirmSprite.height = 70;
     this.confirmSprite.position.set(20, 10);
     this.confirmSprite.zIndex = 1000;
-    this.confirmSprite.addListener('click', e => this.onConfirm(e));
+    // this.confirmSprite.addListener('click', e => this.onConfirm(e));
     this.container.addChild(this.confirmSprite);
+
+    this.confirmSprite
+      .on('pointerdown', (e) => Builder.onDragStart(e))
+      .on('pointerup', (e) => this.onBtnDragEnd(e))
+      .on('pointerupoutside', (e) => this.onBtnDragEnd(e))
+      .on('pointermove', (e) => Builder.onDragMove(e));
   }
+
+  static onDragStart(event) {
+    const obj = event.currentTarget;
+    obj.dragData = event.data;
+    obj.dragging = 1;
+    obj.dragPointerStart = event.data.getLocalPosition(obj.parent);
+    obj.dragObjStart = new Point();
+    obj.dragObjStart.copyFrom(obj.position);
+    obj.dragGlobalStart = new Point();
+    obj.dragGlobalStart.copyFrom(event.data.global);
+  }
+
+  onBtnDragEnd(event) {
+    const obj = event.currentTarget;
+    if (obj.dragging === 1) {
+        this.toggle(obj, event);
+    }
+    obj.dragging = 0;
+    obj.dragData = null;
+    // set the interaction data to null
+  }
+
+  toggle(obj, e) {
+    if (obj === this.confirmSprite) {
+      this.onConfirm(e)
+    } else if (this.cancelSprite) {
+      this.onCancel(e)
+    }
+  }
+
+  static onDragMove(event) {
+    const obj = event.currentTarget;
+    if (!obj.dragging) return;
+    const data = obj.dragData; // it can be different pointer!
+    if (obj.dragging === 1) {
+    // click or drag?
+        if (Math.abs(data.global.x - obj.dragGlobalStart.x)
+            + Math.abs(data.global.y - obj.dragGlobalStart.y) >= 5) {
+            // DRAG
+            obj.dragging = 2;
+        }
+    }
+  }
+
 
   removeHandleBtn() {
     this.container.removeChild(this.cancelSprite);
