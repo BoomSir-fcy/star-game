@@ -258,7 +258,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                       setActive(row.index);
                       onPreview({ ...row, isPreview: true });
 
-                      onChangeGuide();
+                      // onChangeGuide();
                     }}
                     onPointerDown={e => {
                       dragStartHandle(e, row);
@@ -266,7 +266,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
                     onAddClick={() => {
                       handleGoIntoBattle(row);
                       onPreview(row);
-                      onChangeGuide();
+                      // onChangeGuide();
 
                       dispatch(setNavZIndex(true));
                       dispatch(storeAction.queueVisbleSide(false));
