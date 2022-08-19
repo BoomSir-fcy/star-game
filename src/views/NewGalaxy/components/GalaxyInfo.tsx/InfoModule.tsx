@@ -324,11 +324,16 @@ const InfoModule: React.FC<{
         {OwnerInfo.address.toLocaleLowerCase() ===
         account.toLocaleLowerCase() ? (
           <>
-            <AuctionBtn variant='purple' width='50%' disabled>
-              <Text color='textPrimary' bold>
-                {t('Congratulations')}
-              </Text>
-              <Text color='textPrimary' bold>
+            <AuctionBtn
+              variant='purple'
+              height='100%'
+              minWidth='50%'
+              width='max-content'
+              padding='4px 10px'
+              disabled
+            >
+              <Text width='max-content' color='textPrimary' bold>
+                <Box>{t('Congratulations')}</Box>
                 {t('Become the Lord of %name% galaxy', {
                   name: currentGalaxy.name,
                 })}
