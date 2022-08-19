@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+} from 'react';
 import { Button, Flex, Box, Spinner, MarkText, Text, Image, Dots } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
@@ -86,8 +92,8 @@ const ListBox = styled(Box)`
 `;
 
 const ScrollBox = styled(Box)`
-  min-height: calc(100% - 60px - 50px);
-  max-height: calc(100% - 60px - 50px);
+  min-height: calc(100% - 150px - 50px);
+  max-height: calc(100% - 150px - 50px);
   overflow-y: auto;
   margin-bottom: 16px;
 `;
@@ -139,6 +145,8 @@ const OccupiedModul: React.FC<{
   const [visible, setVisible] = useState(false);
   const [ActiveInfo, setActiveInfo] = useState<Api.Galaxy.StarInfo>();
   const [claimMax, setClaimMax] = useState(0);
+
+  const timer = useRef<ReturnType<typeof setTimeout>>();
 
   const GetRewardFactor = useCallback(
     (disapth_box: number) => {
@@ -254,8 +262,18 @@ const OccupiedModul: React.FC<{
   }, [galaxyStarList]);
 
   useEffect(() => {
-    getClaimMax(currentGalaxy.id);
-  }, [currentGalaxy, getClaimMax]);
+    if (timer.current) {
+      clearInterval(timer.current);
+    }
+    timer.current = setInterval(() => {
+      getClaimMax(currentGalaxy.id);
+    }, 3000);
+    return () => {
+      if (timer.current) {
+        clearInterval(timer.current);
+      }
+    };
+  }, [timer, currentGalaxy, getClaimMax]);
 
   return (
     <OutModule className={ShowListModule ? 'active' : 'removeActive'}>
@@ -263,19 +281,13 @@ const OccupiedModul: React.FC<{
         <CloseBox onClick={() => setShowListModule(false)}>
           <CloseImg src='/images/commons/icon/back.png' alt='' />
         </CloseBox>
-        <Flex mb='20px' alignItems='flex-end'>
-          <MarkText fontSize='20px' bold fontStyle='normal'>
+        <Flex alignItems='flex-end'>
+          <MarkText padding={0} fontSize='20px' bold fontStyle='normal'>
             {t('Occupy')}
           </MarkText>
-          <TooltipTrigger
+          {/* <TooltipTrigger
             overlay={
-              <Text
-                width={300}
-                fontSize={`${16 * scale}px`}
-                color='textPrimary'
-              >
-                {t('occupationRules')}
-              </Text>
+              
             }
             placement='leftBottom'
           >
@@ -285,8 +297,11 @@ const OccupiedModul: React.FC<{
               height={25}
               src='/images/commons/icon/help-new.png'
             />
-          </TooltipTrigger>
+          </TooltipTrigger> */}
         </Flex>
+        <Text mb='10px' small>
+          {t('occupationRules')}
+        </Text>
         <ScrollBox id='ScrollDom'>
           {(galaxyStarList ?? []).map((item, index) => (
             <Box mb='30px' key={`${item.number}`}>

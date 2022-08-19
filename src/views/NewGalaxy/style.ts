@@ -77,7 +77,7 @@ export const UserImg = styled.img`
 `;
 
 export const BorderBox = styled(Box)`
-  padding-bottom: 10px;
+  padding-bottom: 20px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.borderPrimary};
 `;
 
@@ -139,4 +139,9 @@ export const GalaxyImg = styled.img`
       transform: translateY(0px) translate(-50%, -50%) scale(0.8);
     }
   } */
+`;
+
+export const GetImg = styled.img`
+  height: 16px;
+  width: 20px;
 `;
