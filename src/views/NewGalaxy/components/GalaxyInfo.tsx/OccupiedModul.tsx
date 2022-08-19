@@ -5,7 +5,17 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { Button, Flex, Box, Spinner, MarkText, Text, Image, Dots } from 'uikit';
+import {
+  Button,
+  Flex,
+  Box,
+  Spinner,
+  MarkText,
+  Text,
+  Image,
+  Dots,
+  BalanceText,
+} from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
 import { useStore } from 'state';
@@ -261,6 +271,10 @@ const OccupiedModul: React.FC<{
     ScrollDom.scrollTop = 0;
   }, [galaxyStarList]);
 
+  // useEffect(() => {
+  //   getClaimMax(currentGalaxy.id);
+  // }, [currentGalaxy.id, getClaimMax]);
+
   useEffect(() => {
     if (timer.current) {
       clearInterval(timer.current);
@@ -448,8 +462,19 @@ const OccupiedModul: React.FC<{
             onClick={handleClaim}
           >
             <Text color='textPrimary' bold>
-              {t('Claim')}
-              {`(${SubString_1(claimMax, 6)}BOX)`}
+              <Flex alignItems='center'>
+                {t('Claim')}(
+                {claimMax ? (
+                  <BalanceText
+                    fontSize='16px'
+                    color='textPrimary'
+                    value={Number(SubString_1(claimMax, 6))}
+                  />
+                ) : (
+                  SubString_1(claimMax, 6)
+                )}
+                BOX)
+              </Flex>
             </Text>
           </Button>
         </Flex>

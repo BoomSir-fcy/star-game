@@ -175,6 +175,7 @@ const InfoModule: React.FC<{
   useEffect(() => {
     dispatch(fetchAuctionRecordListAsync(currentGalaxy.id));
     dispatch(fetchOwnerInfoAsync(currentGalaxy.id));
+    // getClaimMax(currentGalaxy.id);
   }, [dispatch, currentGalaxy]);
 
   useEffect(() => {
@@ -378,17 +379,19 @@ const InfoModule: React.FC<{
           onClick={handleClaim}
         >
           <Text color='textPrimary' bold>
-            {t('Claim')}(
-            {claimMax ? (
-              <BalanceText
-                fontSize='16px'
-                color='textPrimary'
-                value={Number(SubString_1(claimMax, 6))}
-              />
-            ) : (
-              SubString_1(claimMax, 6)
-            )}
-            BOX)
+            <Flex alignItems='center'>
+              {t('Claim')}(
+              {claimMax ? (
+                <BalanceText
+                  fontSize='16px'
+                  color='textPrimary'
+                  value={Number(SubString_1(claimMax, 6))}
+                />
+              ) : (
+                SubString_1(claimMax, 6)
+              )}
+              BOX)
+            </Flex>
           </Text>
         </AuctionBtn>
         {/* <Box ml='20px'>
