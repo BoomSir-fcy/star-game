@@ -145,8 +145,25 @@ export interface GalaxyState {
   galaxy_total_box: number;
   planet_total_box: number;
   galaxyNftList: GalaxyNft[];
+  GalaxReportList: GalaxReportListView[];
 }
 
+export interface GalaxReportListView {
+  id: number;
+  battleTime: number;
+  galaxy: number;
+  number: number;
+  address: string;
+  fromAddress: string;
+  toAddress: string;
+  success: number;
+  loseUnit: number;
+  loseDurability: number;
+  power: number;
+  planetId: string;
+  detail: string;
+  name: string;
+}
 export interface OwnerInfoView {
   hold_time: number;
   nickname: string;

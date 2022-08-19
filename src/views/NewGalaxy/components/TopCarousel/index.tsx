@@ -50,7 +50,7 @@ const TopCarousel: React.FC<{
   const [index, setIndex] = useState(1);
 
   return (
-    <Content width={width} pl={pl}>
+    <Content width={width} pl={pl} minWidth='500px'>
       <Flex mb='20px' justifyContent='space-around' alignItems='flex-end'>
         <Box>
           <Text>{t('Star Lord get')} BOX</Text>

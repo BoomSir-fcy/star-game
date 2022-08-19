@@ -14,10 +14,12 @@ import eventBus from 'utils/eventBus';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
+import { useFetchGalaxReportList } from 'state/galaxy/hooks';
 import { PkBox } from './pkBox';
 import { BattleTop } from './BattleTop';
 import { InProgress } from './components/inProgress';
 import 'intro.js/introjs.css';
+import { GalaxyInProgress } from './components/GalaxyInProgress';
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -64,7 +66,7 @@ const ScrollBox = styled(Box)`
 
 const RowFlex = styled(Flex)`
   overflow-x: auto;
-  height: 364px;
+  height: max-content;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
   margin-bottom: 30px;
@@ -96,6 +98,8 @@ const BattleReport = () => {
     loading,
   } = pkRecord;
 
+  const { GalaxReportList } = useStore(p => p.galaxy);
+
   const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const [Start_time, setStart_time] = useState<number>(
@@ -110,7 +114,7 @@ const BattleReport = () => {
   const [activeStep, setActiveStep] = useState(guides.step);
 
   useFetchCombatRecord(Start_time, End_time);
-
+  useFetchGalaxReportList(Start_time, End_time);
   // const loadMore = useCallback(
   //   (e: any) => {
   //     const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
@@ -199,8 +203,8 @@ const BattleReport = () => {
         }}
       />
 
-      <ScrollBox className='Pk_list'>
-        {RecordList.length > 0 ? (
+      <ScrollBox className='Pk_list' pb={20}>
+        {RecordList.length > 0 || GalaxReportList.length > 0 ? (
           <>
             {(RecordList ?? []).map((item, index) => (
               <RowFlex key={item.id}>
@@ -212,6 +216,11 @@ const BattleReport = () => {
                     info={info}
                   />
                 ))}
+              </RowFlex>
+            ))}
+            {(GalaxReportList ?? []).map((item, index) => (
+              <RowFlex key={item.id}>
+                <GalaxyInProgress info={item} />
               </RowFlex>
             ))}
           </>

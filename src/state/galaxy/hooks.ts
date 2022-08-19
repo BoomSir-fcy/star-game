@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GalaxyInfo, GalaxyState } from 'state/types';
 import {
   fetchAllLogsAsync,
+  fetchGalaxReportListAsync,
   fetchGalaxyListAsync,
   fetchGalaxyStarListAsync,
   fetchGetNftViewAsync,
@@ -109,6 +110,27 @@ export const useFetchOwnerInfo = (nft_id: number) => {
       dispatch(fetchOwnerInfoAsync(nft_id));
     }
   }, [account, nft_id, dispatch]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return {
+    fetch,
+  };
+};
+
+export const useFetchGalaxReportList = (
+  start_time: number,
+  end_time: number,
+) => {
+  const dispatch = useDispatch();
+  const { account } = useActiveWeb3React();
+  const fetch = useCallback(() => {
+    if (account && start_time && end_time) {
+      dispatch(fetchGalaxReportListAsync(start_time || 1, end_time));
+    }
+  }, [account, start_time, end_time, dispatch]);
 
   useEffect(() => {
     fetch();

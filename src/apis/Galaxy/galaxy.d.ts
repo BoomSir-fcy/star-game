@@ -46,5 +46,10 @@ declare namespace Api {
       timestamp: number;
       signature: string;
     }
+
+    interface Report {
+      start_time: number;
+      end_time: number;
+    }
   }
 }

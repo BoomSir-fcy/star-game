@@ -4,6 +4,7 @@ import { AppThunk, GalaxyInfo, GalaxyState } from 'state/types';
 import {
   fetchAllLogs,
   fetchAuctionRecordList,
+  fetchGalaxReportList,
   fetchGalaxyList,
   fetchGalaxyStarList,
   fetchGetNftView,
@@ -49,6 +50,7 @@ export const initialState: GalaxyState = {
   galaxy_total_box: 0,
   planet_total_box: 0,
   galaxyNftList: [],
+  GalaxReportList: [],
 };
 
 export const fetchGalaxyListAsync = (): AppThunk => async dispatch => {
@@ -95,6 +97,13 @@ export const fetchAuctionRecordListAsync =
   async dispatch => {
     const list = await fetchAuctionRecordList(galaxyId);
     dispatch(setAuctionRecordList(list));
+  };
+
+export const fetchGalaxReportListAsync =
+  (start_time: number, end_time: number): AppThunk =>
+  async dispatch => {
+    const info = await fetchGalaxReportList(start_time, end_time);
+    dispatch(GalaxReportList(info));
   };
 
 export const galaxySlice = createSlice({
@@ -170,6 +179,12 @@ export const galaxySlice = createSlice({
         state.OwnerInfo = payload;
       }
     },
+    GalaxReportList: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        state.GalaxReportList = payload;
+      }
+    },
   },
 });
 
@@ -186,6 +201,7 @@ export const {
   setAllLogsList,
   setOwnerInfo,
   setGalaxyNftList,
+  GalaxReportList,
 } = galaxySlice.actions;
 
 export default galaxySlice.reducer;

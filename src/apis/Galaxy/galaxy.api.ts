@@ -72,4 +72,10 @@ export class GalaxyApi extends Http {
     const res = await this.get('galaxy/owner/info', { nft_id });
     return res;
   }
+
+  // 获取掠夺战斗记录
+  async getGalaxReport(params: Api.Galaxy.Report) {
+    const res = await this.get('galaxy/battle/list', params);
+    return res;
+  }
 }

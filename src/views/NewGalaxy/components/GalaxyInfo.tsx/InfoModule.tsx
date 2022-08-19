@@ -255,25 +255,23 @@ const InfoModule: React.FC<{
         </Flex>
       </BorderBox>
       <BorderBox mb={20}>
-        <Text mb='18px'>{t('拍卖获得星系后，您可以')}</Text>
+        <Text mb='18px'>{t('GalaxyDesc1')}</Text>
         <Flex mb='12px'>
-          <GetImg src='/images/commons/icon/getSuccess.png' />
+          <GetImg src='/images/commons/icon/icon-finish.png' />
           <Text ml='10px' fontSize='14px'>
-            {t('获得该星系产出BOX的20%')}
+            {t('GalaxyDesc1-1')}
           </Text>
         </Flex>
         <Flex mb='12px'>
-          <GetImg src='/images/commons/icon/getSuccess.png' />
+          <GetImg src='/images/commons/icon/icon-finish.png' />
           <Text ml='10px' fontSize='14px'>
-            {t('获得其他玩家付出占领恒星挑战费用的30%')}
+            {t('GalaxyDesc1-2')}
           </Text>
         </Flex>
         <Flex mb='12px'>
-          <GetImg src='/images/commons/icon/getSuccess.png' />
+          <GetImg src='/images/commons/icon/icon-finish.png' />
           <Text ml='10px' fontSize='14px'>
-            {t(
-              '如果您的星系被别人拍走，您将获得原本竞拍的金额+额外15%的BNB，自动发到您的BNB链地址。并收到消息栏的通知',
-            )}
+            {t('GalaxyDesc1-3')}
           </Text>
         </Flex>
       </BorderBox>
@@ -327,10 +325,12 @@ const InfoModule: React.FC<{
           <>
             <AuctionBtn variant='purple' width='50%' disabled>
               <Text color='textPrimary' bold>
-                {t('恭喜你')}
+                {t('Congratulations')}
               </Text>
               <Text color='textPrimary' bold>
-                {t('成为 %name%星系主', { name: currentGalaxy.name })}
+                {t('Become the Lord of %name% galaxy', {
+                  name: currentGalaxy.name,
+                })}
               </Text>
             </AuctionBtn>
           </>

@@ -137,3 +137,22 @@ export const fetchOwnerInfo = async (nft_id: number) => {
     return null;
   }
 };
+
+export const fetchGalaxReportList = async (
+  start_time: number,
+  end_time: number,
+) => {
+  try {
+    const res = await Api.GalaxyApi.getGalaxReport({
+      start_time,
+      end_time,
+    });
+    if (Api.isSuccess(res)) {
+      return res?.data?.list;
+    }
+    return null;
+  } catch (error) {
+    console.error(`fetch fetchGalaxReportList error: ${error}`);
+    return null;
+  }
+};
