@@ -155,6 +155,7 @@ export interface OwnerInfoView {
   all_get_box: number;
   all_auction_num: number;
   power: number;
+  address: string;
 }
 export interface AllLogsInfo {
   id: number;

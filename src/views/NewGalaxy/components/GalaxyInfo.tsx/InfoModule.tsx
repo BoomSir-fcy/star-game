@@ -1,6 +1,12 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
 import { useStore } from 'state';
-import { Text, Flex, Box, GraphicsCard, Dots } from 'uikit';
+import { Text, Flex, Box, GraphicsCard, Dots, BalanceText } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { Api } from 'apis';
@@ -12,6 +18,7 @@ import {
   BorderBox,
   ScrollBox,
   AuctionBtn,
+  GetImg,
 } from 'views/NewGalaxy/style';
 import {
   fetchAuctionRecordListAsync,
@@ -33,6 +40,7 @@ import dayjs from 'dayjs';
 import { getTimePeriod, useCountdownTime } from 'components';
 import { useToast } from 'contexts/ToastsContext';
 import { fetchUserBalanceAsync } from 'state/userInfo/reducer';
+import { useWeb3React } from '@web3-react/core';
 
 const InfoModule: React.FC<{
   OpenInfo: boolean;
@@ -42,6 +50,8 @@ const InfoModule: React.FC<{
   const dispatch = useDispatch();
   const { onAuction } = useAuction();
   const { toastSuccess, toastError } = useToast();
+  const { account } = useWeb3React();
+  const timer = useRef<ReturnType<typeof setTimeout>>();
 
   const { currentGalaxy, auctionRecordList, OwnerInfo, galaxyNftList } =
     useStore(p => p.galaxy);
@@ -75,18 +85,18 @@ const InfoModule: React.FC<{
   }, [incomingPrice, currentPrice]);
 
   // 领取倒计时
-  const endTimestamp = dayjs().utc(true).endOf('day').unix();
-  const startTimestamp = dayjs().utc(true).unix();
-  const diffSeconds = useCountdownTime(0, 0, endTimestamp - startTimestamp);
+  // const endTimestamp = dayjs().utc(true).endOf('day').unix();
+  // const startTimestamp = dayjs().utc(true).unix();
+  // const diffSeconds = useCountdownTime(0, 0, endTimestamp - startTimestamp);
 
-  const { hour, minute, second } = useMemo(() => {
-    const { hours, minutes, seconds } = getTimePeriod(diffSeconds);
-    return {
-      hour: hours,
-      minute: minutes,
-      second: seconds,
-    };
-  }, [diffSeconds]);
+  // const { hour, minute, second } = useMemo(() => {
+  //   const { hours, minutes, seconds } = getTimePeriod(diffSeconds);
+  //   return {
+  //     hour: hours,
+  //     minute: minutes,
+  //     second: seconds,
+  //   };
+  // }, [diffSeconds]);
 
   // 竞拍冷却时间
   const cooldownTimestamp = new BigNumber(galaxyNft?.lastTimestamp)
@@ -165,8 +175,22 @@ const InfoModule: React.FC<{
   useEffect(() => {
     dispatch(fetchAuctionRecordListAsync(currentGalaxy.id));
     dispatch(fetchOwnerInfoAsync(currentGalaxy.id));
-    getClaimMax(currentGalaxy.id);
-  }, [dispatch, currentGalaxy, getClaimMax]);
+  }, [dispatch, currentGalaxy]);
+
+  useEffect(() => {
+    if (timer.current) {
+      clearInterval(timer.current);
+    }
+    timer.current = setInterval(() => {
+      getClaimMax(currentGalaxy.id);
+    }, 3000);
+
+    return () => {
+      if (timer.current) {
+        clearInterval(timer.current);
+      }
+    };
+  }, [getClaimMax, currentGalaxy.id, timer]);
 
   return (
     <InfoModuleBox className={OpenInfo ? 'Show' : 'close'}>
@@ -175,14 +199,14 @@ const InfoModule: React.FC<{
           <NormalMarkText bold fontSize='20px'>
             {currentGalaxy.name}
           </NormalMarkText>
-          <Flex ml='30px' alignItems='flex-end'>
+          {/* <Flex ml='30px' alignItems='flex-end'>
             <Text fontSize='14px' mr='15px'>
               {t('Total Galaxy CE')}
             </Text>
             <NormalMarkText bold fontSize='18px'>
               {splitThousandSeparator(OwnerInfo.power)}
             </NormalMarkText>
-          </Flex>
+          </Flex> */}
         </Flex>
         <CloseImg
           onClick={() => setOpenInfo(false)}
@@ -190,30 +214,71 @@ const InfoModule: React.FC<{
           alt=''
         />
       </Flex>
-      <Flex mb='23px' alignItems='center'>
-        <UserImg
-          src={OwnerInfo.avatar ? OwnerInfo.avatar : '/images/login/a-man.png'}
-          alt=''
-        />
-        <Box ml='18px'>
-          <Flex mb='10px' alignItems='flex-end'>
-            <Text fontSize='14px' mr='15px'>
-              {t('Galaxy Lord')}
-            </Text>
-            <NormalMarkText bold fontSize='16px'>
-              {OwnerInfo.nickname}
-            </NormalMarkText>
+      <BorderBox mb={20}>
+        <Flex alignItems='center' justifyContent='space-between'>
+          <Flex alignItems='center'>
+            <UserImg
+              src={
+                OwnerInfo.avatar ? OwnerInfo.avatar : '/images/login/a-man.png'
+              }
+              alt=''
+            />
+            <Box ml='18px'>
+              <Flex mb='10px' alignItems='flex-end'>
+                <Text fontSize='14px' mr='15px'>
+                  {t('Galaxy Lord')}
+                </Text>
+                <NormalMarkText bold fontSize='16px'>
+                  {OwnerInfo.nickname}
+                </NormalMarkText>
+              </Flex>
+              {OwnerInfo.nickname && (
+                <Text fontSize='14px'>
+                  {t('Claimed')}
+                  &nbsp; &nbsp;
+                  {EasyformatTime(HoldTime(OwnerInfo.hold_time), true)}
+                </Text>
+              )}
+            </Box>
           </Flex>
-          {OwnerInfo.nickname && (
-            <Text fontSize='14px'>
-              {t('Claimed')}
-              &nbsp; &nbsp;
-              {EasyformatTime(HoldTime(OwnerInfo.hold_time), true)}
-            </Text>
-          )}
-        </Box>
-      </Flex>
-      <Flex mb='8px' justifyContent='space-between'>
+          <GraphicsCard
+            stripe
+            style={{ padding: '8px 16px' }}
+            width='max-content'
+            height='max-content'
+          >
+            <Text fontSize='14px'>{t('Accumulated')} BOX</Text>
+            <NormalMarkText bold fontSize='18px'>
+              {SubString_1(OwnerInfo.owner_get_box, 5)}
+            </NormalMarkText>
+          </GraphicsCard>
+        </Flex>
+      </BorderBox>
+      <BorderBox mb={20}>
+        <Text mb='18px'>{t('拍卖获得星系后，您可以')}</Text>
+        <Flex mb='12px'>
+          <GetImg src='/images/commons/icon/getSuccess.png' />
+          <Text ml='10px' fontSize='14px'>
+            {t('获得该星系产出BOX的20%')}
+          </Text>
+        </Flex>
+        <Flex mb='12px'>
+          <GetImg src='/images/commons/icon/getSuccess.png' />
+          <Text ml='10px' fontSize='14px'>
+            {t('获得其他玩家付出占领恒星挑战费用的30%')}
+          </Text>
+        </Flex>
+        <Flex mb='12px'>
+          <GetImg src='/images/commons/icon/getSuccess.png' />
+          <Text ml='10px' fontSize='14px'>
+            {t(
+              '如果您的星系被别人拍走，您将获得原本竞拍的金额+额外15%的BNB，自动发到您的BNB链地址。并收到消息栏的通知',
+            )}
+          </Text>
+        </Flex>
+      </BorderBox>
+
+      {/* <Flex mb='8px' justifyContent='space-between'>
         <GraphicsCard
           stripe
           style={{ padding: '8px 16px' }}
@@ -236,8 +301,8 @@ const InfoModule: React.FC<{
             {SubString_1(OwnerInfo.all_get_box, 5)}
           </NormalMarkText>
         </GraphicsCard>
-      </Flex>
-      <BorderBox mb='8px'>
+      </Flex> */}
+      {/* <BorderBox mb='8px'>
         <Text fontSize='14px'>
           {t('Accumulated by all Lords of this galaxy in history')}
           &nbsp;
@@ -255,20 +320,75 @@ const InfoModule: React.FC<{
             })}
           </Text>
         ))}
-      </ScrollBox>
-      <Flex mb='10px' alignItems='center'>
+      </ScrollBox> */}
+      <Flex mb='16px' alignItems='center' justifyContent='center'>
+        {OwnerInfo.address.toLocaleLowerCase() ===
+        account.toLocaleLowerCase() ? (
+          <>
+            <AuctionBtn variant='purple' width='50%' disabled>
+              <Text color='textPrimary' bold>
+                {t('恭喜你')}
+              </Text>
+              <Text color='textPrimary' bold>
+                {t('成为 %name%星系主', { name: currentGalaxy.name })}
+              </Text>
+            </AuctionBtn>
+          </>
+        ) : (
+          <AuctionBtn
+            variant='purple'
+            width='50%'
+            disabled={BiddingdiffSeconds > 0 || pending}
+            onClick={handleAuction}
+          >
+            <Text color='textPrimary' bold>
+              {BiddingdiffSeconds > 0 ? (
+                `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
+                  timePeriod.seconds
+                }${t('s')}`
+              ) : pending ? (
+                <Dots>{t('Bidding')}</Dots>
+              ) : (
+                <>
+                  <Box>{`${t('Auction')} ${currentGalaxy.name}`}</Box>
+                  <Box>
+                    {`( ${currentPrice ? `${currentPrice}` : '---'}BNB )`}
+                  </Box>
+                </>
+              )}
+            </Text>
+          </AuctionBtn>
+        )}
+        {/* <Text color='#A9CCCB' fontSize='14px' ml='20px' mr='20px'>
+          {t(
+            'Of Which, %num1% BNB will be given to the previous galaxy lord, and %num2% BNB will go to the Rewards Pool',
+            {
+              num1: incomingPrice ? `${incomingPrice}` : '---',
+              num2: prizPpool ? `${prizPpool}` : '---',
+            },
+          )}
+        </Text> */}
+      </Flex>
+      <Flex alignItems='center' justifyContent='center'>
         <AuctionBtn
           variant='purple'
-          height='45px'
-          minWidth='45%'
-          width='45%'
+          width='50%'
           // disabled={!claimMax || diffSeconds <= 0}
           disabled={!claimMax}
           onClick={handleClaim}
         >
           <Text color='textPrimary' bold>
-            {t('Claim')}
-            {`(${SubString_1(claimMax, 6)}BOX)`}
+            {t('Claim')}(
+            {claimMax ? (
+              <BalanceText
+                fontSize='16px'
+                color='textPrimary'
+                value={Number(SubString_1(claimMax, 6))}
+              />
+            ) : (
+              SubString_1(claimMax, 6)
+            )}
+            BOX)
           </Text>
         </AuctionBtn>
         {/* <Box ml='20px'>
@@ -279,39 +399,6 @@ const InfoModule: React.FC<{
             {`${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')}`}
           </Text>
         </Box> */}
-      </Flex>
-      <Flex alignItems='center'>
-        <AuctionBtn
-          variant='purple'
-          height='45px'
-          minWidth='45%'
-          width='45%'
-          disabled={BiddingdiffSeconds > 0 || pending}
-          onClick={handleAuction}
-        >
-          <Text color='textPrimary' bold>
-            {BiddingdiffSeconds > 0 ? (
-              `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
-                timePeriod.seconds
-              }${t('s')}`
-            ) : pending ? (
-              <Dots>{t('Bidding')}</Dots>
-            ) : (
-              `${t('Auction')}( ${
-                currentPrice ? `${currentPrice}` : '---'
-              }BNB )`
-            )}
-          </Text>
-        </AuctionBtn>
-        <Text color='#A9CCCB' fontSize='14px' ml='20px' mr='20px'>
-          {t(
-            'Of Which, %num1% BNB will be given to the previous galaxy lord, and %num2% BNB will go to the Rewards Pool',
-            {
-              num1: incomingPrice ? `${incomingPrice}` : '---',
-              num2: prizPpool ? `${prizPpool}` : '---',
-            },
-          )}
-        </Text>
       </Flex>
     </InfoModuleBox>
   );

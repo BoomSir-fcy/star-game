@@ -44,6 +44,7 @@ export const initialState: GalaxyState = {
     all_get_box: 0,
     all_auction_num: 0,
     power: 0,
+    address: '',
   },
   galaxy_total_box: 0,
   planet_total_box: 0,
