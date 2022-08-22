@@ -136,11 +136,7 @@ const TokenInfo = () => {
           <ButtonLeft disabled variant='custom'>
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
-                <TokenImage
-                  width={30}
-                  height={32}
-                  tokenAddress={getBoxAddress()}
-                />
+                <Image width={30} height={32} src='/images/tokens/BOX.svg' />
                 <Text
                   small
                   ml='8px'

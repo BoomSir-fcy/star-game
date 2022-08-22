@@ -131,7 +131,7 @@ const contracts2 = {
   },
   GetCoinTest: {
     [ChainId.BSC_MAINNET]: '',
-    [ChainId.BSC_TESTNET]: '0x243AfD5010498f91288F1AF749988aF20F88827a',
+    [ChainId.BSC_TESTNET]: '0x527E3b4b3E874666d6daBF72b202caEcC9dC9010',
   },
 };
 

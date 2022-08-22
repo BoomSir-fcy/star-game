@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { Fragment, useCallback, useState } from 'react';
 import {
   RefreshButton,
   Flex,
@@ -13,7 +13,88 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'contexts/Localization';
 import useTheme from 'hooks/useTheme';
 import { shortenAddress } from 'utils';
+import Collapse, { Panel } from 'rc-collapse';
+import { formatDisplayApr } from 'utils/formatBalance';
+import 'rc-collapse/assets/index.css';
+import { raceData } from 'config/buildConfig';
+import { getSpriteName, getSpriteRes } from 'game/core/utils';
+
 import { useFetchMessageList } from './hook';
+
+// const List = {
+//   0: {
+//     product_stone: 0,
+//     product_energy: 0,
+//     product_population: 0,
+//     plunder_stone: 0,
+//     plunder_energy: 0,
+//     plunder_population: 0,
+//     cellar_stone: 0,
+//     cellar_energy: 0,
+//     cellar_population: 0,
+//     lose_arm_unit: 0,
+//     lose_durable: 0,
+//     arms: [
+//       {
+//         arm_index: 2,
+//         race: 1,
+//         arm_product: [{ unique_id: 2, count: 0 }],
+//         total_count: 0,
+//       },
+//       {
+//         arm_index: 7,
+//         race: 1,
+//         arm_product: [{ unique_id: 3, count: 5 }],
+//         total_count: 0,
+//       },
+//     ],
+//   },
+//   10: {
+//     product_stone: 0,
+//     product_energy: 0,
+//     product_population: 0,
+//     plunder_stone: 0,
+//     plunder_energy: 0,
+//     plunder_population: 0,
+//     cellar_stone: 0,
+//     cellar_energy: 0,
+//     cellar_population: 0,
+//     lose_arm_unit: 0,
+//     lose_durable: 0,
+//     arms: [
+//       {
+//         arm_index: 12,
+//         race: 3,
+//         arm_product: [
+//           { unique_id: 1, count: 0 },
+//           { unique_id: 2, count: 1 },
+//         ],
+//         total_count: 0,
+//       },
+//     ],
+//   },
+//   101: {
+//     product_stone: 0,
+//     product_energy: 0,
+//     product_population: 0,
+//     plunder_stone: 0,
+//     plunder_energy: 0,
+//     plunder_population: 0,
+//     cellar_stone: 0,
+//     cellar_energy: 0,
+//     cellar_population: 0,
+//     lose_arm_unit: 0,
+//     lose_durable: 0,
+//     arms: [
+//       {
+//         arm_index: 11,
+//         race: 2,
+//         arm_product: [{ unique_id: 3, count: 0 }],
+//         total_count: 0,
+//       },
+//     ],
+//   },
+// };
 
 const TitleBox = styled(Flex)`
   width: 512px;
@@ -37,7 +118,7 @@ const ScrollBox = styled(Box)`
 const ItemFlex = styled(Flex)`
   padding: 40px 48px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.borderPrimary};
-  min-height: 110px;
+  min-height: 200px;
   align-items: center;
 `;
 
@@ -45,6 +126,81 @@ const Img = styled.img`
   width: 58px;
   height: 54px;
 `;
+
+const GetPrandk = (t, info, cellar?) => {
+  const {
+    arms,
+    cellar_energy,
+    cellar_population,
+    cellar_stone,
+    lose_arm_unit,
+    lose_durable,
+    plunder_energy,
+    plunder_population,
+    plunder_stone,
+    product_energy,
+    product_population,
+    product_stone,
+  } = info;
+  return (
+    <Flex>
+      <Text>{t('InboxTypeDesc7-3')}&nbsp;</Text>
+      (&nbsp;
+      <Text color='progressGreenBar'>
+        {t('Ore')}+{formatDisplayApr(10)},{t('Energy')}+{formatDisplayApr(10)},
+        {t('Spices')}+{formatDisplayApr(10)}&nbsp;
+      </Text>
+      ),
+      <Text>{t('InboxTypeDesc7-4')}&nbsp;</Text>(&nbsp;
+      <Text color={plunder_stone >= 0 ? 'progressGreenBar' : 'redText'}>
+        <Flex>
+          {t('Ore')}
+          {plunder_stone >= 0 ? '+' : '-'}
+          {formatDisplayApr(plunder_stone)}
+          {cellar && (
+            <Text color='progressGreenBar'>
+              {`[${t('InboxTypeDesc7-4-1')} ${formatDisplayApr(cellar_stone)}]`}
+            </Text>
+          )}
+        </Flex>
+      </Text>
+      ,
+      <Text color={plunder_energy >= 0 ? 'progressGreenBar' : 'redText'}>
+        <Flex>
+          {t('Energy')} {plunder_energy >= 0 ? '+' : '-'}
+          {formatDisplayApr(plunder_energy)}
+          {cellar && (
+            <Text color='progressGreenBar'>
+              {`[${t('InboxTypeDesc7-4-1')} ${formatDisplayApr(
+                cellar_energy,
+              )}]`}
+            </Text>
+          )}
+        </Flex>
+      </Text>
+      ,
+      <Text color={plunder_population >= 0 ? 'progressGreenBar' : 'redText'}>
+        <Flex>
+          {t('Spices')}
+          {plunder_population >= 0 ? '+' : '-'}
+          {formatDisplayApr(plunder_population)}
+          {cellar && (
+            <Text color='progressGreenBar'>
+              {`[${t('InboxTypeDesc7-4-1')} ${formatDisplayApr(
+                cellar_population,
+              )}]`}
+            </Text>
+          )}
+        </Flex>
+      </Text>
+      ,
+      <Text color={lose_arm_unit > 0 ? 'progressGreenBar' : 'redText'}>
+        {t('Soldier')}-{formatDisplayApr(lose_arm_unit)}
+      </Text>
+      &nbsp;)
+    </Flex>
+  );
+};
 
 const PlatformNews: React.FC = () => {
   const { t, getHTML } = useTranslation();
@@ -117,10 +273,167 @@ const PlatformNews: React.FC = () => {
         <ScrollBox onScroll={loadMore}>
           {(MessageList ?? []).map(item => {
             const msgContent = JSON.parse(item.msgContent);
-            if (item.type === 2) {
-              console.log(msgContent);
+            // console.log(msgContent);
+            if (item.type === 0 && msgContent[0]) {
+              // msgContent = List;
+              const InfoList = [];
+              Object.keys(msgContent).forEach(id => {
+                const obj = {
+                  ...msgContent[id],
+                  id,
+                };
+                InfoList.push(obj);
+              });
+              return (
+                <ItemFlex key={item.id}>
+                  <Collapse>
+                    <Panel
+                      header={
+                        <>
+                          <Flex alignItems='center' mb='10px'>
+                            <Img src='/images/commons/icon/news.png' alt='' />
+                            <Box ml='30px'>
+                              <Flex alignItems='flex-end'>
+                                <MarkText
+                                  mr='28px'
+                                  fontSize='20px'
+                                  bold
+                                  fontStyle='normal'
+                                >
+                                  {GetTitle(item.type)}
+                                </MarkText>
+                                <Text>
+                                  {dayjs(item.addTime * 1000).format(
+                                    'YYYY-MM-DD HH:mm:ss',
+                                  )}
+                                </Text>
+                              </Flex>
+                            </Box>
+                          </Flex>
+                          <Flex mb='4px'>
+                            <Text>
+                              {t('InboxTypeDesc7-1')}:&nbsp;
+                              {dayjs(item.addTime * 1000).format(
+                                'YYYY-MM-DD HH:mm:ss',
+                              )}
+                              &nbsp; ~&nbsp;
+                              {dayjs(item.addTime * 1000).format(
+                                'YYYY-MM-DD HH:mm:ss',
+                              )}
+                            </Text>
+                            <Text ml='6px' color='legendText'>
+                              {t('InboxTypeDesc7-1-1')}
+                            </Text>
+                          </Flex>
+                          <MarkText
+                            mb='4px'
+                            padding={0}
+                            fontStyle='normal'
+                            bold
+                          >
+                            {t('InboxTypeDesc7-2')}
+                          </MarkText>
+                          {GetPrandk(t, msgContent[0])}
+                        </>
+                      }
+                    >
+                      {[InfoList || []].map(planetInfo => {
+                        const renderPlanet = planetInfo.map(info => {
+                          const {
+                            arms,
+                            cellar_energy,
+                            cellar_population,
+                            cellar_stone,
+                            lose_arm_unit,
+                            lose_durable,
+                            plunder_energy,
+                            plunder_population,
+                            plunder_stone,
+                            product_energy,
+                            product_population,
+                            product_stone,
+                          } = info;
+                          return (
+                            <Collapse>
+                              <Panel
+                                header={
+                                  <Box>
+                                    <MarkText
+                                      mb='4px'
+                                      padding={0}
+                                      fontStyle='normal'
+                                      bold
+                                    >
+                                      {t('Planet')}&nbsp;
+                                      {info?.id}&nbsp;
+                                      {t('InboxTypeDesc7-5')}
+                                    </MarkText>
+                                    {GetPrandk(t, info, true)}
+                                  </Box>
+                                }
+                              >
+                                <Flex alignItems='center'>
+                                  <Text mr='4px'>{t('Arms')}:</Text>
+                                  <Text color='redText'>
+                                    {t('Soldier')} -{lose_arm_unit}
+                                  </Text>
+                                  ,{' '}
+                                  <Text mr='2px'>{t('InboxTypeDesc7-6')}:</Text>
+                                  {(arms || []).map(armsInfo => {
+                                    return (
+                                      <Flex alignItems='center'>
+                                        (&nbsp;
+                                        <Text mr='2px'>
+                                          <Flex alignItems='center'>
+                                            {
+                                              raceData[armsInfo.race]?.[
+                                                armsInfo.arm_index
+                                              ]?.name
+                                            }
+                                            &nbsp;
+                                            {t('Generate')}&nbsp;
+                                            {(armsInfo.arm_product || []).map(
+                                              unique => {
+                                                return (
+                                                  <Flex alignItems='center'>
+                                                    <Text color='progressGreenBar'>
+                                                      {`"${getSpriteName(
+                                                        armsInfo.race,
+                                                        unique.unique_id.toString(),
+                                                      )}"`}
+                                                      *{unique.count} /{' '}
+                                                      {t('Toltal')}&nbsp;
+                                                      {armsInfo.total_count}
+                                                    </Text>
+                                                    ,
+                                                  </Flex>
+                                                );
+                                              },
+                                            )}
+                                          </Flex>
+                                        </Text>
+                                        &nbsp;),
+                                      </Flex>
+                                    );
+                                  })}
+                                </Flex>
+                                <Flex alignItems='center'>
+                                  <Text mr='4px'>{t('Building')}:</Text>
+                                  <Text color='redText'>
+                                    {t('InboxTypeDesc7-7')} -{lose_durable}
+                                  </Text>
+                                </Flex>
+                              </Panel>
+                            </Collapse>
+                          );
+                        });
+                        return renderPlanet;
+                      })}
+                    </Panel>
+                  </Collapse>
+                </ItemFlex>
+              );
             }
-
             return (
               <ItemFlex key={item.id}>
                 <Img src='/images/commons/icon/news.png' alt='' />
@@ -166,17 +479,43 @@ const PlatformNews: React.FC = () => {
                   )}
                   {item.type === 3 && (
                     <Text>
-                      {getHTML('InboxTypeDesc1', {
+                      {getHTML('InboxTypeDesc3', {
                         time: dayjs(msgContent.timestamp * 1000).format(
                           'YYYY-MM-DD HH:mm:ss',
                         ),
                         galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
                         star: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.number}</span>`,
-                      })}{' '}
+                      })}
                       &nbsp;
                       <span style={{ color: theme.colors.textTips }}>
                         {t('InboxTypeDesc3-2')}
                       </span>
+                    </Text>
+                  )}
+                  {item.type === 4 && (
+                    <Text>
+                      {getHTML('InboxTypeDesc4', {
+                        galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
+                        star: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.number}</span>`,
+                        time: dayjs(msgContent.timestamp * 1000).format(
+                          'YYYY-MM-DD HH:mm:ss',
+                        ),
+                        address: `<span style="color: ${
+                          theme.colors.legendText
+                        }">${shortenAddress(msgContent.new_owner)}</span>`,
+                        power: `<span style="color: ${
+                          theme.colors.legendText
+                        }">${shortenAddress(
+                          msgContent.new_owner_power,
+                        )}</span>`,
+                      })}
+                      &nbsp;
+                      {getHTML('InboxTypeDesc4-2', {
+                        time: dayjs(msgContent.hold_time * 1000).format(
+                          'YYYY-MM-DD HH:mm:ss',
+                        ),
+                        reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_box}</span>`,
+                      })}
                     </Text>
                   )}
                 </Box>
