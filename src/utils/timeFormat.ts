@@ -17,7 +17,7 @@ export const formatUTC = (time?: string | number, format?: string) => {
     .format(format);
 };
 
-export const EasyformatTime = (time: number, showDay?: boolean) => {
+export const EasyformatTime = (time: number) => {
   if (time <= 0) {
     return '0h:00m:00s';
   }
@@ -36,5 +36,5 @@ export const EasyformatTime = (time: number, showDay?: boolean) => {
   }
   const dayText = `${day}d:${hour}h:${min}m`;
   const hourText = `${hour}h:${min}m:${sec}s`;
-  return `${showDay ? dayText : hourText}`;
+  return `${day > 0 ? dayText : hourText}`;
 };

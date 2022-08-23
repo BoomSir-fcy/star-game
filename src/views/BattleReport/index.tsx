@@ -15,6 +15,7 @@ import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { useFetchGalaxReportList } from 'state/galaxy/hooks';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 import { PkBox } from './pkBox';
 import { BattleTop } from './BattleTop';
 import { InProgress } from './components/inProgress';
@@ -87,6 +88,7 @@ const BattleReport = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { t } = useTranslation();
+  const paramsQs = useParsedQueryString();
 
   const { pkRecord } = useStore(p => p.alliance);
   const {
@@ -99,17 +101,18 @@ const BattleReport = () => {
   } = pkRecord;
 
   const { GalaxReportList } = useStore(p => p.galaxy);
-
   const { guides, setGuide } = useGuide(location.pathname);
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const [Start_time, setStart_time] = useState<number>(
-    moment(new Date(new Date().toLocaleDateString()).getTime()).unix(),
+    moment(Number(paramsQs.starTime) * 1000).unix() ||
+      moment(new Date(new Date().toLocaleDateString()).getTime()).unix(),
   );
   const [End_time, setEnd_time] = useState<number>(
-    moment(
-      (new Date(new Date().toLocaleDateString()).getTime() / 1000 + 86400) *
-        1000,
-    ).unix(),
+    moment(Number(paramsQs.endTime) * 1000).unix() ||
+      moment(
+        (new Date(new Date().toLocaleDateString()).getTime() / 1000 + 86400) *
+          1000,
+      ).unix(),
   );
   const [activeStep, setActiveStep] = useState(guides.step);
 

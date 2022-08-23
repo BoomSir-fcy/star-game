@@ -380,7 +380,7 @@ const OccupiedModul: React.FC<{
                     </SmText>
                     <SmText>
                       {item?.nick_name
-                        ? EasyformatTime(HoldTime(item.hold_time), true)
+                        ? EasyformatTime(HoldTime(item.hold_time))
                         : ''}
                     </SmText>
                   </Flex>

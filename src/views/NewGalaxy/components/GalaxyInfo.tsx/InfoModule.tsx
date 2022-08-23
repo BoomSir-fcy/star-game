@@ -237,7 +237,7 @@ const InfoModule: React.FC<{
                 <Text fontSize='14px'>
                   {t('Claimed')}
                   &nbsp; &nbsp;
-                  {EasyformatTime(HoldTime(OwnerInfo.hold_time), true)}
+                  {EasyformatTime(HoldTime(OwnerInfo.hold_time))}
                 </Text>
               )}
             </Box>
