@@ -391,8 +391,8 @@ const PlatformNews: React.FC = () => {
                                 onClick={() => {
                                   navigate(
                                     `/BattleReport?starTime=${
-                                      msgContent.timestamp - 86400
-                                    }&endTime=${msgContent.timestamp + 86400}`,
+                                      msgContent.start_time - 86400
+                                    }&endTime=${msgContent.end_time + 86400}`,
                                   );
                                 }}
                               >
