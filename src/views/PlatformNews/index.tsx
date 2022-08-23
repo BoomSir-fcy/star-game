@@ -47,8 +47,13 @@ const ScrollBox = styled(Box)`
     background-color: transparent !important;
     border: none !important;
     color: #fff !important;
+    & .rc-collapse-item-active {
+      & .DownImg {
+        transform: rotate(-90deg);
+      }
+    }
     & .rc-collapse-header {
-      cursor: auto !important;
+      /* cursor: auto !important; */
       color: #fff !important;
       padding: 0 !important;
       flex-direction: row-reverse;
@@ -92,6 +97,12 @@ const ItemFlex = styled(Flex)`
 const Img = styled.img`
   width: 51px;
   height: 51px;
+`;
+
+const DownImg = styled.img`
+  width: 40px;
+  height: 56px;
+  transform: rotate(90deg);
 `;
 
 const InfoBox = styled(Box)`
@@ -243,21 +254,21 @@ const PlatformNews: React.FC = () => {
     (status: number) => {
       switch (status) {
         case 0:
-          return t('系统消息');
+          return t('System messages');
         case 1:
-          return t('星系主竞拍成功通知');
+          return t('Notice of successful auction of the master of the galaxy');
         case 2:
-          return t('星系主被其他人竞拍获得');
+          return t('The Lord of the Galaxy was auctioned by others');
         case 3:
-          return t('占领恒星成功通知');
+          return t('Notice of successful occupation of stars');
         case 4:
-          return t('恒星被占领通知');
-        case 5:
-          return t('遭遇战获胜');
-        case 6:
-          return t('遭遇战失败');
+          return t('Notice of star occupation');
+        // case 5:
+        //   return t('遭遇战获胜');
+        // case 6:
+        //   return t('遭遇战失败');
         case 7:
-          return t('行星探索综合报告');
+          return t('Comprehensive report on planetary exploration');
         default:
           return t('系统消息');
       }
@@ -298,9 +309,9 @@ const PlatformNews: React.FC = () => {
       {MessageList.length > 0 ? (
         <ScrollBox onScroll={loadMore}>
           {(MessageList ?? []).map(item => {
-            const msgContent = JSON.parse(item.msgContent);
+            const msgContent = JSON.parse(item?.msgContent);
             // 行星探索综合报告
-            if (item.messageType === 7 && msgContent?.work_report) {
+            if (item?.messageType === 7 && msgContent?.work_report) {
               const InfoList = [];
               Object.keys(msgContent?.work_report).forEach(id => {
                 const obj = {
@@ -315,14 +326,18 @@ const PlatformNews: React.FC = () => {
                     <Panel
                       expandIcon={() => {
                         return (
-                          <Button
-                            variant='purple'
-                            height='45px'
-                            width='140px'
-                            padding='0'
-                          >
-                            <Text color='textPrimary'>{t('Details')}</Text>
-                          </Button>
+                          <DownImg
+                            className='DownImg'
+                            src='/images/commons/icon/back.png'
+                          />
+                          // <Button
+                          //   variant='purple'
+                          //   height='45px'
+                          //   width='140px'
+                          //   padding='0'
+                          // >
+                          //   <Text color='textPrimary'>{t('Details')}</Text>
+                          // </Button>
                         );
                       }}
                       header={
@@ -416,9 +431,9 @@ const PlatformNews: React.FC = () => {
                             product_stone,
                           } = info;
                           return (
-                            <>
+                            <Box key={info?.id}>
                               {index !== 0 && (
-                                <InfoBox key={info?.id}>
+                                <InfoBox>
                                   <Box>
                                     <MarkText
                                       mb='20px'
@@ -493,7 +508,7 @@ const PlatformNews: React.FC = () => {
                                   </Flex>
                                 </InfoBox>
                               )}
-                            </>
+                            </Box>
                           );
                         });
                         return renderPlanet;
