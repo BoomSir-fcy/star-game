@@ -270,7 +270,7 @@ const PlatformNews: React.FC = () => {
         case 7:
           return t('Comprehensive report on planetary exploration');
         default:
-          return t('系统消息');
+          return t('System messages');
       }
     },
     [t],
