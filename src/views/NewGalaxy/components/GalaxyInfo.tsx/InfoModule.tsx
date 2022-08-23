@@ -321,8 +321,8 @@ const InfoModule: React.FC<{
         ))}
       </ScrollBox> */}
       <Flex mb='16px' alignItems='center' justifyContent='center'>
-        {OwnerInfo.address.toLocaleLowerCase() ===
-        account.toLocaleLowerCase() ? (
+        {OwnerInfo?.address?.toLocaleLowerCase() ===
+        account?.toLocaleLowerCase() ? (
           <>
             <AuctionBtn
               variant='purple'

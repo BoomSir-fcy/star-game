@@ -63,6 +63,7 @@ export const InfoModuleBox = styled(Box)`
 
 export const NormalMarkText = styled(MarkText)`
   font-style: normal;
+  padding: 0;
 `;
 
 export const CloseImg = styled.img`

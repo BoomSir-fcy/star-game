@@ -188,7 +188,7 @@ const OccupiedModul: React.FC<{
 
   const IsOwner = useCallback(
     (hasOwner: string) => {
-      return hasOwner?.toLowerCase() === account?.toLowerCase();
+      return hasOwner?.toLocaleLowerCase() === account?.toLocaleLowerCase();
     },
     [account],
   );
