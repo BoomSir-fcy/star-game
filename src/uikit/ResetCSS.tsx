@@ -397,39 +397,6 @@ const ResetCSS = createGlobalStyle`
     word-break:break-word !important;
   }
 
-.rc-collapse{
-    background-color:transparent !important;
-    border:none !important;
-    color:#fff  !important;
-     & .rc-collapse-header{
-    color:#fff !important;
-    padding:0 !important;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    align-items: flex-start !important;
-    margin-bottom: 12px;
-    & .arrow{
-    border-top: 10px solid transparent !important;
-    border-bottom: 10px solid transparent !important;
-    border-right: 10px solid #fff !important;
-    border-left: none !important;
-    }
-    & .rc-collapse-expand-icon{
-      
-    }
-    }
-  & .rc-collapse-content{
-    background-color:transparent !important;
-    color:#fff !important;
-    padding:0 20px !important;
-    border-top:1px solid #666;
-    }
-  }
-  .rc-collapse > .rc-collapse-item-active > .rc-collapse-header .arrow{
-    border-left: 10px solid transparent !important;
-    border-right: 10px solid transparent !important;
-    border-top: 10px solid #fff !important;
-  }
 `;
 
 export default ResetCSS;

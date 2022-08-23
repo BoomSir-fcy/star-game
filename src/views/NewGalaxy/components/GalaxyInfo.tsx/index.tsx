@@ -20,6 +20,7 @@ import { getFullDisplayBalance } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
 import { GalaxyInfo } from 'state/types';
 import { useTranslation } from 'contexts/Localization';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 import InfoModule from './InfoModule';
 import OccupiedModul from './OccupiedModul';
 
@@ -27,6 +28,8 @@ const GalaxyInfoIndex: React.FC = () => {
   useGalaxyList();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const paramsQs = useParsedQueryString();
+  const InitId = Number(paramsQs?.id);
 
   const { galaxyList, galaxyNftList } = useStore(p => p.galaxy);
   const [OpenInfo, setOpenInfo] = useState(false);
@@ -51,6 +54,15 @@ const GalaxyInfoIndex: React.FC = () => {
     const price = getFullDisplayBalance(new BigNumber(currentPrice), 18, 6);
     return Number(price) ? price : 0;
   }, []);
+
+  useEffect(() => {
+    if (InitId && galaxyList.length) {
+      const info = galaxyList.filter(i => InitId === i.id);
+      ChangeActiveGalaxy(info[0]);
+      setOpenInfo(true);
+      setShowListModule(true);
+    }
+  }, [InitId, galaxyList, ChangeActiveGalaxy]);
 
   useEffect(() => {
     if (galaxyList.length) {

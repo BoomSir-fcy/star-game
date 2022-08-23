@@ -19,88 +19,10 @@ import { formatDisplayApr } from 'utils/formatBalance';
 import 'rc-collapse/assets/index.css';
 import { raceData } from 'config/buildConfig';
 import { getSpriteName, getSpriteRes } from 'game/core/utils';
-import duration from 'dayjs/plugin/duration';
 import { EasyformatTime } from 'utils/timeFormat';
 import { useNavigate } from 'react-router-dom';
 
 import { useFetchMessageList } from './hook';
-
-dayjs.extend(duration);
-
-// const List = {
-//   0: {
-//     product_stone: 0,
-//     product_energy: 0,
-//     product_population: 0,
-//     plunder_stone: 0,
-//     plunder_energy: 0,
-//     plunder_population: 0,
-//     cellar_stone: 0,
-//     cellar_energy: 0,
-//     cellar_population: 0,
-//     lose_arm_unit: 0,
-//     lose_durable: 0,
-//     arms: [
-//       {
-//         arm_index: 2,
-//         race: 1,
-//         arm_product: [{ unique_id: 2, count: 0 }],
-//         total_count: 0,
-//       },
-//       {
-//         arm_index: 7,
-//         race: 1,
-//         arm_product: [{ unique_id: 3, count: 5 }],
-//         total_count: 0,
-//       },
-//     ],
-//   },
-//   10: {
-//     product_stone: 0,
-//     product_energy: 0,
-//     product_population: 0,
-//     plunder_stone: 0,
-//     plunder_energy: 0,
-//     plunder_population: 0,
-//     cellar_stone: 0,
-//     cellar_energy: 0,
-//     cellar_population: 0,
-//     lose_arm_unit: 0,
-//     lose_durable: 0,
-//     arms: [
-//       {
-//         arm_index: 12,
-//         race: 3,
-//         arm_product: [
-//           { unique_id: 1, count: 0 },
-//           { unique_id: 2, count: 1 },
-//         ],
-//         total_count: 0,
-//       },
-//     ],
-//   },
-//   101: {
-//     product_stone: 0,
-//     product_energy: 0,
-//     product_population: 0,
-//     plunder_stone: 0,
-//     plunder_energy: 0,
-//     plunder_population: 0,
-//     cellar_stone: 0,
-//     cellar_energy: 0,
-//     cellar_population: 0,
-//     lose_arm_unit: 0,
-//     lose_durable: 0,
-//     arms: [
-//       {
-//         arm_index: 11,
-//         race: 2,
-//         arm_product: [{ unique_id: 3, count: 0 }],
-//         total_count: 0,
-//       },
-//     ],
-//   },
-// };
 
 const TitleBox = styled(Flex)`
   width: 512px;
@@ -119,18 +41,63 @@ const ScrollBox = styled(Box)`
   overflow-x: hidden;
   border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
+
+  .rc-collapse {
+    width: 100%;
+    background-color: transparent !important;
+    border: none !important;
+    color: #fff !important;
+    & .rc-collapse-header {
+      cursor: auto !important;
+      color: #fff !important;
+      padding: 0 !important;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      align-items: flex-start !important;
+      /* margin-bottom: 12px; */
+      width: 100%;
+      & .rc-collapse-header-text {
+        width: 100%;
+      }
+      /* & .arrow {
+        border-top: 10px solid transparent !important;
+        border-bottom: 10px solid transparent !important;
+        border-right: 10px solid #fff !important;
+        border-left: none !important;
+      } */
+    }
+    & .rc-collapse-content {
+      background: transparent;
+      color: #fff !important;
+      /* padding: 0 20px !important; */
+      margin-left: 60px;
+      /* margin-top: 20px; */
+    }
+  }
+  /* .rc-collapse > .rc-collapse-item-active > .rc-collapse-header .arrow {
+    border-left: 10px solid transparent !important;
+    border-right: 10px solid transparent !important;
+    border-top: 10px solid #fff !important;
+  } */
 `;
 
 const ItemFlex = styled(Flex)`
-  padding: 40px 48px;
+  padding: 30px 24px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.borderPrimary};
-  min-height: 200px;
-  align-items: center;
+  min-height: 160px;
+  align-items: flex-start;
+  justify-content: space-between;
 `;
 
 const Img = styled.img`
-  width: 58px;
-  height: 54px;
+  width: 51px;
+  height: 51px;
+`;
+
+const InfoBox = styled(Box)`
+  background: #182f37;
+  margin-bottom: 10px;
+  padding: 15px 20px;
 `;
 
 const GetPrandk = (t, info, cellar?) => {
@@ -149,61 +116,101 @@ const GetPrandk = (t, info, cellar?) => {
     product_stone,
   } = info;
   return (
-    <Flex>
-      <Text>{t('InboxTypeDesc7-3')}&nbsp;</Text>
-      (&nbsp;
-      <Text color='progressGreenBar'>
-        {t('Ore')}+{formatDisplayApr(10)},{t('Energy')}+{formatDisplayApr(10)},
-        {t('Spices')}+{formatDisplayApr(10)}&nbsp;
-      </Text>
-      ),
-      <Text>{t('InboxTypeDesc7-4')}&nbsp;</Text>(&nbsp;
-      <Text color={plunder_stone >= 0 ? 'progressGreenBar' : 'redText'}>
-        <Flex>
-          {t('Ore')}
-          {plunder_stone >= 0 ? '+' : '-'}
-          {formatDisplayApr(plunder_stone)}
-          {cellar && (
-            <Text color='progressGreenBar'>
-              {`[${t('InboxTypeDesc7-4-1')} ${formatDisplayApr(cellar_stone)}]`}
-            </Text>
-          )}
+    <Flex mb='20px' justifyContent='space-between'>
+      <Flex flexDirection='column' width='50%'>
+        <Text mb='10px'>{t('InboxTypeDesc7-3')}</Text>
+        <Flex flexWrap='wrap'>
+          <Text mr='3px'>{t('Ore')}</Text>
+          <Text mr='10px' color='progressGreenBar'>
+            +{formatDisplayApr(product_stone)}
+          </Text>
+          <Text mr='3px'>{t('Energy')}</Text>
+          <Text mr='10px' color='progressGreenBar'>
+            +{formatDisplayApr(product_energy)}
+          </Text>
+          <Text mr='3px'>{t('Spices')}</Text>
+          <Text color='progressGreenBar'>
+            +{formatDisplayApr(product_population)}
+          </Text>
         </Flex>
-      </Text>
-      ,
-      <Text color={plunder_energy >= 0 ? 'progressGreenBar' : 'redText'}>
-        <Flex>
-          {t('Energy')} {plunder_energy >= 0 ? '+' : '-'}
-          {formatDisplayApr(plunder_energy)}
-          {cellar && (
-            <Text color='progressGreenBar'>
-              {`[${t('InboxTypeDesc7-4-1')} ${formatDisplayApr(
-                cellar_energy,
-              )}]`}
+      </Flex>
+      <Flex flexDirection='column' width='50%'>
+        <Text mb='10px'>{t('InboxTypeDesc7-4')}:</Text>
+        <Flex flexWrap='wrap'>
+          <Flex mr='10px'>
+            <Text mr='3px'>{t('Ore')}</Text>
+            <Text color={plunder_stone >= 0 ? 'progressGreenBar' : 'redText'}>
+              <Flex flexWrap='wrap'>
+                {plunder_stone >= 0 ? '+' : '-'}
+                {formatDisplayApr(plunder_stone)}
+                {cellar && (
+                  <Text ml='3px'>
+                    <Flex>
+                      ({t('InboxTypeDesc7-4-1')}
+                      <Text ml='3px' color='progressGreenBar'>
+                        {formatDisplayApr(cellar_stone)}
+                      </Text>
+                      )
+                    </Flex>
+                  </Text>
+                )}
+              </Flex>
             </Text>
-          )}
-        </Flex>
-      </Text>
-      ,
-      <Text color={plunder_population >= 0 ? 'progressGreenBar' : 'redText'}>
-        <Flex>
-          {t('Spices')}
-          {plunder_population >= 0 ? '+' : '-'}
-          {formatDisplayApr(plunder_population)}
-          {cellar && (
-            <Text color='progressGreenBar'>
-              {`[${t('InboxTypeDesc7-4-1')} ${formatDisplayApr(
-                cellar_population,
-              )}]`}
+          </Flex>
+          <Flex mr='10px'>
+            <Text mr='3px'>{t('Energy')}</Text>
+            <Text
+              mr='10px'
+              color={plunder_energy >= 0 ? 'progressGreenBar' : 'redText'}
+            >
+              <Flex flexWrap='wrap'>
+                {plunder_energy >= 0 ? '+' : '-'}
+                {formatDisplayApr(plunder_energy)}
+                {cellar && (
+                  <Text ml='3px'>
+                    <Flex>
+                      ({t('InboxTypeDesc7-4-1')}
+                      <Text ml='3px' color='progressGreenBar'>
+                        {formatDisplayApr(cellar_energy)}
+                      </Text>
+                      )
+                    </Flex>
+                  </Text>
+                )}
+              </Flex>
             </Text>
-          )}
+          </Flex>
+          <Flex mr='10px'>
+            <Text mr='3px'>{t('Spices')}</Text>
+            <Text
+              mr='10px'
+              color={plunder_population >= 0 ? 'progressGreenBar' : 'redText'}
+            >
+              <Flex flexWrap='wrap'>
+                {plunder_population >= 0 ? '+' : '-'}
+                {formatDisplayApr(plunder_population)}
+                {cellar && (
+                  <Text ml='3px'>
+                    <Flex>
+                      ({t('InboxTypeDesc7-4-1')}
+                      <Text ml='3px' color='progressGreenBar'>
+                        {formatDisplayApr(cellar_population)}
+                      </Text>
+                      )
+                    </Flex>
+                  </Text>
+                )}
+              </Flex>
+            </Text>
+          </Flex>
+          <Flex>
+            <Text mr='3px'>{t('Soldier')}</Text>
+            <Text color={lose_arm_unit > 0 ? 'progressGreenBar' : 'redText'}>
+              -{formatDisplayApr(lose_arm_unit)}
+            </Text>
+          </Flex>
         </Flex>
-      </Text>
-      ,
-      <Text color={lose_arm_unit > 0 ? 'progressGreenBar' : 'redText'}>
-        {t('Soldier')}-{formatDisplayApr(lose_arm_unit)}
-      </Text>
-      &nbsp;)
+      </Flex>
     </Flex>
   );
 };
@@ -257,18 +264,29 @@ const PlatformNews: React.FC = () => {
     },
     [t],
   );
-
+  const GetTitleImg = useCallback((type: number) => {
+    switch (type) {
+      case 0:
+        return 'news';
+      case 1:
+        return 'auction';
+      case 2:
+        return 'auction';
+      case 3:
+        return 'occupied';
+      case 4:
+        return 'occupied';
+      case 7:
+        return 'planet_icon';
+      default:
+        return 'news';
+    }
+  }, []);
   return (
     <Box>
       <Flex padding='0 20px' mb='16px' alignItems='center' flex={1}>
         <Box mr='40px'>
           <BackButton />
-          {/* <RefreshButton
-            ml='33px'
-            onRefresh={() => {
-              setPageNum(1);
-            }}
-          /> */}
         </Box>
         <TitleBox>
           <MarkText fontSize='18px' bold fontStyle='italic'>
@@ -276,16 +294,17 @@ const PlatformNews: React.FC = () => {
           </MarkText>
         </TitleBox>
       </Flex>
+      {/* 消息列表 */}
       {MessageList.length > 0 ? (
         <ScrollBox onScroll={loadMore}>
           {(MessageList ?? []).map(item => {
             const msgContent = JSON.parse(item.msgContent);
-            if (item.messageType === 0 && msgContent[0]) {
-              // msgContent = List;
+            // 行星探索综合报告
+            if (item.messageType === 7 && msgContent?.work_report) {
               const InfoList = [];
-              Object.keys(msgContent).forEach(id => {
+              Object.keys(msgContent?.work_report).forEach(id => {
                 const obj = {
-                  ...msgContent[id],
+                  ...msgContent?.work_report[id],
                   id,
                 };
                 InfoList.push(obj);
@@ -294,11 +313,31 @@ const PlatformNews: React.FC = () => {
                 <ItemFlex key={item.id}>
                   <Collapse>
                     <Panel
+                      expandIcon={() => {
+                        return (
+                          <Button
+                            variant='purple'
+                            height='45px'
+                            width='140px'
+                            padding='0'
+                          >
+                            <Text color='textPrimary'>{t('Details')}</Text>
+                          </Button>
+                        );
+                      }}
                       header={
                         <>
-                          <Flex alignItems='center' mb='10px'>
-                            <Img src='/images/commons/icon/news.png' alt='' />
-                            <Box ml='30px'>
+                          <Flex
+                            alignItems='center'
+                            justifyContent='space-between'
+                          >
+                            <Img
+                              src={`/images/commons/messageIcon/${GetTitleImg(
+                                item.messageType,
+                              )}.png`}
+                              alt=''
+                            />
+                            <Box width='calc(100% - 80px)'>
                               <Flex alignItems='flex-end'>
                                 <MarkText
                                   mr='28px'
@@ -316,45 +355,52 @@ const PlatformNews: React.FC = () => {
                               </Flex>
                             </Box>
                           </Flex>
-                          <Flex mb='4px'>
-                            <Text>
-                              {t('InboxTypeDesc7-1')}:&nbsp;
-                              {dayjs(item.addTime * 1000).format(
-                                'YYYY-MM-DD HH:mm:ss',
-                              )}
-                              &nbsp; ~&nbsp;
-                              {dayjs(item.addTime * 1000).format(
-                                'YYYY-MM-DD HH:mm:ss',
-                              )}
-                            </Text>
-                            <Text
-                              ml='6px'
-                              color='legendText'
-                              onClick={() => {
-                                navigate(
-                                  `/BattleReport?starTime=${
-                                    msgContent.timestamp - 86400
-                                  }&endTime=${msgContent.timestamp + 86400}`,
-                                );
-                              }}
-                            >
-                              {t('InboxTypeDesc7-1-1')}
-                            </Text>
-                          </Flex>
-                          <MarkText
+                          <Box width='100%' ml='80px'>
+                            <Flex mb='20px' alignItems='center'>
+                              <Text>
+                                {t('InboxTypeDesc7-1')}:&nbsp;
+                                {dayjs(msgContent.start_time * 1000).format(
+                                  'YYYY-MM-DD HH:mm:ss',
+                                )}
+                                &nbsp; ~&nbsp;
+                                {dayjs(msgContent.end_time * 1000).format(
+                                  'YYYY-MM-DD HH:mm:ss',
+                                )}
+                              </Text>
+                              <Button
+                                variant='text'
+                                height='30px'
+                                width='max-content'
+                                padding='0px 10px'
+                                ml='6px'
+                                onClick={() => {
+                                  navigate(
+                                    `/BattleReport?starTime=${
+                                      msgContent.timestamp - 86400
+                                    }&endTime=${msgContent.timestamp + 86400}`,
+                                  );
+                                }}
+                              >
+                                <Text color='textPrimary'>
+                                  {t('InboxTypeDesc7-1-1')}
+                                </Text>
+                              </Button>
+                            </Flex>
+                            {/* <MarkText
                             mb='4px'
                             padding={0}
                             fontStyle='normal'
                             bold
                           >
                             {t('InboxTypeDesc7-2')}
-                          </MarkText>
-                          {GetPrandk(t, msgContent[0])}
+                          </MarkText> */}
+                            {GetPrandk(t, msgContent?.work_report[0])}
+                          </Box>
                         </>
                       }
                     >
                       {[InfoList || []].map(planetInfo => {
-                        const renderPlanet = planetInfo.map(info => {
+                        const renderPlanet = planetInfo.map((info, index) => {
                           const {
                             arms,
                             cellar_energy,
@@ -370,12 +416,12 @@ const PlatformNews: React.FC = () => {
                             product_stone,
                           } = info;
                           return (
-                            <Collapse>
-                              <Panel
-                                header={
+                            <>
+                              {index !== 0 && (
+                                <InfoBox key={info?.id}>
                                   <Box>
                                     <MarkText
-                                      mb='4px'
+                                      mb='20px'
                                       padding={0}
                                       fontStyle='normal'
                                       bold
@@ -386,61 +432,68 @@ const PlatformNews: React.FC = () => {
                                     </MarkText>
                                     {GetPrandk(t, info, true)}
                                   </Box>
-                                }
-                              >
-                                <Flex alignItems='center'>
-                                  <Text mr='4px'>{t('Arms')}:</Text>
-                                  <Text color='redText'>
-                                    {t('Soldier')} -{lose_arm_unit}
-                                  </Text>
-                                  ,{' '}
-                                  <Text mr='2px'>{t('InboxTypeDesc7-6')}:</Text>
-                                  {(arms || []).map(armsInfo => {
-                                    return (
-                                      <Flex alignItems='center'>
-                                        (&nbsp;
-                                        <Text mr='2px'>
-                                          <Flex alignItems='center'>
-                                            {
-                                              raceData[armsInfo.race]?.[
-                                                armsInfo.arm_index
-                                              ]?.name
-                                            }
-                                            &nbsp;
-                                            {t('Generate')}&nbsp;
-                                            {(armsInfo.arm_product || []).map(
-                                              unique => {
-                                                return (
-                                                  <Flex alignItems='center'>
-                                                    <Text color='progressGreenBar'>
-                                                      {`"${getSpriteName(
-                                                        armsInfo.race,
-                                                        unique.unique_id.toString(),
-                                                      )}"`}
-                                                      *{unique.count} /{' '}
-                                                      {t('Toltal')}&nbsp;
-                                                      {armsInfo.total_count}
-                                                    </Text>
-                                                    ,
-                                                  </Flex>
-                                                );
-                                              },
-                                            )}
-                                          </Flex>
-                                        </Text>
-                                        &nbsp;),
-                                      </Flex>
-                                    );
-                                  })}
-                                </Flex>
-                                <Flex alignItems='center'>
-                                  <Text mr='4px'>{t('Building')}:</Text>
-                                  <Text color='redText'>
-                                    {t('InboxTypeDesc7-7')} -{lose_durable}
-                                  </Text>
-                                </Flex>
-                              </Panel>
-                            </Collapse>
+                                  <Flex alignItems='center'>
+                                    <Text mr='10px'>{t('Arms')}:</Text>
+                                    <Text mr='10px' color='redText'>
+                                      {t('Soldier')} -{lose_arm_unit}
+                                    </Text>
+                                    ,{' '}
+                                    <Text ml='10px' mr='4px'>
+                                      {t('InboxTypeDesc7-6')}:
+                                    </Text>
+                                    {(arms || []).map(armsInfo => {
+                                      return (
+                                        <Flex
+                                          alignItems='center'
+                                          key={armsInfo.arm_index}
+                                        >
+                                          (&nbsp;
+                                          <Text mr='2px'>
+                                            <Flex alignItems='center'>
+                                              {
+                                                raceData[armsInfo.race]?.[
+                                                  armsInfo.arm_index
+                                                ]?.name
+                                              }
+                                              &nbsp;
+                                              {t('Generate')}&nbsp;
+                                              {(armsInfo.arm_product || []).map(
+                                                unique => {
+                                                  return (
+                                                    <Flex
+                                                      key={unique.unique_id}
+                                                      alignItems='center'
+                                                    >
+                                                      <Text color='progressGreenBar'>
+                                                        {`"${getSpriteName(
+                                                          armsInfo.race,
+                                                          unique.unique_id.toString(),
+                                                        )}"`}
+                                                        *{unique.count} /{' '}
+                                                        {t('Toltal')}&nbsp;
+                                                        {armsInfo.total_count}
+                                                      </Text>
+                                                      ,
+                                                    </Flex>
+                                                  );
+                                                },
+                                              )}
+                                            </Flex>
+                                          </Text>
+                                          &nbsp;),
+                                        </Flex>
+                                      );
+                                    })}
+                                  </Flex>
+                                  <Flex alignItems='center'>
+                                    <Text mr='10px'>{t('Building')}:</Text>
+                                    <Text color='redText'>
+                                      {t('InboxTypeDesc7-7')} -{lose_durable}
+                                    </Text>
+                                  </Flex>
+                                </InfoBox>
+                              )}
+                            </>
                           );
                         });
                         return renderPlanet;
@@ -450,139 +503,166 @@ const PlatformNews: React.FC = () => {
                 </ItemFlex>
               );
             }
+            // 其他消息
             return (
               <ItemFlex key={item.id}>
-                <Img src='/images/commons/icon/news.png' alt='' />
-                <Box ml='30px'>
-                  <Flex alignItems='flex-end'>
-                    <MarkText
-                      padding={0}
-                      mr='28px'
-                      fontSize='20px'
-                      bold
-                      fontStyle='normal'
-                    >
-                      {GetTitle(item.messageType)}
-                    </MarkText>
-                    <Text>
-                      {dayjs(item.addTime * 1000).format('YYYY-MM-DD HH:mm:ss')}
-                    </Text>
-                  </Flex>
-                  {item.messageType === 1 && (
-                    <Text>
-                      {getHTML('InboxTypeDesc1', {
-                        galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
-                        price: `<span style="color: ${theme.colors.legendText}">${msgContent.amount}BNB</span>`,
-                      })}
-                    </Text>
-                  )}
-                  {item.messageType === 2 && (
-                    <>
-                      <Text>
-                        {getHTML('InboxTypeDesc2', {
-                          oldPrice: `<span style="color: ${theme.colors.legendText}">${msgContent.old_amount}BNB</span>`,
-                          galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
-                          time: dayjs(msgContent.timestamp * 1000).format(
-                            'YYYY-MM-DD HH:mm:ss',
-                          ),
-                          address: `<span style="color: ${
-                            theme.colors.legendText
-                          }">${shortenAddress(msgContent?.new_owner)}</span>`,
-                          price: `<span style="color: ${theme.colors.legendText}">${msgContent.amount}BNB</span>`,
-                          get_amount: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_amount}</span>`,
-                        })}
-                      </Text>
-                      <Flex alignItems='center' flexWrap='wrap'>
+                <Img
+                  src={`/images/commons/messageIcon/${GetTitleImg(
+                    item.messageType,
+                  )}.png`}
+                  alt=''
+                />
+                <Box width='calc(100% - 80px)'>
+                  <Flex>
+                    <Box>
+                      <Flex
+                        alignItems='flex-end'
+                        justifyContent='space-between'
+                      >
+                        <Flex alignItems='center'>
+                          <MarkText
+                            padding={0}
+                            mr='28px'
+                            fontSize='20px'
+                            bold
+                            fontStyle='normal'
+                          >
+                            {GetTitle(item.messageType)}
+                          </MarkText>
+                          <Text>
+                            {dayjs(item.addTime * 1000).format(
+                              'YYYY-MM-DD HH:mm:ss',
+                            )}
+                          </Text>
+                        </Flex>
+                        {item.messageType === 4 && (
+                          <Button
+                            variant='text'
+                            height='30px'
+                            width='max-content'
+                            padding='0px 10px'
+                            onClick={() => {
+                              navigate(
+                                `/BattleReport?starTime=${
+                                  msgContent.timestamp - 86400
+                                }&endTime=${msgContent.timestamp + 86400}`,
+                              );
+                            }}
+                          >
+                            <Text color='textPrimary'>
+                              {t('InboxTypeDesc7-1-1')}
+                            </Text>
+                          </Button>
+                        )}
+                      </Flex>
+                      {item.messageType === 1 && (
                         <Text>
-                          {getHTML('InboxTypeDesc2-2', {
-                            reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_amount} BOX</span>`,
+                          {getHTML('InboxTypeDesc1', {
+                            galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
+                            price: `<span style="color: ${theme.colors.legendText}">${msgContent.amount}BNB</span>`,
                           })}
                         </Text>
-                        <Button
-                          variant='purple'
-                          height='30px'
-                          width='max-content'
-                          padding='0px 10px'
-                          onClick={() => {
-                            navigate('/galaxy');
-                          }}
-                        >
-                          <Text color='textPrimary'>{t('Go to Claim')}</Text>
-                        </Button>
-                      </Flex>
-                    </>
-                  )}
-                  {item.messageType === 3 && (
-                    <Text>
-                      {getHTML('InboxTypeDesc3', {
-                        time: dayjs(msgContent.timestamp * 1000).format(
-                          'YYYY-MM-DD HH:mm:ss',
-                        ),
-                        galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
-                        star: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.number}</span>`,
-                      })}
-                      &nbsp;
-                      <span style={{ color: theme.colors.textTips }}>
-                        {t('InboxTypeDesc3-2')}
-                      </span>
-                    </Text>
-                  )}
-                  {item.messageType === 4 && (
-                    <Text>
-                      <Flex alignItems='center' flexWrap='wrap'>
-                        {getHTML('InboxTypeDesc4', {
-                          galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
-                          star: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.number}</span>`,
-                          time: dayjs(msgContent.timestamp * 1000).format(
-                            'YYYY-MM-DD HH:mm:ss',
-                          ),
-                          address: `<span style="color: ${
-                            theme.colors.legendText
-                          }">${shortenAddress(msgContent?.new_owner)}</span>`,
-                          power: `<span style="color: ${
-                            theme.colors.legendText
-                          }">( ${t('Power')}${
-                            msgContent?.new_owner_power
-                          } )</span>`,
-                        })}
-                        <Button
-                          variant='purple'
-                          height='30px'
-                          width='max-content'
-                          padding='0px 10px'
-                          onClick={() => {
-                            navigate(
-                              `/BattleReport?starTime=${
-                                msgContent.timestamp - 86400
-                              }&endTime=${msgContent.timestamp + 86400}`,
-                            );
-                          }}
-                        >
-                          <Text color='textPrimary'>
-                            {t('InboxTypeDesc7-1-1')}
+                      )}
+                      {item.messageType === 2 && (
+                        <>
+                          <Text>
+                            {getHTML('InboxTypeDesc2', {
+                              oldPrice: `<span style="color: ${theme.colors.legendText}">${msgContent.old_amount}BNB</span>`,
+                              galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
+                              time: dayjs(msgContent.timestamp * 1000).format(
+                                'YYYY-MM-DD HH:mm:ss',
+                              ),
+                              address: `<span style="color: ${
+                                theme.colors.legendText
+                              }">${shortenAddress(
+                                msgContent?.new_owner,
+                              )}</span>`,
+                              price: `<span style="color: ${theme.colors.legendText}">${msgContent.amount}BNB</span>`,
+                              get_amount: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_amount}</span>`,
+                            })}
                           </Text>
-                        </Button>
-                      </Flex>
+                          <Flex alignItems='center' flexWrap='wrap'>
+                            <Text>
+                              {getHTML('InboxTypeDesc2-2', {
+                                reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_amount} BOX</span>`,
+                              })}
+                            </Text>
+                            <Button
+                              variant='purple'
+                              height='30px'
+                              width='max-content'
+                              padding='0px 10px'
+                              onClick={() => {
+                                navigate(`/galaxy?id=${msgContent?.galaxy_id}`);
+                              }}
+                            >
+                              <Text color='textPrimary'>
+                                {t('Go to Claim')}
+                              </Text>
+                            </Button>
+                          </Flex>
+                        </>
+                      )}
+                      {item.messageType === 3 && (
+                        <Text>
+                          {getHTML('InboxTypeDesc3', {
+                            time: dayjs(msgContent.timestamp * 1000).format(
+                              'YYYY-MM-DD HH:mm:ss',
+                            ),
+                            galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
+                            star: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.number}</span>`,
+                          })}
+                          &nbsp;
+                          <span style={{ color: theme.colors.textTips }}>
+                            {t('InboxTypeDesc3-2')}
+                          </span>
+                        </Text>
+                      )}
+                      {item.messageType === 4 && (
+                        <Text>
+                          <Flex alignItems='center' flexWrap='wrap'>
+                            {getHTML('InboxTypeDesc4', {
+                              galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
+                              star: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.number}</span>`,
+                              time: dayjs(msgContent.timestamp * 1000).format(
+                                'YYYY-MM-DD HH:mm:ss',
+                              ),
+                              address: `<span style="color: ${
+                                theme.colors.legendText
+                              }">${shortenAddress(
+                                msgContent?.new_owner,
+                              )}</span>`,
+                              power: `<span style="color: ${
+                                theme.colors.legendText
+                              }">( ${t('Power')}${
+                                msgContent?.new_owner_power
+                              } )</span>`,
+                            })}
+                          </Flex>
+                          {getHTML('InboxTypeDesc4-2', {
+                            time: EasyformatTime(msgContent.hold_time),
+                            reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_box} BOX</span>`,
+                          })}
+                        </Text>
+                      )}
+                    </Box>
+                    {item.messageType === 4 && (
                       <Flex alignItems='center'>
-                        {getHTML('InboxTypeDesc4-2', {
-                          time: EasyformatTime(msgContent.hold_time),
-                          reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_box} BOX</span>`,
-                        })}
                         <Button
                           variant='purple'
-                          height='30px'
-                          width='max-content'
-                          padding='0px 10px'
+                          height='45px'
+                          width='140px'
+                          padding='0'
                           ml='20px'
                           onClick={() => {
-                            navigate('/galaxy');
+                            navigate(`/galaxy?id=${msgContent?.galaxy_id}`);
                           }}
                         >
                           <Text color='textPrimary'>{t('Go to Claim')}</Text>
                         </Button>
                       </Flex>
-                    </Text>
-                  )}
+                    )}
+                  </Flex>
                 </Box>
               </ItemFlex>
             );
