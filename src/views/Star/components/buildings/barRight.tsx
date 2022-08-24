@@ -117,7 +117,7 @@ export const BarRight: React.FC<BarRightProps> = ({
             mr='10px'
             position='relative'
           >
-            <MarkText bold fontStyle='italic' pl='0'>
+            <MarkText bold pl='0'>
               {planetInfo?.build_count}
             </MarkText>
           </Flex>
@@ -136,7 +136,7 @@ export const BarRight: React.FC<BarRightProps> = ({
             mr='10px'
             position='relative'
           >
-            <MarkText bold fontStyle='italic' pl='0'>
+            <MarkText bold pl='0'>
               Lv{planetInfo?.level}
             </MarkText>
           </Flex>
@@ -155,7 +155,7 @@ export const BarRight: React.FC<BarRightProps> = ({
             mr='10px'
             position='relative'
           >
-            <MarkText bold fontStyle='italic' pl='0'>
+            <MarkText bold pl='0'>
               +{planetInfo?.strengthenLevel}
             </MarkText>
           </Flex>

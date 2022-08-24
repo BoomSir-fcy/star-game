@@ -298,7 +298,7 @@ const PlatformNews: React.FC = () => {
           <BackButton />
         </Box>
         <TitleBox>
-          <MarkText fontSize='18px' bold fontStyle='italic'>
+          <MarkText fontSize='18px' bold>
             {t('InBox')}
           </MarkText>
         </TitleBox>

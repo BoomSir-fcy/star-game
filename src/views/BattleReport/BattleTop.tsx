@@ -143,12 +143,12 @@ export const BattleTop: React.FC<{
         <BackButton />
       </Box>
       <TitleBox>
-        <MarkText fontSize='18px' bold fontStyle='italic'>
+        <MarkText fontSize='18px' bold>
           {t('Brief Report')}
         </MarkText>
       </TitleBox>
       <RecordBox width='316px'>
-        <MarkText ml='20px' mt='10px' fontSize='22px' bold fontStyle='italic'>
+        <MarkText ml='20px' mt='10px' fontSize='22px' bold>
           {t('Total number of battles')}
         </MarkText>
         <Flex
@@ -158,7 +158,7 @@ export const BattleTop: React.FC<{
           height='60px'
           position='relative'
         >
-          <MarkText fontSize='28px' bold fontStyle='italic'>
+          <MarkText fontSize='28px' bold>
             {cont.Cont}
           </MarkText>
         </Flex>

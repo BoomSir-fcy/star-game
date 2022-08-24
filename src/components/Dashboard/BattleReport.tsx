@@ -82,7 +82,7 @@ const BattleReport = () => {
           }}
         >
           <MarkText
-            ml='18px'
+            ml='1px'
             padding={0}
             maxWidth='122px'
             fontSize='16px'
@@ -99,7 +99,7 @@ const BattleReport = () => {
             mr='8px'
             position='relative'
           >
-            <MarkText fontSize='18px' bold fontStyle='italic'>
+            <MarkText fontSize='18px' bold>
               {unread_plunder_count}
             </MarkText>
             {unread_plunder_count > 0 && <MessageBox />}

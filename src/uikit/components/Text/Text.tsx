@@ -24,7 +24,7 @@ const Text = styled.div<TextProps>`
     mark
       ? `
       font-weight: bold;
-      font-style: italic;
+      font-style: normal;
 
       color: #ffffff;
       text-shadow: 0px 3px 0.4em #79c6c4;

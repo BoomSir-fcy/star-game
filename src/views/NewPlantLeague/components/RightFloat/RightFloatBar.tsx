@@ -240,7 +240,7 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
             mr='8px'
             position='relative'
           >
-            <MarkText fontSize='18px' bold fontStyle='italic'>
+            <MarkText fontSize='18px' bold>
               {message_count}
             </MarkText>
             {message_count > 0 && <MessageBox />}
@@ -271,7 +271,7 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
             mr='8px'
             position='relative'
           >
-            <MarkText fontSize='18px' bold fontStyle='italic'>
+            <MarkText fontSize='18px' bold  >
               {unread_plunder_count}
             </MarkText>
             {unread_plunder_count > 0 && <MessageBox />}
