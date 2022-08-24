@@ -35,6 +35,7 @@ import eventBus from 'utils/eventBus';
 import DepositWithdrawalModule from 'components/NavPop/DepositWithdrawalNew';
 import { useFetchUserBalance, useFetchUserProduct } from 'state/userInfo/hooks';
 import BlindPlanetBox from 'components/OpenBlindPlanet/BlindPlanetBox';
+import TokenMoveAnimation from 'components/TokenMoveAnimation';
 
 // .introjs-tooltip{
 //   transform-origin: ${({ rotate }) => (rotate ? 'center' : '0  0')};
@@ -261,6 +262,7 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       <div className={VIDEO_GLOBAL_CLASS_NAME} />
       <ModalContent scale={scale} id={MODAL_GLOBAL_ID_NAME} />
       <Dashboard scale={scale} />
+      {/* <TokenMoveAnimation scale={scale} /> */}
       <Toast />
       {openBlind && <BlindPlanetBox scale={scale} />}
       <Content id='scale-content' scale={scale} hideHeader={!!hideHeader}>
