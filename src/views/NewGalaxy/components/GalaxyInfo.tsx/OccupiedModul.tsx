@@ -95,8 +95,9 @@ const CloseImg = styled.img`
 const ListBox = styled(Box)`
   width: 100%;
   height: 100%;
-  background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
-  border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
+  background: linear-gradient(270deg, #520d4e, #123d45);
+  border: 2px solid;
+  border-image: linear-gradient(90deg, #c83cc0, #2faced) 2 2;
   padding: 16px;
   position: relative;
 `;
@@ -296,9 +297,9 @@ const OccupiedModul: React.FC<{
           <CloseImg src='/images/commons/icon/back.png' alt='' />
         </CloseBox>
         <Flex alignItems='flex-end'>
-          <MarkText padding={0} fontSize='20px' bold fontStyle='normal'>
+          <Text gold fontSize='20px' bold fontStyle='normal'>
             {t('Occupy')}
-          </MarkText>
+          </Text>
           {/* <TooltipTrigger
             overlay={
               
@@ -313,7 +314,7 @@ const OccupiedModul: React.FC<{
             />
           </TooltipTrigger> */}
         </Flex>
-        <Text mb='10px' small>
+        <Text mb='10px' color='textTips' small>
           {t('occupationRules')}
         </Text>
         <ScrollBox id='ScrollDom'>
@@ -326,9 +327,9 @@ const OccupiedModul: React.FC<{
               >
                 <Box position='relative'>
                   <LeveFlex>
-                    <MarkText fontStyle='normal' fontSize='14px' bold>
+                    <Text Purple fontStyle='normal' fontSize='14px' bold>
                       # {item.number} {t('Star')}
-                    </MarkText>
+                    </Text>
                   </LeveFlex>
                   <ImgBox>
                     <img
@@ -393,33 +394,33 @@ const OccupiedModul: React.FC<{
                 >
                   <Flex alignItems='baseline' flexWrap='wrap'>
                     <SmText mr='10px'>{t('Power')}</SmText>
-                    <MarkText ellipsis fontStyle='normal' fontSize='20px' bold>
+                    <Text gold ellipsis fontStyle='normal' fontSize='20px' bold>
                       {splitThousandSeparator(item.power)}
-                    </MarkText>
+                    </Text>
                   </Flex>
                   {!IsOwner(item.owner) && (
                     <>
                       {item.owner ? (
                         <Button
-                          variant='purple'
+                          variant='gold'
                           height='45px'
                           onClick={() => {
                             setActiveInfo(item);
                             setVisible(true);
                           }}
                         >
-                          <Text color='textPrimary' fontSize='16px' bold>
+                          <Text color='#FBC249' fontSize='16px' bold>
                             {t('Seize Star')}
                           </Text>
                         </Button>
                       ) : (
                         <Button
                           disabled={pending}
-                          variant='purple'
+                          variant='gold'
                           height='45px'
                           onClick={() => handleHold(item)}
                         >
-                          <Text color='textPrimary' fontSize='16px' bold>
+                          <Text color='#FBC249' fontSize='16px' bold>
                             {/* {pending ? (
                               <Dots>{t('Occupy Star')}</Dots>
                             ) : (
@@ -435,11 +436,11 @@ const OccupiedModul: React.FC<{
                   {IsOwner(item.owner) && (
                     <Button
                       disabled={pending}
-                      variant='purple'
+                      variant='gold'
                       height='45px'
                       onClick={() => handleGiveupStar(item)}
                     >
-                      <Text color='textPrimary' fontSize='16px' bold>
+                      <Text color='#FBC249' fontSize='16px' bold>
                         {/* {pending ? (
                           <Dots>{t('Give up Occupy')}</Dots>
                         ) : (
@@ -456,18 +457,18 @@ const OccupiedModul: React.FC<{
         </ScrollBox>
         <Flex justifyContent='center'>
           <Button
-            variant='purple'
+            variant='gold'
             height='45px'
             disabled={!claimMax}
             onClick={handleClaim}
           >
-            <Text color='textPrimary' bold>
+            <Text color='#FBC249' bold>
               <Flex alignItems='center'>
                 {t('Claim')}(
                 {claimMax ? (
                   <BalanceText
                     fontSize='16px'
-                    color='textPrimary'
+                    color='#FBC249'
                     value={Number(SubString_1(claimMax, 6))}
                   />
                 ) : (

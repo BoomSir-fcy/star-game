@@ -152,7 +152,7 @@ const GetPrandk = (t, info, cellar?) => {
             <Text mr='3px'>{t('Ore')}</Text>
             <Text color={plunder_stone >= 0 ? 'progressGreenBar' : 'redText'}>
               <Flex flexWrap='wrap'>
-                {plunder_stone >= 0 ? '+' : '-'}
+                {plunder_stone >= 0 ? '+' : ''}
                 {formatDisplayApr(plunder_stone)}
                 {cellar && (
                   <Text ml='3px'>
@@ -175,7 +175,7 @@ const GetPrandk = (t, info, cellar?) => {
               color={plunder_energy >= 0 ? 'progressGreenBar' : 'redText'}
             >
               <Flex flexWrap='wrap'>
-                {plunder_energy >= 0 ? '+' : '-'}
+                {plunder_energy >= 0 ? '+' : ''}
                 {formatDisplayApr(plunder_energy)}
                 {cellar && (
                   <Text ml='3px'>
@@ -198,7 +198,7 @@ const GetPrandk = (t, info, cellar?) => {
               color={plunder_population >= 0 ? 'progressGreenBar' : 'redText'}
             >
               <Flex flexWrap='wrap'>
-                {plunder_population >= 0 ? '+' : '-'}
+                {plunder_population >= 0 ? '+' : ''}
                 {formatDisplayApr(plunder_population)}
                 {cellar && (
                   <Text ml='3px'>
@@ -216,9 +216,7 @@ const GetPrandk = (t, info, cellar?) => {
           </Flex>
           <Flex>
             <Text mr='3px'>{t('Soldier')}</Text>
-            <Text color={lose_arm_unit > 0 ? 'progressGreenBar' : 'redText'}>
-              -{formatDisplayApr(lose_arm_unit)}
-            </Text>
+            <Text color='redText'>-{formatDisplayApr(lose_arm_unit)}</Text>
           </Flex>
         </Flex>
       </Flex>
@@ -312,6 +310,7 @@ const PlatformNews: React.FC = () => {
             const msgContent = JSON.parse(item?.msgContent);
             // 行星探索综合报告
             if (item?.messageType === 7 && msgContent?.work_report) {
+              console.log(msgContent, 'msgContent');
               const InfoList = [];
               Object.keys(msgContent?.work_report).forEach(id => {
                 const obj = {
@@ -415,102 +414,119 @@ const PlatformNews: React.FC = () => {
                       }
                     >
                       {[InfoList || []].map(planetInfo => {
-                        const renderPlanet = planetInfo.map((info, index) => {
-                          const {
-                            arms,
-                            cellar_energy,
-                            cellar_population,
-                            cellar_stone,
-                            lose_arm_unit,
-                            lose_durable,
-                            plunder_energy,
-                            plunder_population,
-                            plunder_stone,
-                            product_energy,
-                            product_population,
-                            product_stone,
-                          } = info;
-                          return (
-                            <Box key={info?.id}>
-                              {index !== 0 && (
-                                <InfoBox>
-                                  <Box>
-                                    <MarkText
-                                      mb='20px'
-                                      padding={0}
-                                      fontStyle='normal'
-                                      bold
-                                    >
-                                      {t('Planet')}&nbsp;
-                                      {info?.id}&nbsp;
-                                      {t('InboxTypeDesc7-5')}
-                                    </MarkText>
-                                    {GetPrandk(t, info, true)}
-                                  </Box>
-                                  <Flex alignItems='center'>
-                                    <Text mr='10px'>{t('Arms')}:</Text>
-                                    <Text mr='10px' color='redText'>
-                                      {t('Soldier')} -{lose_arm_unit}
-                                    </Text>
-                                    ,{' '}
-                                    <Text ml='10px' mr='4px'>
-                                      {t('InboxTypeDesc7-6')}:
-                                    </Text>
-                                    {(arms || []).map(armsInfo => {
-                                      return (
-                                        <Flex
-                                          alignItems='center'
-                                          key={armsInfo.arm_index}
-                                        >
-                                          (&nbsp;
-                                          <Text mr='2px'>
-                                            <Flex alignItems='center'>
-                                              {
-                                                raceData[armsInfo.race]?.[
-                                                  armsInfo.arm_index
-                                                ]?.name
-                                              }
-                                              &nbsp;
-                                              {t('Generate')}&nbsp;
-                                              {(armsInfo.arm_product || []).map(
-                                                unique => {
-                                                  return (
-                                                    <Flex
-                                                      key={unique.unique_id}
-                                                      alignItems='center'
-                                                    >
-                                                      <Text color='progressGreenBar'>
-                                                        {`"${getSpriteName(
-                                                          armsInfo.race,
-                                                          unique.unique_id.toString(),
-                                                        )}"`}
-                                                        *{unique.count} /{' '}
-                                                        {t('Toltal')}&nbsp;
-                                                        {armsInfo.total_count}
-                                                      </Text>
-                                                      ,
-                                                    </Flex>
-                                                  );
-                                                },
-                                              )}
+                        const renderPlanet = planetInfo.map(
+                          (info, planetIndex) => {
+                            const {
+                              arms,
+                              cellar_energy,
+                              cellar_population,
+                              cellar_stone,
+                              lose_arm_unit,
+                              lose_durable,
+                              plunder_energy,
+                              plunder_population,
+                              plunder_stone,
+                              product_energy,
+                              product_population,
+                              product_stone,
+                            } = info;
+                            return (
+                              <Box key={info?.id}>
+                                {planetIndex !== 0 && (
+                                  <InfoBox>
+                                    <Box>
+                                      <MarkText
+                                        mb='20px'
+                                        padding={0}
+                                        fontStyle='normal'
+                                        bold
+                                      >
+                                        {t('Planet')}&nbsp;
+                                        {info?.id}&nbsp;
+                                        {t('InboxTypeDesc7-5')}
+                                      </MarkText>
+                                      {GetPrandk(t, info, true)}
+                                    </Box>
+                                    <Flex alignItems='center' flexWrap='wrap'>
+                                      <Text mr='10px'>{t('Arms')}:</Text>
+                                      <Text mr='10px' color='redText'>
+                                        {t('Soldier')} -{lose_arm_unit}
+                                      </Text>
+                                      ,{' '}
+                                      <Text ml='10px' mr='4px'>
+                                        {t('InboxTypeDesc7-6')}:
+                                      </Text>
+                                      {(arms || []).map(
+                                        (armsInfo, armsIndex) => {
+                                          return (
+                                            <Flex
+                                              alignItems='center'
+                                              key={armsInfo.arm_index}
+                                            >
+                                              (&nbsp;
+                                              <Text ml='10px' mr='10px'>
+                                                <Flex alignItems='center'>
+                                                  {
+                                                    raceData[armsInfo.race]?.[
+                                                      armsInfo.arm_index
+                                                    ]?.name
+                                                  }
+                                                  &nbsp;
+                                                  {t('Generate')}&nbsp;
+                                                  {(
+                                                    armsInfo.arm_product || []
+                                                  ).map(
+                                                    (unique, uniqueIndex) => {
+                                                      return (
+                                                        <Flex
+                                                          key={unique.unique_id}
+                                                          alignItems='center'
+                                                        >
+                                                          <Text
+                                                            mr='6px'
+                                                            color='progressGreenBar'
+                                                          >
+                                                            {`"${getSpriteName(
+                                                              armsInfo.race,
+                                                              unique?.index?.toString() ||
+                                                                '0',
+                                                            )}"`}
+                                                            *{unique.count} /{' '}
+                                                            {t('Toltal')}&nbsp;
+                                                            {
+                                                              armsInfo.total_count
+                                                            }
+                                                          </Text>
+                                                          {uniqueIndex !==
+                                                            armsInfo.arm_product
+                                                              .length -
+                                                              1 && ','}
+                                                        </Flex>
+                                                      );
+                                                    },
+                                                  )}
+                                                </Flex>
+                                              </Text>
+                                              &nbsp;){' '}
+                                              {armsIndex !== arms.length - 1 &&
+                                                ','}
                                             </Flex>
-                                          </Text>
-                                          &nbsp;),
-                                        </Flex>
-                                      );
-                                    })}
-                                  </Flex>
-                                  <Flex alignItems='center'>
-                                    <Text mr='10px'>{t('Building')}:</Text>
-                                    <Text color='redText'>
-                                      {t('InboxTypeDesc7-7')} -{lose_durable}
-                                    </Text>
-                                  </Flex>
-                                </InfoBox>
-                              )}
-                            </Box>
-                          );
-                        });
+                                          );
+                                        },
+                                      )}
+                                    </Flex>
+                                    <Flex alignItems='center'>
+                                      <Text mr='10px'>{t('Building')}:</Text>
+                                      <Text color='redText'>
+                                        {t('InboxTypeDesc7-7')} -{lose_durable}
+                                      </Text>
+                                    </Flex>
+                                  </InfoBox>
+                                )}
+                              </Box>
+                            );
+                          },
+                        );
                         return renderPlanet;
                       })}
                     </Panel>

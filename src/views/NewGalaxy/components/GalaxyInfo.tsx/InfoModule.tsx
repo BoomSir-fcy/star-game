@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import { useStore } from 'state';
-import { Text, Flex, Box, GraphicsCard, Dots, BalanceText } from 'uikit';
+import { Text, Flex, Box, GraphicsCard, Dots, BalanceText, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { Api } from 'apis';
@@ -197,9 +197,9 @@ const InfoModule: React.FC<{
     <InfoModuleBox className={OpenInfo ? 'Show' : 'close'}>
       <Flex mb='16px' justifyContent='space-between'>
         <Flex alignItems='flex-end'>
-          <NormalMarkText bold fontSize='20px'>
-            {currentGalaxy.name}
-          </NormalMarkText>
+          <Text gold bold fontSize='20px'>
+            {t('Auction')}&nbsp;{currentGalaxy.name}
+          </Text>
           {/* <Flex ml='30px' alignItems='flex-end'>
             <Text fontSize='14px' mr='15px'>
               {t('Total Galaxy CE')}
@@ -242,20 +242,19 @@ const InfoModule: React.FC<{
               )}
             </Box>
           </Flex>
-          <GraphicsCard
-            stripe
+          <Box
             style={{ padding: '8px 16px' }}
             width='max-content'
             height='max-content'
           >
             <Text fontSize='14px'>{t('Accumulated')} BOX</Text>
-            <NormalMarkText bold fontSize='18px'>
+            <Text gold bold fontSize='18px'>
               {SubString_1(OwnerInfo.owner_get_box, 5)}
-            </NormalMarkText>
-          </GraphicsCard>
+            </Text>
+          </Box>
         </Flex>
       </BorderBox>
-      <BorderBox mb={20}>
+      <Box mb={30}>
         <Text mb='18px'>{t('GalaxyDesc1')}</Text>
         <Flex mb='12px'>
           <GetImg src='/images/commons/icon/icon-finish.png' />
@@ -275,7 +274,7 @@ const InfoModule: React.FC<{
             {t('GalaxyDesc1-3')}
           </Text>
         </Flex>
-      </BorderBox>
+      </Box>
 
       {/* <Flex mb='8px' justifyContent='space-between'>
         <GraphicsCard
@@ -325,7 +324,7 @@ const InfoModule: React.FC<{
         account?.toLocaleLowerCase() ? (
           <>
             <AuctionBtn
-              variant='purple'
+              variant='purpleShow'
               height='100%'
               minWidth='50%'
               width='max-content'
@@ -342,27 +341,37 @@ const InfoModule: React.FC<{
           </>
         ) : (
           <AuctionBtn
-            variant='purple'
+            variant='purpleShow'
             width='50%'
+            height='max-content'
+            padding='0 10px'
             disabled={BiddingdiffSeconds > 0 || pending}
             onClick={handleAuction}
           >
-            <Text color='textPrimary' bold>
-              {BiddingdiffSeconds > 0 ? (
-                `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
-                  timePeriod.seconds
-                }${t('s')}`
-              ) : pending ? (
-                <Dots>{t('Bidding')}</Dots>
-              ) : (
-                <>
-                  <Box>{`${t('Auction')} ${currentGalaxy.name}`}</Box>
-                  <Box>
-                    {`( ${currentPrice ? `${currentPrice}` : '---'}BNB )`}
-                  </Box>
-                </>
-              )}
-            </Text>
+            <Flex alignItems='center' width='100%' justifyContent='center'>
+              <Image
+                width={40}
+                height={40}
+                src='/images/tokens/BNB.svg'
+                alt=''
+              />
+              <Flex ml='14px' flex={1} flexDirection='column'>
+                {BiddingdiffSeconds > 0 ? (
+                  `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
+                    timePeriod.seconds
+                  }${t('s')}`
+                ) : pending ? (
+                  <Dots>{t('Bidding')}</Dots>
+                ) : (
+                  <>
+                    <Text>{`${t('Auction')} ${currentGalaxy.name}`}</Text>
+                    <Text gold bold fontSize='18px'>
+                      {`( ${currentPrice ? `${currentPrice}` : '---'} BNB )`}
+                    </Text>
+                  </>
+                )}
+              </Flex>
+            </Flex>
           </AuctionBtn>
         )}
         {/* <Text color='#A9CCCB' fontSize='14px' ml='20px' mr='20px'>
@@ -375,31 +384,33 @@ const InfoModule: React.FC<{
           )}
         </Text> */}
       </Flex>
-      <Flex alignItems='center' justifyContent='center'>
-        <AuctionBtn
-          variant='purple'
-          width='50%'
-          // disabled={!claimMax || diffSeconds <= 0}
-          disabled={!claimMax}
-          onClick={handleClaim}
-        >
-          <Text color='textPrimary' bold>
-            <Flex alignItems='center'>
-              {t('Claim')}(
-              {claimMax ? (
-                <BalanceText
-                  fontSize='16px'
-                  color='textPrimary'
-                  value={Number(SubString_1(claimMax, 6))}
-                />
-              ) : (
-                SubString_1(claimMax, 6)
-              )}
-              BOX)
-            </Flex>
-          </Text>
-        </AuctionBtn>
-        {/* <Box ml='20px'>
+      {OwnerInfo?.address?.toLocaleLowerCase() ===
+        account?.toLocaleLowerCase() && (
+        <Flex alignItems='center' justifyContent='center'>
+          <AuctionBtn
+            variant='gold'
+            width='50%'
+            // disabled={!claimMax || diffSeconds <= 0}
+            disabled={!claimMax}
+            onClick={handleClaim}
+          >
+            <Text color='#FBC249' bold>
+              <Flex alignItems='center'>
+                {t('Claim')}(
+                {claimMax ? (
+                  <BalanceText
+                    fontSize='16px'
+                    color='#FBC249'
+                    value={Number(SubString_1(claimMax, 6))}
+                  />
+                ) : (
+                  SubString_1(claimMax, 6)
+                )}
+                BOX)
+              </Flex>
+            </Text>
+          </AuctionBtn>
+          {/* <Box ml='20px'>
           <Text color='textTips' small>
             {t('Remaining time for claiming (24:00 UTC)')}
           </Text>
@@ -407,7 +418,8 @@ const InfoModule: React.FC<{
             {`${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')}`}
           </Text>
         </Box> */}
-      </Flex>
+        </Flex>
+      )}
     </InfoModuleBox>
   );
 };

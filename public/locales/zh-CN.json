@@ -709,7 +709,7 @@
   "Regenerate END": "修复耐久",
   "Recharge Resources": "充值资源",
   "InBox": "站内消息",
-  "Explore Report": "探索报告",
+  "Brief Report": "探索报告",
   "New exploration completed": "新的探索已完成",
   "Insufficient resources": "资源不足",
   "Total Galaxy CE": "星系总战力",
@@ -895,5 +895,6 @@
   "http-error-200040": "行星超过最大工作次数",
   "http-error-300036": "工作队列进行中",
   "http-error-300037": "行星正在工作中，无法添加任务",
+  "http-error-500004": "用户已经拥有其他恒星",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

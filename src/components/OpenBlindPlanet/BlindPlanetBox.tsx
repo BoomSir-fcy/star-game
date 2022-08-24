@@ -174,8 +174,8 @@ const Light = styled(Box)<{ Open?: boolean }>`
 
 const VideoBox = styled(Box)`
   position: absolute;
-  top: -3%;
-  left: -39%;
+  /* top: -3%;
+  left: -39%; */
 `;
 
 const VideoBeginBox = styled(Box)`
@@ -253,6 +253,8 @@ const BlindPlanetBox: React.FC<{
         <VideoBox
           width={410}
           height={410}
+          top={info?.rarity !== 3 ? '-3%' : '-5%'}
+          left={info?.rarity !== 3 ? '-39%' : '-40%'}
           className={Open ? 'star-video' : 'no-video'}
         >
           <VideoStyled

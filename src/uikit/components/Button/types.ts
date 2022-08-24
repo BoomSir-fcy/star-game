@@ -25,6 +25,8 @@ export const variants = {
   STOP: 'stop',
   PURPLE: 'purple',
   TRANSPARENT: 'transparent',
+  GOLD: 'gold',
+  PURPLESHOW: 'purpleShow',
 } as const;
 
 export type Scale = typeof scales[keyof typeof scales];

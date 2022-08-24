@@ -708,7 +708,7 @@
   "Regenerate END": "Regenerate END",
   "Recharge Resources": "Recharge Resources",
   "InBox": "InBox",
-  "Explore Report": "Explore Report",
+  "Brief Report": "Brief Report",
   "New exploration completed": "New exploration completed",
   "Insufficient resources": "Insufficient resources",
   "Total Galaxy CE": "Total Galaxy CE",
@@ -894,5 +894,6 @@
   "http-error-200040": "Planet exceeded maximum number of jobs",
   "http-error-300036": "Work queue in progress",
   "http-error-300037": "Planet is working, can't add quest",
+  "http-error-500004": "User already owns other stars",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

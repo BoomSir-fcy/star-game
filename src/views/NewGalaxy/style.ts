@@ -38,8 +38,9 @@ export const InfoModuleBox = styled(Box)`
   position: fixed;
   width: 582px;
   height: max-content;
-  background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
-  border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
+  background: linear-gradient(270deg, #520d4e, #123d45);
+  border: 2px solid;
+  border-image: linear-gradient(90deg, #c83cc0, #2faced) 2 2;
   bottom: 0;
   padding: 20px 22px;
   opacity: 0;
@@ -79,7 +80,7 @@ export const UserImg = styled.img`
 
 export const BorderBox = styled(Box)`
   padding-bottom: 20px;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.borderPrimary};
+  border-bottom: 2px solid #c221c8;
 `;
 
 export const ScrollBox = styled(Box)`

@@ -82,13 +82,14 @@ const BattleReport = () => {
           }}
         >
           <MarkText
+            ml='18px'
             padding={0}
             maxWidth='122px'
             fontSize='16px'
             bold
             fontStyle='normal'
           >
-            {t('Explore Report')}
+            {t('Brief Report')}
           </MarkText>
           <Flex
             justifyContent='center'

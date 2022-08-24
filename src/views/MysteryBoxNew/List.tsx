@@ -455,18 +455,18 @@ const List = () => {
     return false;
   }, [planetList, sleepShow]);
 
-  const GetVideoPosition = useCallback((index: number) => {
+  const GetVideoPosition = useCallback((index: number, rarity: number) => {
     switch (index) {
       case 0:
-        return 114;
+        return rarity !== 3 ? 114 : 110;
       case 1:
-        return 472;
+        return rarity !== 3 ? 472 : 468;
       case 2:
-        return 830;
+        return rarity !== 3 ? 830 : 826;
       case 3:
-        return 1190;
+        return rarity !== 3 ? 1190 : 1186;
       case 4:
-        return 1548;
+        return rarity !== 3 ? 1548 : 1544;
       default:
         return null;
     }
@@ -666,8 +666,8 @@ const List = () => {
                     height={260}
                     src={`/video/${item?.rarity}rarity.mp4`}
                     loop
-                    left={GetVideoPosition(index)}
-                    top={242}
+                    left={GetVideoPosition(index, item?.rarity)}
+                    top={item?.rarity !== 3 ? 242 : 236}
                     margin='auto'
                     scale={scale}
                   >
