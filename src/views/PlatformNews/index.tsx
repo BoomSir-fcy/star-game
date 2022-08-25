@@ -310,7 +310,6 @@ const PlatformNews: React.FC = () => {
             const msgContent = JSON.parse(item?.msgContent);
             // 行星探索综合报告
             if (item?.messageType === 7 && msgContent?.work_report) {
-              console.log(msgContent, 'msgContent');
               const InfoList = [];
               Object.keys(msgContent?.work_report).forEach(id => {
                 const obj = {
