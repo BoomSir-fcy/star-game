@@ -576,10 +576,10 @@ const List = () => {
                   shadow={
                     openBlindIds?.indexOf(item.id) !== -1
                       ? QualityColor[item?.rarity]
-                      : 0
+                      : '#00000094'
                   }
                   scale='ld'
-                  rotate={openBlindIds?.indexOf(item.id) !== -1}
+                  rotate
                   url={item?.picture1}
                 />
                 {openBlindIds?.indexOf(item.id) === -1 && (
