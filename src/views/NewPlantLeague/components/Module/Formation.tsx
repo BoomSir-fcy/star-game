@@ -1,5 +1,14 @@
-import React, { useState, useCallback } from 'react';
-import { Button, Flex, Box, BgCard, MarkText, Text, GraphicsCard } from 'uikit';
+import React, { useState, useCallback, useEffect } from 'react';
+import {
+  Button,
+  Flex,
+  Box,
+  BgCard,
+  MarkText,
+  Text,
+  Spinner,
+  GraphicsCard,
+} from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
 import { useStore } from 'state';
@@ -35,6 +44,12 @@ const OutBox = styled(Box)`
   }
 `;
 
+const LoadingBox = styled(Flex)`
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
 const FormationBox = styled(Box)`
   width: 316px;
   height: 276px;
@@ -52,6 +67,7 @@ const Formation: React.FC<{
   const { toastError, toastSuccess } = useToast();
   const dispatch = useDispatch();
   const { order } = useStore(p => p.alliance.allianceView);
+  const [LoadPlanet, setLoadPlanet] = useState<Api.Planet.PlanetInfo[]>();
 
   // 开始工作
   const StartOrStopWorking = useCallback(async () => {
@@ -68,6 +84,22 @@ const Formation: React.FC<{
       });
   }, [toastSuccess, toastError, t, dispatch, Difficulty]);
 
+  const addLoadPlanet = useCallback(() => {
+    if (LoadPlanet?.length >= 5) {
+      return;
+    }
+    const ids = LoadPlanet.map(obj => obj?.id);
+    if (ids.indexOf(order[LoadPlanet?.length]?.planetId) === -1) {
+      setLoadPlanet([...LoadPlanet, order[LoadPlanet?.length]?.planet]);
+    }
+  }, [LoadPlanet, order]);
+
+  useEffect(() => {
+    if (order?.length === 5) {
+      setLoadPlanet([order[0]?.planet]);
+    }
+  }, [order]);
+
   return (
     <OutBox
       zIndex={1}
@@ -76,10 +108,13 @@ const Formation: React.FC<{
       className={FormationModule ? 'show' : ''}
     >
       <Flex alignItems='center' justifyContent='space-between'>
-        {(order || []).map(planet => {
-          const item = planet?.planet;
+        {(LoadPlanet || []).map(item => {
+          // const item = planet?.planet;
           return (
-            <Box key={item.id}>
+            <Box
+              display={LoadPlanet?.length >= 5 ? 'block' : 'none'}
+              key={item.id}
+            >
               <Flex mb='24px'>
                 <PlanetBall
                   scale='xs'
@@ -96,7 +131,11 @@ const Formation: React.FC<{
                 </Box>
               </Flex>
               <FormationBox>
-                <GameFormation planetInfo={item} />
+                <GameFormation
+                  LoadPlanet={LoadPlanet}
+                  addLoadPlanet={addLoadPlanet}
+                  planetInfo={item}
+                />
               </FormationBox>
               <Flex pt='30px' justifyContent='center'>
                 <Button
@@ -113,6 +152,11 @@ const Formation: React.FC<{
             </Box>
           );
         })}
+        {LoadPlanet?.length < 5 && (
+          <LoadingBox>
+            <Spinner size={200} />
+          </LoadingBox>
+        )}
       </Flex>
 
       <Flex justifyContent='center' pt='40px'>

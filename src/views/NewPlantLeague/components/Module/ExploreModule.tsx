@@ -144,7 +144,7 @@ const ExploreModule: React.FC<{
             }
             onClick={() => {
               if (ShowModule) {
-                if (order?.length) {
+                if (order?.length === 5) {
                   setFormation(true);
                 } else {
                   toastError(t('http-error-200020'));

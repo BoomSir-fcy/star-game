@@ -20,9 +20,9 @@ import { setEmptyUnits } from 'state/game/reducer';
 
 const GameFormation: React.FC<{
   planetInfo: Api.Planet.PlanetInfo;
-}> = ({ planetInfo }) => {
-  useFetchGamePK();
-  useFetchGamePlanetUnits(planetInfo.id);
+  LoadPlanet: Api.Planet.PlanetInfo[];
+  addLoadPlanet: () => void;
+}> = ({ planetInfo, LoadPlanet, addLoadPlanet }) => {
   const dispatch = useDispatch();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -52,6 +52,20 @@ const GameFormation: React.FC<{
     game.creatTerrain(4, 8); // 创建地形
   }, [game]);
 
+  useFetchGamePK();
+  useFetchGamePlanetUnits(planetInfo.id);
+
+  const race = useMemo(() => {
+    return planetInfo?.race as Api.Game.race;
+  }, [planetInfo]);
+
+  useFetchUnitList(race, planetInfo?.id);
+
+  const unitMaps = useMemo(() => {
+    if (baseUnits[race]) return baseUnits[race];
+    return null;
+  }, [baseUnits, race]);
+
   useEffect(() => {
     if (ref.current) {
       ref.current.appendChild(game.view);
@@ -78,17 +92,6 @@ const GameFormation: React.FC<{
     },
     [activeNum],
   );
-
-  const race = useMemo(() => {
-    return planetInfo?.race as Api.Game.race;
-  }, [planetInfo]);
-
-  useFetchUnitList(race, planetInfo?.id);
-
-  const unitMaps = useMemo(() => {
-    if (baseUnits[race]) return baseUnits[race];
-    return null;
-  }, [baseUnits, race]);
 
   const createSoldiers = useCallback(
     (poses: Api.Game.UnitPlanetPos[]) => {
@@ -131,6 +134,8 @@ const GameFormation: React.FC<{
     ) {
       createSoldiers(plantUnits[planetInfo.id]);
       setSortSoldiers(game.soldiers);
+
+      addLoadPlanet();
     }
   }, [
     plantUnits,
@@ -140,6 +145,7 @@ const GameFormation: React.FC<{
     setSortSoldiers,
     game,
     CanCreate,
+    addLoadPlanet,
   ]);
 
   return (
