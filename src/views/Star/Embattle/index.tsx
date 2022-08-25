@@ -196,11 +196,24 @@ const Embattle = () => {
   }, [plantUnits, planetId, gameSoldiers, UseSoldierNum]);
 
   useEffect(() => {
-    if (plantUnits[planetId] && game.soldiers.length === 0 && CanCreate) {
+    if (
+      plantUnits[planetId] &&
+      game.soldiers.length === 0 &&
+      CanCreate &&
+      race
+    ) {
       createSoldiers(plantUnits[planetId]);
       setSortSoldiers(game.soldiers);
     }
-  }, [plantUnits, planetId, createSoldiers, setSortSoldiers, game, CanCreate]);
+  }, [
+    plantUnits,
+    race,
+    planetId,
+    createSoldiers,
+    setSortSoldiers,
+    game,
+    CanCreate,
+  ]);
 
   const location = useLocation();
   const { guides, setGuide } = useGuide(location.pathname);
