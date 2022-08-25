@@ -384,33 +384,31 @@ const InfoModule: React.FC<{
           )}
         </Text> */}
       </Flex>
-      {OwnerInfo?.address?.toLocaleLowerCase() ===
-        account?.toLocaleLowerCase() && (
-        <Flex alignItems='center' justifyContent='center'>
-          <AuctionBtn
-            variant='gold'
-            width='50%'
-            // disabled={!claimMax || diffSeconds <= 0}
-            disabled={!claimMax}
-            onClick={handleClaim}
-          >
-            <Text color='#FBC249' bold>
-              <Flex alignItems='center'>
-                {t('Claim')}(
-                {claimMax ? (
-                  <BalanceText
-                    fontSize='16px'
-                    color='#FBC249'
-                    value={Number(SubString_1(claimMax, 6))}
-                  />
-                ) : (
-                  SubString_1(claimMax, 6)
-                )}
-                BOX)
-              </Flex>
-            </Text>
-          </AuctionBtn>
-          {/* <Box ml='20px'>
+      <Flex alignItems='center' justifyContent='center'>
+        <AuctionBtn
+          variant='gold'
+          width='50%'
+          // disabled={!claimMax || diffSeconds <= 0}
+          disabled={!claimMax}
+          onClick={handleClaim}
+        >
+          <Text color='#FBC249' bold>
+            <Flex alignItems='center'>
+              {t('Claim')}(
+              {claimMax ? (
+                <BalanceText
+                  fontSize='16px'
+                  color='#FBC249'
+                  value={Number(SubString_1(claimMax, 6))}
+                />
+              ) : (
+                SubString_1(claimMax, 6)
+              )}
+              BOX)
+            </Flex>
+          </Text>
+        </AuctionBtn>
+        {/* <Box ml='20px'>
           <Text color='textTips' small>
             {t('Remaining time for claiming (24:00 UTC)')}
           </Text>
@@ -418,8 +416,7 @@ const InfoModule: React.FC<{
             {`${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')}`}
           </Text>
         </Box> */}
-        </Flex>
-      )}
+      </Flex>
     </InfoModuleBox>
   );
 };

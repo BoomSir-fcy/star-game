@@ -111,7 +111,9 @@ const Login = () => {
           state === CheckNickNameState.LONG_NAME
         ) {
           toastError(
-            t('6~30 characters (Support English, Chinese, and numbers)'),
+            t(
+              '6~30 characters (Support English, Chinese,Punctuation Marks and numbers)',
+            ),
           );
           return;
         }

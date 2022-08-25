@@ -58,7 +58,7 @@
   "Enter the inviter's address (optional)": "输入邀请人地址（选填）",
   "Create an identity will consume 100 DSG, the system will automatically exchange BNB for this amount of DSG using a real-time exchange rate.": "需要消耗100 DSG创建，系统将通过BNB即时交易等额DSG创建身份",
   "Registration Failed": "注册失败",
-  "6~30 characters (Support English, Chinese, and numbers)": "请输入6~30个字符，支持中英文、数字",
+  "6~30 characters (Support English, Chinese,Punctuation Marks and numbers)": "请输入6~30个字符，支持中英文、标点符号、数字",
   "Invalid invitation address": "无效邀请地址",
   "Please enter the correct nickname": "请输正确的昵称",
   "Confirm to create": "确认创建",

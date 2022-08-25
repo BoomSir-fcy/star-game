@@ -608,16 +608,21 @@ const PlatformNews: React.FC = () => {
                                 msgContent?.new_owner,
                               )}</span>`,
                               price: `<span style="color: ${theme.colors.legendText}">${msgContent.amount}BNB</span>`,
-                              get_amount: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_amount}</span>`,
+                              getAmount: `<span style="color: ${
+                                theme.colors.progressGreenBar
+                              }">${
+                                Number(msgContent.old_amount) +
+                                Number(msgContent.get_amount)
+                              } BNB</span>`,
                             })}
                           </Text>
                           <Flex alignItems='center' flexWrap='wrap'>
                             <Text>
                               {getHTML('InboxTypeDesc2-2', {
-                                reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_amount} BOX</span>`,
+                                reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_box} BOX</span>`,
                               })}
                             </Text>
-                            <Button
+                            {/* <Button
                               variant='purple'
                               height='30px'
                               width='max-content'
@@ -629,7 +634,7 @@ const PlatformNews: React.FC = () => {
                               <Text color='textPrimary'>
                                 {t('Go to Claim')}
                               </Text>
-                            </Button>
+                            </Button> */}
                           </Flex>
                         </>
                       )}
@@ -676,7 +681,7 @@ const PlatformNews: React.FC = () => {
                         </Text>
                       )}
                     </Box>
-                    {item.messageType === 4 && (
+                    {(item.messageType === 4 || item.messageType === 2) && (
                       <Flex alignItems='center'>
                         <Button
                           variant='purple'
