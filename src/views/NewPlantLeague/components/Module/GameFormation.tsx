@@ -28,7 +28,6 @@ const GameFormation: React.FC<{
   const ref = useRef<HTMLDivElement>(null);
   const { screenMode } = useStore(p => p.user);
   const { plantUnits } = useStore(p => p.game);
-  const baseUnits = useStore(p => p.game.baseUnits);
 
   const [CanCreate, setCanCreate] = useState(false);
 
@@ -61,11 +60,6 @@ const GameFormation: React.FC<{
 
   useFetchUnitList(race, planetInfo?.id);
 
-  const unitMaps = useMemo(() => {
-    if (baseUnits[race]) return baseUnits[race];
-    return null;
-  }, [baseUnits, race]);
-
   useEffect(() => {
     if (ref.current) {
       ref.current.appendChild(game.view);
@@ -87,7 +81,7 @@ const GameFormation: React.FC<{
   const UseSoldierNum = useCallback(
     (item: Api.Game.UnitInfo) => {
       return `${activeNum(item?.unique_id)}/${
-        item?.default_unit ? '6' : item?.count
+        item?.barracks === 1 && item?.probability === -1 ? '6' : item?.count
       }`;
     },
     [activeNum],
@@ -100,38 +94,37 @@ const GameFormation: React.FC<{
           item.pos.x,
           item.pos.y,
           {
-            srcId: `${unitMaps?.[item.base_unit_id]?.index}`,
+            srcId: `${item?.base_unit.index}`,
             race,
             id: item.base_unit_id,
             unique_id: item.base_unit_id,
-            unitInfo: { ...unitMaps?.[item.base_unit_id], hp: 0 },
-            activeCountText: UseSoldierNum(unitMaps?.[item.base_unit_id]),
+            unitInfo: { ...item?.base_unit, hp: 0 },
+            activeCountText: UseSoldierNum(item?.base_unit),
           },
           false,
         );
       });
     },
-    [unitMaps, race, game, UseSoldierNum],
+    [race, game, UseSoldierNum],
   );
 
   useEffect(() => {
     // 更新棋盘上显示的士兵可摆放数量
-    if (gameSoldiers.length && plantUnits[planetInfo.id] && unitMaps) {
+    if (gameSoldiers.length && plantUnits[planetInfo.id]) {
       gameSoldiers.forEach(item => {
+        const unitInfoObj = plantUnits[planetInfo.id].filter(
+          obj => obj?.base_unit?.unique_id === item?.soldier?.unique_id,
+        );
+
         item.soldier.upDateActiveCountText(
-          UseSoldierNum(unitMaps?.[item.soldier.unique_id]),
+          UseSoldierNum(unitInfoObj[0].base_unit),
         );
       });
     }
-  }, [plantUnits, planetInfo.id, gameSoldiers, unitMaps, UseSoldierNum]);
+  }, [plantUnits, planetInfo.id, gameSoldiers, UseSoldierNum]);
 
   useEffect(() => {
-    if (
-      plantUnits[planetInfo.id] &&
-      unitMaps &&
-      game.soldiers.length === 0 &&
-      CanCreate
-    ) {
+    if (plantUnits[planetInfo.id] && game.soldiers.length === 0 && CanCreate) {
       createSoldiers(plantUnits[planetInfo.id]);
       setSortSoldiers(game.soldiers);
 
@@ -140,7 +133,6 @@ const GameFormation: React.FC<{
   }, [
     plantUnits,
     planetInfo.id,
-    unitMaps,
     createSoldiers,
     setSortSoldiers,
     game,

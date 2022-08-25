@@ -22,6 +22,8 @@ declare namespace Api {
     }
 
     interface UnitInfo {
+      barracks: number;
+      probability: number;
       unique_id: number; //
       race: race; // 种族
       hp: number; // 血量
@@ -105,6 +107,7 @@ declare namespace Api {
       base_unit_id: number;
       pos: Pos;
       speed: number;
+      base_unit: UnitInfo;
     }
     interface UnitPlanetRes {
       units: {
