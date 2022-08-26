@@ -304,7 +304,7 @@ const PlatformNews: React.FC = () => {
         </TitleBox>
       </Flex>
       {/* 消息列表 */}
-      {MessageList.length > 0 ? (
+      {MessageList?.length > 0 ? (
         <ScrollBox onScroll={loadMore}>
           {(MessageList ?? []).map(item => {
             const msgContent = JSON.parse(item?.msgContent);
@@ -585,6 +585,7 @@ const PlatformNews: React.FC = () => {
                           </Button>
                         )}
                       </Flex>
+                      {item.messageType === 0 && <Text>{msgContent}</Text>}
                       {item.messageType === 1 && (
                         <Text>
                           {getHTML('InboxTypeDesc1', {

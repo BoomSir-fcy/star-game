@@ -3,7 +3,7 @@ import random from 'lodash/random';
 import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
 import { Flex, Box, MarkText, Text, Button } from 'uikit';
-import { useStore } from 'state';
+import { storeAction, useStore } from 'state';
 import { Api } from 'apis';
 
 import { useToast } from 'contexts/ToastsContext';
@@ -16,6 +16,10 @@ import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 
 import { BuildingDetailType } from 'state/types';
+import {
+  fetchUserBalanceAsync,
+  fetchUserProductAsync,
+} from 'state/userInfo/reducer';
 import { BuildingProgress } from './buildingProgress';
 import { BuildingResourceModal } from './buildingResourceModal';
 import { BuildingRechargeModal } from './buildingRechargeModal';
@@ -109,8 +113,32 @@ export const BuildingResources: React.FC<{
           setState(p => {
             p.visible = false;
           });
+          const tokenList = [];
+          if (val.energy > 0) tokenList.push('ENG');
+          if (val.stone > 0) tokenList.push('ORE');
+          if (val.population > 0) tokenList.push('SPICES');
+          dispatch(
+            storeAction.setTokenToFrom({
+              to: 'buildingStore',
+              from: 'resourceToken',
+              token: tokenList,
+              toPosition: 'bottomRight',
+            }),
+          );
+          setTimeout(() => {
+            dispatch(
+              storeAction.setTokenToFrom({
+                to: '',
+                from: '',
+                token: [],
+                toPosition: '',
+              }),
+            );
+          }, 2000);
           toastSuccess(t('Extract Succeeded'));
-          onClose();
+          // onClose();
+          dispatch(fetchUserBalanceAsync());
+          dispatch(fetchUserProductAsync());
           dispatch(fetchPlanetInfoAsync([planet_id]));
           dispatch(fetchPlanetBuildingsAsync(planet_id));
         }
@@ -118,7 +146,7 @@ export const BuildingResources: React.FC<{
         console.log('error: ', error);
       }
     },
-    [account, dispatch, library, onClose, planet_id, setState, t, toastSuccess],
+    [account, dispatch, library, planet_id, setState, t, toastSuccess],
   );
 
   const rechargeChange = React.useCallback(
@@ -144,8 +172,32 @@ export const BuildingResources: React.FC<{
           setState(p => {
             p.visible = false;
           });
+          const tokenList = [];
+          if (val.energy > 0) tokenList.push('ENG');
+          if (val.stone > 0) tokenList.push('ORE');
+          if (val.population > 0) tokenList.push('SPICES');
+          dispatch(
+            storeAction.setTokenToFrom({
+              to: 'resourceToken',
+              from: 'buildingStore',
+              token: tokenList,
+              toPosition: 'bottomRight',
+            }),
+          );
+          setTimeout(() => {
+            dispatch(
+              storeAction.setTokenToFrom({
+                to: '',
+                from: '',
+                token: [],
+                toPosition: '',
+              }),
+            );
+          }, 2000);
           toastSuccess(t('Recharge Succeeded'));
-          onClose();
+          // onClose();
+          dispatch(fetchUserBalanceAsync());
+          dispatch(fetchUserProductAsync());
           dispatch(fetchPlanetInfoAsync([planet_id]));
           dispatch(fetchPlanetBuildingsAsync(planet_id));
         }
@@ -153,7 +205,7 @@ export const BuildingResources: React.FC<{
         console.log(error);
       }
     },
-    [account, dispatch, library, onClose, planet_id, setState, t, toastSuccess],
+    [account, dispatch, library, planet_id, setState, t, toastSuccess],
   );
 
   return (
@@ -163,7 +215,35 @@ export const BuildingResources: React.FC<{
       </MarkText>
       {currnet_building.detail_type ===
         BuildingDetailType.BuildingDetailTypeStore && (
-        <Flex width='100%' flexDirection='column'>
+        <Flex
+          id='buildingStore'
+          width='100%'
+          flexDirection='column'
+          onClick={() => {
+            const tokenList = ['ENG', 'ORE', 'SPICES'];
+            // if (val.energy > 0) tokenList.push('ENG');
+            // if (val.stone > 0) tokenList.push('ORE');
+            // if (val.population > 0) tokenList.push('SPICES');
+            dispatch(
+              storeAction.setTokenToFrom({
+                to: 'buildingStore',
+                from: 'resourceToken',
+                token: tokenList,
+                toPosition: 'bottomRight',
+              }),
+            );
+            setTimeout(() => {
+              dispatch(
+                storeAction.setTokenToFrom({
+                  to: '',
+                  from: '',
+                  token: [],
+                  toPosition: '',
+                }),
+              );
+            }, 11000);
+          }}
+        >
           <Box mb='15px'>
             <BuildingProgress
               token='ORE'

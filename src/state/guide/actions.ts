@@ -26,6 +26,13 @@ export const setBuyPrice = createAction<{
   price: string;
 }>('guide/setBuyPrice');
 
+export const setTokenToFrom = createAction<{
+  to: string;
+  from: string;
+  token: string[];
+  toPosition: string;
+}>('guide/setTokenToFrom');
+
 export default {
   toggleVisible,
   setBuyPrice,
@@ -33,4 +40,5 @@ export default {
   setErrCode,
   setToRechargeVisible,
   setRechargeOperationType,
+  setTokenToFrom,
 };

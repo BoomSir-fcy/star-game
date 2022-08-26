@@ -6,6 +6,7 @@ import {
   setToRechargeVisible,
   setRechargeOperationType,
   setBuyPrice,
+  setTokenToFrom,
 } from './actions';
 import { GuideState } from '../types';
 
@@ -18,6 +19,12 @@ export const initialState: GuideState = {
   toRechargeVisible: false,
   RechargeOperationType: 1,
   errorCode: localStorage.getItem('errCode') || '0',
+  tokenToFrom: {
+    to: '',
+    from: '',
+    token: [],
+    toPosition: '',
+  },
 };
 
 export const guide = createSlice({
@@ -48,6 +55,14 @@ export const guide = createSlice({
       })
       .addCase(setRechargeOperationType, (state, { payload }) => {
         state.RechargeOperationType = payload.OperationType;
+      })
+      .addCase(setTokenToFrom, (state, { payload }) => {
+        state.tokenToFrom = {
+          to: payload.to,
+          from: payload.from,
+          token: payload.token,
+          toPosition: payload.toPosition,
+        };
       });
   },
 });

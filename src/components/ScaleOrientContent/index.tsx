@@ -262,7 +262,14 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       <div className={VIDEO_GLOBAL_CLASS_NAME} />
       <ModalContent scale={scale} id={MODAL_GLOBAL_ID_NAME} />
       <Dashboard scale={scale} />
-      {/* <TokenMoveAnimation scale={scale} /> */}
+      {guideState.tokenToFrom.token && (
+        <TokenMoveAnimation
+          scale={scale}
+          fromId={guideState.tokenToFrom.from}
+          toId={guideState.tokenToFrom.to}
+          toPosition={guideState.tokenToFrom.toPosition}
+        />
+      )}
       <Toast />
       {openBlind && <BlindPlanetBox scale={scale} />}
       <Content id='scale-content' scale={scale} hideHeader={!!hideHeader}>

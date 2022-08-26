@@ -87,7 +87,7 @@ const TokenInfo = () => {
   return (
     <Box mt='-8px' position='relative'>
       <Flex>
-        <TokenGroupBox>
+        <TokenGroupBox id='BNB_Box'>
           <DepositWithdrawalBtn>
             <Image
               style={{ cursor: 'pointer' }}
@@ -170,7 +170,7 @@ const TokenInfo = () => {
             </Flex>
           </ButtonLeft>
         </TokenGroupBox>
-        <TokenGroupBox>
+        <TokenGroupBox id='resourceToken'>
           <ButtonLeft disabled variant='custom'>
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>

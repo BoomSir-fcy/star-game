@@ -445,6 +445,13 @@ export enum PlanetStatus {
   BuildingsDurability = 4,
 }
 
+interface tokenToFromView {
+  to: string;
+  from: string;
+  token: string[];
+  toPosition: string;
+}
+
 export interface GuideState {
   visible: boolean;
   lastStep: number;
@@ -454,6 +461,7 @@ export interface GuideState {
   errorCode: string;
   RechargeOperationType: number;
   buyPrice: string;
+  tokenToFrom: tokenToFromView;
 }
 
 export enum BuildingDetailType {
