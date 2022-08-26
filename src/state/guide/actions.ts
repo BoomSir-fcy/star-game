@@ -27,10 +27,11 @@ export const setBuyPrice = createAction<{
 }>('guide/setBuyPrice');
 
 export const setTokenToFrom = createAction<{
-  to: string;
-  from: string;
+  fromTop: number;
+  fromLeft: number;
+  toTop: number;
+  toLeft: number;
   token: string[];
-  toPosition: string;
 }>('guide/setTokenToFrom');
 
 export default {

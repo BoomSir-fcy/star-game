@@ -119,19 +119,21 @@ export const BuildingResources: React.FC<{
           if (val.population > 0) tokenList.push('SPICES');
           dispatch(
             storeAction.setTokenToFrom({
-              to: 'buildingStore',
-              from: 'resourceToken',
+              fromTop: 550,
+              fromLeft: 1460,
+              toTop: 100,
+              toLeft: 540,
               token: tokenList,
-              toPosition: 'bottomRight',
             }),
           );
           setTimeout(() => {
             dispatch(
               storeAction.setTokenToFrom({
-                to: '',
-                from: '',
+                fromTop: 0,
+                fromLeft: 0,
+                toTop: 0,
+                toLeft: 0,
                 token: [],
-                toPosition: '',
               }),
             );
           }, 2000);
@@ -178,19 +180,21 @@ export const BuildingResources: React.FC<{
           if (val.population > 0) tokenList.push('SPICES');
           dispatch(
             storeAction.setTokenToFrom({
-              to: 'resourceToken',
-              from: 'buildingStore',
+              fromTop: 100,
+              fromLeft: 540,
+              toTop: 550,
+              toLeft: 1460,
               token: tokenList,
-              toPosition: 'bottomRight',
             }),
           );
           setTimeout(() => {
             dispatch(
               storeAction.setTokenToFrom({
-                to: '',
-                from: '',
+                fromTop: 0,
+                fromLeft: 0,
+                toTop: 0,
+                toLeft: 0,
                 token: [],
-                toPosition: '',
               }),
             );
           }, 2000);
@@ -215,35 +219,7 @@ export const BuildingResources: React.FC<{
       </MarkText>
       {currnet_building.detail_type ===
         BuildingDetailType.BuildingDetailTypeStore && (
-        <Flex
-          id='buildingStore'
-          width='100%'
-          flexDirection='column'
-          onClick={() => {
-            const tokenList = ['ENG', 'ORE', 'SPICES'];
-            // if (val.energy > 0) tokenList.push('ENG');
-            // if (val.stone > 0) tokenList.push('ORE');
-            // if (val.population > 0) tokenList.push('SPICES');
-            dispatch(
-              storeAction.setTokenToFrom({
-                to: 'buildingStore',
-                from: 'resourceToken',
-                token: tokenList,
-                toPosition: 'bottomRight',
-              }),
-            );
-            setTimeout(() => {
-              dispatch(
-                storeAction.setTokenToFrom({
-                  to: '',
-                  from: '',
-                  token: [],
-                  toPosition: '',
-                }),
-              );
-            }, 11000);
-          }}
-        >
+        <Flex id='buildingStore' width='100%' flexDirection='column'>
           <Box mb='15px'>
             <BuildingProgress
               token='ORE'

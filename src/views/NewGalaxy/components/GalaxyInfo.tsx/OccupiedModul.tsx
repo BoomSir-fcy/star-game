@@ -18,7 +18,7 @@ import {
 } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
-import { useStore } from 'state';
+import { storeAction, useStore } from 'state';
 import { useToast } from 'contexts/ToastsContext';
 import { useDispatch } from 'react-redux';
 import { EasyformatTime } from 'utils/timeFormat';
@@ -252,6 +252,26 @@ const OccupiedModul: React.FC<{
     try {
       const res = await Api.GalaxyApi.ClaimPlanetRewards(galaxy_id);
       if (Api.isSuccess(res)) {
+        dispatch(
+          storeAction.setTokenToFrom({
+            fromTop: 840,
+            fromLeft: 1500,
+            toTop: 70,
+            toLeft: 220,
+            token: ['BOX'],
+          }),
+        );
+        setTimeout(() => {
+          dispatch(
+            storeAction.setTokenToFrom({
+              fromTop: 0,
+              fromLeft: 0,
+              toTop: 0,
+              toLeft: 0,
+              token: [],
+            }),
+          );
+        }, 2000);
         toastSuccess(t('Claim Succeeded'));
         getClaimMax(galaxy_id);
         dispatch(fetchUserBalanceAsync());

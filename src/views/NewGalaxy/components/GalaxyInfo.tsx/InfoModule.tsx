@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import { useStore } from 'state';
+import { storeAction, useStore } from 'state';
 import { Text, Flex, Box, GraphicsCard, Dots, BalanceText, Image } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
@@ -162,6 +162,26 @@ const InfoModule: React.FC<{
     try {
       const res = await Api.GalaxyApi.ClaimRewards(galaxy_id);
       if (Api.isSuccess(res)) {
+        dispatch(
+          storeAction.setTokenToFrom({
+            fromTop: 940,
+            fromLeft: 300,
+            toTop: 70,
+            toLeft: 220,
+            token: ['BOX'],
+          }),
+        );
+        setTimeout(() => {
+          dispatch(
+            storeAction.setTokenToFrom({
+              fromTop: 0,
+              fromLeft: 0,
+              toTop: 0,
+              toLeft: 0,
+              token: [],
+            }),
+          );
+        }, 2000);
         toastSuccess(t('Claim Succeeded'));
         getClaimMax(galaxy_id);
         dispatch(fetchUserBalanceAsync());

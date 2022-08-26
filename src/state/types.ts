@@ -446,10 +446,11 @@ export enum PlanetStatus {
 }
 
 interface tokenToFromView {
-  to: string;
-  from: string;
+  fromTop: number;
+  fromLeft: number;
+  toTop: number;
+  toLeft: number;
   token: string[];
-  toPosition: string;
 }
 
 export interface GuideState {

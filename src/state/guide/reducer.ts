@@ -20,10 +20,11 @@ export const initialState: GuideState = {
   RechargeOperationType: 1,
   errorCode: localStorage.getItem('errCode') || '0',
   tokenToFrom: {
-    to: '',
-    from: '',
+    fromTop: 0,
+    fromLeft: 0,
+    toTop: 0,
+    toLeft: 0,
     token: [],
-    toPosition: '',
   },
 };
 
@@ -58,10 +59,11 @@ export const guide = createSlice({
       })
       .addCase(setTokenToFrom, (state, { payload }) => {
         state.tokenToFrom = {
-          to: payload.to,
-          from: payload.from,
+          fromTop: payload.fromTop,
+          fromLeft: payload.fromLeft,
+          toTop: payload.toTop,
+          toLeft: payload.toLeft,
           token: payload.token,
-          toPosition: payload.toPosition,
         };
       });
   },

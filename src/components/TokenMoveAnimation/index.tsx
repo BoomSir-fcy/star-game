@@ -16,7 +16,7 @@ const TokenAnimationBox = styled(Box)<{
   z-index: 999;
   transform: ${({ scale }) => `scale(${scale})`};
   animation: ${({ fromTop, toTop, Delay }) =>
-    toTop && fromTop ? `toMove 10s ease ${Delay}s` : ''};
+    toTop && fromTop ? `toMove 1s ease ${Delay}s` : ''};
   opacity: 0;
   @keyframes toMove {
     0% {
@@ -45,24 +45,17 @@ const CoinImg = styled.img`
 `;
 
 export interface TokenMoveAnimationProps {
-  url?: string;
   scale?: number;
-  toId?: string;
-  fromId?: string;
-  toPosition?: string;
 }
 
-const TokenMoveAnimation: React.FC<TokenMoveAnimationProps> = ({
-  scale,
-  toId,
-  fromId,
-  toPosition,
-}) => {
-  const guideState = useStore(p => p.guide);
-  const [ToTop, setToTop] = useState(0);
-  const [ToLeft, setToLeft] = useState(0);
-  const [FromTop, setFromTop] = useState(0);
-  const [FromLeft, setFromLeft] = useState(0);
+const TokenMoveAnimation: React.FC<TokenMoveAnimationProps> = ({ scale }) => {
+  const { fromTop, fromLeft, toTop, toLeft, token } = useStore(
+    p => p.guide.tokenToFrom,
+  );
+  // const [ToTop, setToTop] = useState(0);
+  // const [ToLeft, setToLeft] = useState(0);
+  // const [FromTop, setFromTop] = useState(0);
+  // const [FromLeft, setFromLeft] = useState(0);
 
   const imgList = useMemo(() => {
     const arr = [];
@@ -112,56 +105,56 @@ const TokenMoveAnimation: React.FC<TokenMoveAnimationProps> = ({
     return actualTop - elementScrollTop + domHeight;
   };
 
-  useEffect(() => {
-    const toDom = document.getElementById(toId);
-    const fromDom = document.getElementById(fromId);
-    if (fromDom && toDom) {
-      if (toPosition === 'bottomRight') {
-        console.log(
-          getElementTop(toDom, true),
-          getElementLeft(toDom, true),
-          getElementTop(fromDom, true),
-          getElementLeft(fromDom, true),
-        );
+  // useEffect(() => {
+  //   const toDom = document.getElementById(toId);
+  //   const fromDom = document.getElementById(fromId);
+  //   if (fromDom && toDom) {
+  //     if (toPosition === 'bottomRight') {
+  //       console.log(
+  //         getElementTop(toDom, true),
+  //         getElementLeft(toDom, true),
+  //         getElementTop(fromDom, true),
+  //         getElementLeft(fromDom, true),
+  //       );
 
-        setToTop(getElementTop(toDom, true));
-        setToLeft(getElementLeft(toDom, true));
-        setFromTop(getElementTop(fromDom, true));
-        setFromLeft(getElementLeft(fromDom, true));
-      } else {
-        console.log(
-          getElementTop(toDom),
-          getElementLeft(toDom),
-          getElementTop(fromDom),
-          getElementLeft(fromDom),
-        );
-        setToTop(getElementTop(toDom));
-        setToLeft(getElementLeft(toDom));
-        setFromTop(getElementTop(fromDom));
-        setFromLeft(getElementLeft(fromDom));
-      }
-    }
-  }, [toId, fromId, toPosition]);
+  //       setToTop(getElementTop(toDom, true));
+  //       setToLeft(getElementLeft(toDom, true));
+  //       setFromTop(getElementTop(fromDom, true));
+  //       setFromLeft(getElementLeft(fromDom, true));
+  //     } else {
+  //       console.log(
+  //         getElementTop(toDom),
+  //         getElementLeft(toDom),
+  //         getElementTop(fromDom),
+  //         getElementLeft(fromDom),
+  //       );
+  //       setToTop(getElementTop(toDom));
+  //       setToLeft(getElementLeft(toDom));
+  //       setFromTop(getElementTop(fromDom));
+  //       setFromLeft(getElementLeft(fromDom));
+  //     }
+  //   }
+  // }, [toId, fromId, toPosition]);
 
   return (
     <>
-      {guideState.tokenToFrom.token?.map((token, tokenIndex) => {
+      {token?.map((tokenName, tokenIndex) => {
         return (
           <>
             {(imgList || []).map(i => (
               <TokenAnimationBox
                 scale={scale}
-                fromTop={FromTop}
-                fromLeft={FromLeft}
-                toTop={ToTop}
-                toLeft={ToLeft}
+                fromTop={fromTop}
+                fromLeft={fromLeft}
+                toTop={toTop}
+                toLeft={toLeft}
                 Delay={i * 0.02 + tokenIndex * 0.04}
               >
                 <CoinImg
                   src={
-                    token === 'BOX' || token === 'BNB'
-                      ? `/images/tokens/${token}.svg`
-                      : `/images/tokens/${token}.png`
+                    tokenName === 'BOX' || tokenName === 'BNB'
+                      ? `/images/tokens/${tokenName}.svg`
+                      : `/images/tokens/${tokenName}.png`
                   }
                 />
               </TokenAnimationBox>
