@@ -144,6 +144,8 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       if (moving) {
         setMoving(false);
         building?.offDragPreBuilder();
+        // dispatch(setNavZIndex(true));
+        // dispatch(storeAction.queueVisbleSide(false));
       }
     },
     [building, moving, setMoving],
@@ -158,16 +160,16 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
       const builder = new Builder({
         src: `${item.index}`,
         id: `${item._id}`,
-        building: item,
+        building: { ...item, isPreview: true },
         race,
         areaX: item.propterty.size.area_x,
         areaY: item.propterty.size.area_y,
         isBuilding: false,
         enableDrag: true,
         Lv: item.propterty.levelEnergy,
-        ore: item.upgrade_need.upgrade_stone,
-        energy: item.upgrade_need.upgrade_energy,
-        spice: item.upgrade_need.upgrade_population,
+        // ore: item.upgrade_need.upgrade_stone,
+        // energy: item.upgrade_need.upgrade_energy,
+        // spice: item.upgrade_need.upgrade_population,
         Estimated_Time: item.upgrade_need.upgrade_time,
       });
       setMoving(true);

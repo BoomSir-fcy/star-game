@@ -257,6 +257,11 @@ export const DragCompoents: React.FC<{
     };
   }, [rows, cols, gridSize]);
 
+  // 延迟请求
+  const sleep = React.useCallback((ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }, []);
+
   const changeBuff = (item: any) => {
     const currentBuildBuff = buffer?.find(
       (row: any) => row?.build_id === item?._id,
@@ -753,11 +758,6 @@ export const DragCompoents: React.FC<{
       });
       return [...next];
     });
-  };
-
-  // 延迟请求
-  const sleep = (ms: number) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
   };
 
   // 取消建筑&&队列建筑

@@ -354,7 +354,7 @@ class Building extends EventTarget {
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
         builder.addHandleBtn();
         builder.setEnableDrag(false);
-        builder.addConsumeText(options.Estimated_Time);
+        // builder.addConsumeText(options.Estimated_Time);
       } else {
         // 棋盘空位不足
         this.dispatchEvent(getErrorEvent('Insufficient Chessboard Space'));
@@ -391,7 +391,7 @@ class Building extends EventTarget {
         this.dispatchEvent(getAddActiveBuilderEvent(builder));
         builder.addHandleBtn();
         builder.setEnableDrag(false);
-        builder.addConsumeText(options.Estimated_Time);
+        // builder.addConsumeText(options.Estimated_Time);
       } else {
         // 棋盘空位不足
         this.dispatchEvent(getErrorEvent('Insufficient Chessboard Space'));
@@ -427,10 +427,10 @@ class Building extends EventTarget {
         builder.addHandleBtn();
         builder.setEnableDrag(false);
 
-        builder.addConsumeText(
-          builder.option.building.upgrade_need.upgrade_time,
-        );
-        this.dispatchEvent(getAddActiveBuilderEvent(builder));
+        // builder.addConsumeText(
+        //   builder.option.building.upgrade_need.upgrade_time,
+        // );
+        // this.dispatchEvent(getAddActiveBuilderEvent(builder));
       }
       this.dragPreBuilder.setDragging(false);
       this.dragPreBuilder.container.visible = false;

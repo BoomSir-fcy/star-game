@@ -21,6 +21,8 @@ import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { setNavZIndex } from 'state/userInfo/reducer';
 import { eventsType } from 'building/core/event';
 import { useCallbackPrompt } from 'hooks/useCallbackPrompt';
+import { debounce } from 'lodash';
+
 import { useBuildingOperate } from './components/gameModel/hooks';
 import {
   BarRight,
@@ -189,6 +191,11 @@ const Details = () => {
     ];
   }, [t]);
 
+  // 延迟请求
+  const sleep = React.useCallback((ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }, []);
+
   const beforeStepChange = (nextStepIndex, nextElement) => {
     if (nextStepIndex === 3) {
       dispatch(setNavZIndex(false));
@@ -305,9 +312,12 @@ const Details = () => {
         });
         if (Api.isSuccess(res)) {
           getWorkQueue();
+          toastSuccess(t('planetTipsSaveSuccess'));
+          if (!val.isbuilding) {
+            await sleep(2000);
+          }
           dispatch(fetchPlanetBuildingsAsync(id));
           dispatch(fetchPlanetInfoAsync([id]));
-          toastSuccess(t('planetTipsSaveSuccess'));
           return true;
         }
         if (activeBuilder) {
@@ -319,7 +329,7 @@ const Details = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [id, t, toastSuccess],
+    [id, t, toastSuccess, sleep],
   );
 
   // 销毁建筑
@@ -347,6 +357,9 @@ const Details = () => {
         dispatch(setNavZIndex(true));
         dispatch(storeAction.resetModal());
         building?.removeBuilder(activeBuilder);
+        getWorkQueue();
+        dispatch(fetchPlanetBuildingsAsync(id));
+        dispatch(fetchPlanetInfoAsync([id]));
       }
     } catch (error) {
       console.error(error);
@@ -361,6 +374,7 @@ const Details = () => {
     setStateBuilding,
     t,
     toastSuccess,
+    getWorkQueue,
   ]);
 
   const createBuilding = React.useCallback(
@@ -410,9 +424,9 @@ const Details = () => {
       isBuilding: false,
       enableDrag: true,
       Lv: item.propterty.levelEnergy,
-      ore: item.upgrade_need.upgrade_stone,
-      energy: item.upgrade_need.upgrade_energy,
-      spice: item.upgrade_need.upgrade_population,
+      // ore: item.upgrade_need.upgrade_stone,
+      // energy: item.upgrade_need.upgrade_energy,
+      // spice: item.upgrade_need.upgrade_population,
       Estimated_Time: item.upgrade_need.upgrade_time,
     };
     building?.addDragPreBuilderApp(option);
@@ -612,11 +626,13 @@ const Details = () => {
               }
             }, 100);
           }}
-          onComplete={async () => {
+          onComplete={debounce(async () => {
             await getWorkQueue();
+
+            await sleep(2000);
             dispatch(fetchPlanetBuildingsAsync(id));
             dispatch(fetchPlanetInfoAsync([id]));
-          }}
+          }, 500)}
         />
         <Box
           className='guide_step_3'

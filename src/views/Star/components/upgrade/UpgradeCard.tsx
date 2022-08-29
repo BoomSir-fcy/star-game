@@ -54,7 +54,7 @@ export const UpgradeCard: React.FC<UpgradeCardProps> = ({
         <ItemFlex>
           <StyledImage
             width={57}
-            height={53}
+            height={57}
             src='/images/commons/star/LV.png'
           />
           <ItemInfoFlex>

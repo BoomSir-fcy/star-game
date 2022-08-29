@@ -414,7 +414,7 @@ const Upgrade = () => {
               <Flex width='301px' mr='20px' alignItems='center'>
                 <GradeBox>
                   <Text fontSize='31px' bold shadow='primary'>
-                    Lv {upgradeInfo.now_planet_info?.level}
+                    Lv {upgradeInfo.now_planet_info?.level || ''}
                   </Text>
                 </GradeBox>
                 <Image
@@ -427,7 +427,7 @@ const Upgrade = () => {
                   <Text fontSize='31px' bold color='up' shadow='secondary'>
                     {isHighestLevel
                       ? ' MAX'
-                      : `Lv ${upgradeInfo.estimate_planet_info?.level}`}
+                      : `Lv ${upgradeInfo?.estimate_planet_info?.level || ''}`}
                   </Text>
                 </GradeBox>
               </Flex>

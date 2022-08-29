@@ -16,7 +16,7 @@ const TokenAnimationBox = styled(Box)<{
   z-index: 999;
   transform: ${({ scale }) => `scale(${scale})`};
   animation: ${({ fromTop, toTop, Delay }) =>
-    toTop && fromTop ? `toMove 1s ease ${Delay}s` : ''};
+    toTop && fromTop ? `toMove 1.5s ease ${Delay}s` : ''};
   opacity: 0;
   @keyframes toMove {
     0% {

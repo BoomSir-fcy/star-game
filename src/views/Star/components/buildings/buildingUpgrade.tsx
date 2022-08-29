@@ -74,7 +74,7 @@ export const BuildingUpgrade: React.FC<{
   return (
     <Container stripe>
       <Content>
-        {!currnet_building?.isPreview && (
+        {!currnet_building?.isPreview ? (
           <>
             <Flex
               width='100%'
@@ -129,7 +129,7 @@ export const BuildingUpgrade: React.FC<{
                       small
                       color={`${
                         planetAssets?.energy <
-                        (estimate?.upgrade_need?.upgrade_energy ||
+                        (currnet_building?.upgrade_need?.upgrade_energy ||
                           currnet_building?.upgrade_need?.upgrade_energy)
                           ? 'warning'
                           : 'progressGreenBar'
@@ -137,7 +137,7 @@ export const BuildingUpgrade: React.FC<{
                     >
                       {formatDisplayApr(
                         new BigNumber(
-                          estimate?.upgrade_need?.upgrade_energy ||
+                          currnet_building?.upgrade_need?.upgrade_energy ||
                             currnet_building?.upgrade_need?.upgrade_energy,
                         ).toNumber(),
                       )}
@@ -157,7 +157,7 @@ export const BuildingUpgrade: React.FC<{
                       small
                       color={`${
                         planetAssets?.stone <
-                        (estimate?.upgrade_need?.upgrade_stone ||
+                        (currnet_building?.upgrade_need?.upgrade_stone ||
                           currnet_building?.upgrade_need?.upgrade_stone)
                           ? 'warning'
                           : 'progressGreenBar'
@@ -165,7 +165,7 @@ export const BuildingUpgrade: React.FC<{
                     >
                       {formatDisplayApr(
                         new BigNumber(
-                          estimate?.upgrade_need?.upgrade_stone ||
+                          currnet_building?.upgrade_need?.upgrade_stone ||
                             currnet_building?.upgrade_need?.upgrade_stone,
                         ).toNumber(),
                       )}
@@ -193,7 +193,7 @@ export const BuildingUpgrade: React.FC<{
                       small
                       color={`${
                         planetAssets?.population <
-                        (estimate?.upgrade_need?.upgrade_population ||
+                        (currnet_building?.upgrade_need?.upgrade_population ||
                           currnet_building?.upgrade_need?.upgrade_population)
                           ? 'warning'
                           : 'progressGreenBar'
@@ -201,7 +201,7 @@ export const BuildingUpgrade: React.FC<{
                     >
                       {formatDisplayApr(
                         new BigNumber(
-                          estimate?.upgrade_need?.upgrade_population ||
+                          currnet_building?.upgrade_need?.upgrade_population ||
                             currnet_building?.upgrade_need?.upgrade_population,
                         ).toNumber(),
                       )}
@@ -222,7 +222,7 @@ export const BuildingUpgrade: React.FC<{
                       small
                       color={`${
                         planetAssets?.stone <
-                        (estimate?.upgrade_need?.upgrade_box ||
+                        (currnet_building?.upgrade_need?.upgrade_box ||
                           currnet_building?.upgrade_need?.upgrade_box)
                           ? 'warning'
                           : 'progressGreenBar'
@@ -230,7 +230,7 @@ export const BuildingUpgrade: React.FC<{
                     >
                       {formatDisplayApr(
                         new BigNumber(
-                          estimate?.upgrade_need?.upgrade_box ||
+                          currnet_building?.upgrade_need?.upgrade_box ||
                             currnet_building?.upgrade_need?.upgrade_box,
                         ).toNumber(),
                       )}
@@ -270,6 +270,8 @@ export const BuildingUpgrade: React.FC<{
               </Flex>
             </Flex>
           </>
+        ) : (
+          <></>
         )}
         {!currnet_building?.isPreview ? (
           <Flex justifyContent='center' mt='10px'>

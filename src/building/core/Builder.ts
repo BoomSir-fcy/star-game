@@ -58,10 +58,10 @@ class Builder extends EventTarget {
     this.resId = src;
     this.Lv = Lv;
     this.IsUpgrade = Boolean(IsUpgrade);
-    this.ore = ore;
-    this.energy = energy;
-    this.spice = spice;
-    this.Estimated_Time = Estimated_Time;
+    // this.ore = ore;
+    // this.energy = energy;
+    // this.spice = spice;
+    // this.Estimated_Time = Estimated_Time;
     // const img = `${window.location.origin}/assets/buildings/${race}/${
     //   src ? src?.substring(src?.lastIndexOf('/') + 1) : '36.jpg'
     // }`;
@@ -88,7 +88,7 @@ class Builder extends EventTarget {
 
   spice = 0;
 
-  Estimated_Time = 0;
+  // Estimated_Time = 0;
 
   areaY = 1;
 
@@ -226,10 +226,10 @@ class Builder extends EventTarget {
     this.container.addChild(this.cancelSprite);
     // this.cancelSprite.addListener('click', e => this.onCancel(e));
     this.cancelSprite
-        .on('pointerdown', (e) => Builder.onDragStart(e))
-        .on('pointerup', (e) => this.onBtnDragEnd(e))
-        .on('pointerupoutside', (e) => this.onBtnDragEnd(e))
-        .on('pointermove', (e) => Builder.onDragMove(e));
+      .on('pointerdown', e => Builder.onDragStart(e))
+      .on('pointerup', e => this.onBtnDragEnd(e))
+      .on('pointerupoutside', e => this.onBtnDragEnd(e))
+      .on('pointermove', e => Builder.onDragMove(e));
 
     this.confirmSprite.buttonMode = true;
     this.confirmSprite.interactive = true;
@@ -242,10 +242,10 @@ class Builder extends EventTarget {
     this.container.addChild(this.confirmSprite);
 
     this.confirmSprite
-      .on('pointerdown', (e) => Builder.onDragStart(e))
-      .on('pointerup', (e) => this.onBtnDragEnd(e))
-      .on('pointerupoutside', (e) => this.onBtnDragEnd(e))
-      .on('pointermove', (e) => Builder.onDragMove(e));
+      .on('pointerdown', e => Builder.onDragStart(e))
+      .on('pointerup', e => this.onBtnDragEnd(e))
+      .on('pointerupoutside', e => this.onBtnDragEnd(e))
+      .on('pointermove', e => Builder.onDragMove(e));
   }
 
   static onDragStart(event) {
@@ -262,7 +262,7 @@ class Builder extends EventTarget {
   onBtnDragEnd(event) {
     const obj = event.currentTarget;
     if (obj.dragging === 1) {
-        this.toggle(obj, event);
+      this.toggle(obj, event);
     }
     obj.dragging = 0;
     obj.dragData = null;
@@ -271,9 +271,9 @@ class Builder extends EventTarget {
 
   toggle(obj, e) {
     if (obj === this.confirmSprite) {
-      this.onConfirm(e)
+      this.onConfirm(e);
     } else if (this.cancelSprite) {
-      this.onCancel(e)
+      this.onCancel(e);
     }
   }
 
@@ -282,20 +282,22 @@ class Builder extends EventTarget {
     if (!obj.dragging) return;
     const data = obj.dragData; // it can be different pointer!
     if (obj.dragging === 1) {
-    // click or drag?
-        if (Math.abs(data.global.x - obj.dragGlobalStart.x)
-            + Math.abs(data.global.y - obj.dragGlobalStart.y) >= 5) {
-            // DRAG
-            obj.dragging = 2;
-        }
+      // click or drag?
+      if (
+        Math.abs(data.global.x - obj.dragGlobalStart.x) +
+          Math.abs(data.global.y - obj.dragGlobalStart.y) >=
+        5
+      ) {
+        // DRAG
+        obj.dragging = 2;
+      }
     }
   }
-
 
   removeHandleBtn() {
     this.container.removeChild(this.cancelSprite);
     this.container.removeChild(this.confirmSprite);
-    this.Estimated_Time = 0;
+    // this.Estimated_Time = 0;
   }
 
   onConfirm(event: FederatedPointerEvent) {
@@ -352,14 +354,16 @@ class Builder extends EventTarget {
   }
 
   drawInfoBox() {
-    if (this.Estimated_Time) {
-      // 准备建造
-      this.graphicsBox.beginFill(0x434343, 0.8);
-      this.graphicsBox.drawRoundedRect(-64, 20, 130, 170, 10);
-    } else {
-      this.graphicsBox.beginFill(0x434343, 0.5);
-      this.graphicsBox.drawRoundedRect(-64, 20, 130, 70, 10);
-    }
+    // if (this.Estimated_Time) {
+    //   // 准备建造
+    //   this.graphicsBox.beginFill(0x434343, 0.8);
+    //   this.graphicsBox.drawRoundedRect(-64, 20, 130, 170, 10);
+    // } else {
+    //   this.graphicsBox.beginFill(0x434343, 0.5);
+    //   this.graphicsBox.drawRoundedRect(-64, 20, 130, 70, 10);
+    // }
+    this.graphicsBox.beginFill(0x434343, 0.5);
+    this.graphicsBox.drawRoundedRect(-64, 20, 130, 70, 10);
     this.graphicsBox.endFill();
     this.graphicsBox.position.set(-20 * this.areaX, 30 * this.areaY);
     this.container.addChild(this.graphicsBox);
@@ -367,7 +371,7 @@ class Builder extends EventTarget {
   }
 
   addConsumeText(initEstimated_Time) {
-    this.Estimated_Time = initEstimated_Time;
+    // this.Estimated_Time = initEstimated_Time;
     let Estimated = '00:00:00';
     const Time = dayjs.duration(initEstimated_Time * 1000);
     const hours = Time.hours();
@@ -380,17 +384,14 @@ class Builder extends EventTarget {
       Estimated = Time.format('HH:mm:ss');
     }
 
-    this.BuildConsumptionText = new Text(
-      `Resource Consumption:\nOre: ${this.ore}\nEnergy: ${this.energy}\nSpice: ${this.spice}\nEstimated Time: ${Estimated}`,
-      {
-        fill: 0xffffff,
-        fontSize: 14,
-        breakWords: true,
-        wordWrap: true,
-        wordWrapWidth: 124,
-        lineHeight: 18,
-      },
-    );
+    this.BuildConsumptionText = new Text(`Estimated Time: ${Estimated}`, {
+      fill: 0xffffff,
+      fontSize: 14,
+      breakWords: true,
+      wordWrap: true,
+      wordWrapWidth: 124,
+      lineHeight: 18,
+    });
     this.BuildConsumptionText.x = -60;
     this.BuildConsumptionText.y = 60;
     this.graphicsBox.addChild(this.BuildConsumptionText);

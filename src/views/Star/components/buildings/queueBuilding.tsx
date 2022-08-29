@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Flex, Box, Text, Image, Progress } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useImmer } from 'use-immer';
@@ -16,7 +16,7 @@ export const QueueBuilding: React.FC<{
   const [state, setState] = useImmer({
     time: 0,
   });
-  let timer: any = null;
+  const timer = useRef<ReturnType<typeof setTimeout>>();
 
   const workInfo = React.useMemo(() => {
     return {
@@ -49,14 +49,17 @@ export const QueueBuilding: React.FC<{
 
   // 倒计时
   const countDown = () => {
-    timer = setInterval(() => {
+    if (timer.current) {
+      clearInterval(timer.current);
+    }
+    timer.current = setInterval(() => {
       const { time } = state;
       if (time > 0) {
         setState(p => {
           p.time = time - 1;
         });
       } else {
-        clearInterval(timer);
+        clearInterval(timer.current);
         onComplete();
       }
     }, 1000);
@@ -72,7 +75,11 @@ export const QueueBuilding: React.FC<{
     if (status !== 3 && diffTime > 0) {
       countDown();
     }
-    return () => clearInterval(timer);
+    return () => {
+      if (timer.current) {
+        clearInterval(timer.current);
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.time]);
 

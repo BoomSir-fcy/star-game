@@ -160,7 +160,7 @@ export const ThingUpgradesModal: React.FC<{
               imgHeight={50}
               // imgSrc='/images/tokens/0x2bf6502a30Af3378ACb51F056F47fc5e24aB8961.svg'
               imgSrc='/images/tokens/BOX.svg'
-              number={estimate_building_detail?.upgrade_need?.upgrade_box || 0}
+              number={building_detail?.upgrade_need?.upgrade_box || 0}
               unit='BOX'
             />
             <Button ml='34px' onClick={() => onChange(building_detail)}>
