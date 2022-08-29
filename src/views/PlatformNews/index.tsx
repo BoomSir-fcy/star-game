@@ -22,7 +22,7 @@ import { getSpriteName, getSpriteRes } from 'game/core/utils';
 import { EasyformatTime } from 'utils/timeFormat';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchMessageList } from './hook';
+import { GalaxyMsg, useFetchMessageList } from './hook';
 
 const TitleBox = styled(Flex)`
   width: 512px;
@@ -113,12 +113,10 @@ const InfoBox = styled(Box)`
 
 const GetPrandk = (t, info, cellar?) => {
   const {
-    arms,
     cellar_energy,
     cellar_population,
     cellar_stone,
     lose_arm_unit,
-    lose_durable,
     plunder_energy,
     plunder_population,
     plunder_stone,
@@ -307,10 +305,11 @@ const PlatformNews: React.FC = () => {
       {MessageList?.length > 0 ? (
         <ScrollBox onScroll={loadMore}>
           {(MessageList ?? []).map(item => {
-            const msgContent = JSON.parse(item?.msgContent);
+            const msgContent = JSON.parse(item?.msgContent) as GalaxyMsg;
             // 行星探索综合报告
             if (item?.messageType === 7 && msgContent?.work_report) {
               const InfoList = [];
+
               Object.keys(msgContent?.work_report).forEach(id => {
                 const obj = {
                   ...msgContent?.work_report[id],
@@ -328,14 +327,6 @@ const PlatformNews: React.FC = () => {
                             className='DownImg'
                             src='/images/commons/icon/back.png'
                           />
-                          // <Button
-                          //   variant='purple'
-                          //   height='45px'
-                          //   width='140px'
-                          //   padding='0'
-                          // >
-                          //   <Text color='textPrimary'>{t('Details')}</Text>
-                          // </Button>
                         );
                       }}
                       header={
@@ -372,11 +363,11 @@ const PlatformNews: React.FC = () => {
                             <Flex mb='20px' alignItems='center'>
                               <Text>
                                 {t('InboxTypeDesc7-1')}:&nbsp;
-                                {dayjs(msgContent.start_time * 1000).format(
+                                {dayjs(msgContent?.start_time * 1000).format(
                                   'YYYY-MM-DD HH:mm:ss',
                                 )}
                                 &nbsp; ~&nbsp;
-                                {dayjs(msgContent.end_time * 1000).format(
+                                {dayjs(msgContent?.end_time * 1000).format(
                                   'YYYY-MM-DD HH:mm:ss',
                                 )}
                               </Text>
@@ -389,8 +380,8 @@ const PlatformNews: React.FC = () => {
                                 onClick={() => {
                                   navigate(
                                     `/BattleReport?starTime=${
-                                      msgContent.start_time - 86400
-                                    }&endTime=${msgContent.end_time + 86400}`,
+                                      msgContent?.start_time - 86400
+                                    }&endTime=${msgContent?.end_time + 86400}`,
                                   );
                                 }}
                               >
@@ -399,14 +390,7 @@ const PlatformNews: React.FC = () => {
                                 </Text>
                               </Button>
                             </Flex>
-                            {/* <MarkText
-                            mb='4px'
-                            padding={0}
-                            fontStyle='normal'
-                            bold
-                          >
-                            {t('InboxTypeDesc7-2')}
-                          </MarkText> */}
+
                             {GetPrandk(t, msgContent?.work_report[0])}
                           </Box>
                         </>
@@ -415,20 +399,7 @@ const PlatformNews: React.FC = () => {
                       {[InfoList || []].map(planetInfo => {
                         const renderPlanet = planetInfo.map(
                           (info, planetIndex) => {
-                            const {
-                              arms,
-                              cellar_energy,
-                              cellar_population,
-                              cellar_stone,
-                              lose_arm_unit,
-                              lose_durable,
-                              plunder_energy,
-                              plunder_population,
-                              plunder_stone,
-                              product_energy,
-                              product_population,
-                              product_stone,
-                            } = info;
+                            const { arms, lose_arm_unit, lose_durable } = info;
                             return (
                               <Box key={info?.id}>
                                 {planetIndex !== 0 && (
@@ -538,7 +509,7 @@ const PlatformNews: React.FC = () => {
               <ItemFlex key={item.id}>
                 <Img
                   src={`/images/commons/messageIcon/${GetTitleImg(
-                    item.messageType,
+                    item?.messageType,
                   )}.png`}
                   alt=''
                 />
@@ -557,15 +528,15 @@ const PlatformNews: React.FC = () => {
                             bold
                             fontStyle='normal'
                           >
-                            {GetTitle(item.messageType)}
+                            {GetTitle(item?.messageType)}
                           </MarkText>
                           <Text>
-                            {dayjs(item.addTime * 1000).format(
+                            {dayjs(item?.addTime * 1000).format(
                               'YYYY-MM-DD HH:mm:ss',
                             )}
                           </Text>
                         </Flex>
-                        {item.messageType === 4 && (
+                        {item?.messageType === 4 && (
                           <Button
                             variant='text'
                             height='30px'
@@ -574,8 +545,8 @@ const PlatformNews: React.FC = () => {
                             onClick={() => {
                               navigate(
                                 `/BattleReport?starTime=${
-                                  msgContent.timestamp - 86400
-                                }&endTime=${msgContent.timestamp + 86400}`,
+                                  msgContent?.timestamp - 86400
+                                }&endTime=${msgContent?.timestamp + 86400}`,
                               );
                             }}
                           >
@@ -589,8 +560,8 @@ const PlatformNews: React.FC = () => {
                       {item.messageType === 1 && (
                         <Text>
                           {getHTML('InboxTypeDesc1', {
-                            galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
-                            price: `<span style="color: ${theme.colors.legendText}">${msgContent.amount}BNB</span>`,
+                            galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.galaxy_name}</span>`,
+                            price: `<span style="color: ${theme.colors.legendText}">${msgContent?.amount}BNB</span>`,
                           })}
                         </Text>
                       )}
@@ -598,9 +569,9 @@ const PlatformNews: React.FC = () => {
                         <>
                           <Text>
                             {getHTML('InboxTypeDesc2', {
-                              oldPrice: `<span style="color: ${theme.colors.legendText}">${msgContent.old_amount}BNB</span>`,
-                              galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
-                              time: dayjs(msgContent.timestamp * 1000).format(
+                              oldPrice: `<span style="color: ${theme.colors.legendText}">${msgContent?.old_amount}BNB</span>`,
+                              galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.galaxy_name}</span>`,
+                              time: dayjs(msgContent?.timestamp * 1000).format(
                                 'YYYY-MM-DD HH:mm:ss',
                               ),
                               address: `<span style="color: ${
@@ -608,45 +579,32 @@ const PlatformNews: React.FC = () => {
                               }">${shortenAddress(
                                 msgContent?.new_owner,
                               )}</span>`,
-                              price: `<span style="color: ${theme.colors.legendText}">${msgContent.amount}BNB</span>`,
+                              price: `<span style="color: ${theme.colors.legendText}">${msgContent?.amount}BNB</span>`,
                               getAmount: `<span style="color: ${
                                 theme.colors.progressGreenBar
                               }">${
-                                Number(msgContent.old_amount) +
-                                Number(msgContent.get_amount)
+                                Number(msgContent?.old_amount) +
+                                Number(msgContent?.get_amount)
                               } BNB</span>`,
                             })}
                           </Text>
                           <Flex alignItems='center' flexWrap='wrap'>
                             <Text>
                               {getHTML('InboxTypeDesc2-2', {
-                                reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_box} BOX</span>`,
+                                reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.get_box} BOX</span>`,
                               })}
                             </Text>
-                            {/* <Button
-                              variant='purple'
-                              height='30px'
-                              width='max-content'
-                              padding='0px 10px'
-                              onClick={() => {
-                                navigate(`/galaxy?id=${msgContent?.galaxy_id}`);
-                              }}
-                            >
-                              <Text color='textPrimary'>
-                                {t('Go to Claim')}
-                              </Text>
-                            </Button> */}
                           </Flex>
                         </>
                       )}
                       {item.messageType === 3 && (
                         <Text>
                           {getHTML('InboxTypeDesc3', {
-                            time: dayjs(msgContent.timestamp * 1000).format(
+                            time: dayjs(msgContent?.timestamp * 1000).format(
                               'YYYY-MM-DD HH:mm:ss',
                             ),
-                            galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
-                            star: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.number}</span>`,
+                            galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.galaxy_name}</span>`,
+                            star: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.number}</span>`,
                           })}
                           &nbsp;
                           <span style={{ color: theme.colors.textTips }}>
@@ -658,9 +616,9 @@ const PlatformNews: React.FC = () => {
                         <Text>
                           <Flex alignItems='center' flexWrap='wrap'>
                             {getHTML('InboxTypeDesc4', {
-                              galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.galaxy_name}</span>`,
-                              star: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.number}</span>`,
-                              time: dayjs(msgContent.timestamp * 1000).format(
+                              galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.galaxy_name}</span>`,
+                              star: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.number}</span>`,
+                              time: dayjs(msgContent?.timestamp * 1000).format(
                                 'YYYY-MM-DD HH:mm:ss',
                               ),
                               address: `<span style="color: ${
@@ -676,8 +634,8 @@ const PlatformNews: React.FC = () => {
                             })}
                           </Flex>
                           {getHTML('InboxTypeDesc4-2', {
-                            time: EasyformatTime(msgContent.hold_time),
-                            reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent.get_box} BOX</span>`,
+                            time: EasyformatTime(msgContent?.hold_time),
+                            reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.get_box} BOX</span>`,
                           })}
                         </Text>
                       )}

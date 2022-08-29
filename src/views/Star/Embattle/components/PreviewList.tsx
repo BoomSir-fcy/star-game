@@ -197,7 +197,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 cursor: 'pointer',
               }}
               key={`${item.unique_id}_${item.level}`}
-              margin='36px 20px 0'
+              margin='20px 20px 0'
               position='relative'
             >
               {/* {visibleBtn && activeSoldier?.unique_id === item.unique_id ? (

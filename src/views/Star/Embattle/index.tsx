@@ -157,11 +157,12 @@ const Embattle = () => {
 
   const UseSoldierNum = useCallback(
     (item: Api.Game.UnitInfo) => {
-      return `${activeNum(item?.unique_id)}/${
-        item?.barracks === 1 && item?.probability === -1 ? '6' : item?.count
-      }`;
+      // return `${activeNum(item?.unique_id)}/${
+      //   item?.barracks === 1 && item?.probability === -1 ? '6' : item?.count
+      // }`;
+      return `${gameSoldiers.length}/6`;
     },
-    [activeNum],
+    [gameSoldiers],
   );
 
   const createSoldiers = useCallback(
@@ -189,7 +190,7 @@ const Embattle = () => {
         );
 
         item.soldier.upDateActiveCountText(
-          UseSoldierNum(unitInfoObj[0].base_unit),
+          UseSoldierNum(unitInfoObj[0]?.base_unit),
         );
       });
     }

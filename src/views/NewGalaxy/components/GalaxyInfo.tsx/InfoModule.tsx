@@ -164,7 +164,7 @@ const InfoModule: React.FC<{
       if (Api.isSuccess(res)) {
         dispatch(
           storeAction.setTokenToFrom({
-            fromTop: 940,
+            fromTop: 900,
             fromLeft: 300,
             toTop: 70,
             toLeft: 220,

@@ -667,7 +667,7 @@ const List = () => {
                     src={`/video/${item?.rarity}rarity.mp4`}
                     loop
                     left={GetVideoPosition(index, item?.rarity)}
-                    top={item?.rarity !== 3 ? 242 : 236}
+                    top={item?.rarity !== 3 ? 272 : 268}
                     margin='auto'
                     scale={scale}
                   >

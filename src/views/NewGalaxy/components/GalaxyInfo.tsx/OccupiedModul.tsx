@@ -254,7 +254,7 @@ const OccupiedModul: React.FC<{
       if (Api.isSuccess(res)) {
         dispatch(
           storeAction.setTokenToFrom({
-            fromTop: 840,
+            fromTop: 790,
             fromLeft: 1500,
             toTop: 70,
             toLeft: 220,
