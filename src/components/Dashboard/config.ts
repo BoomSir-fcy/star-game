@@ -19,6 +19,7 @@ export const getHideHeader = (url: string) => {
       '/choose-planet',
       '/platform-News',
       '/mystery-box/state',
+      '/explore-progress',
     ],
     url,
   );

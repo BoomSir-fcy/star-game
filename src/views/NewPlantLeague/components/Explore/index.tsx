@@ -13,6 +13,7 @@ import { useToast } from 'contexts/ToastsContext';
 import { useDispatch } from 'react-redux';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useCountdownTime, getTimePeriod, TooltipTrigger } from 'components';
+import { useNavigate } from 'react-router-dom';
 
 const Explore: React.FC<{
   Difficulty: number;
@@ -22,6 +23,7 @@ const Explore: React.FC<{
   const { t } = useTranslation();
   const { toastError, toastSuccess } = useToast();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { max_work_count, now_work_count, end_time, free_time, alliance } =
     useStore(p => p.alliance.allianceView);
@@ -128,12 +130,13 @@ const Explore: React.FC<{
           className='Start_Exploration'
           variant='purple'
           width='300px'
-          disabled={alliance.working !== 0 || max_work_count === now_work_count}
+          disabled={max_work_count === now_work_count}
           onClick={() => {
-            // if (ShowModule) {
-            //   StartOrStopWorking();
-            // }
-            setShowModule(true);
+            if (alliance.working !== 0) {
+              navigate('/explore-progress');
+            } else {
+              setShowModule(true);
+            }
           }}
         >
           <Flex flexDirection='column'>
