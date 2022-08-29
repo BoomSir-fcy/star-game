@@ -339,7 +339,17 @@ class Building extends EventTarget {
       if (chequer) {
         let builder_axisX = chequer.axisX;
         let builder_axisY = chequer.axisY;
-        if (this.activeChequer) {
+        // 查询选中格子有没有被占领
+        const activeChequerInfo = this.boards.chequers.find(
+          item =>
+            item.axisX === this.activeChequer.x &&
+            this.activeChequer.y === item.axisY,
+        ) as Chequer;
+
+        if (
+          this.activeChequer &&
+          activeChequerInfo.state === stateType.PREVIEW
+        ) {
           builder_axisX = this.activeChequer.x;
           builder_axisY = this.activeChequer.y;
           // 清除选中位置
