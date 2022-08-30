@@ -78,11 +78,19 @@ export const mysteryBoxSlice = createSlice({
       const { payload } = action;
       state.openBlindIds = [...state.openBlindIds, payload];
     },
+    clearOpenBlindIds: state => {
+      state.openBlindIds = [];
+    },
   },
 });
 
 // Actions
-export const { setBoxView, setUserKeys, setOpenBlind, setOpenBlindIds } =
-  mysteryBoxSlice.actions;
+export const {
+  setBoxView,
+  setUserKeys,
+  setOpenBlind,
+  setOpenBlindIds,
+  clearOpenBlindIds,
+} = mysteryBoxSlice.actions;
 
 export default mysteryBoxSlice.reducer;

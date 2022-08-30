@@ -30,7 +30,10 @@ import { useGuide } from 'hooks/useGuide';
 import { Steps } from 'intro.js-react';
 import 'intro.js/introjs.css';
 import { setActivePlanet } from 'state/planet/actions';
-import { EditOpenBlindModalAsync } from 'state/mysteryBox/reducer';
+import {
+  EditOpenBlindModalAsync,
+  clearOpenBlindIds,
+} from 'state/mysteryBox/reducer';
 import { VideoStyled } from 'components/OpenBlindPlanet/BlindPlanetBox';
 import { GlobalVideo } from 'components/Video';
 import { getBuilderSpriteRes } from 'building/core/utils';
@@ -387,6 +390,7 @@ const List = () => {
               try {
                 await SetWorking(planetList.map(v => v.id));
                 toastSuccess(t('Join Succeeded'));
+                dispatch(clearOpenBlindIds());
                 setTween(2);
                 setTimeout(() => {
                   navigate('/plant-league', { replace: true });
@@ -411,6 +415,7 @@ const List = () => {
             width='355px'
             height='68px'
             onClick={() => {
+              dispatch(clearOpenBlindIds());
               setTween(1);
               setTimeout(() => {
                 navigate('/star/planet', { replace: true });
@@ -431,6 +436,7 @@ const List = () => {
         width='355px'
         height='68px'
         onClick={() => {
+          dispatch(clearOpenBlindIds());
           setTween(1);
           setTimeout(() => {
             navigate('/star/planet', { replace: true });
@@ -452,6 +458,7 @@ const List = () => {
     toastError,
     toastSuccess,
     t,
+    dispatch,
   ]);
 
   const visibleGuide = useMemo(() => {
