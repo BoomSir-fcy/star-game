@@ -5,7 +5,7 @@ import ModalWrapper from 'components/Modal';
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction } from 'state';
 import { useDispatch } from 'react-redux';
-import { raceData } from 'config/buildConfig';
+import { BuildRaceData } from 'config/buildConfig';
 
 export const NoUpgradeModal: React.FC<{
   planetId: number;
@@ -68,7 +68,8 @@ export const NoUpgradeModal: React.FC<{
                   >
                     {t(
                       `${
-                        raceData[item.building?.race][item.building?.index].name
+                        BuildRaceData[item.building?.race][item.building?.index]
+                          .name
                       }`,
                     )}
                   </Text>

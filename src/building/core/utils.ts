@@ -1,7 +1,7 @@
 // import { Point, Container, Graphics } from 'pixi.js';
 import { Container } from '@pixi/display';
 import { Point } from '@pixi/math';
-import { raceData } from 'config/buildConfig';
+import { BuildRaceData } from 'config/buildConfig';
 import { DescType, descType, Skill, TipsTextType } from '../types';
 
 export function onDragStart(this: any, event: any) {
@@ -354,11 +354,11 @@ export const getBuildingOfRaceAndIndex = (
   race: number,
   resId: string | number,
 ): undefined | { name: string; desc: string } => {
-  return raceData[race]?.[resId];
+  return BuildRaceData[race]?.[resId];
 };
 
 export const getSpriteName = (race: number, resId: string) => {
-  // return raceData[race].children.find(item => item.id === Number(resId))?.name;
+  // return BuildRaceData[race].children.find(item => item.id === Number(resId))?.name;
   return '';
 };
 

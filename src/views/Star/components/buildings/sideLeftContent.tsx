@@ -9,7 +9,7 @@ import { getBuilderSpriteRes } from 'building/core/utils';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
 import { setNavZIndex } from 'state/userInfo/reducer';
-import { raceData } from 'config/buildConfig';
+import { BuildRaceData } from 'config/buildConfig';
 import { GameThing } from '../gameModel';
 import { useActiveBuilder } from '../../detailHooks';
 
@@ -187,7 +187,7 @@ export const SideLeftContent: React.FC<SideLeftContentProps> = ({
 
   const getBuildings = React.useCallback(
     index => {
-      const build = raceData[race]?.[index];
+      const build = BuildRaceData[race]?.[index];
       return build;
     },
     [race],

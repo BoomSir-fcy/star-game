@@ -20,6 +20,8 @@ import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { QualityColor, RaceTypeColor } from 'uikit/theme/colors';
 import { raceData } from 'config/raceConfig';
+
+import { BuildRaceData } from 'config/buildConfig';
 import { useJoinAlliance } from 'views/Star/hook';
 import { useToast } from 'contexts/ToastsContext';
 import { useFetchAllianceView } from 'state/alliance/hooks';
@@ -172,6 +174,7 @@ const AnimationStar = styled(Box)`
 `;
 
 const ContentBox = styled(Box)<{ tween?: number }>`
+  height: 850px;
   &.tween-animation2 {
     animation: ${({ tween }) =>
         tween === 2 ? ContentTweenFrame2 : ContentTweenFrame1}
@@ -248,6 +251,7 @@ const LightBox = styled(Box)<{ type: number }>`
   box-shadow: 0px 0px 7px 3px
     ${({ type }) => (type === 1 ? '#FFD63E' : '#FF02C5')};
   padding: 6px;
+  background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
 `;
 
 const List = () => {
@@ -531,6 +535,7 @@ const List = () => {
         className='mystery-list-step0'
         pt='124px'
         justifyContent='space-evenly'
+        height='calc(100% - 130px)'
       >
         {!planetList?.length && (
           <Flex width='100%' alignItems='center' justifyContent='center'>
@@ -626,9 +631,6 @@ const List = () => {
                         {t('Planet level gift')}:&nbsp;
                         {`Lv.1 > Lv.${item.give_level}`}
                       </Text>
-                      {/* <Text color='#FFD63E'>
-                        
-                      </Text> */}
                     </LightBox>
                   )}
                   {item.give_build_index !== 0 && (
@@ -638,7 +640,7 @@ const List = () => {
                       </Text>
                       <Text color='#FF02C5'>
                         {t(
-                          raceData[item?.race]?.children[item?.give_build_index]
+                          BuildRaceData[item?.race][item?.give_build_index]
                             ?.name,
                         )}
                         *1
@@ -667,7 +669,7 @@ const List = () => {
                     src={`/video/${item?.rarity}rarity.mp4`}
                     loop
                     left={GetVideoPosition(index, item?.rarity)}
-                    top={item?.rarity !== 3 ? 272 : 268}
+                    top={item?.rarity !== 3 ? 236 : 234}
                     margin='auto'
                     scale={scale}
                   >

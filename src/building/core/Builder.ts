@@ -6,7 +6,7 @@ import { Texture } from '@pixi/core';
 import { Graphics } from '@pixi/graphics';
 import { Text } from '@pixi/text';
 import { Container } from '@pixi/display';
-import { raceData } from 'config/buildConfig';
+import { BuildRaceData } from 'config/buildConfig';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import Chequer, { StateType, stateType } from './Chequer';
@@ -403,7 +403,7 @@ class Builder extends EventTarget {
 
   addBuilderText() {
     this.BuildingInfoText = new Text(
-      `${raceData[this.race]?.[this.resId]?.name}    Lv${this.Lv}`,
+      `${BuildRaceData[this.race]?.[this.resId]?.name}    Lv${this.Lv}`,
       {
         fill: 0xffffff,
         fontSize: 14,

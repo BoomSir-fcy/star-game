@@ -1,7 +1,7 @@
 import { RaceType } from 'uikit/theme/types';
 
 // type 1 生产 储存   2 战斗 buff
-export const raceData = {
+export const BuildRaceData = {
   [RaceType.PROTOSS]: {
     '1': {
       name: 'Watcher’s Temple',

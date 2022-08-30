@@ -14,10 +14,11 @@ import { useTranslation } from 'contexts/Localization';
 import useTheme from 'hooks/useTheme';
 import { shortenAddress } from 'utils';
 import { formatDisplayApr } from 'utils/formatBalance';
-import { raceData } from 'config/buildConfig';
+import { BuildRaceData } from 'config/buildConfig';
 import { getSpriteName, getSpriteRes } from 'game/core/utils';
 import { EasyformatTime } from 'utils/timeFormat';
 import { useNavigate } from 'react-router-dom';
+import { useFetchAllianceView } from 'state/alliance/hooks';
 import ProgressContent from './components/ProgressContent';
 
 const TitleBox = styled(Flex)`
@@ -41,6 +42,7 @@ const ExploreProgress: React.FC = () => {
   const { t, getHTML } = useTranslation();
   const { theme } = useTheme();
   const navigate = useNavigate();
+  useFetchAllianceView();
 
   return (
     <Box>
@@ -55,7 +57,7 @@ const ExploreProgress: React.FC = () => {
         </TitleBox>
       </Flex>
       <ContentBox>
-        <Flex>
+        <Flex flex={1}>
           <ProgressContent />
         </Flex>
       </ContentBox>

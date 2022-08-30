@@ -163,7 +163,14 @@ export const ThingUpgradesModal: React.FC<{
               number={building_detail?.upgrade_need?.upgrade_box || 0}
               unit='BOX'
             />
-            <Button ml='34px' onClick={() => onChange(building_detail)}>
+            <Button
+              variant='purple'
+              ml='34px'
+              width='max-content'
+              padding='0 20px'
+              onClick={() => onChange(building_detail)}
+              mr='20px'
+            >
               {t('Confirm to upgrade')}
             </Button>
           </Flex>

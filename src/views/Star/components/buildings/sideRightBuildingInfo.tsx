@@ -11,7 +11,7 @@ import {
   fetchUserBalanceAsync,
   fetchUserProductAsync,
 } from 'state/userInfo/reducer';
-import { raceData } from 'config/buildConfig';
+import { BuildRaceData } from 'config/buildConfig';
 import { BuildingValue, GameThing } from '../gameModel';
 import { useBuildingUpgrade } from '../gameModel/hooks';
 import { BuildingUpgrade } from './buildingUpgrade';
@@ -179,7 +179,8 @@ export const SideRightBuildingInfo: React.FC<{
   );
 
   const getBuildings = React.useCallback(() => {
-    const build = raceData[currentAttributes?.race][currentAttributes?.index];
+    const build =
+      BuildRaceData[currentAttributes?.race][currentAttributes?.index];
     return build;
   }, [currentAttributes]);
 

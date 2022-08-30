@@ -38,7 +38,7 @@ const ProgressContent: React.FC = () => {
   }, [diffSeconds]);
 
   return (
-    <Flex>
+    <Flex flex={1} justifyContent='space-between'>
       <Box>
         <Text fontSize='20px' bold>
           {t('探索进度')}
@@ -48,8 +48,8 @@ const ProgressContent: React.FC = () => {
           {`( ${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')} )`}
         </Text>
       </Box>
-      <Box>
-        <Progress color='#1EB2FF' primaryStep={1} />
+      <Box width='calc(100% - 200px)'>
+        <Progress scale='sm' color='#15F33A' primaryStep={1} />
       </Box>
     </Flex>
   );

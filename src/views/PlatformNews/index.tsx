@@ -17,7 +17,7 @@ import { shortenAddress } from 'utils';
 import Collapse, { Panel } from 'rc-collapse';
 import { formatDisplayApr } from 'utils/formatBalance';
 import 'rc-collapse/assets/index.css';
-import { raceData } from 'config/buildConfig';
+import { BuildRaceData } from 'config/buildConfig';
 import { getSpriteName, getSpriteRes } from 'game/core/utils';
 import { EasyformatTime } from 'utils/timeFormat';
 import { useNavigate } from 'react-router-dom';
@@ -437,9 +437,10 @@ const PlatformNews: React.FC = () => {
                                               <Text ml='10px' mr='10px'>
                                                 <Flex alignItems='center'>
                                                   {
-                                                    raceData[armsInfo.race]?.[
-                                                      armsInfo.arm_index
-                                                    ]?.name
+                                                    BuildRaceData[
+                                                      armsInfo.race
+                                                    ]?.[armsInfo.arm_index]
+                                                      ?.name
                                                   }
                                                   &nbsp;
                                                   {t('Generate')}&nbsp;
