@@ -7,6 +7,12 @@ export class AllianceApi extends Http {
     return res;
   }
 
+  // 获取星球联盟探索进度
+  async getExploreProgress() {
+    const res = await this.get('work/progress');
+    return res;
+  }
+
   // 行星联盟开始工作
   async AllianceWorking(params: Api.Alliance.StartWorking) {
     const res = await this.post('alliance/worker/start', params);

@@ -383,11 +383,72 @@ export interface AllianceView {
   unread_plunder_count: number;
   message_count: number;
 }
+
+export interface PlanetProView extends ExploreProgressPlanetDetail {
+  rarity: 1 | 2 | 3 | 4 | 5 | 6; // 品质1-6
+  picture1: string; // 星球3d材质
+}
+export interface ExploreProgressPlanetDetail {
+  energy: number;
+  level: number;
+  planet_id: number;
+  sec_energy: number;
+  sec_spices: number;
+  sec_stone: number;
+  spices: number;
+  stone: number;
+  max_energy: number;
+  max_spices: number;
+  max_stone: number;
+  protect_energy: number;
+  protect_spices: number;
+  protect_stone: number;
+}
+
+export interface plunder_infoView {
+  success: boolean;
+  stone: number;
+  energy: number;
+  spices: number;
+  address: string;
+}
+export interface arm_productView {
+  unique_id: number;
+  count: number;
+  index: string;
+  cost_stone: number;
+  cost_energy: number;
+  cost_spices: number;
+}
+export interface armsView {
+  arm_index: number;
+  race: number;
+  arm_product: arm_productView;
+  total_count: number;
+}
+
+export interface work_messageView {
+  planet_id: number;
+  time_stamp: number;
+  type: number;
+  product_stone: number;
+  product_energy: number;
+  product_spices: number;
+  arms: armsView;
+  plunder_info: plunder_infoView;
+}
+export interface ExploreProgressDateView {
+  end_time: number;
+  planet_detail: ExploreProgressPlanetDetail[];
+  work_message: work_messageView[];
+  work_time: number;
+}
 export interface AllianceState {
   allianceView: AllianceView;
   workingPlanet: number[];
   pkRecord: PkRecord;
   DifficultyToExplore: number;
+  ExploreProgressDate: ExploreProgressDateView;
 }
 
 export interface PkRecord {

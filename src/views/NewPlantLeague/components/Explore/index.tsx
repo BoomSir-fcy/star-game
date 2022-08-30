@@ -130,6 +130,7 @@ const Explore: React.FC<{
           className='Start_Exploration'
           variant='purple'
           width='300px'
+          // disabled={alliance.working !== 0 || max_work_count === now_work_count}
           disabled={max_work_count === now_work_count}
           onClick={() => {
             if (alliance.working !== 0) {
@@ -137,6 +138,7 @@ const Explore: React.FC<{
             } else {
               setShowModule(true);
             }
+            // setShowModule(true);
           }}
         >
           <Flex flexDirection='column'>

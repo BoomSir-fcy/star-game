@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AllianceState, AppThunk, orderInfo } from 'state/types';
-import { fetchCombatRecord, fetchMyPlanetAlliance } from './fetchers';
+import {
+  fetchCombatRecord,
+  fetchExploreProgress,
+  fetchMyPlanetAlliance,
+} from './fetchers';
 
 export const initialState: AllianceState = {
   allianceView: {
@@ -44,11 +48,22 @@ export const initialState: AllianceState = {
     loading: false,
   },
   DifficultyToExplore: 0,
+  ExploreProgressDate: {
+    end_time: 0,
+    planet_detail: [],
+    work_message: [],
+    work_time: 0,
+  },
 };
 
 export const fetchAllianceViewAsync = (): AppThunk => async dispatch => {
   const info = await fetchMyPlanetAlliance();
   dispatch(setAllianceView(info));
+};
+
+export const fetchExploreProgressAsync = (): AppThunk => async dispatch => {
+  const info = await fetchExploreProgress();
+  dispatch(setExploreProgressDate(info));
 };
 
 export const fetchCombatRecordAsync =
@@ -102,6 +117,9 @@ export const allianceSlice = createSlice({
     setDifficultyToExplore: (state, action) => {
       state.DifficultyToExplore = action.payload;
     },
+    setExploreProgressDate: (state, action) => {
+      state.ExploreProgressDate = action.payload;
+    },
   },
 });
 
@@ -111,6 +129,7 @@ export const {
   setPkRecord,
   setRecordLoad,
   setDifficultyToExplore,
+  setExploreProgressDate,
 } = allianceSlice.actions;
 
 export default allianceSlice.reducer;

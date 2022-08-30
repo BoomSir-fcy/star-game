@@ -24,9 +24,15 @@ const Progress: React.FC<ProgressProps> = ({
   showProgressBunny = false,
   color,
   linear,
+  className,
 }) => {
   return (
-    <StyledProgress variant={variant} scale={scale} linear={linear}>
+    <StyledProgress
+      className={className}
+      variant={variant}
+      scale={scale}
+      linear={linear}
+    >
       {showProgressBunny && (
         <ProgressBunnyWrapper style={{ left: `${stepGuard(primaryStep)}%` }}>
           <ProgressBunny />
@@ -38,7 +44,10 @@ const Progress: React.FC<ProgressProps> = ({
         style={{ width: `${stepGuard(primaryStep)}%` }}
       />
       {secondaryStep ? (
-        <Bar style={{ width: `${stepGuard(secondaryStep)}%` }} />
+        <Bar
+          className='secondaryStep'
+          style={{ width: `${stepGuard(secondaryStep)}%` }}
+        />
       ) : null}
     </StyledProgress>
   );
