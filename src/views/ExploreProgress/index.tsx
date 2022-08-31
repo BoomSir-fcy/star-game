@@ -12,13 +12,11 @@ import {
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
 import useTheme from 'hooks/useTheme';
-import { shortenAddress } from 'utils';
-import { formatDisplayApr } from 'utils/formatBalance';
-import { BuildRaceData } from 'config/buildConfig';
-import { getSpriteName, getSpriteRes } from 'game/core/utils';
-import { EasyformatTime } from 'utils/timeFormat';
 import { useNavigate } from 'react-router-dom';
-import { useFetchAllianceView } from 'state/alliance/hooks';
+import {
+  useFetchAllianceView,
+  useFetchExploreProgressView,
+} from 'state/alliance/hooks';
 import { useDispatch } from 'react-redux';
 import { fetchExploreProgressAsync } from 'state/alliance/reducer';
 import { useStore } from 'state';
@@ -54,6 +52,7 @@ const ExploreProgress: React.FC = () => {
   const dispatch = useDispatch();
 
   useFetchAllianceView();
+  useFetchExploreProgressView();
 
   const { ExploreProgressDate, allianceView } = useStore(p => p.alliance);
   const { order } = allianceView;
@@ -71,10 +70,6 @@ const ExploreProgress: React.FC = () => {
       setWorkEnd(false);
     }
   }, [diffSeconds]);
-
-  useEffect(() => {
-    dispatch(fetchExploreProgressAsync());
-  }, [dispatch]);
 
   useEffect(() => {
     if (ExploreProgressDate?.planet_detail?.length && order?.length) {
@@ -103,7 +98,7 @@ const ExploreProgress: React.FC = () => {
         </TitleBox>
       </Flex>
       <ContentBox>
-        {alliance.working !== 0 ? (
+        {alliance.working !== 0 && ExploreProgressDate ? (
           <>
             <Flex flex={1} alignItems='flex-start'>
               <Flex flex={1} flexDirection='column'>

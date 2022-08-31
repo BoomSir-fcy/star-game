@@ -27,27 +27,40 @@ const SmText = styled(Text)`
 const MsgList: React.FC = () => {
   const { t, getHTML } = useTranslation();
   const { work_message } = useStore(p => p.alliance.ExploreProgressDate);
+  const [isDown, setIsDown] = useState(true);
+
+  const ScrollList = useCallback((e: any) => {
+    const { clientHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
+    if (clientHeight + scrollTop >= scrollHeight) {
+      console.log(111);
+      // TODO:滑动后 滚动条没到底 更新数据时不置底
+    }
+  }, []);
 
   useEffect(() => {
     const workMessageListDom = document.getElementById('workMessageList');
     if (workMessageListDom && work_message.length) {
       // 更新数据时 当前滚动条在顶部 才置底
-      if (workMessageListDom.scrollTop === 0) {
-        workMessageListDom.scrollTop = workMessageListDom.scrollHeight;
-      }
+      // if (
+      //   workMessageListDom.scrollTop === 0 ||
+      //   workMessageListDom.scrollTop + workMessageListDom.clientHeight ===
+      //     workMessageListDom.scrollHeight
+      // ) {
+      // }
+      workMessageListDom.scrollTop = workMessageListDom.scrollHeight;
     }
   }, [work_message]);
 
   return (
-    <BgFlex id='workMessageList' ml='20px'>
+    <BgFlex onScroll={ScrollList} id='workMessageList' ml='20px'>
       {(work_message || []).map(i => (
-        <Flex key={`${i.time_stamp}_${i.planet_id}`} mb='16px'>
+        <Flex key={`${i?.time_stamp}_${i?.planet_id}`} mb='16px'>
           <Flex alignItems='center' width='25%'>
             <SmText color='textSubtle' mr='30px'>
-              {dayjs(i.time_stamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              {dayjs(i?.time_stamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </SmText>
             <SmText width='100px' mr='10px'>
-              Token {i.planet_id}
+              Token {i?.planet_id}
             </SmText>
           </Flex>
           <SmText width='75%'>
@@ -117,10 +130,13 @@ const MsgList: React.FC = () => {
               <Flex alignItems='center' flexWrap='wrap'>
                 {t(BuildRaceData[i?.arms?.race][i?.arms?.arm_index]?.name)}
                 {t('成功制作了')}
-                {` [ ${t(
-                  raceData[i?.arms?.race]?.children[i?.arms?.arm_product?.index]
-                    .name,
-                )} ]`}
+                <SmText color='#10BA2C'>
+                  {` [ ${t(
+                    raceData[i?.arms?.race]?.children.find(
+                      ({ id }) => id === Number(i?.arms?.arm_product?.index),
+                    )?.name,
+                  )} ]`}
+                </SmText>
               </Flex>
             )}
             {i.type === 3 && (
@@ -160,5 +176,5 @@ const MsgList: React.FC = () => {
     </BgFlex>
   );
 };
-
+// i?.arms?.arm_product?.index
 export default MsgList;

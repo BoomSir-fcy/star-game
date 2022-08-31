@@ -76,13 +76,14 @@ const Formation: React.FC<{
         if (Api.isSuccess(res)) {
           toastSuccess(t('Operate Succeeded'));
           dispatch(fetchAllianceViewAsync());
+          navigate('/explore-progress');
         }
       })
       .catch(err => {
         toastError(t('Operate Failed'));
         console.error(err);
       });
-  }, [toastSuccess, toastError, t, dispatch, Difficulty]);
+  }, [toastSuccess, toastError, t, dispatch, Difficulty, navigate]);
 
   const addLoadPlanet = useCallback(() => {
     if (LoadPlanet?.length >= 5) {

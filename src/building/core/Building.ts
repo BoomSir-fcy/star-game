@@ -342,8 +342,8 @@ class Building extends EventTarget {
         // 查询选中格子有没有被占领
         const activeChequerInfo = this.boards.chequers.find(
           item =>
-            item.axisX === this.activeChequer.x &&
-            this.activeChequer.y === item.axisY,
+            item.axisX === this.activeChequer?.x &&
+            this.activeChequer?.y === item.axisY,
         ) as Chequer;
 
         if (

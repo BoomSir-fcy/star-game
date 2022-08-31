@@ -46,6 +46,10 @@ const ResourceInfoBox: React.FC<{
 
   const NowResource = useIncrease(reItem.now, WorkEnd ? 0 : reItem.sec);
 
+  const CalculatedNowResource = useMemo(() => {
+    return NowResource > 0 ? NowResource : reItem.now;
+  }, [NowResource, reItem]);
+
   return (
     <ResourceProgressFlex>
       <Box width={40} height={40} mr='5px'>
@@ -67,7 +71,11 @@ const ResourceInfoBox: React.FC<{
           </Flex>
           <Flex>
             <Text small color='#15F33A'>
-              {format(NowResource > reItem?.max ? reItem?.max : NowResource)}
+              {format(
+                CalculatedNowResource > reItem?.max
+                  ? reItem?.max
+                  : CalculatedNowResource,
+              )}
             </Text>
             <Text small>/{format(reItem?.max)}</Text>
           </Flex>
@@ -77,7 +85,7 @@ const ResourceInfoBox: React.FC<{
           scale='sm'
           color='#1EB2FF'
           primaryStep={(reItem?.Protect / reItem?.max) * 100}
-          secondaryStep={(NowResource / reItem?.max) * 100}
+          secondaryStep={(CalculatedNowResource / reItem?.max) * 100}
         />
       </Flex>
     </ResourceProgressFlex>
