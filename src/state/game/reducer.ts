@@ -196,6 +196,9 @@ export const userInfoSlice = createSlice({
       state.plantUnits = {};
       state.baseUnits = {};
     },
+    setEmptyPlantUnits: (state, { payload }) => {
+      state.plantUnits = {};
+    },
   },
 });
 
@@ -211,6 +214,7 @@ export const {
   setPlantUnitsTest,
   setTerrainInfo,
   setPKRes,
+  setEmptyPlantUnits,
   setEmptyUnits,
 } = userInfoSlice.actions;
 

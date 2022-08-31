@@ -40,7 +40,7 @@ import MiniRaceAni from './miniRace';
 import useSimulation from '../hooks/useSimulation';
 
 // transform: translateX(252px);
-const BorderCardStyled = styled(BorderCard) <{ show?: boolean }>`
+const BorderCardStyled = styled(BorderCard)<{ show?: boolean }>`
   transition: 0.3s all;
   transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(120%)')};
 `;
@@ -158,6 +158,8 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
 
   const removeHandle = useCallback(() => {
     if (activeSoldier) {
+      console.log(123);
+
       game.removeSoldier(activeSoldier);
     }
   }, [activeSoldier, game]);
@@ -277,7 +279,7 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
                 label={t('planetHPValue')}
                 value={activeSoldier?.options?.unitInfo?.hp || 0}
                 src='/images/commons/star/HP.png'
-              // subSrc='/images/commons/icon/add_blood.png'
+                // subSrc='/images/commons/icon/add_blood.png'
               />
               <StatusItem
                 label={t('hit')}

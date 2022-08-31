@@ -34,7 +34,7 @@ import { useTranslation } from 'contexts/Localization';
 import useGame from 'game/hooks/useGame';
 import { useStore, storeAction } from 'state';
 import { useDispatch } from 'react-redux';
-import { setEmptyUnits } from 'state/game/reducer';
+import { setEmptyPlantUnits, setEmptyUnits } from 'state/game/reducer';
 import Game from 'game/core/Game';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import PreviewList from './components/PreviewList';
@@ -277,8 +277,11 @@ const Embattle = () => {
     }, 0);
   }, [gameSoldiers]);
 
-  const removeHandle = useCallback(() => {
+  const removeHandle = useCallback(async () => {
     if (activeSoldier) {
+      // if (game.soldiers.length === 1) {
+      //   dispatch(setEmptyPlantUnits({}));
+      // }
       game.removeSoldier(activeSoldier);
       handleUpdate();
     }
