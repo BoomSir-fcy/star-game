@@ -630,21 +630,19 @@ const List = () => {
                     width='230px'
                     textAlign='center'
                   >
-                    {t('Congratulations for getting extra')}
+                    {t('Congrats on the extra bonus')}
                   </Text>
                   {item.give_level > 1 && (
                     <LightBox mb={16} type={1}>
                       <Text color='#FFD63E'>
-                        {t('Planet level gift')}:&nbsp;
+                        {t('Free Planet Upgrade')}:&nbsp;
                         {`Lv.1 > Lv.${item.give_level}`}
                       </Text>
                     </LightBox>
                   )}
                   {item.give_build_index !== 0 && (
                     <LightBox type={2}>
-                      <Text color='#FF02C5'>
-                        {t('Extra Building Gift')}:&nbsp;
-                      </Text>
+                      <Text color='#FF02C5'>{t('Free Building')}:&nbsp;</Text>
                       <Text color='#FF02C5'>
                         {t(
                           BuildRaceData[item?.race][item?.give_build_index]

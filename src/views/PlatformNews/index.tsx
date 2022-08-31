@@ -250,23 +250,23 @@ const PlatformNews: React.FC = () => {
     (status: number) => {
       switch (status) {
         case 0:
-          return t('System messages');
+          return t('System Messages');
         case 1:
-          return t('Notice of successful auction of the master of the galaxy');
+          return t('Notification for bidding Galaxy Lordship successfully');
         case 2:
-          return t('The Lord of the Galaxy was auctioned by others');
+          return t('Galaxy Lordship was bid and obtained by others');
         case 3:
-          return t('Notice of successful occupation of stars');
+          return t('Notification for Occupying Star successfully');
         case 4:
-          return t('Notice of star occupation');
+          return t('Notification when a Star is occupied');
         // case 5:
         //   return t('遭遇战获胜');
         // case 6:
         //   return t('遭遇战失败');
         case 7:
-          return t('Comprehensive report on planetary exploration');
+          return t('Comprehensive report of Planet Exploration');
         default:
-          return t('System messages');
+          return t('System Messages');
       }
     },
     [t],
@@ -653,7 +653,7 @@ const PlatformNews: React.FC = () => {
                             navigate(`/galaxy?id=${msgContent?.galaxy_id}`);
                           }}
                         >
-                          <Text color='textPrimary'>{t('Go to Claim')}</Text>
+                          <Text color='textPrimary'>{t('Claim Rewards')}</Text>
                         </Button>
                       </Flex>
                     )}

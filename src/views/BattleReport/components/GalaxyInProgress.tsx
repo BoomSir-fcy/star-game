@@ -71,7 +71,7 @@ export const GalaxyInProgress: React.FC<{
         <CardBox>
           <Flex mb='20px' justifyContent='center'>
             <MarkText padding={0} fontStyle='normal' fontSize='20px' bold>
-              {t('Occupy the Stars')}
+              {t('Occupy Star Report')}
             </MarkText>
           </Flex>
           <Flex mb='16px' justifyContent='space-between' alignItems='baseline'>
@@ -92,7 +92,7 @@ export const GalaxyInProgress: React.FC<{
             )}
           </Flex>
           <Flex mb='16px' alignItems='center'>
-            <Text mr='10px'>{t('Belonging to the star')}:</Text>
+            <Text mr='10px'>{t('Star Name')}:</Text>
             <MarkTextStyle mr='10px'>
               {info?.name}
               {/* {t('星系')} */}
@@ -104,10 +104,10 @@ export const GalaxyInProgress: React.FC<{
             </MarkTextStyle>
           </Flex>
           <Flex alignItems='center'>
-            <Text mr='10px'>{t('Battle result')}:</Text>
+            <Text mr='10px'>{t('Battle Results')}:</Text>
             <Text color={BettleResult ? 'progressGreenBar' : 'redText'}>
               {IsFrom ? t('ToOccupy') : t('Occupied')}&nbsp;
-              {BettleResult ? t('Successfully') : t('Fail')}
+              {BettleResult ? t('Success') : t('Fail')}
             </Text>
           </Flex>
         </CardBox>
@@ -117,9 +117,7 @@ export const GalaxyInProgress: React.FC<{
           <PkResult result={BettleResult} />
           <Flex flexDirection='column' flex={1} ml='30px' height='100%'>
             <Flex mb={20} justifyContent='space-between' alignItems='center'>
-              <MarkTextStyle>
-                {t('Occupy the Stars battle details')}
-              </MarkTextStyle>
+              <MarkTextStyle>{t('Occupy Star Dashboard')}</MarkTextStyle>
               <Link
                 onClick={event => {
                   try {
@@ -139,13 +137,13 @@ export const GalaxyInProgress: React.FC<{
               </Link>
             </Flex>
             <Flex mb='10px' justifyContent='space-between'>
-              <Text mr='10px'>{t('Participate in Battle Planet')}:</Text>
+              <Text mr='10px'>{t('Planets in Battle')}:</Text>
               <Text>
                 {info.planetId.substring(0, info.planetId.lastIndexOf(','))}
               </Text>
             </Flex>
             <Flex mb='10px' justifyContent='space-between'>
-              <Text mr='10px'>{t('Challenge players')}:</Text>
+              <Text mr='10px'>{t('Challenger')}:</Text>
               <Box>
                 <Text textAlign='right'>
                   {shortenAddress(IsFrom ? info.toAddress : info.fromAddress)}
