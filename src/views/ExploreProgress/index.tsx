@@ -8,6 +8,7 @@ import {
   Text,
   Empty,
   Button,
+  Spinner,
 } from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
@@ -43,6 +44,13 @@ const ContentBox = styled(Box)`
   border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   padding: 30px 50px;
+`;
+
+const LoadingBox = styled(Box)`
+  position: absolute;
+  left: 56%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ExploreProgress: React.FC = () => {
@@ -125,6 +133,12 @@ const ExploreProgress: React.FC = () => {
             <Empty />
           </>
         )}
+        {alliance.working !== 0 &&
+          ExploreProgressDate?.planet_detail?.length <= 0 && (
+            <LoadingBox>
+              <Spinner size={200} />
+            </LoadingBox>
+          )}
       </ContentBox>
     </Box>
   );

@@ -31,9 +31,13 @@ const MsgList: React.FC = () => {
 
   const ScrollList = useCallback((e: any) => {
     const { clientHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
-    if (clientHeight + scrollTop >= scrollHeight) {
-      console.log(111);
-      // TODO:滑动后 滚动条没到底 更新数据时不置底
+    if (clientHeight + scrollTop < scrollHeight - 100) {
+      console.log(123);
+
+      setIsDown(false);
+    } else {
+      setIsDown(true);
+      console.log(321);
     }
   }, []);
 
@@ -41,21 +45,17 @@ const MsgList: React.FC = () => {
     const workMessageListDom = document.getElementById('workMessageList');
     if (workMessageListDom && work_message.length) {
       // 更新数据时 当前滚动条在顶部 才置底
-      // if (
-      //   workMessageListDom.scrollTop === 0 ||
-      //   workMessageListDom.scrollTop + workMessageListDom.clientHeight ===
-      //     workMessageListDom.scrollHeight
-      // ) {
-      // }
-      workMessageListDom.scrollTop = workMessageListDom.scrollHeight;
+      if (isDown) {
+        workMessageListDom.scrollTop = workMessageListDom.scrollHeight;
+      }
     }
-  }, [work_message]);
+  }, [work_message, isDown]);
 
   return (
     <BgFlex onScroll={ScrollList} id='workMessageList' ml='20px'>
       {(work_message || []).map(i => (
         <Flex
-          key={`${i?.time_stamp}_${i?.planet_id}`}
+          key={`${i?.time_stamp}_${i?.planet_id}_${i?.arms?.race}_${i?.arms?.arm_product?.index}`}
           mb='16px'
           alignItems='flex-start'
         >
@@ -133,6 +133,7 @@ const MsgList: React.FC = () => {
             {i.type === 2 && (
               <Flex alignItems='center' flexWrap='wrap'>
                 {t(BuildRaceData[i?.arms?.race][i?.arms?.arm_index]?.name)}
+                &nbsp;
                 {t('ExploreMsgDesc3')}
                 <SmText color='#10BA2C'>
                   {` [ ${t(
@@ -148,6 +149,7 @@ const MsgList: React.FC = () => {
                 {t('ExploreMsgDesc4 %address%', {
                   addr: shortenAddress(i?.plunder_info?.address),
                 })}
+                &nbsp;
                 {i?.plunder_info?.success
                   ? t('ExploreMsgDesc5')
                   : t('ExploreMsgDesc6')}

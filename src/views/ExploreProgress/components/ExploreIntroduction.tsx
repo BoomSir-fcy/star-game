@@ -7,6 +7,7 @@ const BgBox = styled(GraphicsCard)`
   width: 600px;
   height: 243px;
   padding: 16px 30px;
+  overflow-y: auto;
 `;
 
 const SmText = styled(Text)`

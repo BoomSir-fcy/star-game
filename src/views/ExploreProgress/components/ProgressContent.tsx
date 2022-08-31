@@ -62,7 +62,7 @@ const ProgressContent: React.FC<{ diffSeconds: number }> = ({
           {`( ${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')} )`}
         </Text>
       </Box>
-      <Box width='calc(100% - 150px)'>
+      <Box width='calc(100% - 200px)'>
         <Flex mb='10px'>
           <Text textAlign='center' width='37.5%' color='#15F33A'>
             {t('Safe zone (no risk of being looted)')}
