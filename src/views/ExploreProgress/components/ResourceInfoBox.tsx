@@ -63,7 +63,7 @@ const ResourceInfoBox: React.FC<{
         <Flex mb='4px' justifyContent='space-between' alignItems='center'>
           <Flex>
             <Text small mr='4px'>
-              {t('保护值')}
+              {t('Protection value')}
             </Text>
             <Text small color='#1EB2FF'>
               {format(reItem?.Protect)}

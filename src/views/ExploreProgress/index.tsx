@@ -93,7 +93,7 @@ const ExploreProgress: React.FC = () => {
         </Box>
         <TitleBox>
           <MarkText fontSize='18px' bold>
-            {t('探索状态')}
+            {t('State of exploration')}
           </MarkText>
         </TitleBox>
       </Flex>

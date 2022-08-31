@@ -54,7 +54,11 @@ const MsgList: React.FC = () => {
   return (
     <BgFlex onScroll={ScrollList} id='workMessageList' ml='20px'>
       {(work_message || []).map(i => (
-        <Flex key={`${i?.time_stamp}_${i?.planet_id}`} mb='16px'>
+        <Flex
+          key={`${i?.time_stamp}_${i?.planet_id}`}
+          mb='16px'
+          alignItems='flex-start'
+        >
           <Flex alignItems='center' width='25%'>
             <SmText color='textSubtle' mr='30px'>
               {dayjs(i?.time_stamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
@@ -73,7 +77,7 @@ const MsgList: React.FC = () => {
                     i.product_energy > 0 ||
                     i.product_spices > 0) && (
                     <>
-                      {t('工厂成功生产了')}
+                      {t('ExploreMsgDesc1')}
                       {`[ ${i.product_stone > 0 ? t('Ore') : ''} ]`}
                       {i.product_stone > 0 && (
                         <SmText color='#10BA2C'>
@@ -102,7 +106,7 @@ const MsgList: React.FC = () => {
                     i.product_energy < 0 ||
                     i.product_spices < 0) && (
                     <>
-                      {t('建筑消耗')}
+                      {t('ExploreMsgDesc2')}
                       {`[ ${i.product_stone < 0 ? t('Ore') : ''} ]`}
                       {i.product_stone < 0 && (
                         <SmText color='#E75652'>
@@ -129,7 +133,7 @@ const MsgList: React.FC = () => {
             {i.type === 2 && (
               <Flex alignItems='center' flexWrap='wrap'>
                 {t(BuildRaceData[i?.arms?.race][i?.arms?.arm_index]?.name)}
-                {t('成功制作了')}
+                {t('ExploreMsgDesc3')}
                 <SmText color='#10BA2C'>
                   {` [ ${t(
                     raceData[i?.arms?.race]?.children.find(
@@ -141,12 +145,12 @@ const MsgList: React.FC = () => {
             )}
             {i.type === 3 && (
               <Flex alignItems='center' flexWrap='wrap'>
-                {t('指挥官! 我们遭遇了[ %addr% 行星联盟 ]的袭击！', {
+                {t('ExploreMsgDesc4 %address%', {
                   addr: shortenAddress(i?.plunder_info?.address),
                 })}
                 {i?.plunder_info?.success
-                  ? t('战斗胜利,成功掠夺了')
-                  : t('战斗失败,被掠夺了')}
+                  ? t('ExploreMsgDesc5')
+                  : t('ExploreMsgDesc6')}
                 <SmText
                   color={i?.plunder_info?.success ? '#10BA2C' : '#E75551'}
                 >
@@ -166,7 +170,7 @@ const MsgList: React.FC = () => {
                     i?.time_stamp - 86400
                   }&endTime=${i?.time_stamp + 86400}`}
                 >
-                  <SmText color='#1EB2FF'>{t('查看战斗详情')}</SmText>
+                  <SmText color='#1EB2FF'>{t('ExploreMsgDesc7')}</SmText>
                 </Button>
               </Flex>
             )}

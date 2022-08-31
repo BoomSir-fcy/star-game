@@ -55,20 +55,20 @@ const ProgressContent: React.FC<{ diffSeconds: number }> = ({
     <PrFlex alignItems='flex-end' flex={1} justifyContent='space-between'>
       <Box>
         <Text fontSize='20px' bold>
-          {t('探索进度')}
+          {t('Explore Progress')}
         </Text>
         <Text small>
-          {t('剩余')}&nbsp;
+          {t('Over')}&nbsp;
           {`( ${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')} )`}
         </Text>
       </Box>
       <Box width='calc(100% - 150px)'>
         <Flex mb='10px'>
           <Text textAlign='center' width='37.5%' color='#15F33A'>
-            {t('安全区(无被掠夺风险)')}
+            {t('Safe zone (no risk of being looted)')}
           </Text>
           <Text textAlign='center' width='62.5%' color='#E75551'>
-            {t('风险区(会有遭遇战)')}
+            {t('Risk Zone (there will be encounters)')}
           </Text>
         </Flex>
         <Progress
