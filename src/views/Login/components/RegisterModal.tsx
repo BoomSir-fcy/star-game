@@ -52,9 +52,9 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
       setVisible={setVisible}
     >
       <Flex padding='30px' flexDirection='column' alignItems='center'>
-        <Image src='/images/commons/dsg-1.png' width={109} height={114} />
+        {/* <Image src='/images/commons/dsg-1.png' width={109} height={114} /> */}
         {DsgBalance.isLessThan(price) ? (
-          <Text mt='20px' fontSize='24px'>
+          <Text mt='50px' fontSize='24px'>
             {t('BnbRegister', {
               DSG: formatDisplayBalance(new BigNumber(price), 18),
               BNB: formatDisplayBalance(new BigNumber(BNBprice), 18),
