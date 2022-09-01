@@ -56,6 +56,8 @@ const PlatformNews = lazy(() => import('./views/PlatformNews'));
 const NewGalaxy = lazy(() => import('./views/NewGalaxy'));
 const ExploreProgress = lazy(() => import('./views/ExploreProgress'));
 
+const Swap = lazy(() => import('./views/Swap'));
+
 // window.addEventListener('click', () => {
 //   console.log(Object.keys(document.documentElement));
 //   console.log((document as any).webkitRequestFullScreen);
@@ -125,6 +127,8 @@ function App() {
               <Route path='/vip' element={<VipPage />} />
 
               <Route path='/change-rate' element={<ChangeRate />} />
+
+              <Route path='/swap' element={<Swap />} />
 
               <Route path='/test' element={<Test />}>
                 <Route path='drag-put' element={<TestDragAndPut />} />
