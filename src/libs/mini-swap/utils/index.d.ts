@@ -1,0 +1,17 @@
+import { Contract } from '@ethersproject/contracts';
+import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers';
+import { BigNumber } from '@ethersproject/bignumber';
+import { ChainId, JSBI, Percent, CurrencyAmount, Currency } from 'dsgswap-sdk';
+import { TokenAddressMap } from '../state/lists/hooks';
+export declare function isAddress(value: any): string | false;
+export declare function getBscScanLink(data: string | number, type: 'transaction' | 'token' | 'address' | 'block' | 'countdown', chainId?: ChainId): string;
+export declare function shortenAddress(address: string, chars?: number): string;
+export declare function calculateGasMargin(value: BigNumber): BigNumber;
+export declare function basisPointsToPercent(num: number): Percent;
+export declare function calculateSlippageAmount(value: CurrencyAmount, slippage: number): [JSBI, JSBI];
+export declare function getSigner(library: Web3Provider, account: string): JsonRpcSigner;
+export declare function getProviderOrSigner(library: Web3Provider, account?: string): Web3Provider | JsonRpcSigner;
+export declare function getContract(address: string, ABI: any, library: Web3Provider, account?: string): Contract;
+export declare function getRouterContract(_: number, library: Web3Provider, account?: string): Contract;
+export declare function escapeRegExp(string: string): string;
+export declare function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currency): boolean;

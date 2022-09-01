@@ -33,6 +33,7 @@
     "chance": "^1.1.8",
     "classnames": "^2.3.1",
     "dayjs": "^1.11.0",
+    "dsgswap-sdk": "^1.0.23",
     "ethers": "^5.6.1",
     "gsap": "^3.9.1",
     "history": "^5.3.0",

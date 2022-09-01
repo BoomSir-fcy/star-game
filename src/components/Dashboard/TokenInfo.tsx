@@ -44,7 +44,26 @@ const DepositWithdrawalBtn = styled(Flex)`
   height: 36px;
   justify-content: space-between;
   align-items: center;
-  padding: 0 60px;
+  padding: 0;
+`;
+
+const ButtonStyled = styled(Button)`
+  width: 69px;
+  height: 34px;
+  padding: 0;
+  font-size: 14px;
+`;
+const ButtonStyled1 = styled(ButtonStyled)`
+  background: url('/images/commons/btn/t1.png');
+  background-size: cover;
+`;
+const ButtonStyled2 = styled(ButtonStyled)`
+  background: url('/images/commons/btn/t2.png');
+  background-size: cover;
+`;
+const ButtonStyled3 = styled(ButtonStyled)`
+  background: url('/images/commons/btn/t3.png');
+  background-size: cover;
 `;
 
 const TokenInfo = () => {
@@ -89,7 +108,30 @@ const TokenInfo = () => {
       <Flex>
         <TokenGroupBox id='BNB_Box'>
           <DepositWithdrawalBtn>
-            <Image
+            <ButtonStyled1
+              onClick={() => {
+                dispatch(
+                  storeAction.setRechargeOperationType({ OperationType: 1 }),
+                );
+                dispatch(storeAction.setToRechargeVisible({ visible: true }));
+              }}
+              variant='custom'
+            >
+              充值
+            </ButtonStyled1>
+            <ButtonStyled2
+              onClick={() => {
+                dispatch(
+                  storeAction.setRechargeOperationType({ OperationType: 2 }),
+                );
+                dispatch(storeAction.setToRechargeVisible({ visible: true }));
+              }}
+              variant='custom'
+            >
+              提现
+            </ButtonStyled2>
+            <ButtonStyled3 variant='custom'>兑换</ButtonStyled3>
+            {/* <Image
               style={{ cursor: 'pointer' }}
               width={36}
               height={36}
@@ -112,7 +154,7 @@ const TokenInfo = () => {
                 );
                 dispatch(storeAction.setToRechargeVisible({ visible: true }));
               }}
-            />
+            /> */}
           </DepositWithdrawalBtn>
           <ButtonLeft disabled variant='custom'>
             <Flex width='100%' alignItems='center'>
