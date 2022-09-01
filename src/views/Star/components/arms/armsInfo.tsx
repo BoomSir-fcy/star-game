@@ -201,6 +201,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
                 height={40}
                 padding='0'
                 variant='text'
+                mr='40px'
               >
                 <Image
                   width={40}
