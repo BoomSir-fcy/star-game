@@ -34,7 +34,12 @@ import { useTranslation } from 'contexts/Localization';
 import useGame from 'game/hooks/useGame';
 import { useStore, storeAction } from 'state';
 import { useDispatch } from 'react-redux';
-import { setEmptyPlantUnits, setEmptyUnits } from 'state/game/reducer';
+import {
+  fetchGamePlanetUnitsAsync,
+  fetchUnitListAsync,
+  setEmptyPlantUnits,
+  setEmptyUnits,
+} from 'state/game/reducer';
 import Game from 'game/core/Game';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import PreviewList from './components/PreviewList';
@@ -279,13 +284,17 @@ const Embattle = () => {
 
   const removeHandle = useCallback(async () => {
     if (activeSoldier) {
-      // if (game.soldiers.length === 1) {
-      //   dispatch(setEmptyPlantUnits({}));
-      // }
+      if (game.soldiers.length === 1) {
+        dispatch(setEmptyPlantUnits({}));
+      }
       game.removeSoldier(activeSoldier);
-      handleUpdate();
+      if (game.soldiers.length === 1) {
+        dispatch(fetchGamePlanetUnitsAsync(planetId));
+        dispatch(fetchUnitListAsync(race, info?.id));
+      }
+      // handleUpdate();
     }
-  }, [activeSoldier, handleUpdate, game]);
+  }, [activeSoldier, game, planetId, race, info?.id, dispatch]);
 
   const { screenMode } = useStore(p => p.user);
 

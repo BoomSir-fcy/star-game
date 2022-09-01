@@ -9,7 +9,7 @@ import { SortSoldier } from '../components/SortBoard';
 const useUpdatePos = (planetId: number, game: Game) => {
   const [gameSoldiers, setGameSoldiers] = useState<SortSoldier[]>([]);
 
-  const { toastSuccess } = useToast();
+  const { toastSuccess, toastError } = useToast();
   const { t } = useTranslation();
 
   const setSortSoldiers = useCallback(
@@ -31,6 +31,10 @@ const useUpdatePos = (planetId: number, game: Game) => {
   const handleUpdate = useCallback(
     async (noToast?: boolean) => {
       const { soldiers } = game;
+      if (soldiers.length < 6) {
+        toastError(t('The board must be filled with 6 soldiers to save'));
+        return;
+      }
       // const { soldiers } = event.detail as { soldiers: Soldier[] };
       const MAX = 64;
       const units = soldiers.map((item, index) => {
@@ -59,7 +63,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
         // game.removeSoldier(game.soldiers[game.soldiers.length - 1]);
       }
     },
-    [planetId, game, t, toastSuccess],
+    [planetId, game, t, toastSuccess, toastError],
   );
 
   const onUpdate = useCallback(
@@ -67,9 +71,9 @@ const useUpdatePos = (planetId: number, game: Game) => {
       // const { soldiers } = game;
       const { soldiers } = event.detail as { soldiers: Soldier[] };
       setSortSoldiers(soldiers);
-      handleUpdate();
+      // handleUpdate();
     },
-    [setSortSoldiers, handleUpdate],
+    [setSortSoldiers],
   );
 
   useEffect(() => {
