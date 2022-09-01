@@ -100,6 +100,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       // '/star/grow',
       // '/star/embattle',
       // '/star/embattle-test',
+      '/plunder-result',
       '/upgrade-list',
     ];
     if (starPath.indexOf(location.pathname) > -1) {

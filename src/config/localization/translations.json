@@ -906,7 +906,7 @@
   "http-error-200031": "Insufficient resources consumed by the upgrade",
   "http-error-200037": "Planet upgrade fail in planetary alliance",
   "http-error-1000004": "Game unit count over.",
-  "http-error-200029": "Planetary Alliance is working, unable to occupy stars",
+  "http-error-200029": "Planetary Alliance is working",
   "http-error-200030": "Lack of upgrade experience",
   "http-error-200040": "Planet exceeded maximum number of jobs",
   "http-error-300036": "Work queue in progress",
