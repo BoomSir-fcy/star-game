@@ -118,7 +118,7 @@ const TokenInfo = () => {
               }}
               variant='custom'
             >
-              充值
+              Recharge
             </ButtonStyled1>
             <ButtonStyled2
               onClick={() => {
@@ -129,10 +129,10 @@ const TokenInfo = () => {
               }}
               variant='custom'
             >
-              提现
+              Withdraw
             </ButtonStyled2>
             <Link to='/swap'>
-              <ButtonStyled3 variant='custom'>兑换</ButtonStyled3>
+              <ButtonStyled3 variant='custom'>Swap</ButtonStyled3>
             </Link>
             {/* <Image
               style={{ cursor: 'pointer' }}
