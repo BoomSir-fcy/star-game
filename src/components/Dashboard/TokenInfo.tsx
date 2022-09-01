@@ -12,6 +12,7 @@ import {
 } from 'utils/formatBalance';
 import { storeAction, useStore } from 'state';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const TokenGroupBox = styled(Box)`
   width: 261px;
@@ -130,7 +131,9 @@ const TokenInfo = () => {
             >
               提现
             </ButtonStyled2>
-            <ButtonStyled3 variant='custom'>兑换</ButtonStyled3>
+            <Link to='/swap'>
+              <ButtonStyled3 variant='custom'>兑换</ButtonStyled3>
+            </Link>
             {/* <Image
               style={{ cursor: 'pointer' }}
               width={36}
