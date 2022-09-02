@@ -140,6 +140,11 @@ const BattleReport = () => {
     dispatch(fetchAllianceViewAsync());
   }, [dispatch]);
 
+  const HaveDetileGalaxReportList = React.useMemo(() => {
+    const arr = GalaxReportList.filter(i => i?.detail?.length !== 0);
+    return arr;
+  }, [GalaxReportList]);
+
   const steps = React.useMemo(
     () => [
       {
@@ -207,7 +212,7 @@ const BattleReport = () => {
       />
 
       <ScrollBox className='Pk_list' pb={20}>
-        {RecordList.length > 0 || GalaxReportList.length > 0 ? (
+        {RecordList.length > 0 || HaveDetileGalaxReportList.length > 0 ? (
           <>
             {(RecordList ?? []).map((item, index) => (
               <RowFlex key={item.id}>
@@ -221,7 +226,7 @@ const BattleReport = () => {
                 ))}
               </RowFlex>
             ))}
-            {(GalaxReportList ?? []).map((item, index) => (
+            {(HaveDetileGalaxReportList ?? []).map((item, index) => (
               <RowFlex key={item.id}>
                 <GalaxyInProgress info={item} />
               </RowFlex>
