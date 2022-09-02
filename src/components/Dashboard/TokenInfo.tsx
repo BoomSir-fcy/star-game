@@ -118,7 +118,7 @@ const TokenInfo = () => {
               }}
               variant='custom'
             >
-              Recharge
+              Deposit
             </ButtonStyled1>
             <ButtonStyled2
               onClick={() => {
