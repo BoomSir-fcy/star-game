@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Flex, Box, Image, TweenText } from 'uikit';
@@ -57,6 +57,12 @@ const BoxRightBottom = styled(Box)<ScaleProps>`
   ${({ index }) => index && `z-index: 99;`}
 `;
 
+const UpdateIndex = createGlobalStyle`
+  .mini-swap-Modal__Body--open  .mini-swap-Modal__Body--update{
+    z-index: 0 !important;
+  }
+`;
+
 interface DashboardProps extends ButtonGroupProps {
   scale: number;
 }
@@ -111,21 +117,34 @@ const Dashboard: React.FC<DashboardProps> = ({
   }, [location.pathname, navigate]);
   return (
     <>
+      <UpdateIndex />
       {!hideHeader && (
         <>
-          <FlexLeftTop scale={scale} index={zIndex}>
+          <FlexLeftTop
+            className='mini-swap-Modal__Body--update'
+            scale={scale}
+            index={zIndex}
+          >
             <Avatar />
             <TokenInfo />
             <BattleReport />
           </FlexLeftTop>
-          <BoxRightTop scale={scale} index={zIndex}>
+          <BoxRightTop
+            className='mini-swap-Modal__Body--update'
+            scale={scale}
+            index={zIndex}
+          >
             <HandleButtonGroup
               onRefresh={onRefreshClick}
               onBack={onBackClick}
             />
           </BoxRightTop>
           {!hideFooter && (
-            <BoxRightBottom scale={scale} index={zIndex}>
+            <BoxRightBottom
+              className='mini-swap-Modal__Body--update'
+              scale={scale}
+              index={zIndex}
+            >
               <ButtonGroup />
             </BoxRightBottom>
           )}

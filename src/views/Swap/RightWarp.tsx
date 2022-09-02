@@ -81,7 +81,8 @@ const RightWarp: React.FC<RightWarpProps> = ({ children, ...props }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const [Visible, setVisible] = useState(false);
+
+  const [Visible, setVisible] = useState(true);
 
   return (
     <Container
