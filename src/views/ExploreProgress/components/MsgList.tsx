@@ -110,19 +110,19 @@ const MsgList: React.FC = () => {
                       {i.product_stone < 0 && ` [${t('Ore')}] `}
                       {i.product_stone < 0 && (
                         <SmText color='#E75652'>
-                          - {SubString_1(i.product_stone, 3)}
+                          {SubString_1(i.product_stone, 3)}
                         </SmText>
                       )}
                       {i.product_energy < 0 && ` [${t('Energy')}] `}
                       {i.product_energy < 0 && (
                         <SmText color='#E75652'>
-                          - {SubString_1(i.product_energy, 3)}
+                          {SubString_1(i.product_energy, 3)}
                         </SmText>
                       )}
                       {i.product_spices < 0 && ` [${t('Population')}] `}
                       {i.product_spices < 0 && (
                         <SmText color='#E75652'>
-                          - {SubString_1(i.product_spices, 3)}
+                          {SubString_1(i.product_spices, 3)}
                         </SmText>
                       )}
                     </>
