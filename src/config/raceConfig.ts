@@ -419,13 +419,13 @@ export const raceData = {
         thumb1: '/assets/modal/2/25-1.png',
         thumb2: '/assets/modal/2/25-2.png',
       },
-      {
-        id: 26,
-        name: 'Explorer',
-        desc: 'Can easily overcome obstacles and attack enemy units.',
-        thumb1: '/assets/modal/2/26-1.png',
-        thumb2: '/assets/modal/2/26-2.png',
-      },
+      // {
+      //   id: 26,
+      //   name: "Explorer",
+      //   desc: "Can easily overcome obstacles and attack enemy units.",
+      //   thumb1: "/assets/modal/2/26-1.png",
+      //   thumb2: "/assets/modal/2/26-2.png",
+      // },
       {
         id: 27,
         name: 'Victor',
@@ -464,7 +464,7 @@ export const raceData = {
       {
         id: 1,
         name: 'Crabworm',
-        desc: 'They have a hard shell, and can quickly shuttle through the battlefield.',
+        desc: 'They can quickly shuttle through the battlefield with hard shells—a single-target attack.',
         thumb1: '/assets/modal/3/1-1.png',
         thumb2: '/assets/modal/3/1-2.png',
       },
@@ -520,7 +520,7 @@ export const raceData = {
       {
         id: 9,
         name: 'Abyssal Mouth',
-        desc: 'A giant mouth in the shape of a piranha can imprison 1 enemy combat unit.',
+        desc: 'A giant mouth in the shape of a piranha can lock up 1 enemy battle unit.',
         thumb1: '/assets/modal/3/9-1.png',
         thumb2: '/assets/modal/3/9-2.png',
       },
@@ -534,7 +534,7 @@ export const raceData = {
       {
         id: 11,
         name: 'Spiked Squid',
-        desc: 'With the spiky tentacles, they can put enemies into their mouths and attack enemy unit 3 squares away.',
+        desc: 'With spiky tentacles, they can put enemies into their mouths and single-attack enemy units.',
         thumb1: '/assets/modal/3/11-1.png',
         thumb2: '/assets/modal/3/11-2.png',
       },
@@ -548,7 +548,7 @@ export const raceData = {
       {
         id: 13,
         name: 'Ant Lord',
-        desc: "As mutated species from the void, they are enemy's nightmare. They can use venom missiles to bomb 4 targets around.",
+        desc: "As mutated species from the void, they are the enemy's nightmare. They can use venom missiles to bomb 4 targets around.",
         thumb1: '/assets/modal/3/13-1.png',
         thumb2: '/assets/modal/3/13-2.png',
       },
@@ -569,7 +569,7 @@ export const raceData = {
       {
         id: 16,
         name: 'Flying Insect',
-        desc: 'Air unit that can imprison enemy units.',
+        desc: 'Air unit that can lock up 1 enemy unit. With high speed and weak ATK.',
         thumb1: '/assets/modal/3/16-1.png',
         thumb2: '/assets/modal/3/16-2.png',
       },
@@ -590,7 +590,7 @@ export const raceData = {
       {
         id: 19,
         name: 'Cyclops',
-        desc: 'Air Scout with ranged attack capability.',
+        desc: 'As air scouts, they can only attack 1 enemy unit at close range due to special reasons.',
         thumb1: '/assets/modal/3/19-1.png',
         thumb2: '/assets/modal/3/19-2.png',
       },
@@ -611,21 +611,21 @@ export const raceData = {
       {
         id: 22,
         name: 'Carrier',
-        desc: 'The explosive bomb on their back can be precisely guided for long-range attacks.',
+        desc: 'The explosive bomb on its back can make precisely guided attacks with high ATK and low HP.',
         thumb1: '/assets/modal/3/22-1.png',
         thumb2: '/assets/modal/3/22-2.png',
       },
       {
         id: 23,
         name: 'Blackwater',
-        desc: 'A fast-attacking unit on the ground, they can regenerate 1 HP with their side at long range.',
+        desc: 'They can regenerate HP for their side as fast-attacking units on the ground.',
         thumb1: '/assets/modal/3/23-1.png',
         thumb2: '/assets/modal/3/23-2.png',
       },
       {
         id: 24,
         name: 'Quantum Spider',
-        desc: 'Made entirely of quantum energy, belongs to tank warriors, they can imprison 1 enemy target',
+        desc: 'Made entirely of quantum energy, they belong to tank warriors and can lock up 1 enemy target',
         thumb1: '/assets/modal/3/24-1.png',
         thumb2: '/assets/modal/3/24-2.png',
       },
@@ -639,7 +639,7 @@ export const raceData = {
       {
         id: 26,
         name: 'Rogue Beast',
-        desc: 'With mutant cells, they can rampage in battle, their attack range is 2 squares.',
+        desc: 'With mutant cells, they can rampage in battle. Single-target attack.',
         thumb1: '/assets/modal/3/26-1.png',
         thumb2: '/assets/modal/3/26-2.png',
       },
