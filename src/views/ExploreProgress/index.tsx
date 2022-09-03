@@ -101,7 +101,7 @@ const ExploreProgress: React.FC = () => {
         </Box>
         <TitleBox>
           <MarkText fontSize='18px' bold>
-            {t('State of exploration')}
+            {t('State of Exploration')}
           </MarkText>
         </TitleBox>
       </Flex>

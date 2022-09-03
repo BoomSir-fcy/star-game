@@ -53,7 +53,7 @@ const Explore: React.FC<{
   const BtnShowText = useMemo(() => {
     // 工作中
     if (alliance.working !== 0) {
-      return t('Exploring');
+      return t('View Explore Progress');
     }
     // 次数用完
     if (max_work_count === now_work_count) {
