@@ -60,7 +60,7 @@ export const PlanetSearch: React.FC<{
     >
       <Flex width='100%' justifyContent='center' alignItems='center'>
         <SearchContainer focus={focus}>
-          <Text fontSize='24px' width='94px' ml='10px'>
+          <Text fontSize='20px' width='94px' ml='10px'>
             Token :
           </Text>
           <SearchInput
