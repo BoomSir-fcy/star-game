@@ -401,11 +401,11 @@ const Details = () => {
     if (activeBuilder) {
       building?.removeBuilder(activeBuilder);
     }
-    setStateBuilding(p => {
-      p.visible = false;
-    });
-    dispatch(setNavZIndex(true));
-  }, [activeBuilder, building, dispatch, setStateBuilding]);
+    // setStateBuilding(p => {
+    //   p.visible = false;
+    // });
+    // dispatch(setNavZIndex(true));
+  }, [activeBuilder, building]);
 
   const onClickGuide = () => {
     const nextButton = document.querySelector('.introjs-nextbutton');
@@ -451,6 +451,7 @@ const Details = () => {
       if (activeInfo?.length) {
         buildingObj._id = activeInfo[0].building._id;
       }
+
       setStateBuilding(p => {
         p.visible = true;
         p.building = buildingObj;
@@ -656,6 +657,7 @@ const Details = () => {
               animation={!stepsEnabled}
               OnAddBuildings={val => {
                 handleGoIntoBattle(val);
+
                 setStateBuilding(p => {
                   p.visible = true;
                   p.building = {
