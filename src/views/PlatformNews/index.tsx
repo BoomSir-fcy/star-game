@@ -306,6 +306,7 @@ const PlatformNews: React.FC = () => {
         <ScrollBox onScroll={loadMore}>
           {(MessageList ?? []).map(item => {
             const msgContent = JSON.parse(item?.msgContent) as GalaxyMsg;
+
             // 行星探索综合报告
             if (item?.messageType === 7 && msgContent?.work_report) {
               const InfoList = [];
@@ -507,7 +508,7 @@ const PlatformNews: React.FC = () => {
             }
             // 其他消息
             return (
-              <ItemFlex key={item.id}>
+              <ItemFlex key={item?.id}>
                 <Img
                   src={`/images/commons/messageIcon/${GetTitleImg(
                     item?.messageType,
@@ -557,8 +558,10 @@ const PlatformNews: React.FC = () => {
                           </Button>
                         )}
                       </Flex>
-                      {item.messageType === 0 && <Text>{msgContent}</Text>}
-                      {item.messageType === 1 && (
+                      {item?.messageType === 0 && (
+                        <Text>{item?.msgContent}</Text>
+                      )}
+                      {item?.messageType === 1 && (
                         <Text>
                           {getHTML('InboxTypeDesc1', {
                             galaxy: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.galaxy_name}</span>`,
@@ -566,7 +569,7 @@ const PlatformNews: React.FC = () => {
                           })}
                         </Text>
                       )}
-                      {item.messageType === 2 && (
+                      {item?.messageType === 2 && (
                         <>
                           <Text>
                             {getHTML('InboxTypeDesc2', {
@@ -598,7 +601,7 @@ const PlatformNews: React.FC = () => {
                           </Flex>
                         </>
                       )}
-                      {item.messageType === 3 && (
+                      {item?.messageType === 3 && (
                         <Text>
                           {getHTML('InboxTypeDesc3', {
                             time: dayjs(msgContent?.timestamp * 1000).format(
@@ -613,7 +616,7 @@ const PlatformNews: React.FC = () => {
                           </span>
                         </Text>
                       )}
-                      {item.messageType === 4 && (
+                      {item?.messageType === 4 && (
                         <Text>
                           <Flex alignItems='center' flexWrap='wrap'>
                             {getHTML('InboxTypeDesc4', {
@@ -641,7 +644,7 @@ const PlatformNews: React.FC = () => {
                         </Text>
                       )}
                     </Box>
-                    {(item.messageType === 4 || item.messageType === 2) && (
+                    {(item?.messageType === 4 || item?.messageType === 2) && (
                       <Flex alignItems='center'>
                         <Button
                           variant='purple'

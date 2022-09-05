@@ -34,7 +34,7 @@ export interface ExplorationMsg {
   work_report: Work_reportView[];
 }
 
-export interface msgContent {
+export interface msgContentList {
   addTime: number;
   address: string;
   id: number;
@@ -51,7 +51,7 @@ export interface msgContent {
 
 export interface MessageListType {
   count: number;
-  list: msgContent[];
+  list: msgContentList[];
 }
 
 export interface GalaxyMsg extends ExplorationMsg {
@@ -72,7 +72,7 @@ export interface GalaxyMsg extends ExplorationMsg {
 
 export const useFetchMessageList = () => {
   const { account } = useWeb3React();
-  const [list, setList] = useState<msgContent[]>([]);
+  const [list, setList] = useState<msgContentList[]>([]);
   const [page, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [end, setEnd] = useState(false);
@@ -91,7 +91,6 @@ export const useFetchMessageList = () => {
         if (page * pageSize >= res?.data?.count) {
           setEnd(true);
         }
-        console.log(nowList);
 
         setList(nowList);
       }
