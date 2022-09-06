@@ -497,6 +497,13 @@ const Grow: React.FC = () => {
                 {t('Confirm Cultivating')}
               </Button>
             </Flex>
+            {estimateCost?.consume_bnb > BNBBlance && (
+              <Flex pt='20px' justifyContent='center'>
+                <Text fontSize='18px' color='#ec3838'>
+                  {t('Please go to recharge')}
+                </Text>
+              </Flex>
+            )}
           </Flex>
         </Box>
       </ModalWrapper>

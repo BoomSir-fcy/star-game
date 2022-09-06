@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { useDispatch } from 'react-redux';
@@ -17,6 +17,7 @@ const Container = styled(GraphicsCard)`
   border: 0;
   border-top: 2px solid #4ffffb;
   flex: 1;
+  height: max-content;
 `;
 const Content = styled(Box)`
   position: relative;
@@ -70,6 +71,24 @@ export const BuildingUpgrade: React.FC<{
     },
     [balanceList],
   );
+
+  const ShowWarText = useMemo(() => {
+    return (
+      planetAssets?.energy <
+        (currnet_building?.upgrade_need?.upgrade_energy ||
+          currnet_building?.upgrade_need?.upgrade_energy) ||
+      planetAssets?.stone <
+        (currnet_building?.upgrade_need?.upgrade_stone ||
+          currnet_building?.upgrade_need?.upgrade_stone) ||
+      planetAssets?.population <
+        (currnet_building?.upgrade_need?.upgrade_population ||
+          currnet_building?.upgrade_need?.upgrade_population) ||
+      TokenBlance('BOX')?.amount <
+        (currnet_building?.upgrade_need?.upgrade_box ||
+          currnet_building?.upgrade_need?.upgrade_box) ||
+      currnet_building?.propterty?.levelEnergy + 1 > planet.level
+    );
+  }, [currnet_building, planetAssets, TokenBlance, planet]);
 
   return (
     <Container stripe>
@@ -221,7 +240,7 @@ export const BuildingUpgrade: React.FC<{
                       ml='2px'
                       small
                       color={`${
-                        planetAssets?.stone <
+                        TokenBlance('BOX')?.amount <
                         (currnet_building?.upgrade_need?.upgrade_box ||
                           currnet_building?.upgrade_need?.upgrade_box)
                           ? 'warning'
@@ -272,6 +291,15 @@ export const BuildingUpgrade: React.FC<{
           </>
         ) : (
           <></>
+        )}
+        {ShowWarText && (
+          <Flex pt='10px' justifyContent='center'>
+            <Text fontSize='16px' color='#ec3838'>
+              {t(
+                'Please go to the Storage Tank to recharge or upgrade the planet',
+              )}
+            </Text>
+          </Flex>
         )}
         {!currnet_building?.isPreview ? (
           <Flex justifyContent='center' mt='10px'>
