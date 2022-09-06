@@ -250,12 +250,19 @@ export const SideRightBuildingInfo: React.FC<{
                 alignItems='flex-start'
               >
                 <Flex flexDirection='column' ml='19px' flex={1}>
-                  <MarkText bold fontSize='18px' fontStyle='normal' mb='15px'>
-                    {t(
-                      getBuildings()?.name ||
-                        currentAttributes?.propterty?.name_cn,
-                    )}
-                  </MarkText>
+                  <Flex alignItems='flex-end' mb='15px'>
+                    <MarkText mr='20px' bold fontSize='18px' fontStyle='normal'>
+                      {t(
+                        getBuildings()?.name ||
+                          currentAttributes?.propterty?.name_cn,
+                      )}
+                    </MarkText>
+                    <Text>
+                      {t('Grid')} :&nbsp;
+                      {currentAttributes?.propterty?.size?.area_x}&nbsp;x&nbsp;
+                      {currentAttributes?.propterty?.size?.area_y}
+                    </Text>
+                  </Flex>
                   <Text color='textSubtle'>{t(getBuildings()?.desc)}</Text>
                 </Flex>
                 {!currentAttributes?.isqueue && (
