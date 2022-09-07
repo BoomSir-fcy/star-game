@@ -1,4 +1,10 @@
-import React, { useEffect, useCallback, useMemo, useState } from 'react';
+import React, {
+  useEffect,
+  useCallback,
+  useMemo,
+  useState,
+  useRef,
+} from 'react';
 import { Flex, Box, GraphicsCard, MarkText, Text, Button } from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
@@ -9,6 +15,7 @@ import { BuildRaceData } from 'config/buildConfig';
 import { raceData } from 'config/raceConfig';
 import { shortenAddress } from 'utils';
 import { Link } from 'react-router-dom';
+import { work_messageView } from 'state/types';
 
 const BgFlex = styled(Flex)`
   flex: 1;
@@ -22,52 +29,120 @@ const BgFlex = styled(Flex)`
 
 const SmText = styled(Text)`
   font-size: 14px;
+  & .addResource {
+    animation: addtext 1s linear;
+    @keyframes addtext {
+      0% {
+        font-size: 14px;
+      }
+      50% {
+        font-size: 28px;
+      }
+      100% {
+        font-size: 14px;
+      }
+    }
+  }
 `;
 
 const MsgList: React.FC = () => {
   const { t, getHTML } = useTranslation();
+  const timer = useRef<ReturnType<typeof setTimeout>>();
   const { work_message } = useStore(p => p.alliance.ExploreProgressDate);
   const [isDown, setIsDown] = useState(true);
+  const [MsgRenderList, setMsgRenderList] = useState<work_messageView[]>([]);
+  const [addDifftime, setaddDifftime] = useState(0);
+  const [diffLength, setdiffLength] = useState(0);
 
   const ScrollList = useCallback((e: any) => {
     const { clientHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
     if (clientHeight + scrollTop < scrollHeight - 100) {
-      console.log(123);
-
       setIsDown(false);
     } else {
       setIsDown(true);
-      console.log(321);
     }
   }, []);
 
   useEffect(() => {
+    if (work_message.length) {
+      if (MsgRenderList?.length === 0) {
+        // 初次渲染消息渲染所有列表
+        setMsgRenderList(work_message);
+        return;
+      }
+      // 计算新列表更新了几条
+      const diff = work_message.length - MsgRenderList?.length;
+      console.log(diff);
+      if (diff > 0) {
+        setdiffLength(diff);
+      } else {
+        console.log('完了');
+
+        // 两个列表相等了 清空倒计时
+        if (timer.current) {
+          clearInterval(timer.current);
+        }
+        setdiffLength(0);
+        setaddDifftime(0);
+      }
+    }
+  }, [work_message, MsgRenderList]);
+
+  useEffect(() => {
+    // 计算每条消息的间隔时间
+    if (addDifftime === 0 && diffLength > 0) {
+      setaddDifftime(50 / (diffLength + 1));
+    }
+  }, [addDifftime, diffLength]);
+
+  useEffect(() => {
+    if (work_message?.length && diffLength > 0) {
+      if (timer.current) {
+        clearInterval(timer.current);
+      }
+      console.log(addDifftime * 1000, diffLength);
+
+      timer.current = setInterval(() => {
+        setMsgRenderList(p => [
+          ...p,
+          work_message[work_message.length - diffLength],
+        ]);
+      }, addDifftime * 1000);
+    }
+    return () => {
+      if (timer.current) {
+        clearInterval(timer.current);
+      }
+    };
+  }, [diffLength, work_message, addDifftime]);
+
+  useEffect(() => {
     const workMessageListDom = document.getElementById('workMessageList');
-    if (workMessageListDom && work_message.length) {
+    if (workMessageListDom && MsgRenderList.length) {
       // 更新数据时 当前滚动条在顶部 才置底
       if (isDown) {
         workMessageListDom.scrollTop = workMessageListDom.scrollHeight;
       }
     }
-  }, [work_message, isDown]);
+  }, [MsgRenderList, isDown]);
 
   return (
     <BgFlex onScroll={ScrollList} id='workMessageList' ml='20px'>
-      {(work_message || []).map(i => (
+      {(MsgRenderList || []).map((i, msgIndex) => (
         <Flex
           key={`${i?.time_stamp}_${i?.planet_id}_${i?.arms?.race}_${i?.arms?.arm_product?.index}`}
           mb='16px'
           alignItems='flex-start'
         >
-          <Flex alignItems='center' width='25%'>
-            <SmText color='textSubtle' mr='30px'>
+          <Flex alignItems='center' width='28%'>
+            <SmText width='60%' color='textSubtle'>
               {dayjs(i?.time_stamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </SmText>
-            <SmText width='100px' mr='10px'>
+            <SmText width='40%' mr='10px'>
               Token {i?.planet_id}
             </SmText>
           </Flex>
-          <SmText width='75%'>
+          <SmText width='72%'>
             {/* 生产 */}
             {i.type === 1 && (
               <Flex alignItems='center' flexWrap='wrap'>
@@ -80,27 +155,48 @@ const MsgList: React.FC = () => {
                       {t('ExploreMsgDesc1')}
                       {i.product_stone > 0 && ` [${t('Ore')}] `}
                       {i.product_stone > 0 && (
-                        <SmText color='#10BA2C'>
+                        <SmText
+                          color='#10BA2C'
+                          className={
+                            msgIndex === MsgRenderList.length - 1
+                              ? 'addResource'
+                              : ''
+                          }
+                        >
                           + {SubString_1(i.product_stone, 3)}
                         </SmText>
                       )}
                       {i.product_energy > 0 && ` [${t('Energy')}] `}
                       {i.product_energy > 0 && (
-                        <SmText color='#10BA2C'>
+                        <SmText
+                          color='#10BA2C'
+                          className={
+                            msgIndex === MsgRenderList.length - 1
+                              ? 'addResource'
+                              : ''
+                          }
+                        >
                           + {SubString_1(i.product_energy, 3)}
                         </SmText>
                       )}
                       {i.product_spices > 0 && ` [${t('Population')}] `}
                       {i.product_spices > 0 && (
-                        <SmText color='#10BA2C'>
+                        <SmText
+                          color='#10BA2C'
+                          className={
+                            msgIndex === MsgRenderList.length - 1
+                              ? 'addResource'
+                              : ''
+                          }
+                        >
                           + {SubString_1(i.product_spices, 3)}
                         </SmText>
                       )}
+                      &nbsp; &nbsp;
                     </>
                   )}
                 </>
                 {/* 消耗 */}
-                &nbsp; &nbsp;
                 <>
                   {(i.product_stone < 0 ||
                     i.product_energy < 0 ||

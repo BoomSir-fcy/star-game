@@ -36,6 +36,7 @@ export const useFetchExploreProgressView = () => {
   const fetch = useCallback(() => {
     if (account) {
       dispatch(fetchExploreProgressAsync());
+      dispatch(fetchAllianceViewAsync());
     }
   }, [account, dispatch]);
 

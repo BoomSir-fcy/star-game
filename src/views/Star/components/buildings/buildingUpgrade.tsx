@@ -292,7 +292,7 @@ export const BuildingUpgrade: React.FC<{
         ) : (
           <></>
         )}
-        {ShowWarText && (
+        {ShowWarText && !currnet_building?.isPreview && (
           <Flex pt='10px' justifyContent='center'>
             <Text fontSize='16px' color='#ec3838'>
               {t(
