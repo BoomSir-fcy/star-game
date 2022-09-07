@@ -335,7 +335,7 @@ const Alliance: React.FC<{
             <Text textAlign='center' fontSize='28px'>
               {t('StopWorkWarn')}
             </Text>
-            <Flex justifyContent='space-around' mt='120px'>
+            <Flex justifyContent='space-around' mt='80px'>
               <Button
                 width='200px'
                 variant='purple'
