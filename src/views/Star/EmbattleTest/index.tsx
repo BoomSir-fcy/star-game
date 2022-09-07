@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Text, Flex } from 'uikit';
+import { Box, Button, Text, Flex, Input } from 'uikit';
 import { Api } from 'apis';
 import { isAppAndVerticalScreen } from 'utils/detectOrient';
 import {
@@ -159,6 +159,8 @@ const Embattle = () => {
     }
   }, [activeSoldier, game]);
 
+  const [roundAmount, setRoundAmount] = useState('');
+
   return (
     <Box position='relative' width='100%'>
       <Box ref={ref} />
@@ -192,7 +194,7 @@ const Embattle = () => {
         top='490px'
         left='0'
       >
-        <Flex alignItems='center' position='absolute' top='-80px'>
+        <Flex width='100%' alignItems='center' position='absolute' top='-80px'>
           <Button onClick={() => game.clearSoldier()} padding={0} width='50px'>
             <Text fontSize='20px'>清空</Text>
           </Button>
@@ -220,17 +222,27 @@ const Embattle = () => {
           <Button
             padding={0}
             width='50px'
-            onClick={() => setSimulation(gameSoldiers)}
+            onClick={() => setSimulation(gameSoldiers, roundAmount)}
           >
             <Text fontSize='20px'>动画模拟</Text>
           </Button>
-          <Select
+          <Input
+            width='400px'
+            value={roundAmount}
+            onChange={event => {
+              const _input = event.target.value;
+              const withoutSpaces = _input.replace(/[^0-9]/g, '');
+              setRoundAmount(withoutSpaces);
+            }}
+            placeholder='请输入回合数 默认3回合'
+          />
+          {/* <Select
             options={terrainSelect}
             defaultId={0}
             onChange={option => {
               setActiveTerrain(option);
             }}
-          />
+          /> */}
         </Flex>
         <PreviewList
           unitMaps={unitMaps}

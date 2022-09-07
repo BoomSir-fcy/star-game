@@ -163,6 +163,7 @@ declare namespace Api {
       from: ParamsUnit[];
       to: ParamsUnit[];
       race: number;
+      round?: number;
     }
   }
 }
