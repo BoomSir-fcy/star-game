@@ -72,12 +72,9 @@ const MsgList: React.FC = () => {
       }
       // 计算新列表更新了几条
       const diff = work_message.length - MsgRenderList?.length;
-      console.log(diff);
       if (diff > 0) {
         setdiffLength(diff);
       } else {
-        console.log('完了');
-
         // 两个列表相等了 清空倒计时
         if (timer.current) {
           clearInterval(timer.current);
@@ -100,7 +97,6 @@ const MsgList: React.FC = () => {
       if (timer.current) {
         clearInterval(timer.current);
       }
-      console.log(addDifftime * 1000, diffLength);
 
       timer.current = setInterval(() => {
         setMsgRenderList(p => [
