@@ -146,6 +146,12 @@ const MsgList: React.FC<{
     }
   }, [MsgRenderList, isDown]);
 
+  // 页面只渲染50条数据
+  const renderListLimit = React.useMemo(() => {
+    if (MsgRenderList) return MsgRenderList.slice(-50);
+    return [];
+  }, [MsgRenderList]);
+
   return (
     <BgFlex concise={concise} ml={concise ? '' : '20px'}>
       {!concise ? (
@@ -195,7 +201,7 @@ const MsgList: React.FC<{
         </TitleGrid>
       )}
       <ScrollBox onScroll={ScrollList} id='workMessageList'>
-        {(MsgRenderList || []).map((i, msgIndex) => (
+        {(renderListLimit || []).map((i, msgIndex) => (
           <TitleGrid
             concise={concise}
             key={`${i?.time_stamp}_${i?.planet_id}_${i?.arms?.race}_${i?.arms?.arm_product?.index}`}
@@ -289,7 +295,9 @@ const MsgList: React.FC<{
               </SmText>
             )}
             <SmText>
-              {i?.arms?.total_count > 0 ? `+ ${i?.arms?.total_count}` : ''}
+              {i?.arms?.arm_product.count > 0
+                ? `+ ${i?.arms?.arm_product.count}`
+                : ''}
             </SmText>
             {!concise && (
               <>
