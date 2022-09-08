@@ -419,13 +419,13 @@ export const raceData = {
         thumb1: '/assets/modal/2/25-1.png',
         thumb2: '/assets/modal/2/25-2.png',
       },
-      // {
-      //   id: 26,
-      //   name: "Explorer",
-      //   desc: "Can easily overcome obstacles and attack enemy units.",
-      //   thumb1: "/assets/modal/2/26-1.png",
-      //   thumb2: "/assets/modal/2/26-2.png",
-      // },
+      {
+        id: 26,
+        name: 'Red Spider',
+        desc: 'Ultra-mobility combat machine, they can quickly approach the enemy and cause confusion, but their damage power is extremely low.',
+        thumb1: '/assets/modal/2/26-1.png',
+        thumb2: '/assets/modal/2/26-2.png',
+      },
       {
         id: 27,
         name: 'Victor',
