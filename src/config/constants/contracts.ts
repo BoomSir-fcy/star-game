@@ -1,4 +1,4 @@
-import isApp2 from 'config/AppDevelopment';
+import isApp2, { IS_PUBLIC_BETA } from 'config/AppDevelopment';
 import { ChainId } from '../wallet/config';
 
 const contracts = {
@@ -134,5 +134,71 @@ const contracts2 = {
     [ChainId.BSC_TESTNET]: '0xb9FE7C70a405037C730e31727231623Ab351a0D5',
   },
 };
+const contractsBeta = {
+  test: {
+    [ChainId.BSC_MAINNET]: '0x675e77aeb7F50CAbCE65B9d7114aeB402557679f',
+    [ChainId.BSC_TESTNET]: '0x675e77aeb7F50CAbCE65B9d7114aeB402557679f',
+  },
+  multiCall: {
+    [ChainId.BSC_MAINNET]: '0xfF6FD90A470Aaa0c1B8A54681746b07AcdFedc9B',
+    [ChainId.BSC_TESTNET]: '0x8F3273Fb89B075b1645095ABaC6ed17B2d4Bc576',
+  },
+  WBNB: {
+    [ChainId.BSC_MAINNET]: '0xfF6FD90A470Aaa0c1B8A54681746b07AcdFedc9B',
+    [ChainId.BSC_TESTNET]: '0x8F3273Fb89B075b1645095ABaC6ed17B2d4Bc576',
+  },
+  DsgToken: {
+    [ChainId.BSC_MAINNET]: '0x9A78649501BbAAC285Ea4187299471B7ad4ABD35',
+    [ChainId.BSC_TESTNET]: '0xf8e8c2e77c47B9da858477341a649823f500c295',
+  },
+  TimeToken: {
+    [ChainId.BSC_MAINNET]: '0xc7184a87D9443A52F6E578E3C0A611468536487f',
+    [ChainId.BSC_TESTNET]: '0xd3a03c02e3DFf87a1C42eb33705440471E4F0d63',
+  },
+  MatterToken: {
+    [ChainId.BSC_MAINNET]: '0x6Da59176FBc92f227853E17202B62D79B82f6a40',
+    [ChainId.BSC_TESTNET]: '0xAd47428ed49926D5769DaCCdA27C03F1A47cEf91',
+  },
+  UserAgent: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0xee27a4e0216acece9abb376a595a39ee9efaabd8',
+  },
+  MysteryBox: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0x7597c690e0782f90b12d6310d0acf05233cd82d2',
+  },
+  Galaxy: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0x8e1e268185cf840d9829bd39cce8b3691f44d372',
+  },
+  Planet: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0xd06108956f3ebd1ba395808a3c6fc304f0911d0a',
+  },
+  UserVault: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0x7428b7e7c8089d7c92e1f2146df7663b9a9b2dc7',
+  },
+  BoxToken: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0x84a253841bdecc75a0cdf3378c507a38a2b88e2a',
+  },
+  EnergyToken: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0xb683ed223765f2a2c668535fe31d23020e66155c',
+  },
+  SpiceToken: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0x3fe8f999425c3d3655b79d915ab0de6869143afd',
+  },
+  OreToken: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0x0ae0e86465483d2908519d0563d40dd429f66e1d',
+  },
+  GetCoinTest: {
+    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_TESTNET]: '0xb9FE7C70a405037C730e31727231623Ab351a0D5',
+  },
+};
 
-export default isApp2 ? contracts2 : contracts;
+export default IS_PUBLIC_BETA ? contractsBeta : isApp2 ? contracts2 : contracts;

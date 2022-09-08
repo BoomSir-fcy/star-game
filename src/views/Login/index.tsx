@@ -319,7 +319,7 @@ const Login = () => {
           }}
         />
       )}
-      <Button onClick={onHandleGetTestCoins}>领取测试币</Button>
+      {/* <Button onClick={onHandleGetTestCoins}>领取测试币</Button> */}
 
       <Flex
         height='100%'
