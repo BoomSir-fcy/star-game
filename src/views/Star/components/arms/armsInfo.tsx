@@ -172,7 +172,7 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
 
   const getArms = React.useCallback(() => {
     const arms = raceData[game_base_unit?.race]?.children?.find(
-      ({ id }) => id === Number(game_base_unit?.index),
+      ({ id }) => String(id) === game_base_unit?.index,
     );
     return arms;
   }, [game_base_unit]);

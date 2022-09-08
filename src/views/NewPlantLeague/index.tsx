@@ -22,6 +22,7 @@ import ExploreModule from './components/Module/ExploreModule';
 import ManageModule from './components/Module/ManageModule';
 import { PlanetLeague, ToFind } from './components/AlliancePlanetStyle';
 import Formation from './components/Module/Formation';
+import SmallWorkMsg from './components/Module/SmallWorkMsg';
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -62,9 +63,10 @@ const NewPlantLeague: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { unread_plunder_count, order } = useStore(
+  const { unread_plunder_count, order, alliance } = useStore(
     p => p.alliance.allianceView,
   );
+  const { working } = alliance;
   const { DifficultyToExplore } = useStore(p => p.alliance);
   const { guides, setGuide } = useGuide(location.pathname);
 
@@ -75,6 +77,8 @@ const NewPlantLeague: React.FC = () => {
   const [ChoosePlant, setChoosePlant] = useState<orderInfo>();
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const [activeStep, setActiveStep] = useState(guides.step);
+  const [ShowMsgModule, setShowMsgModule] = useState(false);
+
   const guideRef = React.useRef(null);
 
   const ToAddClick = (className: string) => {
@@ -211,6 +215,10 @@ const NewPlantLeague: React.FC = () => {
     }
   }, [FormationModule, dispatch]);
 
+  useEffect(() => {
+    setShowMsgModule(Boolean(working));
+  }, [working]);
+
   return (
     <Layout height='940px' className='leagueOutBox'>
       {Booting && (
@@ -325,6 +333,7 @@ const NewPlantLeague: React.FC = () => {
         <ManageModule
           PlantManageModule={PlantManageModule}
           ChoosePlant={ChoosePlant}
+          setPlantManageModule={setPlantManageModule}
         />
         {(FormationModule || ShowModule) && (
           <Formation
@@ -332,6 +341,9 @@ const NewPlantLeague: React.FC = () => {
             FormationModule={FormationModule}
             setFormation={e => setFormation(e)}
           />
+        )}
+        {working !== 0 && ShowMsgModule && !PlantManageModule && (
+          <SmallWorkMsg ShowMsgModule={ShowMsgModule} />
         )}
       </Box>
     </Layout>
