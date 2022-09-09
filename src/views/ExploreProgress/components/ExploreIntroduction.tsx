@@ -5,9 +5,9 @@ import { useTranslation } from 'contexts/Localization';
 
 const BgBox = styled(GraphicsCard)`
   width: 600px;
-  height: 243px;
+  height: 300px;
   padding: 16px 30px;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 `;
 
 const SmText = styled(Text)`

@@ -11,7 +11,7 @@ import { getPlanetRarity } from 'utils/planetRarity';
 
 const OutBox = styled(Box)`
   width: 680px;
-  height: 350px;
+  height: 370px;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
 `;
@@ -23,8 +23,9 @@ const StarImg = styled.img`
 
 const ManageModule: React.FC<{
   PlantManageModule: boolean;
+  setPlantManageModule: (e) => void;
   ChoosePlant: orderInfo;
-}> = ({ PlantManageModule, ChoosePlant = {} }) => {
+}> = ({ PlantManageModule, ChoosePlant = {}, setPlantManageModule }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -63,10 +64,25 @@ const ManageModule: React.FC<{
     >
       <OutBox padding='26px'>
         <Flex
+          justifyContent='flex-end'
+          width={32}
+          height={32}
+          right={10}
+          top={10}
+          position='absolute'
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            setPlantManageModule(false);
+          }}
+        >
+          <Image width={32} height={32} src='/images/commons/icon/guanbi.png' />
+        </Flex>
+        <Flex
           mb='20px'
           height='77%'
           justifyContent='space-between'
           alignItems='center'
+          pt='20px'
         >
           <Flex
             height='100%'

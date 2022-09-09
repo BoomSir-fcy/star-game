@@ -5,7 +5,16 @@ import React, {
   useState,
   useRef,
 } from 'react';
-import { Flex, Box, GraphicsCard, MarkText, Text, Button } from 'uikit';
+import {
+  Flex,
+  Box,
+  GraphicsCard,
+  MarkText,
+  Text,
+  Grid,
+  Button,
+  Image,
+} from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'state';
@@ -17,14 +26,27 @@ import { shortenAddress } from 'utils';
 import { Link } from 'react-router-dom';
 import { work_messageView } from 'state/types';
 
-const BgFlex = styled(Flex)`
-  flex: 1;
-  height: 243px;
-  padding: 16px 30px;
-  background: #57575785;
+const BgFlex = styled(Flex)<{ concise: boolean }>`
+  height: 300px;
+  background: ${({ concise }) => (concise ? '#000' : '#57575785')};
   border: 1px solid #373c45;
+  flex: 1;
+  flex-direction: column;
+`;
+
+const ScrollBox = styled(Flex)`
+  flex: 1;
+  height: calc(100% - 80px);
   flex-direction: column;
   overflow-y: auto;
+  padding: 14px 0 14px 24px;
+`;
+
+const TitleGrid = styled(Box)<{ concise: boolean }>`
+  display: grid;
+  grid-template-columns: ${({ concise }) =>
+    concise ? '25% 15% 14% 14% 14% 18%' : '15% 10% 8% 8% 8% 10% auto'};
+  align-items: center;
 `;
 
 const SmText = styled(Text)`
@@ -45,7 +67,9 @@ const SmText = styled(Text)`
   }
 `;
 
-const MsgList: React.FC = () => {
+const MsgList: React.FC<{
+  concise?: boolean;
+}> = ({ concise }) => {
   const { t, getHTML } = useTranslation();
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const { work_message } = useStore(p => p.alliance.ExploreProgressDate);
@@ -64,14 +88,14 @@ const MsgList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (work_message.length) {
+    if (work_message?.length) {
       if (MsgRenderList?.length === 0) {
         // 初次渲染消息渲染所有列表
         setMsgRenderList(work_message);
         return;
       }
       // 计算新列表更新了几条
-      const diff = work_message.length - MsgRenderList?.length;
+      const diff = work_message?.length - MsgRenderList?.length;
       if (diff > 0) {
         setdiffLength(diff);
       } else {
@@ -101,7 +125,7 @@ const MsgList: React.FC = () => {
       timer.current = setInterval(() => {
         setMsgRenderList(p => [
           ...p,
-          work_message[work_message.length - diffLength],
+          work_message[work_message?.length - diffLength],
         ]);
       }, addDifftime * 1000);
     }
@@ -122,155 +146,222 @@ const MsgList: React.FC = () => {
     }
   }, [MsgRenderList, isDown]);
 
+  // 页面只渲染50条数据
+  const renderListLimit = React.useMemo(() => {
+    if (MsgRenderList) return MsgRenderList.slice(-50);
+    return [];
+  }, [MsgRenderList]);
+
   return (
-    <BgFlex onScroll={ScrollList} id='workMessageList' ml='20px'>
-      {(MsgRenderList || []).map((i, msgIndex) => (
-        <Flex
-          key={`${i?.time_stamp}_${i?.planet_id}_${i?.arms?.race}_${i?.arms?.arm_product?.index}`}
-          mb='16px'
-          alignItems='flex-start'
-        >
-          <Flex alignItems='center' width='28%'>
-            <SmText width='60%' color='textSubtle'>
+    <BgFlex concise={concise} ml={concise ? '' : '20px'}>
+      {!concise ? (
+        <GraphicsCard height='max-content' width='100%' padding='0' stripe>
+          <TitleGrid concise={concise} padding='10px 0 10px 24px'>
+            <SmText>{t('Time')}</SmText>
+            <SmText>{t('Planet')}</SmText>
+            <Image
+              width={32}
+              height={32}
+              src='/images/commons/icon/icon_minera.png'
+            />
+            <Image
+              width={32}
+              height={32}
+              src='/images/commons/icon/icon_energy.png'
+            />
+            <Image
+              width={32}
+              height={32}
+              src='/images/commons/icon/icon_spice.png'
+            />
+            <SmText>{t('InboxTypeDesc7-6')}</SmText>
+            <SmText>{t('Details')}</SmText>
+          </TitleGrid>
+        </GraphicsCard>
+      ) : (
+        <TitleGrid concise={concise} padding='14px 8px 14px 24px'>
+          <SmText>{t('Time')}</SmText>
+          <SmText>{t('Planet')}</SmText>
+          <Image
+            width={32}
+            height={32}
+            src='/images/commons/icon/icon_minera.png'
+          />
+          <Image
+            width={32}
+            height={32}
+            src='/images/commons/icon/icon_energy.png'
+          />
+          <Image
+            width={32}
+            height={32}
+            src='/images/commons/icon/icon_spice.png'
+          />
+          <SmText>{t('InboxTypeDesc7-6')}</SmText>
+        </TitleGrid>
+      )}
+      <ScrollBox onScroll={ScrollList} id='workMessageList'>
+        {(renderListLimit || []).map((i, msgIndex) => (
+          <TitleGrid
+            concise={concise}
+            key={`${i?.time_stamp}_${i?.planet_id}_${i?.arms?.race}_${i?.arms?.arm_product?.index}`}
+            mb='16px'
+          >
+            <SmText color='textSubtle'>
               {dayjs(i?.time_stamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </SmText>
-            <SmText width='40%' mr='10px'>
-              Token {i?.planet_id}
+            <SmText>Token {i?.planet_id || ''}</SmText>
+            {i.type === 3 ? (
+              <SmText
+                ellipsis
+                color={i?.plunder_info?.stone > 0 ? '#10BA2C' : '#E75652'}
+                className={
+                  i?.plunder_info?.stone > 0 &&
+                  msgIndex === MsgRenderList.length - 1
+                    ? 'addResource'
+                    : ''
+                }
+              >
+                {i?.plunder_info?.stone > 0 && '+'}{' '}
+                {i?.plunder_info?.stone !== 0
+                  ? SubString_1(i?.plunder_info?.stone, 3)
+                  : ''}
+              </SmText>
+            ) : (
+              <SmText
+                color={i.product_stone > 0 ? '#10BA2C' : '#E75652'}
+                className={
+                  i.product_stone > 0 && msgIndex === MsgRenderList.length - 1
+                    ? 'addResource'
+                    : ''
+                }
+              >
+                {i.product_stone > 0 && '+'}{' '}
+                {i.product_stone !== 0 ? SubString_1(i.product_stone, 3) : ''}
+              </SmText>
+            )}
+            {i.type === 3 ? (
+              <SmText
+                ellipsis
+                color={i?.plunder_info?.energy > 0 ? '#10BA2C' : '#E75652'}
+                className={
+                  i?.plunder_info?.energy > 0 &&
+                  msgIndex === MsgRenderList.length - 1
+                    ? 'addResource'
+                    : ''
+                }
+              >
+                {i?.plunder_info?.energy > 0 && '+'}{' '}
+                {i?.plunder_info?.energy !== 0
+                  ? SubString_1(i?.plunder_info?.energy, 3)
+                  : ''}
+              </SmText>
+            ) : (
+              <SmText
+                color={i.product_energy > 0 ? '#10BA2C' : '#E75652'}
+                className={
+                  msgIndex === MsgRenderList.length - 1 ? 'addResource' : ''
+                }
+              >
+                {i.product_energy > 0 && '+'}{' '}
+                {i.product_energy !== 0 ? SubString_1(i.product_energy, 3) : ''}
+              </SmText>
+            )}
+            {i.type === 3 ? (
+              <SmText
+                ellipsis
+                color={i?.plunder_info?.spices > 0 ? '#10BA2C' : '#E75652'}
+                className={
+                  i?.plunder_info?.spices > 0 &&
+                  msgIndex === MsgRenderList.length - 1
+                    ? 'addResource'
+                    : ''
+                }
+              >
+                {i?.plunder_info?.spices > 0 && '+'}{' '}
+                {i?.plunder_info?.spices !== 0
+                  ? SubString_1(i?.plunder_info?.spices, 3)
+                  : ''}
+              </SmText>
+            ) : (
+              <SmText
+                color={i.product_spices > 0 ? '#10BA2C' : '#E75652'}
+                className={
+                  msgIndex === MsgRenderList.length - 1 ? 'addResource' : ''
+                }
+              >
+                {i.product_spices > 0 && '+'}{' '}
+                {i.product_spices !== 0 ? SubString_1(i.product_spices, 3) : ''}
+              </SmText>
+            )}
+            <SmText>
+              {i?.arms?.arm_product.count > 0
+                ? `+ ${i?.arms?.arm_product.count}`
+                : ''}
             </SmText>
-          </Flex>
-          <SmText width='72%'>
-            {/* 生产 */}
-            {i.type === 1 && (
-              <Flex alignItems='center' flexWrap='wrap'>
-                {/* 增加 */}
-                <>
-                  {(i.product_stone > 0 ||
-                    i.product_energy > 0 ||
-                    i.product_spices > 0) && (
-                    <>
-                      {t('ExploreMsgDesc1')}
-                      {i.product_stone > 0 && ` [${t('Ore')}] `}
-                      {i.product_stone > 0 && (
-                        <SmText
-                          color='#10BA2C'
-                          className={
-                            msgIndex === MsgRenderList.length - 1
-                              ? 'addResource'
-                              : ''
-                          }
-                        >
-                          + {SubString_1(i.product_stone, 3)}
-                        </SmText>
+            {!concise && (
+              <>
+                {i.type === 1 && (
+                  <SmText>
+                    {t('ExploreMsgDesc1')}&nbsp;or&nbsp;
+                    {t('ExploreMsgDesc2')}
+                  </SmText>
+                )}
+                {i.type === 2 && (
+                  <Flex alignItems='center' flexWrap='wrap'>
+                    <SmText mr='10px'>
+                      {t(
+                        BuildRaceData[i?.arms?.race][i?.arms?.arm_index]?.name,
                       )}
-                      {i.product_energy > 0 && ` [${t('Energy')}] `}
-                      {i.product_energy > 0 && (
-                        <SmText
-                          color='#10BA2C'
-                          className={
-                            msgIndex === MsgRenderList.length - 1
-                              ? 'addResource'
-                              : ''
-                          }
-                        >
-                          + {SubString_1(i.product_energy, 3)}
-                        </SmText>
+                    </SmText>
+                    <SmText mr='10px'>{t('ExploreMsgDesc3')}</SmText>
+                    <SmText color='#10BA2C'>
+                      {`[ ${t(
+                        raceData[i?.arms?.race]?.children.find(
+                          ({ id }) =>
+                            id === Number(i?.arms?.arm_product?.index),
+                        )?.name,
+                      )} ]`}
+                    </SmText>
+                  </Flex>
+                )}
+                {i.type === 3 && (
+                  <Box>
+                    <SmText mr='10px'>
+                      {t('ExploreMsgDesc4 %address%', {
+                        addr: shortenAddress(i?.plunder_info?.address),
+                      })}
+                    </SmText>
+                    <Flex alignItems='center' flexWrap='wrap'>
+                      <SmText
+                        mr='10px'
+                        color={i?.plunder_info?.success ? '#10BA2C' : '#E75652'}
+                      >
+                        {i?.plunder_info?.success
+                          ? t('ExploreMsgDesc5')
+                          : t('ExploreMsgDesc6')}
+                      </SmText>
+                      {!i?.plunder_info?.success && (
+                        <SmText>{t('ExploreMsgDesc8')}</SmText>
                       )}
-                      {i.product_spices > 0 && ` [${t('Population')}] `}
-                      {i.product_spices > 0 && (
-                        <SmText
-                          color='#10BA2C'
-                          className={
-                            msgIndex === MsgRenderList.length - 1
-                              ? 'addResource'
-                              : ''
-                          }
-                        >
-                          + {SubString_1(i.product_spices, 3)}
-                        </SmText>
-                      )}
-                      &nbsp; &nbsp;
-                    </>
-                  )}
-                </>
-                {/* 消耗 */}
-                <>
-                  {(i.product_stone < 0 ||
-                    i.product_energy < 0 ||
-                    i.product_spices < 0) && (
-                    <>
-                      {t('ExploreMsgDesc2')}
-                      {i.product_stone < 0 && ` [${t('Ore')}] `}
-                      {i.product_stone < 0 && (
-                        <SmText color='#E75652'>
-                          {SubString_1(i.product_stone, 3)}
-                        </SmText>
-                      )}
-                      {i.product_energy < 0 && ` [${t('Energy')}] `}
-                      {i.product_energy < 0 && (
-                        <SmText color='#E75652'>
-                          {SubString_1(i.product_energy, 3)}
-                        </SmText>
-                      )}
-                      {i.product_spices < 0 && ` [${t('Population')}] `}
-                      {i.product_spices < 0 && (
-                        <SmText color='#E75652'>
-                          {SubString_1(i.product_spices, 3)}
-                        </SmText>
-                      )}
-                    </>
-                  )}
-                </>
-              </Flex>
+                      <Button
+                        height='max-content'
+                        variant='text'
+                        as={Link}
+                        to={`/BattleReport?starTime=${
+                          i?.time_stamp - 86400
+                        }&endTime=${i?.time_stamp + 86400}`}
+                      >
+                        <SmText color='#1EB2FF'>{t('ExploreMsgDesc7')}</SmText>
+                      </Button>
+                    </Flex>
+                  </Box>
+                )}
+              </>
             )}
-            {i.type === 2 && (
-              <Flex alignItems='center' flexWrap='wrap'>
-                {t(BuildRaceData[i?.arms?.race][i?.arms?.arm_index]?.name)}
-                &nbsp;
-                {t('ExploreMsgDesc3')}
-                <SmText color='#10BA2C'>
-                  {` [ ${t(
-                    raceData[i?.arms?.race]?.children.find(
-                      ({ id }) => id === Number(i?.arms?.arm_product?.index),
-                    )?.name,
-                  )} ]`}
-                </SmText>
-              </Flex>
-            )}
-            {i.type === 3 && (
-              <Flex alignItems='center' flexWrap='wrap'>
-                {t('ExploreMsgDesc4 %address%', {
-                  addr: shortenAddress(i?.plunder_info?.address),
-                })}
-                &nbsp;
-                {i?.plunder_info?.success
-                  ? t('ExploreMsgDesc5')
-                  : t('ExploreMsgDesc6')}
-                <SmText
-                  color={i?.plunder_info?.success ? '#10BA2C' : '#E75551'}
-                >
-                  {`[ ${t('Ore')} ] x ${SubString_1(
-                    i?.plunder_info?.stone,
-                  )} , [ ${t('Energy')} ] x ${SubString_1(
-                    i?.plunder_info?.energy,
-                  )} , [ ${t('Population')} ] x ${SubString_1(
-                    i?.plunder_info?.spices,
-                  )}`}
-                </SmText>
-                <Button
-                  height='max-content'
-                  variant='text'
-                  as={Link}
-                  to={`/BattleReport?starTime=${
-                    i?.time_stamp - 86400
-                  }&endTime=${i?.time_stamp + 86400}`}
-                >
-                  <SmText color='#1EB2FF'>{t('ExploreMsgDesc7')}</SmText>
-                </Button>
-              </Flex>
-            )}
-          </SmText>
-        </Flex>
-      ))}
+          </TitleGrid>
+        ))}
+      </ScrollBox>
     </BgFlex>
   );
 };
