@@ -40,19 +40,8 @@ const ScrollBox = styled(Flex)`
   flex-direction: column;
   overflow-y: auto;
   padding: 14px 0 14px 24px;
-`;
-
-const TitleGrid = styled(Box)<{ concise: boolean }>`
-  display: grid;
-  grid-template-columns: ${({ concise }) =>
-    concise ? '25% 15% 14% 14% 14% 18%' : '15% 10% 8% 8% 8% 10% auto'};
-  align-items: center;
-`;
-
-const SmText = styled(Text)`
-  font-size: 14px;
   & .addResource {
-    animation: addtext 1s linear;
+    animation: addtext 1s linear 0.5s;
     @keyframes addtext {
       0% {
         font-size: 14px;
@@ -65,6 +54,17 @@ const SmText = styled(Text)`
       }
     }
   }
+`;
+
+const TitleGrid = styled(Box)<{ concise: boolean }>`
+  display: grid;
+  grid-template-columns: ${({ concise }) =>
+    concise ? '25% 15% 14% 14% 14% 18%' : '15% 10% 8% 8% 8% 10% auto'};
+  align-items: center;
+`;
+
+const SmText = styled(Text)`
+  font-size: 14px;
 `;
 
 const MsgList: React.FC<{
@@ -217,7 +217,7 @@ const MsgList: React.FC<{
                 color={i?.plunder_info?.stone > 0 ? '#10BA2C' : '#E75652'}
                 className={
                   i?.plunder_info?.stone > 0 &&
-                  msgIndex === MsgRenderList.length - 1
+                  msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
@@ -231,7 +231,7 @@ const MsgList: React.FC<{
               <SmText
                 color={i.product_stone > 0 ? '#10BA2C' : '#E75652'}
                 className={
-                  i.product_stone > 0 && msgIndex === MsgRenderList.length - 1
+                  i.product_stone > 0 && msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
@@ -246,7 +246,7 @@ const MsgList: React.FC<{
                 color={i?.plunder_info?.energy > 0 ? '#10BA2C' : '#E75652'}
                 className={
                   i?.plunder_info?.energy > 0 &&
-                  msgIndex === MsgRenderList.length - 1
+                  msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
@@ -260,7 +260,7 @@ const MsgList: React.FC<{
               <SmText
                 color={i.product_energy > 0 ? '#10BA2C' : '#E75652'}
                 className={
-                  msgIndex === MsgRenderList.length - 1 ? 'addResource' : ''
+                  msgIndex === renderListLimit.length - 1 ? 'addResource' : ''
                 }
               >
                 {i.product_energy > 0 && '+'}{' '}
@@ -273,7 +273,7 @@ const MsgList: React.FC<{
                 color={i?.plunder_info?.spices > 0 ? '#10BA2C' : '#E75652'}
                 className={
                   i?.plunder_info?.spices > 0 &&
-                  msgIndex === MsgRenderList.length - 1
+                  msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
@@ -287,7 +287,7 @@ const MsgList: React.FC<{
               <SmText
                 color={i.product_spices > 0 ? '#10BA2C' : '#E75652'}
                 className={
-                  msgIndex === MsgRenderList.length - 1 ? 'addResource' : ''
+                  msgIndex === renderListLimit.length - 1 ? 'addResource' : ''
                 }
               >
                 {i.product_spices > 0 && '+'}{' '}
