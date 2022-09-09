@@ -95,7 +95,7 @@ const Swap = () => {
                 swap: `<a style="color: ${theme.colors.textPrimary}" target="_blank" href='https://dsgmetaverse.com/#/swap'>DSG Swap</a>`,
               })}{' '}
             </Text>
-            <Text mt='8px'>3 {t('swap-tips3')} </Text>
+            {/* <Text mt='8px'>3 {t('swap-tips3')} </Text> */}
           </Text>
         </Box>
       </RightWarp>
