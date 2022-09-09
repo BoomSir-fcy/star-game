@@ -163,6 +163,7 @@ const effectConfig: EffectConfig = {
       bombSpineSrc: '/assets/bullet/chuantou1/chuantou.json',
       bombSpine: bulletType.THROUGH,
       moveSpine: bulletType.THROUGH,
+      flip: true,
       bombSpriteSrc: '',
       moveSpineSrc: '/assets/bullet/chuantou1/chuantou.json',
       moveSpriteSrc: '',
