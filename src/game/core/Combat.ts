@@ -476,10 +476,34 @@ class Combat extends EventTarget {
       this.onAttackEnd();
     });
 
-    if (
+    if (effect === descType.ADD_SHIELD) {
+      bullet.attack(bulletType[bulletTypeIndex.SHIELD], target);
+    } else if (effect === descType.BOOM) {
+      bullet.attack(bulletType[bulletTypeIndex.BOMB], target);
+    } else if (effect === descType.FIRING) {
+      bullet.attack(bulletType[bulletTypeIndex.FIRING], target);
+    } else if (effect === descType.REMOVE_FIRING) {
+      bullet.attack(bulletType[bulletTypeIndex.BULLET], target);
+    } else if (effect === descType.ICE_END) {
+      bullet.attack(bulletType[bulletTypeIndex.BULLET], target);
+    } else if (effect === descType.STOP_MOVE) {
+      bullet.attack(bulletType[bulletTypeIndex.STOP_MOVE], target);
+    } else if (effect === descType.REMOVE_STOP_MOVE) {
+      bullet.attack(bulletType[bulletTypeIndex.BULLET], target);
+    } else if (effect === descType.RESTORE) {
+      bullet.attack(bulletType[bulletTypeIndex.RESTORE], target);
+    } else if (effect === descType.PURIFY) {
+      bullet.attack(bulletType[bulletTypeIndex.PURIFY], target);
+    } else if (
+      effect === descType.REMOVE ||
+      (this === target && effect === descType.ATTACK)
+    ) {
+      // 阵亡 || 自伤 不做操作
+      bullet.attack(bulletType[bulletTypeIndex.BULLET], target);
+    } else if (
       effect === descType.ATTACK ||
-      descType.ATTACK_DODGE ||
-      descType.ATTACK_MISS
+      effect === descType.ATTACK_DODGE ||
+      effect === descType.ATTACK_MISS
     ) {
       bullet.attack(bulletType[this.attackType], target);
     } else {
