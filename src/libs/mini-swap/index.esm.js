@@ -34127,7 +34127,7 @@ var tokens$2 = [
 	{
 		name: "BOX",
 		symbol: "BOX",
-		address: "0x93C059bCD85ceEA3E70aB9d2225259876218f8Fb",
+		address: "0x84a253841bdecc75a0cdf3378c507a38a2b88e2a",
 		chainId: 97,
 		decimals: 18,
 		logoURI: "https://dsgmetaverse.com/images/tokens/BOX.png"
@@ -34135,7 +34135,7 @@ var tokens$2 = [
 	{
 		name: "Energy",
 		symbol: "ENERGY",
-		address: "0xf7562ba09a99635f1420df0652ec23aad2b8b718",
+		address: "0xb683ed223765f2a2c668535fe31d23020e66155c",
 		chainId: 97,
 		decimals: 18,
 		logoURI: "https://dsgmetaverse.com/images/tokens/ENERGY.png"
@@ -34143,7 +34143,7 @@ var tokens$2 = [
 	{
 		name: "Spices",
 		symbol: "SPICES",
-		address: "0xe0b773b980ec1de9d097b577124b35396aca532b",
+		address: "0x3fe8f999425c3d3655b79d915ab0de6869143afd",
 		chainId: 97,
 		decimals: 18,
 		logoURI: "https://dsgmetaverse.com/images/tokens/SPICES.png"
@@ -34151,7 +34151,7 @@ var tokens$2 = [
 	{
 		name: "Ore",
 		symbol: "ORE",
-		address: "0xcc1454d0e42c47e80baa532c08f81be3e136c6ea",
+		address: "0x0ae0e86465483d2908519d0563d40dd429f66e1d",
 		chainId: 97,
 		decimals: 18,
 		logoURI: "https://dsgmetaverse.com/images/tokens/ORE.png"
@@ -34672,45 +34672,45 @@ var tokens = {
         symbol: 'BOX',
         address: {
             56: '0x0F5F514CC37d51CcC9A5d183D6073298eDf9eEb8',
-            97: '0x93C059bCD85ceEA3E70aB9d2225259876218f8Fb',
+            97: '0x84a253841bdecc75a0cdf3378c507a38a2b88e2a',
             80001: '',
         },
         decimals: 18,
         projectLink: 'https://cryptogalaxybox.com/',
-        name: 'Crypto Galaxy Box Token'
+        name: 'Crypto Galaxy Box Token',
     },
     energy: {
         symbol: 'ENERGY',
         address: {
             56: '0x7F3fB4973CE7574E87062f4684f8865729B7b373',
-            97: '0xf7562ba09a99635f1420df0652ec23aad2b8b718',
+            97: '0xb683ed223765f2a2c668535fe31d23020e66155c',
             80001: '',
         },
         decimals: 18,
         projectLink: 'https://cryptogalaxybox.com/',
-        name: 'Crypto Galaxy Energy Token'
+        name: 'Crypto Galaxy Energy Token',
     },
     spices: {
         symbol: 'SPICES',
         address: {
             56: '0xF3a7F80e10F5d762Dddb19c4d81Af4522e260c6D',
-            97: '0xe0b773b980ec1de9d097b577124b35396aca532b',
+            97: '0x3fe8f999425c3d3655b79d915ab0de6869143afd',
             80001: '',
         },
         decimals: 18,
         projectLink: 'https://cryptogalaxybox.com/',
-        name: 'Crypto Galaxy Spice Token'
+        name: 'Crypto Galaxy Spice Token',
     },
     ore: {
         symbol: 'ORE',
         address: {
             56: '0x90dC747720396c540D0dfD0eA7350fa07c91ca8E',
-            97: '0xcc1454d0e42c47e80baa532c08f81be3e136c6ea',
+            97: '0x0ae0e86465483d2908519d0563d40dd429f66e1d',
             80001: '',
         },
         decimals: 18,
         projectLink: 'https://cryptogalaxybox.com/',
-        name: 'Crypto Galaxy Ore Token'
+        name: 'Crypto Galaxy Ore Token',
     },
 };
 var BOX = (_b$5 = {},
