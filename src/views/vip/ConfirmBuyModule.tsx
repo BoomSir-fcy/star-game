@@ -108,12 +108,7 @@ export const ConfirmBuyModule: React.FC<{
               buy();
             }}
           >
-            <Text
-              bold
-              fontSize='18px'
-              color='#4FFFFB'
-              textTransform='capitalize'
-            >
+            <Text bold fontSize='18px' color='#4FFFFB'>
               {pending ? (
                 <Dots>{Renewal ? t('Renewal') : t('Become VIP')}</Dots>
               ) : (

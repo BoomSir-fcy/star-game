@@ -362,14 +362,9 @@ const VipPage = () => {
                 disabled={user?.vipBenefits?.is_vip}
                 onClick={() => setvisible(true)}
               >
-                <Text
-                  bold
-                  fontSize='16px'
-                  color='#4FFFFB'
-                  textTransform='capitalize'
-                >
+                <Text bold fontSize='16px' color='#4FFFFB'>
                   {user?.vipBenefits?.is_vip
-                    ? t('you have become a VIP')
+                    ? t('You are now a VIP!')
                     : t('Become VIP')}
                 </Text>
               </Submit>

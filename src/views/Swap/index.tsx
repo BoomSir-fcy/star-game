@@ -76,7 +76,7 @@ const Swap = () => {
           <Text mt='8px'>
             2{' '}
             {getHTML('swap-tips2', {
-              link: `<a style="color: ${theme.colors.textPrimary}" target="_blank" href='https://crypto-galaxy-1.gitbook.io/crypto-galaxy/tokenomics/core-token-box'>https://crypto-galaxy-1.gitbook.io/crypto-galaxy/tokenomics/core-token-box</a>`,
+              link: `<a style="color: ${theme.colors.textPrimary}" target="_blank" href='https://crypto-galaxy-1.gitbook.io/crypto-galaxy/tokenomics/core-token-box'>Click here</a>`,
             })}
             {/* <Text
               color="primary"

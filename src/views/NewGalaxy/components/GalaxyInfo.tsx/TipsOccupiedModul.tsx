@@ -104,14 +104,18 @@ const TipsOccupiedModul: React.FC<{
   return (
     <Box width='100%' padding='100px 0'>
       <Text color='textPrimary' mb='40px' textAlign='center' fontSize='20px'>
-        {t('Challenge ticket %num%BOX', { num: info.cost_star })}
+        {t('Challenge Ticket %num%BOX', { num: info.cost_star })}
       </Text>
       <Flex
         padding='0 20px'
-        mb='120px'
         flexWrap='wrap'
-        justifyContent='space-around'
+        flexDirection='column'
+        width='70%'
+        margin='0 auto 50px'
       >
+        <Text mb='14px'>
+          {t('The proceeds of this ticket will be used in the following ways:')}
+        </Text>
         <SmText>
           {t('Give to the stellar master:')}
           &nbsp; &nbsp;

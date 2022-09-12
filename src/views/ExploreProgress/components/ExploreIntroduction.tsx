@@ -7,7 +7,7 @@ const BgBox = styled(GraphicsCard)`
   width: 600px;
   height: 300px;
   padding: 16px 30px;
-  /* overflow-y: auto; */
+  overflow-y: auto;
 `;
 
 const SmText = styled(Text)`
@@ -21,10 +21,10 @@ const ExploreIntroduction: React.FC = () => {
   return (
     <BgBox stripe>
       <Text mb='20px' fontSize='18px'>
-        {t('Commander')}
+        {t('Dear Commander')}
       </Text>
       <SmText mb='16px'>{t('ExploreDesc1')}</SmText>
-      <SmText>{t('ExploreDesc2')}</SmText>
+      <SmText mb='16px'>{t('ExploreDesc2')}</SmText>
       <SmText>{t('ExploreDesc3')}</SmText>
     </BgBox>
   );

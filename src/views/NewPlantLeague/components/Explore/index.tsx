@@ -118,7 +118,7 @@ const Explore: React.FC<{
       <TooltipTrigger
         zIndex={TooltipTriggerZIndex}
         overlay={
-          <Text fontSize={`${16 * scale}px`} color='textPrimary'>
+          <Text fontSize={`${16 * scale}px`} color='textTips'>
             {t('Earn Resources')}
           </Text>
         }

@@ -98,8 +98,9 @@ const GameFormation: React.FC<{
             race,
             id: item.base_unit_id,
             unique_id: item.base_unit_id,
-            unitInfo: { ...item?.base_unit, hp: 0 },
+            unitInfo: { ...item?.base_unit },
             activeCountText: UseSoldierNum(item?.base_unit),
+            noHp: true,
           },
           false,
         );

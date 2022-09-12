@@ -189,7 +189,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
           {detail.descInfo?.receives.map((item, index) => {
             return (
               <PanelText key={`${item.pos.x}_${item.pos.y}`}>
-                对&nbsp;
+                向&nbsp;
                 <PanelSide isEnemy={item.isEnemy} />
                 {/* <PanelAxis axis={item.pos} /> */}
                 <PanelName soldier={item?.soldier} />
@@ -568,7 +568,7 @@ const PlunderPanelNew: React.FC<PlunderPanelProps> = ({
                           ,{' '}
                           {item.success ? <PanelSide /> : <PanelSide isEnemy />}
                         </PanelText>
-                        <PanelText>胜利</PanelText>
+                        <PanelText>{t('Victory')}</PanelText>
                       </>
                     )}
                   </PanelText>

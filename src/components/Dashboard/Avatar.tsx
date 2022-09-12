@@ -74,12 +74,12 @@ const Avatar = () => {
         <ButtonStyled
           onClick={() => {
             setPopType(2);
-            setPopTitle(t('Invite to earn'));
+            setPopTitle(t('Invite to Earn'));
             setVisible(true);
           }}
         >
           <Text small bold>
-            {t('Invite to earn')}
+            {t('Invite to Earn')}
           </Text>
         </ButtonStyled>
       </Box>

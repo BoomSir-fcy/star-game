@@ -30,6 +30,7 @@ export interface AttrSoldierOptions extends CombatOptions {
   enableDrag?: boolean;
   test?: boolean;
   activeCountText?: string;
+  noHp?: boolean;
 }
 export interface SoldierOptions extends AttrSoldierOptions {
   x: number;
@@ -86,6 +87,7 @@ class Soldier extends Combat {
       zIndex = 0,
       unitInfo,
       activeCountText,
+      noHp,
     } = options;
 
     this.options = {
@@ -126,7 +128,7 @@ class Soldier extends Combat {
     this.shield = shield;
     this.hp = hp || unitInfo?.hp;
     this.activePh = activePh || this.hp;
-    if (this.hp) {
+    if (this.hp && !noHp) {
       this.renderPh();
     }
 
