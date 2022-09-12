@@ -96,7 +96,7 @@ export const BuildRaceData = {
       type: 1,
     },
     '6': {
-      name: 'Prism Barracks',
+      name: 'Prism Barrack',
       desc: "Factories that produce various troop types: The higher the level, the more troop types you can unlock, and the higher the troops' level. Troop types are randomly produced, and different troops consume different time and resources. The storage capacity of each troop type is different. Insufficient resources will make you skip or stop production.",
       type: 2,
     },
@@ -106,7 +106,7 @@ export const BuildRaceData = {
       type: 2,
     },
     '10': {
-      name: 'Magnetic Barracks',
+      name: 'Magnetic Barrack',
       desc: "Factories that produce various troop types: The higher the level, the more troop types you can unlock, and the higher the troops' level. Troop types are randomly produced, and different troops consume different time and resources. The storage capacity of each troop type is different. Insufficient resources will make you skip or stop production.",
       type: 2,
     },
@@ -131,7 +131,7 @@ export const BuildRaceData = {
       type: 2,
     },
     '16': {
-      name: 'Refinement Barracks',
+      name: 'Refinement Barrack',
       desc: "Factories that produce various troop types: The higher the level, the more troop types you can unlock, and the higher the troops' level. Troop types are randomly produced, and different troops consume different time and resources. The storage capacity of each troop type is different. Insufficient resources will make you skip or stop production.",
       type: 2,
     },
