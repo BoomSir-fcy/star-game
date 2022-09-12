@@ -135,7 +135,7 @@ const Create: React.ForwardRefRenderFunction<ForwardRefRenderProps, any> = (
       </LabelStyle>
       <Text mt={32} small>
         {t(
-          'Create an identity will consume 100 DSG, the system will automatically exchange BNB for this amount of DSG using a real-time exchange rate.',
+          'Create an identity will consume 2,000 DSG, the system will automatically exchange BNB for this amount of DSG using a real-time exchange rate.',
         )}
       </Text>
     </BoxStyled>
