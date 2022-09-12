@@ -294,7 +294,7 @@ const DepositWithdrawal: React.FC<DepositWithdrawalProps> = ({
                   t('Approve')
                 )
               ) : (
-                t('Confirm Transfer-out')
+                t('Confirm Withdraw')
               )}
             </Button>
           )}

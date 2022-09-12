@@ -43,7 +43,7 @@ export const NewPlanetAssets: React.FC<{
           width='45%'
         >
           <MarkText padding={0} fontStyle='normal' bold>
-            {t('Battle Attributes')}
+            {t('Battle Attribute')}
           </MarkText>
           <Box>
             <Text small color='textSubtle'>

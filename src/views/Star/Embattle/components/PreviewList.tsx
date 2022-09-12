@@ -98,8 +98,9 @@ const PreviewList: React.FC<PreviewListProps> = ({
         race,
         id: item?.unique_id,
         unique_id: item?.unique_id,
-        unitInfo: { ...unitMaps?.[item?.unique_id], hp: 0 },
+        unitInfo: { ...unitMaps?.[item?.unique_id] },
         activeCountText: UseSoldierNum(unitMaps?.[item?.unique_id]),
+        noHp: true,
       });
       game.addActiveSolider(soldier);
     }
@@ -129,8 +130,9 @@ const PreviewList: React.FC<PreviewListProps> = ({
         enableDrag: false,
         id: item.unique_id,
         unique_id: item.unique_id,
-        unitInfo: { ...item, hp: 0 },
+        unitInfo: { ...item },
         activeCountText: UseSoldierNum(item, true),
+        noHp: true,
       });
       setMoving(true);
       game?.addDragPreSoldier(soldier);
@@ -161,8 +163,9 @@ const PreviewList: React.FC<PreviewListProps> = ({
       enableDrag: true,
       id: item.unique_id,
       unique_id: item.unique_id,
-      unitInfo: { ...item, hp: 0 },
+      unitInfo: { ...item },
       activeCountText: UseSoldierNum(item, true),
+      noHp: true,
     };
     game.addDragPreSoldierApp(options);
   };
@@ -222,8 +225,9 @@ const PreviewList: React.FC<PreviewListProps> = ({
                       race,
                       id: item.unique_id,
                       unique_id: item.unique_id,
-                      unitInfo: { ...unitMaps?.[item.unique_id], hp: 0 },
+                      unitInfo: { ...unitMaps?.[item.unique_id] },
                       activeCountText: UseSoldierNum(item, true),
+                      noHp: true,
                     });
                     game.addActiveSolider(soldier);
                     // if (isApp()) {

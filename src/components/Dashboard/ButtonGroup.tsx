@@ -80,7 +80,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
         <TooltipTrigger
           zIndex={TooltipTriggerZIndex}
           overlay={
-            <Text fontSize={`${16 * scale}px`} color='textPrimary'>
+            <Text fontSize={`${16 * scale}px`} color='textTips'>
               {t('Earn BOX')}
             </Text>
           }

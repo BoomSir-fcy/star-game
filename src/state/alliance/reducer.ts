@@ -118,7 +118,9 @@ export const allianceSlice = createSlice({
       state.DifficultyToExplore = action.payload;
     },
     setExploreProgressDate: (state, action) => {
-      state.ExploreProgressDate = action.payload;
+      if (action.payload) {
+        state.ExploreProgressDate = action.payload;
+      }
     },
   },
 });

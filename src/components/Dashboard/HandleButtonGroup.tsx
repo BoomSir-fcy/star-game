@@ -80,12 +80,12 @@ const HandleButtonGroup: React.FC<HandleButtonGroupProps> = ({
       {/* <RefreshButton mr='22px' onRefresh={onRefresh} /> */}
 
       {isApp2 && (
-          <SecondaryButton href='/change-rate' tag='m-box1'>
-            更改时间倍率
-          </SecondaryButton>
-        )}
+        <SecondaryButton href='/change-rate' tag='m-box1'>
+          更改时间倍率
+        </SecondaryButton>
+      )}
       <SecondaryButton className='tofind' href='/mystery-box' tag='m-box1'>
-        {t('Discovers').toLocaleUpperCase()}
+        {t('Discover').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton href='/vip' tag='vip'>
         VIP

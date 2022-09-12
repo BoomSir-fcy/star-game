@@ -47,7 +47,7 @@ export const InProgress: React.FC<{
       stripe
     >
       <CardBox>
-        <Box>
+        <Box mb='20px'>
           <Flex mb='20px' justifyContent='center'>
             <MarkText padding={0} fontStyle='normal' fontSize='20px' bold>
               {t('Brief Report')}
@@ -55,7 +55,7 @@ export const InProgress: React.FC<{
           </Flex>
           <Flex mb='10px' justifyContent='space-between' alignItems='baseline'>
             <MarkText fontSize='20px' bold>
-              {t('%num%th exploration', { num: info.workCount })}
+              {t('%num%st Exploration', { num: info.workCount })}
             </MarkText>
             {info.working ? (
               <Text color='#59E97B' fontSize='16px'>
@@ -86,9 +86,9 @@ export const InProgress: React.FC<{
             <TextStyle>
               -{info.loseUnit} {t('Battle Unit')}
             </TextStyle>
-            <TextStyle>
+            <Text width='max-content'>
               -{info.lostDurability} {t('Building’s END')}
-            </TextStyle>
+            </Text>
           </FlexStyle>
           <FlexStyle>
             <TextStyle>
@@ -102,7 +102,7 @@ export const InProgress: React.FC<{
             </TextStyle>
           </FlexStyle>
         </Box>
-        <Box>
+        <Box pt='10px'>
           <TextStyle mb='8px'>{t('Get Resources')} :</TextStyle>
           <FlexStyle>
             <TextStyle>

@@ -504,7 +504,7 @@ const Planet = () => {
                   >
                     <LinkStyled to='/mystery-box'>
                       <Text small>
-                        {t('No data, Go to open the black hole')} &gt;
+                        {t('No planet. Go to open the Blind Box')} &gt;
                       </Text>
                     </LinkStyled>
                   </Flex>

@@ -269,7 +269,9 @@ const InfoModule: React.FC<{
           >
             <Text fontSize='14px'>{t('Accumulated')} BOX</Text>
             <Text gold bold fontSize='18px'>
-              {SubString_1(OwnerInfo.owner_get_box, 5)}
+              {splitThousandSeparator(
+                Number(SubString_1(OwnerInfo.owner_get_box, 5)),
+              )}
             </Text>
           </Box>
         </Flex>

@@ -182,7 +182,7 @@ const PlanetListBox: React.FC<{
                   width='20%'
                 >
                   <MarkText padding={0} fontStyle='normal' bold>
-                    {t('Battle Attributes')}
+                    {t('Battle Attribute')}
                   </MarkText>
                   <Box>
                     <Text small color='textSubtle'>
@@ -253,7 +253,7 @@ const PlanetListBox: React.FC<{
         >
           <LinkStyled to='/mystery-box'>
             <Text fontSize='18px'>
-              {t('No data, Go to open the black hole')} &gt;
+              {t('No planet. Go to open the Blind Box')} &gt;
             </Text>
           </LinkStyled>
         </Flex>

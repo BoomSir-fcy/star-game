@@ -14,7 +14,11 @@ import ApproveButton from 'components/ApproveButton';
 import { getUserAgentAddress } from 'utils/addressHelpers';
 import { fetchAllowanceAsync } from 'state/userInfo/reducer';
 import { useDispatch } from 'react-redux';
-import { formatDisplayBalance } from 'utils/formatBalance';
+import {
+  formatDisplayBalance,
+  splitThousandSeparator,
+  getBalanceNumber,
+} from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
 
 interface RegisterModalProps {
@@ -56,14 +60,17 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
         {DsgBalance.isLessThan(price) ? (
           <Text mt='50px' fontSize='24px'>
             {t('BnbRegister', {
-              DSG: formatDisplayBalance(new BigNumber(price), 18),
+              DSG: splitThousandSeparator(
+                getBalanceNumber(new BigNumber(price), 18),
+              ),
               BNB: formatDisplayBalance(new BigNumber(BNBprice), 18),
             })}{' '}
           </Text>
         ) : (
           <Text mt='20px' fontSize='24px'>
             {t('Payment for creating identity')}{' '}
-            {formatDisplayBalance(new BigNumber(price), 18)} DSG
+            {splitThousandSeparator(getBalanceNumber(new BigNumber(price), 18))}{' '}
+            DSG
           </Text>
         )}
         {isApprove || DsgBalance.isLessThan(price) ? (
