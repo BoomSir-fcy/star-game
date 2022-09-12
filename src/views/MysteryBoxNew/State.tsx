@@ -347,11 +347,7 @@ const State = () => {
           {!existBox && (
             <Flex justifyContent='center'>
               <Box width={30}>
-                <TokenImage
-                  width={30}
-                  height={30}
-                  tokenAddress={getWEtherAddress()}
-                />
+                <TokenImage width={30} height={30} tokenAddress='BNB' />
               </Box>
               <Text ml='15px' fontSize='22px' bold>
                 {t('BNB')}

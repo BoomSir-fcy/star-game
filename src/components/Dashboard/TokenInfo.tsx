@@ -118,7 +118,9 @@ const TokenInfo = () => {
               }}
               variant='custom'
             >
-              Deposit
+              <Text color='#4FFFFB' small>
+                Deposit
+              </Text>
             </ButtonStyled1>
             <ButtonStyled2
               onClick={() => {
@@ -129,10 +131,16 @@ const TokenInfo = () => {
               }}
               variant='custom'
             >
-              Withdraw
+              <Text color='#FF7C7C' small>
+                Withdraw
+              </Text>
             </ButtonStyled2>
             <Link to='/swap'>
-              <ButtonStyled3 variant='custom'>Swap</ButtonStyled3>
+              <ButtonStyled3 variant='custom'>
+                <Text color='#92F4A8' small>
+                  Swap
+                </Text>
+              </ButtonStyled3>
             </Link>
             {/* <Image
               style={{ cursor: 'pointer' }}

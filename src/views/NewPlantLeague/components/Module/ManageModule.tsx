@@ -75,7 +75,11 @@ const ManageModule: React.FC<{
             setPlantManageModule(false);
           }}
         >
-          <Image width={32} height={32} src='/images/commons/icon/guanbi.png' />
+          <Image
+            width={32}
+            height={32}
+            src='/images/commons/introjs-close.png'
+          />
         </Flex>
         <Flex
           mb='20px'

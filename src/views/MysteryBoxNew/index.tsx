@@ -100,7 +100,7 @@ const SurprisesBox = styled(Box)`
   position: fixed;
   top: -360px;
   right: 0;
-  width: 230px;
+  width: 260px;
   border-radius: 10px;
   background: #43434380;
   padding: 18px;
@@ -290,7 +290,10 @@ const MysteryBoxNew = () => {
         <Text bold>{t('OpenMysteryBoxDesc1-2')}</Text>
       </PageTitle>
       <SurprisesBox>
-        <Text mb='20px' bold>
+        <Text mb='10px' bold>
+          {t('Notice')}
+        </Text>
+        <Text mb='10px' bold>
           {t('SurprisesDesc1')}
         </Text>
         <Text fontSize='20px' color='#FFD63E' mb='6px' bold>
