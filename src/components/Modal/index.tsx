@@ -122,7 +122,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
               {...props}
               style={{
                 ...props.style,
-                height: `${(1 / rate) * 100}vmin`,
+                height: `100vmin`,
                 top: '0',
                 bottom: '0',
                 margin: 'auto',

@@ -630,7 +630,7 @@ const List = () => {
                     width='230px'
                     textAlign='center'
                   >
-                    {t('Congrats on the extra bonus')}
+                    {t('Extra Bonus')}
                   </Text>
                   {item.give_level > 1 && (
                     <LightBox mb={16} type={1}>
