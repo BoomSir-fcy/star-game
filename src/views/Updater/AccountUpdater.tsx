@@ -28,33 +28,33 @@ export default function AccountUpdater() {
     }
   }, [account, dispatch]);
 
-  useEffect(() => {
-    // 如果钱包地址不一样退出
-    if (
-      userInfo.address &&
-      account &&
-      account?.toLowerCase() !== userInfo.address
-    ) {
-      handleReSetAccount();
-    }
-  }, [account, userInfo, handleReSetAccount]);
-
   // useEffect(() => {
-  //   if (!account) {
+  //   // 如果钱包地址不一样退出
+  //   if (
+  //     userInfo.address &&
+  //     account &&
+  //     account?.toLowerCase() !== userInfo.address
+  //   ) {
   //     handleReSetAccount();
   //   }
-  // }, [account, handleReSetAccount]);
+  // }, [account, userInfo, handleReSetAccount]);
 
-  useEffect(() => {
-    if (account && !accountFlag) {
-      setAccountFlag(account);
-      return;
-    }
-    if (account && accountFlag && accountFlag !== account) {
-      setAccountFlag(account);
-      handleReSetAccount();
-    }
-  }, [account, handleReSetAccount, accountFlag]);
+  // // useEffect(() => {
+  // //   if (!account) {
+  // //     handleReSetAccount();
+  // //   }
+  // // }, [account, handleReSetAccount]);
+
+  // useEffect(() => {
+  //   if (account && !accountFlag) {
+  //     setAccountFlag(account);
+  //     return;
+  //   }
+  //   if (account && accountFlag && accountFlag !== account) {
+  //     setAccountFlag(account);
+  //     handleReSetAccount();
+  //   }
+  // }, [account, handleReSetAccount, accountFlag]);
 
   return null;
 }

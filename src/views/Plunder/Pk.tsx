@@ -78,7 +78,8 @@ const Pk = () => {
 
   const { TerrainInfo } = useStore(p => p.game);
 
-  const { PKInfo, pkRes } = useStore(p => p.game);
+  const { PKInfo, pkRes, isFrom } = useStore(p => p.game);
+  console.log(pkRes, isFrom, ' pkRes, isFrom');
 
   const [complete, setComplete] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -157,7 +158,7 @@ const Pk = () => {
   const onRunEnd = useCallback(() => {
     const { success } = PKInfo[current];
     setResult(prev => {
-      return [...prev, success];
+      return [...prev, isFrom ? success : !success];
     });
     // descType
     setOthers(prev => {
@@ -196,7 +197,15 @@ const Pk = () => {
       return;
     }
     onEndHandle();
-  }, [setOthers, current, setResult, PKInfo, newRoundHandle, onEndHandle]);
+  }, [
+    setOthers,
+    current,
+    setResult,
+    PKInfo,
+    newRoundHandle,
+    onEndHandle,
+    isFrom,
+  ]);
 
   useEffect(() => {
     if (running) {
@@ -286,11 +295,11 @@ const Pk = () => {
 
   const initPKHandle = useCallback(() => {
     try {
-      initHandle(PKInfo[current]);
+      initHandle(PKInfo[current], isFrom);
     } catch (error) {
       onRunEnd();
     }
-  }, [initHandle, PKInfo, current, onRunEnd]);
+  }, [initHandle, PKInfo, current, onRunEnd, isFrom]);
 
   const loaderLoaded = useCallback(
     event => {
@@ -317,7 +326,6 @@ const Pk = () => {
   useEffect(() => {
     if (!mounted && VideoEnd) {
       if (ref.current && game && PKInfo) {
-        console.log(PKInfo);
         setTotalInfo(PKInfo[current].init.show_hp);
         setMounted(true);
         // 初始化
