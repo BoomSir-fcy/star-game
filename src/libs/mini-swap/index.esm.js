@@ -34790,24 +34790,29 @@ var CUSTOM_BASES = (_c = {},
 // used for display in the default list when adding liquidity
 var SUGGESTED_BASES = (_d = {},
     _d[ChainId.MATIC_MAINNET] = [
-        MBT[ChainId.MATIC_MAINNET], WETH[ChainId.MATIC_MAINNET], USDC[ChainId.MATIC_MAINNET], USDT[ChainId.MATIC_MAINNET],
-        DSG[ChainId.MATIC_MAINNET], DAI[ChainId.MATIC_MAINNET], WBTC[ChainId.MATIC_MAINNET]
+        MBT[ChainId.MATIC_MAINNET],
+        WETH[ChainId.MATIC_MAINNET],
+        USDC[ChainId.MATIC_MAINNET],
+        USDT[ChainId.MATIC_MAINNET],
+        DSG[ChainId.MATIC_MAINNET],
+        DAI[ChainId.MATIC_MAINNET],
+        WBTC[ChainId.MATIC_MAINNET],
     ],
     _d[ChainId.MATIC_TESTNET] = [
-        MBT[ChainId.MATIC_TESTNET], WETH[ChainId.MATIC_TESTNET], USDC[ChainId.MATIC_TESTNET], USDT[ChainId.MATIC_TESTNET],
-        DSG[ChainId.MATIC_TESTNET], DAI[ChainId.MATIC_TESTNET]
+        MBT[ChainId.MATIC_TESTNET],
+        WETH[ChainId.MATIC_TESTNET],
+        USDC[ChainId.MATIC_TESTNET],
+        USDT[ChainId.MATIC_TESTNET],
+        DSG[ChainId.MATIC_TESTNET],
+        DAI[ChainId.MATIC_TESTNET],
     ],
     _d[ChainId.MAINNET] = [BUSD[ChainId.MAINNET], USDT[ChainId.MAINNET], BOX[ChainId.MAINNET], DSG[ChainId.MAINNET]],
     _d[ChainId.TESTNET] = [BUSD[ChainId.TESTNET], USDT[ChainId.TESTNET], BOX[ChainId.TESTNET], DSG[ChainId.TESTNET]],
     _d);
 // used to construct the list of all pairs we consider by default in the frontend
 (_e$1 = {},
-    _e$1[ChainId.MATIC_MAINNET] = [
-        WETHER[ChainId.MATIC_MAINNET], USDT[ChainId.MATIC_MAINNET]
-    ],
-    _e$1[ChainId.MATIC_TESTNET] = [
-        WETHER[ChainId.MATIC_TESTNET], USDT[ChainId.MATIC_TESTNET]
-    ],
+    _e$1[ChainId.MATIC_MAINNET] = [WETHER[ChainId.MATIC_MAINNET], USDT[ChainId.MATIC_MAINNET]],
+    _e$1[ChainId.MATIC_TESTNET] = [WETHER[ChainId.MATIC_TESTNET], USDT[ChainId.MATIC_TESTNET]],
     _e$1[ChainId.MAINNET] = [WETH[ChainId.MAINNET], BUSD[ChainId.MAINNET], USDT[ChainId.MAINNET]],
     _e$1[ChainId.TESTNET] = [WETH[ChainId.TESTNET], DSG[ChainId.TESTNET], BUSD[ChainId.TESTNET]],
     _e$1);
@@ -34831,7 +34836,7 @@ var SUGGESTED_BASES = (_d = {},
     ],
     _f);
 // default allowed slippage, in bips
-var INITIAL_ALLOWED_SLIPPAGE = 50;
+var INITIAL_ALLOWED_SLIPPAGE = 100 * 22; // 更改默认滑点
 // 20 minutes, denominated in seconds
 var DEFAULT_DEADLINE_FROM_NOW = 60 * 20;
 JSBI.BigInt(0);
@@ -85051,7 +85056,7 @@ function Swap(_a) {
                                                         onSwitchTokens();
                                                     }, color: currencies[Field$2.INPUT] && currencies[Field$2.OUTPUT] ? 'primary' : 'text' }, void 0) }), void 0), recipient === null && !showWrap && isExpertMode ? (jsxRuntime.exports.jsx(Button, __assign({ variant: "text", id: "add-recipient-button", onClick: function () { return onChangeRecipient(''); } }, { children: t('+ Add a send (optional)') }), void 0)) : null] }), void 0) }), void 0), jsxRuntime.exports.jsx(CurrencyInputPanel, { value: formattedAmounts[Field$2.OUTPUT], onUserInput: handleTypeOutput, 
                                     // label={independentField === Field.INPUT && !showWrap && trade ? t('To (estimated)') : t('To')}
-                                    label: independentField === Field$2.INPUT && !showWrap && trade ? t('To') : t('To'), showMaxButton: false, currency: currencies[Field$2.OUTPUT], onCurrencySelect: handleOutputSelect, otherCurrency: currencies[Field$2.INPUT], id: "swap-currency-output", disabled: disabledOutput, showCommonBases: true }, void 0), isExpertMode && recipient !== null && !showWrap ? (jsxRuntime.exports.jsxs(jsxRuntime.exports.Fragment, { children: [jsxRuntime.exports.jsxs(AutoRow, __assign({ justify: "space-between", style: { padding: '0 1rem' } }, { children: [jsxRuntime.exports.jsx(ArrowWrapper, __assign({ clickable: false, title: t('titleExchange') }, { children: jsxRuntime.exports.jsx(Icon$1, { width: "32px" }, void 0) }), void 0), jsxRuntime.exports.jsx(Button, __assign({ variant: "text", id: "remove-recipient-button", onClick: function () { return onChangeRecipient(null); } }, { children: t('- Remove send') }), void 0)] }), void 0), jsxRuntime.exports.jsx(AddressInputPanel, { id: "recipient", value: recipient, onChange: onChangeRecipient }, void 0)] }, void 0)) : null, showWrap ? null : (jsxRuntime.exports.jsxs(AutoColumn, __assign({ gap: "8px", style: { padding: '0' } }, { children: [(Boolean(trade) || polyData.isPolyMethed) && (jsxRuntime.exports.jsx(RowBetween, __assign({ align: "center" }, { children: jsxRuntime.exports.jsx(TradePrice, { price: (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed) ? polyData === null || polyData === void 0 ? void 0 : polyData.price : trade === null || trade === void 0 ? void 0 : trade.executionPrice, showInverted: showInverted, setShowInverted: setShowInverted }, void 0) }), void 0)), allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (jsxRuntime.exports.jsxs(RowBetween, __assign({ align: "center" }, { children: [jsxRuntime.exports.jsx(Text, __assign({ fontSize: "16px" }, { children: t('Slippage Tolerance') }), void 0), jsxRuntime.exports.jsxs(Text, __assign({ fontSize: "16px", color: "textSubtle" }, { children: [allowedSlippage / 100, "%"] }), void 0)] }), void 0))] }), void 0))] }), void 0), !swapIsUnsupported ? (jsxRuntime.exports.jsx(AdvancedSwapDetailsDropdown, { isPolyMethed: polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed, polyData: polyData, trade: trade }, void 0)) : (jsxRuntime.exports.jsx(UnsupportedCurrencyFooter, { currencies: [currencies.INPUT, currencies.OUTPUT] }, void 0)), jsxRuntime.exports.jsxs(Box, __assign({ mt: "0.5rem" }, { children: [isExpertMode && swapErrorMessage ? jsxRuntime.exports.jsx(SwapCallbackError, { error: swapErrorMessage }, void 0) : null, getButtonSupported()] }), void 0)] }), void 0), jsxRuntime.exports.jsx(Box, { children: powered }, void 0)] }, void 0) }, void 0));
+                                    label: independentField === Field$2.INPUT && !showWrap && trade ? t('To') : t('To'), showMaxButton: false, currency: currencies[Field$2.OUTPUT], onCurrencySelect: handleOutputSelect, otherCurrency: currencies[Field$2.INPUT], id: "swap-currency-output", disabled: disabledOutput, showCommonBases: true }, void 0), isExpertMode && recipient !== null && !showWrap ? (jsxRuntime.exports.jsxs(jsxRuntime.exports.Fragment, { children: [jsxRuntime.exports.jsxs(AutoRow, __assign({ justify: "space-between", style: { padding: '0 1rem' } }, { children: [jsxRuntime.exports.jsx(ArrowWrapper, __assign({ clickable: false, title: t('titleExchange') }, { children: jsxRuntime.exports.jsx(Icon$1, { width: "32px" }, void 0) }), void 0), jsxRuntime.exports.jsx(Button, __assign({ variant: "text", id: "remove-recipient-button", onClick: function () { return onChangeRecipient(null); } }, { children: t('- Remove send') }), void 0)] }), void 0), jsxRuntime.exports.jsx(AddressInputPanel, { id: "recipient", value: recipient, onChange: onChangeRecipient }, void 0)] }, void 0)) : null, showWrap ? null : (jsxRuntime.exports.jsxs(AutoColumn, __assign({ gap: "8px", style: { padding: '0' } }, { children: [(Boolean(trade) || polyData.isPolyMethed) && (jsxRuntime.exports.jsx(RowBetween, __assign({ align: "center" }, { children: jsxRuntime.exports.jsx(TradePrice, { price: (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed) ? polyData === null || polyData === void 0 ? void 0 : polyData.price : trade === null || trade === void 0 ? void 0 : trade.executionPrice, showInverted: showInverted, setShowInverted: setShowInverted }, void 0) }), void 0)), jsxRuntime.exports.jsxs(RowBetween, __assign({ align: "center" }, { children: [jsxRuntime.exports.jsx(Text, __assign({ fontSize: "16px" }, { children: t('Slippage Tolerance') }), void 0), jsxRuntime.exports.jsxs(Text, __assign({ fontSize: "16px", color: "textSubtle" }, { children: [allowedSlippage / 100, "%"] }), void 0)] }), void 0)] }), void 0))] }), void 0), !swapIsUnsupported ? (jsxRuntime.exports.jsx(AdvancedSwapDetailsDropdown, { isPolyMethed: polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed, polyData: polyData, trade: trade }, void 0)) : (jsxRuntime.exports.jsx(UnsupportedCurrencyFooter, { currencies: [currencies.INPUT, currencies.OUTPUT] }, void 0)), jsxRuntime.exports.jsxs(Box, __assign({ mt: "0.5rem" }, { children: [isExpertMode && swapErrorMessage ? jsxRuntime.exports.jsx(SwapCallbackError, { error: swapErrorMessage }, void 0) : null, getButtonSupported()] }), void 0)] }), void 0), jsxRuntime.exports.jsx(Box, { children: powered }, void 0)] }, void 0) }, void 0));
 }
 var templateObject_1;
 
@@ -86444,12 +86449,14 @@ var initialState$5 = {
     useNestGet: false,
     useNestPledge: false,
 };
+// 小于当前时间 更改默认值
+var UPDATE_TIMESTAMP = new Date(new Date().setUTCFullYear(2022, 9, 13)).setUTCHours(12, 0, 0, 0);
 var user = createReducer(initialState$5, function (builder) {
     return builder
         .addCase(updateVersion, function (state) {
         // slippage isnt being tracked in local storage, reset to default
         // noinspection SuspiciousTypeOfGuard
-        if (typeof state.userSlippageTolerance !== 'number') {
+        if (typeof state.userSlippageTolerance !== 'number' || state.lastUpdateVersionTimestamp < UPDATE_TIMESTAMP) {
             state.userSlippageTolerance = INITIAL_ALLOWED_SLIPPAGE;
         }
         // deadline isnt being tracked in local storage, reset to default
