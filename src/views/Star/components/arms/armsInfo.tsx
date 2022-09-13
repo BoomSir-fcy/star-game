@@ -88,7 +88,6 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
 }) => {
   const { t } = useTranslation();
   const { game_base_unit } = armsData;
-  console.log(game_base_unit);
 
   // const { arms_attr } = game_base_unit || {}
   const [radarChart] = React.useState(
@@ -302,7 +301,13 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
           </Box>
         </Flex>
       </Content>
-      <MiniRaceAni top='0' left='0' mock={gameMock} show={visible && !!sid} />
+      <MiniRaceAni
+        top='0'
+        left='0'
+        mock={gameMock}
+        activeId={(gameMock as any)?.init?.blue_units[0].base_unit_id}
+        show={visible && !!sid}
+      />
     </Container>
   );
 };

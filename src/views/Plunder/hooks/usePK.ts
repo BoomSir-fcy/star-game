@@ -44,15 +44,35 @@ export const usePK = (game: Game) => {
   );
 
   const initHandle = useCallback(
-    (PKInfo: GamePkInfo) => {
+    (PKInfo: GamePkInfo, isFrom?: boolean) => {
       const ids: idMap = {};
       Object.keys(PKInfo?.init?.ids).forEach(id => {
         const { x, y } = PKInfo.init.ids[id];
         ids[`${x}${y}`] = id;
       });
 
-      createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, ids, false);
-      createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
+      if (isFrom) {
+        createSoldiers(
+          PKInfo.init.blue_units,
+          PKInfo.init.base_unit,
+          ids,
+          false,
+        );
+        createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
+      } else {
+        createSoldiers(
+          PKInfo.init.red_units,
+          PKInfo.init.base_unit,
+          ids,
+          false,
+        );
+        createSoldiers(
+          PKInfo.init.blue_units,
+          PKInfo.init.base_unit,
+          ids,
+          true,
+        );
+      }
       game.once('lastSoldierCreated', (event: Event) => {
         const _running = new Running(game, {
           round: PKInfo.slot,

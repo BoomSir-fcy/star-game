@@ -27,12 +27,14 @@ interface MiniRaceAniProps extends BoxProps {
   mock: any;
   show: boolean;
   scale?: number;
+  activeId?: number;
 }
 
 const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
   scale,
   mock,
   show,
+  activeId,
   ...props
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -49,6 +51,13 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
   const [running, setRunning] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [resLoaded, setResLoaded] = useState(false);
+  const [timer, setTimer] = useState(null);
+
+  // const [activeId, setActiveId] = useState();
+
+  // useEffect(() => {
+  //   setActiveId(mock?.init?.blue_units[0].base_unit_id);
+  // }, [mock]);
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -120,15 +129,25 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
     [game],
   );
 
+  useEffect(() => {
+    // console.log(running, mock);
+    console.log(running?.trackIndex, 'running?.trackIndex');
+    if (mock && running && running?.trackIndex !== 0) {
+      running.pause();
+    }
+  }, [running, mock]);
+
   const initHandle = useCallback(() => {
     // running?.pause();
+    if (mock?.init?.blue_units[0].base_unit_id !== activeId) return;
     game.clearSoldier();
+
     initSoldiers(mock);
     getCenterByAxis(
       mock?.init?.blue_units[0].pos.x,
       mock?.init?.blue_units[0].pos.y,
     );
-  }, [mock, getCenterByAxis, initSoldiers, game]);
+  }, [mock, getCenterByAxis, initSoldiers, game, activeId]);
 
   React.useEffect(() => {
     if (ref.current && !loaded) {
@@ -161,19 +180,21 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
     //   );
     // }
   }, []);
-  const [timer, setTimer] = useState(null);
 
   // 结束
-  const onRunEnd = useCallback(() => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    setTimer(
-      setTimeout(() => {
-        initHandle();
-      }, 1000),
-    );
-  }, [initHandle, timer]);
+  const onRunEnd = useCallback(
+    event => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      setTimer(
+        setTimeout(() => {
+          initHandle();
+        }, 1000),
+      );
+    },
+    [initHandle, timer],
+  );
 
   React.useEffect(() => {
     if (running) {
@@ -186,7 +207,7 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
         running.removeEventListener('runEnd', onRunEnd);
       }
     };
-  }, [running, onRunEnd]);
+  }, [running, onRunEnd, timer]);
 
   // React.useEffect(() => {
   //   return () => {
