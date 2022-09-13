@@ -905,7 +905,7 @@
   "http-error-1000003": "没有对应单元的demo信息",
   "http-error-400004": "余额不足",
   "http-error-400008": "BNB余额不足",
-  "http-error-400010": "资源不足",
+  "http-error-400010": "所需能量资源不足",
   "http-error-400002": "平台余额不足",
   "http-error-400011": "BOX余额不足",
   "http-error-400012": "提币数量低于最小限额",

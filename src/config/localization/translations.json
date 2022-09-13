@@ -904,7 +904,7 @@
   "http-error-1000003": "There is no demo information for the corresponding unit",
   "http-error-400004": "Insufficient balance",
   "http-error-400008": "Insufficient BNB balance",
-  "http-error-400010": "Insufficient resources",
+  "http-error-400010": "Insufficient Energy resources required",
   "http-error-400011": "Insufficient BOX balance",
   "http-error-400002": "Insufficient platform balance",
   "http-error-400012": "Withdrawal amount is below the minimum limit",
