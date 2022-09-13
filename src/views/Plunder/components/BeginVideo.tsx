@@ -9,7 +9,7 @@ const VideoStyled = styled.video`
   top: 0; */
   object-fit: fill;
   mix-blend-mode: screen;
-  animation: fadeOut 3.8s linear;
+  animation: fadeOut 4s linear;
   opacity: 0;
   @keyframes fadeOut {
     0% {
@@ -17,6 +17,9 @@ const VideoStyled = styled.video`
     }
     50% {
       opacity: 1;
+    }
+    80% {
+      opacity: 0.9;
     }
     100% {
       opacity: 0;

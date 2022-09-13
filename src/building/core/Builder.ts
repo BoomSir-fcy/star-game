@@ -147,6 +147,10 @@ class Builder extends EventTarget {
     lineHeight: 18,
   });
 
+  UpgradeSprite: Sprite = new Sprite(
+    Texture.from('images/commons/icon/icon-building-upgrade.png'),
+  );
+
   UpgradeText = new Text('during Upgrade...', {
     fill: 0xffffff,
     fontSize: 14,
@@ -443,6 +447,7 @@ class Builder extends EventTarget {
       this.addIsUpgradeText();
     } else {
       this.graphicsBox.removeChild(this.UpgradeText);
+      this.container.removeChild(this.UpgradeSprite);
     }
   }
 
@@ -466,6 +471,13 @@ class Builder extends EventTarget {
     this.UpgradeText.x = -60;
     this.UpgradeText.y = 68;
     this.graphicsBox.addChild(this.UpgradeText);
+
+    this.UpgradeSprite.anchor.set(0.5);
+    this.UpgradeSprite.width = 70;
+    this.UpgradeSprite.height = 70;
+    this.UpgradeSprite.position.set(-20, 0);
+    this.UpgradeSprite.zIndex = 1000;
+    this.container.addChild(this.UpgradeSprite);
   }
 
   addIsBuildingText() {
