@@ -7,7 +7,7 @@ import utc from 'dayjs/plugin/utc';
 import { Link } from 'react-router-dom';
 import { parseZip } from 'utils';
 import { useDispatch } from 'react-redux';
-import { setPKInfo, setPKisFrom, setPKRes } from 'state/game/reducer';
+import { setPKInfo, setPKRes } from 'state/game/reducer';
 import { useWeb3React } from '@web3-react/core';
 import { PlunderInfo } from 'state/types';
 import { PkResult } from './components/PkResult';
@@ -115,8 +115,6 @@ export const PkBox: React.FC<{
               console.log(parseZip(info.detail), 'parseZip(info.detail)');
               dispatch(setPKInfo(parseZip(info.detail)));
               dispatch(setPKRes(pkRes));
-              console.log(isFrom, 'isFrom');
-              dispatch(setPKisFrom(isFrom));
             } catch (error) {
               event.preventDefault();
               console.log('解析报错');

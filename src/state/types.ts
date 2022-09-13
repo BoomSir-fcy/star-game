@@ -305,7 +305,6 @@ export interface GameState {
     };
   };
   pkRes: boolean;
-  isFrom: boolean; // 是否是防守
   process: any;
   PKInfo: null | GamePkInfo[];
   state: GamePkState;

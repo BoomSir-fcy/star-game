@@ -9,7 +9,7 @@ import { useWeb3React } from '@web3-react/core';
 import { GalaxReportListView } from 'state/types';
 import { shortenAddress } from 'utils/contract';
 import { Link } from 'react-router-dom';
-import { setPKInfo, setPKisFrom, setPKRes } from 'state/game/reducer';
+import { setPKInfo, setPKRes } from 'state/game/reducer';
 import { parseZip } from 'utils';
 
 import { PkResult } from './PkResult';
@@ -43,8 +43,7 @@ export const GalaxyInProgress: React.FC<{
   info?: GalaxReportListView;
 }> = ({ info }) => {
   const { t } = useTranslation();
-  const { account } = { account: '0x0634845285e2cF3cAc978d23e13770126189A6C6' };
-  // const { account } = useWeb3React();
+  const { account } = useWeb3React();
   const dispatch = useDispatch();
 
   const IsFrom = useMemo(() => {
@@ -124,9 +123,6 @@ export const GalaxyInProgress: React.FC<{
                   try {
                     dispatch(setPKInfo(parseZip(info.detail)));
                     dispatch(setPKRes(BettleResult));
-                    console.log(IsFrom, 'isFrom');
-
-                    dispatch(setPKisFrom(IsFrom));
                   } catch (error) {
                     event.preventDefault();
                     console.log('解析报错');
