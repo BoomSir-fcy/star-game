@@ -84,9 +84,9 @@ export const QueueBuilding: React.FC<{
   }, [state.time]);
 
   return (
-    <Flex width='250px'>
+    <Flex width='300px'>
       <Flex flexDirection='column' style={{ flex: 1 }}>
-        <Flex alignItems='flex-end' mb='16px'>
+        <Flex alignItems='flex-end' mb='16px' justifyContent='space-between'>
           <Text bold fontSize='18px'>
             {/* {currentBuilding?.propterty?.name_en} */}
             {

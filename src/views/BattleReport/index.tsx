@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BgCard, Box, Empty, Flex, Spinner, Text } from 'uikit';
 import { useStore, storeAction } from 'state';
 import {
@@ -66,14 +66,14 @@ const ScrollBox = styled(Box)`
 `;
 
 const RowFlex = styled(Flex)`
-  overflow-x: auto;
+  /* overflow-x: auto; */
   height: max-content;
   background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
   border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
   margin-bottom: 30px;
-  &::-webkit-scrollbar {
+  /* &::-webkit-scrollbar {
     height: 0;
-  }
+  } */
 `;
 
 const LoadingBox = styled(Box)`
@@ -89,6 +89,7 @@ const BattleReport = () => {
   const location = useLocation();
   const { t } = useTranslation();
   const paramsQs = useParsedQueryString();
+  const navigate = useNavigate();
 
   const { pkRecord } = useStore(p => p.alliance);
   const {
@@ -136,10 +137,6 @@ const BattleReport = () => {
     return false;
   }, [RecordList]);
 
-  const onRefreshClick = useCallback(() => {
-    dispatch(fetchAllianceViewAsync());
-  }, [dispatch]);
-
   const HaveDetileGalaxReportList = React.useMemo(() => {
     const arr = GalaxReportList.filter(i => i?.detail?.length !== 0);
     return arr;
@@ -155,13 +152,6 @@ const BattleReport = () => {
     ],
     [t],
   );
-  // 添加事件监听，用于更新状态
-  useEffect(() => {
-    eventBus.addEventListener('onRefresh', onRefreshClick);
-    return () => {
-      eventBus.removeEventListener('onRefresh', onRefreshClick);
-    };
-  }, [onRefreshClick]);
 
   useEffect(() => {
     return () => {
@@ -170,6 +160,13 @@ const BattleReport = () => {
       );
     };
   }, [dispatch, steps.length]);
+
+  useEffect(() => {
+    if (Start_time > 0 && End_time > 0)
+      navigate(`/BattleReport?starTime=${Start_time}&endTime=${End_time}`, {
+        replace: true,
+      });
+  }, [Start_time, End_time, navigate]);
 
   return (
     <Box pt='20px' height='940px'>
@@ -217,13 +214,15 @@ const BattleReport = () => {
             {(RecordList ?? []).map((item, index) => (
               <RowFlex key={item.id}>
                 <InProgress info={item} />
-                {(item.plunder ?? []).map((info, index2) => (
-                  <PkBox
-                    First={index === 0 && index2 === 0}
-                    key={info.createTime}
-                    info={info}
-                  />
-                ))}
+                <Flex overflowX='auto'>
+                  {(item.plunder ?? []).map((info, index2) => (
+                    <PkBox
+                      First={index === 0 && index2 === 0}
+                      key={info.createTime}
+                      info={info}
+                    />
+                  ))}
+                </Flex>
               </RowFlex>
             ))}
             {(HaveDetileGalaxReportList ?? []).map((item, index) => (

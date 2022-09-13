@@ -122,13 +122,10 @@ const SmText = styled(Text)`
   font-size: 14px;
 `;
 const LoadingBox = styled(Box)`
-  position: fixed;
+  position: absolute;
   left: 56%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 120%;
-  height: 100%;
-  z-index: 99;
 `;
 
 const ImgBox = styled(Box)`
@@ -148,7 +145,7 @@ const OccupiedModul: React.FC<{
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { handleGiveup } = usePlunder();
-  const { galaxyStarList, currentGalaxy } = useStore(p => p.galaxy);
+  const { galaxyStarList, currentGalaxy, loading } = useStore(p => p.galaxy);
   const { scale, TooltipTriggerZIndex } = useStore(p => p.user);
 
   const [pending, setPending] = useState(false);
@@ -289,7 +286,9 @@ const OccupiedModul: React.FC<{
     }
     setTotalReward(num);
     const ScrollDom = document.getElementById('ScrollDom');
-    ScrollDom.scrollTop = 0;
+    if (ScrollDom) {
+      ScrollDom.scrollTop = 0;
+    }
   }, [galaxyStarList]);
 
   // useEffect(() => {
@@ -337,168 +336,183 @@ const OccupiedModul: React.FC<{
         <Text mb='10px' color='textTips' small>
           {t('occupationRules')}
         </Text>
-        <ScrollBox id='ScrollDom'>
-          {(galaxyStarList ?? []).map((item, index) => (
-            <Box mb='30px' key={`${item.number}`}>
-              <Flex
-                justifyContent='space-between'
-                alignItems='center'
-                height='100px'
-              >
-                <Box position='relative'>
-                  <LeveFlex>
-                    <Text Purple fontStyle='normal' fontSize='14px' bold>
-                      # {item.number} {t('Star')}
-                    </Text>
-                  </LeveFlex>
-                  <ImgBox>
-                    <img
-                      src={
-                        item.ownerAvatar
-                          ? item.ownerAvatar
-                          : item?.nick_name
-                          ? '/images/login/a-man.png'
-                          : '/images/commons/36.png'
-                      }
-                      alt=''
-                    />
-                  </ImgBox>
-                </Box>
-                <Flex
-                  flexDirection='column'
-                  justifyContent='space-between'
-                  height='100%'
-                  width='50%'
-                >
-                  <Flex alignItems='baseline'>
-                    <SmText mr='10px' color='textSubtle'>
-                      {t('Star Lord')}:
-                    </SmText>
-                    <SmText ellipsis>{item?.nick_name || ''}</SmText>
-                  </Flex>
-                  <Flex alignItems='center'>
-                    <SmText mr='10px' color='textSubtle'>
-                      {t('Reward Coefficient')}
-                    </SmText>
-                    <SmText>
-                      {SubString_1(GetRewardFactor(item?.disapth_box), 3)}%
-                    </SmText>
-                  </Flex>
-                  <Flex alignItems='center'>
-                    <SmText mr='10px' color='textSubtle'>
-                      {t('Estimated amount of BOX received in 24 hours')}:&nbsp;
-                      <span style={{ color: '#fff' }}>
-                        {formatLocalisedCompactBalance(item.pre_box)}
-                      </span>
-                    </SmText>
-                    {/* <SmText>
+        {loading ? (
+          <LoadingBox>
+            <Spinner />
+          </LoadingBox>
+        ) : (
+          <>
+            <ScrollBox id='ScrollDom'>
+              {(galaxyStarList ?? []).map((item, index) => (
+                <Box mb='30px' key={`${item.number}`}>
+                  <Flex
+                    justifyContent='space-between'
+                    alignItems='center'
+                    height='100px'
+                  >
+                    <Box position='relative'>
+                      <LeveFlex>
+                        <Text Purple fontStyle='normal' fontSize='14px' bold>
+                          {t('Star')} #{item.number}
+                        </Text>
+                      </LeveFlex>
+                      <ImgBox>
+                        <img
+                          src={
+                            item.ownerAvatar
+                              ? item.ownerAvatar
+                              : item?.nick_name
+                              ? '/images/login/a-man.png'
+                              : '/images/commons/36.png'
+                          }
+                          alt=''
+                        />
+                      </ImgBox>
+                    </Box>
+                    <Flex
+                      flexDirection='column'
+                      justifyContent='space-between'
+                      height='100%'
+                      width='50%'
+                    >
+                      <Flex alignItems='baseline'>
+                        <SmText mr='8px' color='textSubtle'>
+                          {t('Star Lord')}:
+                        </SmText>
+                        <SmText ellipsis>{item?.nick_name || ''}</SmText>
+                      </Flex>
+                      <Flex alignItems='center'>
+                        <SmText mr='8px' color='textSubtle'>
+                          {t('Reward Coefficient')}:
+                        </SmText>
+                        <SmText>
+                          {SubString_1(GetRewardFactor(item?.disapth_box), 3)}%
+                        </SmText>
+                      </Flex>
+                      <Flex alignItems='center'>
+                        <SmText mr='8px' color='textSubtle'>
+                          {t('Estimated amount of BOX received in 24 hours')}
+                          :&nbsp;
+                          <span style={{ color: '#fff' }}>
+                            {formatLocalisedCompactBalance(item.pre_box)}
+                          </span>
+                        </SmText>
+                        {/* <SmText>
                       
                     </SmText> */}
-                  </Flex>
-                  <Flex alignItems='center'>
-                    <SmText mr='10px' color='textSubtle'>
-                      {t('Time of occupation')}:
-                    </SmText>
-                    <SmText>
-                      {item?.nick_name
-                        ? EasyformatTime(HoldTime(item.hold_time))
-                        : ''}
-                    </SmText>
-                  </Flex>
-                </Flex>
-                <Flex
-                  flexDirection='column'
-                  justifyContent='space-between'
-                  height='100%'
-                  width='30%'
-                >
-                  <Flex alignItems='baseline' flexWrap='wrap'>
-                    <SmText mr='10px'>{t('Power')}</SmText>
-                    <Text gold ellipsis fontStyle='normal' fontSize='20px' bold>
-                      {splitThousandSeparator(item.power)}
-                    </Text>
-                  </Flex>
-                  {!IsOwner(item.owner) && (
-                    <>
-                      {item.owner ? (
-                        <Button
-                          variant='gold'
-                          height='45px'
-                          onClick={() => {
-                            setActiveInfo(item);
-                            setVisible(true);
-                          }}
+                      </Flex>
+                      <Flex alignItems='center'>
+                        <SmText mr='8px' color='textSubtle'>
+                          {t('Time of occupation')}:
+                        </SmText>
+                        <SmText>
+                          {item?.nick_name
+                            ? EasyformatTime(HoldTime(item.hold_time))
+                            : ''}
+                        </SmText>
+                      </Flex>
+                    </Flex>
+                    <Flex
+                      flexDirection='column'
+                      justifyContent='space-between'
+                      height='100%'
+                      width='30%'
+                    >
+                      <Flex alignItems='baseline' flexWrap='wrap'>
+                        <SmText mr='10px'>{t('Power')}</SmText>
+                        <Text
+                          gold
+                          ellipsis
+                          fontStyle='normal'
+                          fontSize='20px'
+                          bold
                         >
-                          <Text color='#FBC249' fontSize='16px' bold>
-                            {t('Seize Star')}
-                          </Text>
-                        </Button>
-                      ) : (
-                        <Button
-                          disabled={pending}
-                          variant='gold'
-                          height='45px'
-                          onClick={() => handleHold(item)}
-                        >
-                          <Text color='#FBC249' fontSize='16px' bold>
-                            {/* {pending ? (
+                          {splitThousandSeparator(item.power)}
+                        </Text>
+                      </Flex>
+                      {!IsOwner(item.owner) && (
+                        <>
+                          {item.owner ? (
+                            <Button
+                              variant='gold'
+                              height='45px'
+                              onClick={() => {
+                                setActiveInfo(item);
+                                setVisible(true);
+                              }}
+                            >
+                              <Text color='#FBC249' fontSize='16px' bold>
+                                {t('Seize Star')}
+                              </Text>
+                            </Button>
+                          ) : (
+                            <Button
+                              disabled={pending}
+                              variant='gold'
+                              height='45px'
+                              onClick={() => handleHold(item)}
+                            >
+                              <Text color='#FBC249' fontSize='16px' bold>
+                                {/* {pending ? (
                               <Dots>{t('Occupy Star')}</Dots>
                             ) : (
                               t('Occupy Star')
                             )} */}
-                            {t('Occupy Star')}
-                          </Text>
-                        </Button>
+                                {t('Occupy Star')}
+                              </Text>
+                            </Button>
+                          )}
+                        </>
                       )}
-                    </>
-                  )}
 
-                  {IsOwner(item.owner) && (
-                    <Button
-                      disabled={pending}
-                      variant='gold'
-                      height='45px'
-                      onClick={() => handleGiveupStar(item)}
-                    >
-                      <Text color='#FBC249' fontSize='16px' bold>
-                        {/* {pending ? (
+                      {IsOwner(item.owner) && (
+                        <Button
+                          disabled={pending}
+                          variant='gold'
+                          height='45px'
+                          onClick={() => handleGiveupStar(item)}
+                        >
+                          <Text color='#FBC249' fontSize='16px' bold>
+                            {/* {pending ? (
                           <Dots>{t('Give up Occupy')}</Dots>
                         ) : (
                           t('Give up Occupy')
                         )} */}
-                        {t('Give up Occupy')}
-                      </Text>
-                    </Button>
-                  )}
-                </Flex>
-              </Flex>
-            </Box>
-          ))}
-        </ScrollBox>
-        <Flex justifyContent='center'>
-          <Button
-            variant='gold'
-            height='45px'
-            disabled={!claimMax}
-            onClick={handleClaim}
-          >
-            <Text color='#FBC249' bold>
-              <Flex alignItems='center'>
-                {t('Claim')}(
-                {claimMax ? (
-                  <BalanceText
-                    fontSize='16px'
-                    color='#FBC249'
-                    value={Number(SubString_1(claimMax, 6))}
-                  />
-                ) : (
-                  SubString_1(claimMax, 6)
-                )}
-                BOX)
-              </Flex>
-            </Text>
-          </Button>
-        </Flex>
+                            {t('Give up Occupy')}
+                          </Text>
+                        </Button>
+                      )}
+                    </Flex>
+                  </Flex>
+                </Box>
+              ))}
+            </ScrollBox>
+            <Flex justifyContent='center'>
+              <Button
+                variant='gold'
+                height='45px'
+                disabled={!claimMax}
+                onClick={handleClaim}
+              >
+                <Text color='#FBC249' bold>
+                  <Flex alignItems='center'>
+                    {t('Claim')}(
+                    {claimMax ? (
+                      <BalanceText
+                        fontSize='16px'
+                        color='#FBC249'
+                        value={Number(SubString_1(claimMax, 6))}
+                      />
+                    ) : (
+                      SubString_1(claimMax, 6)
+                    )}
+                    &nbsp;BOX)
+                  </Flex>
+                </Text>
+              </Button>
+            </Flex>
+          </>
+        )}
       </ListBox>
       {visible && (
         <Modal title='TIPS' visible={visible} setVisible={setVisible}>

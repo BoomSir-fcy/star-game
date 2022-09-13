@@ -23,7 +23,7 @@ import { BuildingConsume } from './buildingConsume';
 
 const Container = styled(Box)`
   position: absolute;
-  right: -10px;
+  right: 0;
   top: -25px;
   height: 950px;
   z-index: 199;
