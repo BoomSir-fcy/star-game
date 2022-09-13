@@ -59,22 +59,31 @@ export const BuildingRechargeModal: React.FC<{
   });
   const stoneProportion = Number(
     SubString_1(
-      (maxValue[StoreType.STONE].already / maxValue[StoreType.STONE].max) * 100,
+      Number(
+        new BigNumber(maxValue[StoreType.STONE].already)
+          .div(maxValue[StoreType.STONE].max)
+          .times(100),
+      ),
       50,
     ),
   );
   const populationProportion = Number(
     SubString_1(
-      (maxValue[StoreType.POPULATION].already /
-        maxValue[StoreType.POPULATION].max) *
-        100,
+      Number(
+        new BigNumber(maxValue[StoreType.POPULATION].already)
+          .div(maxValue[StoreType.POPULATION].max)
+          .times(100),
+      ),
       50,
     ),
   );
   const energyProportion = Number(
     SubString_1(
-      (maxValue[StoreType.ENERGY].already / maxValue[StoreType.ENERGY].max) *
-        100,
+      Number(
+        new BigNumber(maxValue[StoreType.ENERGY].already)
+          .div(maxValue[StoreType.ENERGY].max)
+          .times(100),
+      ),
       50,
     ),
   );

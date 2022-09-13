@@ -36,6 +36,7 @@ export const initialState: GalaxyState = {
     lastTimestamp: '0',
   },
   auctionRecordList: [],
+  auctionRecordListLoading: false,
   AllLogs: [],
   OwnerInfo: {
     hold_time: 0,
@@ -47,6 +48,7 @@ export const initialState: GalaxyState = {
     power: 0,
     address: '',
   },
+  OwnerInfoLoading: false,
   galaxy_total_box: 0,
   planet_total_box: 0,
   galaxyNftList: [],
@@ -67,6 +69,7 @@ export const fetchAllLogsAsync = (): AppThunk => async dispatch => {
 export const fetchOwnerInfoAsync =
   (nft_id: number): AppThunk =>
   async dispatch => {
+    dispatch(setOwnerInfoLoading(true));
     const info = await fetchOwnerInfo(nft_id);
     dispatch(setOwnerInfo(info));
   };
@@ -95,6 +98,7 @@ export const fetchGetNftViewListAsync =
 export const fetchAuctionRecordListAsync =
   (galaxyId: number): AppThunk =>
   async dispatch => {
+    dispatch(setAuctionRecordListLoading(true));
     const list = await fetchAuctionRecordList(galaxyId);
     dispatch(setAuctionRecordList(list));
   };
@@ -166,6 +170,10 @@ export const galaxySlice = createSlice({
     setAuctionRecordList: (state, action) => {
       const { payload } = action;
       state.auctionRecordList = payload;
+      state.auctionRecordListLoading = false;
+    },
+    setAuctionRecordListLoading: (state, action) => {
+      state.auctionRecordListLoading = action.payload;
     },
     setAllLogsList: (state, action) => {
       const { payload } = action;
@@ -177,7 +185,11 @@ export const galaxySlice = createSlice({
       const { payload } = action;
       if (payload) {
         state.OwnerInfo = payload;
+        state.OwnerInfoLoading = false;
       }
+    },
+    setOwnerInfoLoading: (state, action) => {
+      state.OwnerInfoLoading = action.payload;
     },
     GalaxReportList: (state, action) => {
       const { payload } = action;
@@ -202,6 +214,8 @@ export const {
   setOwnerInfo,
   setGalaxyNftList,
   GalaxReportList,
+  setAuctionRecordListLoading,
+  setOwnerInfoLoading,
 } = galaxySlice.actions;
 
 export default galaxySlice.reducer;

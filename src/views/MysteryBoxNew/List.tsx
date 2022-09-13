@@ -551,7 +551,7 @@ const List = () => {
         )}
         {planetList?.length > 0 &&
           planetList?.map((item, index) => (
-            <Box position='relative' key={item?.id}>
+            <Box position='relative' key={item?.id} width='230px'>
               <Light
                 tween={tween}
                 haveGift={item.give_level > 1 || item.give_build_index !== 0}

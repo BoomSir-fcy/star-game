@@ -187,7 +187,7 @@ const GalaxyInfoIndex: React.FC = () => {
   }, [galaxyList]);
 
   return (
-    <Box position='relative' height='100%'>
+    <Box position='relative' height='calc(100% - 156px)'>
       <GalaxyInfoBox id='InfoBox'>
         <Box
           id='box'

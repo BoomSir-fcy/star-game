@@ -6,7 +6,16 @@ import React, {
   useRef,
 } from 'react';
 import { storeAction, useStore } from 'state';
-import { Text, Flex, Box, GraphicsCard, Dots, BalanceText, Image } from 'uikit';
+import {
+  Text,
+  Flex,
+  Box,
+  GraphicsCard,
+  Dots,
+  BalanceText,
+  Image,
+  Spinner,
+} from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { Api } from 'apis';
@@ -19,6 +28,7 @@ import {
   ScrollBox,
   AuctionBtn,
   GetImg,
+  LoadingBox,
 } from 'views/NewGalaxy/style';
 import {
   fetchAuctionRecordListAsync,
@@ -53,8 +63,13 @@ const InfoModule: React.FC<{
   const { account } = useWeb3React();
   const timer = useRef<ReturnType<typeof setTimeout>>();
 
-  const { currentGalaxy, auctionRecordList, OwnerInfo, galaxyNftList } =
-    useStore(p => p.galaxy);
+  const {
+    currentGalaxy,
+    auctionRecordList,
+    OwnerInfo,
+    galaxyNftList,
+    OwnerInfoLoading,
+  } = useStore(p => p.galaxy);
   const galaxyNft = galaxyNftList[currentGalaxy?.id];
   // useGalaxyNft(currentGalaxy.id);
 
@@ -215,12 +230,18 @@ const InfoModule: React.FC<{
 
   return (
     <InfoModuleBox className={OpenInfo ? 'Show' : 'close'}>
-      <Flex mb='16px' justifyContent='space-between'>
-        <Flex alignItems='flex-end'>
-          <Text gold bold fontSize='20px'>
-            {t('Auction')}&nbsp;{currentGalaxy.name}
-          </Text>
-          {/* <Flex ml='30px' alignItems='flex-end'>
+      {OwnerInfoLoading ? (
+        <LoadingBox>
+          <Spinner />
+        </LoadingBox>
+      ) : (
+        <>
+          <Flex mb='16px' justifyContent='space-between'>
+            <Flex alignItems='flex-end'>
+              <Text gold bold fontSize='20px'>
+                {t('Auction')}&nbsp;{currentGalaxy.name}
+              </Text>
+              {/* <Flex ml='30px' alignItems='flex-end'>
             <Text fontSize='14px' mr='15px'>
               {t('Total Galaxy CE')}
             </Text>
@@ -228,77 +249,79 @@ const InfoModule: React.FC<{
               {splitThousandSeparator(OwnerInfo.power)}
             </NormalMarkText>
           </Flex> */}
-        </Flex>
-        <CloseImg
-          onClick={() => setOpenInfo(false)}
-          src='/images/commons/introjs-close.png'
-          alt=''
-        />
-      </Flex>
-      <BorderBox mb={20}>
-        <Flex alignItems='center' justifyContent='space-between'>
-          <Flex alignItems='center'>
-            <UserImg
-              src={
-                OwnerInfo.avatar ? OwnerInfo.avatar : '/images/login/a-man.png'
-              }
+            </Flex>
+            <CloseImg
+              onClick={() => setOpenInfo(false)}
+              src='/images/commons/introjs-close.png'
               alt=''
             />
-            <Box ml='18px'>
-              <Flex mb='10px' alignItems='flex-end'>
-                <Text fontSize='14px' mr='15px'>
-                  {t('Galaxy Lord')}
-                </Text>
-                <NormalMarkText bold fontSize='16px'>
-                  {OwnerInfo.nickname}
-                </NormalMarkText>
-              </Flex>
-              {OwnerInfo.nickname && (
-                <Text fontSize='14px'>
-                  {t('Claimed')}
-                  &nbsp; &nbsp;
-                  {EasyformatTime(HoldTime(OwnerInfo.hold_time))}
-                </Text>
-              )}
-            </Box>
           </Flex>
-          <Box
-            style={{ padding: '8px 16px' }}
-            width='max-content'
-            height='max-content'
-          >
-            <Text fontSize='14px'>{t('Accumulated')} BOX</Text>
-            <Text gold bold fontSize='18px'>
-              {splitThousandSeparator(
-                Number(SubString_1(OwnerInfo.owner_get_box, 5)),
-              )}
-            </Text>
+          <BorderBox mb={20}>
+            <Flex alignItems='center' justifyContent='space-between'>
+              <Flex alignItems='center'>
+                <UserImg
+                  src={
+                    OwnerInfo.avatar
+                      ? OwnerInfo.avatar
+                      : '/images/login/a-man.png'
+                  }
+                  alt=''
+                />
+                <Box ml='18px'>
+                  <Flex mb='10px' alignItems='flex-end'>
+                    <Text fontSize='14px' mr='15px'>
+                      {t('Galaxy Lord')}
+                    </Text>
+                    <NormalMarkText bold fontSize='16px'>
+                      {OwnerInfo.nickname}
+                    </NormalMarkText>
+                  </Flex>
+                  {OwnerInfo.nickname && (
+                    <Text fontSize='14px'>
+                      {t('Claimed')}
+                      &nbsp; &nbsp;
+                      {EasyformatTime(HoldTime(OwnerInfo.hold_time))}
+                    </Text>
+                  )}
+                </Box>
+              </Flex>
+              <Box
+                style={{ padding: '8px 16px' }}
+                width='max-content'
+                height='max-content'
+              >
+                <Text fontSize='14px'>{t('Accumulated')} BOX</Text>
+                <Text gold bold fontSize='18px'>
+                  {splitThousandSeparator(
+                    Number(SubString_1(OwnerInfo.owner_get_box, 5)),
+                  )}
+                </Text>
+              </Box>
+            </Flex>
+          </BorderBox>
+          <Box mb={30}>
+            <Text mb='18px'>{t('GalaxyDesc1')}</Text>
+            <Flex mb='12px'>
+              <GetImg src='/images/commons/icon/icon-finish.png' />
+              <Text ml='10px' fontSize='14px'>
+                {t('GalaxyDesc1-1')}
+              </Text>
+            </Flex>
+            <Flex mb='12px'>
+              <GetImg src='/images/commons/icon/icon-finish.png' />
+              <Text ml='10px' fontSize='14px'>
+                {t('GalaxyDesc1-2')}
+              </Text>
+            </Flex>
+            <Flex mb='12px'>
+              <GetImg src='/images/commons/icon/icon-finish.png' />
+              <Text ml='10px' fontSize='14px'>
+                {t('GalaxyDesc1-3')}
+              </Text>
+            </Flex>
           </Box>
-        </Flex>
-      </BorderBox>
-      <Box mb={30}>
-        <Text mb='18px'>{t('GalaxyDesc1')}</Text>
-        <Flex mb='12px'>
-          <GetImg src='/images/commons/icon/icon-finish.png' />
-          <Text ml='10px' fontSize='14px'>
-            {t('GalaxyDesc1-1')}
-          </Text>
-        </Flex>
-        <Flex mb='12px'>
-          <GetImg src='/images/commons/icon/icon-finish.png' />
-          <Text ml='10px' fontSize='14px'>
-            {t('GalaxyDesc1-2')}
-          </Text>
-        </Flex>
-        <Flex mb='12px'>
-          <GetImg src='/images/commons/icon/icon-finish.png' />
-          <Text ml='10px' fontSize='14px'>
-            {t('GalaxyDesc1-3')}
-          </Text>
-        </Flex>
-      </Box>
 
-      {/* <Flex mb='8px' justifyContent='space-between'>
+          {/* <Flex mb='8px' justifyContent='space-between'>
         <GraphicsCard
           stripe
           style={{ padding: '8px 16px' }}
@@ -322,7 +345,7 @@ const InfoModule: React.FC<{
           </NormalMarkText>
         </GraphicsCard>
       </Flex> */}
-      {/* <BorderBox mb='8px'>
+          {/* <BorderBox mb='8px'>
         <Text fontSize='14px'>
           {t('Accumulated by all Lords of this galaxy in history')}
           &nbsp;
@@ -341,62 +364,64 @@ const InfoModule: React.FC<{
           </Text>
         ))}
       </ScrollBox> */}
-      <Flex mb='16px' alignItems='center' justifyContent='center'>
-        {OwnerInfo?.address?.toLocaleLowerCase() ===
-        account?.toLocaleLowerCase() ? (
-          <>
-            <AuctionBtn
-              variant='purpleShow'
-              height='100%'
-              minWidth='50%'
-              width='max-content'
-              padding='4px 10px'
-              disabled
-            >
-              <Text width='max-content' color='textPrimary' bold>
-                <Box>{t('Congratulations')}</Box>
-                {t('Become the Lord of %name% galaxy', {
-                  name: currentGalaxy.name,
-                })}
-              </Text>
-            </AuctionBtn>
-          </>
-        ) : (
-          <AuctionBtn
-            variant='purpleShow'
-            width='50%'
-            height='max-content'
-            padding='0 10px'
-            disabled={BiddingdiffSeconds > 0 || pending}
-            onClick={handleAuction}
-          >
-            <Flex alignItems='center' width='100%' justifyContent='center'>
-              <Image
-                width={40}
-                height={40}
-                src='/images/tokens/BNB.svg'
-                alt=''
-              />
-              <Flex ml='14px' flex={1} flexDirection='column'>
-                {BiddingdiffSeconds > 0 ? (
-                  `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
-                    timePeriod.seconds
-                  }${t('s')}`
-                ) : pending ? (
-                  <Dots>{t('Bidding')}</Dots>
-                ) : (
-                  <>
-                    <Text>{`${t('Auction')} ${currentGalaxy.name}`}</Text>
-                    <Text gold bold fontSize='18px'>
-                      {`( ${currentPrice ? `${currentPrice}` : '---'} BNB )`}
-                    </Text>
-                  </>
-                )}
-              </Flex>
-            </Flex>
-          </AuctionBtn>
-        )}
-        {/* <Text color='#A9CCCB' fontSize='14px' ml='20px' mr='20px'>
+          <Flex mb='16px' alignItems='center' justifyContent='center'>
+            {OwnerInfo?.address?.toLocaleLowerCase() ===
+            account?.toLocaleLowerCase() ? (
+              <>
+                <AuctionBtn
+                  variant='purpleShow'
+                  height='100%'
+                  minWidth='50%'
+                  width='max-content'
+                  padding='4px 10px'
+                  disabled
+                >
+                  <Text width='max-content' color='textPrimary' bold>
+                    <Box>{t('Congratulations')}</Box>
+                    {t('Become the Lord of %name% galaxy', {
+                      name: currentGalaxy.name,
+                    })}
+                  </Text>
+                </AuctionBtn>
+              </>
+            ) : (
+              <AuctionBtn
+                variant='purpleShow'
+                width='50%'
+                height='max-content'
+                padding='0 10px'
+                disabled={BiddingdiffSeconds > 0 || pending}
+                onClick={handleAuction}
+              >
+                <Flex alignItems='center' width='100%' justifyContent='center'>
+                  <Image
+                    width={40}
+                    height={40}
+                    src='/images/tokens/BNB.svg'
+                    alt=''
+                  />
+                  <Flex ml='14px' flex={1} flexDirection='column'>
+                    {BiddingdiffSeconds > 0 ? (
+                      `${t('Cooling')}:${timePeriod.minutes}${t('m')}${
+                        timePeriod.seconds
+                      }${t('s')}`
+                    ) : pending ? (
+                      <Dots>{t('Bidding')}</Dots>
+                    ) : (
+                      <>
+                        <Text>{`${t('Auction')} ${currentGalaxy.name}`}</Text>
+                        <Text gold bold fontSize='18px'>
+                          {`( ${
+                            currentPrice ? `${currentPrice}` : '---'
+                          } BNB )`}
+                        </Text>
+                      </>
+                    )}
+                  </Flex>
+                </Flex>
+              </AuctionBtn>
+            )}
+            {/* <Text color='#A9CCCB' fontSize='14px' ml='20px' mr='20px'>
           {t(
             'Of Which, %num1% BNB will be given to the previous galaxy lord, and %num2% BNB will go to the Rewards Pool',
             {
@@ -405,32 +430,32 @@ const InfoModule: React.FC<{
             },
           )}
         </Text> */}
-      </Flex>
-      <Flex alignItems='center' justifyContent='center'>
-        <AuctionBtn
-          variant='gold'
-          width='50%'
-          // disabled={!claimMax || diffSeconds <= 0}
-          disabled={!claimMax}
-          onClick={handleClaim}
-        >
-          <Text color='#FBC249' bold>
-            <Flex alignItems='center'>
-              {t('Claim')}(
-              {claimMax ? (
-                <BalanceText
-                  fontSize='16px'
-                  color='#FBC249'
-                  value={Number(SubString_1(claimMax, 6))}
-                />
-              ) : (
-                SubString_1(claimMax, 6)
-              )}
-              BOX)
-            </Flex>
-          </Text>
-        </AuctionBtn>
-        {/* <Box ml='20px'>
+          </Flex>
+          <Flex alignItems='center' justifyContent='center'>
+            <AuctionBtn
+              variant='gold'
+              width='50%'
+              // disabled={!claimMax || diffSeconds <= 0}
+              disabled={!claimMax}
+              onClick={handleClaim}
+            >
+              <Text color='#FBC249' bold>
+                <Flex alignItems='center'>
+                  {t('Claim')}(
+                  {claimMax ? (
+                    <BalanceText
+                      fontSize='16px'
+                      color='#FBC249'
+                      value={Number(SubString_1(claimMax, 6))}
+                    />
+                  ) : (
+                    SubString_1(claimMax, 6)
+                  )}
+                  &nbsp;BOX)
+                </Flex>
+              </Text>
+            </AuctionBtn>
+            {/* <Box ml='20px'>
           <Text color='textTips' small>
             {t('Remaining time for claiming (24:00 UTC)')}
           </Text>
@@ -438,7 +463,9 @@ const InfoModule: React.FC<{
             {`${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')}`}
           </Text>
         </Box> */}
-      </Flex>
+          </Flex>
+        </>
+      )}
     </InfoModuleBox>
   );
 };

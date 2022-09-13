@@ -72,7 +72,7 @@ const AllianceResources: React.FC = () => {
       </ButtonLeft>
       <Flex position='absolute' top='4px' justifyContent='center' width='100%'>
         <MarkText fontSize='14px' fontStyle='normal' bold>
-          {t('Planetary Alliance Resources')}
+          {t('Planet Alliance Resources')}
         </MarkText>
       </Flex>
     </TokenGroupBox>

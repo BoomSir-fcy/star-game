@@ -111,7 +111,7 @@ const InvitePop: React.FC = () => {
             justifyContent='space-between'
             alignItems='center'
           >
-            <Text color='textSubtle'>{t('Invitation address')}</Text>
+            <Text color='textSubtle'>{t('Invitees‘ address')}</Text>
             <Text color='textSubtle'>
               {t('Rebate')}
               (BNB)

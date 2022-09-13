@@ -61,29 +61,6 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
         <StyledImage
           width={35}
           height={39}
-          src='/images/commons/icon/icon_spice.png'
-        />
-        <ItemInfoFlex>
-          <Text small color='textSubtle'>
-            {t('Population')}
-          </Text>
-          <Flex>
-            <Text
-              small
-              color={
-                planetInfo?.population < spices ? 'warning' : 'progressGreenBar'
-              }
-            >
-              {spices}
-            </Text>
-            <Text small>/{planetInfo?.population}</Text>
-          </Flex>
-        </ItemInfoFlex>
-      </ItemFlex>
-      <ItemFlex>
-        <StyledImage
-          width={35}
-          height={39}
           src='/images/commons/icon/icon_energy.png'
         />
         <ItemInfoFlex>
@@ -100,6 +77,29 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
               {energy}
             </Text>
             <Text small>/{planetInfo?.energy}</Text>
+          </Flex>
+        </ItemInfoFlex>
+      </ItemFlex>
+      <ItemFlex>
+        <StyledImage
+          width={35}
+          height={39}
+          src='/images/commons/icon/icon_spice.png'
+        />
+        <ItemInfoFlex>
+          <Text small color='textSubtle'>
+            {t('Population')}
+          </Text>
+          <Flex>
+            <Text
+              small
+              color={
+                planetInfo?.population < spices ? 'warning' : 'progressGreenBar'
+              }
+            >
+              {spices}
+            </Text>
+            <Text small>/{planetInfo?.population}</Text>
           </Flex>
         </ItemInfoFlex>
       </ItemFlex>

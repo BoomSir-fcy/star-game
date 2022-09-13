@@ -140,8 +140,10 @@ export interface GalaxyState {
   loadingGalaxy: boolean;
   loading: boolean;
   auctionRecordList: any[];
+  auctionRecordListLoading: boolean;
   AllLogs: AllLogsInfo[];
   OwnerInfo: OwnerInfoView;
+  OwnerInfoLoading: boolean;
   galaxy_total_box: number;
   planet_total_box: number;
   galaxyNftList: GalaxyNft[];

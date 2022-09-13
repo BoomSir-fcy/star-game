@@ -34,10 +34,18 @@ export const ItemGalaxyBox = styled(Box)`
   position: absolute;
 `;
 
+export const LoadingBox = styled(Box)`
+  position: absolute;
+  left: 56%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 export const InfoModuleBox = styled(Box)`
   position: fixed;
   width: 582px;
   height: max-content;
+  min-height: 540px;
   background: linear-gradient(270deg, #520d4e, #123d45);
   border: 2px solid;
   border-image: linear-gradient(90deg, #c83cc0, #2faced) 2 2;
