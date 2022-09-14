@@ -18,7 +18,11 @@ import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
-import { setNavZIndex } from 'state/userInfo/reducer';
+import {
+  setNavZIndex,
+  fetchUserBalanceAsync,
+  fetchUserProductAsync,
+} from 'state/userInfo/reducer';
 import { eventsType } from 'building/core/event';
 import { useCallbackPrompt } from 'hooks/useCallbackPrompt';
 import { debounce } from 'lodash';
@@ -326,6 +330,9 @@ const Details = () => {
         return false;
       } catch (error: any) {
         throw new Error(error);
+      } finally {
+        dispatch(fetchUserBalanceAsync());
+        dispatch(fetchUserProductAsync());
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

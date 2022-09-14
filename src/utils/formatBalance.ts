@@ -106,7 +106,7 @@ export const formatDisplayApr = (number: number, decimals = 6): string => {
   return number.toLocaleString('en-US', { maximumFractionDigits: decimals });
 };
 
-export const formatLocalisedCompactBalance = (
+export const formatLocalisedCompactBalance_b = (
   number: number,
   decimals = 3,
 ): string => {
@@ -120,6 +120,22 @@ export const formatLocalisedCompactBalance = (
     }).format(Number(number?.toFixed(decimals)));
   }
   return SubString_1(number, decimals);
+};
+
+export const formatLocalisedCompactBalance = (
+  number: number,
+  decimals = 3,
+): string => {
+  if (!Number.isFinite(number)) return '0';
+  const codeFromStorage = getLanguageCodeFromLS();
+  return new Intl.NumberFormat(codeFromStorage, {
+    notation: 'compact',
+    // compactDisplay: 'long',
+    maximumSignificantDigits: 6,
+  }).format(Number(number?.toFixed(decimals)));
+  // if (new BigNumber(number).isGreaterThanOrEqualTo(ONE_MILLION)) {
+  // }
+  // return SubString_1(number, decimals);
 };
 
 export const formatLocalisedCompactNumber = (
@@ -144,7 +160,8 @@ export const splitThousandSeparator = (num: number): string => {
   }
   let DIGIT_PATTERN = /(^|\s)\d+(?=\.?\d*($|\s))/g;
   let MILI_PATTERN = /(?=(?!\b)(\d{3})+\.?\b)/g;
-  let str: string = num?.toString()
+  let str: string = num
+    ?.toString()
     .replace(DIGIT_PATTERN, m => m.replace(MILI_PATTERN, ','));
   return prefix + str;
 };

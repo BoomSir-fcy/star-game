@@ -7,7 +7,7 @@ import { useToast } from 'contexts/ToastsContext';
 import { getBoxAddress } from 'utils/addressHelpers';
 import { TokenImage } from 'components/TokenImage';
 import {
-  formatLocalisedCompactBalance,
+  formatLocalisedCompactBalance_b,
   formatDisplayApr,
 } from 'utils/formatBalance';
 import { storeAction, useStore } from 'state';
@@ -102,7 +102,7 @@ const TokenInfo = () => {
   );
 
   const format = useCallback((number: number) => {
-    return formatLocalisedCompactBalance(number) || 0;
+    return formatLocalisedCompactBalance_b(number) || 0;
   }, []);
   return (
     <Box mt='-8px' position='relative'>
@@ -240,19 +240,6 @@ const TokenInfo = () => {
           <ButtonLeft disabled variant='custom'>
             <Flex width='100%' alignItems='center'>
               <Flex alignItems='center' flex={1}>
-                <TokenImage width={35} height={35} tokenAddress='SPICES' />
-                <Text small ml='8px' ellipsis title={`${Product.population}`}>
-                  {format(Product.population)}
-                </Text>
-              </Flex>
-              <Text ml='8px' small>
-                {t('Population')}
-              </Text>
-            </Flex>
-          </ButtonLeft>
-          <ButtonLeft disabled variant='custom'>
-            <Flex width='100%' alignItems='center'>
-              <Flex alignItems='center' flex={1}>
                 <TokenImage width={35} height={35} tokenAddress='ENG' />
                 <Text small ml='8px' ellipsis title={`${Product.energy}`}>
                   {format(Product.energy)}
@@ -260,6 +247,19 @@ const TokenInfo = () => {
               </Flex>
               <Text ml='8px' small>
                 {t('Energy ')}
+              </Text>
+            </Flex>
+          </ButtonLeft>
+          <ButtonLeft disabled variant='custom'>
+            <Flex width='100%' alignItems='center'>
+              <Flex alignItems='center' flex={1}>
+                <TokenImage width={35} height={35} tokenAddress='SPICES' />
+                <Text small ml='8px' ellipsis title={`${Product.population}`}>
+                  {format(Product.population)}
+                </Text>
+              </Flex>
+              <Text ml='8px' small>
+                {t('Population')}
               </Text>
             </Flex>
           </ButtonLeft>
