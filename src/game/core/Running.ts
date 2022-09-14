@@ -290,7 +290,7 @@ class Running extends EventTarget {
     }
     if (track?.type === descType.TOTAL_INFO) {
       const round = `回合: ${track.id} \n`;
-      const effect = `我方: ${track.info?.blue_total_hp}; 敌方${track.info?.red_total_hp} \n`;
+      const effect = `Your: ${track.info?.blue_total_hp}; Enemy${track.info?.red_total_hp} \n`;
       this.infoText.text = `${round}${effect}`;
       callback();
       return null;

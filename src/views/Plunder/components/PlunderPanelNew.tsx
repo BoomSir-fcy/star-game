@@ -53,13 +53,27 @@ const PanelTextHp: React.FC = ({ children }) => {
   return <PanelText color='hp'>{children}HP</PanelText>;
 };
 
-const PanelSide = ({ isEnemy }: { isEnemy?: boolean }) => {
+const PanelSide = ({
+  isEnemy,
+  after,
+}: {
+  isEnemy?: boolean;
+  after?: boolean;
+}) => {
   const { t } = useTranslation();
 
   if (isEnemy) {
-    return <PanelText color='redSide'>{t('敌方')}&nbsp;</PanelText>;
+    return (
+      <PanelText color='redSide'>
+        {after ? 'enemy' : t('Enemy')}&nbsp;
+      </PanelText>
+    );
   }
-  return <PanelText color='blueSide'>{t('我方')}&nbsp;</PanelText>;
+  return (
+    <PanelText color='blueSide'>
+      {after ? 'your side' : t('Your')}&nbsp;
+    </PanelText>
+  );
 };
 
 const PanelAxis = ({ axis }: { axis?: RoundDescAxis }) => {
@@ -73,12 +87,12 @@ const PanelName = ({ soldier }: { soldier?: Soldier }) => {
   if (soldier) {
     return (
       <span>
-        &nbsp;{getSpriteName(soldier.race, String(soldier.srcId)) || '战士'}
+        &nbsp;{getSpriteName(soldier.race, String(soldier.srcId)) || 'Soldiers'}
         &nbsp;
       </span>
     );
   }
-  return <span>战士</span>;
+  return <span>Soldiers</span>;
 };
 // hp
 
@@ -97,7 +111,10 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
             <PanelTextHp>
               {/* 护盾伤害 */}
               {detail.attackInfo?.around[index]?.sub_shield ? (
-                <>{detail.attackInfo?.around[index]?.sub_shield}护盾和&nbsp;</>
+                <>
+                  {detail.attackInfo?.around[index]?.sub_shield}Shields
+                  and&nbsp;
+                </>
               ) : (
                 ''
               )}
@@ -105,7 +122,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
               {detail.attackInfo?.around[index]?.receive_sub_hp || 0}
             </PanelTextHp>
             {detail.attackInfo?.attack_crit ? (
-              <PanelText color='redSide'>&nbsp;暴击&nbsp;</PanelText>
+              <PanelText color='redSide'>&nbsp;SPR&nbsp;</PanelText>
             ) : (
               ''
             )}
@@ -128,14 +145,14 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
   if (detail?.type === descType.REMOVE) {
     return (
       <Flex pl='20px' mt='10px'>
-        <PanelText color='redSide'>阵亡</PanelText>
+        {/* <PanelText color='redSide'>Killed</PanelText> */}
 
         {rounds}
         <PanelText>
           <PanelSide isEnemy={detail?.descInfo?.sender?.isEnemy} />
           {/* <PanelAxis axis={detail.descInfo?.sender?.pos} /> */}
           <PanelName soldier={detail?.descInfo?.sender?.soldier} />
-          阵亡
+          Killed
         </PanelText>
       </Flex>
     );
@@ -151,10 +168,11 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
         {rounds}
         <PanelText>
           <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-          兵种
+          &nbsp;troop&nbsp;
           {/* <PanelAxis axis={detail.descInfo?.sender?.pos} /> */}
           <PanelName soldier={detail?.descInfo?.sender?.soldier} />
-          向<PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
+          {getEffectDescTextNew(detail.descInfo?.type)}
+          &nbsp;to&nbsp;
           {detail.descInfo?.receives.map((item, index) => {
             return (
               <PanelText key={`${item.pos.x}_${item.pos.y}`}>
@@ -164,7 +182,8 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
               </PanelText>
             );
           })}
-          {getEffectDescTextNew(detail.descInfo?.type)}
+          &nbsp;of&nbsp;
+          <PanelSide after isEnemy={detail.descInfo?.sender?.isEnemy} />
         </PanelText>
       </Flex>
     );
@@ -183,17 +202,18 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
         {rounds}
         <PanelText>
           <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-          兵种
+          &nbsp;troop&nbsp;
           <PanelName soldier={detail?.descInfo?.sender?.soldier} />
           {/* <PanelAxis axis={detail.descInfo?.sender?.pos} /> */}
+          {getEffectDescTextNew(detail.descInfo?.type)}
           {detail.descInfo?.receives.map((item, index) => {
             return (
               <PanelText key={`${item.pos.x}_${item.pos.y}`}>
-                向&nbsp;
-                <PanelSide isEnemy={item.isEnemy} />
-                {/* <PanelAxis axis={item.pos} /> */}
+                &nbsp;to&nbsp;
                 <PanelName soldier={item?.soldier} />
-                {getEffectDescTextNew(detail.descInfo?.type)}
+                &nbsp;of&nbsp;
+                <PanelSide after isEnemy={item.isEnemy} />
+                {/* <PanelAxis axis={item.pos} /> */}
                 {/* {getEffectText(detail.descInfo?.type)}
                 {getEffectDescTypeText(detail.descInfo?.type)} */}
                 {index + 1 < (detail.descInfo?.receives.length || 0) && '、'}
@@ -222,18 +242,13 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
                     </PanelText>
                     <PanelText>
                       <PanelSide isEnemy={round?.descInfo?.sender?.isEnemy} />
-                      兵种
+                      &nbsp;troop&nbsp;
                       <PanelName soldier={round?.descInfo?.sender?.soldier} />
-                      {/* <PanelAxis axis={round?.descInfo?.sender?.pos} /> */}
-                      使用范围攻击,
+                      used AOE attack,
                       {round?.descInfo?.receives.map((item, index) => {
                         return (
                           <PanelText key={`${item.pos.x}_${item.pos.y}`}>
-                            对
-                            <PanelSide isEnemy={item.isEnemy} />
-                            <PanelName soldier={item?.soldier} />
-                            {/* <PanelAxis axis={item.pos} /> */}
-                            造成&nbsp;
+                            &nbsp;dealt&nbsp;
                             {round?.attackInfo?.around?.length && (
                               <PanelTextHp>
                                 {/* 护盾伤害 */}
@@ -244,7 +259,7 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
                                       round?.attackInfo?.around[index]
                                         ?.sub_shield
                                     }
-                                    护盾和&nbsp;
+                                    Shields and&nbsp;
                                   </>
                                 ) : (
                                   ''
@@ -256,25 +271,29 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
                             )}
                             {round?.attackInfo?.attack_crit ? (
                               <PanelText color='redSide'>
-                                &nbsp;暴击&nbsp;
+                                &nbsp;SPR&nbsp;
                               </PanelText>
                             ) : (
                               ''
                             )}
+                            <PanelText
+                              color={
+                                round.descInfo?.type === descType.ATTACK_MISS
+                                  ? 'missTxt'
+                                  : ''
+                              }
+                            >
+                              &nbsp;group damage&nbsp;
+                            </PanelText>
+                            to&nbsp;
+                            <PanelName soldier={item?.soldier} />
+                            of&nbsp;
+                            <PanelSide after isEnemy={item.isEnemy} />
                             {index + 1 <
                               (round?.descInfo?.receives?.length || 0) && '、'}
                           </PanelText>
                         );
                       })}
-                      <PanelText
-                        color={
-                          round.descInfo?.type === descType.ATTACK_MISS
-                            ? 'missTxt'
-                            : ''
-                        }
-                      >
-                        群体伤害
-                      </PanelText>
                     </PanelText>
                   </Flex>
                 )}
@@ -299,15 +318,14 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
           return (
             <PanelText key={`${item.pos.x}_${item.pos.y}`}>
               <PanelSide isEnemy={item.isEnemy} />
-              兵种
+              &nbsp;troop&nbsp;
               {/* <PanelAxis axis={item.pos} /> */}
               <PanelName soldier={item?.soldier} />
               {getEffectDescText(detail.descInfo?.type)}
-              造成&nbsp;
               <PanelTextHp>
                 {/* 护盾伤害 */}
                 {detail.attackInfo?.sub_shield ? (
-                  <>{detail.attackInfo?.sub_shield}护盾和&nbsp;</>
+                  <>{detail.attackInfo?.sub_shield}Shield and&nbsp;</>
                 ) : (
                   ''
                 )}
@@ -336,22 +354,18 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
         {rounds}
         <PanelText>
           <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-          兵种
+          &nbsp;troop&nbsp;
           <PanelName soldier={detail?.descInfo?.sender?.soldier} />
-          {/* <PanelAxis
-            axis={detail.descInfo?.sender?.pos || detail?.currentAxisPoint}
-          /> */}
           {getEffectDescTextNew(detail.descInfo?.type || detail?.type)},
           {detail.descInfo?.receives.map((item, index) => {
             return (
               <PanelText key={`${item.pos.x}_${item.pos.y}`}>
-                对
-                <PanelSide isEnemy={item.isEnemy} />
-                {/* <PanelAxis axis={item.pos} /> */}
-                <PanelName soldier={item?.soldier} />
-                造成&nbsp;
+                &nbsp;caused&nbsp;
                 {getEffectText(detail.descInfo?.type)}
-                {getEffectDescTypeText(detail.descInfo?.type)}
+                &nbsp;effect to troop&nbsp;
+                <PanelName soldier={item?.soldier} />
+                &nbsp;of&nbsp;
+                <PanelSide after isEnemy={item.isEnemy} />
               </PanelText>
             );
           })}
@@ -372,20 +386,22 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
         {rounds}
         <PanelText>
           <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-          兵种
+          &nbsp;troop&nbsp;
           <PanelName soldier={detail?.descInfo?.sender?.soldier} />
-          {/* <PanelAxis axis={detail.descInfo?.sender?.pos} /> */}
-          使用{getEffectDescTextNew(detail.descInfo?.type)},
+          &nbsp;used&nbsp;
+          {getEffectDescTextNew(detail.descInfo?.type)},
           {detail.descInfo?.receives.map((item, index) => {
             return (
               <PanelText key={`${item.pos.x}_${item.pos.y}`}>
-                <PanelSide isEnemy={item.isEnemy} />
-
-                <PanelName soldier={item?.soldier} />
-                {/* <PanelAxis axis={item.pos} /> */}
+                &nbsp;caused&nbsp;
                 <PanelText color='missTxt'>
                   {getEffectText(detail.descInfo?.type)}
                 </PanelText>
+                &nbsp;to&nbsp;
+                <PanelName soldier={item?.soldier} />
+                &nbsp;of&nbsp;
+                <PanelSide after isEnemy={item.isEnemy} />
+                {/* <PanelAxis axis={item.pos} /> */}
               </PanelText>
             );
           })}
@@ -405,17 +421,16 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
         {rounds}
         <PanelText>
           <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-          兵种
+          &nbsp;troop&nbsp;
           <PanelName soldier={detail?.descInfo?.sender?.soldier} />
           {/* <PanelAxis axis={detail.descInfo?.sender?.pos} /> */}
-          使用普通攻击,{detail?.type === descType.ATTACK_MISS && <>对</>}
+          &nbsp;used General Attack to,
           {detail.descInfo?.receives.map((item, index) => {
             return (
               <PanelText key={`${item.pos.x}_${item.pos.y}`}>
-                <PanelSide isEnemy={item.isEnemy} />
-
-                {/* <PanelAxis axis={item.pos} /> */}
                 <PanelName soldier={item?.soldier} />
+                &nbsp;of&nbsp;
+                <PanelSide after isEnemy={item.isEnemy} />
                 <PanelText color='missTxt'>
                   {getEffectDescTextNew(detail.descInfo?.type)}
                 </PanelText>
@@ -461,20 +476,21 @@ const PanelType = ({ detail }: { detail: TrackDetail }) => {
         {rounds}
         <PanelText>
           <PanelSide isEnemy={detail.descInfo?.sender?.isEnemy} />
-          兵种
+          &nbsp;troop&nbsp;
           <PanelName soldier={detail?.descInfo?.sender?.soldier} />
           {/* <PanelAxis axis={detail.descInfo?.sender?.pos} /> */}
           {getEffectDescTextNew(detail.descInfo?.type)},
           {detail.descInfo?.receives.map((item, index) => {
             return (
               <PanelText key={`${item.pos.x}_${item.pos.y}`}>
-                对
-                <PanelSide isEnemy={item.isEnemy} />
-                <PanelName soldier={item?.soldier} />
-                {/* <PanelAxis axis={item.pos} /> */}
-                造成&nbsp;
+                &nbsp;caused&nbsp;
                 {Harm(index)}
-                {getEffectDescTypeText(detail.descInfo?.type)}
+                &nbsp;loss to&nbsp;
+                <PanelName soldier={item?.soldier} />
+                &nbsp;of&nbsp;
+                <PanelSide after isEnemy={item.isEnemy} />
+                {/* <PanelAxis axis={item.pos} /> */}
+                {/* {getEffectDescTypeText(detail.descInfo?.type)} */}
                 {index + 1 < (detail.descInfo?.receives.length || 0) && ';'}
               </PanelText>
             );
