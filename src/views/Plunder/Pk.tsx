@@ -517,7 +517,7 @@ const Pk = () => {
             {/* <WaitPlunderList /> */}
           </Flex>
           <ModalWrapper
-            title={t('Game over')}
+            title={t('Game Over')}
             visible={visibleGameFailed}
             setVisible={() => setVisibleGameFailed(false)}
           >

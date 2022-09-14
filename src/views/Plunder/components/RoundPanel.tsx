@@ -55,7 +55,7 @@ const RoundPanel: React.FC<RoundPanelProps> = ({
           {roundName || '--'}
         </Text>
         <Text shadow='primary' fontSize='22px' bold>
-          {isEnemy ? 'Enemy actions' : 'Our actions'}
+          {isEnemy ? 'Enemy Actions' : 'Our Actions'}
         </Text>
         <ButtonStyled
           onClick={() => {
