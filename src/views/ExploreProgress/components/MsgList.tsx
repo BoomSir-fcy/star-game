@@ -159,21 +159,30 @@ const MsgList: React.FC<{
           <TitleGrid concise={concise} padding='10px 0 10px 24px'>
             <SmText>{t('Time')}</SmText>
             <SmText>{t('Planet')}</SmText>
-            <Image
-              width={32}
-              height={32}
-              src='/images/commons/icon/icon_minera.png'
-            />
-            <Image
-              width={32}
-              height={32}
-              src='/images/commons/icon/icon_energy.png'
-            />
-            <Image
-              width={32}
-              height={32}
-              src='/images/commons/icon/icon_spice.png'
-            />
+            <Flex alignItems='center'>
+              <Image
+                width={32}
+                height={32}
+                src='/images/commons/icon/icon_minera.png'
+              />
+              <SmText ml='4px'>{t('Ore')}</SmText>
+            </Flex>
+            <Flex alignItems='center'>
+              <Image
+                width={32}
+                height={32}
+                src='/images/commons/icon/icon_energy.png'
+              />
+              <SmText ml='4px'>{t('Energy')}</SmText>
+            </Flex>
+            <Flex alignItems='center'>
+              <Image
+                width={32}
+                height={32}
+                src='/images/commons/icon/icon_spice.png'
+              />
+              <SmText ml='4px'>{t('Spices')}</SmText>
+            </Flex>
             <SmText>{t('InboxTypeDesc7-6')}</SmText>
             <SmText>{t('Details')}</SmText>
           </TitleGrid>
@@ -182,21 +191,9 @@ const MsgList: React.FC<{
         <TitleGrid concise={concise} padding='14px 8px 14px 24px'>
           <SmText>{t('Time')}</SmText>
           <SmText>{t('Planet')}</SmText>
-          <Image
-            width={32}
-            height={32}
-            src='/images/commons/icon/icon_minera.png'
-          />
-          <Image
-            width={32}
-            height={32}
-            src='/images/commons/icon/icon_energy.png'
-          />
-          <Image
-            width={32}
-            height={32}
-            src='/images/commons/icon/icon_spice.png'
-          />
+          <SmText ml='4px'>{t('Ore')}</SmText>
+          <SmText ml='4px'>{t('Energy')}</SmText>
+          <SmText ml='4px'>{t('Spices')}</SmText>
           <SmText>{t('InboxTypeDesc7-6')}</SmText>
         </TitleGrid>
       )}
@@ -225,19 +222,27 @@ const MsgList: React.FC<{
                 {i?.plunder_info?.stone > 0 && '+'}{' '}
                 {i?.plunder_info?.stone !== 0
                   ? SubString_1(i?.plunder_info?.stone, 3)
-                  : ''}
+                  : '0'}
               </SmText>
             ) : (
               <SmText
-                color={i.product_stone > 0 ? '#10BA2C' : '#E75652'}
+                color={i.type === 1 ? '#10BA2C' : '#E75652'}
                 className={
-                  i.product_stone > 0 && msgIndex === renderListLimit.length - 1
+                  i.type === 1 && msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
               >
-                {i.product_stone > 0 && '+'}{' '}
-                {i.product_stone !== 0 ? SubString_1(i.product_stone, 3) : ''}
+                {i.type === 1 ? '+' : '-'}{' '}
+                {i.type === 2 ? (
+                  <>{SubString_1(i?.arms?.arm_product.cost_stone, 3)}</>
+                ) : (
+                  <>
+                    {i.product_stone !== 0
+                      ? SubString_1(i.product_stone, 3)
+                      : '0'}
+                  </>
+                )}
               </SmText>
             )}
             {i.type === 3 ? (
@@ -254,17 +259,27 @@ const MsgList: React.FC<{
                 {i?.plunder_info?.energy > 0 && '+'}{' '}
                 {i?.plunder_info?.energy !== 0
                   ? SubString_1(i?.plunder_info?.energy, 3)
-                  : ''}
+                  : '0'}
               </SmText>
             ) : (
               <SmText
-                color={i.product_energy > 0 ? '#10BA2C' : '#E75652'}
+                color={i.type === 1 ? '#10BA2C' : '#E75652'}
                 className={
-                  msgIndex === renderListLimit.length - 1 ? 'addResource' : ''
+                  i.type === 1 && msgIndex === renderListLimit.length - 1
+                    ? 'addResource'
+                    : ''
                 }
               >
-                {i.product_energy > 0 && '+'}{' '}
-                {i.product_energy !== 0 ? SubString_1(i.product_energy, 3) : ''}
+                {i.type === 1 ? '+' : '-'}{' '}
+                {i.type === 2 ? (
+                  <>{SubString_1(i?.arms?.arm_product.cost_energy, 3)}</>
+                ) : (
+                  <>
+                    {i.product_energy !== 0
+                      ? SubString_1(i.product_energy, 3)
+                      : '0'}
+                  </>
+                )}
               </SmText>
             )}
             {i.type === 3 ? (
@@ -281,32 +296,47 @@ const MsgList: React.FC<{
                 {i?.plunder_info?.spices > 0 && '+'}{' '}
                 {i?.plunder_info?.spices !== 0
                   ? SubString_1(i?.plunder_info?.spices, 3)
-                  : ''}
+                  : '0'}
               </SmText>
             ) : (
               <SmText
-                color={i.product_spices > 0 ? '#10BA2C' : '#E75652'}
+                color={i.type === 1 ? '#10BA2C' : '#E75652'}
                 className={
-                  msgIndex === renderListLimit.length - 1 ? 'addResource' : ''
+                  i.type === 1 && msgIndex === renderListLimit.length - 1
+                    ? 'addResource'
+                    : ''
                 }
               >
-                {i.product_spices > 0 && '+'}{' '}
-                {i.product_spices !== 0 ? SubString_1(i.product_spices, 3) : ''}
+                {i.type === 1 ? '+' : '-'}{' '}
+                {i.type === 2 ? (
+                  <>{SubString_1(i?.arms?.arm_product.cost_spices, 3)}</>
+                ) : (
+                  <>
+                    {i.product_spices !== 0
+                      ? SubString_1(i.product_spices, 3)
+                      : '0'}
+                  </>
+                )}
               </SmText>
             )}
             <SmText>
-              {i?.arms?.arm_product.count > 0
-                ? `+ ${i?.arms?.arm_product.count}`
-                : ''}
+              {concise ? (
+                t(
+                  raceData[i?.arms?.race]?.children.find(
+                    ({ id }) => id === Number(i?.arms?.arm_product?.index),
+                  )?.name,
+                )
+              ) : (
+                <>
+                  {i?.arms?.arm_product.count > 0
+                    ? `+ ${i?.arms?.arm_product.count}`
+                    : ''}
+                </>
+              )}
             </SmText>
             {!concise && (
               <>
-                {i.type === 1 && (
-                  <SmText>
-                    {t('ExploreMsgDesc1')}&nbsp;or&nbsp;
-                    {t('ExploreMsgDesc2')}
-                  </SmText>
-                )}
+                {i.type === 1 && <SmText>{t('ExploreMsgDesc1')}</SmText>}
                 {i.type === 2 && (
                   <Flex alignItems='center' flexWrap='wrap'>
                     <SmText mr='10px'>
@@ -357,6 +387,7 @@ const MsgList: React.FC<{
                     </Flex>
                   </Box>
                 )}
+                {i.type === 4 && <SmText>{t('ExploreMsgDesc2')}</SmText>}
               </>
             )}
           </TitleGrid>
