@@ -104,6 +104,9 @@ const PKProgress: React.FC<PKProgressProps> = ({
     if (total && typeof current === 'number' && current !== 0) {
       return Math.floor((current / total) * 100);
     }
+    if (total === 0 && current === 0) {
+      return 0;
+    }
     return 100;
   }, [total, current]);
 
