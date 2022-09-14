@@ -679,6 +679,8 @@ class Building extends EventTarget {
         if (!IsUpgrade) {
           builder.updateLv(item.building.propterty.levelEnergy);
         }
+        builder.id = item.building._id;
+        builder.option.id = item.building._id;
         builder.option.building = {
           ...item.building,
         };

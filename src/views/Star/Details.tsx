@@ -269,7 +269,10 @@ const Details = () => {
           const buildings = workQueueBase.find(
             ({ buildings_number }) => buildings_number === item.building_number,
           );
-          return { ...item, building: buildings };
+          return {
+            ...item,
+            building: { ...buildings, _id: item.buildings_id },
+          };
         });
         const sortList = queueList.sort(
           (a, b) => a?.work_status - b?.work_status,
@@ -455,6 +458,7 @@ const Details = () => {
         isbuilding: activeBuilder?.builded,
         isqueue: activeBuilder?.isBuilding,
       };
+
       if (activeInfo?.length) {
         buildingObj._id = activeInfo[0].building._id;
       }
