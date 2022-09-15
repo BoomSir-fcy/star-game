@@ -80,11 +80,14 @@ const PreviewList: React.FC<PreviewListProps> = ({
   };
 
   const list = useMemo(() => {
-    return orderBy(
+    const arr = orderBy(
       Object.values(unitMaps),
       item => (isBaseUnit(item) ? 99999 : item.count),
       'desc',
     );
+    console.log(arr);
+
+    return arr;
   }, [unitMaps]);
 
   useEffect(() => {

@@ -88,7 +88,6 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
 }) => {
   const { t } = useTranslation();
   const { game_base_unit } = armsData;
-  console.log(game_base_unit);
 
   // const { arms_attr } = game_base_unit || {}
   const [radarChart] = React.useState(

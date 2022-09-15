@@ -165,7 +165,7 @@ const Pk = () => {
         ...prev,
         {
           id: 0,
-          text: `本场战斗结束, 下场战斗即将开始`,
+          text: `This battle is over, the next battle is about to begin`,
           type: 1,
           success,
           showResult: true,

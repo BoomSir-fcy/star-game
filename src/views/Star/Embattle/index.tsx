@@ -321,7 +321,6 @@ const Embattle = () => {
               } else if (currentStep > 5) {
                 setArrowShow(false);
               }
-              console.log(currentStep, guides.step);
               if (currentStep > guides.step) {
                 setGuide(currentStep);
               }

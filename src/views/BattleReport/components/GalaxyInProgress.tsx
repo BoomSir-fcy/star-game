@@ -128,7 +128,6 @@ export const GalaxyInProgress: React.FC<{
                     dispatch(setPKisFrom(IsFrom));
                   } catch (error) {
                     event.preventDefault();
-                    console.log('解析报错');
                     console.error(error);
                   }
                 }}

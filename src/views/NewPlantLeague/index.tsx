@@ -181,9 +181,9 @@ const NewPlantLeague: React.FC = () => {
 
   useEffect(() => {
     if (!Booting) return;
-    console.log(guides.step, '步骤');
+    // console.log(guides.step, '步骤');
     if (guides.step === 4 || guides.step === 6) {
-      console.log(guides.step, '返回上一步');
+      // console.log(guides.step, '返回上一步');
       ToAddClick('introjs-prevbutton');
     }
     if (guides.step === 5 || guides.step === 2) {
@@ -246,7 +246,6 @@ const NewPlantLeague: React.FC = () => {
                   .getElementsByClassName('introjs-prevbutton')[0]
                   .setAttribute('style', '');
               }
-              console.log(event, 'onBeforeChange');
               setActiveStep(event);
             }}
             onAfterChange={event => {}}
@@ -256,7 +255,6 @@ const NewPlantLeague: React.FC = () => {
               }
             }}
             onExit={step => {
-              console.log(step, '中途离开页面', guides.step, activeStep);
               setStepsEnabled(false);
               if (step === 1) {
                 setGuide(2, false);

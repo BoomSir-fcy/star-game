@@ -265,8 +265,6 @@ export const BuildingRechargeModal: React.FC<{
                 defaultValue.stone === maxValue[StoreType.STONE].max &&
                 defaultValue.population === maxValue[StoreType.POPULATION].max
               ) {
-                console.log(defaultValue, maxValue);
-
                 toastError(
                   t(
                     'The resource has reached the upper limit and cannot be recharged',

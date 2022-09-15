@@ -172,7 +172,6 @@ export const GameInfo: React.FC<{
               taregtBuildingLevel[0]?.target_level + 1;
           }
 
-          console.log(itemData, '建筑', selfLevel);
           const res = await upgrade(
             planet_id,
             buildingsId,
@@ -258,7 +257,6 @@ export const GameInfo: React.FC<{
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemData]);
 
-    console.log(arms);
     return (
       <Container>
         {itemData?._id && (

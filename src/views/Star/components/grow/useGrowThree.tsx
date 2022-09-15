@@ -47,7 +47,6 @@ const useGrowThree = (dom: Element, url?: string) => {
 
   useEffect(() => {
     if (dom) {
-      console.log('----------初始化-----------');
       // const src = getImageUrl(url);
       init(url);
       // if (timer) {
@@ -59,8 +58,6 @@ const useGrowThree = (dom: Element, url?: string) => {
     }
 
     return () => {
-      console.log('清除动画');
-
       if (state.current.timer) {
         cancelAnimationFrame(state.current.timer);
       }

@@ -5,7 +5,6 @@ export const RechargeToken = async (
   ChainToken: any,
 ) => {
   let tx;
-  console.log(ChainToken, amount, '11');
   if (ChainToken) {
     tx = await masterChefContract.depositBNB({
       value: amount,

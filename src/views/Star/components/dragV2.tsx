@@ -17,8 +17,6 @@ export const DragV2: React.FC<{
     if (ref.current) {
       ref.current.appendChild(game.view);
     }
-
-    console.log(!!ref.current);
   }, [ref, game]);
 
   return (
