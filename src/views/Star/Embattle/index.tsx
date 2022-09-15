@@ -352,29 +352,28 @@ const Embattle = () => {
         </Flex>
       </Box> */}
       <Box position='absolute' bottom={0} left={0}>
-        <Flex alignItems='center'>
-          <GraphicsCard
-            className='star-embattle-step6'
-            width='740px'
-            height='75px'
-            padding={0}
+        <GraphicsCard
+          className='star-embattle-step6'
+          width='740px'
+          height='75px'
+          padding={0}
+        >
+          <Flex
+            alignItems='center'
+            justifyContent='space-between'
+            height='100%'
+            width='100%'
           >
-            <Flex
-              alignItems='center'
-              justifyContent='space-between'
-              height='100%'
-              width='100%'
-            >
-              <Flex alignItems='center'>
-                <Text margin='0 32px'>{t('Total Power')}</Text>
-                <Text bold fontSize='34px' paddingRight={10} mark>
-                  {totalPower}
-                </Text>
-              </Flex>
+            <Flex alignItems='center'>
+              <Text margin='0 32px'>{t('Total Power')}</Text>
+              <Text bold fontSize='34px' paddingRight={10} mark>
+                {totalPower}
+              </Text>
+            </Flex>
+            <Flex>
               <Button
                 onClick={() => handleUpdate()}
-                mr='16px'
-                width='213px'
+                width='130px'
                 height='45px'
                 variant='purple'
               >
@@ -382,22 +381,22 @@ const Embattle = () => {
                   {t('Complete')}
                 </Text>
               </Button>
+              <Button
+                onClick={() => OneClickDeployment(race)}
+                ml='10px'
+                width='180px'
+                height='45px'
+                variant='purple'
+                padding='0 10px'
+                mr='16px'
+              >
+                <Text color='textPrimary' bold>
+                  {t('Smart Deployment')}
+                </Text>
+              </Button>
             </Flex>
-          </GraphicsCard>
-          <Button
-            style={{ position: 'relative', zIndex: 1 }}
-            onClick={() => OneClickDeployment(race)}
-            ml='10px'
-            width='150px'
-            height='max-content'
-            variant='purple'
-            padding='4px 10px'
-          >
-            <Text color='textPrimary' bold>
-              {t('One-click Deployment')}
-            </Text>
-          </Button>
-        </Flex>
+          </Flex>
+        </GraphicsCard>
       </Box>
       <Box
         position='absolute'
