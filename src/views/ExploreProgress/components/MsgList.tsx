@@ -226,18 +226,22 @@ const MsgList: React.FC<{
               </SmText>
             ) : (
               <SmText
-                color={i.type === 1 ? '#10BA2C' : '#E75652'}
+                color={
+                  (i.type === 1 && i.product_stone) > 0 ? '#10BA2C' : '#E75652'
+                }
                 className={
-                  i.type === 1 && msgIndex === renderListLimit.length - 1
+                  i.type === 1 &&
+                  i.product_stone > 0 &&
+                  msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
               >
-                {i.type === 1 ? '+' : '-'}{' '}
                 {i.type === 2 ? (
-                  <>{SubString_1(i?.arms?.arm_product.cost_stone, 3)}</>
+                  <>- {SubString_1(i?.arms?.arm_product.cost_stone, 3)}</>
                 ) : (
                   <>
+                    {i.product_stone >= 0 ? '+' : '-'}{' '}
                     {i.product_stone !== 0
                       ? SubString_1(i.product_stone, 3)
                       : '0'}
@@ -263,18 +267,22 @@ const MsgList: React.FC<{
               </SmText>
             ) : (
               <SmText
-                color={i.type === 1 ? '#10BA2C' : '#E75652'}
+                color={
+                  (i.type === 1 && i.product_energy) > 0 ? '#10BA2C' : '#E75652'
+                }
                 className={
-                  i.type === 1 && msgIndex === renderListLimit.length - 1
+                  i.type === 1 &&
+                  i.product_energy > 0 &&
+                  msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
               >
-                {i.type === 1 ? '+' : '-'}{' '}
                 {i.type === 2 ? (
-                  <>{SubString_1(i?.arms?.arm_product.cost_energy, 3)}</>
+                  <>- {SubString_1(i?.arms?.arm_product.cost_energy, 3)}</>
                 ) : (
                   <>
+                    {i.product_energy >= 0 ? '+' : '-'}{' '}
                     {i.product_energy !== 0
                       ? SubString_1(i.product_energy, 3)
                       : '0'}
@@ -300,18 +308,22 @@ const MsgList: React.FC<{
               </SmText>
             ) : (
               <SmText
-                color={i.type === 1 ? '#10BA2C' : '#E75652'}
+                color={
+                  (i.type === 1 && i.product_spices) > 0 ? '#10BA2C' : '#E75652'
+                }
                 className={
-                  i.type === 1 && msgIndex === renderListLimit.length - 1
+                  i.type === 1 &&
+                  i.product_spices > 0 &&
+                  msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
               >
-                {i.type === 1 ? '+' : '-'}{' '}
                 {i.type === 2 ? (
-                  <>{SubString_1(i?.arms?.arm_product.cost_spices, 3)}</>
+                  <>- {SubString_1(i?.arms?.arm_product.cost_spices, 3)}</>
                 ) : (
                   <>
+                    {i.product_spices >= 0 ? '+' : '-'}{' '}
                     {i.product_spices !== 0
                       ? SubString_1(i.product_spices, 3)
                       : '0'}
@@ -336,7 +348,11 @@ const MsgList: React.FC<{
             </SmText>
             {!concise && (
               <>
-                {i.type === 1 && <SmText>{t('ExploreMsgDesc1')}</SmText>}
+                {i.type === 1 && (
+                  <SmText>
+                    {t('ExploreMsgDesc1')} or {t('ExploreMsgDesc2')}
+                  </SmText>
+                )}
                 {i.type === 2 && (
                   <Flex alignItems='center' flexWrap='wrap'>
                     <SmText mr='10px'>
@@ -387,7 +403,6 @@ const MsgList: React.FC<{
                     </Flex>
                   </Box>
                 )}
-                {i.type === 4 && <SmText>{t('ExploreMsgDesc2')}</SmText>}
               </>
             )}
           </TitleGrid>
