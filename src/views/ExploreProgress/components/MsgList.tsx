@@ -59,7 +59,7 @@ const ScrollBox = styled(Flex)`
 const TitleGrid = styled(Box)<{ concise: boolean }>`
   display: grid;
   grid-template-columns: ${({ concise }) =>
-    concise ? '25% 15% 14% 14% 14% 18%' : '15% 10% 8% 8% 8% 10% auto'};
+    concise ? '17% 10% 18% 18% 18% auto' : '10% 6% 10% 10% 10% 11% auto'};
   align-items: center;
 `;
 
@@ -205,9 +205,9 @@ const MsgList: React.FC<{
             mb='16px'
           >
             <SmText color='textSubtle'>
-              {dayjs(i?.time_stamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              {dayjs(i?.time_stamp * 1000).format('MM-DD HH:mm:ss')}
             </SmText>
-            <SmText>Token {i?.planet_id || ''}</SmText>
+            <SmText>{i?.planet_id || ''}</SmText>
             {i.type === 3 ? (
               <SmText
                 ellipsis

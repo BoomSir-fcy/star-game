@@ -214,9 +214,17 @@ export const BuildingResources: React.FC<{
 
   return (
     <Box>
-      <MarkText bold fontSize='18px' fontStyle='normal' mb='25px'>
-        {t('store resources')}
-      </MarkText>
+      <Box mb='20px'>
+        <MarkText bold fontSize='18px' fontStyle='normal'>
+          {t('store resources')}
+        </MarkText>
+        {currnet_building.detail_type ===
+          BuildingDetailType.BuildingDetailTypeStore && (
+          <Text pt='10px' small color='textTips'>
+            {t('The Storage Tank, resource storage situation')}
+          </Text>
+        )}
+      </Box>
       {currnet_building.detail_type ===
         BuildingDetailType.BuildingDetailTypeStore && (
         <Flex id='buildingStore' width='100%' flexDirection='column'>

@@ -143,7 +143,7 @@ export const BuildingRechargeModal: React.FC<{
   }, [setState, maxValue]);
 
   return (
-    <Container width='547px' height='343px'>
+    <Container width='547px' height='370px'>
       <Box position='relative'>
         <Close onClick={onClose}>
           <Image
@@ -152,9 +152,12 @@ export const BuildingRechargeModal: React.FC<{
             src='../images/commons/introjs-close.png'
           />
         </Close>
-        <MarkText bold fontStyle='normal' mb='25px'>
+        <MarkText bold fontStyle='normal'>
           {t('Supplement Resources')}
         </MarkText>
+        <Text pt='10px' small color='textTips' mb='20px'>
+          {t('The total amount of resources on the planet')}
+        </Text>
         <Box mb='21px'>
           <ResourceSlider
             icon='ORE'

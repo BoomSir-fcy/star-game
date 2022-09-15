@@ -17,6 +17,7 @@ import {
   BorderCard,
 } from 'uikit';
 
+import styled from 'styled-components';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
 
@@ -62,6 +63,13 @@ import BeginVideo from './components/BeginVideo';
 
 // const GAME_LOAD_RATE = 0.9; // 加载进度条占的比值
 
+const LoadingBox = styled(Box)`
+  position: absolute;
+  left: 56%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 const Pk = () => {
   useFetchGameTerrain();
   const { toastError } = useToast();
@@ -86,6 +94,7 @@ const Pk = () => {
 
   const [current, setCurrent] = useState(0);
   const [VideoEnd, setVideoEnd] = useState(false);
+  const [VideoPlaying, setVideoPlaying] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -544,10 +553,18 @@ const Pk = () => {
           </ModalWrapper>
         </Layout>
       )}
+      {!VideoPlaying && (
+        <LoadingBox>
+          <Spinner size={200} />
+        </LoadingBox>
+      )}
       <BeginVideo
         display={!VideoEnd ? '' : 'none'}
         isEnd={() => {
           setVideoEnd(true);
+        }}
+        isPlaying={() => {
+          setVideoPlaying(true);
         }}
       />
     </>

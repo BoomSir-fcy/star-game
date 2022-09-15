@@ -383,15 +383,15 @@ const Embattle = () => {
               </Button>
               <Button
                 onClick={() => OneClickDeployment(race)}
-                ml='10px'
-                width='180px'
+                ml='16px'
+                width='160px'
                 height='45px'
                 variant='purple'
                 padding='0 10px'
                 mr='16px'
               >
                 <Text color='textPrimary' bold>
-                  {t('Smart Deployment')}
+                  {t('Smart Deploy')}
                 </Text>
               </Button>
             </Flex>
