@@ -221,7 +221,7 @@ export const BuildingResources: React.FC<{
         {currnet_building.detail_type ===
           BuildingDetailType.BuildingDetailTypeStore && (
           <Text pt='10px' small color='textTips'>
-            {t('The Storage Tank, resource storage situation')}
+            {t("The Storage Tank's resource storage")}
           </Text>
         )}
       </Box>

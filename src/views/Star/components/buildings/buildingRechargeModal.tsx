@@ -156,7 +156,7 @@ export const BuildingRechargeModal: React.FC<{
           {t('Supplement Resources')}
         </MarkText>
         <Text pt='10px' small color='textTips' mb='20px'>
-          {t('The total amount of resources on the planet')}
+          {t("The Planet's total resource storage")}
         </Text>
         <Box mb='21px'>
           <ResourceSlider
