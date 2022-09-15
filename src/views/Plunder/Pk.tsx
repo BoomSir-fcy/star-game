@@ -157,7 +157,7 @@ const Pk = () => {
   const onRunEnd = useCallback(() => {
     const { success } = PKInfo[current];
     setResult(prev => {
-      return [...prev, success];
+      return [...prev, isFrom ? success : !success];
     });
     // descType
     setOthers(prev => {
@@ -196,7 +196,15 @@ const Pk = () => {
       return;
     }
     onEndHandle();
-  }, [setOthers, current, setResult, PKInfo, newRoundHandle, onEndHandle]);
+  }, [
+    setOthers,
+    current,
+    setResult,
+    PKInfo,
+    newRoundHandle,
+    onEndHandle,
+    isFrom,
+  ]);
 
   useEffect(() => {
     if (running) {
@@ -286,11 +294,11 @@ const Pk = () => {
 
   const initPKHandle = useCallback(() => {
     try {
-      initHandle(PKInfo[current]);
+      initHandle(PKInfo[current], isFrom);
     } catch (error) {
       onRunEnd();
     }
-  }, [initHandle, PKInfo, current, onRunEnd]);
+  }, [initHandle, PKInfo, current, onRunEnd, isFrom]);
 
   const loaderLoaded = useCallback(
     event => {
@@ -317,7 +325,6 @@ const Pk = () => {
   useEffect(() => {
     if (!mounted && VideoEnd) {
       if (ref.current && game && PKInfo) {
-        console.log(PKInfo);
         setTotalInfo(PKInfo[current].init.show_hp);
         setMounted(true);
         // 初始化
@@ -517,7 +524,7 @@ const Pk = () => {
             {/* <WaitPlunderList /> */}
           </Flex>
           <ModalWrapper
-            title={t('Game Over')}
+            title={t('Game over')}
             visible={visibleGameFailed}
             setVisible={() => setVisibleGameFailed(false)}
           >

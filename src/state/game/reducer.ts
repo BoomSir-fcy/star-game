@@ -20,6 +20,7 @@ export const initialState: GameState = {
   process: null,
   PKInfo: null,
   pkRes: false,
+  isFrom: false,
   plunderPK: {},
   state: GamePkState.MATCHING,
   matchUser: null,
@@ -172,6 +173,10 @@ export const userInfoSlice = createSlice({
       state.pkRes = payload;
     },
 
+    setPKisFrom: (state, { payload }) => {
+      state.isFrom = payload;
+    },
+
     setMatchUser: (state, { payload }) => {
       state.matchUser = payload;
     },
@@ -214,6 +219,7 @@ export const {
   setPlantUnitsTest,
   setTerrainInfo,
   setPKRes,
+  setPKisFrom,
   setEmptyPlantUnits,
   setEmptyUnits,
 } = userInfoSlice.actions;

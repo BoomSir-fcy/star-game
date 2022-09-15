@@ -7,7 +7,7 @@ import utc from 'dayjs/plugin/utc';
 import { Link } from 'react-router-dom';
 import { parseZip } from 'utils';
 import { useDispatch } from 'react-redux';
-import { setPKInfo, setPKRes } from 'state/game/reducer';
+import { setPKInfo, setPKisFrom, setPKRes } from 'state/game/reducer';
 import { useWeb3React } from '@web3-react/core';
 import { PlunderInfo } from 'state/types';
 import { PkResult } from './components/PkResult';
