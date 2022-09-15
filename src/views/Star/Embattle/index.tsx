@@ -146,10 +146,8 @@ const Embattle = () => {
     }
   }, [ref, game]);
 
-  const { gameSoldiers, setSortSoldiers, handleUpdate } = useUpdatePos(
-    planetId,
-    game,
-  );
+  const { gameSoldiers, setSortSoldiers, handleUpdate, OneClickDeployment } =
+    useUpdatePos(planetId, game);
 
   const activeSoldier = useActiveSoldier(game);
 
@@ -354,35 +352,52 @@ const Embattle = () => {
         </Flex>
       </Box> */}
       <Box position='absolute' bottom={0} left={0}>
-        <GraphicsCard
-          className='star-embattle-step6'
-          width='740px'
-          height='75px'
-          padding={0}
-        >
-          <Flex
-            alignItems='center'
-            justifyContent='space-between'
-            height='100%'
-            width='100%'
+        <Flex alignItems='center'>
+          <GraphicsCard
+            className='star-embattle-step6'
+            width='740px'
+            height='75px'
+            padding={0}
           >
-            <Flex alignItems='center'>
-              <Text margin='0 32px'>{t('Total Power')}</Text>
-              <Text bold fontSize='34px' paddingRight={10} mark>
-                {totalPower}
-              </Text>
-            </Flex>
-            <Button
-              onClick={() => handleUpdate()}
-              mr='16px'
-              width='213px'
-              height='45px'
-              variant='purple'
+            <Flex
+              alignItems='center'
+              justifyContent='space-between'
+              height='100%'
+              width='100%'
             >
-              {t('Complete')}
-            </Button>
-          </Flex>
-        </GraphicsCard>
+              <Flex alignItems='center'>
+                <Text margin='0 32px'>{t('Total Power')}</Text>
+                <Text bold fontSize='34px' paddingRight={10} mark>
+                  {totalPower}
+                </Text>
+              </Flex>
+              <Button
+                onClick={() => handleUpdate()}
+                mr='16px'
+                width='213px'
+                height='45px'
+                variant='purple'
+              >
+                <Text fontSize='18px' color='textPrimary' bold>
+                  {t('Complete')}
+                </Text>
+              </Button>
+            </Flex>
+          </GraphicsCard>
+          <Button
+            style={{ position: 'relative', zIndex: 1 }}
+            onClick={() => OneClickDeployment(race)}
+            ml='10px'
+            width='150px'
+            height='max-content'
+            variant='purple'
+            padding='4px 10px'
+          >
+            <Text color='textPrimary' bold>
+              {t('One-click Deployment')}
+            </Text>
+          </Button>
+        </Flex>
       </Box>
       <Box
         position='absolute'

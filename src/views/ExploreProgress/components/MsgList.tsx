@@ -241,7 +241,7 @@ const MsgList: React.FC<{
                   <>- {SubString_1(i?.arms?.arm_product.cost_stone, 3)}</>
                 ) : (
                   <>
-                    {i.product_stone >= 0 ? '+' : '-'}{' '}
+                    {i.product_stone >= 0 ? '+' : ''}{' '}
                     {i.product_stone !== 0
                       ? SubString_1(i.product_stone, 3)
                       : '0'}
@@ -282,7 +282,7 @@ const MsgList: React.FC<{
                   <>- {SubString_1(i?.arms?.arm_product.cost_energy, 3)}</>
                 ) : (
                   <>
-                    {i.product_energy >= 0 ? '+' : '-'}{' '}
+                    {i.product_energy >= 0 ? '+' : ''}{' '}
                     {i.product_energy !== 0
                       ? SubString_1(i.product_energy, 3)
                       : '0'}
@@ -323,7 +323,7 @@ const MsgList: React.FC<{
                   <>- {SubString_1(i?.arms?.arm_product.cost_spices, 3)}</>
                 ) : (
                   <>
-                    {i.product_spices >= 0 ? '+' : '-'}{' '}
+                    {i.product_spices >= 0 ? '+' : ''}{' '}
                     {i.product_spices !== 0
                       ? SubString_1(i.product_spices, 3)
                       : '0'}

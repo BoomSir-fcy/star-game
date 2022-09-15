@@ -85,8 +85,9 @@ const PreviewList: React.FC<PreviewListProps> = ({
       item => (isBaseUnit(item) ? 99999 : item.count),
       'desc',
     );
-    console.log(arr);
-
+    arr.sort((a, b) => {
+      return b.power - a.power; // 降序
+    });
     return arr;
   }, [unitMaps]);
 
@@ -203,7 +204,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 cursor: 'pointer',
               }}
               key={`${item.unique_id}_${item.level}`}
-              margin='20px 20px 0'
+              margin='20px 20px 10px'
               position='relative'
             >
               {/* {visibleBtn && activeSoldier?.unique_id === item.unique_id ? (
@@ -244,14 +245,27 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   position='relative'
                   zIndex={2}
                   justifyContent='space-between'
+                  alignItems='center'
                 >
-                  <Text shadow='primary' fontSize='22' ml='13px' mt='2px' bold>
+                  <Text shadow='primary' ml='13px' mt='2px' bold>
                     LV {item.level}
                   </Text>
-                  <Text shadow='primary' fontSize='22' mr='13px' mt='2px' bold>
-                    {/* {activeNum(item.unique_id)}/
-                    {isBaseUnit(item) ? '6' : item.count} */}
-                    {UseSoldierNum(item)}
+                  <Text shadow='primary' mr='13px' mt='2px' bold>
+                    {item.default_unit ? (
+                      <>
+                        <Flex alignItems='flex-start'>
+                          <Text lineHeight={1} mr='2px'>
+                            +
+                          </Text>
+                          <Text lineHeight={1} fontSize='20px'>
+                            ∞
+                          </Text>
+                        </Flex>
+                      </>
+                    ) : (
+                      `${item.count}/${item.max_count}`
+                    )}
+                    {/* {UseSoldierNum(item)} */}
                   </Text>
                 </Flex>
                 <PreviewSoldier
@@ -293,7 +307,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   />
                 </Box>
               </BorderCard>
-              <Text mt='8px' textAlign='center' bold>
+              <Text mt='8px' textAlign='center' bold width='max-content'>
                 {getSoldierName(item)}
               </Text>
               <Flex justifyContent='center'>

@@ -198,17 +198,20 @@ export const ArmsInfo: React.FC<ArmsInfoProps> = ({
             {removeHandle && (
               <Button
                 onClick={removeHandle}
-                width={40}
-                height={40}
-                padding='0'
-                variant='text'
-                mr='40px'
+                padding='0 20px'
+                variant='purple'
+                width='max-content'
+                height={45}
+                mr='10px'
               >
-                <Image
+                <Text fontSize='18px' color='textPrimary' bold>
+                  {t('Delete')}
+                </Text>
+                {/* <Image
                   width={40}
                   height={40}
                   src='/images/commons/icon/delete.png'
-                />
+                /> */}
               </Button>
             )}
           </Flex>

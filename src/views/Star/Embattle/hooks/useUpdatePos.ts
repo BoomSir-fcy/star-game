@@ -4,6 +4,12 @@ import Game from 'game/core/Game';
 import { useToast } from 'contexts/ToastsContext';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'contexts/Localization';
+import { useDispatch } from 'react-redux';
+import {
+  fetchGamePlanetUnitsAsync,
+  fetchUnitListAsync,
+  setEmptyUnits,
+} from 'state/game/reducer';
 import { SortSoldier } from '../components/SortBoard';
 
 const useUpdatePos = (planetId: number, game: Game) => {
@@ -11,6 +17,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
 
   const { toastSuccess, toastError } = useToast();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const setSortSoldiers = useCallback(
     soldiers => {
@@ -26,6 +33,28 @@ const useUpdatePos = (planetId: number, game: Game) => {
       }
     },
     [setGameSoldiers],
+  );
+
+  const OneClickDeployment = useCallback(
+    async (race: number) => {
+      try {
+        const res = await Api.GameApi.gameUnitSettingFast({
+          planet_id: planetId,
+        });
+        if (Api.isSuccess(res)) {
+          game.clearSoldier();
+          dispatch(setEmptyUnits({}));
+
+          dispatch(fetchUnitListAsync(race, planetId));
+          dispatch(fetchGamePlanetUnitsAsync(planetId));
+
+          toastSuccess(t('Deploy Succeeded'));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [t, planetId, toastSuccess, dispatch, game],
   );
 
   const handleUpdate = useCallback(
@@ -87,6 +116,7 @@ const useUpdatePos = (planetId: number, game: Game) => {
     gameSoldiers,
     setSortSoldiers,
     handleUpdate,
+    OneClickDeployment,
   };
 };
 
