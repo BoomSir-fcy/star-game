@@ -894,7 +894,7 @@
   "http-error-300031": "Planet Alliance cannot start work while occupying stars ",
   "http-error-300032": "Planet can't have more Cellars than Storage Tanks ",
   "http-error-300033": "Incorrect Building Coordinates",
-  "http-error-300034": "You can't delete the last Factory / Hive / Temple",
+  "http-error-300034": "You can't delete the last Barrack / Hive / Temple",
   "http-error-300035": "You can't delete the last Storage Tank",
   "http-error-400001": "Failed to get user information",
   "http-error-500001": "The Galaxy Star is within protection period",
