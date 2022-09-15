@@ -347,8 +347,6 @@ export const DragCompoents: React.FC<{
           return [...next];
         });
 
-        console.log(queueBuilding);
-
         setGridBuilds([...currentGridBuilds, ...queueBuilding]);
       }
     },
@@ -476,7 +474,6 @@ export const DragCompoents: React.FC<{
             currentAxis,
           ];
 
-          console.log(grid);
           /** @s4 */
           const canUseArea = areaPoints?.every(
             item =>
@@ -999,10 +996,6 @@ export const DragCompoents: React.FC<{
                 onSave={saveWorkQueue}
                 onComplete={debounce(async () => {
                   await sleep(1000);
-                  console.log(
-                    '刷新队列：',
-                    dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-                  );
                   await getWorkQueue(true);
                   setCurrentBuild({});
                 }, 500)}

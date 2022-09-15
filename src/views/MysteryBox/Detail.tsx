@@ -152,7 +152,7 @@ const MysteryBoxDetail = () => {
             }
           }}
           onBeforeChange={event => {
-            console.log(event);
+            // console.log(event);
           }}
           onExit={index => {
             setStepsEnabled(false);

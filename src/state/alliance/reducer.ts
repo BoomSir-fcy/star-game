@@ -35,6 +35,7 @@ export const initialState: AllianceState = {
     now_work_count: 0,
     unread_plunder_count: 0,
     message_count: 0,
+    hold_planet: false,
   },
   workingPlanet: [],
   pkRecord: {

@@ -22,6 +22,7 @@ declare namespace Api {
     }
 
     interface UnitInfo {
+      max_count: number;
       barracks: number;
       probability: number;
       unique_id: number; //
@@ -125,7 +126,9 @@ declare namespace Api {
       planet_id: number;
       units: ParamsUnit[];
     }
-
+    interface ParamsUnitSettingFast {
+      planet_id: number;
+    }
     interface ParamsUnitSettingTest {
       tag: string;
       units1: ParamsUnit[];

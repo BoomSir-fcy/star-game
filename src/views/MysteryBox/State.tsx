@@ -216,7 +216,7 @@ const MysteryBoxState = () => {
             }
           }}
           onBeforeChange={event => {
-            console.log(event);
+            // console.log(event);
           }}
           onExit={currentStep => {
             setGuide(1);

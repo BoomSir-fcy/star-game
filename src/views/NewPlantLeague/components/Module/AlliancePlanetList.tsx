@@ -179,7 +179,6 @@ const AlliancePlanetList: React.FC<{
         toastError(t('The alliance has not changed'));
         return;
       }
-      console.log(ChooseList);
       await SetWorking(ChooseList);
       toastSuccess(t('planetTipsSaveSuccess'));
       dispatch(fetchAllianceViewAsync());

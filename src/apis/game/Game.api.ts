@@ -21,6 +21,10 @@ export class GameApi extends Http {
     return this.post('game/unit/setting', params);
   }
 
+  async gameUnitSettingFast(params: Api.Game.ParamsUnitSettingFast) {
+    return this.post('game/unit/setting/fast', params);
+  }
+
   async gamePK(player1: number, player2: number, max_round?: number) {
     return this.post('game/pk', { player1, player2, max_round });
   }

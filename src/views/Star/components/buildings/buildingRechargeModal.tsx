@@ -143,7 +143,7 @@ export const BuildingRechargeModal: React.FC<{
   }, [setState, maxValue]);
 
   return (
-    <Container width='547px' height='343px'>
+    <Container width='547px' height='370px'>
       <Box position='relative'>
         <Close onClick={onClose}>
           <Image
@@ -152,9 +152,12 @@ export const BuildingRechargeModal: React.FC<{
             src='../images/commons/introjs-close.png'
           />
         </Close>
-        <MarkText bold fontStyle='normal' mb='25px'>
+        <MarkText bold fontStyle='normal'>
           {t('Supplement Resources')}
         </MarkText>
+        <Text pt='10px' small color='textTips' mb='20px'>
+          {t("The Planet's total resource storage")}
+        </Text>
         <Box mb='21px'>
           <ResourceSlider
             icon='ORE'
@@ -265,8 +268,6 @@ export const BuildingRechargeModal: React.FC<{
                 defaultValue.stone === maxValue[StoreType.STONE].max &&
                 defaultValue.population === maxValue[StoreType.POPULATION].max
               ) {
-                console.log(defaultValue, maxValue);
-
                 toastError(
                   t(
                     'The resource has reached the upper limit and cannot be recharged',

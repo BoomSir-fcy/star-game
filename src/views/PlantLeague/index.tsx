@@ -246,7 +246,7 @@ const PlantLeague = () => {
                 }
               }}
               onExit={step => {
-                console.log(step, '中途离开页面', guides.step, activeStep);
+                // console.log(step, '中途离开页面', guides.step, activeStep);
                 setStepsEnabled(false);
                 if (step === 5) {
                   setGuide(0, false, 2);

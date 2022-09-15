@@ -32,11 +32,9 @@ const usePlunder = () => {
           );
           const params = { ...sign, signature, ...starInfo };
           const res = await Api.GalaxyApi.plunderStar(params);
-          console.log(starInfo);
           dispatch(fetchGalaxyStarListAsync(starInfo.nft_id));
           if (Api.isSuccess(res)) {
             // dispatch(setPKInfo(res.data.pk_result1[0]));
-            console.log(parseZip(res.data.pk_result));
             const pkRes = parseZip(res.data.pk_result);
             if (!pkRes) {
               toastSuccess(t('Occupy Succeeded'));

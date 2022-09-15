@@ -29,9 +29,22 @@ const VideoStyled = styled.video`
 
 interface BeginVideoProps extends BoxProps {
   isEnd: () => void;
+  isPlaying: () => void;
 }
 
-const BeginVideo: React.FC<BeginVideoProps> = ({ isEnd, ...props }) => {
+const BeginVideo: React.FC<BeginVideoProps> = ({
+  isEnd,
+  isPlaying,
+  ...props
+}) => {
+  const [isErr, setisErr] = useState(false);
+  const [isPlay, setisPlay] = useState(false);
+  useEffect(() => {
+    if (!isErr && isPlay) {
+      isPlaying();
+    }
+  }, [isErr, isPlay, isPlaying]);
+
   return (
     <Box
       width={1920}
@@ -46,6 +59,13 @@ const BeginVideo: React.FC<BeginVideoProps> = ({ isEnd, ...props }) => {
         src='/video/battleReplay.mp4'
         playsInline
         onEnded={isEnd}
+        id='battleReplay'
+        onPlay={() => {
+          setisPlay(true);
+        }}
+        onError={() => {
+          setisErr(true);
+        }}
       />
     </Box>
   );

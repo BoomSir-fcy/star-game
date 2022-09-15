@@ -385,6 +385,7 @@ export interface AllianceView {
   now_work_count: number;
   unread_plunder_count: number;
   message_count: number;
+  hold_planet: boolean;
 }
 
 export interface PlanetProView extends ExploreProgressPlanetDetail {

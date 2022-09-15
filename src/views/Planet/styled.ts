@@ -138,7 +138,6 @@ export const useStarCss = (plant: number) => {
       }
     ${prev};`;
       }, '');
-    console.log(111, '===');
     return res;
   }, [plant, screen_num]);
 };

@@ -146,10 +146,8 @@ const Embattle = () => {
     }
   }, [ref, game]);
 
-  const { gameSoldiers, setSortSoldiers, handleUpdate } = useUpdatePos(
-    planetId,
-    game,
-  );
+  const { gameSoldiers, setSortSoldiers, handleUpdate, OneClickDeployment } =
+    useUpdatePos(planetId, game);
 
   const activeSoldier = useActiveSoldier(game);
 
@@ -321,7 +319,6 @@ const Embattle = () => {
               } else if (currentStep > 5) {
                 setArrowShow(false);
               }
-              console.log(currentStep, guides.step);
               if (currentStep > guides.step) {
                 setGuide(currentStep);
               }
@@ -373,15 +370,31 @@ const Embattle = () => {
                 {totalPower}
               </Text>
             </Flex>
-            <Button
-              onClick={() => handleUpdate()}
-              mr='16px'
-              width='213px'
-              height='45px'
-              variant='purple'
-            >
-              {t('Complete')}
-            </Button>
+            <Flex>
+              <Button
+                onClick={() => handleUpdate()}
+                width='130px'
+                height='45px'
+                variant='purple'
+              >
+                <Text fontSize='18px' color='textPrimary' bold>
+                  {t('Complete')}
+                </Text>
+              </Button>
+              <Button
+                onClick={() => OneClickDeployment(race)}
+                ml='16px'
+                width='160px'
+                height='45px'
+                variant='purple'
+                padding='0 10px'
+                mr='16px'
+              >
+                <Text color='textPrimary' bold>
+                  {t('Smart Deploy')}
+                </Text>
+              </Button>
+            </Flex>
           </Flex>
         </GraphicsCard>
       </Box>

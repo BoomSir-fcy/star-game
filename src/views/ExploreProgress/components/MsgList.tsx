@@ -59,7 +59,7 @@ const ScrollBox = styled(Flex)`
 const TitleGrid = styled(Box)<{ concise: boolean }>`
   display: grid;
   grid-template-columns: ${({ concise }) =>
-    concise ? '25% 15% 14% 14% 14% 18%' : '15% 10% 8% 8% 8% 10% auto'};
+    concise ? '17% 10% 18% 18% 18% auto' : '10% 6% 10% 10% 10% 11% auto'};
   align-items: center;
 `;
 
@@ -205,9 +205,9 @@ const MsgList: React.FC<{
             mb='16px'
           >
             <SmText color='textSubtle'>
-              {dayjs(i?.time_stamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              {dayjs(i?.time_stamp * 1000).format('MM-DD HH:mm:ss')}
             </SmText>
-            <SmText>Token {i?.planet_id || ''}</SmText>
+            <SmText>{i?.planet_id || ''}</SmText>
             {i.type === 3 ? (
               <SmText
                 ellipsis
@@ -226,18 +226,22 @@ const MsgList: React.FC<{
               </SmText>
             ) : (
               <SmText
-                color={i.type === 1 ? '#10BA2C' : '#E75652'}
+                color={
+                  (i.type === 1 && i.product_stone) > 0 ? '#10BA2C' : '#E75652'
+                }
                 className={
-                  i.type === 1 && msgIndex === renderListLimit.length - 1
+                  i.type === 1 &&
+                  i.product_stone > 0 &&
+                  msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
               >
-                {i.type === 1 ? '+' : '-'}{' '}
                 {i.type === 2 ? (
-                  <>{SubString_1(i?.arms?.arm_product.cost_stone, 3)}</>
+                  <>- {SubString_1(i?.arms?.arm_product.cost_stone, 3)}</>
                 ) : (
                   <>
+                    {i.product_stone >= 0 ? '+' : ''}{' '}
                     {i.product_stone !== 0
                       ? SubString_1(i.product_stone, 3)
                       : '0'}
@@ -263,18 +267,22 @@ const MsgList: React.FC<{
               </SmText>
             ) : (
               <SmText
-                color={i.type === 1 ? '#10BA2C' : '#E75652'}
+                color={
+                  (i.type === 1 && i.product_energy) > 0 ? '#10BA2C' : '#E75652'
+                }
                 className={
-                  i.type === 1 && msgIndex === renderListLimit.length - 1
+                  i.type === 1 &&
+                  i.product_energy > 0 &&
+                  msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
               >
-                {i.type === 1 ? '+' : '-'}{' '}
                 {i.type === 2 ? (
-                  <>{SubString_1(i?.arms?.arm_product.cost_energy, 3)}</>
+                  <>- {SubString_1(i?.arms?.arm_product.cost_energy, 3)}</>
                 ) : (
                   <>
+                    {i.product_energy >= 0 ? '+' : ''}{' '}
                     {i.product_energy !== 0
                       ? SubString_1(i.product_energy, 3)
                       : '0'}
@@ -300,18 +308,22 @@ const MsgList: React.FC<{
               </SmText>
             ) : (
               <SmText
-                color={i.type === 1 ? '#10BA2C' : '#E75652'}
+                color={
+                  (i.type === 1 && i.product_spices) > 0 ? '#10BA2C' : '#E75652'
+                }
                 className={
-                  i.type === 1 && msgIndex === renderListLimit.length - 1
+                  i.type === 1 &&
+                  i.product_spices > 0 &&
+                  msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
               >
-                {i.type === 1 ? '+' : '-'}{' '}
                 {i.type === 2 ? (
-                  <>{SubString_1(i?.arms?.arm_product.cost_spices, 3)}</>
+                  <>- {SubString_1(i?.arms?.arm_product.cost_spices, 3)}</>
                 ) : (
                   <>
+                    {i.product_spices >= 0 ? '+' : ''}{' '}
                     {i.product_spices !== 0
                       ? SubString_1(i.product_spices, 3)
                       : '0'}
@@ -336,7 +348,11 @@ const MsgList: React.FC<{
             </SmText>
             {!concise && (
               <>
-                {i.type === 1 && <SmText>{t('ExploreMsgDesc1')}</SmText>}
+                {i.type === 1 && (
+                  <SmText>
+                    {t('ExploreMsgDesc1')} or {t('ExploreMsgDesc2')}
+                  </SmText>
+                )}
                 {i.type === 2 && (
                   <Flex alignItems='center' flexWrap='wrap'>
                     <SmText mr='10px'>
@@ -387,7 +403,6 @@ const MsgList: React.FC<{
                     </Flex>
                   </Box>
                 )}
-                {i.type === 4 && <SmText>{t('ExploreMsgDesc2')}</SmText>}
               </>
             )}
           </TitleGrid>

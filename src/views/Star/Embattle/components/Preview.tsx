@@ -158,8 +158,6 @@ const Preview: React.FC<PreviewProps> = ({ game, activeSoldier, ...props }) => {
 
   const removeHandle = useCallback(() => {
     if (activeSoldier) {
-      console.log(123);
-
       game.removeSoldier(activeSoldier);
     }
   }, [activeSoldier, game]);

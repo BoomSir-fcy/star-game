@@ -33,8 +33,6 @@ const ArmsPreview: React.FC<{
   data: Api.Building.Arms;
   onClick: () => void;
 }> = ({ data, onClick }) => {
-  console.log(data);
-
   const getArms = React.useCallback(() => {
     const arms = raceData[data?.game_base_unit?.race]?.children.find(
       ({ id }) => id === Number(data?.game_base_unit.index),

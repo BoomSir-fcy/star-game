@@ -25,8 +25,14 @@ const Explore: React.FC<{
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { max_work_count, now_work_count, end_time, free_time, alliance } =
-    useStore(p => p.alliance.allianceView);
+  const {
+    max_work_count,
+    now_work_count,
+    end_time,
+    free_time,
+    alliance,
+    hold_planet,
+  } = useStore(p => p.alliance.allianceView);
   const { userInfo } = useStore(p => p.userInfo);
   const { scale, TooltipTriggerZIndex } = useStore(p => p.user);
 
@@ -51,6 +57,9 @@ const Explore: React.FC<{
 
   // 按钮文字显示
   const BtnShowText = useMemo(() => {
+    if (hold_planet) {
+      return t('Occupying Stars');
+    }
     // 工作中
     if (alliance.working !== 0) {
       return t('View Explore Progress');
@@ -62,7 +71,7 @@ const Explore: React.FC<{
       }
     }
     return `${t('Start Exploration')}(${now_work_count}/${max_work_count})`;
-  }, [alliance, t, now_work_count, max_work_count, userInfo]);
+  }, [alliance, t, now_work_count, max_work_count, userInfo, hold_planet]);
 
   // // 开始工作
   // const StartOrStopWorking = useCallback(async () => {
@@ -135,10 +144,11 @@ const Explore: React.FC<{
           onClick={() => {
             if (alliance.working !== 0) {
               navigate('/explore-progress');
+            } else if (hold_planet) {
+              toastError(t('http-error-300031'));
             } else {
               setShowModule(true);
             }
-            // setShowModule(true);
           }}
         >
           <Flex flexDirection='column'>

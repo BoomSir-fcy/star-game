@@ -53,8 +53,6 @@ export const useRegisterWithDsg = () => {
     }: RegisterParams) => {
       let tx;
       if (payType === 'BNB') {
-        console.log(BNB_price);
-
         tx = await contract.registerWithBnb(nickname, superior, gender, {
           value: BNB_price,
         });
