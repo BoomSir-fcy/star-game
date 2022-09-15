@@ -42,12 +42,10 @@ const useUpdatePos = (planetId: number, game: Game) => {
           planet_id: planetId,
         });
         if (Api.isSuccess(res)) {
-          game.clearSoldier();
           dispatch(setEmptyUnits({}));
-
+          game.clearSoldier();
           dispatch(fetchUnitListAsync(race, planetId));
           dispatch(fetchGamePlanetUnitsAsync(planetId));
-
           toastSuccess(t('Deploy Succeeded'));
         }
       } catch (error) {
