@@ -167,7 +167,7 @@ const Pk = () => {
           id: 0,
           text: `本场战斗结束, 下场战斗即将开始`,
           type: 1,
-          success,
+          success: isFrom ? success : !success,
           showResult: true,
         },
       ];

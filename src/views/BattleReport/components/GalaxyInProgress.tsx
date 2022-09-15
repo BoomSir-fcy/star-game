@@ -55,11 +55,11 @@ export const GalaxyInProgress: React.FC<{
 
   // 战斗成功还是失败
   const BettleResult = useMemo(() => {
-    if (IsFrom) {
-      return info.success ? !!info.success : !info.success;
-    }
-    return info.success ? !info.success : !!info.success;
-  }, [info, IsFrom]);
+    // if (IsFrom) {
+    //   return info.success ? !!info.success : !info.success;
+    // }
+    return !!info.success;
+  }, [info]);
 
   return (
     <>
@@ -115,6 +115,10 @@ export const GalaxyInProgress: React.FC<{
       </GraphicsCard>
       <CardBox>
         <Flex height='100%' alignItems='center'>
+          {/* <Text>
+            {info.id} {BettleResult ? '赢' : '输'}{' '}
+            {IsFrom ? '进攻方' : '防守方'}
+          </Text> */}
           <PkResult result={BettleResult} />
           <Flex flexDirection='column' flex={1} ml='30px' height='100%'>
             <Flex mb={20} justifyContent='space-between' alignItems='center'>
@@ -124,7 +128,6 @@ export const GalaxyInProgress: React.FC<{
                   try {
                     dispatch(setPKInfo(parseZip(info.detail)));
                     dispatch(setPKRes(BettleResult));
-
                     dispatch(setPKisFrom(IsFrom));
                   } catch (error) {
                     event.preventDefault();
