@@ -78,7 +78,7 @@ const Pk = () => {
 
   const { TerrainInfo } = useStore(p => p.game);
 
-  const { PKInfo, pkRes } = useStore(p => p.game);
+  const { PKInfo, pkRes, isFrom } = useStore(p => p.game);
 
   const [complete, setComplete] = useState(false);
   const [mounted, setMounted] = useState(false);

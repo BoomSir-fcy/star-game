@@ -4,7 +4,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import random from 'lodash/random';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setPKInfo, setPKRes } from 'state/game/reducer';
+import { setPKInfo, setPKisFrom, setPKRes } from 'state/game/reducer';
 import { signMessage } from 'utils/web3React';
 import { parseZip } from 'utils';
 import { fetchGalaxyStarListAsync } from 'state/galaxy/reducer';
@@ -44,6 +44,7 @@ const usePlunder = () => {
             }
             dispatch(setPKInfo(pkRes));
             dispatch(setPKRes(res.data?.success));
+            dispatch(setPKisFrom(true));
             return true;
           }
         } catch (error) {

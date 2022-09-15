@@ -123,6 +123,7 @@ export const GalaxyInProgress: React.FC<{
                   try {
                     dispatch(setPKInfo(parseZip(info.detail)));
                     dispatch(setPKRes(BettleResult));
+                    dispatch(setPKisFrom(IsFrom));
                   } catch (error) {
                     event.preventDefault();
                     console.log('解析报错');

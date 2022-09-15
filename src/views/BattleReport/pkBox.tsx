@@ -115,6 +115,7 @@ export const PkBox: React.FC<{
               console.log(parseZip(info.detail), 'parseZip(info.detail)');
               dispatch(setPKInfo(parseZip(info.detail)));
               dispatch(setPKRes(pkRes));
+              dispatch(setPKisFrom(isFrom));
             } catch (error) {
               event.preventDefault();
               console.log('解析报错');
