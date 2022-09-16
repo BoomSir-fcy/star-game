@@ -148,7 +148,7 @@ class Builder extends EventTarget {
   });
 
   UpgradeSprite: Sprite = new Sprite(
-    Texture.from('images/commons/icon/icon-building-upgrade.png'),
+    Texture.from('images/commons/icon/Mecha_upgrade.png'),
   );
 
   UpgradeText = new Text('during Upgrade...', {
@@ -473,7 +473,7 @@ class Builder extends EventTarget {
     this.graphicsBox.addChild(this.UpgradeText);
 
     this.UpgradeSprite.anchor.set(0.5);
-    this.UpgradeSprite.width = 70;
+    this.UpgradeSprite.width = 60;
     this.UpgradeSprite.height = 70;
     this.UpgradeSprite.position.set(-20, 0);
     this.UpgradeSprite.zIndex = 1000;
