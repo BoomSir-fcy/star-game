@@ -10,24 +10,25 @@ import {
   BackButton,
   RefreshButton,
   Button,
+  GraphicsCard,
+  Spinner,
 } from 'uikit';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import Layout from 'components/Layout';
 import { Api } from 'apis';
 import { useStore } from 'state';
-import { setActiveMaterialMap } from 'state/planet/actions';
+import { setActiveMaterialMap, setUpgradePlanetId } from 'state/planet/actions';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
-import { PlanetBox } from '../planet/PlanetBox';
+import { Nav } from 'components';
+import { PlanetSearch, PlanetRaceTabs } from '..';
+import { PlanetBox } from './PlanetBox';
 
-const ScrollBox = styled(Flex)`
+const ScrollBox = styled(Box)`
   margin-top: 22px;
   min-height: 550px;
   max-height: 672px;
   overflow-y: auto;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  justify-content: space-between;
 `;
 
 const MaterialBox = styled(Box)<{ disabled?: boolean }>`
@@ -35,17 +36,6 @@ const MaterialBox = styled(Box)<{ disabled?: boolean }>`
   margin-bottom: 20px;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
-`;
-const ChooseBox = styled(Flex)`
-  position: absolute;
-  right: 25px;
-  top: 22px;
-  width: 36px;
-  height: 36px;
-  justify-content: center;
-  align-items: center;
-  background: url('/images/commons/icon/choose.png') no-repeat;
-  background-size: 100% 100%;
 `;
 const LinkStyled = styled(Link)`
   :hover {
@@ -62,24 +52,36 @@ const SelectPlanet = () => {
   const { t } = useTranslation();
   const { toastWarning } = useToast();
   const [starList, setStarList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState({
+    page: 1,
+    token: 0,
+    race: 0,
+  });
 
-  const activeMaterialMap = useStore(p => p.planet.activeMaterialMap);
+  const { activeMaterialMap } = useStore(p => p.planet);
 
   const init = useCallback(async () => {
     try {
-      const res = await Api.PlanetApi.getMaterialList(planetId);
+      const params = {
+        planet_id: planetId,
+        find_planet_id: state.token,
+        race: state.race,
+        rarity: Number(parsedQs.t) || 0,
+      };
+      const res = await Api.PlanetApi.getMaterialList(params);
       if (Api.isSuccess(res)) {
         setStarList(res.data?.Data || []);
-        // setStarList([]);
       }
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
-  }, [planetId]);
+  }, [planetId, state, parsedQs.t]);
 
   useEffect(() => {
     init();
-  }, [init]);
+  }, [parsedQs.t, state.race, state.token, init]);
 
   // 可最多添加5个星球
   const addMaterialPlanet = useCallback(
@@ -96,8 +98,10 @@ const SelectPlanet = () => {
         // 取消选择
         dispatch(setActiveMaterialMap({ [item.id]: null }));
       }
+      dispatch(setUpgradePlanetId(planetId));
     },
-    [activeMaterialMap, t, dispatch, toastWarning],
+
+    [planetId, activeMaterialMap, t, dispatch, toastWarning],
   );
 
   return (
@@ -105,58 +109,137 @@ const SelectPlanet = () => {
       <Flex width='100%'>
         <Box>
           <Flex padding='0 20px' mb='60px'>
-            <BackButton />
-            <RefreshButton ml='33px' />
+            <BackButton
+              onBack={() => {
+                // dispatch(setActiveMaterialMap(null));
+                // navigate(`/star/upgrade?id=${planetId}`);
+                // navigate(-1);
+                navigate(`/star/upgrade?id=${planetId}`, { replace: true });
+              }}
+            />
+            {/* <RefreshButton onRefresh={() => init()} ml='33px' /> */}
           </Flex>
+          <Nav
+            activeId={Number(parsedQs.t)}
+            nav={[
+              {
+                id: 0,
+                label: t('All'),
+                path: `/upgrade-list?t=0&i=${planetId}`,
+              },
+              {
+                id: 1,
+                label: t('rarity-1'),
+                path: `/upgrade-list?t=1&i=${planetId}`,
+              },
+              {
+                id: 2,
+                label: t('rarity-2'),
+                path: `/upgrade-list?t=2&i=${planetId}`,
+              },
+              {
+                id: 3,
+                label: t('rarity-3'),
+                path: `/upgrade-list?t=3&i=${planetId}`,
+              },
+              {
+                id: 4,
+                label: t('rarity-4'),
+                path: `/upgrade-list?t=4&i=${planetId}`,
+              },
+              {
+                id: 5,
+                label: t('rarity-5'),
+                path: `/upgrade-list?t=5&i=${planetId}`,
+              },
+              {
+                id: 6,
+                label: t('rarity-6'),
+                path: `/upgrade-list?t=6&i=${planetId}`,
+              },
+            ]}
+          />
         </Box>
-        <Flex ml='7px' flex={1}>
-          <BgCard variant='full' fringe padding='40px 37px'>
+        <Flex ml='30px' mr='30px' flex={1}>
+          <GraphicsCard
+            width='1589px'
+            height='802px'
+            borderWidth={2}
+            padding='26px 30px'
+          >
+            <Flex justifyContent='space-between'>
+              <PlanetRaceTabs
+                current={state.race}
+                callBack={id => setState({ ...state, race: id })}
+              />
+              <PlanetSearch
+                onEndCallback={value =>
+                  setState({ ...state, token: value ? Number(value) : 0 })
+                }
+              />
+              <Button
+                width='200px'
+                variant='purple'
+                onClick={() => {
+                  navigate(`/star/upgrade?id=${planetId}`, { replace: true });
+                }}
+              >
+                {t('Confirm')}
+              </Button>
+            </Flex>
             <ScrollBox>
-              {(starList ?? []).map((item: any) => (
-                <React.Fragment key={`${item.id}_${item.name}`}>
-                  <MaterialBox
-                    // disabled={!!activeMaterialMap[item.id]}
-                    mb='20px'
-                    onClick={() => {
-                      addMaterialPlanet(item);
-                      // if (activeMaterialMap[item.id]) {
-                      //   return;
-                      // }
-                      // dispatch(setActiveMaterialMap({ [item.id]: item }));
-                      // navigate(-1);
-                    }}
-                  >
-                    <PlanetBox info={item} providedExp />
-                    <ChooseBox>
-                      <Text fontSize='22px'>
-                        {Object.keys(activeMaterialMap).indexOf(
-                          `${item.id}`,
-                        ) !== -1
-                          ? Object.keys(activeMaterialMap).indexOf(
-                              `${item.id}`,
-                            ) + 1
-                          : ''}
-                      </Text>
-                    </ChooseBox>
-                  </MaterialBox>
-                </React.Fragment>
-              ))}
-              {!starList?.length && (
+              {loading ? (
                 <Flex
-                  mt='50px'
+                  height='500px'
                   width='100%'
-                  justifyContent='center'
                   alignItems='center'
+                  justifyContent='center'
                 >
-                  <LinkStyled to='/mystery-box'>
-                    <Text small>
-                      {t('No data, Go to open the blind box')} &gt;
-                    </Text>
-                  </LinkStyled>
+                  <Spinner />
                 </Flex>
+              ) : (
+                <>
+                  {(starList ?? []).map((item: any) => (
+                    <React.Fragment key={`${item.id}_${item.name}`}>
+                      <MaterialBox
+                        mb='20px'
+                        onClick={() => {
+                          // addMaterialPlanet(item);
+                          navigate(`/star?id=${item.id}`);
+                        }}
+                      >
+                        <PlanetBox
+                          info={item}
+                          active={
+                            Object.keys(activeMaterialMap).indexOf(
+                              `${item.id}`,
+                            ) !== -1
+                          }
+                          onSelect={() => {
+                            addMaterialPlanet(item);
+                          }}
+                        />
+                      </MaterialBox>
+                    </React.Fragment>
+                  ))}
+                  {!starList?.length && (
+                    <Flex
+                      mt='50px'
+                      width='100%'
+                      justifyContent='center'
+                      alignItems='center'
+                    >
+                      <LinkStyled to='/mystery-box'>
+                        <Text fontSize='18px'>
+                          {t('No planet. Go to open the Blind Box')} &gt;
+                        </Text>
+                      </LinkStyled>
+                    </Flex>
+                  )}
+                </>
               )}
             </ScrollBox>
-            {starList?.length && (
+            {/* {starList?.length && (
               <Flex mt='10px' justifyContent='center'>
                 <Button
                   disabled={!starList?.length}
@@ -165,8 +248,8 @@ const SelectPlanet = () => {
                   {t('Join in')}
                 </Button>
               </Flex>
-            )}
-          </BgCard>
+            )} */}
+          </GraphicsCard>
         </Flex>
       </Flex>
     </Layout>

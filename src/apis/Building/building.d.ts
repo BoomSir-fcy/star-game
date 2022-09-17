@@ -32,9 +32,10 @@ declare namespace Api {
       parent_buildings_number: number;
       picture: string;
       type: number;
+      race: number;
       extra: BuildingExtra;
       propterty: BuildingPropterty;
-      _id: string | number;
+      _id: string;
       status?: {
         building_id: string | number;
         count_down: number;
@@ -43,11 +44,24 @@ declare namespace Api {
       building: {
         _id: number;
       };
+      upgrade_need: UpgradeNeed;
       work_queue_id?: number;
+      position?: {
+        from: {
+          x: number;
+          y: number;
+        };
+        to: {
+          x: number;
+          y: number;
+        };
+      };
+      index: number;
       isbuilding?: boolean;
       isactive?: boolean; // 是否激活
       iscreate?: boolean; // 是否已经保存创建建筑了
-      isqueue?: boolean; // 是否加入队列中，可以取消
+      isqueue?: boolean; // 是否加入队列中
+      isPreview?: boolean; // 预览
     }
 
     interface BuildingsOperateParams {
@@ -63,9 +77,9 @@ declare namespace Api {
     }
 
     interface CreateBuildingParams {
-      planet_id: number | string;
+      planet_id: number;
       build_type?: number;
-      work_queue_params: CreateworkQueueParams;
+      work_queue_params: CreateworkQueueParams[];
     }
 
     interface CreateworkQueueParams {
@@ -134,14 +148,14 @@ declare namespace Api {
     }
 
     interface BuildingBuffer {
-      attack: number;
-      build_id: string;
-      critical: number;
-      defense: number;
-      hit: number;
-      hp: number;
-      miss: number;
-      speed: number;
+      attack?: number;
+      build_id?: string;
+      critical?: number;
+      defense?: number;
+      hit?: number;
+      hp?: number;
+      miss?: number;
+      speed?: number;
     }
 
     interface upgradeDetailData {
@@ -291,7 +305,7 @@ declare namespace Api {
     }
 
     interface Stone {
-      product: string;
+      product: any;
     }
 
     interface Store {

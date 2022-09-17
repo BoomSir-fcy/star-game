@@ -1,4 +1,5 @@
-import { useUserAgentContract } from 'hooks/useContract';
+import { useWeb3React } from '@web3-react/core';
+import { useGetCoinContract, useUserAgentContract } from 'hooks/useContract';
 import { useCallback } from 'react';
 import { getStringOfBold } from 'utils';
 import { CheckNickNameState } from '../types';
@@ -33,6 +34,8 @@ interface RegisterParams {
 }
 export const useRegisterWithDsg = () => {
   const contract = useUserAgentContract();
+  const GetCoinContract = useGetCoinContract();
+  const { account } = useWeb3React();
 
   /**
    * @dev 使用dsg注册
@@ -50,8 +53,6 @@ export const useRegisterWithDsg = () => {
     }: RegisterParams) => {
       let tx;
       if (payType === 'BNB') {
-        console.log(BNB_price);
-
         tx = await contract.registerWithBnb(nickname, superior, gender, {
           value: BNB_price,
         });
@@ -64,7 +65,14 @@ export const useRegisterWithDsg = () => {
     [contract],
   );
 
+  const TestToGetCoin = useCallback(async () => {
+    const tx = await GetCoinContract.getCoin(account);
+    const receipt = await tx.wait();
+    return receipt.status;
+  }, [GetCoinContract, account]);
+
   return {
     handleRegister,
+    TestToGetCoin,
   };
 };

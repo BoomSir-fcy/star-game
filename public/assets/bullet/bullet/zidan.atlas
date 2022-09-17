@@ -1,34 +1,41 @@
 
 zidan.png
-size: 128,128
+size: 261,88
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-子弹1
+g-002
   rotate: false
-  xy: 1, 1
-  size: 60, 59
-  orig: 60, 60
-  offset: 0, 1
+  xy: 2, 6
+  size: 114, 80
+  orig: 114, 80
+  offset: 0, 0
   index: -1
-子弹2
-  rotate: false
-  xy: 63, 59
-  size: 60, 56
-  orig: 60, 60
-  offset: 0, 4
+g_002
+  rotate: true
+  xy: 118, 14
+  size: 72, 53
+  orig: 72, 53
+  offset: 0, 0
   index: -1
-子弹3
+xing
   rotate: false
-  xy: 63, 1
-  size: 60, 56
-  orig: 60, 60
-  offset: 0, 2
+  xy: 223, 50
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
   index: -1
-子弹4
-  rotate: false
-  xy: 1, 62
-  size: 60, 53
-  orig: 60, 60
-  offset: 0, 2
+z-001
+  rotate: true
+  xy: 173, 29
+  size: 57, 48
+  orig: 57, 48
+  offset: 0, 0
+  index: -1
+zd
+  rotate: true
+  xy: 173, 2
+  size: 25, 26
+  orig: 25, 26
+  offset: 0, 0
   index: -1

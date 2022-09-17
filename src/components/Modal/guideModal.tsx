@@ -28,8 +28,10 @@ export const GuideModal: React.FC<{
       setVisible={onClose}
     >
       <Box padding='80px 25px'>
-        <Text>{t('GuideModalText')}</Text>
-        <Flex justifyContent='space-between' mt='300px'>
+        <Text textAlign='center' fontSize='28px'>
+          {t('GuideModalText')}
+        </Text>
+        <Flex justifyContent='space-between' mt='150px'>
           <Button
             onClick={() => {
               setGuide(lastStep);

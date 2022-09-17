@@ -6,7 +6,10 @@ import { Flex, Box, Card, Text, Image, Button, Progress } from 'uikit';
 import { useToast } from 'contexts/ToastsContext';
 import { useStore, storeAction } from 'state';
 import { Api } from 'apis';
-
+import {
+  getBuilderSpriteRes,
+  getBuildingOfRaceAndIndex,
+} from 'building/core/utils';
 import { fetchPlanetBuildingsAsync } from 'state/buildling/fetchers';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useTranslation } from 'contexts/Localization';
@@ -169,7 +172,6 @@ export const GameInfo: React.FC<{
               taregtBuildingLevel[0]?.target_level + 1;
           }
 
-          console.log(itemData, '建筑', selfLevel);
           const res = await upgrade(
             planet_id,
             buildingsId,
@@ -195,7 +197,7 @@ export const GameInfo: React.FC<{
           callback();
           getSelfBuilding();
           toastSuccess(t('planetDestroyedSuccessfully'));
-          dispatch(storeAction.destoryBuildingVisibleModal(false));
+          // dispatch(storeAction.destoryBuildingVisibleModal(false));
         } else {
           toastError(res.message);
         }
@@ -255,7 +257,6 @@ export const GameInfo: React.FC<{
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemData]);
 
-    console.log(arms);
     return (
       <Container>
         {itemData?._id && (
@@ -263,7 +264,11 @@ export const GameInfo: React.FC<{
             <CardContent>
               <Flex alignItems='flex-start'>
                 <GameThing
-                  src={currentAttributes?.picture}
+                  // src={currentAttributes?.picture}
+                  src={getBuilderSpriteRes(
+                    currentAttributes.race,
+                    `${currentAttributes.index}`,
+                  )}
                   level={currentAttributes?.propterty?.levelEnergy}
                   scale='md'
                   border
@@ -276,8 +281,14 @@ export const GameInfo: React.FC<{
                   >
                     <Flex alignItems='flex-end'>
                       <Text bold shadow='primary'>
-                        {currentAttributes?.propterty?.name_cn ||
-                          itemData?.propterty?.name_cn}
+                        {/* {currentAttributes?.propterty?.name_cn ||
+                          itemData?.propterty?.name_cn} */}
+                        {
+                          getBuildingOfRaceAndIndex(
+                            currentAttributes?.race || itemData?.race,
+                            currentAttributes?.index || itemData?.index,
+                          )?.name
+                        }
                       </Text>
                       <Text ml='27px' small>
                         {`${
@@ -699,10 +710,9 @@ export const GameInfo: React.FC<{
                               'The number of cellars must be less than or equal to storage tanks',
                             ),
                           );
-                          return;
                         }
 
-                        dispatch(storeAction.destoryBuildingVisibleModal(true));
+                        // dispatch(storeAction.destoryBuildingVisibleModal(true));
                       }}
                     >
                       {t('planetDestroyBuilding')}
@@ -732,7 +742,7 @@ export const GameInfo: React.FC<{
         )}
 
         {/* 销毁建筑 */}
-        <ThingDestoryModal
+        {/* <ThingDestoryModal
           planet_id={planet_id}
           itemData={itemData}
           upgrade={state.upgrade}
@@ -740,14 +750,13 @@ export const GameInfo: React.FC<{
           onClose={() =>
             dispatch(storeAction.destoryBuildingVisibleModal(false))
           }
-        />
+        /> */}
 
         {/* 建筑升级 */}
         <ThingUpgradesModal
           visible={state.upgradesVisible}
           planet_id={planet_id}
           itemData={itemData}
-          upgrade={state.upgrade}
           onChange={async () => {
             const level =
               state.upgrade?.building_detail?.propterty?.levelEnergy + 2;

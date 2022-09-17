@@ -1,0 +1,10 @@
+import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
+import { SerializedBigNumber } from 'state/types';
+export declare const BIG_ZERO: BigNumber;
+export declare const BIG_ONE: BigNumber;
+export declare const BIG_NINE: BigNumber;
+export declare const BIG_TEN: BigNumber;
+export declare const ONE_BILLION: BigNumber;
+export declare const ethersToSerializedBigNumber: (ethersBn: ethers.BigNumber) => SerializedBigNumber;
+export declare const ethersToBigNumber: (ethersBn: ethers.BigNumber) => BigNumber;

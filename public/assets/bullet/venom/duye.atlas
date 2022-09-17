@@ -1,55 +1,153 @@
 
 duye.png
-size: 256,256
+size: 1734,706
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-毒气4
+DY_01
   rotate: false
-  xy: 1, 78
-  size: 77, 70
-  orig: 77, 70
+  xy: 1530, 564
+  size: 137, 140
+  orig: 137, 140
   offset: 0, 0
   index: -1
-毒气6
+DY_02
   rotate: false
-  xy: 99, 1
-  size: 96, 74
-  orig: 96, 74
+  xy: 1410, 358
+  size: 137, 140
+  orig: 137, 140
   offset: 0, 0
   index: -1
-毒气7
-  rotate: false
-  xy: 1, 1
-  size: 96, 75
-  orig: 96, 75
+DY_03
+  rotate: true
+  xy: 1428, 219
+  size: 137, 140
+  orig: 137, 140
   offset: 0, 0
   index: -1
-毒气2
+DY_04
   rotate: false
-  xy: 193, 77
-  size: 52, 52
-  orig: 52, 52
+  xy: 1444, 77
+  size: 137, 140
+  orig: 137, 140
   offset: 0, 0
   index: -1
-毒气1
+DY_05
   rotate: false
-  xy: 197, 1
-  size: 36, 28
-  orig: 36, 28
+  xy: 1549, 422
+  size: 137, 140
+  orig: 137, 140
   offset: 0, 0
   index: -1
-毒气5
+DY_06
   rotate: false
-  xy: 99, 77
-  size: 92, 77
-  orig: 92, 77
+  xy: 1570, 280
+  size: 137, 140
+  orig: 137, 140
   offset: 0, 0
   index: -1
-毒气3
+DY_07
   rotate: false
-  xy: 1, 150
-  size: 63, 62
-  orig: 63, 62
+  xy: 1583, 138
+  size: 137, 140
+  orig: 137, 140
+  offset: 0, 0
+  index: -1
+db_001
+  rotate: false
+  xy: 1058, 63
+  size: 256, 154
+  orig: 256, 154
+  offset: 0, 0
+  index: -1
+dm_001
+  rotate: true
+  xy: 1316, 66
+  size: 151, 126
+  orig: 151, 126
+  offset: 0, 0
+  index: -1
+dm_002
+  rotate: false
+  xy: 1444, 6
+  size: 92, 69
+  orig: 92, 69
+  offset: 0, 0
+  index: -1
+g-001
+  rotate: true
+  xy: 1583, 32
+  size: 104, 111
+  orig: 104, 111
+  offset: 0, 0
+  index: -1
+s-001
+  rotate: false
+  xy: 1410, 500
+  size: 118, 204
+  orig: 118, 204
+  offset: 0, 0
+  index: -1
+s-002
+  rotate: false
+  xy: 1696, 100
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+tx-01
+  rotate: false
+  xy: 2, 2
+  size: 350, 350
+  orig: 350, 350
+  offset: 0, 0
+  index: -1
+tx-02
+  rotate: false
+  xy: 354, 354
+  size: 350, 350
+  orig: 350, 350
+  offset: 0, 0
+  index: -1
+tx-03
+  rotate: false
+  xy: 354, 2
+  size: 350, 350
+  orig: 350, 350
+  offset: 0, 0
+  index: -1
+tx-04
+  rotate: false
+  xy: 706, 354
+  size: 350, 350
+  orig: 350, 350
+  offset: 0, 0
+  index: -1
+tx-05
+  rotate: false
+  xy: 706, 2
+  size: 350, 350
+  orig: 350, 350
+  offset: 0, 0
+  index: -1
+tx-06
+  rotate: false
+  xy: 1058, 354
+  size: 350, 350
+  orig: 350, 350
+  offset: 0, 0
+  index: -1
+tx-07
+  rotate: false
+  xy: 2, 354
+  size: 350, 350
+  orig: 350, 350
+  offset: 0, 0
+  index: -1
+yan-001
+  rotate: true
+  xy: 1058, 219
+  size: 133, 368
+  orig: 133, 368
   offset: 0, 0
   index: -1

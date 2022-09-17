@@ -12,5 +12,7 @@ export interface TextProps extends SpaceProps, TypographyProps, LayoutProps {
   textTransform?: 'uppercase' | 'lowercase' | 'capitalize';
   maxLine?: number;
   mark?: boolean;
+  gold?: boolean;
+  Purple?: boolean;
   vip?: boolean;
 }

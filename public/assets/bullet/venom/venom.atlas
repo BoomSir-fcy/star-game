@@ -1,0 +1,104 @@
+
+venom.png
+size: 346,1033
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+dq_0010000
+  rotate: false
+  xy: 2, 891
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010001
+  rotate: false
+  xy: 2, 749
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010002
+  rotate: true
+  xy: 204, 831
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010003
+  rotate: false
+  xy: 2, 607
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010004
+  rotate: true
+  xy: 204, 629
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010005
+  rotate: false
+  xy: 2, 465
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010006
+  rotate: false
+  xy: 2, 323
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010007
+  rotate: true
+  xy: 204, 427
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010008
+  rotate: false
+  xy: 2, 181
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010009
+  rotate: true
+  xy: 204, 225
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010010
+  rotate: false
+  xy: 2, 39
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+dq_0010011
+  rotate: true
+  xy: 204, 23
+  size: 200, 140
+  orig: 200, 140
+  offset: 0, 0
+  index: -1
+duqi-001
+  rotate: false
+  xy: 2, 2
+  size: 78, 35
+  orig: 78, 35
+  offset: 0, 0
+  index: -1
+duqi-002
+  rotate: false
+  xy: 82, 16
+  size: 14, 21
+  orig: 14, 21
+  offset: 0, 0
+  index: -1

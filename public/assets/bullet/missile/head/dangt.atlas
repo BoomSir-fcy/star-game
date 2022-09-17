@@ -1,34 +1,167 @@
 
 dangt.png
-size: 256,256
+size: 1255,216
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-3
+dd_002
   rotate: false
-  xy: 1, 97
-  size: 171, 39
-  orig: 171, 39
+  xy: 394, 21
+  size: 109, 95
+  orig: 139, 121
+  offset: 13, 15
+  index: -1
+dd_003
+  rotate: false
+  xy: 721, 22
+  size: 105, 97
+  orig: 139, 121
+  offset: 17, 13
+  index: -1
+dd_004
+  rotate: false
+  xy: 1147, 27
+  size: 106, 95
+  orig: 139, 121
+  offset: 16, 15
+  index: -1
+dd_005
+  rotate: false
+  xy: 930, 123
+  size: 109, 91
+  orig: 139, 121
+  offset: 13, 19
+  index: -1
+dd_006
+  rotate: false
+  xy: 379, 118
+  size: 108, 96
+  orig: 139, 121
+  offset: 14, 14
+  index: -1
+dd_007
+  rotate: false
+  xy: 828, 23
+  size: 104, 97
+  orig: 139, 121
+  offset: 18, 13
+  index: -1
+dd_008
+  rotate: false
+  xy: 711, 121
+  size: 107, 93
+  orig: 139, 121
+  offset: 15, 17
+  index: -1
+dd_009
+  rotate: false
+  xy: 600, 121
+  size: 109, 93
+  orig: 139, 121
+  offset: 13, 17
+  index: -1
+dd_010
+  rotate: false
+  xy: 270, 117
+  size: 107, 97
+  orig: 139, 121
+  offset: 15, 13
+  index: -1
+dd_011
+  rotate: false
+  xy: 934, 24
+  size: 104, 97
+  orig: 139, 121
+  offset: 18, 13
+  index: -1
+dd_012
+  rotate: false
+  xy: 820, 122
+  size: 108, 92
+  orig: 139, 121
+  offset: 14, 18
+  index: -1
+dd_013
+  rotate: false
+  xy: 489, 119
+  size: 109, 95
+  orig: 139, 121
+  offset: 13, 15
+  index: -1
+dd_014
+  rotate: false
+  xy: 505, 20
+  size: 106, 97
+  orig: 139, 121
+  offset: 16, 13
+  index: -1
+dd_015
+  rotate: false
+  xy: 1040, 25
+  size: 105, 96
+  orig: 139, 121
+  offset: 17, 14
+  index: -1
+dd_016
+  rotate: false
+  xy: 1041, 124
+  size: 109, 90
+  orig: 139, 121
+  offset: 13, 20
+  index: -1
+fc_01
+  rotate: false
+  xy: 2, 103
+  size: 135, 111
+  orig: 143, 115
+  offset: 1, 4
+  index: -1
+fc_02
+  rotate: false
+  xy: 139, 116
+  size: 129, 98
+  orig: 143, 115
+  offset: 2, 0
+  index: -1
+fc_03
+  rotate: false
+  xy: 2, 3
+  size: 143, 98
+  orig: 143, 115
+  offset: 0, 1
+  index: -1
+fc_04
+  rotate: false
+  xy: 147, 16
+  size: 129, 98
+  orig: 143, 115
+  offset: 3, 6
+  index: -1
+wuqi-001
+  rotate: false
+  xy: 1215, 185
+  size: 31, 29
+  orig: 31, 29
   offset: 0, 0
   index: -1
-2
+wuqi4
   rotate: false
-  xy: 1, 138
-  size: 155, 31
-  orig: 155, 31
+  xy: 278, 6
+  size: 114, 109
+  orig: 114, 109
   offset: 0, 0
   index: -1
-1
+wuqi_002
   rotate: false
-  xy: 1, 51
-  size: 180, 44
-  orig: 180, 44
+  xy: 1152, 162
+  size: 61, 52
+  orig: 61, 52
   offset: 0, 0
   index: -1
-4
+wyqi_003
   rotate: false
-  xy: 1, 1
-  size: 179, 48
-  orig: 179, 48
+  xy: 613, 2
+  size: 106, 117
+  orig: 106, 117
   offset: 0, 0
   index: -1

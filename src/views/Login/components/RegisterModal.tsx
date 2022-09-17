@@ -14,7 +14,11 @@ import ApproveButton from 'components/ApproveButton';
 import { getUserAgentAddress } from 'utils/addressHelpers';
 import { fetchAllowanceAsync } from 'state/userInfo/reducer';
 import { useDispatch } from 'react-redux';
-import { formatDisplayBalance } from 'utils/formatBalance';
+import {
+  formatDisplayBalance,
+  splitThousandSeparator,
+  getBalanceNumber,
+} from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
 
 interface RegisterModalProps {
@@ -51,23 +55,28 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
       visible={visible}
       setVisible={setVisible}
     >
-      <Flex pt='98px' flexDirection='column' alignItems='center'>
-        <Image src='/images/commons/dsg-1.png' width={109} height={114} />
+      <Flex padding='30px' flexDirection='column' alignItems='center'>
+        {/* <Image src='/images/commons/dsg-1.png' width={109} height={114} /> */}
         {DsgBalance.isLessThan(price) ? (
-          <Text mt='42px' fontSize='24px'>
+          <Text mt='50px' fontSize='24px'>
             {t('BnbRegister', {
-              DSG: formatDisplayBalance(new BigNumber(price), 18),
+              DSG: splitThousandSeparator(
+                getBalanceNumber(new BigNumber(price), 18),
+              ),
               BNB: formatDisplayBalance(new BigNumber(BNBprice), 18),
             })}{' '}
           </Text>
         ) : (
-          <Text mt='42px' fontSize='24px'>
+          <Text mt='20px' fontSize='24px'>
             {t('Payment for creating identity')}{' '}
-            {formatDisplayBalance(new BigNumber(price), 18)} DSG
+            {splitThousandSeparator(getBalanceNumber(new BigNumber(price), 18))}{' '}
+            DSG
           </Text>
         )}
         {isApprove || DsgBalance.isLessThan(price) ? (
           <Button
+            width='50%'
+            variant='purple'
             onClick={() => {
               if (DsgBalance.isLessThan(price)) {
                 onRegister('BNB');
@@ -75,9 +84,11 @@ const RegisterModal: React.FC<RegisterModalProps> = ({
                 onRegister('DSG');
               }
             }}
-            mt='58px'
+            mt='48px'
           >
-            {t('Confirm and Pay')}
+            <Text fontSize='20px' bold>
+              {t('Confirm and Pay')}
+            </Text>
           </Button>
         ) : (
           <ApproveButton

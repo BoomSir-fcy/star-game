@@ -21,4 +21,5 @@ export interface ProgressProps {
   showProgressBunny?: boolean;
   color?: string;
   linear?: boolean;
+  className?: string;
 }

@@ -5,6 +5,7 @@ declare namespace Api {
       race?: number;
       token?: string;
       rarity?: number;
+      level?: number;
       page: number;
       page_size: number;
     }
@@ -59,7 +60,20 @@ declare namespace Api {
       status_countdown: number; // 倒计时
       exp: number; // 当前经验值
       can_provided_exp: number; // 销毁产生经验值
-      in_queue: boolean; //星球是否有任务队列
+      in_queue: boolean; // 星球是否有任务队列
+      max_level: number; // 最大等级
+      stone_enough: boolean; // 矿石是否足够
+      energy_enough: boolean; // 能量是否足够
+      population_enough: boolean; // 香料是否足够
+      power: number; // 战斗力
+      arm_count: number; // 兵种数量
+      ak_buff: number; // buff建筑加成
+      strengthen_buff: number; // 培育强化加成
+      strengthen: Buffer;
+      work_time: number; // 上次工作时间
+      work_count: number; // 工作次数
+      give_build_index: number; // 赠送建造index
+      give_level: number; // 赠送建造等级
     }
 
     interface UpgradePlanetInfo {
@@ -76,6 +90,24 @@ declare namespace Api {
       upgrade_time: number;
       upgrade_exp: number; // 最大经验值
       success?: boolean;
+    }
+
+    interface MaterialParams {
+      planet_id: number;
+      find_planet_id?: number;
+      race?: number;
+      rarity?: number;
+    }
+
+    interface Buffer {
+      attack?: number;
+      build_id?: string;
+      critical?: number;
+      defense?: number;
+      hit?: number;
+      hp?: number;
+      miss?: number;
+      speed?: number;
     }
   }
 }

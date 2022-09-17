@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AllianceState, AppThunk, orderInfo } from 'state/types';
-import { fetchCombatRecord, fetchMyPlanetAlliance } from './fetchers';
+import {
+  fetchCombatRecord,
+  fetchExploreProgress,
+  fetchMyPlanetAlliance,
+} from './fetchers';
 
 export const initialState: AllianceState = {
   allianceView: {
@@ -27,6 +31,11 @@ export const initialState: AllianceState = {
     end_time: 0,
     free_time: 0,
     later_extract_time: 0,
+    max_work_count: 0,
+    now_work_count: 0,
+    unread_plunder_count: 0,
+    message_count: 0,
+    hold_planet: false,
   },
   workingPlanet: [],
   pkRecord: {
@@ -39,6 +48,13 @@ export const initialState: AllianceState = {
     isEnd: false,
     loading: false,
   },
+  DifficultyToExplore: 0,
+  ExploreProgressDate: {
+    end_time: 0,
+    planet_detail: [],
+    work_message: [],
+    work_time: 0,
+  },
 };
 
 export const fetchAllianceViewAsync = (): AppThunk => async dispatch => {
@@ -46,10 +62,15 @@ export const fetchAllianceViewAsync = (): AppThunk => async dispatch => {
   dispatch(setAllianceView(info));
 };
 
+export const fetchExploreProgressAsync = (): AppThunk => async dispatch => {
+  const info = await fetchExploreProgress();
+  dispatch(setExploreProgressDate(info));
+};
+
 export const fetchCombatRecordAsync =
-  (address: string, page: number, page_size: number): AppThunk =>
+  (address: string, start_time: number, end_time: number): AppThunk =>
   async dispatch => {
-    const info = await fetchCombatRecord(address, page, page_size);
+    const info = await fetchCombatRecord(address, start_time, end_time);
     dispatch(setPkRecord(info));
   };
 
@@ -76,13 +97,13 @@ export const allianceSlice = createSlice({
       const { pkRecord } = state;
       if (payload) {
         const temp = payload.record;
-        const nowList =
-          payload.page === 1 ? temp : [...pkRecord.record, ...temp];
-
-        let isEnd = false;
-        if (payload.page * payload.page_size >= payload.count) {
-          isEnd = true;
-        }
+        // const nowList =
+        //   payload.page === 1 ? temp : [...pkRecord.record, ...temp];
+        const nowList = temp;
+        const isEnd = false;
+        // if (payload.page * payload.page_size >= payload.count) {
+        //   isEnd = true;
+        // }
         state.pkRecord = {
           ...payload,
           record: nowList,
@@ -91,17 +112,27 @@ export const allianceSlice = createSlice({
         };
       }
     },
-    setRefresh: state => {
-      state.pkRecord.record = [];
-    },
     setRecordLoad: state => {
       state.pkRecord.loading = true;
+    },
+    setDifficultyToExplore: (state, action) => {
+      state.DifficultyToExplore = action.payload;
+    },
+    setExploreProgressDate: (state, action) => {
+      if (action.payload) {
+        state.ExploreProgressDate = action.payload;
+      }
     },
   },
 });
 
 // Actions
-export const { setAllianceView, setPkRecord, setRefresh, setRecordLoad } =
-  allianceSlice.actions;
+export const {
+  setAllianceView,
+  setPkRecord,
+  setRecordLoad,
+  setDifficultyToExplore,
+  setExploreProgressDate,
+} = allianceSlice.actions;
 
 export default allianceSlice.reducer;

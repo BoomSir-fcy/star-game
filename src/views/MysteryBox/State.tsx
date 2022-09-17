@@ -38,6 +38,7 @@ import { useStore } from 'state';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { fetchUserKeysAsync } from 'state/mysteryBox/reducer';
+import { useToast } from 'contexts/ToastsContext';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import OpenModal from './components/OpenModal';
 import { queryMintEvent } from './event';
@@ -215,7 +216,7 @@ const MysteryBoxState = () => {
             }
           }}
           onBeforeChange={event => {
-            console.log(event);
+            // console.log(event);
           }}
           onExit={currentStep => {
             setGuide(1);
@@ -272,11 +273,7 @@ const MysteryBoxState = () => {
               >
                 <Flex alignItems='center'>
                   <Box width={100}>
-                    <TokenImage
-                      width={80}
-                      height={80}
-                      tokenAddress={getWEtherAddress()}
-                    />
+                    <TokenImage width={80} height={80} tokenAddress='BNB' />
                   </Box>
                   <Box ml='20px'>
                     <Text color='textTips'>{t('BNB Value')}</Text>
@@ -314,7 +311,7 @@ const MysteryBoxState = () => {
                   {handleLoading ? (
                     <Dots>{t('Opening')}</Dots>
                   ) : (
-                    <Text fontSize='inherit'>{t('Open blind box')}</Text>
+                    <Text fontSize='inherit'>{t('Open')}</Text>
                   )}
                 </Button>
               ) : (
@@ -325,7 +322,7 @@ const MysteryBoxState = () => {
                   {handleLoading ? (
                     <Dots>{t('Purchasing')}</Dots>
                   ) : (
-                    <Text fontSize='inherit'>{t('Buy blind box')}</Text>
+                    <Text fontSize='inherit'>{t('Buy')}</Text>
                   )}
                 </Button>
               )}

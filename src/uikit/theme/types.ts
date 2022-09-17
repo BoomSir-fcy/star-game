@@ -57,6 +57,9 @@ export type TextShadows = {
 export type Gradients = {
   bubblegum: string;
   progress: string;
+  card: string;
+  stripe: string;
+  stripeBg: string;
 };
 
 export const qualities = {
@@ -78,6 +81,7 @@ export type Qualities = typeof qualities[keyof typeof qualities];
 export type Races = typeof RaceType[keyof typeof RaceType];
 
 export type Colors = {
+  redText: string;
   legendText: string;
   profit: string;
   failure: string;
@@ -99,6 +103,7 @@ export type Colors = {
   textSecondary: string;
   textDisabled: string;
   textSubtle: string;
+  textPrimary: string;
   disabled: string;
   textTips: string;
   textSuccess: string;
@@ -108,6 +113,7 @@ export type Colors = {
   raceHuman: string;
   raceZerg: string;
 
+  borderPrimary: string;
   border: string;
   goldBorder: string;
   lightBorder: string;
@@ -123,9 +129,12 @@ export type Colors = {
   navy: string;
   missTxt: string;
   progressGreenBar: string;
+  progressSliderBackground: string;
   // NFT Token Colors
   triangleDinosaur: string;
   meat: string;
+  textUp: string;
+  white_black: string;
 
   // quality
   [qualities.ORDINARY]: string;

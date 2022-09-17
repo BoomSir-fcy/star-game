@@ -54,14 +54,16 @@ export const BuyVipModal: React.FC<{
 
   return (
     <ModalWrapper title='Tips' visible={visible} setVisible={onClose}>
-      <Flex flexDirection='column' alignItems='center' padding='80px 25px'>
+      <Flex flexDirection='column' alignItems='center' padding='30px 25px'>
         <Text fontSize='28px'>{tips}</Text>
         <Text fontSize='24px' mt='36px'>
           {t('This feature is a VIP benefit, please upgrade to VIP')}
         </Text>
-        <Flex justifyContent='space-between' mt='210px'>
+        <Flex justifyContent='space-between' mt='60px'>
           <Link to='/vip'>
-            <Button>{t('Become VIP')}</Button>
+            <Button variant='purple' width='260px'>
+              {t('Become VIP')}
+            </Button>
           </Link>
         </Flex>
       </Flex>

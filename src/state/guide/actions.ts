@@ -6,6 +6,40 @@ export const toggleVisible = createAction<{
   pathname?: string;
 }>('guide/toggleVisible');
 
+export const toggleRechargeVisible = createAction<{
+  visible: boolean;
+}>('guide/toggleRechargeVisible');
+
+export const setToRechargeVisible = createAction<{
+  visible: boolean;
+}>('guide/setToRechargeVisible');
+
+export const setErrCode = createAction<{
+  code: string;
+}>('guide/setErrCode');
+
+export const setRechargeOperationType = createAction<{
+  OperationType: number;
+}>('guide/setRechargeOperationType');
+
+export const setBuyPrice = createAction<{
+  price: string;
+}>('guide/setBuyPrice');
+
+export const setTokenToFrom = createAction<{
+  fromTop: number;
+  fromLeft: number;
+  toTop: number;
+  toLeft: number;
+  token: string[];
+}>('guide/setTokenToFrom');
+
 export default {
   toggleVisible,
+  setBuyPrice,
+  toggleRechargeVisible,
+  setErrCode,
+  setToRechargeVisible,
+  setRechargeOperationType,
+  setTokenToFrom,
 };

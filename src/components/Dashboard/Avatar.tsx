@@ -8,6 +8,14 @@ import { useTranslation } from 'contexts/Localization';
 import { Box, Image, Text, Button } from 'uikit';
 import { useStore } from 'state/util';
 
+const BoxStyled = styled(Box)`
+  background: url('/images/commons/dashboard/avatar.png');
+  background-size: 100% 100%;
+  width: 185px;
+  height: 204px;
+  position: relative;
+`;
+
 const ButtonStyled = styled(Button)`
   /* background: url('/images/commons/dashboard/a1.png'); */
   /* background-size: 100% 100%; */
@@ -20,6 +28,16 @@ const ButtonStyled = styled(Button)`
   margin: 0;
   text-shadow: none;
 `;
+const VipButton = styled(Button)`
+  position: absolute;
+  background: url('/images/commons/icon/icon-vip.png');
+  background-size: cover;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  right: 10px;
+  top: 10px;
+`;
 
 const Avatar = () => {
   const { t } = useTranslation();
@@ -30,7 +48,8 @@ const Avatar = () => {
   const [visible, setVisible] = useState(false);
 
   return (
-    <Box width='272px' position='relative'>
+    <BoxStyled position='relative'>
+      {userInfo.vipBenefits?.is_vip && <VipButton variant='custom' />}
       <Box
         onClick={() => {
           setPopType(1);
@@ -38,36 +57,36 @@ const Avatar = () => {
           setVisible(true);
         }}
       >
-        <Box position='absolute' top={20} width='100%'>
-          <Text textAlign='center' fontSize='20px' ellipsis>
+        <Box position='absolute' top={15} width='100%'>
+          <Text textAlign='center' bold ellipsis>
             {userInfo.nickname}
           </Text>
         </Box>
-        <Box position='relative' zIndex={-1} width={224} mt='15px' ml='24px'>
+        <Box position='relative' zIndex={-1} width={146} mt='15px' ml='24px'>
           <Image
             src={userInfo.avatar || '/images/login/a-man.png'}
-            width={286}
-            height={286}
+            width={146}
+            height={143}
           />
         </Box>
       </Box>
-      <Box position='absolute' bottom='0' left='-4px' width='100%'>
+      <Box position='absolute' bottom='-10px' left='-2px' width='100%'>
         <ButtonStyled
           onClick={() => {
             setPopType(2);
-            setPopTitle(t('Invite to earn'));
+            setPopTitle(t('Invite to Earn'));
             setVisible(true);
           }}
         >
-          <Text fontSize='20px' bold>
-            {t('Invite to earn')}
+          <Text small bold>
+            {t('Invite to Earn')}
           </Text>
         </ButtonStyled>
       </Box>
       <Modal title={PopTitle} visible={visible} setVisible={setVisible}>
         {PopType === 1 ? <UserInfo /> : <InvitePop />}
       </Modal>
-    </Box>
+    </BoxStyled>
   );
 };
 

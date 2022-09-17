@@ -18,6 +18,7 @@ export const Bar = styled.div<BarProps>`
     theme.colors.gradients.progress};
   height: 100%;
   transition: width 200ms ease;
+  z-index: 1;
 `;
 
 Bar.defaultProps = {

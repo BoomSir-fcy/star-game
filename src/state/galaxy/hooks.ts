@@ -2,11 +2,15 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useGalaxyContract } from 'hooks/useContract';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { GalaxyState } from 'state/types';
+import { GalaxyInfo, GalaxyState } from 'state/types';
 import {
+  fetchAllLogsAsync,
+  fetchGalaxReportListAsync,
   fetchGalaxyListAsync,
   fetchGalaxyStarListAsync,
   fetchGetNftViewAsync,
+  fetchGetNftViewListAsync,
+  fetchOwnerInfoAsync,
 } from './reducer';
 
 export const useGalaxySelector = () => {
@@ -49,6 +53,17 @@ export const useGalaxyNft = (tokenId: number) => {
   }, [account, tokenId, dispatch]);
 };
 
+export const useGalaxyNftArr = (List: GalaxyInfo[]) => {
+  const dispatch = useDispatch();
+  const { account } = useActiveWeb3React();
+
+  useEffect(() => {
+    if (account && List.length) {
+      dispatch(fetchGetNftViewListAsync(List));
+    }
+  }, [account, List, dispatch]);
+};
+
 // 竞拍
 export const useAuction = () => {
   const contract = useGalaxyContract();
@@ -67,4 +82,61 @@ export const useAuction = () => {
   );
 
   return { onAuction };
+};
+
+export const useFetchAllLogsView = () => {
+  const dispatch = useDispatch();
+  const { account } = useActiveWeb3React();
+  const fetch = useCallback(() => {
+    if (account) {
+      dispatch(fetchAllLogsAsync());
+    }
+  }, [account, dispatch]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return {
+    fetch,
+  };
+};
+
+export const useFetchOwnerInfo = (nft_id: number) => {
+  const dispatch = useDispatch();
+  const { account } = useActiveWeb3React();
+  const fetch = useCallback(() => {
+    if (account) {
+      dispatch(fetchOwnerInfoAsync(nft_id));
+    }
+  }, [account, nft_id, dispatch]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return {
+    fetch,
+  };
+};
+
+export const useFetchGalaxReportList = (
+  start_time: number,
+  end_time: number,
+) => {
+  const dispatch = useDispatch();
+  const { account } = useActiveWeb3React();
+  const fetch = useCallback(() => {
+    if (account && start_time && end_time) {
+      dispatch(fetchGalaxReportListAsync(start_time || 1, end_time));
+    }
+  }, [account, start_time, end_time, dispatch]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return {
+    fetch,
+  };
 };

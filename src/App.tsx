@@ -4,7 +4,6 @@ import { Box, ResetCSS, Spinner } from 'uikit';
 import VConsole from 'vconsole';
 import ScaleOrientContent from 'components/ScaleOrientContent';
 import useEagerConnect from 'hooks/useEagerConnect';
-import Toast from 'components/Toast';
 import { ConnectWalletProvider } from 'contexts/ConnectWallet';
 import AccountUpdater from './views/Updater/AccountUpdater';
 import EventBusUpdater from './views/Updater/EventBusUpdater';
@@ -17,35 +16,47 @@ import {
   TestStar,
   TestText,
   TestLabel,
+  TestDrag,
+  TestDragAndPut,
 } from './views/Test';
+
+const ChangeRate = lazy(() => import('./views/Test/ChangeRate'));
 
 const Home = lazy(() => import('./views/Home'));
 const Login = lazy(() => import('./views/Login'));
 
-const MysteryBox = lazy(() => import('./views/MysteryBox'));
-const MysteryBoxDetail = lazy(() => import('./views/MysteryBox/Detail'));
-const MysteryBoxState = lazy(() => import('./views/MysteryBox/State'));
-const MysteryBoxList = lazy(() => import('./views/MysteryBox/List'));
+const MysteryBox = lazy(() => import('./views/MysteryBoxNew'));
+const MysteryBoxDetail = lazy(() => import('./views/MysteryBoxNew/Detail'));
+const MysteryBoxState = lazy(() => import('./views/MysteryBoxNew/State'));
+const MysteryBoxList = lazy(() => import('./views/MysteryBoxNew/List'));
 
-const PlantLeague = lazy(() => import('./views/PlantLeague'));
+// const PlantLeague = lazy(() => import('./views/PlantLeague'));
 const BattleReport = lazy(() => import('./views/BattleReport'));
+// const ChoosePlanet = lazy(() => import('./views/NewPlantLeague/ChoosePlanet'));
 
 const Plunder = lazy(() => import('./views/Plunder'));
 const PlunderPk = lazy(() => import('./views/Plunder/Pk'));
 const PlunderResult = lazy(() => import('./views/Plunder/Result'));
 const PlunderTest = lazy(() => import('./views/Plunder/Test'));
-const Galaxy = lazy(() => import('./views/Galaxy'));
-const Auction = lazy(() => import('./views/Galaxy/Auction'));
-const Stars = lazy(() => import('./views/Galaxy/Stars'));
+// const Galaxy = lazy(() => import('./views/Galaxy'));
+// const Auction = lazy(() => import('./views/Galaxy/Auction'));
+// const Stars = lazy(() => import('./views/Galaxy/Stars'));
 
 const Start = lazy(() => import('./views/Star/Layout'));
-const StartPlanet = lazy(() => import('./views/Star/planet'));
+// const StartPlanet = lazy(() => import('./views/Planet'));
+const StartPlanet = lazy(() => import('./views/NewPlanet'));
 
 const UpgradeList = React.lazy(
   () => import('./views/Star/components/upgrade/SelectPlanet'),
 );
 
 const VipPage = lazy(() => import('./views/vip'));
+const NewPlantLeague = lazy(() => import('./views/NewPlantLeague'));
+const PlatformNews = lazy(() => import('./views/PlatformNews'));
+const NewGalaxy = lazy(() => import('./views/NewGalaxy'));
+const ExploreProgress = lazy(() => import('./views/ExploreProgress'));
+
+const Swap = lazy(() => import('./views/Swap'));
 
 // window.addEventListener('click', () => {
 //   console.log(Object.keys(document.documentElement));
@@ -82,7 +93,7 @@ function App() {
                 path='/mystery-box/detail'
                 element={<MysteryBoxDetail />}
               />
-              <Route path='/mystery-box/state' element={<MysteryBoxState />} />
+              {/* <Route path='/mystery-box/state' element={<MysteryBoxState />} /> */}
               <Route path='/mystery-box/list' element={<MysteryBoxList />} />
 
               {/* 升级星球背包 */}
@@ -94,12 +105,18 @@ function App() {
               <Route path='/star/*' element={<Start />} />
 
               {/* 星球联盟 */}
-              <Route path='/plant-league' element={<PlantLeague />} />
+              {/* <Route path='/plant-league' element={<PlantLeague />} /> */}
+              <Route path='/plant-league' element={<NewPlantLeague />} />
+              {/* <Route path='/choose-planet' element={<ChoosePlanet />} /> */}
+              <Route path='/platform-News' element={<PlatformNews />} />
+              <Route path='/explore-progress' element={<ExploreProgress />} />
+
               <Route path='/battleReport' element={<BattleReport />} />
               {/* 星系 */}
-              <Route path='/galaxy' element={<Galaxy />} />
+              {/* <Route path='/galaxy' element={<Galaxy />} />
               <Route path='/galaxy/auction' element={<Auction />} />
-              <Route path='/galaxy/stars' element={<Stars />} />
+              <Route path='/galaxy/stars' element={<Stars />} /> */}
+              <Route path='/galaxy' element={<NewGalaxy />} />
 
               {/* 掠夺 */}
               <Route path='/plunder' element={<Plunder />} />
@@ -109,7 +126,13 @@ function App() {
 
               <Route path='/vip' element={<VipPage />} />
 
+              <Route path='/change-rate' element={<ChangeRate />} />
+
+              <Route path='/swap' element={<Swap />} />
+
               <Route path='/test' element={<Test />}>
+                <Route path='drag-put' element={<TestDragAndPut />} />
+                <Route path='drag' element={<TestDrag />} />
                 <Route path='card' element={<TestCard />} />
                 <Route path='bg-card' element={<TestBgCard />} />
                 <Route path='button' element={<TestButton />} />
@@ -120,7 +143,6 @@ function App() {
             </Routes>
           </Suspense>
         </ConnectWalletProvider>
-        <Toast />
       </ScaleOrientContent>
     </>
     // </BrowserRouter>

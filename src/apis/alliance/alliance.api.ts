@@ -7,9 +7,15 @@ export class AllianceApi extends Http {
     return res;
   }
 
+  // 获取星球联盟探索进度
+  async getExploreProgress() {
+    const res = await this.get('work/progress');
+    return res;
+  }
+
   // 行星联盟开始工作
-  async AllianceWorking() {
-    const res = await this.post('alliance/worker/start');
+  async AllianceWorking(params: Api.Alliance.StartWorking) {
+    const res = await this.post('alliance/worker/start', params);
     return res;
   }
 
@@ -40,6 +46,12 @@ export class AllianceApi extends Http {
   // 获取掠夺战斗记录
   async getMyCombatRecord(params: Api.Alliance.Record) {
     const res = await this.get('alliance/combat/record', params);
+    return res;
+  }
+
+  // 获取消息列表
+  async getMyMessage(params: Api.Alliance.News) {
+    const res = await this.get('message/list', params);
     return res;
   }
 }

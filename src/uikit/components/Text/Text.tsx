@@ -16,7 +16,7 @@ const getTextShadows = ({ shadow, theme }: ThemedProps) => {
 };
 
 const getFontSize = ({ fontSize, small }: TextProps) => {
-  return small ? '20px' : fontSize || '28px';
+  return small ? '14px' : fontSize || '16px';
 };
 
 const Text = styled.div<TextProps>`
@@ -24,7 +24,7 @@ const Text = styled.div<TextProps>`
     mark
       ? `
       font-weight: bold;
-      font-style: italic;
+      font-style: normal;
 
       color: #ffffff;
       text-shadow: 0px 3px 0.4em #79c6c4;
@@ -38,7 +38,25 @@ const Text = styled.div<TextProps>`
       -webkit-text-fill-color: transparent;
     `
       : ''};
-
+  ${({ gold }) =>
+    gold
+      ? `
+      font-weight: bold;
+      color: #FFFFFF;
+      line-height: 370px;
+      text-shadow: 0px 3px 14px rgba(0,0,0,0.35);
+      background: linear-gradient(0deg, rgba(255,238,143) 0%, rgba(255,199,0) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    `
+      : ''};
+  ${({ Purple }) =>
+    Purple
+      ? `
+      text-shadow: 0px 0px 20px #f500f5;
+      color:#dbb6db;
+    `
+      : ''};
   ${({ vip }) =>
     vip
       ? `

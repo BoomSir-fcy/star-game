@@ -12,7 +12,6 @@ const useGame = (option?: GameOptionsProps) => {
 
   useEffect(() => {
     const destroy = () => {
-      console.log('destroy, ==destroy');
       game.app.destroy(true);
       delete game.app;
     };

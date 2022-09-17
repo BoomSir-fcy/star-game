@@ -1,15 +1,20 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
+import SkyBgCanvas from './skyCanvas';
 import './spiders.css';
 
 export const backgroundVariants = [
   '/images/commons/sky-bg0.png',
   '/images/commons/sky-bg1.jpg',
-  '/images/commons/sky-bg2.jpg',
+  '/images/commons/sky-bg2.png',
+  '/images/commons/sky-bg3.png',
+  '/images/commons/sky-bg4.png',
+  '/images/commons/sky-bg5.png',
 ];
 
 const getBackground = ({ type }: { type: number }) => {
+  if (type === -1) return '';
   if (backgroundVariants[type]) {
     const backgroundImage = backgroundVariants[type];
 
@@ -19,7 +24,7 @@ const getBackground = ({ type }: { type: number }) => {
     `;
   }
   return `
-    background: url(${backgroundVariants[0]}) no-repeat right;
+    background: url(${backgroundVariants[3]}) no-repeat right;
     background-size: cover;
 
   `;
@@ -33,6 +38,7 @@ const StarrySkyBg = styled(Box)<{ bgType: number }>`
   height: 100%;
   width: 100%;
   ${({ bgType }) => getBackground({ type: bgType })}
+  background-color: #1d1d1d;
   transform: translate3d(0, 0, 0);
   transform: translateZ(-1px);
   overflow: hidden;
@@ -47,13 +53,19 @@ const StarrySky: React.FC<StarrySkyProps> = ({ bgType = 0 }) => {
     return bgType;
   }, [bgType]);
   return (
-    <StarrySkyBg bgType={type}>
-      <div className='spiders'>
-        <div className='spidersOne' />
-        <div className='spidersTwo' />
-        <div className='spidersThree' />
-      </div>
-    </StarrySkyBg>
+    <>
+      {type === 3 ? (
+        <SkyBgCanvas />
+      ) : (
+        <StarrySkyBg bgType={type}>
+          <div className='spiders'>
+            <div className='spidersOne' />
+            <div className='spidersTwo' />
+            <div className='spidersThree' />
+          </div>
+        </StarrySkyBg>
+      )}
+    </>
   );
 };
 

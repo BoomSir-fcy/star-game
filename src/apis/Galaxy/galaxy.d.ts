@@ -20,6 +20,13 @@ declare namespace Api {
       disapth_box: number; // 恒星收益分配比例
       nick_name: string;
       product_box: number; // 产出box
+      power: number; // 战斗力
+      cost_star: number; // 挑战门票
+      destroy_star: number; // 销毁
+      staking_pool_star: number; // 分配质押池
+      planet_owner_star: number; // 恒星主获得
+      storage_pool_star: number; // 分配给储备池
+      pre_box: number; // 恒星主24小时预计获得box
     }
 
     interface OwnerInfo {
@@ -38,6 +45,11 @@ declare namespace Api {
       nonce: string;
       timestamp: number;
       signature: string;
+    }
+
+    interface Report {
+      start_time: number;
+      end_time: number;
     }
   }
 }

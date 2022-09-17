@@ -23,7 +23,20 @@ export default function useHttpError() {
   const httpErrorToast = useCallback(
     (data: Api.Error) => {
       if (httpErrorCodes.includes(data.code)) {
-        toastError(t(`http-error-${data.code}`));
+        switch (data.code) {
+          case 400010:
+          case 400013:
+          case 400014:
+            toastError(
+              t(`http-error-${data.code}`, {
+                value: Number(data.message).toFixed(2),
+              }),
+            );
+            break;
+
+          default:
+            toastError(t(`http-error-${data.code}`));
+        }
       } else {
         toastError(t('http-error-network'));
       }

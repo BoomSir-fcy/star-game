@@ -1,10 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppThunk, GalaxyState } from 'state/types';
+import BigNumber from 'bignumber.js';
+import { AppThunk, GalaxyInfo, GalaxyState } from 'state/types';
 import {
+  fetchAllLogs,
   fetchAuctionRecordList,
+  fetchGalaxReportList,
   fetchGalaxyList,
   fetchGalaxyStarList,
   fetchGetNftView,
+  fetchGetNftViewList,
+  fetchOwnerInfo,
 } from './fetchers';
 import { getGalaxyIncoming, sliceByLevels } from './util';
 
@@ -20,6 +25,7 @@ export const initialState: GalaxyState = {
     starTotal: 0,
     starOwnerTotal: 0,
     nickname: '',
+    power: 0,
   },
   currentStarPeriod: { id: 0, label: '', levels: [] },
   galaxyNft: {
@@ -30,6 +36,23 @@ export const initialState: GalaxyState = {
     lastTimestamp: '0',
   },
   auctionRecordList: [],
+  auctionRecordListLoading: false,
+  AllLogs: [],
+  OwnerInfo: {
+    hold_time: 0,
+    nickname: '',
+    avatar: '',
+    owner_get_box: 0,
+    all_get_box: 0,
+    all_auction_num: 0,
+    power: 0,
+    address: '',
+  },
+  OwnerInfoLoading: false,
+  galaxy_total_box: 0,
+  planet_total_box: 0,
+  galaxyNftList: [],
+  GalaxReportList: [],
 };
 
 export const fetchGalaxyListAsync = (): AppThunk => async dispatch => {
@@ -37,6 +60,19 @@ export const fetchGalaxyListAsync = (): AppThunk => async dispatch => {
   const list = await fetchGalaxyList();
   dispatch(setGalaxyList(list));
 };
+
+export const fetchAllLogsAsync = (): AppThunk => async dispatch => {
+  const list = await fetchAllLogs();
+  dispatch(setAllLogsList(list));
+};
+
+export const fetchOwnerInfoAsync =
+  (nft_id: number): AppThunk =>
+  async dispatch => {
+    dispatch(setOwnerInfoLoading(true));
+    const info = await fetchOwnerInfo(nft_id);
+    dispatch(setOwnerInfo(info));
+  };
 
 export const fetchGalaxyStarListAsync =
   (galaxyId: number): AppThunk =>
@@ -52,11 +88,26 @@ export const fetchGetNftViewAsync =
     dispatch(setGalaxyNft(nft));
   };
 
+export const fetchGetNftViewListAsync =
+  (List: GalaxyInfo[]): AppThunk =>
+  async dispatch => {
+    const list = await fetchGetNftViewList(List);
+    dispatch(setGalaxyNftList(list));
+  };
+
 export const fetchAuctionRecordListAsync =
   (galaxyId: number): AppThunk =>
   async dispatch => {
+    dispatch(setAuctionRecordListLoading(true));
     const list = await fetchAuctionRecordList(galaxyId);
     dispatch(setAuctionRecordList(list));
+  };
+
+export const fetchGalaxReportListAsync =
+  (start_time: number, end_time: number): AppThunk =>
+  async dispatch => {
+    const info = await fetchGalaxReportList(start_time, end_time);
+    dispatch(GalaxReportList(info));
   };
 
 export const galaxySlice = createSlice({
@@ -72,7 +123,9 @@ export const galaxySlice = createSlice({
     setGalaxyList: (state, action) => {
       const { payload } = action;
       if (payload) {
-        state.galaxyList = payload;
+        state.galaxyList = payload.data;
+        state.galaxy_total_box = payload.galaxy_total_box;
+        state.planet_total_box = payload.planet_total_box;
         state.loadingGalaxy = false;
       }
     },
@@ -107,9 +160,42 @@ export const galaxySlice = createSlice({
       const { payload } = action;
       state.galaxyNft = payload;
     },
+    setGalaxyNftList: (state, action) => {
+      const { payload } = action;
+      for (let i = 0; i < payload.length; i++) {
+        state.galaxyNftList[new BigNumber(payload[i].id).toNumber()] =
+          payload[i];
+      }
+    },
     setAuctionRecordList: (state, action) => {
       const { payload } = action;
       state.auctionRecordList = payload;
+      state.auctionRecordListLoading = false;
+    },
+    setAuctionRecordListLoading: (state, action) => {
+      state.auctionRecordListLoading = action.payload;
+    },
+    setAllLogsList: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        state.AllLogs = payload;
+      }
+    },
+    setOwnerInfo: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        state.OwnerInfo = payload;
+        state.OwnerInfoLoading = false;
+      }
+    },
+    setOwnerInfoLoading: (state, action) => {
+      state.OwnerInfoLoading = action.payload;
+    },
+    GalaxReportList: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        state.GalaxReportList = payload;
+      }
     },
   },
 });
@@ -124,6 +210,12 @@ export const {
   setCurrentStarPeriod,
   setGalaxyNft,
   setAuctionRecordList,
+  setAllLogsList,
+  setOwnerInfo,
+  setGalaxyNftList,
+  GalaxReportList,
+  setAuctionRecordListLoading,
+  setOwnerInfoLoading,
 } = galaxySlice.actions;
 
 export default galaxySlice.reducer;

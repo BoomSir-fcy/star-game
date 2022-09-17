@@ -1,7 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { BuildlingState } from '../types';
 import { fetchBuildingsListAsync, fetchPlanetBuildingsAsync } from './fetchers';
-import { destoryBuildingVisibleModal } from './action';
+import {
+  destoryBuildingModal,
+  upgradesBuildingModal,
+  resetModal,
+  resetSelfBuildings,
+  queueVisbleSide,
+  setUpgradeUnsuccessful,
+} from './action';
 
 export const initialState: BuildlingState = {
   buildings: [], // 所有基础建筑
@@ -12,12 +19,23 @@ export const initialState: BuildlingState = {
     id: '',
     planet_id: 0,
   },
-  destroyBuilding: false,
+  destroyBuilding: {
+    visible: false,
+    destory: {} as any,
+  },
+  upgradesBuilding: {
+    visible: false,
+    upgrad: {} as any,
+  },
   planetAssets: {
     energy: 0,
     population: 0,
     stone: 0,
   },
+  queue: {
+    visible: false,
+  },
+  upgradeUnsuccessful: false,
 };
 
 export const buildling = createSlice({
@@ -60,8 +78,35 @@ export const buildling = createSlice({
         state.selfBuildings = data;
         state.planetAssets = assets;
       })
-      .addCase(destoryBuildingVisibleModal, (state, action) => {
+      .addCase(destoryBuildingModal, (state, action) => {
         state.destroyBuilding = action.payload;
+      })
+      .addCase(upgradesBuildingModal, (state, action) => {
+        state.upgradesBuilding = action.payload;
+      })
+      .addCase(resetModal, (state, action) => {
+        state.destroyBuilding = {
+          visible: false,
+          destory: {},
+        };
+        state.upgradesBuilding = {
+          visible: false,
+          upgrad: {},
+        };
+      })
+      .addCase(resetSelfBuildings, (state, action) => {
+        state.selfBuildings = {
+          building_type: 0,
+          buildings: [],
+          id: '',
+          planet_id: 0,
+        };
+      })
+      .addCase(queueVisbleSide, (state, action) => {
+        state.queue.visible = action.payload;
+      })
+      .addCase(setUpgradeUnsuccessful, (state, action) => {
+        state.upgradeUnsuccessful = action.payload;
       });
   },
 });

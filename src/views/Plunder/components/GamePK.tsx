@@ -25,17 +25,20 @@ import {
   RoundDescAttack,
   MapBaseUnits,
   SoldierMoveType,
+  RoundDescTotalHp,
 } from 'game/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { fetchUnitListAsync } from 'state/game/reducer';
 import { fetchPlanetInfoAsync } from 'state/planet/fetchers';
 import { useDispatch } from 'react-redux';
-import Running, { RoundsProps } from 'game/core/Running';
+import Running, { RoundsProps, TrackDetail } from 'game/core/Running';
 import { useNavigate } from 'react-router-dom';
 import { OptionProps, Select } from 'components/Select';
 import effectConfig from 'game/effectConfig';
 import Progress from 'components/Progress';
 import speeder from 'game/core/Speeder';
+import PlunderPanel, { OtherDetail } from './PlunderPanel';
+import PlunderPanelNew from './PlunderPanelNew';
 
 const sleep = (handle: any, delay: number) => {
   return new Promise<void>((res, rej) => {
@@ -96,17 +99,15 @@ const GamePK: React.FC<GamePKProps> = () => {
 
   useEffect(() => {
     if (parsedQs.terrain) {
-      setActiveTerrainInfo(JSON.parse(String(parsedQs.terrain)));
+      setActiveTerrainInfo(JSON.parse(JSON.stringify(parsedQs.terrain)));
     }
   }, [parsedQs]);
 
   useEffect(() => {
-    if (TerrainInfo?.length && ActiveTerrainInfo) {
-      game.creatTerrain(TerrainInfo[ActiveTerrainInfo?.value]?.terrains);
-    } else {
-      game.creatTerrain([]);
+    if (game) {
+      game.creatTerrain();
     }
-  }, [TerrainInfo, ActiveTerrainInfo]);
+  }, []);
 
   const startHandle = useCallback(() => {
     if (Number(pid0) && Number(pid1)) {
@@ -127,7 +128,9 @@ const GamePK: React.FC<GamePKProps> = () => {
     infoP0?.id,
     infoP1?.id,
     Number(maxRound),
-    parsedQs.terrain ? Number(JSON.parse(String(parsedQs.terrain))?.id) : 0,
+    parsedQs.terrain
+      ? Number(JSON.parse(JSON.stringify(parsedQs.terrain))?.id)
+      : 0,
   );
 
   const ref = useRef<HTMLDivElement>(null);
@@ -179,7 +182,7 @@ const GamePK: React.FC<GamePKProps> = () => {
       });
       setRunning(_running);
       setTimeout(() => {
-        _running.play();
+        _running.run();
       }, 3000);
       setRunningInfo(prev => {
         return {
@@ -319,7 +322,6 @@ const GamePK: React.FC<GamePKProps> = () => {
   }, []);
 
   const bulletSelect: OptionProps[] = useMemo(() => {
-    console.log(effectConfig.bullet);
     return effectConfig.bullet.map((item, index) => ({
       value: item.name,
       label: `${item.label || item.name} ${item.id}`,
@@ -356,6 +358,58 @@ const GamePK: React.FC<GamePKProps> = () => {
   }, []);
 
   const [speederBase, setSpeederBase] = useState(speeder.base);
+
+  const [roundInfo, setRoundInfo] = useState<TrackDetail | null>(null);
+  const [roundInfos, setRoundInfos] = useState<TrackDetail[]>([]);
+  const [others, setOthers] = useState<OtherDetail[]>([]);
+  const [totalInfo, setTotalInfo] = useState<RoundDescTotalHp | null>(null);
+  const [result, setResult] = useState<boolean[]>([]);
+
+  const onRunningUpdate = useCallback(
+    (event: Event) => {
+      const { detail } = event as CustomEvent<TrackDetail>;
+      if (detail) {
+        setRoundInfos(prev => {
+          // console.log(prev);
+          if (
+            !prev.find(
+              item =>
+                item.descInfo?.id === detail.descInfo?.id &&
+                detail.descInfo?.id,
+            )
+          ) {
+            // const { length } = prev;
+            // // 大于20条就截取
+            // return length >= 20 ? [...prev.slice(1, length), detail] : [...prev, detail];
+            return [...prev, detail];
+          }
+          return prev;
+        });
+        setRoundInfo(detail);
+        if (detail.info) {
+          setTotalInfo(detail.info);
+        }
+      }
+    },
+    [setRoundInfo, setTotalInfo, setRoundInfos],
+  );
+
+  const onRunEnd = useCallback(() => {
+    console.log('end');
+  }, []);
+
+  useEffect(() => {
+    if (running) {
+      running.addEventListener('updateTrack', onRunningUpdate);
+      running.addEventListener('runEnd', onRunEnd);
+    }
+    return () => {
+      if (running) {
+        running.removeEventListener('updateTrack', onRunningUpdate);
+        running.removeEventListener('runEnd', onRunEnd);
+      }
+    };
+  }, [running, onRunningUpdate, onRunEnd]);
 
   return (
     <Box position='relative'>
@@ -494,6 +548,12 @@ const GamePK: React.FC<GamePKProps> = () => {
           </Box>
         </Box>
       </Flex>
+      <PlunderPanelNew
+        className='plunder-pk-step3'
+        width='100%'
+        details={roundInfos}
+        others={others}
+      />
     </Box>
   );
 };

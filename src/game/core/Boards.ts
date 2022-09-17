@@ -7,6 +7,7 @@
 //   InteractionEvent,
 // } from '@pixi/core';
 import { Application } from '@pixi/app';
+import { Texture } from '@pixi/core';
 import { Sprite } from '@pixi/sprite';
 import { Container } from '@pixi/display';
 import { Loader } from '@pixi/loaders';
@@ -51,9 +52,15 @@ class Boards extends EventTarget {
 
   height;
 
+  row = config.BOARDS_ROW_COUNT;
+
+  col = config.BOARDS_COL_COUNT;
+
   chequers: Chequer[] = []; // 棋盘格子
 
   container = new Container();
+
+  solderContainer = new Container();
 
   scale = 1;
 
@@ -63,6 +70,10 @@ class Boards extends EventTarget {
 
   enableDrag = true;
 
+  bg1 = new Sprite(Texture.from('/assets/map/p1.png'));
+
+  bg2 = new Sprite(Texture.from('/assets/map/p1.png'));
+
   private dragData: InteractionData = new InteractionData();
 
   private dragging = false;
@@ -70,9 +81,20 @@ class Boards extends EventTarget {
   init({ test }: { test?: boolean }) {
     this.container.position.set(this.width / 2, this.height / 2);
 
-    // this.drawChequers(test);
+    // this.container.position.set(this.height / 2, this.width / 2);
+    // this.container.position.set(this.width, this.height);
+    this.container.width = this.width;
+    this.container.height = this.height;
 
+    this.solderContainer.width = this.width;
+    this.solderContainer.height = this.height;
+    // this.drawChequers(test);
+    // this.container.scale.set(0.5);
     this.container.interactive = true;
+    this.container.sortableChildren = true;
+    this.solderContainer.interactive = true;
+    this.solderContainer.zIndex = 9999;
+    this.container.addChild(this.solderContainer);
     this.container.on('wheel', e => {
       this.onHandleWheel(e);
     });
@@ -110,27 +132,23 @@ class Boards extends EventTarget {
   }
 
   // 绘制棋格
-  drawChequers(test?: boolean, TerrainInfo?: Api.Game.TerrainInfo[]) {
+  drawChequers(_col?: number, _row?: number) {
+    if (_col) {
+      this.col = _col;
+    }
+    if (_row) {
+      this.row = _row;
+    }
     this.chequers = [];
-    const terrains: {
-      [axis: string]: Api.Game.TerrainInfo;
-    } = {};
-    TerrainInfo?.forEach(item => {
-      item.terrain_areas.forEach(subItem => {
-        terrains[`${subItem.x},${subItem.y}`] = item;
-      });
-    });
+    this.drawBg();
 
-    for (let row = 0; row < config.BOARDS_ROW_COUNT; row++) {
-      for (let col = 0; col < config.BOARDS_COL_COUNT; col++) {
+    for (let row = 0; row < this.row; row++) {
+      for (let col = 0; col < this.col; col++) {
         const chequer = new Chequer({
-          type: terrains[`${row},${col}`]
-            ? terrains[`${row},${col}`].terrain_type
-            : mapType.MAP1,
+          type: mapType.MAP1,
           axisX: row,
           axisY: col,
           state: stateType.PREVIEW,
-          test,
           offsetStartX: this.offsetStartX,
           offsetStartY: this.offsetStartY,
         });
@@ -150,6 +168,35 @@ class Boards extends EventTarget {
     });
 
     this.created = true;
+  }
+
+  drawBg() {
+    const chequer = new Chequer({
+      axisX: 6,
+      axisY: 4,
+    });
+    const chequer1 = new Chequer({
+      axisX: 6,
+      axisY: 2,
+    });
+    this.bg1.position.set(
+      chequer.centerPoint.x + this.offsetStartX - config.TWO_BOARDS_OFFSET,
+      chequer.centerPoint.y + this.offsetStartY - 5,
+    );
+    this.bg1.anchor.set(0.5);
+    this.bg1.scale.set(0.559);
+    // this.bg1.rotation = -Math.PI * 0.000001;
+    this.container.addChild(this.bg1);
+
+    if (this.col === 8) {
+      this.bg2.position.set(
+        chequer1.centerPoint.x + this.offsetStartX + config.TWO_BOARDS_OFFSET,
+        chequer1.centerPoint.y + this.offsetStartY,
+      );
+      // this.bg2.anchor.set(0.5);
+      this.bg2.scale.set(0.559);
+      this.container.addChild(this.bg2);
+    }
   }
 
   onDragStart(event: InteractionEvent) {

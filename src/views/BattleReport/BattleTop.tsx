@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styled from 'styled-components';
 import {
   Card,
@@ -12,10 +12,14 @@ import {
 } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
-import { setRefresh } from 'state/alliance/reducer';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+import { DateRangePicker } from 'react-dates';
+import moment from 'moment';
+import TopCarousel from 'views/NewGalaxy/components/TopCarousel';
 
 const TitleBox = styled(Flex)`
-  width: 512px;
+  width: 380px;
   height: 52px;
   background: url('/images/battleReport/top.png') no-repeat;
   background-size: 100% 100%;
@@ -24,14 +28,69 @@ const TitleBox = styled(Flex)`
 `;
 
 const RecordBox = styled(Flex)`
-  width: 316px;
   height: 90px;
   background: url('/images/battleReport/infoBg.png') no-repeat;
   background-size: 100% 100%;
   align-items: center;
   justify-content: space-between;
-  padding: 0 45px;
+  padding: 0 34px 0 45px;
   margin-left: 20px;
+  .DateRangePickerInput {
+    margin-top: 10px;
+    background-color: transparent;
+    /* display: flex;
+    align-items: center; */
+    .DateInput {
+      background: transparent;
+      .DateInput_input {
+        background-color: transparent;
+        text-shadow: 0px 3px 0.4em #79c6c4;
+        background: linear-gradient(
+          0deg,
+          rgba(79, 255, 251, 1) 0%,
+          rgba(255, 255, 255, 1) 60.4873046875%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: #ffffff;
+        font-size: 22px;
+        font-weight: 600;
+        font-family: SourceHanSansCN-Bold;
+        line-height: 1.5;
+        /* margin-left: 20px; */
+        font-size: 22px;
+        font-style: italic;
+        padding: 0;
+        border: none;
+        cursor: pointer;
+      }
+    }
+    .CalendarDay {
+      line-height: 38px;
+    }
+    .DateRangePickerInput_arrow {
+      display: none;
+      color: #79c6c4;
+      .DateRangePickerInput_arrow_svg {
+        fill: #79c6c4;
+        width: 60px;
+        height: 34px;
+      }
+    }
+    .DateRangePicker_picker__directionLeft {
+      top: 78px !important;
+    }
+    .DateInput_fang {
+      display: none;
+    }
+  }
+`;
+
+const DownImg = styled.img`
+  width: 36px;
+  transform: rotate(90deg);
+  cursor: pointer;
 `;
 
 interface contInfo {
@@ -42,52 +101,97 @@ interface contInfo {
 
 export const BattleTop: React.FC<{
   cont: contInfo;
-  upDate: (e) => void;
-}> = ({ cont, upDate }) => {
+  Start_time: number;
+  End_time: number;
+  setStart_time: (e) => void;
+  setEnd_time: (e) => void;
+}> = ({ cont, Start_time, End_time, setStart_time, setEnd_time }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const initialStartDate = useMemo(() => {
+    return moment(Start_time * 1000);
+  }, [Start_time]);
+
+  const initialEndDate = useMemo(() => {
+    return moment(End_time * 1000);
+  }, [End_time]);
+
+  const [isFocused, setIsFocused] = useState(null);
+
+  const onDateChange = (e: any) => {
+    const E_startDate = e.startDate;
+    const E_endDate = e.endDate;
+
+    const Starttime = moment(e.startDate).format('YYYY-MM-DD');
+    const Endtime = moment(e.endDate).format('YYYY-MM-DD');
+    const Start =
+      new Date(new Date(Starttime).toLocaleDateString()).getTime() / 1000;
+    const End =
+      new Date(new Date(Endtime).toLocaleDateString()).getTime() / 1000;
+    setStart_time(Start);
+    setEnd_time(End || Start + 86400);
+    setIsFocused(null);
+  };
+  const onFocusChange = e => {
+    setIsFocused(e);
+  };
+
   return (
-    <Flex padding='0 20px' mb='16px' alignItems='center' flex={1}>
+    <Flex pl='20px' mb='16px' alignItems='center' flex={1}>
       <Box mr='40px'>
         <BackButton />
-        <RefreshButton
-          ml='33px'
-          onRefresh={() => {
-            upDate(1);
-            // dispatch(setRefresh());
-          }}
-        />
       </Box>
       <TitleBox>
-        <MarkText fontSize='18px' bold fontStyle='italic'>
-          {t('Battle details')}
+        <MarkText fontSize='18px' bold>
+          {t('Brief Report')}
         </MarkText>
       </TitleBox>
-      <RecordBox>
-        <MarkText ml='20px' mt='10px' fontSize='22px' bold fontStyle='italic'>
+      <RecordBox width='316px'>
+        <MarkText ml='20px' mt='10px' fontSize='22px' bold>
           {t('Total number of battles')}
         </MarkText>
-        <MarkText fontSize='28px' bold fontStyle='italic'>
-          {cont.Cont}
-        </MarkText>
+        <Flex
+          justifyContent='center'
+          alignItems='center'
+          width='60px'
+          height='60px'
+          position='relative'
+        >
+          <MarkText fontSize='28px' bold>
+            {cont.Cont}
+          </MarkText>
+        </Flex>
       </RecordBox>
-      <RecordBox>
-        <MarkText ml='20px' mt='10px' fontSize='22px' bold fontStyle='italic'>
-          {t('Victories')}
-        </MarkText>
-        <MarkText fontSize='28px' bold fontStyle='italic'>
-          {cont.WinCont}
-        </MarkText>
+      <RecordBox width='320px'>
+        <DateRangePicker
+          readOnly
+          startDate={initialStartDate}
+          endDate={initialEndDate}
+          focusedInput={isFocused}
+          onFocusChange={onFocusChange}
+          onDatesChange={onDateChange}
+          // maxDate={moment(new Date(new Date().toLocaleDateString()).getTime())}
+          minimumNights={0}
+          // disabled='endDate'
+          numberOfMonths={1}
+          isOutsideRange={() => {}}
+          startDateId='_startDate'
+          endDateId='_endDateId'
+          noBorder
+        />
+        <Flex
+          onClick={() => setIsFocused('startDate')}
+          justifyContent='center'
+          alignItems='center'
+          width='80px'
+          height='60px'
+          position='relative'
+        >
+          <DownImg src='/images/commons/icon/back.png' />
+        </Flex>
       </RecordBox>
-      <RecordBox>
-        <MarkText ml='20px' mt='10px' fontSize='22px' bold fontStyle='italic'>
-          {t('Number of failed games')}
-        </MarkText>
-        <MarkText fontSize='28px' bold fontStyle='italic'>
-          {cont.FailedCont}
-        </MarkText>
-      </RecordBox>
+      <TopCarousel width='max-content' pl='0px' />
     </Flex>
   );
 };

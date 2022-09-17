@@ -48,7 +48,12 @@ export const useTokenBalance = (tokenAddress: string) => {
     };
 
     if (account) {
-      if (!tokenAddress) return;
+      if (
+        !tokenAddress ||
+        tokenAddress.toLocaleLowerCase() ===
+          '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+      )
+        return;
       fetchBalance();
     }
   }, [account, tokenAddress, fastRefresh, SUCCESS, FAILED]);

@@ -18,6 +18,8 @@ export * from './components/Fringe';
 export * from './components/InputPanel';
 export * from './components/Progress';
 export * from './components/Divider';
+export * from './components/Slider';
+export * from './components/Empty';
 
 // Hooks
 export * from './hooks';

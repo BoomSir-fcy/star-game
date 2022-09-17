@@ -4,23 +4,24 @@ import { Flex, Text, Input } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 
 const SearchContainer = styled(Flex)<{ focus?: boolean }>`
-  width: 510px;
+  width: 673px;
   height: 55px;
-  font-size: 24px;
+  background: #313131;
+  font-size: 20px;
   transition: all 0.3s;
-  background: ${({ theme }) => theme.colors.inputSecondary};
   border-radius: ${({ theme }) => theme.radii.card};
   border: 1px solid ${({ focus, theme }) => (focus ? '#F9FEFF' : 'transparent')};
   &:hover {
-    border: 1px solid ${({ theme }) => '#F9FEFF'};
+    border: 1px solid ${({ theme }) => theme.colors.borderPrimary};
   }
+  align-items: center;
 `;
 
 const SearchInput = styled(Input)`
   width: 100%;
   height: 100%;
   padding-left: 30px;
-  font-size: 24px;
+  font-size: 20px;
   background-color: transparent;
 `;
 export const PlanetSearch: React.FC<{
@@ -58,8 +59,10 @@ export const PlanetSearch: React.FC<{
       }}
     >
       <Flex width='100%' justifyContent='center' alignItems='center'>
-        <Text mr='27px'>Token</Text>
         <SearchContainer focus={focus}>
+          <Text fontSize='20px' width='94px' ml='10px'>
+            Token :
+          </Text>
           <SearchInput
             ref={inputRef}
             autoComplete='off'

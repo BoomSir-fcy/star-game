@@ -4,7 +4,7 @@ import { Api } from 'apis';
 
 const useSimulation = () => {
   // 保存模拟人物数据
-  const setSimulation = React.useCallback(async (data: any) => {
+  const setSimulation = React.useCallback(async (data: any, round = 3) => {
     const MAX = 64;
     const soldiers: Soldier[] = (data ?? []).map((r: any) => r.soldier);
     const temp = soldiers.map((item, index) => {
@@ -23,6 +23,7 @@ const useSimulation = () => {
         },
         speed: item.speed, // 出手顺序
         unit_id: item.id,
+        unit_number: item.options?.unitInfo?.number,
       };
     });
 
@@ -34,11 +35,12 @@ const useSimulation = () => {
         },
         speed: item.speed, // 出手顺序
         unit_id: item.id,
+        unit_number: item.options?.unitInfo?.number,
       };
     });
     const { race } = soldiers?.[0]?.options || {};
 
-    await Api.GameApi.Gamemock({ from, to, race });
+    await Api.GameApi.Gamemock({ from, to, race, round: Number(round) || 3 });
   }, []);
 
   // 获取模拟人物数据

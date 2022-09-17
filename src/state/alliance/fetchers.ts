@@ -13,16 +13,29 @@ export const fetchMyPlanetAlliance = async () => {
   }
 };
 
+export const fetchExploreProgress = async () => {
+  try {
+    const res = await Api.AllianceApi.getExploreProgress();
+    if (Api.isSuccess(res)) {
+      return res.data;
+    }
+    return null;
+  } catch (error) {
+    console.error(`fetch fetchExploreProgress error: ${error}`);
+    return null;
+  }
+};
+
 export const fetchCombatRecord = async (
   address: string,
-  page: number,
-  page_size: number,
+  start_time: number,
+  end_time: number,
 ) => {
   try {
     const res = await Api.AllianceApi.getMyCombatRecord({
       address,
-      page,
-      page_size,
+      start_time,
+      end_time,
     });
     if (Api.isSuccess(res)) {
       return res.data;

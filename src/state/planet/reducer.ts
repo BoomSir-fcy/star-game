@@ -1,16 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { PlanetState } from 'state/types';
+import { AppThunk, PlanetState } from 'state/types';
 import {
   setActiveMaterialMap,
   setActiveNavId,
   setActivePlanet,
   setUpgradePlanetId,
+  setAssetsVisible,
 } from './actions';
 
-import { fetchMePlanetAsync, fetchPlanetInfoAsync } from './fetchers';
+import { fetchPlanetInfoAsync, fetchPlanetList } from './fetchers';
 
 export const initialState: PlanetState = {
   mePlanet: [],
+  mePlanetEnd: false,
+  mePlanetLoading: true,
+  assetsVisibleModal: true,
   planetInfo: {},
   activeMaterialMap: {},
   upgradePlanetId: null,
@@ -18,15 +22,42 @@ export const initialState: PlanetState = {
   activePlanet: {} as Api.Planet.PlanetInfo,
 };
 
+// 我的星球列表
+export const fetchMePlanetAsync =
+  (params: Api.Planet.PageParams): AppThunk =>
+  async dispatch => {
+    dispatch(setPlanetLoading(true));
+    const list = await fetchPlanetList(params);
+    dispatch(setPlanetList(list));
+  };
+
 export const planet = createSlice({
   name: 'planet',
   initialState,
-  reducers: {},
+  reducers: {
+    setPlanetLoading: (state, action) => {
+      state.mePlanetLoading = action.payload;
+    },
+    setPlanetList: (state, action) => {
+      const { payload } = action;
+      if (payload) {
+        const { Data, count, page, page_size } = payload;
+        if (page > 1) {
+          state.mePlanet = [...state.mePlanet, ...Data];
+        } else {
+          state.mePlanet = Data;
+        }
+        if (page * page_size >= count) {
+          state.mePlanetEnd = true;
+        } else {
+          state.mePlanetEnd = false;
+        }
+        state.mePlanetLoading = false;
+      }
+    },
+  },
   extraReducers: builder => {
     builder
-      .addCase(fetchMePlanetAsync.fulfilled, (state, action) => {
-        state.mePlanet = action.payload;
-      })
       .addCase(setActivePlanet, (state, { payload }) => {
         state.activePlanet = payload;
       })
@@ -53,10 +84,16 @@ export const planet = createSlice({
       .addCase(setUpgradePlanetId, (state, { payload }) => {
         state.upgradePlanetId = payload;
       })
+      .addCase(setAssetsVisible, (state, { payload }) => {
+        state.assetsVisibleModal = payload;
+      })
       .addCase(setActiveNavId, (state, { payload }) => {
         state.activeNavId = payload;
       });
   },
 });
+
+// Actions
+export const { setPlanetList, setPlanetLoading } = planet.actions;
 
 export default planet.reducer;

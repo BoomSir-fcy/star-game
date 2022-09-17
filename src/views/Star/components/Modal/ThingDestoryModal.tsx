@@ -1,21 +1,23 @@
 import React from 'react';
 import { Box, Flex, Button, Text, Image } from 'uikit';
 import { useStore } from 'state';
-
+import {
+  getBuilderSpriteRes,
+  getBuildingOfRaceAndIndex,
+} from 'building/core/utils';
 import { useTranslation } from 'contexts/Localization';
 
 import ModalWrapper from 'components/Modal';
 import { GameThing } from '../gameModel';
 
 export const ThingDestoryModal: React.FC<{
+  visible: boolean;
   planet_id: number;
-  itemData: Api.Building.Building;
-  upgrade: any;
   onChange: () => void;
   onClose: () => void;
-}> = ({ planet_id, itemData, upgrade, onChange, onClose }) => {
+}> = ({ visible, planet_id, onChange, onClose }) => {
   const { t } = useTranslation();
-  const visible = useStore(p => p.buildling.destroyBuilding);
+  const destory = useStore(p => p.buildling.destroyBuilding);
 
   return (
     <ModalWrapper
@@ -25,15 +27,29 @@ export const ThingDestoryModal: React.FC<{
     >
       <Box padding='30px 25px'>
         <Flex>
-          <GameThing src={itemData?.picture} scale='lg' border />
+          <GameThing
+            src={getBuilderSpriteRes(
+              destory?.destory?.race,
+              `${destory?.destory?.index}`,
+            )}
+            // src={destory?.destory?.picture}
+            scale='lg'
+            border
+          />
           <Flex ml='23px' justifyContent='space-between' flexDirection='column'>
             <Box>
               <Text shadow='primary' bold>
-                {itemData?.propterty?.name_en}
+                {/* {destory?.destory?.propterty?.name_en} */}
+                {
+                  getBuildingOfRaceAndIndex(
+                    destory?.destory?.race,
+                    destory?.destory?.index,
+                  )?.name
+                }
               </Text>
-              <Text color='textSubtle' mt='22px' small>
+              <Text color='textSubtle' mt='22px'>
                 {t('planetDetailsTypeEffect')}
-                {t('planetDetailsType1')}
+                {destory?.destory?.describe}
               </Text>
             </Box>
             <Button onClick={onChange}>{t('planetConfirmDestroy')}</Button>

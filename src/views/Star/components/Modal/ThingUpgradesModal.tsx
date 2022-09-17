@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { Box, Flex, Input, Button, Text, Image } from 'uikit';
 import ModalWrapper from 'components/Modal';
 import { useTranslation } from 'contexts/Localization';
-
+import { getBuildingOfRaceAndIndex } from 'building/core/utils';
+import { useStore } from 'state';
 import { TextList } from './TextList';
 import { ThingaddBlood, GameThing, ThingRepair } from '..';
 
@@ -61,13 +62,13 @@ const UpgradeItem: React.FC<{
 export const ThingUpgradesModal: React.FC<{
   visible: boolean;
   planet_id: number;
-  itemData: Api.Building.Building;
-  upgrade: any;
+  itemData?: Api.Building.Building;
   onChange: (value: any) => void;
   onClose: () => void;
-}> = ({ visible, planet_id, itemData, upgrade, onChange, onClose }) => {
+}> = ({ visible, planet_id, itemData, onChange, onClose }) => {
   const { t } = useTranslation();
-  const upgradDiff = upgrade?.estimate_building_detail || {};
+  const upgrade = useStore(p => p.buildling.upgradesBuilding.upgrad);
+  const { building_detail, estimate_building_detail } = upgrade;
 
   return (
     <ModalWrapper
@@ -77,9 +78,17 @@ export const ThingUpgradesModal: React.FC<{
     >
       <Box padding='30px 25px'>
         <Flex alignItems='center'>
-          <Text shadow='primary'>{itemData?.propterty?.name_en}</Text>
+          <Text shadow='primary'>
+            {/* {building_detail?.propterty?.name_en} */}
+            {
+              getBuildingOfRaceAndIndex(
+                building_detail?.race,
+                building_detail?.index,
+              )?.name
+            }
+          </Text>
           <Text ml='27px' small>
-            {`${itemData?.propterty?.size.area_x}x${itemData?.propterty?.size.area_y}`}
+            {`${building_detail?.propterty?.size.area_x}x${building_detail?.propterty?.size.area_y}`}
           </Text>
         </Flex>
         <Flex flexWrap='wrap' pb='16px'>
@@ -89,19 +98,19 @@ export const ThingUpgradesModal: React.FC<{
               height={50}
               src='/images/commons/star/durability.png'
               title={t('planetDurability')}
-              value={`${itemData?.propterty?.now_durability}/${itemData?.propterty?.max_durability}`}
+              value={`${building_detail?.propterty?.now_durability}/${building_detail?.propterty?.max_durability}`}
               extValue={
-                upgradDiff?.propterty?.now_durability -
-                itemData?.propterty?.now_durability
+                estimate_building_detail?.propterty?.now_durability -
+                building_detail?.propterty?.now_durability
               }
               moreButton={
                 <>
-                  {itemData?.propterty?.now_durability !==
-                    itemData?.propterty?.max_durability && (
+                  {building_detail?.propterty?.now_durability !==
+                    building_detail?.propterty?.max_durability && (
                     <ThingRepair
                       itemData={itemData}
                       planet_id={planet_id}
-                      building_id={itemData._id}
+                      building_id={itemData?._id}
                       onCallback={() => {
                         // TODO: 更多
                       }}
@@ -117,10 +126,10 @@ export const ThingUpgradesModal: React.FC<{
               height={50}
               src='/images/commons/icon/icon_energy.png'
               title={t('planetEnergyConsumption')}
-              value={`${itemData?.propterty?.per_cost_energy}/h`}
+              value={`${building_detail?.propterty?.per_cost_energy}/h`}
               extValue={
-                upgradDiff?.propterty?.per_cost_energy -
-                itemData?.propterty?.per_cost_energy
+                estimate_building_detail?.propterty?.per_cost_energy -
+                building_detail?.propterty?.per_cost_energy
               }
             />
           </Item>
@@ -130,10 +139,10 @@ export const ThingUpgradesModal: React.FC<{
               height={50}
               src='/images/commons/icon/icon_spice.png'
               title={t('planetPopulationConsumption')}
-              value={`${itemData?.propterty?.per_cost_population}/h`}
+              value={`${building_detail?.propterty?.per_cost_population}/h`}
               extValue={
-                upgradDiff?.propterty?.per_cost_population -
-                itemData?.propterty?.per_cost_population
+                estimate_building_detail?.propterty?.per_cost_population -
+                building_detail?.propterty?.per_cost_population
               }
             />
           </Item>
@@ -149,11 +158,19 @@ export const ThingUpgradesModal: React.FC<{
             <TextList
               imgWidth={50}
               imgHeight={50}
-              imgSrc='/images/tokens/0x2bf6502a30Af3378ACb51F056F47fc5e24aB8961.svg'
-              number={upgradDiff?.upgrade_need?.upgrade_box || 0}
+              // imgSrc='/images/tokens/0x2bf6502a30Af3378ACb51F056F47fc5e24aB8961.svg'
+              imgSrc='/images/tokens/BOX.svg'
+              number={building_detail?.upgrade_need?.upgrade_box || 0}
               unit='BOX'
             />
-            <Button ml='34px' onClick={onChange}>
+            <Button
+              variant='purple'
+              ml='34px'
+              width='max-content'
+              padding='0 20px'
+              onClick={() => onChange(building_detail)}
+              mr='20px'
+            >
               {t('Confirm to upgrade')}
             </Button>
           </Flex>

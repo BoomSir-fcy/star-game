@@ -251,7 +251,7 @@ class CommonEffect extends EventTarget {
   onPlayEnd(name: CommonSpineType) {
     this.effects[name].complete = true;
     // this.dispatchEvent(new Event('attackEnd'));
-    this.container.parent?.removeChild(this.container);
+    this.container?.parent?.removeChild(this.container);
     this.onEnd(name);
   }
 

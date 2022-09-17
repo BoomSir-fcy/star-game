@@ -26,6 +26,11 @@ declare namespace Api {
       address: string;
     }
 
+    interface InviteParams {
+      page: number;
+      page_size: number;
+    }
+
     interface vipList {
       id: number;
       vipPrice: string;

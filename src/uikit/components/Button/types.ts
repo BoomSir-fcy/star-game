@@ -16,6 +16,7 @@ export const variants = {
   PRIMARY: 'primary',
   DANGER: 'danger',
   SECONDARY: 'secondary',
+  S2_LONG: 's2-long',
   TERTIARY: 'tertiary',
   TEXT: 'text',
   VS: 'vs',
@@ -24,6 +25,8 @@ export const variants = {
   STOP: 'stop',
   PURPLE: 'purple',
   TRANSPARENT: 'transparent',
+  GOLD: 'gold',
+  PURPLESHOW: 'purpleShow',
 } as const;
 
 export type Scale = typeof scales[keyof typeof scales];

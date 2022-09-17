@@ -27,6 +27,7 @@ const getDisabledStyles = ({ $isLoading, theme }: TransientButtonProps) => {
       // background-repeat: no-repeat;
       // background-position: 0 0px, 10px 0px, 100% -1px;
       // background-size: 20px 36px, calc(100% - 20px) 36px, 20px 38px;
+      background: #161920;
       border-color: ${theme.colors.backgroundDisabled};
       box-shadow: none;
       color: white;

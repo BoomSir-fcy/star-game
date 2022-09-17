@@ -20,6 +20,7 @@ export const initialState: GameState = {
   process: null,
   PKInfo: null,
   pkRes: false,
+  isFrom: false,
   plunderPK: {},
   state: GamePkState.MATCHING,
   matchUser: null,
@@ -44,6 +45,20 @@ export const fetchUnitListAsync =
         }),
       );
       dispatch(setBaseSkill(data.base));
+    }
+  };
+
+export const fetchTestUnitListAsync =
+  (race: number): AppThunk =>
+  async dispatch => {
+    const data = await Api.GameApi.getAllUnitList(race);
+    if (data) {
+      dispatch(
+        setUnits({
+          [race]: data.data.units,
+        }),
+      );
+      dispatch(setBaseSkill(data.data.base));
     }
   };
 
@@ -98,8 +113,9 @@ export const fetchGameMatchUserAsync =
     if (Api.isSuccess(res) && res.data) {
       if (our === 1) {
         dispatch(setMineUser(res.data));
+      } else {
+        dispatch(setMatchUser(res.data));
       }
-      dispatch(setMatchUser(res.data));
       dispatch(setState(GamePkState.MATCHED));
     } else {
       dispatch(setState(GamePkState.MATCH_ERROR));
@@ -157,6 +173,10 @@ export const userInfoSlice = createSlice({
       state.pkRes = payload;
     },
 
+    setPKisFrom: (state, { payload }) => {
+      state.isFrom = payload;
+    },
+
     setMatchUser: (state, { payload }) => {
       state.matchUser = payload;
     },
@@ -176,6 +196,14 @@ export const userInfoSlice = createSlice({
     setTerrainInfo: (state, { payload }) => {
       state.TerrainInfo = payload;
     },
+
+    setEmptyUnits: (state, { payload }) => {
+      state.plantUnits = {};
+      state.baseUnits = {};
+    },
+    setEmptyPlantUnits: (state, { payload }) => {
+      state.plantUnits = {};
+    },
   },
 });
 
@@ -191,6 +219,9 @@ export const {
   setPlantUnitsTest,
   setTerrainInfo,
   setPKRes,
+  setPKisFrom,
+  setEmptyPlantUnits,
+  setEmptyUnits,
 } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

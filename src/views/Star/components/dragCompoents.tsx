@@ -23,6 +23,10 @@ import { GameInfo, GameThing, Building, Queue } from './gameModel';
 import { ThingRepairModal } from './Modal';
 import { BuffBonus } from './buff';
 import { useBuffer, useWorkqueue } from './hooks';
+import {
+  getBuilderSpriteRes,
+  getBuildingOfRaceAndIndex,
+} from 'building/core/utils';
 
 polyfill({
   dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
@@ -253,6 +257,11 @@ export const DragCompoents: React.FC<{
     };
   }, [rows, cols, gridSize]);
 
+  // 延迟请求
+  const sleep = React.useCallback((ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }, []);
+
   const changeBuff = (item: any) => {
     const currentBuildBuff = buffer?.find(
       (row: any) => row?.build_id === item?._id,
@@ -337,8 +346,6 @@ export const DragCompoents: React.FC<{
           });
           return [...next];
         });
-
-        console.log(queueBuilding);
 
         setGridBuilds([...currentGridBuilds, ...queueBuilding]);
       }
@@ -467,7 +474,6 @@ export const DragCompoents: React.FC<{
             currentAxis,
           ];
 
-          console.log(grid);
           /** @s4 */
           const canUseArea = areaPoints?.every(
             item =>
@@ -751,11 +757,6 @@ export const DragCompoents: React.FC<{
     });
   };
 
-  // 延迟请求
-  const sleep = (ms: number) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  };
-
   // 取消建筑&&队列建筑
   const destroyBuilding = () => {
     setCurrentBuild({});
@@ -967,8 +968,11 @@ export const DragCompoents: React.FC<{
                         scale='sm'
                         round
                         itemData={row}
-                        src={row.picture}
-                        text={row?.propterty.name_cn}
+                        src={getBuilderSpriteRes(row.race, `${row.index}`)}
+                        text={
+                          getBuildingOfRaceAndIndex(row.race, `${row.index}`)
+                            ?.name
+                        }
                       />
                     </BuildingsItem>
                   ),
@@ -992,10 +996,6 @@ export const DragCompoents: React.FC<{
                 onSave={saveWorkQueue}
                 onComplete={debounce(async () => {
                   await sleep(1000);
-                  console.log(
-                    '刷新队列：',
-                    dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-                  );
                   await getWorkQueue(true);
                   setCurrentBuild({});
                 }, 500)}

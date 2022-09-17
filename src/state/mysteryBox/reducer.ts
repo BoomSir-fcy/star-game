@@ -23,6 +23,8 @@ export const initialState: MysteryBoxState = {
     boxCount: [], // 获取用户各盲盒持有的key数量
     loading: true,
   },
+  openBlind: false, // 开启星球稀有度
+  openBlindIds: [], // 已开启的星球id
 };
 
 export const fetchBoxViewAsync =
@@ -36,6 +38,12 @@ export const fetchUserKeysAsync =
   async dispatch => {
     const infoView = await fetchUserKeys(account);
     dispatch(setUserKeys(infoView));
+  };
+
+export const EditOpenBlindModalAsync =
+  (open: boolean): AppThunk =>
+  async dispatch => {
+    dispatch(setOpenBlind(open));
   };
 
 export const mysteryBoxSlice = createSlice({
@@ -62,10 +70,27 @@ export const mysteryBoxSlice = createSlice({
         };
       }
     },
+    setOpenBlind: (state, action) => {
+      const { payload } = action;
+      state.openBlind = payload;
+    },
+    setOpenBlindIds: (state, action) => {
+      const { payload } = action;
+      state.openBlindIds = [...state.openBlindIds, payload];
+    },
+    clearOpenBlindIds: state => {
+      state.openBlindIds = [];
+    },
   },
 });
 
 // Actions
-export const { setBoxView, setUserKeys } = mysteryBoxSlice.actions;
+export const {
+  setBoxView,
+  setUserKeys,
+  setOpenBlind,
+  setOpenBlindIds,
+  clearOpenBlindIds,
+} = mysteryBoxSlice.actions;
 
 export default mysteryBoxSlice.reducer;

@@ -1,6 +1,11 @@
 import StarrySky from 'components/StarrySky';
 import { VideoComponent } from 'components/Video';
-import { APP_HEIGHT, APP_WIDTH, VIDEO_GLOBAL_CLASS_NAME } from 'config';
+import {
+  APP_HEIGHT,
+  APP_WIDTH,
+  MODAL_GLOBAL_ID_NAME,
+  VIDEO_GLOBAL_CLASS_NAME,
+} from 'config';
 import React, {
   useCallback,
   useEffect,
@@ -10,15 +15,27 @@ import React, {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { setGlobalClient, setGlobalScale } from 'state/user/actions';
+import {
+  setGlobalClient,
+  setGlobalScale,
+  setScreenMode,
+} from 'state/user/actions';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Box } from 'uikit';
 import agentClient from 'utils/client';
 import { storeAction, useStore } from 'state';
 import detectOrient from 'utils/detectOrient';
-
+import Toast from 'components/Toast';
 import Dashboard from 'components/Dashboard';
 import { GuideModal } from 'components/Modal/guideModal';
+import { getHideHeader } from 'components/Dashboard/config';
+import useParsedQueryString from 'hooks/useParsedQueryString';
+import { ToRechargeModal } from 'components/Modal/ToRechargeModal';
+import eventBus from 'utils/eventBus';
+import DepositWithdrawalModule from 'components/NavPop/DepositWithdrawalNew';
+import { useFetchUserBalance, useFetchUserProduct } from 'state/userInfo/hooks';
+import BlindPlanetBox from 'components/OpenBlindPlanet/BlindPlanetBox';
+import TokenMoveAnimation from 'components/TokenMoveAnimation';
 
 // .introjs-tooltip{
 //   transform-origin: ${({ rotate }) => (rotate ? 'center' : '0  0')};
@@ -78,15 +95,18 @@ window.addEventListener(
   { once: true },
 );
 
-const Content = styled(Box)<{ scale: number }>`
+const Content = styled(Box)<{ scale: number; hideHeader?: boolean }>`
   width: 1920px;
-  height: 900px;
+  /* height: ${({ scale, hideHeader }) => (hideHeader ? 900 - 176 : 900)}px; */
+  /* padding-top: ${({ scale, hideHeader }) =>
+    hideHeader ? 0 : scale * 176}px; */
   transform-origin: 0 0;
   position: absolute;
-  top: 2px;
+  top: 50%;
   left: 50%;
   /* background: pink; */
-  transform: ${({ scale }) => `translate(${-scale * 50}%) scale(${scale})`};
+  transform: ${({ scale }) =>
+    `translate(${-scale * 50}%, ${-scale * 50}%) scale(${scale})`};
   /* ${({ theme }) => theme.mediaQueries.sm} {
     top: ${({ scale }) => `${scale * 58}%`};
   }
@@ -95,14 +115,27 @@ const Content = styled(Box)<{ scale: number }>`
   } */
 `;
 
+const ModalContent = styled(Box)<{ scale: number }>`
+  /* width: 1px;
+  height: 1px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: ${({ scale }) => `translate(-50%, -50%) scale(${scale})`};
+  z-index: 100; */
+`;
+
 const ScaleOrientContent: React.FC = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
+  const { fetch: FetchBlance } = useFetchUserBalance();
+  const { fetch: FetchProduct } = useFetchUserProduct();
+
   const { client } = useStore(p => p.user);
   const guideState = useStore(p => p.guide);
-
+  const { openBlind } = useStore(p => p.mysteryBox);
   const [minHeight, setMinHeight] = useState(900);
   const [cHeight, setCHeight] = useState(900);
   const [scale, setScale] = useState(1);
@@ -120,8 +153,6 @@ const ScaleOrientContent: React.FC = ({ children }) => {
       // 处理高度不够显示不全bug
       const rate = Math.min(rateMax, rateMin);
 
-      console.log(rateMax, rateMin);
-
       // dispatch(setScale)
       setScale(rate);
       setMinHeight(Math.min(clientWidth, clientHeight));
@@ -134,11 +165,8 @@ const ScaleOrientContent: React.FC = ({ children }) => {
         }),
       );
       dispatch(setGlobalScale(rate));
+      dispatch(setScreenMode(clientWidth > clientHeight));
       if (ref.current) {
-        console.log(
-          typeof mode === 'boolean' ? mode : false,
-          "typeof mode === 'boolean' ? mode : false",
-        );
         detectOrient(ref.current, typeof mode === 'boolean' ? mode : false);
       }
     },
@@ -147,7 +175,6 @@ const ScaleOrientContent: React.FC = ({ children }) => {
 
   const onFocusin = useCallback(
     (event: FocusEvent) => {
-      console.log(event.target, 'focusin');
       if ((event?.target as HTMLElement)?.nodeName === 'INPUT') {
         handleResize(true);
       }
@@ -187,21 +214,44 @@ const ScaleOrientContent: React.FC = ({ children }) => {
     };
   }, [handleResize, onFocusout, onFocusin]);
 
+  const OpenRechargeVisible = useCallback(() => {
+    dispatch(
+      storeAction.toggleRechargeVisible({
+        visible: true,
+      }),
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    eventBus.addEventListener('insufficient', OpenRechargeVisible);
+    return () => {
+      eventBus.removeEventListener('insufficient', OpenRechargeVisible);
+    };
+  }, [OpenRechargeVisible]);
+
   const bgType = useMemo(() => {
     const secondList = [
       '/mystery-box/state',
       '/mystery-box',
       '/mystery-box/list',
       '/mystery-box/detail',
-      '/plant-league',
     ];
-    if (secondList.includes(pathname)) return 2;
+    if (secondList.includes(pathname)) return 3;
     if (pathname === '/plant-league') return 2;
+    if (pathname === '/star') return 5;
     if (pathname === '/') return 1;
+    if (pathname === '/galaxy') return 4;
+    if (pathname === '/star/grow') return -1;
     return 0;
   }, [pathname]);
+
+  const params = useParsedQueryString();
+  const hideHeader = useMemo(() => {
+    return getHideHeader(pathname) || params?.hide;
+  }, [pathname, params]);
+
   return (
-    <Box position='relative' id='detect-orient' ref={ref}>
+    <Box zIndex={99} position='relative' id='detect-orient' ref={ref}>
       <ResetCSS scale={scale} rotate={client?.width < client?.height} />
       <StarrySky bgType={bgType} />
       <VideoComponent
@@ -210,10 +260,13 @@ const ScaleOrientContent: React.FC = ({ children }) => {
         scale={scale}
       />
       <div className={VIDEO_GLOBAL_CLASS_NAME} />
-      <Content id='scale-content' scale={scale}>
-        <Dashboard />
+      <ModalContent scale={scale} id={MODAL_GLOBAL_ID_NAME} />
+      <Dashboard scale={scale} />
+      {guideState.tokenToFrom.token && <TokenMoveAnimation scale={scale} />}
+      <Toast />
+      {openBlind && <BlindPlanetBox scale={scale} />}
+      <Content id='scale-content' scale={scale} hideHeader={!!hideHeader}>
         {children}
-
         {/* 引导提示框 */}
         {guideState.visible && (
           <GuideModal
@@ -225,9 +278,28 @@ const ScaleOrientContent: React.FC = ({ children }) => {
             }
           />
         )}
+        {guideState.recharge_visible && (
+          <ToRechargeModal
+            visible={guideState.recharge_visible}
+            onClose={() =>
+              dispatch(storeAction.toggleRechargeVisible({ visible: false }))
+            }
+            Recharge={() => {
+              dispatch(storeAction.toggleRechargeVisible({ visible: false }));
+              dispatch(storeAction.setToRechargeVisible({ visible: true }));
+            }}
+          />
+        )}
+        {guideState.toRechargeVisible && (
+          <DepositWithdrawalModule
+            visible={guideState.toRechargeVisible}
+            OperationType={guideState.RechargeOperationType}
+            close={() => {
+              dispatch(storeAction.setToRechargeVisible({ visible: false }));
+            }}
+          />
+        )}
       </Content>
-      {/* <Box>
-      </Box> */}
     </Box>
   );
 };

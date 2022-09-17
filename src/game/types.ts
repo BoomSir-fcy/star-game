@@ -53,8 +53,9 @@ export interface ReceiveChange {
   receive_point: RoundDescAxis;
   receive_sub_hp: number;
   now_hp: number;
-  now_shield: number;
   add_hp: number;
+  now_shield: number;
+  sub_shield: number;
 }
 
 interface SlotBaseInfo {
@@ -320,7 +321,7 @@ export const descType = {
   BEAT_MOVE: 13, // 击退产生位移
   BEAT_COLLISION: 14, // 击退碰撞伤害
   REMOVE_FIRING: 15, // 解除灼烧
-  REMOVE_STOP_MOVE: 16, // 解除灼烧
+  REMOVE_STOP_MOVE: 16, // 解除禁锢
   ADD_SHIELD: 17, // 添加护盾
   REMOVE_SHIELD: 18, // 减少护盾
   ADD_TERRAIN_FIRING: 19, // 地形灼烧DescUnitAddTerrainFiring
@@ -363,38 +364,43 @@ export enum bulletTypeIndex {
   BULLET,
   CURVE_BULLET,
   FIREBALL,
-  FIRING,
+  FIRING, // 5
   MECHANICAL_BULLET,
   MISSILE,
   MISSILE_BOOM,
   STING,
-  VENOM,
+  VENOM, // 10
   FIGHT,
   DRAGON,
   BUMP,
   SHIELD,
-  STOP_MOVE,
+  STOP_MOVE, // 15
   BOMB,
   ADD_BOMB,
   ADD_TERRAIN_FIRING,
   TERRAIN_FIRING,
-  RESTORE,
+  RESTORE, // 20
   PURIFY,
   LEIDIAN,
   CHUANTOU,
   JINZHAN,
-  TEST,
+  TEST, // 25
   THROUGH,
   DAODAN,
   FENG,
   V_ATTACK,
-  V_ATTACK_2,
+  V_ATTACK_2, // 30
   IMMUNITY_ICE,
   IMMUNITY_LOCK_MOVE,
   IMMUNITY_FIRING,
+  FIREBALLMOVE,
+  QJ, // 35
+  VENOM_MOVE,
 }
 
 export const bulletType = {
+  QJ: 'qj', // 冰块
+  [bulletTypeIndex.QJ]: 'qj', // 冰块
   ICE: 'ice', // 冰块
   [bulletTypeIndex.ICE]: 'ice', // 冰块
   ROCK: 'rock', // 岩石
@@ -405,6 +411,8 @@ export const bulletType = {
   [bulletTypeIndex.CURVE_BULLET]: 'curve_bullet', // 曲线子弹
   FIREBALL: 'fireball', // 火球
   [bulletTypeIndex.FIREBALL]: 'fireball', // 火球
+  FIREBALLMOVE: 'fireballmove', // 火球移动
+  [bulletTypeIndex.FIREBALLMOVE]: 'fireballmove', // 火球
   FIRING: 'firing', // 火焰灼烧
   [bulletTypeIndex.FIRING]: 'firing', // 火焰灼烧
   MECHANICAL_BULLET: 'mechanical_bullet', // 机械子弹
@@ -417,6 +425,8 @@ export const bulletType = {
   [bulletTypeIndex.STING]: 'sting', // 尖刺攻击
   VENOM: 'venom', // 毒液攻击
   [bulletTypeIndex.VENOM]: 'venom', // 毒液攻击
+  VENOM_MOVE: 'venom_move', // 毒液攻击
+  [bulletTypeIndex.VENOM_MOVE]: 'venom', // 毒液攻击
   FIGHT: 'fight', // 肉搏
   [bulletTypeIndex.FIGHT]: 'fight', // 肉搏
   DRAGON: 'dragon', // 岩石

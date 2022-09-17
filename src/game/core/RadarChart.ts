@@ -39,6 +39,13 @@ class RadarChart {
 
   offsetAngle = Math.PI / 2;
 
+  static formatData(data: AttrData) {
+    return data.map(item => ({
+      ...item,
+      value: item.value * 100,
+    }));
+  }
+
   init(options: Options) {
     const { width, height, data, colorText, colorPolygon, fillColor } = {
       ...options,
@@ -57,7 +64,7 @@ class RadarChart {
     if (fillColor) {
       this.fillColor = fillColor;
     }
-    this.data = data;
+    this.data = RadarChart.formatData(data);
     this.count = data.length;
     this.centerX = width / 2;
     this.radius = this.centerX - 28;
@@ -193,7 +200,10 @@ class RadarChart {
   }
 
   updateDate(data: AttrData) {
-    this.data = data;
+    this.data = RadarChart.formatData(data);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.count = data.length;
+    this.angle = (Math.PI * 2) / this.count;
     this.draw();
   }
 }

@@ -17,6 +17,7 @@ import {
   BorderCard,
 } from 'uikit';
 
+import styled from 'styled-components';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
 import 'intro.js/introjs.css';
 
@@ -41,6 +42,7 @@ import {
 import { GamePkState } from 'state/types';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useDispatch } from 'react-redux';
+import { APP_HEIGHT } from 'config';
 import { TrackDetail } from 'game/core/Running';
 import { useWeb3React } from '@web3-react/core';
 import ModalWrapper from 'components/Modal';
@@ -52,12 +54,21 @@ import {
   WaitPlunderList,
   PlunderPanel,
   OtherDetail,
+  PlunderPanelNew,
 } from './components';
 import { usePK } from './hooks/usePK';
+import BeginVideo from './components/BeginVideo';
 
 // const game = new Game({ width: 1400, height: 600 });
 
 // const GAME_LOAD_RATE = 0.9; // 加载进度条占的比值
+
+const LoadingBox = styled(Box)`
+  position: absolute;
+  left: 56%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 const Pk = () => {
   useFetchGameTerrain();
@@ -75,17 +86,19 @@ const Pk = () => {
 
   const { TerrainInfo } = useStore(p => p.game);
 
-  const { PKInfo, pkRes } = useStore(p => p.game);
+  const { PKInfo, pkRes, isFrom } = useStore(p => p.game);
 
   const [complete, setComplete] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [visibleGameFailed, setVisibleGameFailed] = useState(false);
 
   const [current, setCurrent] = useState(0);
+  const [VideoEnd, setVideoEnd] = useState(false);
+  const [VideoPlaying, setVideoPlaying] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const game = useGame({ width: 1400, height: 600 });
+  const game = useGame({ width: 1400, height: 500 });
   const [progress, setProgress] = useState(0);
 
   // 蓝色方和红色方信息
@@ -134,7 +147,6 @@ const Pk = () => {
   );
 
   const newRoundHandle = useCallback(() => {
-    console.log('重新开始');
     game.clearSoldier();
     setTotalInfo(null);
     setOthers([]);
@@ -154,7 +166,7 @@ const Pk = () => {
   const onRunEnd = useCallback(() => {
     const { success } = PKInfo[current];
     setResult(prev => {
-      return [...prev, success];
+      return [...prev, isFrom ? success : !success];
     });
     // descType
     setOthers(prev => {
@@ -162,9 +174,9 @@ const Pk = () => {
         ...prev,
         {
           id: 0,
-          text: `本场战斗结束`,
+          text: `This battle is over, the next one is about to start`,
           type: 1,
-          success,
+          success: isFrom ? success : !success,
           showResult: true,
         },
       ];
@@ -193,7 +205,15 @@ const Pk = () => {
       return;
     }
     onEndHandle();
-  }, [setOthers, current, setResult, PKInfo, newRoundHandle, onEndHandle]);
+  }, [
+    setOthers,
+    current,
+    setResult,
+    PKInfo,
+    newRoundHandle,
+    onEndHandle,
+    isFrom,
+  ]);
 
   useEffect(() => {
     if (running) {
@@ -209,12 +229,10 @@ const Pk = () => {
   }, [running, onRunningUpdate, onRunEnd]);
 
   useEffect(() => {
-    if (TerrainInfo?.length) {
-      game.creatTerrain(TerrainInfo[0].terrains);
-    } else {
-      game.creatTerrain([]);
+    if (game) {
+      game.creatTerrain();
     }
-  }, [TerrainInfo, game]);
+  }, [game]);
 
   const location = useLocation();
   const { guides, setGuide } = useGuide(location.pathname);
@@ -223,6 +241,7 @@ const Pk = () => {
 
   // 控制是否开启新手指导的
   const [stepsEnabled, setStepsEnabled] = useState(true);
+  const guideState = useStore(p => p.guide);
   const [activeStep, setActiveStep] = useState(guides.step);
   const steps = useMemo(
     () => [
@@ -241,6 +260,12 @@ const Pk = () => {
         intro: t('Here is the basic information of the opponent.'),
       },
       {
+        element: '.plunder-pk-step2-1',
+        intro: t(
+          'Here is the battle arrangement of both sides and the display of combat effects.',
+        ),
+      },
+      {
         element: '.plunder-pk-step3',
         intro: t(
           'Here are the details of the battle report of the current battle process.',
@@ -249,6 +274,23 @@ const Pk = () => {
     ],
     [t],
   );
+
+  const showGuide = useMemo(() => {
+    return (
+      !guides.guideFinish &&
+      guides.finish &&
+      steps.length - 1 > guides.step &&
+      stepsEnabled
+    );
+  }, [guides, steps.length, stepsEnabled]);
+
+  useEffect(() => {
+    if (guideState.visible || showGuide) {
+      running?.pause();
+    } else {
+      running?.play();
+    }
+  }, [showGuide, guideState.visible, running]);
 
   const [loaders, setLoaders] = useState(null);
 
@@ -261,11 +303,11 @@ const Pk = () => {
 
   const initPKHandle = useCallback(() => {
     try {
-      initHandle(PKInfo[current]);
+      initHandle(PKInfo[current], isFrom);
     } catch (error) {
       onRunEnd();
     }
-  }, [initHandle, PKInfo, current, onRunEnd]);
+  }, [initHandle, PKInfo, current, onRunEnd, isFrom]);
 
   const loaderLoaded = useCallback(
     event => {
@@ -290,10 +332,8 @@ const Pk = () => {
   }, [loaderLoading, loaderLoaded, loaders]);
 
   useEffect(() => {
-    console.log(mounted);
-    if (!mounted) {
+    if (!mounted && VideoEnd) {
       if (ref.current && game && PKInfo) {
-        console.log(PKInfo);
         setTotalInfo(PKInfo[current].init.show_hp);
         setMounted(true);
         // 初始化
@@ -327,11 +367,12 @@ const Pk = () => {
     }
 
     return () => {
-      if (!mounted) {
+      if (!mounted && VideoEnd) {
         loaderRemoveEventListener();
       }
     };
   }, [
+    VideoEnd,
     ref,
     game,
     setProgress,
@@ -345,142 +386,188 @@ const Pk = () => {
     loaderRemoveEventListener,
     t,
   ]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setVideoEnd(true);
+  //   }, 3000);
+  // }, []);
 
   return (
-    <Layout>
-      {!guides.guideFinish && guides.finish && steps.length - 1 > guides.step && (
-        <Steps
-          enabled={stepsEnabled}
-          steps={steps}
-          initialStep={guides.step}
-          options={{
-            exitOnOverlayClick: false,
-            tooltipPosition: 'top',
-          }}
-          onChange={currentStep => {
-            if (currentStep > guides.step) {
-              setGuide(currentStep);
-            }
-          }}
-          onBeforeChange={event => {
-            setActiveStep(event);
-          }}
-          onExit={index => {
-            setStepsEnabled(false);
-            if (index < steps.length - 1) {
-              dispatch(
-                storeAction.toggleVisible({
-                  visible: true,
-                  lastStep: steps.length,
-                }),
-              );
-            }
-          }}
-        />
-      )}
-      <Box
-        position='absolute'
-        width={800}
-        height={480}
-        top={50}
-        right={0}
-        className='plunder-pk-step2'
-        zIndex={-1}
-      />
-      <Flex mb='20px'>
-        <Flex position='relative' zIndex={1}>
-          <BackButton ml='19px' />
-          {/* <RefreshButton ml='33px' /> */}
-        </Flex>
-        <Fringe ml='-192px' />
-        <Box />
-      </Flex>
-      <Flex>
-        <Flex flexDirection='column' alignItems='center'>
-          <PeopleCard
-            className='plunder-pk-step0'
-            mb='10px'
-            active
-            {...mineUser}
+    <>
+      {VideoEnd && (
+        <Layout height={900}>
+          {showGuide && (
+            <Steps
+              enabled={stepsEnabled}
+              steps={steps}
+              initialStep={guides.step}
+              options={{
+                exitOnOverlayClick: false,
+                tooltipPosition: 'top',
+              }}
+              onChange={currentStep => {
+                if (currentStep > guides.step) {
+                  setGuide(currentStep);
+                }
+              }}
+              onBeforeChange={event => {
+                setActiveStep(event);
+              }}
+              onExit={index => {
+                setStepsEnabled(false);
+                if (index < steps.length - 1) {
+                  dispatch(
+                    storeAction.toggleVisible({
+                      visible: true,
+                      lastStep: steps.length,
+                    }),
+                  );
+                }
+              }}
+            />
+          )}
+          <Box
+            position='absolute'
+            width={800}
+            height={480}
+            top={50}
+            right={0}
+            className='plunder-pk-step2'
+            zIndex={-1}
           />
-          <Energy />
-        </Flex>
-        <Flex flex='1' flexDirection='column'>
-          <Flex mt='-52px' justifyContent='space-between'>
-            <PKProgress
-              className='plunder-pk-step1'
-              total={PKInfo?.[current]?.init?.show_hp?.blue_total_hp ?? 0}
-              current={totalInfo?.blue_total_hp ?? 0}
-              result={result}
-            />
-            <RoundPanel
-              mt='-45px'
-              roundName={roundInfo?.id}
-              isEnemy={roundInfo?.descInfo?.sender?.isEnemy}
-              onEnd={onEndHandle}
-            />
-            <PKProgress
-              opponent
-              result={result}
-              isRed
-              total={PKInfo?.[current]?.init?.show_hp?.red_total_hp ?? 0}
-              current={totalInfo?.red_total_hp ?? 0}
-            />
+          <Box
+            position='absolute'
+            width={900}
+            height={500}
+            top={0}
+            right={0}
+            left={0}
+            bottom={0}
+            margin='auto'
+            className='plunder-pk-step2-1'
+            zIndex={-1}
+          />
+          <Flex mb='20px'>
+            <Flex position='relative' zIndex={1}>
+              <BackButton ml='19px' />
+              {/* <RefreshButton ml='33px' /> */}
+            </Flex>
+            <Fringe ml='-70px' />
+            <Box />
           </Flex>
-          <Flex justifyContent='center' alignItems='center'>
-            <Box ref={ref} />
+          <Flex>
+            <Flex flexDirection='column' alignItems='center'>
+              <PeopleCard
+                className='plunder-pk-step0'
+                mb='10px'
+                active
+                {...mineUser}
+              />
+              {/* <Energy /> */}
+            </Flex>
+            <Flex flex='1' flexDirection='column'>
+              <Flex mt='-52px' justifyContent='space-between'>
+                <PKProgress
+                  className='plunder-pk-step1'
+                  total={PKInfo?.[current]?.init?.show_hp?.blue_total_hp ?? 0}
+                  current={totalInfo?.blue_total_hp ?? 0}
+                  result={result}
+                />
+                <RoundPanel
+                  mt='-45px'
+                  roundName={roundInfo?.id}
+                  isEnemy={roundInfo?.descInfo?.sender?.isEnemy}
+                  onEnd={onEndHandle}
+                />
+                <PKProgress
+                  opponent
+                  result={result}
+                  isRed
+                  total={PKInfo?.[current]?.init?.show_hp?.red_total_hp ?? 0}
+                  current={totalInfo?.red_total_hp ?? 0}
+                />
+              </Flex>
+              <Flex justifyContent='center' alignItems='center'>
+                <Box ref={ref} />
+              </Flex>
+            </Flex>
+
+            <Flex flexDirection='column' alignItems='center'>
+              <PeopleCard mb='10px' {...matchUser} />
+              {/* <Energy /> */}
+            </Flex>
           </Flex>
-        </Flex>
-
-        <Flex flexDirection='column' alignItems='center'>
-          <PeopleCard mb='10px' {...matchUser} />
-          <Energy />
-        </Flex>
-      </Flex>
-      {PKInfo && (
-        <Flex alignItems='center' margin=' 36px auto' width='900px'>
-          <Box width='900px'>
-            <Progress width={`${progress}%`} />
-          </Box>
-          {/* <Text>{progress}</Text> */}
-        </Flex>
-      )}
-
-      <Flex
-        justifyContent='center'
-        position='absolute'
-        bottom='-1000px'
-        width='100%'
-        style={{
-          transform: `translateZ(1px) translateY(${complete ? -960 : 0}px)`,
-          transition: 'all 0.5s',
-        }}
-      >
-        {/* <WaitPlunderList /> */}
-        <Flex flex={1}>
-          <PlunderPanel
+          {PKInfo && (
+            <Flex alignItems='center' margin=' 36px auto' width='900px'>
+              <Box width='900px'>
+                {progress < 100 && <Progress width={`${progress}%`} />}
+              </Box>
+              {/* <Text>{progress}</Text> */}
+            </Flex>
+          )}
+          <Flex
+            justifyContent='center'
+            position='absolute'
+            bottom='-1000px'
+            width='100%'
+            style={{
+              transform: `translateZ(1px) translateY(${complete ? -960 : 0}px)`,
+              transition: 'all 0.5s',
+            }}
+          >
+            {/* <WaitPlunderList /> */}
+            <Flex flex={1}>
+              {/* <PlunderPanel
             className='plunder-pk-step3'
             width='100%'
             details={roundInfos}
             others={others}
-          />
-        </Flex>
-        {/* <WaitPlunderList /> */}
-      </Flex>
-
-      <ModalWrapper
-        title={t('Game over')}
-        visible={visibleGameFailed}
-        setVisible={() => setVisibleGameFailed(false)}
-      >
-        <Flex pt='100px' flexDirection='column' alignItems='center'>
-          <Text color='warning'>{t('Failed to plunder the planet!')}</Text>
-          <Button mt='30px' onClick={() => navigate(-1)}>
-            {t('Confirm')}
-          </Button>
-        </Flex>
-      </ModalWrapper>
-    </Layout>
+          /> */}
+              <PlunderPanelNew
+                className='plunder-pk-step3'
+                width='100%'
+                details={roundInfos}
+                others={others}
+              />
+            </Flex>
+            {/* <WaitPlunderList /> */}
+          </Flex>
+          <ModalWrapper
+            title={t('Game over')}
+            visible={visibleGameFailed}
+            setVisible={() => setVisibleGameFailed(false)}
+          >
+            <Flex pt='100px' flexDirection='column' alignItems='center'>
+              <Text fontSize='30px' color='warning'>
+                {t('Failed to plunder the planet!')}
+              </Text>
+              <Button
+                width='180px'
+                variant='purple'
+                mt='70px'
+                onClick={() => navigate(-1)}
+              >
+                {t('Confirm')}
+              </Button>
+            </Flex>
+          </ModalWrapper>
+        </Layout>
+      )}
+      {!VideoPlaying && (
+        <LoadingBox>
+          <Spinner size={200} />
+        </LoadingBox>
+      )}
+      <BeginVideo
+        display={!VideoEnd ? '' : 'none'}
+        isEnd={() => {
+          setVideoEnd(true);
+        }}
+        isPlaying={() => {
+          setVideoPlaying(true);
+        }}
+      />
+    </>
   );
 };
 

@@ -3,9 +3,14 @@ import { Http } from '../http';
 
 export class PlanetApi extends Http {
   // 我的星球
-  async getMePlanet(
-    params: Api.Planet.PageParams,
-  ): Promise<Api.Response<{ Data: Api.Planet.PlanetInfo[] }>> {
+  async getMePlanet(params: Api.Planet.PageParams): Promise<
+    Api.Response<{
+      Data: Api.Planet.PlanetInfo[];
+      count: number;
+      page: number;
+      page_size: number;
+    }>
+  > {
     const res = await this.get('planet/myplanet', params);
     return res;
   }
@@ -47,8 +52,10 @@ export class PlanetApi extends Http {
   }
 
   // 升级所需材料星球列表
-  async getMaterialList(planet_id: number): Promise<Api.Response<any>> {
-    return this.get(`/planet/material_list`, { planet_id });
+  async getMaterialList(
+    params: Api.Planet.MaterialParams,
+  ): Promise<Api.Response<any>> {
+    return this.get(`/planet/material_list`, params);
   }
 
   // 星球是否升级成功

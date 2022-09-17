@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Text, Flex } from 'uikit';
+import { Box, Button, Text, Flex, Input } from 'uikit';
 import { Api } from 'apis';
 import { isAppAndVerticalScreen } from 'utils/detectOrient';
 import {
@@ -15,6 +15,7 @@ import {
   useFetchGamePK,
   useFetchGamePlanetUnitsTest,
   useFetchGameTerrain,
+  useFetchTestUnitList,
 } from 'state/game/hooks';
 import Soldier from 'game/core/Soldier';
 import { OptionProps, Select } from 'components/Select';
@@ -28,6 +29,7 @@ import SortBoard, { SortSoldier } from './components/SortBoard';
 import useUpdatePos from './hooks/useUpdatePos';
 import useActiveSoldier from './hooks/useActiveSoldier';
 import useSimulation from './hooks/useSimulation';
+import { ArmsInfo } from '../components/arms';
 
 const Embattle = () => {
   const parsedQs = useParsedQueryString();
@@ -67,12 +69,26 @@ const Embattle = () => {
   }, [planetInfo, planetId]);
 
   const race = info?.race as Api.Game.race;
-  useFetchUnitList(race, info?.id);
+  // useFetchUnitList(race, info?.id);
+  useFetchTestUnitList(race);
 
   const baseUnits = useStore(p => p.game.baseUnits);
 
   const unitMaps = useMemo(() => {
-    if (baseUnits[race]) return baseUnits[race];
+    if (baseUnits[race]) {
+      const baseUnit = baseUnits[race];
+      return (baseUnit as unknown as Api.Game.UnitInfo[]).reduce(
+        (pre, next) => {
+          return {
+            ...pre,
+            [next.unique_id]: {
+              ...next,
+            },
+          };
+        },
+        {},
+      );
+    }
     return null;
   }, [baseUnits, race]);
 
@@ -131,11 +147,19 @@ const Embattle = () => {
       game.boards.container.rotation = Math.PI / 2;
     }
     if (TerrainInfo?.length) {
-      game.creatTerrain(TerrainInfo[activeTerrain.value].terrains);
+      game.creatTerrain();
     } else {
-      game.creatTerrain([]);
+      game.creatTerrain();
     }
   }, [activeTerrain, ref, TerrainInfo, game]);
+
+  const removeHandle = useCallback(() => {
+    if (activeSoldier) {
+      game.removeSoldier(activeSoldier);
+    }
+  }, [activeSoldier, game]);
+
+  const [roundAmount, setRoundAmount] = useState('');
 
   return (
     <Box position='relative' width='100%'>
@@ -146,7 +170,7 @@ const Embattle = () => {
         top='0'
         right='18px'
       >
-        <Preview game={game} activeSoldier={activeSoldier} />
+        {/* <Preview game={game} activeSoldier={activeSoldier} /> */}
         {/* <SortBoard
           sortSoldiers={gameSoldiers}
           activeSoldier={activeSoldier}
@@ -158,13 +182,19 @@ const Embattle = () => {
           }}
         /> */}
       </Flex>
+      <ArmsInfo
+        armsData={{ game_base_unit: activeSoldier?.options?.unitInfo }}
+        sid={activeSoldier?.options?.unitInfo?.number}
+        right='0'
+        removeHandle={removeHandle}
+      />
       <Box
         style={{ userSelect: 'none' }}
         position='absolute'
         top='490px'
         left='0'
       >
-        <Flex alignItems='center' position='absolute' top='-80px'>
+        <Flex width='100%' alignItems='center' position='absolute' top='-80px'>
           <Button onClick={() => game.clearSoldier()} padding={0} width='50px'>
             <Text fontSize='20px'>清空</Text>
           </Button>
@@ -192,19 +222,34 @@ const Embattle = () => {
           <Button
             padding={0}
             width='50px'
-            onClick={() => setSimulation(gameSoldiers)}
+            onClick={() => setSimulation(gameSoldiers, roundAmount)}
           >
             <Text fontSize='20px'>动画模拟</Text>
           </Button>
-          <Select
+          <Input
+            width='400px'
+            value={roundAmount}
+            onChange={event => {
+              const _input = event.target.value;
+              const withoutSpaces = _input.replace(/[^0-9]/g, '');
+              setRoundAmount(withoutSpaces);
+            }}
+            placeholder='请输入回合数 默认3回合'
+          />
+          {/* <Select
             options={terrainSelect}
             defaultId={0}
             onChange={option => {
               setActiveTerrain(option);
             }}
-          />
+          /> */}
         </Flex>
-        <PreviewList race={race} game={game} activeSoldier={activeSoldier} />
+        <PreviewList
+          unitMaps={unitMaps}
+          race={race}
+          game={game}
+          activeSoldier={activeSoldier}
+        />
       </Box>
     </Box>
   );

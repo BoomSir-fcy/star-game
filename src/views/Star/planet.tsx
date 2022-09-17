@@ -23,7 +23,7 @@ import { useTranslation } from 'contexts/Localization';
 import Layout from 'components/Layout';
 import Nav from 'components/Nav';
 import { storeAction, useStore } from 'state';
-import { fetchMePlanetAsync } from 'state/planet/fetchers';
+import { fetchMePlanetAsync } from 'state/planet/reducer';
 import { setActivePlanet } from 'state/planet/actions';
 import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useToast } from 'contexts/ToastsContext';
@@ -384,7 +384,7 @@ const Planet = () => {
             {choose && (
               <Flex padding='0 20px' mb='60px'>
                 <BackButton />
-                <RefreshButton ml='33px' />
+                {/* <RefreshButton ml='33px' /> */}
               </Flex>
             )}
             <Nav
@@ -504,7 +504,7 @@ const Planet = () => {
                   >
                     <LinkStyled to='/mystery-box'>
                       <Text small>
-                        {t('No data, Go to open the blind box')} &gt;
+                        {t('No planet. Go to open the Blind Box')} &gt;
                       </Text>
                     </LinkStyled>
                   </Flex>

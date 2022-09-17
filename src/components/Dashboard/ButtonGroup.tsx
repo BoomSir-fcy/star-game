@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Flex,
   Button,
@@ -13,6 +13,8 @@ import {
   Text,
 } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
+import TooltipTrigger from 'components/Tooltip';
+import { useStore } from 'state';
 
 export interface ButtonGroupProps {
   onRefresh?: () => void;
@@ -21,7 +23,7 @@ export interface ButtonGroupProps {
 }
 
 interface SecondaryButtonProps extends ButtonProps {
-  tag: 'attack' | 'flag' | 'm-box' | 'star';
+  tag: 'attack' | 'flag' | 'm-box' | 'star' | 'bag';
   href: string;
 }
 const SecondaryButton: React.FC<SecondaryButtonProps> = ({
@@ -38,13 +40,13 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
           variant='secondary'
           startIcon={
             <Image
-              width={50}
-              height={50}
+              width={36}
+              height={36}
               src={`/images/commons/btn/${tag}.png`}
             />
           }
         >
-          <Text fontSize='20px' bold shadow='secondary'>
+          <Text bold shadow='secondary'>
             {children}
           </Text>
         </Button>
@@ -59,27 +61,45 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
   className,
 }) => {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const { scale, TooltipTriggerZIndex } = useStore(p => p.user);
 
   return (
     <Flex>
-      {/* <SecondaryButton href='/plunder' tag='attack'>
-        {t('Loot Resources').toLocaleUpperCase()}
-      </SecondaryButton> */}
-      <SecondaryButton href='/galaxy' tag='flag'>
-        {t('Occupy Star').toLocaleUpperCase()}
+      <SecondaryButton href='/star/planet' tag='bag'>
+        {t('Planet').toLocaleUpperCase()}
       </SecondaryButton>
       <SecondaryButton
         href='/plant-league'
         tag='star'
         className='header_explore'
       >
-        {t('Planet Alliance').toLocaleUpperCase()}
+        {t('Alliance').toLocaleUpperCase()}
       </SecondaryButton>
-      <SecondaryButton href='/mystery-box' tag='m-box'>
-        {t('Planet Box').toLocaleUpperCase()}
-      </SecondaryButton>
+      {pathname === '/plant-league' ? (
+        <TooltipTrigger
+          zIndex={TooltipTriggerZIndex}
+          overlay={
+            <Text fontSize={`${16 * scale}px`} color='textTips'>
+              {t('Earn BOX')}
+            </Text>
+          }
+          defaultVisible
+          trigger={[]}
+          placement='topRight'
+        >
+          <SecondaryButton href='/galaxy' tag='flag'>
+            {t('Galaxy').toLocaleUpperCase()}
+          </SecondaryButton>
+        </TooltipTrigger>
+      ) : (
+        <SecondaryButton href='/galaxy' tag='flag'>
+          {t('Galaxy').toLocaleUpperCase()}
+        </SecondaryButton>
+      )}
+
       {/* <BackButton onBack={onBack} /> */}
-      <RefreshButton mr='23px' onRefresh={onRefresh} />
+      {/* <RefreshButton mr='23px' onRefresh={onRefresh} /> */}
     </Flex>
   );
 };

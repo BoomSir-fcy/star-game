@@ -9,6 +9,7 @@ import { BoardPositionSelf } from '../types';
 import { checkPolygonPoint } from './utils';
 
 export const mapType = {
+  MAP: 99,
   MAP1: 0,
   MAP2: 1,
   MAP3: 2,
@@ -79,6 +80,8 @@ class Chequer {
   state: StateType = stateType.PREVIEW;
 
   static maps = {
+    [mapType.MAP]: Texture.from('/assets/map/map.png'),
+
     [mapType.MAP1]: Texture.from('/assets/map/map0.png'),
 
     [mapType.MAP2]: Texture.from('/assets/map/map1.png'),
@@ -119,7 +122,7 @@ class Chequer {
   init({
     axisX,
     axisY,
-    type = mapType.MAP1,
+    type = mapType.MAP,
     state = stateType.DISABLE,
     test,
   }: ChequerOptions) {
@@ -130,10 +133,10 @@ class Chequer {
     this.axisX = axisX;
     this.axisY = axisY;
 
-    this.bunny = new Sprite(Chequer.maps[type]);
+    this.bunny = new Sprite(Chequer.maps[mapType.MAP]);
     this.bunny.anchor.set(0.5);
-    this.bunny.width = 100;
-    this.bunny.height = 125;
+    this.bunny.width = 100 * 1;
+    this.bunny.height = 125 * 1;
     // this.getXY(this.axisX, this.axisY); => this.getXY(this.axisY, this.axisX); 从左手坐标系改为右手坐标系
     const { x, y, enemy } = this.getXY(this.axisY, this.axisX);
     this.bunny.x = x;
@@ -147,22 +150,32 @@ class Chequer {
     } else {
       this.setState(enemy ? stateType.DISABLE : state);
     }
+    this.centerPoint.set(x, y);
+
+    const defaultSprite = new Sprite(Texture.from('/assets/map/state0.png'));
+    defaultSprite.anchor.set(0.5);
+    defaultSprite.x = 0;
+    defaultSprite.y = -23;
+    defaultSprite.scale.set(0.49);
+    this.bunny.addChild(defaultSprite);
+    defaultSprite.visible = true;
 
     this.stateSprite.anchor.set(0.5);
+    this.stateSprite.scale.set(0.5);
     this.stateSprite.x = 0;
     this.stateSprite.y = -23;
     this.bunny.addChild(this.stateSprite);
     this.stateSprite.visible = false;
 
-    if (test) {
-      const text = new Text(`x${this.axisX}, ${this.axisY}`, {
-        fill: 0xffffff,
-        fontSize: 16,
-      });
-      text.x = -30;
-      text.y = -28;
-      this.bunny.addChild(text);
-    }
+    // if (!test) {
+    //   const text = new Text(`x${this.axisX}, ${this.axisY}`, {
+    //     fill: 0xffffff,
+    //     fontSize: 16,
+    //   });
+    //   text.x = -30;
+    //   text.y = -28;
+    //   this.bunny.addChild(text);
+    // }
   }
 
   // 底色是不规则渲染 所以事件范围也不规则
@@ -180,6 +193,7 @@ class Chequer {
     ];
     const color = getRandomColor();
     this.graphics.beginFill(color, 0.00001);
+    // this.graphics.lineStyle({ color, width: 0.8 });
     this.graphics.drawPolygon(path);
     this.graphics.endFill();
     const { x } = this.bunny;
@@ -234,7 +248,8 @@ class Chequer {
   }
 
   displayState(visible: boolean) {
-    this.stateSprite.visible = visible;
+    // this.stateSprite.visible = visible;
+    this.stateSprite.visible = false;
   }
 
   // 检测一个点是否在当前格子里

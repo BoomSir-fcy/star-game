@@ -5,7 +5,16 @@ import Soldier from 'game/core/Soldier';
 import { getSpriteName, getSpriteRes } from 'game/core/utils';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
-import { Box, Text, BgCard, Flex, BorderCard, BgCardProps } from 'uikit';
+import {
+  Box,
+  Text,
+  GraphicsCard,
+  Flex,
+  BorderCard,
+  GraphicsCardProps,
+  Image,
+  MarkText,
+} from 'uikit';
 import orderBy from 'lodash/orderBy';
 import { useToast } from 'contexts/ToastsContext';
 import { useTranslation } from 'contexts/Localization';
@@ -14,7 +23,7 @@ import PreviewSoldier from './PreviewSoldier';
 import { SortSoldier } from './SortBoard';
 import { PlayBtn } from './styled';
 
-interface PreviewListProps extends BgCardProps {
+interface PreviewListProps extends GraphicsCardProps {
   game: Game;
   gameSoldiers: SortSoldier[];
   activeSoldier: Soldier | null;
@@ -40,6 +49,22 @@ const PreviewList: React.FC<PreviewListProps> = ({
 
   const { toastError } = useToast();
 
+  const activeNum = useCallback(
+    id => {
+      return gameSoldiers.filter(item => item.soldier.id === id)?.length || 0;
+    },
+    [gameSoldiers],
+  );
+
+  const UseSoldierNum = useCallback(
+    (item: Api.Game.UnitInfo, add?: boolean) => {
+      return `${
+        add ? activeNum(item.unique_id) + 1 : activeNum(item.unique_id)
+      }/${item.default_unit ? '6' : item.count}`;
+    },
+    [activeNum],
+  );
+
   useEffect(() => {
     setdDisableDragSoilder(isApp() || disableDrag);
   }, [disableDrag]);
@@ -50,20 +75,26 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, [units, race]);
 
   const isBaseUnit = (item: Api.Game.UnitInfo) => {
-    return Number(`${item.race}3999`) === item.number;
+    return item.default_unit;
+    // return item.default_unit;
   };
 
   const list = useMemo(() => {
-    return orderBy(
+    const arr = orderBy(
       Object.values(unitMaps),
       item => (isBaseUnit(item) ? 99999 : item.count),
       'desc',
     );
+    arr.sort((a, b) => {
+      return b.power - a.power; // 降序
+    });
+    return arr;
   }, [unitMaps]);
 
   useEffect(() => {
     if (list.length) {
       const [item] = list;
+
       const soldier = new Soldier({
         x: 0,
         y: 0,
@@ -71,11 +102,13 @@ const PreviewList: React.FC<PreviewListProps> = ({
         race,
         id: item?.unique_id,
         unique_id: item?.unique_id,
-        unitInfo: unitMaps?.[item?.unique_id],
+        unitInfo: { ...unitMaps?.[item?.unique_id] },
+        activeCountText: UseSoldierNum(unitMaps?.[item?.unique_id]),
+        noHp: true,
       });
       game.addActiveSolider(soldier);
     }
-  }, [list, game, race, unitMaps]);
+  }, [list, game, race, unitMaps, UseSoldierNum]);
 
   const [moving, setMoving] = useState(false);
 
@@ -101,20 +134,14 @@ const PreviewList: React.FC<PreviewListProps> = ({
         enableDrag: false,
         id: item.unique_id,
         unique_id: item.unique_id,
-        unitInfo: item,
+        unitInfo: { ...item },
+        activeCountText: UseSoldierNum(item, true),
+        noHp: true,
       });
       setMoving(true);
       game?.addDragPreSoldier(soldier);
     },
-    [game, race],
-  );
-
-  const activeNum = useCallback(
-    id => {
-      console.log(gameSoldiers, id);
-      return gameSoldiers.filter(item => item.soldier.id === id)?.length || 0;
-    },
-    [gameSoldiers],
+    [game, race, UseSoldierNum],
   );
 
   const checkCreateSoldier = useCallback(
@@ -140,7 +167,9 @@ const PreviewList: React.FC<PreviewListProps> = ({
       enableDrag: true,
       id: item.unique_id,
       unique_id: item.unique_id,
-      unitInfo: item,
+      unitInfo: { ...item },
+      activeCountText: UseSoldierNum(item, true),
+      noHp: true,
     };
     game.addDragPreSoldierApp(options);
   };
@@ -161,7 +190,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
   }, []);
 
   return (
-    <BgCard padding='0 28px' variant='long' {...props}>
+    <GraphicsCard width='727px' height='230px' padding='0 16px' {...props}>
       <Flex
         className='star-embattle-step1'
         style={{ overflow: 'auto' }}
@@ -175,14 +204,14 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 cursor: 'pointer',
               }}
               key={`${item.unique_id}_${item.level}`}
-              margin='49px 20px 0'
+              margin='20px 20px 10px'
               position='relative'
             >
-              {visibleBtn && activeSoldier?.unique_id === item.unique_id ? (
+              {/* {visibleBtn && activeSoldier?.unique_id === item.unique_id ? (
                 <PlayBtn scale='xs' onClick={() => handleGoIntoBattle(item)}>
                   上阵
                 </PlayBtn>
-              ) : null}
+              ) : null} */}
               <BorderCard
                 isActive={activeSoldier?.unique_id === item.unique_id}
                 width={122}
@@ -192,8 +221,7 @@ const PreviewList: React.FC<PreviewListProps> = ({
                 position='relative'
                 onClick={() => {
                   if (!disableClick) {
-                    if (!checkCreateSoldier(item)) return;
-
+                    // if (!checkCreateSoldier(item)) return;
                     const soldier = new Soldier({
                       x: 0,
                       y: 0,
@@ -201,12 +229,14 @@ const PreviewList: React.FC<PreviewListProps> = ({
                       race,
                       id: item.unique_id,
                       unique_id: item.unique_id,
-                      unitInfo: unitMaps?.[item.unique_id],
+                      unitInfo: { ...unitMaps?.[item.unique_id] },
+                      activeCountText: UseSoldierNum(item, true),
+                      noHp: true,
                     });
                     game.addActiveSolider(soldier);
-                    if (isApp()) {
-                      setVisibleBtn(true);
-                    }
+                    // if (isApp()) {
+                    //   setVisibleBtn(true);
+                    // }
                   }
                   // game.dispatchEvent(getAddActiveSoliderEvent(soldier));
                 }}
@@ -215,13 +245,27 @@ const PreviewList: React.FC<PreviewListProps> = ({
                   position='relative'
                   zIndex={2}
                   justifyContent='space-between'
+                  alignItems='center'
                 >
-                  <Text shadow='primary' fontSize='22' ml='13px' mt='2px' bold>
+                  <Text shadow='primary' ml='13px' mt='2px' bold>
                     LV {item.level}
                   </Text>
-                  <Text shadow='primary' fontSize='22' mr='13px' mt='2px' bold>
-                    {activeNum(item.unique_id)}/
-                    {isBaseUnit(item) ? '6' : item.count}
+                  <Text shadow='primary' mr='13px' mt='2px' bold>
+                    {item.default_unit ? (
+                      <>
+                        <Flex alignItems='flex-start'>
+                          <Text lineHeight={1} mr='2px'>
+                            +
+                          </Text>
+                          <Text lineHeight={1} fontSize='20px'>
+                            ∞
+                          </Text>
+                        </Flex>
+                      </>
+                    ) : (
+                      `${item.count}/${item.max_count}`
+                    )}
+                    {/* {UseSoldierNum(item)} */}
                   </Text>
                 </Flex>
                 <PreviewSoldier
@@ -242,21 +286,41 @@ const PreviewList: React.FC<PreviewListProps> = ({
                     }
                   }}
                 />
+                <Box
+                  width={36}
+                  height={36}
+                  position='absolute'
+                  left='0'
+                  bottom='0'
+                >
+                  <Image
+                    style={{ cursor: 'pointer' }}
+                    // position='absolute'
+                    // bottom='0'
+                    // left='0'
+                    width={36}
+                    height={36}
+                    src='/images/commons/icon/add.png'
+                    onClick={() => {
+                      handleGoIntoBattle(item);
+                    }}
+                  />
+                </Box>
               </BorderCard>
-              <Text
-                width='122px'
-                mt='8px'
-                textAlign='center'
-                fontSize='20'
-                bold
-              >
+              <Text mt='8px' textAlign='center' bold width='max-content'>
                 {getSoldierName(item)}
               </Text>
+              <Flex justifyContent='center'>
+                <Text bold>{t('Power')}</Text>{' '}
+                <MarkText fontStyle='normal' bold>
+                  {item?.power}
+                </MarkText>
+              </Flex>
             </Box>
           );
         })}
       </Flex>
-    </BgCard>
+    </GraphicsCard>
   );
 };
 

@@ -9,6 +9,18 @@ import {
 
 const effectConfig: EffectConfig = {
   bullet: [
+    // {
+    //   name: bulletType.QJ,
+    //   id: bulletTypeIndex.QJ,
+    //   bombSpineSrc: '/assets/bullet/qj/qj.json',
+    //   bombSpine: bulletType.QJ,
+    //   // moveSpine: bulletType.FENG,
+    //   moveSpineSrc: '',
+    //   bombSpriteSrc: '',
+    //   moveSpriteSrc: '',
+    //   label: 'QJ',
+    // },
+
     {
       name: bulletType.ICE,
       id: bulletTypeIndex.ICE,
@@ -35,13 +47,14 @@ const effectConfig: EffectConfig = {
     {
       name: bulletType.BULLET,
       id: bulletTypeIndex.BULLET,
-      // bombSpine: bulletType.ROCK,
+      bombSpine: bulletType.QJ,
       moveSpine: bulletType.BULLET,
-      bombSpineSrc: '',
+      bombSpineSrc: '/assets/bullet/qj/qj.json',
       bombSpriteSrc: '',
       moveSpineSrc: '/assets/bullet/bullet/zidan.json',
       moveSpriteSrc: '',
       label: '子弹',
+      flip: true,
     },
     {
       name: bulletType.CURVE_BULLET,
@@ -58,21 +71,22 @@ const effectConfig: EffectConfig = {
       name: bulletType.FIREBALL,
       id: bulletTypeIndex.FIREBALL,
       bombSpine: bulletType.FIREBALL,
+      moveSpine: bulletType.FIREBALLMOVE,
       // moveSpine: bulletType.CURVE_BULLET,
       bombSpineSrc: '/assets/bullet/fireball/huoqiu.json',
       bombSpriteSrc: '',
-      moveSpineSrc: '',
-      moveSpriteSrc: '/assets/bullet/fireball/fireball.png',
+      moveSpineSrc: '/assets/bullet/fireball/fireball.json',
+      moveSpriteSrc: '',
       label: '火球',
-      flip: true,
     },
     {
       name: bulletType.FIRING,
       id: bulletTypeIndex.FIRING,
+      moveSpine: bulletType.FIREBALLMOVE,
       bombSpineSrc: '',
       bombSpriteSrc: '',
-      moveSpineSrc: '',
-      moveSpriteSrc: '/assets/bullet/fireball/fireball.png',
+      moveSpineSrc: '/assets/bullet/fireball/fireball.json',
+      moveSpriteSrc: '',
       label: '火焰灼烧',
     },
     {
@@ -97,17 +111,17 @@ const effectConfig: EffectConfig = {
       moveSpriteSrc: '/assets/bullet/bomb/bomb.png',
       label: '炸弹',
     },
-    // {
-    //   name: bulletType.BOMB,
-    //   id: bulletTypeIndex.BOMB,
-    //   bombSpineSrc: '/assets/bullet/bomb/zhadan.json',
-    //   bombSpine: bulletType.BOMB,
-    //   // moveSpine: bulletType.CURVE_BULLET,
-    //   bombSpriteSrc: '',
-    //   moveSpineSrc: '',
-    //   moveSpriteSrc: '',
-    //   label: '炸弹爆炸',
-    // },
+    {
+      name: bulletType.BOMB,
+      id: bulletTypeIndex.BOMB,
+      bombSpineSrc: '/assets/bullet/bomb/zhadan.json',
+      bombSpine: bulletType.BOMB,
+      // moveSpine: bulletType.CURVE_BULLET,
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      moveSpriteSrc: '',
+      label: '炸弹爆炸',
+    },
     {
       name: bulletType.LEIDIAN,
       id: bulletTypeIndex.LEIDIAN,
@@ -149,6 +163,7 @@ const effectConfig: EffectConfig = {
       bombSpineSrc: '/assets/bullet/chuantou1/chuantou.json',
       bombSpine: bulletType.THROUGH,
       moveSpine: bulletType.THROUGH,
+      flip: true,
       bombSpriteSrc: '',
       moveSpineSrc: '/assets/bullet/chuantou1/chuantou.json',
       moveSpriteSrc: '',
@@ -218,7 +233,7 @@ const effectConfig: EffectConfig = {
       // spriteRes: '/assets/bullet/sting/jianc.png',
       bombSpineSrc: '/assets/bullet/sting/jianc.json',
       bombSpine: bulletType.STING,
-      // moveSpine: bulletType.MISSILE_BOOM,
+      // moveSpine: '',
       bombSpriteSrc: '',
       moveSpineSrc: '',
       moveSpriteSrc: '',
@@ -231,10 +246,10 @@ const effectConfig: EffectConfig = {
       // spriteRes: '/assets/bullet/venom/venom.png',
       bombSpineSrc: '/assets/bullet/venom/duye.json',
       bombSpine: bulletType.VENOM,
-      // moveSpine: bulletType.MISSILE_BOOM,
+      moveSpine: bulletType.VENOM_MOVE,
       bombSpriteSrc: '',
-      moveSpineSrc: '',
-      moveSpriteSrc: '/assets/bullet/venom/venom.png',
+      moveSpineSrc: '/assets/bullet/venom/venom.json',
+      moveSpriteSrc: '',
       label: '毒液攻击',
     },
     {
@@ -250,20 +265,20 @@ const effectConfig: EffectConfig = {
       moveSpriteSrc: '',
       label: '肉搏',
     },
-    // {
-    //   name: bulletType.BUMP,
-    //   id: bulletTypeIndex.BUMP,
-    //   // resDir: '/assets/bullet/fight/jinzhan.json',
-    //   // spriteRes: '/assets/bullet/fight/jinzhan.png',
-    //   bombSpineSrc: '/assets/bullet/yan/yans.json',
-    //   bombSpine: bulletType.BUMP,
-    //   // moveSpine: bulletType.FIGHT,
-    //   bombSpriteSrc: '',
-    //   moveSpineSrc: '',
-    //   flip: true,
-    //   moveSpriteSrc: '',
-    //   label: '碰撞',
-    // },
+    {
+      name: bulletType.BUMP,
+      id: bulletTypeIndex.BUMP,
+      // resDir: '/assets/bullet/fight/jinzhan.json',
+      // spriteRes: '/assets/bullet/fight/jinzhan.png',
+      bombSpineSrc: '/assets/bullet/yan/yans.json',
+      bombSpine: bulletType.BUMP,
+      // moveSpine: bulletType.FIGHT,
+      bombSpriteSrc: '',
+      moveSpineSrc: '',
+      flip: true,
+      moveSpriteSrc: '',
+      label: '碰撞',
+    },
     {
       name: bulletType.SHIELD,
       id: bulletTypeIndex.SHIELD,
@@ -493,6 +508,10 @@ export const descOfEffect = {
 
 export const spines = [
   {
+    name: bulletType.QJ,
+    src: '/assets/bullet/qj/qj.json',
+  },
+  {
     name: commonSpineType.FLYING_END,
     src: '/assets/effects/feiluo/feiluo.json',
   },
@@ -531,6 +550,10 @@ export const spines = [
   {
     name: bulletType.MISSILE_BOOM,
     src: '/assets/bullet/missile/bom/daod.json',
+  },
+  {
+    name: bulletType.FIREBALLMOVE,
+    src: '/assets/bullet/fireball/fireball.json',
   },
   {
     name: bulletType.STING,
@@ -595,5 +618,9 @@ export const spines = [
   {
     name: bulletType.ATTACK_START,
     src: '/assets/bullet/space-start/kua1.json',
+  },
+  {
+    name: bulletType.VENOM_MOVE,
+    src: '/assets/bullet/venom/venom.json',
   },
 ];

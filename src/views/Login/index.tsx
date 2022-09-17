@@ -43,16 +43,26 @@ import { useLogin } from './hooks/login';
 const StarGameBoxMove = styled(StarGameBox)<{ move?: boolean }>`
   transition: 0.3s;
   transform: translateY(${({ move }) => (move ? '-160px' : '0')});
+  position: absolute;
+  top: 180px;
 `;
 
 const EnterBoxMove = styled(Box)<{ move?: boolean }>`
   transition: 0.3s;
   transform: translateY(${({ move }) => (move ? '200px' : '0')}) translateZ(1px);
+  position: absolute;
+  bottom: 340px;
 `;
 
 const CreateBoxShow = styled(Box)<{ show?: boolean }>`
   transition: 0.3s;
   opacity: ${({ show }) => (show ? 1 : 0)};
+`;
+
+const Container = styled(Box)`
+  position: relative;
+  width: 100%;
+  height: 940px;
 `;
 
 const Login = () => {
@@ -69,6 +79,7 @@ const Login = () => {
 
   const { toastSuccess, toastWarning, toastError } = useToast();
   const { fetch } = useFetchUserInfo();
+  const timer = useRef<ReturnType<typeof setTimeout>>(null);
 
   useFetchUserInfo();
   useFetchInfoView();
@@ -77,7 +88,7 @@ const Login = () => {
   const { userInfoView, allowance, infoView } = useStore(p => p.userInfo);
 
   const { handleCheck } = useCheckName();
-  const { handleRegister } = useRegisterWithDsg();
+  const { handleRegister, TestToGetCoin } = useRegisterWithDsg();
   const { handleLogin, getPlanetNum } = useLogin();
 
   const createRef = useRef<ForwardRefRenderProps>(null);
@@ -100,7 +111,9 @@ const Login = () => {
           state === CheckNickNameState.LONG_NAME
         ) {
           toastError(
-            t('6~30 characters (Support English, Chinese, and numbers)'),
+            t(
+              '6~30 characters (Support English, Chinese,Punctuation Marks and numbers)',
+            ),
           );
           return;
         }
@@ -127,7 +140,6 @@ const Login = () => {
 
   const onHandleRegister = useCallback(
     async (payType: string) => {
-      let timer: any = 0;
       if (pending) {
         return;
       }
@@ -145,19 +157,20 @@ const Login = () => {
             payType,
             BNB_price: infoView?.priceBnb_,
           });
-          timer = setInterval(async () => {
+          timer.current = setInterval(async () => {
             toastWarning(t('loginSigninSearch'));
             const result = await Api.UserApi.getCheck({
               address: String(account),
             });
             if (Api.isSuccess(result) && result?.data?.register) {
-              if (timer) clearInterval(timer);
+              if (timer.current) clearInterval(timer.current);
               fetch();
             }
           }, 6000);
-        } catch (error) {
+        } catch (error: any) {
           console.error(error);
-          toastError(t('RegistrationCheckBalance'));
+          toastError(error?.data?.message);
+          // toastError(t('RegistrationCheckBalance'));
         }
       }
     },
@@ -173,8 +186,28 @@ const Login = () => {
       pending,
       account,
       infoView,
+      timer,
     ],
   );
+
+  const onHandleGetTestCoins = useCallback(async () => {
+    try {
+      const res = await TestToGetCoin();
+      toastSuccess(t('Claim Succeeded'));
+    } catch (error: any) {
+      console.error(error);
+      toastError(error?.data?.message);
+    }
+  }, [TestToGetCoin, toastError, toastSuccess, t]);
+
+  useEffect(() => {
+    if (account) {
+      if (timer.current) clearInterval(timer.current);
+    }
+    return () => {
+      clearInterval(timer.current);
+    };
+  }, [account, timer]);
 
   const handleEnter = useCallback(async () => {
     if (!account) {
@@ -197,10 +230,10 @@ const Login = () => {
           if (planetNum > 0) {
             navigate('/star/planet');
           } else {
-            navigate('/mystery-box');
+            navigate('/plant-league');
           }
         } else {
-          navigate('/mystery-box');
+          navigate('/plant-league');
         }
       }
 
@@ -228,7 +261,7 @@ const Login = () => {
   }, [parsedQs.InviteAddress]);
 
   useEffect(() => {
-    if (!userInfoView.loading && !parsedQs.s) {
+    if (!userInfoView.loading || !parsedQs.s) {
       if (account && !userInfoView.isActive) {
         navigate(`${pathname}?s=${1}`, { replace: true });
       } else {
@@ -271,7 +304,7 @@ const Login = () => {
   );
 
   return (
-    <>
+    <Container>
       {showCreate && (
         <Steps
           enabled={stepsEnabled}
@@ -286,6 +319,8 @@ const Login = () => {
           }}
         />
       )}
+      {/* <Button onClick={onHandleGetTestCoins}>领取测试币</Button> */}
+
       <Flex
         height='100%'
         flexDirection='column'
@@ -312,6 +347,7 @@ const Login = () => {
             onClick={handleEnter}
             variant='login'
             disabled={account && userInfoView.loading}
+            style={{ fontSize: '24px' }}
           >
             {account ? 'ENTER' : t('Connect Wallet')}
           </Button>
@@ -329,7 +365,7 @@ const Login = () => {
           onRegister={payType => onHandleRegister(payType)}
         />
       )}
-    </>
+    </Container>
   );
 };
 

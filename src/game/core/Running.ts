@@ -46,6 +46,7 @@ type HandleType = typeof handleType[keyof typeof handleType];
 interface PeopleInfo {
   pos: RoundDescAxis;
   isEnemy: boolean;
+  soldier: Soldier | null;
   receive_sub_hp?: number;
   now_shield?: number;
 }
@@ -55,6 +56,7 @@ export interface DescInfo {
   type: DescType;
   moveTo?: RoundDescAxis;
   id: string;
+  soldier?: Soldier | null;
 }
 
 interface RunTrackDetail {
@@ -103,6 +105,7 @@ class Running extends EventTarget {
     super();
 
     this.game = game;
+    this.game.setRunning(this);
     this.rounds = rounds.round;
     this.base = rounds.base;
     this.playLoop = loop || false;
@@ -150,8 +153,12 @@ class Running extends EventTarget {
 
   playLoop = false;
 
+  id = 0;
+
   init() {
+    this.id = new Date().getTime();
     this.getTracks();
+
     // this.runHandle();
   }
 
@@ -160,6 +167,14 @@ class Running extends EventTarget {
   // }
 
   play() {
+    if (this.paused) {
+      this.paused = false;
+      this.runHandle();
+      this.dispatchEvent(new Event('play'));
+    }
+  }
+
+  run() {
     this.paused = false;
     this.runHandle();
     this.dispatchEvent(new Event('play'));
@@ -275,7 +290,7 @@ class Running extends EventTarget {
     }
     if (track?.type === descType.TOTAL_INFO) {
       const round = `回合: ${track.id} \n`;
-      const effect = `我方: ${track.info?.blue_total_hp}; 敌方${track.info?.red_total_hp} \n`;
+      const effect = `Your: ${track.info?.blue_total_hp}; Enemy${track.info?.red_total_hp} \n`;
       this.infoText.text = `${round}${effect}`;
       callback();
       return null;
@@ -305,7 +320,6 @@ class Running extends EventTarget {
       this.playCount -= 1;
       this.runHandle();
     } else if (this.playLoop) {
-      console.log('循环播放');
       this.playLoop = false;
       this.trackIndex = 0;
       this.runHandle();
@@ -352,6 +366,7 @@ class Running extends EventTarget {
       id,
       sender: {
         isEnemy: this.game.getSoliderEnemyById(moves.id),
+        soldier: this.game.findSoldierById(moves.id),
         pos: {
           x: startPoint?.x ?? 0,
           y: startPoint?.y ?? 0,
@@ -410,6 +425,7 @@ class Running extends EventTarget {
       id: descId,
       type: descType.BEAT_MOVE,
       sender: {
+        soldier: this.game.findSoldierById(moves.move_unit),
         isEnemy: this.game.getSoliderEnemyById(moves.move_unit),
         pos: {
           x,
@@ -560,9 +576,11 @@ class Running extends EventTarget {
     const receives: PeopleInfo[] = [];
     if (attacks.around && attacks.around.length > 1) {
       attacks.around.forEach(item => {
+        const _s = this.game.findSoldierById(attacks.receive_id);
         receives.push({
           pos: item.receive_point,
-          isEnemy: this.game.getSoliderEnemyById(item.receive_id),
+          soldier: _s,
+          isEnemy: this.game.getSoliderEnemyById(attacks.receive_id),
           receive_sub_hp: item.receive_sub_hp,
           now_shield: item.now_shield,
         });
@@ -570,6 +588,7 @@ class Running extends EventTarget {
     } else {
       receives.push({
         pos: attacks.receive_point,
+        soldier: this.game.findSoldierById(attacks.receive_id),
         isEnemy: this.game.getSoliderEnemyById(attacks.receive_id),
         receive_sub_hp:
           attacks.receive_sub_hp ?? attacks.around?.[0]?.receive_sub_hp,
@@ -580,6 +599,7 @@ class Running extends EventTarget {
       type: desc_type,
       id,
       sender: {
+        soldier: this.game.findSoldierById(attacks.sender_id),
         isEnemy: this.game.getSoliderEnemyById(attacks.sender_id),
         pos: {
           x: attacks.sender_point?.x ?? 0,
@@ -632,6 +652,7 @@ class Running extends EventTarget {
       type: desc_type,
       id,
       sender: {
+        soldier: this.game.findSoldierById(attacks.receive_id),
         isEnemy: this.game.getSoliderEnemyById(attacks.receive_id),
         pos: {
           x: attacks.receive_point?.x ?? 0,
@@ -669,6 +690,7 @@ class Running extends EventTarget {
       type: desc_type,
       id,
       sender: {
+        soldier: this.game.findSoldierById(attacks.active_unit_id),
         isEnemy: this.game.getSoliderEnemyById(attacks.active_unit_id),
         pos: {
           x: attacks.active_unit_pos?.x ?? 0,
@@ -707,6 +729,29 @@ class Running extends EventTarget {
   ): TrackDetail[] {
     const detail = this.getDetails(attacks.detail || [], id, true);
 
+    const descInfo: DescInfo = {
+      type: desc_type,
+      id,
+      sender: {
+        soldier: this.game.findSoldierById(attacks.sender_id),
+        isEnemy: this.game.getSoliderEnemyById(attacks.sender_id),
+        pos: {
+          x: attacks.sender_point?.x ?? 0,
+          y: attacks.sender_point?.y ?? 0,
+        },
+      },
+      receives: [
+        {
+          pos: attacks.receive_point,
+          soldier: this.game.findSoldierById(attacks.receive_id),
+          isEnemy: this.game.getSoliderEnemyById(attacks.receive_id),
+          // receive_sub_hp:
+          //   attacks.receive_sub_hp ?? attacks.around?.[0]?.receive_sub_hp,
+          // now_shield: attacks.now_shield ?? attacks.around?.[0]?.now_shield,
+        },
+      ],
+    };
+
     const attack: TrackDetail[] = [
       {
         id,
@@ -722,6 +767,7 @@ class Running extends EventTarget {
           y: attacks.sender_point?.y,
         },
         detail: [],
+        descInfo,
       },
       // ...detail,
     ];

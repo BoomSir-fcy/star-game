@@ -22,6 +22,9 @@ declare namespace Api {
     }
 
     interface UnitInfo {
+      max_count: number;
+      barracks: number;
+      probability: number;
       unique_id: number; //
       race: race; // 种族
       hp: number; // 血量
@@ -55,6 +58,8 @@ declare namespace Api {
       number: number; // 兵种标识
       build_id: string; // 培养皿id 建筑id
       count: number; // 数量
+      default_unit: number; // 是否是基础兵种
+      power: number; // 战斗力
       arms_attr: {
         ak: number;
         crit: number;
@@ -103,6 +108,7 @@ declare namespace Api {
       base_unit_id: number;
       pos: Pos;
       speed: number;
+      base_unit: UnitInfo;
     }
     interface UnitPlanetRes {
       units: {
@@ -120,7 +126,9 @@ declare namespace Api {
       planet_id: number;
       units: ParamsUnit[];
     }
-
+    interface ParamsUnitSettingFast {
+      planet_id: number;
+    }
     interface ParamsUnitSettingTest {
       tag: string;
       units1: ParamsUnit[];
@@ -158,6 +166,7 @@ declare namespace Api {
       from: ParamsUnit[];
       to: ParamsUnit[];
       race: number;
+      round?: number;
     }
   }
 }

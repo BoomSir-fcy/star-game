@@ -1,17 +1,29 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Api } from 'apis';
 
-// 我的星球列表
-export const fetchMePlanetAsync = createAsyncThunk(
-  'fetch/getMePlanet',
-  async (params: Api.Planet.PageParams) => {
-    const response = await Api.PlanetApi.getMePlanet(params);
-    if (Api.isSuccess(response)) {
-      return response.data.Data || [];
+// export const fetchMePlanetAsync = createAsyncThunk(
+//   'fetch/getMePlanet',
+//   async (params: Api.Planet.PageParams) => {
+//     const response = await Api.PlanetApi.getMePlanet(params);
+//     if (Api.isSuccess(response)) {
+//       return response.data.Data || [];
+//     }
+//     return [];
+//   },
+// );
+
+export const fetchPlanetList = async (params: Api.Planet.PageParams) => {
+  try {
+    const res = await Api.PlanetApi.getMePlanet(params);
+    if (Api.isSuccess(res)) {
+      return res.data || [];
     }
     return [];
-  },
-);
+  } catch (error) {
+    console.error(`fetch fetchGalaxyList error: ${error}`);
+    return [];
+  }
+};
 
 export const fetchPlanetInfoAsync = createAsyncThunk(
   'fetch/getPlanetInfo',

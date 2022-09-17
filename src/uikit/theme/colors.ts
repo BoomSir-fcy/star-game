@@ -2,7 +2,7 @@ import { Colors, qualities, RaceType } from './types';
 
 export const baseColors = {
   failure: '#FF3A3A',
-  warning: '#FF7272',
+  warning: '#EC3838',
   profit: '#52FF83',
   blueSide: '#2CCFFF',
   redSide: '#EB5231',
@@ -63,18 +63,29 @@ export const lightColors: Colors = {
   textTips: '#7D879C',
   textSuccess: '#84FF59',
   textDanger: '#FF5353',
+  textPrimary: '#4ffffb',
   raceProtoss: '#DF7DFD',
   raceHuman: '#3dcfff',
   raceZerg: '#8ac001',
   border: '#2B2F39',
+  borderPrimary: '#4ffffb',
   goldBorder: '#8ac001',
   lightBorder: '#f9feff',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
   missTxt: '#5af3eb',
   progressGreenBar: '#64E06D',
+  progressSliderBackground: '#363941',
+  redText: '#FF3939',
+  textUp: '#3ED450',
+  white_black: '#000',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
     progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',
+    card: 'linear-gradient(270deg, #162D37, #0B1C22, #0A161B)',
+    stripe:
+      'linear-gradient(45deg, #29595b 25%, #275253 0, #275253 50%, #29595b 0, #29595b 75%, #275253 0 )',
+    stripeBg:
+      'linear-gradient(to bottom, rgb(16 36 38 / 70%) 0%, rgb(31 87 88 / 0%) 100% )',
   },
 };
 
@@ -99,17 +110,28 @@ export const darkColors: Colors = {
   textTips: '#7D879C',
   textSuccess: '#84FF59',
   textDanger: '#FF5353',
+  textPrimary: '#4ffffb',
   raceProtoss: '#DF7DFD',
   raceHuman: '#3dcfff',
   raceZerg: '#8ac001',
   border: '#2B2F39',
+  borderPrimary: '#4ffffb',
   goldBorder: '#EB9C12',
   lightBorder: '#f9feff',
   progressBar: 'linear-gradient(180deg, #26DAE1, #38327B)',
   missTxt: '#5af3eb',
   progressGreenBar: '#64E06D',
+  progressSliderBackground: '#363941',
+  redText: '#FF3939',
+  textUp: '#3ED450',
+  white_black: '#FFF',
   gradients: {
     bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',
     progress: 'linear-gradient(180deg, #1E5D7D, #27395F)',
+    card: 'linear-gradient(270deg, #162D37, #0B1C22, #0A161B)',
+    stripe:
+      'linear-gradient(45deg, #29595b 25%, #275253 0, #275253 50%, #29595b 0, #29595b 75%, #275253 0 )',
+    stripeBg:
+      'linear-gradient(to bottom, rgb(16 36 38 / 70%) 0%, rgb(31 87 88 / 0%) 100% )',
   },
 };

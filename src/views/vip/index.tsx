@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -16,14 +16,18 @@ import {
 import { useToast } from 'contexts/ToastsContext';
 import { fetchUserInfoByAccountAsync } from 'state/userInfo/reducer';
 import { useTranslation } from 'contexts/Localization';
+import { TokenImage } from 'components/TokenImage';
 import { Api } from 'apis';
 
 import { useStore } from 'state';
 import { debounce } from 'lodash';
+import { ConfirmBuyModule } from './ConfirmBuyModule';
 
-const Container = styled(BgCard)`
+const Container = styled(Box)`
   position: relative;
   padding: 47px 110px;
+  background: linear-gradient(270deg, #162d37, #0b1c22, #0a161b);
+  border: 2px solid ${({ theme }) => theme.colors.borderPrimary};
 `;
 
 const RecordBox = styled(Flex)`
@@ -51,14 +55,15 @@ const VipLevel = styled(Box)`
   width: 357px;
   height: 345px;
   top: 0;
+  z-index: 1;
 `;
 
 const VipBase = styled(Box)`
   position: absolute;
-  width: 300px;
+  width: 500px;
   height: 400px;
   bottom: -50px;
-  z-index: -1;
+  z-index: 0;
 `;
 
 const Title = styled(Text)`
@@ -88,8 +93,8 @@ const TextBox = styled(Text)`
 const Content = styled(Flex)`
   width: 100%;
   height: 500px;
-  background: #161920;
-  box-shadow: 0px 7px 3px 0px rgba(0, 0, 0, 0.35);
+  /* background: #161920; */
+  box-shadow: 0px 5px 20px 20px rgb(0 0 0 / 35%);
   border-radius: 10px;
 `;
 
@@ -131,16 +136,6 @@ const Submit = styled(Button)`
   margin: 20px auto 0;
   width: 506px;
   height: 64px;
-  border: 1px solid;
-  border-radius: 0;
-  /* background: linear-gradient(0deg, #25babe, #1c273d); */
-  border-image: linear-gradient(-29deg, #14f1fd, #1caaf4) 1 1;
-  box-shadow: 0px 0px 43px 0px #512d58;
-  border: 1px solid #182e37;
-`;
-
-const SubmitText = styled(Text)`
-  color: #25babe;
 `;
 
 const VipPage = () => {
@@ -152,6 +147,8 @@ const VipPage = () => {
     list: [],
     config: [],
   });
+
+  const [visible, setvisible] = useState(false);
 
   const getVipList = React.useCallback(async () => {
     try {
@@ -180,12 +177,14 @@ const VipPage = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setvisible(false);
     }
-  }, [dispatch, state.list, t, toastSuccess, user?.address]);
+  }, [dispatch, setvisible, state.list, t, toastSuccess, user?.address]);
 
   React.useEffect(() => {
     getVipList();
-  });
+  }, [getVipList]);
 
   return (
     <Box>
@@ -197,7 +196,6 @@ const VipPage = () => {
       >
         <Flex>
           <BackButton />
-          <RefreshButton ml='33px' />
           <RecordBox>
             <VipMarkText ml='10px' mt='10px' fontSize='24px' bold>
               VIP BENEFITS
@@ -212,7 +210,7 @@ const VipPage = () => {
           </RecordBox>
         </Flex>
       </Flex>
-      <Container variant='Fullscreen'>
+      <Container>
         <Flex>
           <IconBox>
             <VipLevel>
@@ -224,7 +222,7 @@ const VipPage = () => {
             </VipLevel>
             <VipBase>
               <Image
-                width={300}
+                width={500}
                 height={400}
                 src='/images/mystery-box/base-super.png'
               />
@@ -240,24 +238,30 @@ const VipPage = () => {
                 mb='5px'
                 style={{ flex: 1 }}
               >
-                <TextBox fontSize='16px'>
-                  {t(
-                    'You are not yet a VIP, you can get more benefits after upgrading to VIP',
-                  )}
-                </TextBox>
-                <TextBox fontSize='16px'>
-                  {t('Expire on')}
-                  {` `}
-                  {user?.vipBenefits?.is_vip
-                    ? dayjs(user?.vipBenefits?.expired_time * 1000).format(
-                        'YYYY.MM.DD',
-                      )
-                    : dayjs(
-                        (Number((new Date().getTime() / 1000).toFixed(0)) +
-                          state.list[0]?.vipDuration) *
-                          1000,
-                      ).format('YYYY.MM.DD')}
-                </TextBox>
+                <Flex>
+                  <TextBox fontSize='16px'>
+                    {t(
+                      'You are not yet a VIP, you can get more benefits after upgrading to VIP',
+                    )}
+                  </TextBox>
+                  <Button
+                    variant='text'
+                    height='max-content'
+                    onClick={() => setvisible(true)}
+                  >
+                    <TextBox color='#4FFFFB' fontSize='16px'>
+                      {t('Renewal')}
+                    </TextBox>
+                  </Button>
+                </Flex>
+                {user?.vipBenefits?.is_vip && (
+                  <TextBox fontSize='16px'>
+                    {t('Expire on')}
+                    {dayjs(user?.vipBenefits?.expired_time * 1000).format(
+                      'YYYY.MM.DD',
+                    )}
+                  </TextBox>
+                )}
               </Flex>
             </Flex>
             <Content>
@@ -278,7 +282,7 @@ const VipPage = () => {
                   </Text>
                 </Items>
                 <Items>
-                  <Text shadow='primary' small>
+                  <Text shadow='primary' small textAlign='center'>
                     {t('Simultaneous jobs (upgrades/builds)')}
                   </Text>
                 </Items>
@@ -310,7 +314,7 @@ const VipPage = () => {
                       </TView>
                     </Items>
                     <Items>
-                      <TView small>{row?.buildingQueueCapacity}个</TView>
+                      <TView small>{row?.buildingQueueCapacity}</TView>
                     </Items>
                     <Items>
                       <TView small>{row?.produceJob}</TView>
@@ -324,30 +328,59 @@ const VipPage = () => {
                     </Items>
                     <Items>
                       <TView small>{row?.planetExploreFrequency}</TView>
-                      <Text
+                      {/* <Text
                         fontSize='16px'
                         color='textSubtle'
                         textAlign='center'
                       >
                         (
                         {t(
-                          'Income: 100% for the first 3 times and 50% for the last time',
+                          'Income: 100% for the first %num% times and 50% for the last time',
+                          { num: row?.planetExploreFrequency - 1 },
                         )}
                         )
-                      </Text>
+                      </Text> */}
                     </Items>
                   </GroupItem>
                 );
               })}
             </Content>
+            {!user?.vipBenefits?.is_vip && (
+              <Flex alignItems='center' justifyContent='center' mt='10px'>
+                <TokenImage width={30} height={30} tokenAddress='BNB' />
+                <Text margin='0 10px' fontSize='22px'>
+                  BNB
+                </Text>
+                <Text shadow='primary' fontSize='22px'>
+                  $ {state.list?.[0]?.vipPrice}
+                </Text>
+              </Flex>
+            )}
             <Flex justifyContent='center'>
-              <Submit onClick={debounce(() => buyVip(), 1000)}>
-                <SubmitText>{t('Become VIP')}</SubmitText>
+              <Submit
+                variant='purple'
+                disabled={user?.vipBenefits?.is_vip}
+                onClick={() => setvisible(true)}
+              >
+                <Text bold fontSize='16px' color='#4FFFFB'>
+                  {user?.vipBenefits?.is_vip
+                    ? t('You are now a VIP!')
+                    : t('Become VIP')}
+                </Text>
               </Submit>
             </Flex>
           </Box>
         </Flex>
       </Container>
+      {visible && (
+        <ConfirmBuyModule
+          visible={visible}
+          Renewal={user?.vipBenefits?.is_vip}
+          onClose={() => setvisible(false)}
+          buy={debounce(() => buyVip(), 1000)}
+          vipPrice={state.list?.[0]?.vipPrice}
+        />
+      )}
     </Box>
   );
 };

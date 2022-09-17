@@ -1,0 +1,93 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "addr",
+				"type": "address"
+			}
+		],
+		"name": "getCoin",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "_box",
+				"type": "address"
+			},
+			{
+				"internalType": "contract IERC20",
+				"name": "_ore",
+				"type": "address"
+			},
+			{
+				"internalType": "contract IERC20",
+				"name": "_energy",
+				"type": "address"
+			},
+			{
+				"internalType": "contract IERC20",
+				"name": "_spice",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "box",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "energy",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ore",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "spice",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

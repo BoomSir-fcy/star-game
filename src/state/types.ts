@@ -51,8 +51,20 @@ export interface userProductView {
   stone: number;
   energy: number;
   population: number;
+  power: number;
 }
 
+export interface invite_reward {
+  reward: string;
+  sender: string;
+}
+export interface userInviteInfoView {
+  bnb_income: string;
+  invite_reward: invite_reward[];
+  invite_user_num: number;
+  page: number;
+  page_size: number;
+}
 export interface UserInfoState {
   userBalance: UserBalanceView[];
   infoView: UserAgentInfoView;
@@ -63,6 +75,10 @@ export interface UserInfoState {
     loading: boolean;
   };
   userProduct: userProductView;
+  zIndex: boolean; // 导航层级
+  userInviteInfo: userInviteInfoView;
+  InviteInfoEnd: boolean;
+  InviteInfoLoading: boolean;
 }
 
 export interface MysteryBoxView {
@@ -88,6 +104,8 @@ export interface MysteryBoxView {
 
 export interface MysteryBoxState {
   boxView: MysteryBoxView;
+  openBlind: boolean;
+  openBlindIds: number[];
 }
 
 export interface GalaxyInfo extends Api.Galaxy.GalaxyInfo {
@@ -97,6 +115,7 @@ export interface GalaxyInfo extends Api.Galaxy.GalaxyInfo {
   starTotal: number;
   starOwnerTotal: number;
   nickname: string;
+  power: number;
 }
 
 export interface StarLevelInfo {
@@ -116,14 +135,65 @@ export interface GalaxyState {
   currentGalaxy: GalaxyInfo;
   currentStarPeriod: StarLevelInfo;
   galaxyList: GalaxyInfo[];
-  galaxyStarList: StarLevelInfo[];
+  galaxyStarList: Api.Galaxy.StarInfo[];
   galaxyNft: GalaxyNft;
   loadingGalaxy: boolean;
   loading: boolean;
   auctionRecordList: any[];
+  auctionRecordListLoading: boolean;
+  AllLogs: AllLogsInfo[];
+  OwnerInfo: OwnerInfoView;
+  OwnerInfoLoading: boolean;
+  galaxy_total_box: number;
+  planet_total_box: number;
+  galaxyNftList: GalaxyNft[];
+  GalaxReportList: GalaxReportListView[];
 }
+
+export interface GalaxReportListView {
+  id: number;
+  battleTime: number;
+  galaxy: number;
+  number: number;
+  address: string;
+  fromAddress: string;
+  toAddress: string;
+  success: number;
+  loseUnit: number;
+  loseDurability: number;
+  power: number;
+  planetId: string;
+  detail: string;
+  name: string;
+}
+export interface OwnerInfoView {
+  hold_time: number;
+  nickname: string;
+  avatar: string;
+  owner_get_box: number;
+  all_get_box: number;
+  all_auction_num: number;
+  power: number;
+  address: string;
+}
+export interface AllLogsInfo {
+  id: number;
+  galaxyId: number;
+  nickname: string;
+  oldOwner: string;
+  newOwner: string;
+  price: number;
+  auctionAt: number;
+  addTime: number;
+  avatar: string;
+  name: string;
+}
+
 export interface PlanetState {
   mePlanet: Api.Planet.PlanetInfo[];
+  mePlanetEnd: boolean;
+  mePlanetLoading: boolean;
+  assetsVisibleModal: boolean;
   planetInfo: { [x: number]: Api.Planet.PlanetInfo };
   activePlanet: Api.Planet.PlanetInfo;
   activeMaterialMap: { [x: number]: Api.Planet.PlanetInfo | null };
@@ -135,12 +205,23 @@ export interface BuildlingState {
   selfBuildings: Api.Building.SelfBuildings;
   upgradeIds: string[];
   buildings: { [type: number]: Api.Building.Building[] };
-  destroyBuilding: boolean;
+  destroyBuilding: {
+    visible: boolean;
+    destory: any;
+  };
+  upgradesBuilding: {
+    visible: boolean;
+    upgrad: any;
+  };
   planetAssets: {
     energy: number;
     population: number;
     stone: number;
   };
+  queue: {
+    visible: boolean;
+  };
+  upgradeUnsuccessful: boolean;
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -224,6 +305,7 @@ export interface GameState {
     };
   };
   pkRes: boolean;
+  isFrom: boolean; // 是否是防守
   process: any;
   PKInfo: null | GamePkInfo[];
   state: GamePkState;
@@ -243,12 +325,15 @@ export interface UserState {
 
   isDark: boolean;
 
+  screenMode: boolean; // true为 为竖屏操作旋转屏幕
+
   scale: number; // 缩放比列
 
   client: {
     width: number;
     height: number;
   };
+  TooltipTriggerZIndex: number;
 }
 export interface State {
   user: UserState;
@@ -296,11 +381,78 @@ export interface AllianceView {
   later_extract_time: number;
   order: orderInfo[];
   energy: energyInfo;
+  max_work_count: number;
+  now_work_count: number;
+  unread_plunder_count: number;
+  message_count: number;
+  hold_planet: boolean;
+}
+
+export interface PlanetProView extends ExploreProgressPlanetDetail {
+  rarity: 1 | 2 | 3 | 4 | 5 | 6; // 品质1-6
+  picture1: string; // 星球3d材质
+}
+export interface ExploreProgressPlanetDetail {
+  energy: number;
+  level: number;
+  planet_id: number;
+  sec_energy: number;
+  sec_spices: number;
+  sec_stone: number;
+  spices: number;
+  stone: number;
+  max_energy: number;
+  max_spices: number;
+  max_stone: number;
+  protect_energy: number;
+  protect_spices: number;
+  protect_stone: number;
+}
+
+export interface plunder_infoView {
+  success: boolean;
+  stone: number;
+  energy: number;
+  spices: number;
+  address: string;
+}
+export interface arm_productView {
+  unique_id: number;
+  count: number;
+  index: string;
+  cost_stone: number;
+  cost_energy: number;
+  cost_spices: number;
+}
+export interface armsView {
+  arm_index: number;
+  race: number;
+  arm_product: arm_productView;
+  total_count: number;
+}
+
+export interface work_messageView {
+  planet_id: number;
+  time_stamp: number;
+  type: number;
+  product_stone: number;
+  product_energy: number;
+  product_spices: number;
+  arms: armsView;
+  plunder_info: plunder_infoView;
+}
+export interface ExploreProgressDateView {
+  end_time: number;
+  planet_detail: ExploreProgressPlanetDetail[];
+  work_message: work_messageView[];
+  work_time: number;
 }
 export interface AllianceState {
   allianceView: AllianceView;
   workingPlanet: number[];
   pkRecord: PkRecord;
+  DifficultyToExplore: number;
+  ExploreProgressDate: ExploreProgressDateView;
 }
 
 export interface PkRecord {
@@ -314,22 +466,41 @@ export interface PkRecord {
   loading: boolean;
 }
 
-export interface RecordInfo {
-  detail: string;
-  fromAddress: string;
+export interface PlunderInfo {
   id: number;
+  fromAddress: string;
+  toAddress: string;
+  incomeStone: number;
   incomeEnergy: number;
   incomePopulation: number;
-  incomeStone: number;
-  loseEnergy: number;
-  losePopulation: number;
-  loseStone: number;
+  success: number;
+  createTime: number;
+  detail: string;
+  blueLoseUnit: number;
   lostDurability: number;
   redLoseUnit: number;
-  success: number;
-  toAddress: string;
-  blueLoseUnit: number;
-  createTime: number;
+  loseStone: number;
+  loseEnergy: number;
+  losePopulation: number;
+}
+
+export interface RecordInfo {
+  id: number;
+  startTime: number;
+  endTime: number;
+  plunderCount: number;
+  workCount: number;
+  working: number;
+  lostDurability: number;
+  loseUnit: number;
+  loseEnergy: number;
+  loseStone: number;
+  losePopulation: number;
+  address: string;
+  getStone: number;
+  getEnergy: number;
+  getPopulation: number;
+  plunder: PlunderInfo[];
 }
 
 export enum PlanetStatus {
@@ -339,10 +510,24 @@ export enum PlanetStatus {
   BuildingsDurability = 4,
 }
 
+interface tokenToFromView {
+  fromTop: number;
+  fromLeft: number;
+  toTop: number;
+  toLeft: number;
+  token: string[];
+}
+
 export interface GuideState {
   visible: boolean;
   lastStep: number;
   pathname?: string;
+  recharge_visible: boolean;
+  toRechargeVisible: boolean;
+  errorCode: string;
+  RechargeOperationType: number;
+  buyPrice: string;
+  tokenToFrom: tokenToFromView;
 }
 
 export enum BuildingDetailType {

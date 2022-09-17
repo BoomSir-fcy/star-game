@@ -3,6 +3,7 @@ import { getAddActiveSoliderEvent } from 'game/core/event';
 import Game from 'game/core/Game';
 import Soldier from 'game/core/Soldier';
 import { getSpriteRes, getSpriteName } from 'game/core/utils';
+import { MapBaseUnits } from 'game/types';
 import { Point } from 'pixi.js';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStore } from 'state';
@@ -15,22 +16,27 @@ interface PreviewListProps {
   game: Game;
   activeSoldier: Soldier | null;
   race?: Api.Game.race;
+  unitMaps?: MapBaseUnits;
 }
 const PreviewList: React.FC<PreviewListProps> = ({
   activeSoldier,
   game,
   race = 1,
+  unitMaps = {},
 }) => {
   const units = useStore(p => p.game.baseUnits);
   const [visibleBtn, setVisibleBtn] = useState(false);
 
-  const unitMaps = useMemo(() => {
-    if (units[race]) return units[race];
-    return {};
-  }, [units, race]);
+  // const unitMaps = useMemo(() => {
+  //   if (units[race]) return units[race];
+  //   return {};
+  // }, [units, race]);
 
   const list = useMemo(() => {
-    return Object.values(unitMaps);
+    if (unitMaps) {
+      return Object.values(unitMaps);
+    }
+    return [];
   }, [unitMaps]);
 
   const [moving, setMoving] = useState(false);

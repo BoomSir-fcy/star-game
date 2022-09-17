@@ -1,14 +1,15 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { Flex, Button } from 'uikit';
+import { Flex, Button, GraphicsCard } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 
 const Container = styled(Flex)`
+  position: relative;
   width: 495px;
   height: 55px;
   padding: 0 7px;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.backgroundCard};
+  /* background-color: ${({ theme }) => theme.colors.backgroundCard};
   background-image: linear-gradient(
     45deg,
     rgba(31, 34, 40, 0.5) 25%,
@@ -19,7 +20,7 @@ const Container = styled(Flex)`
     transparent 75%,
     transparent
   );
-  background-size: 10px 10px;
+  background-size: 10px 10px; */
   border-radius: ${({ theme }) => theme.radii.card};
 `;
 
@@ -28,14 +29,14 @@ const TabsButton = styled(Button)<{ active?: boolean }>`
   height: 45px;
   font-size: 20px;
   font-weight: bold;
-  color: #ffffff;
-  ${({ active }) =>
+  color: ${({ theme }) => theme.colors.textPrimary};
+  /* ${({ active }) =>
     active &&
     css`
       border-radius: 10px;
       background: url(/images/commons/btn/blue-round.png) no-repeat;
       background-size: auto auto;
-    `}
+    `} */
 `;
 
 export const PlanetRaceTabs: React.FC<{
@@ -64,18 +65,25 @@ export const PlanetRaceTabs: React.FC<{
   ];
 
   return (
-    <Container>
-      {raceArr.map(({ id, label }) => (
-        <TabsButton
-          key={id}
-          scale='sm'
-          variant='text'
-          active={current === id}
-          onClick={() => callBack(id)}
-        >
-          {label}
-        </TabsButton>
-      ))}
-    </Container>
+    <GraphicsCard
+      style={{ padding: 0 }}
+      width='max-content'
+      height='max-content'
+      stripe
+    >
+      <Container>
+        {raceArr.map(({ id, label }) => (
+          <TabsButton
+            key={id}
+            scale='sm'
+            variant={current === id ? 'purple' : 'text'}
+            active={current === id}
+            onClick={() => callBack(id)}
+          >
+            {label}
+          </TabsButton>
+        ))}
+      </Container>
+    </GraphicsCard>
   );
 };

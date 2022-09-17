@@ -1,40 +1,83 @@
 import React, { useEffect, useMemo } from 'react';
-import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import styled, { createGlobalStyle } from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Flex, BgCard, Image, TweenText } from 'uikit';
+import { Flex, Box, Image, TweenText } from 'uikit';
 
 import eventBus from 'utils/eventBus';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'state';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { useFetchUserBalance, useFetchUserProduct } from 'state/userInfo/hooks';
+
 import Avatar from './Avatar';
 import Info from './Info';
-import { ButtonGroupProps } from './ButtonGroup';
+import TokenInfo from './TokenInfo';
+import ButtonGroup, { ButtonGroupProps } from './ButtonGroup';
 
-import { getHideHeader } from './config';
+import { getHideFooter, getHideHeader } from './config';
+import HandleButtonGroup from './HandleButtonGroup';
+import BattleReport from './BattleReport';
 
-const FlexStyled = styled(Flex)`
-  background: url('/images/commons/dashboard/b1.png');
+interface ScaleProps {
+  scale: number;
+  index: boolean;
+}
+const FlexStyled = styled(Flex)<ScaleProps>`
+  /* background: url('/images/commons/dashboard/b1.png'); */
   background-size: 100% 100%;
   width: 100%;
   height: 295px;
   margin-bottom: 30px;
+  transform: ${({ scale }) => `scale(${scale})`};
 `;
 
-const Dashboard: React.FC<ButtonGroupProps> = ({
+const BoxRightTop = styled(Box)<ScaleProps>`
+  position: fixed;
+  top: 15px;
+  right: 0;
+  transform: ${({ scale }) => `scale(${scale})`};
+  transform-origin: top right;
+  ${({ index }) => index && `z-index: 99;`}
+`;
+
+const FlexLeftTop = styled(Flex)<ScaleProps>`
+  position: fixed;
+  transform: ${({ scale }) => `scale(${scale})`};
+  left: 0;
+  transform-origin: top left;
+  ${({ index }) => index && `z-index: 99;`}
+`;
+
+const BoxRightBottom = styled(Box)<ScaleProps>`
+  position: fixed;
+  right: 0;
+  transform: ${({ scale }) => `scale(${scale})`};
+  transform-origin: bottom right;
+  bottom: 15px;
+  ${({ index }) => index && `z-index: 99;`}
+`;
+
+const UpdateIndex = createGlobalStyle`
+  .mini-swap-Modal__Body--open  .mini-swap-Modal__Body--update{
+    z-index: 0 !important;
+  }
+`;
+
+interface DashboardProps extends ButtonGroupProps {
+  scale: number;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({
   onRefresh,
   children,
   className,
+  scale,
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { t } = useTranslation();
   const params = useParsedQueryString();
-
-  const { fetch: FetchBlance } = useFetchUserBalance();
-  const { fetch: FetchProduct } = useFetchUserProduct();
+  const navigate = useNavigate();
 
   const onRefreshClick = () => {
     eventBus.dispatchEvent(new MessageEvent('onRefresh'));
@@ -46,37 +89,89 @@ const Dashboard: React.FC<ButtonGroupProps> = ({
   // }, [location.pathname, FetchBlance, FetchProduct]);
 
   const Product = useStore(p => p.userInfo.userProduct);
+  const zIndex = useStore(p => p.userInfo.zIndex);
 
   const hideHeader = useMemo(() => {
     return getHideHeader(location.pathname) || params?.hide;
   }, [location.pathname, params]);
 
+  const hideFooter = useMemo(() => {
+    return getHideFooter(location.pathname) || params?.hide;
+  }, [location.pathname, params]);
+
+  const onBackClick = React.useCallback(() => {
+    const starPath = [
+      // '/star',
+      // '/star/upgrade',
+      // '/star/grow',
+      // '/star/embattle',
+      // '/star/embattle-test',
+      '/plunder-result',
+      // '/upgrade-list',
+    ];
+    if (starPath.indexOf(location.pathname) > -1) {
+      navigate(-2);
+    } else {
+      navigate(-1);
+    }
+  }, [location.pathname, navigate]);
   return (
     <>
+      <UpdateIndex />
       {!hideHeader && (
-        <FlexStyled>
-          <Avatar />
-          <Flex flex={1}>
-            <Info onRefresh={() => onRefreshClick()} className={className}>
-              {/* {location.pathname === '/mystery-box' && !Product.planet_num && (
-                <BgCard variant='short'>
-                  <Flex alignItems='center' height='100%' width='100%'>
-                    <TweenText
-                      width='100%'
-                      textAlign='center'
-                      fontSize='22px'
-                      to={t(
-                        "You don't have a planet yet, please acquire a planet to start your Galaxy journey",
-                      )}
-                      shadow='primary'
-                    />
-                  </Flex>
-                </BgCard>
-              )} */}
-              {children}
-            </Info>
-          </Flex>
-        </FlexStyled>
+        <>
+          <FlexLeftTop
+            className='mini-swap-Modal__Body--update'
+            scale={scale}
+            index={zIndex}
+          >
+            <Avatar />
+            <TokenInfo />
+            <BattleReport />
+          </FlexLeftTop>
+          <BoxRightTop
+            className='mini-swap-Modal__Body--update'
+            scale={scale}
+            index={zIndex}
+          >
+            <HandleButtonGroup
+              onRefresh={onRefreshClick}
+              onBack={onBackClick}
+            />
+          </BoxRightTop>
+          {!hideFooter && (
+            <BoxRightBottom
+              className='mini-swap-Modal__Body--update'
+              scale={scale}
+              index={zIndex}
+            >
+              <ButtonGroup />
+            </BoxRightBottom>
+          )}
+
+          {/* <FlexStyled scale={scale}>
+            <Flex flex={1}>
+              <Info onRefresh={() => onRefreshClick()} className={className}>
+                {location.pathname === '/mystery-box' && !Product.planet_num && (
+                  <BgCard variant='short'>
+                    <Flex alignItems='center' height='100%' width='100%'>
+                      <TweenText
+                        width='100%'
+                        textAlign='center'
+                        fontSize='22px'
+                        to={t(
+                          "You don't have a planet yet, please acquire a planet to start your Galaxy journey",
+                        )}
+                        shadow='primary'
+                      />
+                    </Flex>
+                  </BgCard>
+                )}
+                {children}
+              </Info>
+            </Flex>
+          </FlexStyled> */}
+        </>
       )}
     </>
   );

@@ -20,6 +20,7 @@ import {
 import LinearMove from './LinearMove';
 import loaders from './Loaders';
 import { SpeederType } from '../types';
+import type Running from './Running';
 
 export interface GameOptionsProps {
   height?: number;
@@ -29,6 +30,7 @@ export interface GameOptionsProps {
   enableSoliderDrag?: boolean;
   offsetStartX?: number;
   offsetStartY?: number;
+  scale?: number;
 }
 /**
  * 游戏入口
@@ -45,12 +47,21 @@ class Game extends EventTarget {
       enableSoliderDrag = true,
       offsetStartY,
       offsetStartX,
+      scale = 1,
     } = options || {};
-    const _width = width || config.WIDTH;
-    const _height = height || config.HEIGHT;
+
+    const { clientHeight, clientWidth } = window.document.body;
+
+    let _width = width || config.WIDTH;
+    let _height = height || config.HEIGHT;
+    const screenRota = clientHeight > clientWidth;
+    if (screenRota) {
+      _height = width || config.WIDTH;
+      _width = height || config.HEIGHT;
+    }
     this.boards = new Boards({
-      width,
-      height,
+      width: _width,
+      height: _height,
       test,
       enableDrag,
       offsetStartX,
@@ -64,6 +75,16 @@ class Game extends EventTarget {
       backgroundAlpha: test ? 0.5 : 0,
     });
     this.enableSoliderDrag = enableSoliderDrag;
+    this.app.stage.scale.set(scale);
+    if (screenRota) {
+      this.app.stage.rotation = Math.PI / 2;
+      this.app.stage.position.set(
+        (_width + _height) / 2,
+        (_height - _width) / 2,
+      );
+    }
+    // this.app.stage.anchor = 0.2;
+
     // 添加棋盘
     this.app.stage.addChild(this.boards.container);
     // 绑定缩放
@@ -83,7 +104,7 @@ class Game extends EventTarget {
 
   app: Application;
 
-  boards;
+  boards: Boards;
 
   boardsCreated = false;
 
@@ -104,6 +125,8 @@ class Game extends EventTarget {
   activeSolider?: Soldier; // 当前选中小人
 
   activeSoliderFlag?: boolean; // 表示事件触发源未activeSolider
+
+  running?: Running;
 
   private lastCreateSoldierId = '';
 
@@ -130,13 +153,21 @@ class Game extends EventTarget {
     this.addEventListenerOfWindow();
   }
 
+  setRunning(running: Running) {
+    if (this.running) {
+      this.running.pause();
+      delete this.running;
+    }
+    this.running = running;
+  }
+
   loadResources() {
     this.loaders.loadSpineAll();
     return this.loaders;
   }
 
-  creatTerrain(TerrainInfo?: Api.Game.TerrainInfo[]) {
-    this.boards.drawChequers(this.test, TerrainInfo);
+  creatTerrain(col?: number, row?: number) {
+    this.boards.drawChequers(col, row);
     this.boardsCreated = true;
     this.dispatchEvent(new Event('boardsCreated'));
   }
@@ -160,12 +191,13 @@ class Game extends EventTarget {
   // 添加小人
   addSoldier(soldier: Soldier) {
     this.soldiers.push(soldier);
-    this.boards.container.sortableChildren = true;
-    this.boards.container.zIndex = 1;
-    this.boards.container.addChild(soldier.container);
+    this.boards.solderContainer.sortableChildren = true;
+    this.boards.solderContainer.zIndex = 1;
+    this.boards.solderContainer.addChild(soldier.container);
     soldier.container
       .on('pointerdown', () => {
-        this.showSameSoliderState(soldier);
+        // this.showSameSoliderState(soldier);
+        soldier.changeState(stateType.ACTIVE, true);
         soldier.setMoved(false);
       })
       .on('pointermove', event => {
@@ -188,6 +220,7 @@ class Game extends EventTarget {
         this.activeSolider = soldier;
         soldier.changeState(stateType.ACTIVE, true);
         this.dispatchEvent(getAddActiveSoliderEvent(soldier));
+        soldier.updateZIndex();
       })
       .on('click', (e: InteractionEvent) => {
         this.activeSoliderFlag = true;
@@ -237,7 +270,7 @@ class Game extends EventTarget {
   // 从棋盘上移除小人
   removeSoldier(soldier: Soldier) {
     this.soldiers = this.soldiers.filter(item => item !== soldier);
-    this.boards.container.removeChild(soldier.container);
+    this.boards.solderContainer.removeChild(soldier.container);
     soldier.changeState(stateType.PREVIEW, false);
     this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
     this.removeActiveSolider();
@@ -247,10 +280,16 @@ class Game extends EventTarget {
   clearSoldier() {
     this.soldiers.forEach(item => {
       item.changeState(stateType.PREVIEW, false);
-      this.boards.container.removeChild(item.container);
+      this.boards.solderContainer.removeChild(item.container);
     });
     this.soldiers = [];
     this.dispatchEvent(getUpdateSoldierPosition(this.soldiers));
+    this.clearBullet();
+  }
+
+  // 清空所有子弹及效果
+  clearBullet() {
+    this.boards.solderContainer.removeChildren();
   }
 
   setEnableDrag(state: boolean) {
@@ -264,6 +303,11 @@ class Game extends EventTarget {
     ) as Chequer;
     if (chequer) {
       this.createSoldier(chequer.axisX, chequer.axisY, { ...options });
+      this.dispatchEvent(
+        new CustomEvent('updateSoldierPosition', {
+          detail: { soldiers: this.soldiers },
+        }),
+      );
     }
   }
 
@@ -369,7 +413,12 @@ class Game extends EventTarget {
    * @param option 参数
    * @returns 小人
    */
-  createSoldier(_x: number, _y: number, option: AttrSoldierOptions) {
+  createSoldier(
+    _x: number,
+    _y: number,
+    option: AttrSoldierOptions,
+    enableDrag?: boolean,
+  ) {
     const axis = this.getAxis(_x, _y);
     let zIndex = 0;
     if (axis) {
@@ -382,12 +431,13 @@ class Game extends EventTarget {
       y: axis.y - 1000,
       axisPoint: axis,
       zIndex,
+      enableDrag,
     });
 
     this.addSoldier(soldier);
 
     // 小人从天而降
-    soldier.changeState(stateType.PREVIEW, true);
+    soldier.changeState(stateType.ACTIVE, true);
     const point0 = new Point(axis.x, axis.y - 1000) as AxisPoint;
     const point1 = new Point(axis.x, axis.y) as AxisPoint;
 

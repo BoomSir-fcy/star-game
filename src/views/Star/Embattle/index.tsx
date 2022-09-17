@@ -11,7 +11,15 @@ import 'intro.js/introjs.css';
 
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Button, Text, Flex, Image } from 'uikit';
+import {
+  Box,
+  Button,
+  Text,
+  Flex,
+  Image,
+  GraphicsCard,
+  BalanceText,
+} from 'uikit';
 import { useGuide } from 'hooks/useGuide';
 import config from 'game/config';
 import { Api } from 'apis';
@@ -26,6 +34,12 @@ import { useTranslation } from 'contexts/Localization';
 import useGame from 'game/hooks/useGame';
 import { useStore, storeAction } from 'state';
 import { useDispatch } from 'react-redux';
+import {
+  fetchGamePlanetUnitsAsync,
+  fetchUnitListAsync,
+  setEmptyPlantUnits,
+  setEmptyUnits,
+} from 'state/game/reducer';
 import Game from 'game/core/Game';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import PreviewList from './components/PreviewList';
@@ -33,6 +47,7 @@ import Preview from './components/Preview';
 import SortBoard, { SortSoldier } from './components/SortBoard';
 import useUpdatePos from './hooks/useUpdatePos';
 import useActiveSoldier from './hooks/useActiveSoldier';
+import { ArmsInfo } from '../components/arms';
 
 // const game = new Game();
 
@@ -62,7 +77,7 @@ const moveKeyframes = keyframes`
     opacity:1;    
   }
   100% {
-  transform: translate(100px, -100px);
+  transform: translate(-155px, -100px);
   opacity: 0.5;    
   
     
@@ -72,7 +87,7 @@ const moveKeyframes = keyframes`
 const ArrowBox = styled(Box)`
   animation: ${moveKeyframes} 2s linear infinite;
   & img {
-    transform: rotate(-45deg);
+    transform: rotate(-155deg);
   }
 `;
 
@@ -88,8 +103,17 @@ const Embattle = () => {
 
   const game = useGame({ width: 1600, offsetStartX: -330 });
 
+  const [CanCreate, setCanCreate] = useState(false);
+
   useEffect(() => {
-    game.creatTerrain(); // 创建地形
+    dispatch(setEmptyUnits({}));
+    setTimeout(() => {
+      setCanCreate(true);
+    }, 100);
+  }, [dispatch]);
+
+  useEffect(() => {
+    game.creatTerrain(4, 8); // 创建地形
   }, [game]);
 
   // const race = Number(parsedQs.race) as Api.Game.race;
@@ -107,12 +131,12 @@ const Embattle = () => {
   const race = info?.race as Api.Game.race;
   useFetchUnitList(race, info?.id);
 
-  const baseUnits = useStore(p => p.game.baseUnits);
+  // const baseUnits = useStore(p => p.game.baseUnits);
 
-  const unitMaps = useMemo(() => {
-    if (baseUnits[race]) return baseUnits[race];
-    return null;
-  }, [baseUnits, race]);
+  // const unitMaps = useMemo(() => {
+  //   if (baseUnits[race]) return baseUnits[race];
+  //   return null;
+  // }, [baseUnits, race]);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -122,31 +146,79 @@ const Embattle = () => {
     }
   }, [ref, game]);
 
-  const { gameSoldiers, setSortSoldiers } = useUpdatePos(planetId, game);
+  const { gameSoldiers, setSortSoldiers, handleUpdate, OneClickDeployment } =
+    useUpdatePos(planetId, game);
 
   const activeSoldier = useActiveSoldier(game);
+
+  const activeNum = useCallback(
+    id => {
+      return gameSoldiers.filter(item => item.soldier.id === id)?.length || 0;
+    },
+    [gameSoldiers],
+  );
+
+  const UseSoldierNum = useCallback(
+    (item: Api.Game.UnitInfo) => {
+      // return `${activeNum(item?.unique_id)}/${
+      //   item?.barracks === 1 && item?.probability === -1 ? '6' : item?.count
+      // }`;
+      return `${gameSoldiers.length}/6`;
+    },
+    [gameSoldiers],
+  );
 
   const createSoldiers = useCallback(
     (poses: Api.Game.UnitPlanetPos[]) => {
       poses.forEach(item => {
         game.createSoldier(item.pos.x, item.pos.y, {
-          srcId: `${unitMaps?.[item.base_unit_id]?.index}`,
+          srcId: `${item?.base_unit.index}`,
           race,
           id: item.base_unit_id,
           unique_id: item.base_unit_id,
-          unitInfo: unitMaps?.[item.base_unit_id],
+          unitInfo: { ...item?.base_unit },
+          activeCountText: UseSoldierNum(item?.base_unit),
+          noHp: true,
         });
       });
     },
-    [unitMaps, race, game],
+    [race, game, UseSoldierNum],
   );
 
   useEffect(() => {
-    if (plantUnits[planetId] && unitMaps && game.soldiers.length === 0) {
+    // 更新棋盘上显示的士兵可摆放数量
+    if (gameSoldiers.length && plantUnits[planetId]) {
+      gameSoldiers.forEach(item => {
+        const unitInfoObj = plantUnits[planetId].filter(
+          obj => obj?.base_unit?.unique_id === item?.soldier?.unique_id,
+        );
+
+        item.soldier.upDateActiveCountText(
+          UseSoldierNum(unitInfoObj[0]?.base_unit),
+        );
+      });
+    }
+  }, [plantUnits, planetId, gameSoldiers, UseSoldierNum]);
+
+  useEffect(() => {
+    if (
+      plantUnits[planetId] &&
+      game.soldiers.length === 0 &&
+      CanCreate &&
+      race
+    ) {
       createSoldiers(plantUnits[planetId]);
       setSortSoldiers(game.soldiers);
     }
-  }, [plantUnits, planetId, unitMaps, createSoldiers, setSortSoldiers, game]);
+  }, [
+    plantUnits,
+    race,
+    planetId,
+    createSoldiers,
+    setSortSoldiers,
+    game,
+    CanCreate,
+  ]);
 
   const location = useLocation();
   const { guides, setGuide } = useGuide(location.pathname);
@@ -191,17 +263,39 @@ const Embattle = () => {
         ),
         interactive: true,
       },
-      // {
-      //   element: '.star-embattle-step6',
-      //   intro: t(
-      //     'All right, deployment is over! Here is the order of attack in combat.',
-      //   ),
-      // },
+      {
+        element: '.star-embattle-step6',
+        intro: t(
+          'Well, the latest combat effectiveness will be displayed after deployment! Click and finish to end the deployment.',
+        ),
+      },
     ],
     [t],
   );
 
   const [arrowShow, setArrowShow] = useState(false);
+
+  const totalPower = useMemo(() => {
+    return gameSoldiers.reduce((prev, curr) => {
+      return prev + (curr.soldier.options?.unitInfo?.power || 0);
+    }, 0);
+  }, [gameSoldiers]);
+
+  const removeHandle = useCallback(async () => {
+    if (activeSoldier) {
+      if (game.soldiers.length === 1) {
+        dispatch(setEmptyPlantUnits({}));
+      }
+      game.removeSoldier(activeSoldier);
+      if (game.soldiers.length === 1) {
+        dispatch(fetchGamePlanetUnitsAsync(planetId));
+        dispatch(fetchUnitListAsync(race, info?.id));
+      }
+      // handleUpdate();
+    }
+  }, [activeSoldier, game, planetId, race, info?.id, dispatch]);
+
+  const { screenMode } = useStore(p => p.user);
 
   return (
     <Box className='star-embattle-step5' position='relative'>
@@ -225,7 +319,6 @@ const Embattle = () => {
               } else if (currentStep > 5) {
                 setArrowShow(false);
               }
-              console.log(currentStep, guides.step);
               if (currentStep > guides.step) {
                 setGuide(currentStep);
               }
@@ -247,7 +340,7 @@ const Embattle = () => {
           />
         </>
       )}
-      <Box position='absolute' top={0} left={0} width={200}>
+      {/* <Box position='absolute' top={0} left={0} width={200}>
         <Button onClick={() => game.clearSoldier()}>
           <Text fontSize='20px'>Clear All</Text>
         </Button>
@@ -257,6 +350,53 @@ const Embattle = () => {
             {gameSoldiers.length}/{config.MAX_SOLDIER_COUNT}
           </Text>
         </Flex>
+      </Box> */}
+      <Box position='absolute' bottom={0} left={0}>
+        <GraphicsCard
+          className='star-embattle-step6'
+          width='740px'
+          height='75px'
+          padding={0}
+        >
+          <Flex
+            alignItems='center'
+            justifyContent='space-between'
+            height='100%'
+            width='100%'
+          >
+            <Flex alignItems='center'>
+              <Text margin='0 32px'>{t('Total Power')}</Text>
+              <Text bold fontSize='34px' paddingRight={10} mark>
+                {totalPower}
+              </Text>
+            </Flex>
+            <Flex>
+              <Button
+                onClick={() => handleUpdate()}
+                width='130px'
+                height='45px'
+                variant='purple'
+              >
+                <Text fontSize='18px' color='textPrimary' bold>
+                  {t('Complete')}
+                </Text>
+              </Button>
+              <Button
+                onClick={() => OneClickDeployment(race)}
+                ml='16px'
+                width='160px'
+                height='45px'
+                variant='purple'
+                padding='0 10px'
+                mr='16px'
+              >
+                <Text color='textPrimary' bold>
+                  {t('Smart Deploy')}
+                </Text>
+              </Button>
+            </Flex>
+          </Flex>
+        </GraphicsCard>
       </Box>
       <Box
         position='absolute'
@@ -267,14 +407,30 @@ const Embattle = () => {
         className='star-embattle-step0'
         zIndex={-1}
       />
-      <Box ref={ref} />
+      <Box position='relative' width={1600} height={720}>
+        <Box
+          position='absolute'
+          top={screenMode ? 0 : (720 - 1600) / 2}
+          left={screenMode ? 0 : (1600 - 720) / 2}
+          className={screenMode ? '' : 'reverse-rotate'}
+          ref={ref}
+        />
+      </Box>
+      <ArmsInfo
+        className='star-embattle-step4'
+        armsData={{ game_base_unit: activeSoldier?.options?.unitInfo }}
+        sid={activeSoldier?.options?.unitInfo?.number}
+        right='0'
+        removeHandle={removeHandle}
+      />
+
       <Flex
         style={{ userSelect: 'none' }}
         position='absolute'
         top='0'
         right='18px'
       >
-        <Preview game={game} activeSoldier={activeSoldier} />
+        {/* <Preview game={game} activeSoldier={activeSoldier} /> */}
         {/* <SortBoard
           className='star-embattle-step6'
           sortSoldiers={gameSoldiers}
@@ -290,8 +446,8 @@ const Embattle = () => {
       <Box
         style={{ userSelect: 'none' }}
         position='absolute'
-        top='490px'
-        left='0'
+        bottom='0'
+        right='0'
       >
         {/* <Box position='absolute' top='-80px'>
           <Button
@@ -317,10 +473,11 @@ const Embattle = () => {
       {arrowShow && (
         <ArrowBox
           position='absolute'
-          top={400}
-          left={100}
+          top={480}
+          left={800}
           width={200}
           height={200}
+          zIndex={99}
         >
           <Image
             width={200}

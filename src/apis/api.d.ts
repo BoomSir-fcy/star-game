@@ -2,6 +2,7 @@ declare namespace Api {
   interface Error {
     code: number;
     msg: string;
+    message: string;
   }
 
   interface Response<T> {

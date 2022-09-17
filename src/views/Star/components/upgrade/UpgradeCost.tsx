@@ -35,66 +35,74 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
   const { t } = useTranslation();
 
   return (
-    <Flex flexDirection='column'>
-      <Text bold fontSize='20px' shadow='primary'>
-        {t('Upgrade consumption')}
-      </Text>
-      <Flex flexWrap='wrap'>
-        <ItemFlex>
-          <StyledImage
-            width={57}
-            height={53}
-            src='/images/commons/icon/icon_minera.png'
-          />
-          <ItemInfoFlex>
-            <Text small color='textSubtle'>
-              {t('Ore')}
-            </Text>
+    <Flex>
+      <ItemFlex>
+        <StyledImage
+          width={35}
+          height={39}
+          src='/images/commons/icon/icon_minera.png'
+        />
+        <ItemInfoFlex>
+          <Text small color='textSubtle'>
+            {t('Ore')}
+          </Text>
+          <Flex>
             <Text
-              fontSize='22px'
-              color={planetInfo?.stone < stone ? 'warning' : ''}
+              small
+              color={planetInfo?.stone < stone ? 'warning' : 'progressGreenBar'}
             >
-              -{stone}
+              {stone}
             </Text>
-          </ItemInfoFlex>
-        </ItemFlex>
-        <ItemFlex>
-          <StyledImage
-            width={57}
-            height={53}
-            src='/images/commons/icon/icon_spice.png'
-          />
-          <ItemInfoFlex>
-            <Text small color='textSubtle'>
-              {t('Population')}
-            </Text>
+            <Text small>/{planetInfo?.stone}</Text>
+          </Flex>
+        </ItemInfoFlex>
+      </ItemFlex>
+      <ItemFlex>
+        <StyledImage
+          width={35}
+          height={39}
+          src='/images/commons/icon/icon_energy.png'
+        />
+        <ItemInfoFlex>
+          <Text small color='textSubtle'>
+            {t('Energy')}
+          </Text>
+          <Flex>
             <Text
-              fontSize='22px'
-              color={planetInfo?.population < spices ? 'warning' : ''}
+              small
+              color={
+                planetInfo?.energy < energy ? 'warning' : 'progressGreenBar'
+              }
             >
-              -{spices}
+              {energy}
             </Text>
-          </ItemInfoFlex>
-        </ItemFlex>
-        <ItemFlex>
-          <StyledImage
-            width={57}
-            height={53}
-            src='/images/commons/icon/icon_energy.png'
-          />
-          <ItemInfoFlex>
-            <Text small color='textSubtle'>
-              {t('Energy')}
-            </Text>
+            <Text small>/{planetInfo?.energy}</Text>
+          </Flex>
+        </ItemInfoFlex>
+      </ItemFlex>
+      <ItemFlex>
+        <StyledImage
+          width={35}
+          height={39}
+          src='/images/commons/icon/icon_spice.png'
+        />
+        <ItemInfoFlex>
+          <Text small color='textSubtle'>
+            {t('Population')}
+          </Text>
+          <Flex>
             <Text
-              fontSize='22px'
-              color={planetInfo?.energy < energy ? 'warning' : ''}
+              small
+              color={
+                planetInfo?.population < spices ? 'warning' : 'progressGreenBar'
+              }
             >
-              -{energy}
+              {spices}
             </Text>
-          </ItemInfoFlex>
-        </ItemFlex>
-      </Flex>
+            <Text small>/{planetInfo?.population}</Text>
+          </Flex>
+        </ItemInfoFlex>
+      </ItemFlex>
     </Flex>
   );
 };

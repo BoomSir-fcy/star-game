@@ -1,11 +1,23 @@
 import Soldier from 'game/core/Soldier';
 import { Api } from 'apis';
 import Game from 'game/core/Game';
+import { useToast } from 'contexts/ToastsContext';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'contexts/Localization';
+import { useDispatch } from 'react-redux';
+import {
+  fetchGamePlanetUnitsAsync,
+  fetchUnitListAsync,
+  setEmptyUnits,
+} from 'state/game/reducer';
 import { SortSoldier } from '../components/SortBoard';
 
 const useUpdatePos = (planetId: number, game: Game) => {
   const [gameSoldiers, setGameSoldiers] = useState<SortSoldier[]>([]);
+
+  const { toastSuccess, toastError } = useToast();
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const setSortSoldiers = useCallback(
     soldiers => {
@@ -23,9 +35,34 @@ const useUpdatePos = (planetId: number, game: Game) => {
     [setGameSoldiers],
   );
 
+  const OneClickDeployment = useCallback(
+    async (race: number) => {
+      try {
+        const res = await Api.GameApi.gameUnitSettingFast({
+          planet_id: planetId,
+        });
+        if (Api.isSuccess(res)) {
+          dispatch(setEmptyUnits({}));
+          game.clearSoldier();
+          dispatch(fetchUnitListAsync(race, planetId));
+          dispatch(fetchGamePlanetUnitsAsync(planetId));
+          toastSuccess(t('Deploy Succeeded'));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [t, planetId, toastSuccess, dispatch, game],
+  );
+
   const handleUpdate = useCallback(
-    async (event: any) => {
-      const { soldiers } = event.detail as { soldiers: Soldier[] };
+    async (noToast?: boolean) => {
+      const { soldiers } = game;
+      if (soldiers.length < 6) {
+        toastError(t('The board must be filled with 6 soldiers to save'));
+        return;
+      }
+      // const { soldiers } = event.detail as { soldiers: Soldier[] };
       const MAX = 64;
       const units = soldiers.map((item, index) => {
         return {
@@ -45,24 +82,39 @@ const useUpdatePos = (planetId: number, game: Game) => {
         planet_id: planetId,
       });
       if (Api.isSuccess(res)) {
-        setSortSoldiers(game.soldiers);
+        // setSortSoldiers(game.soldiers);
+        if (!noToast) {
+          toastSuccess(t('Deploy Succeeded'));
+        }
       } else {
-        game.removeSoldier(game.soldiers[game.soldiers.length - 1]);
+        // game.removeSoldier(game.soldiers[game.soldiers.length - 1]);
       }
     },
-    [planetId, game, setSortSoldiers],
+    [planetId, game, t, toastSuccess, toastError],
+  );
+
+  const onUpdate = useCallback(
+    async (event: any) => {
+      // const { soldiers } = game;
+      const { soldiers } = event.detail as { soldiers: Soldier[] };
+      setSortSoldiers(soldiers);
+      // handleUpdate();
+    },
+    [setSortSoldiers],
   );
 
   useEffect(() => {
-    game.addEventListener('updateSoldierPosition', handleUpdate);
+    game.addEventListener('updateSoldierPosition', onUpdate);
     return () => {
-      game.removeEventListener('updateSoldierPosition', handleUpdate);
+      game.removeEventListener('updateSoldierPosition', onUpdate);
     };
-  }, [handleUpdate, game]);
+  }, [onUpdate, game]);
 
   return {
     gameSoldiers,
     setSortSoldiers,
+    handleUpdate,
+    OneClickDeployment,
   };
 };
 

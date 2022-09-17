@@ -15,19 +15,30 @@ const StyledImage = styled(Image)`
 `;
 
 export const BuildingValue: React.FC<{
-  itemData: Api.Building.Building;
+  itemData: Api.Building.BuildingDetail;
   planet_id?: number;
   title: string;
   value: string;
   addedValue?: number;
   icon: string;
   isRepair?: boolean;
+  onClose?: () => void;
 }> = React.memo(
-  ({ itemData, planet_id, title, value, addedValue, icon, isRepair }) => {
+  ({
+    itemData,
+    planet_id,
+    title,
+    value,
+    addedValue,
+    icon,
+    isRepair,
+    onClose,
+  }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
     const getSelfBuilding = () => {
+      onClose();
       dispatch(fetchPlanetBuildingsAsync(planet_id));
       dispatch(fetchPlanetInfoAsync([planet_id]));
     };

@@ -49,3 +49,11 @@ export interface BorderCardProps
   isActive?: boolean;
   borderWidth?: number;
 }
+
+export interface GraphicsCardProps extends CardProps {
+  width?: string;
+  height?: string;
+  isRadius?: boolean;
+  stripe?: boolean;
+  borderWidth?: number;
+}

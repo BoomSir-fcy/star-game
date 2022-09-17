@@ -13,7 +13,7 @@ const Container = styled(Box)<{ show: boolean }>`
   background-color: #161920;
   width: 208px;
   height: 208px;
-  top: 0;
+  /* top: 0; */
   transition: 0.3s all;
   transform: translateX(-215px);
   visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
@@ -67,7 +67,7 @@ const MiniRaceAni: React.FC<{
     (slot: RoundsProps) => {
       const run = new Running(game, slot);
       setRunning(run);
-      run.play();
+      run.run();
     },
     [game, setRunning],
   );

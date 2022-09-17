@@ -21,17 +21,22 @@ export const usePK = (game: Game) => {
     ) => {
       let soldier: Soldier | null = null;
       poses?.forEach(item => {
-        soldier = game.createSoldier(item.pos.x, item.pos.y, {
-          srcId: `${base[item.base_unit_id]?.index}`,
-          race: base[item.base_unit_id]?.race || 1,
-          id: item.base_unit_id,
-          sid: ids[`${item.pos.x}${item.pos.y}`],
-          hp: base[item.base_unit_id]?.hp,
-          isEnemy,
-          enableDrag: false,
-          unique_id: item.base_unit_id,
-          unitInfo: base[item.base_unit_id],
-        });
+        soldier = game.createSoldier(
+          item.pos.x,
+          item.pos.y,
+          {
+            srcId: `${base[item.base_unit_id]?.index}`,
+            race: base[item.base_unit_id]?.race || 1,
+            id: item.base_unit_id,
+            sid: ids[`${item.pos.x}${item.pos.y}`],
+            hp: base[item.base_unit_id]?.hp,
+            isEnemy,
+            enableDrag: false,
+            unique_id: item.base_unit_id,
+            unitInfo: base[item.base_unit_id],
+          },
+          false,
+        );
       });
       return soldier;
     },
@@ -39,22 +44,42 @@ export const usePK = (game: Game) => {
   );
 
   const initHandle = useCallback(
-    (PKInfo: GamePkInfo) => {
+    (PKInfo: GamePkInfo, isFrom?: boolean) => {
       const ids: idMap = {};
       Object.keys(PKInfo?.init?.ids).forEach(id => {
         const { x, y } = PKInfo.init.ids[id];
         ids[`${x}${y}`] = id;
       });
 
-      createSoldiers(PKInfo.init.blue_units, PKInfo.init.base_unit, ids, false);
-      createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
+      if (isFrom) {
+        createSoldiers(
+          PKInfo.init.blue_units,
+          PKInfo.init.base_unit,
+          ids,
+          false,
+        );
+        createSoldiers(PKInfo.init.red_units, PKInfo.init.base_unit, ids, true);
+      } else {
+        createSoldiers(
+          PKInfo.init.red_units,
+          PKInfo.init.base_unit,
+          ids,
+          false,
+        );
+        createSoldiers(
+          PKInfo.init.blue_units,
+          PKInfo.init.base_unit,
+          ids,
+          true,
+        );
+      }
       game.once('lastSoldierCreated', (event: Event) => {
         const _running = new Running(game, {
           round: PKInfo.slot,
           base: PKInfo.init.base_unit,
         });
         setRunning(_running);
-        _running.play();
+        _running.run();
       });
     },
     [game, createSoldiers],

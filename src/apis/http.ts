@@ -70,6 +70,23 @@ export class Http {
     return this.request(config);
   }
 
+  async lang_get(
+    url: string,
+    timeout: number,
+    params?: any,
+    option: AxiosRequestConfigCustom = {},
+  ) {
+    const config: AxiosRequestConfigCustom = {
+      method: 'GET',
+      url,
+      baseURL,
+      params,
+      timeout,
+      ...option,
+    };
+    return this.request(config);
+  }
+
   async post(url: string, data?: any, option: AxiosRequestConfigCustom = {}) {
     const config: AxiosRequestConfigCustom = {
       method: 'POST',

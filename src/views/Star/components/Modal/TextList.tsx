@@ -17,7 +17,8 @@ export const TextList: React.FC<{
   imgSrc: string;
   number: string;
   unit: string;
-}> = ({ imgWidth, imgHeight, imgSrc, number, unit }) => {
+  color?: string;
+}> = ({ imgWidth, imgHeight, imgSrc, number, unit, color = 'textSubtle' }) => {
   return (
     <Group>
       <Box width={`${imgWidth}px`} height={`${imgHeight}px`}>
@@ -25,7 +26,7 @@ export const TextList: React.FC<{
       </Box>
       <Flex alignItems='center'>
         <Text fontSize='34px'>{number}</Text>
-        <Text ml='16px' color='textSubtle' small>
+        <Text ml='16px' color={color} small>
           {unit}
         </Text>
       </Flex>

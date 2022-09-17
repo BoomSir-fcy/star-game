@@ -2,20 +2,31 @@ import React from 'react';
 import { ToastContainer, ToastContainerProps } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import { useStore } from 'state';
 import styled from 'styled-components';
 import { CloseButton } from 'uikit';
 
-const StyledContainer = styled(ToastContainer)`
+const StyledContainer = styled(ToastContainer)<{ scale: number }>`
   &.Toastify__toast-container {
     z-index: 99999;
-    transform: translateZ(1px);
+    transform: translateZ(1px) scale(${({ scale }) => scale + 0.2});
     left: auto;
-    right: 20px;
-    top: 20px;
+    right: -80px;
+    top: 10px;
+    /* right: ${({ scale }) => `${scale * 20}px`};
+    top: ${({ scale }) => `${scale * 20}px`}; */
+    ${({ theme }) => theme.mediaQueries.sm} {
+      right: -60px;
+      top: 20px;
+    }
+    ${({ theme }) => theme.mediaQueries.xl} {
+      right: 20px;
+      top: 20px;
+    }
   }
   .Toastify__toast {
     background: url('/images/commons/modal/toast.png') no-repeat;
-    background-size: 100%;
+    background-size: 100% 100%;
     min-height: 150px;
   }
   .Toastify__toast-body {
@@ -28,6 +39,9 @@ const StyledContainer = styled(ToastContainer)`
     width: 30px;
     margin-bottom: 10px;
   }
+  .Toastify__toast-body > div:last-child {
+    word-break: break-all;
+  }
 `;
 
 const StyledCloseBtn = styled(CloseButton)`
@@ -36,6 +50,7 @@ const StyledCloseBtn = styled(CloseButton)`
   top: 0;
 `;
 const ToastComponents: React.FC<ToastContainerProps> = React.memo(() => {
+  const { scale } = useStore(p => p.user);
   return (
     <StyledContainer
       containerId='toast'
@@ -43,6 +58,7 @@ const ToastComponents: React.FC<ToastContainerProps> = React.memo(() => {
       limit={100}
       closeButton={() => <StyledCloseBtn width={35} />}
       autoClose={3000}
+      scale={scale}
       newestOnTop={false}
       closeOnClick
       rtl={false}
