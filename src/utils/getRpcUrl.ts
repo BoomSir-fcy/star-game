@@ -14,8 +14,8 @@ const ethereum =
 export const nodes = [...ethereum.rpcUrls];
 
 const getNodeUrl = () => {
-  // return sample(nodes) as string;
-  return 'https://data-seed-prebsc-1-s1.binance.org:8545/';
+  return sample(nodes) as string;
+  // return 'https://data-seed-prebsc-1-s1.binance.org:8545/';
 };
 
 export default getNodeUrl;
