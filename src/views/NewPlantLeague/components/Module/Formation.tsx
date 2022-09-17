@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   Button,
   Flex,
@@ -19,6 +19,7 @@ import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { PlanetBall } from 'components';
 import { QualityColor } from 'uikit/theme/colors';
 import { useNavigate } from 'react-router-dom';
+import ModalWrapper from 'components/Modal';
 import GameFormation from './GameFormation';
 
 const OutBox = styled(Box)`
@@ -57,6 +58,16 @@ const FormationBox = styled(Box)`
   background-size: cover;
 `;
 
+const ScrollBox = styled(Box)`
+  height: 200px;
+  overflow-y: auto;
+`;
+
+interface WorkErrListView {
+  err_type: number;
+  planet_id: number;
+}
+
 const Formation: React.FC<{
   Difficulty: number;
   FormationModule: boolean;
@@ -68,6 +79,8 @@ const Formation: React.FC<{
   const dispatch = useDispatch();
   const { order } = useStore(p => p.alliance.allianceView);
   const [LoadPlanet, setLoadPlanet] = useState<Api.Planet.PlanetInfo[]>();
+  const [WorkErrList, setWorkErrList] = useState<WorkErrListView[]>([]);
+  const [visible, setVisible] = useState(false);
 
   // 开始工作
   const StartOrStopWorking = useCallback(async () => {
@@ -100,6 +113,32 @@ const Formation: React.FC<{
       setLoadPlanet([order[0]?.planet]);
     }
   }, [order]);
+
+  const CanWork = useMemo(() => {
+    let can = true;
+    WorkErrList.forEach(item => {
+      if (item.err_type === 7 || item.err_type === 8) {
+        can = false;
+      }
+    });
+    return can;
+  }, [WorkErrList]);
+
+  const getWorkCheck = useCallback(async () => {
+    await Api.AllianceApi.getStartCheck()
+      .then(res => {
+        if (Api.isSuccess(res)) {
+          setWorkErrList(res.data.err);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    getWorkCheck();
+  }, [getWorkCheck]);
 
   return (
     <OutBox
@@ -174,8 +213,12 @@ const Formation: React.FC<{
               height={45}
               width='180px'
               onClick={() => {
-                StartOrStopWorking();
-                setFormation(false);
+                if (WorkErrList.length) {
+                  setVisible(true);
+                } else {
+                  StartOrStopWorking();
+                  setFormation(false);
+                }
               }}
             >
               <Text color='textPrimary'>{t('Confirmed,Go!!')}</Text>
@@ -193,6 +236,62 @@ const Formation: React.FC<{
           </Flex>
         </GraphicsCard>
       </Flex>
+      <ModalWrapper
+        title={t('Tips')}
+        visible={visible}
+        setVisible={() => {
+          setVisible(false);
+        }}
+      >
+        <Box padding='30px 25px'>
+          {/* 联盟存在以下问题，是否继续探索 */}
+          <Text mb='20px' textAlign='center' fontSize='20px' bold>
+            {CanWork ? t('workErrTips1') : t('workErrTips2')}
+          </Text>
+          <ScrollBox>
+            {(WorkErrList || []).map(item => {
+              return (
+                <Flex
+                  key={`${item.planet_id}${item.err_type}`}
+                  alignItems='center'
+                  width='60%'
+                  margin='0 auto 10px'
+                >
+                  <Text mr='20px'>Token: {item.planet_id}</Text>
+                  <Text color='redText'>{t(`workErr${item.err_type}`)}</Text>
+                </Flex>
+              );
+            })}
+          </ScrollBox>
+          <Flex justifyContent='center' pt='20px'>
+            {CanWork && (
+              <Button
+                mr='60px'
+                variant='purple'
+                height={45}
+                width='180px'
+                onClick={() => {
+                  StartOrStopWorking();
+                  setFormation(false);
+                  setVisible(false);
+                }}
+              >
+                <Text color='textPrimary'>{t('Confirmed,Go!!')}</Text>
+              </Button>
+            )}
+            <Button
+              variant='purple'
+              height={45}
+              width='180px'
+              onClick={() => {
+                setVisible(false);
+              }}
+            >
+              <Text color='textPrimary'>{t('Cancel')}</Text>
+            </Button>
+          </Flex>
+        </Box>
+      </ModalWrapper>
     </OutBox>
   );
 };

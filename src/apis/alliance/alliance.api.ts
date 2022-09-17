@@ -54,4 +54,10 @@ export class AllianceApi extends Http {
     const res = await this.get('message/list', params);
     return res;
   }
+
+  // 获取联盟星球资源情况
+  async getStartCheck() {
+    const res = await this.get('work/start/check');
+    return res;
+  }
 }

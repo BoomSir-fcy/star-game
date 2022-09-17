@@ -4,6 +4,7 @@ import { formatUnits } from 'ethers/lib/utils';
 import { getLanguageCodeFromLS } from 'contexts/Localization/helpers';
 import { BIG_TEN, ONE_BILLION, ONE_MILLION } from 'config/constants/bigNumber';
 import { SubString_1 } from './DecimalPlaces';
+import { formatAmount } from './formatInfoNumbers';
 
 /**
  * Take a formatted amount, e.g. 15 BNB and convert it to full decimal value, e.g. 15000000000000000
@@ -127,12 +128,13 @@ export const formatLocalisedCompactBalance = (
   decimals = 3,
 ): string => {
   if (!Number.isFinite(number)) return '0';
-  const codeFromStorage = getLanguageCodeFromLS();
-  return new Intl.NumberFormat(codeFromStorage, {
-    notation: 'compact',
-    // compactDisplay: 'long',
-    maximumSignificantDigits: 6,
-  }).format(Number(number?.toFixed(decimals)));
+  // const codeFromStorage = getLanguageCodeFromLS();
+  // return new Intl.NumberFormat(codeFromStorage, {
+  //   notation: 'compact',
+  //   // compactDisplay: 'long',
+  //   maximumSignificantDigits: 6,
+  // }).format(Number(number?.toFixed(decimals)));
+  return formatAmount(number);
   // if (new BigNumber(number).isGreaterThanOrEqualTo(ONE_MILLION)) {
   // }
   // return SubString_1(number, decimals);

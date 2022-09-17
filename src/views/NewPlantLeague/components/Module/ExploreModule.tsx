@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Flex, Box, BgCard, MarkText, Text, GraphicsCard } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
