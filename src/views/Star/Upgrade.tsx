@@ -190,7 +190,7 @@ const Upgrade = () => {
             dispatch(setActiveMaterialMap({ [id]: null }));
           }}
           callBack={() => {
-            navigate(`/upgrade-list?i=${planetId}`);
+            navigate(`/upgrade-list?i=${planetId}`, { replace: true });
           }}
         />,
       );

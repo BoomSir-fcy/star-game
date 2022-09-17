@@ -113,7 +113,8 @@ const SelectPlanet = () => {
               onBack={() => {
                 // dispatch(setActiveMaterialMap(null));
                 // navigate(`/star/upgrade?id=${planetId}`);
-                navigate(-1);
+                // navigate(-1);
+                navigate(`/star/upgrade?id=${planetId}`, { replace: true });
               }}
             />
             {/* <RefreshButton onRefresh={() => init()} ml='33px' /> */}
@@ -180,7 +181,7 @@ const SelectPlanet = () => {
                 width='200px'
                 variant='purple'
                 onClick={() => {
-                  navigate(`/star/upgrade?id=${planetId}`);
+                  navigate(`/star/upgrade?id=${planetId}`, { replace: true });
                 }}
               >
                 {t('Confirm')}
