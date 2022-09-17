@@ -13,6 +13,8 @@ import {
 export const useFetchAllianceView = () => {
   const dispatch = useDispatch();
   const { account } = useActiveWeb3React();
+  const { slowRefresh } = useRefresh();
+
   const fetch = useCallback(() => {
     if (account) {
       dispatch(fetchAllianceViewAsync());
@@ -21,7 +23,7 @@ export const useFetchAllianceView = () => {
 
   useEffect(() => {
     fetch();
-  }, [fetch]);
+  }, [fetch, slowRefresh]);
 
   return {
     fetch,
@@ -36,7 +38,7 @@ export const useFetchExploreProgressView = () => {
   const fetch = useCallback(() => {
     if (account) {
       dispatch(fetchExploreProgressAsync());
-      dispatch(fetchAllianceViewAsync());
+      // dispatch(fetchAllianceViewAsync());
     }
   }, [account, dispatch]);
 

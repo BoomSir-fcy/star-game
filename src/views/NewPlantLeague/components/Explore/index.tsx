@@ -157,7 +157,11 @@ const Explore: React.FC<{
             </Text>
             {alliance.working !== 0 && (
               <Text>
-                {`( ${hour}${t('h')}:${minute}${t('m')}:${second}${t('s')} )`}
+                {diffSeconds <= 0
+                  ? t('Coming to an end...')
+                  : `( ${hour}${t('h')}:${minute}${t('m')}:${second}${t(
+                      's',
+                    )} )`}
               </Text>
             )}
           </Flex>
