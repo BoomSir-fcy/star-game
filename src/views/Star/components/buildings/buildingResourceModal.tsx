@@ -45,7 +45,7 @@ export const ResourceSlider: React.FC<{
         <Flex justifyContent='space-between' alignItems='center'>
           <Text color='textSubtle'>{title}</Text>
           <Text small>
-            {Number((defaultValue / 100) * maxValue)}/{maxValue}
+            {Number(((defaultValue / 100) * maxValue).toFixed(0))}/{maxValue}
           </Text>
         </Flex>
         <Slider
@@ -109,7 +109,7 @@ export const BuildingResourceModal: React.FC<{
             maxValue={maxValue.stone}
             onChange={val =>
               setState(p => {
-                p.stone = Number(val);
+                p.stone = Number(val.toFixed(0));
               })
             }
           />
@@ -122,7 +122,7 @@ export const BuildingResourceModal: React.FC<{
             maxValue={maxValue.energy}
             onChange={val =>
               setState(p => {
-                p.energy = Number(val);
+                p.energy = Number(val.toFixed(0));
               })
             }
           />
@@ -135,7 +135,7 @@ export const BuildingResourceModal: React.FC<{
             maxValue={maxValue.population}
             onChange={val =>
               setState(p => {
-                p.population = Number(val);
+                p.population = Number(val.toFixed(0));
               })
             }
           />
@@ -150,15 +150,24 @@ export const BuildingResourceModal: React.FC<{
                 stone:
                   state.stone === 100
                     ? maxValue?.stone
-                    : Number((state.stone / 100) * maxValue?.stone),
+                    : Number(
+                        ((state.stone / 100) * maxValue?.stone).toFixed(0),
+                      ),
                 population:
                   state.population === 100
                     ? maxValue?.population
-                    : Number((state.population / 100) * maxValue?.population),
+                    : Number(
+                        (
+                          (state.population / 100) *
+                          maxValue?.population
+                        ).toFixed(0),
+                      ),
                 energy:
                   state.energy === 100
                     ? maxValue?.energy
-                    : Number((state.energy / 100) * maxValue?.energy),
+                    : Number(
+                        ((state.energy / 100) * maxValue?.energy).toFixed(0),
+                      ),
               };
               onFinish(params);
             }}
