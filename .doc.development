@@ -1,0 +1,20 @@
+########### APP1 ########
+REACT_APP_VERSION = $npm_package_version
+GENERATE_SOURCEMAP = true
+port=3010
+
+REACT_APP_CHAIN_ID = 97
+
+REACT_APP_API_HOST = "https://tsapi.cryptogalaxybox.com/"
+REACT_APP_WEB_LINK = "https://cryptogalaxybox.com/"
+
+########### APP2 ########
+REACT_APP_VERSION = $npm_package_version
+GENERATE_SOURCEMAP = true
+port=3010
+
+REACT_APP_CHAIN_ID = 97
+
+REACT_APP_API_HOST = "https://tsapi2.cryptogalaxybox.com/"
+REACT_APP_WEB_LINK = "https://cryptogalaxybox.com/"
+
