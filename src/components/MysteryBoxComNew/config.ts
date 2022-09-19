@@ -9,14 +9,14 @@ export const mysteryConfig = {
   },
   [qualities.ADVANCED]: {
     label: 'Advanced',
-    tips: 'Uncommon, Rare, Epic, Legendary',
+    tips: 'Common Uncommon, Rare, Epic, Legendary',
     srcName: 'advanced',
-    rarity: [2, 3, 4, 5],
+    rarity: [1, 2, 3, 4, 5],
   },
   [qualities.SUPER]: {
     label: 'Super',
-    tips: 'Rare, Epic, Legendary, Mythic',
+    tips: 'Uncommon Rare, Epic, Legendary, Mythic',
     srcName: 'super',
-    rarity: [3, 4, 5, 6],
+    rarity: [2, 3, 4, 5, 6],
   },
 };
