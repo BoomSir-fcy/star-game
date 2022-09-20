@@ -75,26 +75,26 @@ export const ThingRepairModal: React.FC<{
                 <TextList
                   imgWidth={50}
                   imgHeight={50}
-                  imgSrc='/images/commons/icon/icon_spice.png'
-                  number={state.population}
-                  unit={t('Population')}
+                  imgSrc='/images/commons/icon/icon_minera.png'
+                  number={state.stone}
+                  unit={t('Ore')}
                 />
               </Box>
               <Box mb='15px'>
                 <TextList
                   imgWidth={50}
                   imgHeight={50}
-                  imgSrc='/images/commons/icon/icon_minera.png'
-                  number={state.stone}
-                  unit={t('Ore')}
+                  imgSrc='/images/commons/icon/icon_energy.png'
+                  number={state.energy}
+                  unit={t('Energy')}
                 />
               </Box>
               <TextList
                 imgWidth={50}
                 imgHeight={50}
-                imgSrc='/images/commons/icon/icon_energy.png'
-                number={state.energy}
-                unit={t('Energy')}
+                imgSrc='/images/commons/icon/icon_spice.png'
+                number={state.population}
+                unit={t('Population')}
               />
             </Box>
             <Button
