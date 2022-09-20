@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Text, Flex, Box } from 'uikit';
 import Layout from 'components/Layout';
-import { useFetchAllianceView } from 'state/alliance/hooks';
+import { useFetchAllianceView_slowRefresh } from 'state/alliance/hooks';
 import { orderInfo } from 'state/types';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
@@ -57,7 +57,7 @@ const GlobalStyle = createGlobalStyle<{
 `;
 
 const NewPlantLeague: React.FC = () => {
-  useFetchAllianceView();
+  useFetchAllianceView_slowRefresh();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const location = useLocation();

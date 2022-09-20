@@ -15,7 +15,7 @@ import { useTranslation } from 'contexts/Localization';
 import useTheme from 'hooks/useTheme';
 import { useNavigate } from 'react-router-dom';
 import {
-  useFetchAllianceView,
+  useFetchAllianceView_slowRefresh,
   useFetchExploreProgressView,
 } from 'state/alliance/hooks';
 import { useDispatch } from 'react-redux';
@@ -59,7 +59,7 @@ const ExploreProgress: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useFetchAllianceView();
+  useFetchAllianceView_slowRefresh();
   useFetchExploreProgressView();
 
   const { ExploreProgressDate, allianceView } = useStore(p => p.alliance);
