@@ -42,7 +42,8 @@ export const formatAmount = (
   }
   if (!amount) return '-';
   if (displayThreshold && amount < displayThreshold) {
-    return `<${displayThreshold}`;
+    // return `<${displayThreshold}`;
+    return amount;
   }
   if (amount < 1 && !tokenPrecision) {
     return getFirstThreeNonZeroDecimals(amount);

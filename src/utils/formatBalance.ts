@@ -134,7 +134,7 @@ export const formatLocalisedCompactBalance = (
   //   // compactDisplay: 'long',
   //   maximumSignificantDigits: 6,
   // }).format(Number(number?.toFixed(decimals)));
-  return formatAmount(number);
+  return formatAmount(number, { isInteger: true });
   // if (new BigNumber(number).isGreaterThanOrEqualTo(ONE_MILLION)) {
   // }
   // return SubString_1(number, decimals);

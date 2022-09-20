@@ -14,6 +14,7 @@ import {
 import { TokenImage } from 'components/TokenImage';
 
 import { useTranslation } from 'contexts/Localization';
+import { formatLocalisedCompactBalance } from 'utils/formatBalance';
 
 const Container = styled(GraphicsCard)`
   position: absolute;
@@ -44,8 +45,16 @@ export const ResourceSlider: React.FC<{
       <Flex flexDirection='column' flex={1} ml='9px'>
         <Flex justifyContent='space-between' alignItems='center'>
           <Text color='textSubtle'>{title}</Text>
-          <Text small>
-            {Math.floor(Number((defaultValue / 100) * maxValue))}/{maxValue}
+          <Text
+            small
+            title={`${Math.floor(
+              Number((defaultValue / 100) * maxValue),
+            )}/${maxValue}`}
+          >
+            {formatLocalisedCompactBalance(
+              Math.floor(Number((defaultValue / 100) * maxValue)),
+            )}
+            /{formatLocalisedCompactBalance(maxValue)}
           </Text>
         </Flex>
         <Slider

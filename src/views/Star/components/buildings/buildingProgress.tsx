@@ -2,7 +2,7 @@ import React from 'react';
 import BigNumber from 'bignumber.js';
 import { Flex, Progress, Text } from 'uikit';
 
-import { formatDisplayApr } from 'utils/formatBalance';
+import { formatLocalisedCompactBalance } from 'utils/formatBalance';
 import { TokenImage } from 'components/TokenImage';
 import { useTranslation } from 'contexts/Localization';
 
@@ -23,21 +23,28 @@ export const BuildingProgress: React.FC<{
           <Flex justifyContent='space-between' alignItems='center' width='100%'>
             <Flex alignItems='center'>
               <Text color='textSubtle'>{title}</Text>
-              <Text ml='12px'>
-                {formatDisplayApr(new BigNumber(value).toNumber())}
+              <Text ml='12px' title={`${new BigNumber(value).toNumber()}`}>
+                {formatLocalisedCompactBalance(new BigNumber(value).toNumber())}
               </Text>
             </Flex>
             {Boolean(nextValue) && (
               <Text
+                title={`${
+                  nextValue
+                    ? nextValue > 0
+                      ? `+${new BigNumber(nextValue).toNumber()}`
+                      : `${new BigNumber(nextValue).toNumber()}`
+                    : 0
+                }`}
                 color={`${nextValue >= 0 ? 'progressGreenBar' : 'textDanger'}`}
               >
                 {t('Next Lv. ', {
                   value: nextValue
                     ? nextValue > 0
-                      ? `+${formatDisplayApr(
+                      ? `+${formatLocalisedCompactBalance(
                           new BigNumber(nextValue).toNumber(),
                         )}`
-                      : `${formatDisplayApr(
+                      : `${formatLocalisedCompactBalance(
                           new BigNumber(nextValue).toNumber(),
                         )}`
                     : 0,

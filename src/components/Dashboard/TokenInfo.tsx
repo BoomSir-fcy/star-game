@@ -9,6 +9,7 @@ import { TokenImage } from 'components/TokenImage';
 import {
   formatLocalisedCompactBalance_b,
   formatDisplayApr,
+  formatLocalisedCompactBalance,
 } from 'utils/formatBalance';
 import { storeAction, useStore } from 'state';
 import { useDispatch } from 'react-redux';
@@ -102,6 +103,10 @@ const TokenInfo = () => {
   );
 
   const format = useCallback((number: number) => {
+    return formatLocalisedCompactBalance(number) || 0;
+  }, []);
+
+  const format2 = useCallback((number: number) => {
     return formatLocalisedCompactBalance_b(number) || 0;
   }, []);
   return (
@@ -196,7 +201,7 @@ const TokenInfo = () => {
                   ellipsis
                   title={`${TokenBlance('BOX')?.amount}`}
                 >
-                  {format(TokenBlance('BOX')?.amount)}
+                  {format2(TokenBlance('BOX')?.amount)}
                 </Text>
               </Flex>
               <Text ml='8px' small>
@@ -214,7 +219,7 @@ const TokenInfo = () => {
                   ellipsis
                   title={`${TokenBlance('BNB')?.amount}`}
                 >
-                  {format(TokenBlance('BNB')?.amount)}
+                  {format2(TokenBlance('BNB')?.amount)}
                 </Text>
               </Flex>
               <Text ml='8px' small>
