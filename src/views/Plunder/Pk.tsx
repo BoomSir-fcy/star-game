@@ -395,6 +395,11 @@ const Pk = () => {
   const onPlayHandle = useCallback(() => {
     setVideoPlaying(true);
   }, []);
+  const onPlayEnd = useCallback(() => {
+    setVideoEnd(true);
+  }, []);
+
+  // console.log('out , VideoEnd');
 
   return (
     <>
@@ -564,9 +569,7 @@ const Pk = () => {
       )}
       <BeginVideo
         display={!VideoEnd ? '' : 'none'}
-        isEnd={() => {
-          setVideoEnd(true);
-        }}
+        isEnd={onPlayEnd}
         isPlaying={onPlayHandle}
       />
     </>
