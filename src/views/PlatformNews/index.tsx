@@ -597,7 +597,11 @@ const PlatformNews: React.FC = () => {
                           <Flex alignItems='center' flexWrap='wrap'>
                             <Text>
                               {getHTML('InboxTypeDesc2-2', {
-                                reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.get_box} BOX</span>`,
+                                reward: `<span style="color: ${
+                                  theme.colors.progressGreenBar
+                                }">${formatLocalisedCompactBalance(
+                                  Number(msgContent?.get_box),
+                                )} BOX</span>`,
                               })}
                             </Text>
                           </Flex>
@@ -641,7 +645,11 @@ const PlatformNews: React.FC = () => {
                           </Flex>
                           {getHTML('InboxTypeDesc4-2', {
                             time: EasyformatTime(msgContent?.hold_time),
-                            reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.get_box} BOX</span>`,
+                            reward: `<span style="color: ${
+                              theme.colors.progressGreenBar
+                            }">${formatLocalisedCompactBalance(
+                              Number(msgContent?.get_box),
+                            )} BOX</span>`,
                           })}
                         </Text>
                       )}

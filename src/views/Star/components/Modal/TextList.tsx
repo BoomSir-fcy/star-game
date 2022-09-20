@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text, Image } from 'uikit';
+import { formatLocalisedCompactBalance } from 'utils/formatBalance';
 
 const Group = styled(Flex)`
   flex: 1;
@@ -25,7 +26,9 @@ export const TextList: React.FC<{
         <Image src={imgSrc} width={imgWidth} height={imgHeight} />
       </Box>
       <Flex alignItems='center'>
-        <Text fontSize='34px'>{number}</Text>
+        <Text fontSize='34px'>
+          {formatLocalisedCompactBalance(Number(number))}
+        </Text>
         <Text ml='16px' color={color} small>
           {unit}
         </Text>

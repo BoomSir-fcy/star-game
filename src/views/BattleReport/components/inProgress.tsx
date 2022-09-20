@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { setPKInfo, setPKRes } from 'state/game/reducer';
 import { useWeb3React } from '@web3-react/core';
 import { RecordInfo } from 'state/types';
+import { formatLocalisedCompactBalance } from 'utils/formatBalance';
 
 dayjs.extend(utc);
 
@@ -92,13 +93,14 @@ export const InProgress: React.FC<{
           </FlexStyle>
           <FlexStyle>
             <TextStyle>
-              -{info.loseEnergy} {t('Energy')}
+              -{formatLocalisedCompactBalance(info.loseEnergy)} {t('Energy')}
             </TextStyle>
             <TextStyle>
-              -{info.loseStone} {t('Ore')}
+              -{formatLocalisedCompactBalance(info.loseStone)} {t('Ore')}
             </TextStyle>
             <TextStyle>
-              -{info.losePopulation} {t('Population')}
+              -{formatLocalisedCompactBalance(info.losePopulation)}{' '}
+              {t('Population')}
             </TextStyle>
           </FlexStyle>
         </Box>
@@ -106,13 +108,14 @@ export const InProgress: React.FC<{
           <TextStyle mb='8px'>{t('Get Resources')} :</TextStyle>
           <FlexStyle>
             <TextStyle>
-              +{info.getEnergy} {t('Energy')}
+              +{formatLocalisedCompactBalance(info.getEnergy)} {t('Energy')}
             </TextStyle>
             <TextStyle>
-              +{info.getStone} {t('Ore')}
+              +{formatLocalisedCompactBalance(info.getStone)} {t('Ore')}
             </TextStyle>
             <TextStyle>
-              +{info.getPopulation} {t('Population')}
+              +{formatLocalisedCompactBalance(info.getPopulation)}{' '}
+              {t('Population')}
             </TextStyle>
           </FlexStyle>
         </Box>
