@@ -45,7 +45,7 @@ export const ResourceSlider: React.FC<{
         <Flex justifyContent='space-between' alignItems='center'>
           <Text color='textSubtle'>{title}</Text>
           <Text small>
-            {Number((defaultValue / 100) * maxValue)}/{maxValue}
+            {Math.floor(Number((defaultValue / 100) * maxValue))}/{maxValue}
           </Text>
         </Flex>
         <Slider
@@ -109,7 +109,7 @@ export const BuildingResourceModal: React.FC<{
             maxValue={maxValue.stone}
             onChange={val =>
               setState(p => {
-                p.stone = Number(val);
+                p.stone = Math.floor(Number(val));
               })
             }
           />
@@ -122,7 +122,7 @@ export const BuildingResourceModal: React.FC<{
             maxValue={maxValue.energy}
             onChange={val =>
               setState(p => {
-                p.energy = Number(val);
+                p.energy = Math.floor(Number(val));
               })
             }
           />
@@ -135,7 +135,7 @@ export const BuildingResourceModal: React.FC<{
             maxValue={maxValue.population}
             onChange={val =>
               setState(p => {
-                p.population = Number(val);
+                p.population = Math.floor(Number(val));
               })
             }
           />
@@ -150,15 +150,19 @@ export const BuildingResourceModal: React.FC<{
                 stone:
                   state.stone === 100
                     ? maxValue?.stone
-                    : Number((state.stone / 100) * maxValue?.stone),
+                    : Math.floor(Number((state.stone / 100) * maxValue?.stone)),
                 population:
                   state.population === 100
                     ? maxValue?.population
-                    : Number((state.population / 100) * maxValue?.population),
+                    : Math.floor(
+                        Number((state.population / 100) * maxValue?.population),
+                      ),
                 energy:
                   state.energy === 100
                     ? maxValue?.energy
-                    : Number((state.energy / 100) * maxValue?.energy),
+                    : Math.floor(
+                        Number((state.energy / 100) * maxValue?.energy),
+                      ),
               };
               onFinish(params);
             }}

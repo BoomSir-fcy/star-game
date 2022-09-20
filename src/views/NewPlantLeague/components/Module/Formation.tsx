@@ -81,6 +81,7 @@ const Formation: React.FC<{
   const [LoadPlanet, setLoadPlanet] = useState<Api.Planet.PlanetInfo[]>();
   const [WorkErrList, setWorkErrList] = useState<WorkErrListView[]>([]);
   const [visible, setVisible] = useState(false);
+  const [isLoad, setisLoad] = useState(false);
 
   // 开始工作
   const StartOrStopWorking = useCallback(async () => {
@@ -109,10 +110,11 @@ const Formation: React.FC<{
   }, [LoadPlanet, order]);
 
   useEffect(() => {
-    if (order?.length === 5) {
+    if (order?.length === 5 && !isLoad) {
       setLoadPlanet([order[0]?.planet]);
+      setisLoad(true);
     }
-  }, [order]);
+  }, [order, isLoad]);
 
   const CanWork = useMemo(() => {
     let can = true;

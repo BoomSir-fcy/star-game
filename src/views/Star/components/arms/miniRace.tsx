@@ -29,6 +29,8 @@ interface MiniRaceAniProps extends BoxProps {
   scale?: number;
 }
 
+let timer = null;
+
 const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
   scale,
   mock,
@@ -119,9 +121,9 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
     },
     [game],
   );
-
   const initHandle = useCallback(() => {
     // running?.pause();
+    if (timer) clearTimeout(timer);
     game.clearSoldier();
     initSoldiers(mock);
     getCenterByAxis(
@@ -161,19 +163,17 @@ const MiniRaceAni: React.FC<MiniRaceAniProps> = ({
     //   );
     // }
   }, []);
-  const [timer, setTimer] = useState(null);
+  // const [timer, setTimer] = useState(null);
 
   // 结束
   const onRunEnd = useCallback(() => {
     if (timer) {
       clearTimeout(timer);
     }
-    setTimer(
-      setTimeout(() => {
-        initHandle();
-      }, 1000),
-    );
-  }, [initHandle, timer]);
+    timer = setTimeout(() => {
+      initHandle();
+    }, 1000);
+  }, [initHandle]);
 
   React.useEffect(() => {
     if (running) {

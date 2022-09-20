@@ -219,7 +219,7 @@ export const BuildingRechargeModal: React.FC<{
                 return;
               }
               setState(p => {
-                p.energy = Number(SubString_1(val, 50));
+                p.energy = Number(val);
               });
             }}
           />
@@ -281,27 +281,33 @@ export const BuildingRechargeModal: React.FC<{
                   state.stone === 100
                     ? maxValue[StoreType.STONE].max -
                       maxValue[StoreType.STONE].already
-                    : Number(
-                        ((state.stone - stoneProportion) / 100) *
-                          maxValue[StoreType.STONE].max,
-                      ).toFixed(0),
+                    : Math.floor(
+                        Number(
+                          ((state.stone - stoneProportion) / 100) *
+                            maxValue[StoreType.STONE].max,
+                        ),
+                      ),
                 population:
                   state.population === 100
                     ? maxValue[StoreType.POPULATION].max -
                       maxValue[StoreType.POPULATION].already
-                    : Number(
-                        ((state.population - populationProportion) / 100) *
-                          maxValue[StoreType.POPULATION].max,
-                      ).toFixed(0),
+                    : Math.floor(
+                        Number(
+                          ((state.population - populationProportion) / 100) *
+                            maxValue[StoreType.POPULATION].max,
+                        ),
+                      ),
 
                 energy:
                   state.energy === 100
                     ? maxValue[StoreType.ENERGY].max -
                       maxValue[StoreType.ENERGY].already
-                    : Number(
-                        ((state.energy - energyProportion) / 100) *
-                          maxValue[StoreType.ENERGY].max,
-                      ).toFixed(0),
+                    : Math.floor(
+                        Number(
+                          ((state.energy - energyProportion) / 100) *
+                            maxValue[StoreType.ENERGY].max,
+                        ),
+                      ),
               };
               onFinish(params);
             }}

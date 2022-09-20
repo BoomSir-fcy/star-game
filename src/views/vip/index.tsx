@@ -254,13 +254,15 @@ const VipPage = () => {
                     </TextBox>
                   </Button>
                 </Flex>
-                {user?.vipBenefits?.is_vip && (
+                {user?.vipBenefits?.is_vip ? (
                   <TextBox fontSize='16px'>
                     {t('Expire on')}
                     {dayjs(user?.vipBenefits?.expired_time * 1000).format(
                       'YYYY.MM.DD',
                     )}
                   </TextBox>
+                ) : (
+                  <TextBox fontSize='16px'>Term of Validity: 15 days</TextBox>
                 )}
               </Flex>
             </Flex>

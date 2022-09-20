@@ -471,7 +471,7 @@ const Upgrade = () => {
             <Flex mt='10px'>{!!maxExp && StarAddBox}</Flex>
           </Box>
 
-          <GraphicsCard mt='47px' width='853px' height='178px' stripe isRadius>
+          <GraphicsCard mt='47px' width='853px' height='200px' stripe isRadius>
             <Flex
               width='100%'
               justifyContent='space-between'

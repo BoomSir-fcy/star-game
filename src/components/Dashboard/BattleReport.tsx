@@ -89,7 +89,7 @@ const BattleReport = () => {
             bold
             fontStyle='normal'
           >
-            {t('Brief Report')}
+            {t('Battle Report')}
           </MarkText>
           <Flex
             justifyContent='center'
