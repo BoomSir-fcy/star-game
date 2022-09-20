@@ -10,7 +10,7 @@ import {
   setRecordLoad,
 } from './reducer';
 
-export const useFetchAllianceView = () => {
+export const useFetchAllianceView_slowRefresh = () => {
   const dispatch = useDispatch();
   const { account } = useActiveWeb3React();
   const { slowRefresh } = useRefresh();
@@ -24,6 +24,26 @@ export const useFetchAllianceView = () => {
   useEffect(() => {
     fetch();
   }, [fetch, slowRefresh]);
+
+  return {
+    fetch,
+  };
+};
+
+export const useFetchAllianceView = () => {
+  const dispatch = useDispatch();
+  const { account } = useActiveWeb3React();
+  // const { slowRefresh } = useRefresh();
+
+  const fetch = useCallback(() => {
+    if (account) {
+      dispatch(fetchAllianceViewAsync());
+    }
+  }, [account, dispatch]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
 
   return {
     fetch,
