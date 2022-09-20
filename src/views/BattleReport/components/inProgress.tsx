@@ -50,7 +50,7 @@ export const InProgress: React.FC<{
         <Box mb='20px'>
           <Flex mb='20px' justifyContent='center'>
             <MarkText padding={0} fontStyle='normal' fontSize='20px' bold>
-              {t('Brief Report')}
+              {t('Battle Report')}
             </MarkText>
           </Flex>
           <Flex mb='10px' justifyContent='space-between' alignItems='baseline'>

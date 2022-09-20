@@ -261,7 +261,7 @@ const RightFloatBar: React.FC<{ Booting: boolean; setGuide: (e) => void }> = ({
             bold
             fontStyle='normal'
           >
-            {t('Brief Report')}
+            {t('Battle Report')}
           </MarkText>
           <Flex
             justifyContent='center'
