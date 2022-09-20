@@ -22,7 +22,7 @@ const VideoStyled = styled.video`
       opacity: 0.9;
     }
     100% {
-      opacity: 0;
+      opacity: 0.01;
     }
   }
 `;
@@ -44,6 +44,17 @@ const BeginVideo: React.FC<BeginVideoProps> = ({
       isPlaying();
     }
   }, [isErr, isPlay, isPlaying]);
+  const [timer, setTimer] = useState(null);
+
+  useEffect(() => {
+    if (!timer) {
+      setTimer(
+        setTimeout(() => {
+          if (isEnd) isEnd();
+        }, 6000),
+      );
+    }
+  }, [isEnd, timer]);
 
   return (
     <Box
