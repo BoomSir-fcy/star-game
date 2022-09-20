@@ -262,7 +262,7 @@ const VipPage = () => {
                     )}
                   </TextBox>
                 ) : (
-                  <TextBox fontSize='16px'>Validity: 15 days</TextBox>
+                  <TextBox fontSize='16px'>Term of Validity: 15 days</TextBox>
                 )}
               </Flex>
             </Flex>
