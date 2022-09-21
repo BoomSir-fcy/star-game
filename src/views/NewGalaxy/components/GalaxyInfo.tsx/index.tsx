@@ -184,6 +184,13 @@ const GalaxyInfoIndex: React.FC = () => {
         return false;
       };
     }
+    return () => {
+      if (galaxyList.length) {
+        const InfoBox = document.getElementById('InfoBox');
+        InfoBox.onmousedown = (ev: MouseEvent) => {};
+        InfoBox.ontouchstart = ev => {};
+      }
+    };
   }, [galaxyList]);
 
   return (
