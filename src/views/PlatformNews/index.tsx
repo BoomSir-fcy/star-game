@@ -15,7 +15,7 @@ import { useTranslation } from 'contexts/Localization';
 import useTheme from 'hooks/useTheme';
 import { shortenAddress } from 'utils';
 import Collapse, { Panel } from 'rc-collapse';
-import { formatDisplayApr } from 'utils/formatBalance';
+import { formatLocalisedCompactBalance } from 'utils/formatBalance';
 import 'rc-collapse/assets/index.css';
 import { BuildRaceData } from 'config/buildConfig';
 import { getSpriteName, getSpriteRes } from 'game/core/utils';
@@ -131,15 +131,15 @@ const GetPrandk = (t, info, cellar?) => {
         <Flex flexWrap='wrap'>
           <Text mr='3px'>{t('Ore')}</Text>
           <Text mr='10px' color='progressGreenBar'>
-            +{formatDisplayApr(product_stone)}
+            +{formatLocalisedCompactBalance(product_stone)}
           </Text>
           <Text mr='3px'>{t('Energy')}</Text>
           <Text mr='10px' color='progressGreenBar'>
-            +{formatDisplayApr(product_energy)}
+            +{formatLocalisedCompactBalance(product_energy)}
           </Text>
           <Text mr='3px'>{t('Spices')}</Text>
           <Text color='progressGreenBar'>
-            +{formatDisplayApr(product_population)}
+            +{formatLocalisedCompactBalance(product_population)}
           </Text>
         </Flex>
       </Flex>
@@ -151,13 +151,13 @@ const GetPrandk = (t, info, cellar?) => {
             <Text color={plunder_stone >= 0 ? 'progressGreenBar' : 'redText'}>
               <Flex flexWrap='wrap'>
                 {plunder_stone >= 0 ? '+' : ''}
-                {formatDisplayApr(plunder_stone)}
+                {formatLocalisedCompactBalance(plunder_stone)}
                 {cellar && (
                   <Text ml='3px'>
                     <Flex>
                       ({t('InboxTypeDesc7-4-1')}
                       <Text ml='3px' color='progressGreenBar'>
-                        {formatDisplayApr(cellar_stone)}
+                        {formatLocalisedCompactBalance(cellar_stone)}
                       </Text>
                       )
                     </Flex>
@@ -174,13 +174,13 @@ const GetPrandk = (t, info, cellar?) => {
             >
               <Flex flexWrap='wrap'>
                 {plunder_energy >= 0 ? '+' : ''}
-                {formatDisplayApr(plunder_energy)}
+                {formatLocalisedCompactBalance(plunder_energy)}
                 {cellar && (
                   <Text ml='3px'>
                     <Flex>
                       ({t('InboxTypeDesc7-4-1')}
                       <Text ml='3px' color='progressGreenBar'>
-                        {formatDisplayApr(cellar_energy)}
+                        {formatLocalisedCompactBalance(cellar_energy)}
                       </Text>
                       )
                     </Flex>
@@ -197,13 +197,13 @@ const GetPrandk = (t, info, cellar?) => {
             >
               <Flex flexWrap='wrap'>
                 {plunder_population >= 0 ? '+' : ''}
-                {formatDisplayApr(plunder_population)}
+                {formatLocalisedCompactBalance(plunder_population)}
                 {cellar && (
                   <Text ml='3px'>
                     <Flex>
                       ({t('InboxTypeDesc7-4-1')}
                       <Text ml='3px' color='progressGreenBar'>
-                        {formatDisplayApr(cellar_population)}
+                        {formatLocalisedCompactBalance(cellar_population)}
                       </Text>
                       )
                     </Flex>
@@ -214,7 +214,9 @@ const GetPrandk = (t, info, cellar?) => {
           </Flex>
           <Flex>
             <Text mr='3px'>{t('Soldier')}</Text>
-            <Text color='redText'>-{formatDisplayApr(lose_arm_unit)}</Text>
+            <Text color='redText'>
+              -{formatLocalisedCompactBalance(lose_arm_unit)}
+            </Text>
           </Flex>
         </Flex>
       </Flex>
@@ -595,7 +597,11 @@ const PlatformNews: React.FC = () => {
                           <Flex alignItems='center' flexWrap='wrap'>
                             <Text>
                               {getHTML('InboxTypeDesc2-2', {
-                                reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.get_box} BOX</span>`,
+                                reward: `<span style="color: ${
+                                  theme.colors.progressGreenBar
+                                }">${formatLocalisedCompactBalance(
+                                  Number(msgContent?.get_box),
+                                )} BOX</span>`,
                               })}
                             </Text>
                           </Flex>
@@ -639,7 +645,11 @@ const PlatformNews: React.FC = () => {
                           </Flex>
                           {getHTML('InboxTypeDesc4-2', {
                             time: EasyformatTime(msgContent?.hold_time),
-                            reward: `<span style="color: ${theme.colors.progressGreenBar}">${msgContent?.get_box} BOX</span>`,
+                            reward: `<span style="color: ${
+                              theme.colors.progressGreenBar
+                            }">${formatLocalisedCompactBalance(
+                              Number(msgContent?.get_box),
+                            )} BOX</span>`,
                           })}
                         </Text>
                       )}

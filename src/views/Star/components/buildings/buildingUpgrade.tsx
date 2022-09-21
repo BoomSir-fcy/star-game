@@ -7,7 +7,7 @@ import { Flex, Box, GraphicsCard, Button, MarkText, Text, Image } from 'uikit';
 
 import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'contexts/ToastsContext';
-import { formatDisplayApr } from 'utils/formatBalance';
+import { formatLocalisedCompactBalance } from 'utils/formatBalance';
 
 const Container = styled(GraphicsCard)`
   position: relative;
@@ -153,17 +153,26 @@ export const BuildingUpgrade: React.FC<{
                           ? 'warning'
                           : 'progressGreenBar'
                       }`}
+                      title={`${new BigNumber(
+                        currnet_building?.upgrade_need?.upgrade_energy ||
+                          currnet_building?.upgrade_need?.upgrade_energy,
+                      ).toNumber()}`}
                     >
-                      {formatDisplayApr(
+                      {formatLocalisedCompactBalance(
                         new BigNumber(
                           currnet_building?.upgrade_need?.upgrade_energy ||
                             currnet_building?.upgrade_need?.upgrade_energy,
                         ).toNumber(),
                       )}
                     </Text>
-                    <Text small>
+                    <Text
+                      small
+                      title={`${new BigNumber(
+                        planetAssets?.energy,
+                      ).toNumber()}`}
+                    >
                       /
-                      {formatDisplayApr(
+                      {formatLocalisedCompactBalance(
                         new BigNumber(planetAssets?.energy).toNumber(),
                       )}
                     </Text>
@@ -181,17 +190,24 @@ export const BuildingUpgrade: React.FC<{
                           ? 'warning'
                           : 'progressGreenBar'
                       }`}
+                      title={`${new BigNumber(
+                        currnet_building?.upgrade_need?.upgrade_stone ||
+                          currnet_building?.upgrade_need?.upgrade_stone,
+                      ).toNumber()}`}
                     >
-                      {formatDisplayApr(
+                      {formatLocalisedCompactBalance(
                         new BigNumber(
                           currnet_building?.upgrade_need?.upgrade_stone ||
                             currnet_building?.upgrade_need?.upgrade_stone,
                         ).toNumber(),
                       )}
                     </Text>
-                    <Text small>
+                    <Text
+                      small
+                      title={`${new BigNumber(planetAssets?.stone).toNumber()}`}
+                    >
                       /
-                      {formatDisplayApr(
+                      {formatLocalisedCompactBalance(
                         new BigNumber(planetAssets?.stone).toNumber(),
                       )}
                     </Text>
@@ -217,17 +233,26 @@ export const BuildingUpgrade: React.FC<{
                           ? 'warning'
                           : 'progressGreenBar'
                       }`}
+                      title={`${new BigNumber(
+                        currnet_building?.upgrade_need?.upgrade_population ||
+                          currnet_building?.upgrade_need?.upgrade_population,
+                      ).toNumber()}`}
                     >
-                      {formatDisplayApr(
+                      {formatLocalisedCompactBalance(
                         new BigNumber(
                           currnet_building?.upgrade_need?.upgrade_population ||
                             currnet_building?.upgrade_need?.upgrade_population,
                         ).toNumber(),
                       )}
                     </Text>
-                    <Text small>
+                    <Text
+                      small
+                      title={`${new BigNumber(
+                        planetAssets?.population,
+                      ).toNumber()}`}
+                    >
                       /
-                      {formatDisplayApr(
+                      {formatLocalisedCompactBalance(
                         new BigNumber(planetAssets?.population).toNumber(),
                       )}
                     </Text>
@@ -246,17 +271,21 @@ export const BuildingUpgrade: React.FC<{
                           ? 'warning'
                           : 'progressGreenBar'
                       }`}
+                      title={`${new BigNumber(
+                        currnet_building?.upgrade_need?.upgrade_box ||
+                          currnet_building?.upgrade_need?.upgrade_box,
+                      ).toNumber()}`}
                     >
-                      {formatDisplayApr(
+                      {formatLocalisedCompactBalance(
                         new BigNumber(
                           currnet_building?.upgrade_need?.upgrade_box ||
                             currnet_building?.upgrade_need?.upgrade_box,
                         ).toNumber(),
                       )}
                     </Text>
-                    <Text small>
+                    <Text small title={`${TokenBlance('BOX')?.amount}`}>
                       /
-                      {formatDisplayApr(
+                      {formatLocalisedCompactBalance(
                         new BigNumber(TokenBlance('BOX')?.amount).toNumber(),
                       )}
                     </Text>

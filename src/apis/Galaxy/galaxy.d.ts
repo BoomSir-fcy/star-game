@@ -27,6 +27,7 @@ declare namespace Api {
       planet_owner_star: number; // 恒星主获得
       storage_pool_star: number; // 分配给储备池
       pre_box: number; // 恒星主24小时预计获得box
+      income_percent: number; //收益占比
     }
 
     interface OwnerInfo {

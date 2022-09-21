@@ -2,6 +2,7 @@ import { useTranslation } from 'contexts/Localization';
 import React from 'react';
 import styled from 'styled-components';
 import { Flex, FlexProps, Image, Text } from 'uikit';
+import { formatLocalisedCompactBalance } from 'utils/formatBalance';
 
 const ItemFlex = styled(Flex)`
   margin-top: 23px;
@@ -50,10 +51,13 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
             <Text
               small
               color={planetInfo?.stone < stone ? 'warning' : 'progressGreenBar'}
+              title={`${stone}`}
             >
-              {stone}
+              {formatLocalisedCompactBalance(stone)}
             </Text>
-            <Text small>/{planetInfo?.stone}</Text>
+            <Text small title={`${planetInfo?.stone}`}>
+              /{formatLocalisedCompactBalance(planetInfo?.stone)}
+            </Text>
           </Flex>
         </ItemInfoFlex>
       </ItemFlex>
@@ -73,10 +77,13 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
               color={
                 planetInfo?.energy < energy ? 'warning' : 'progressGreenBar'
               }
+              title={`${energy}`}
             >
-              {energy}
+              {formatLocalisedCompactBalance(energy)}
             </Text>
-            <Text small>/{planetInfo?.energy}</Text>
+            <Text small title={`${planetInfo?.energy}`}>
+              /{formatLocalisedCompactBalance(planetInfo?.energy)}
+            </Text>
           </Flex>
         </ItemInfoFlex>
       </ItemFlex>
@@ -96,10 +103,13 @@ export const UpgradeCost: React.FC<UpgradeCostProps> = ({
               color={
                 planetInfo?.population < spices ? 'warning' : 'progressGreenBar'
               }
+              title={`${spices}`}
             >
-              {spices}
+              {formatLocalisedCompactBalance(spices)}
             </Text>
-            <Text small>/{planetInfo?.population}</Text>
+            <Text small title={`${planetInfo?.population}`}>
+              /{formatLocalisedCompactBalance(planetInfo?.population)}
+            </Text>
           </Flex>
         </ItemInfoFlex>
       </ItemFlex>

@@ -27,7 +27,29 @@ export const ThingRepairModal: React.FC<{
     energy: '',
   });
 
+  const [nowResource, setnowResource] = React.useState({
+    already_energy: null,
+    already_population: null,
+    already_stone: null,
+  });
+
   React.useEffect(() => {
+    const getStorage = async () => {
+      const id = typeof planet_id === 'object' ? planet_id[0] : planet_id;
+      try {
+        const res = await Api.BuildingApi.getMaxReCharge(id);
+        if (Api.isSuccess(res)) {
+          const obj = {
+            already_energy: res.data?.already_energy,
+            already_population: res.data?.already_population,
+            already_stone: res.data?.already_stone,
+          };
+          setnowResource(obj);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
     const init = async () => {
       try {
         const res =
@@ -42,6 +64,9 @@ export const ThingRepairModal: React.FC<{
       }
     };
     init();
+    if (typeof planet_id !== 'object' || planet_id.length === 1) {
+      getStorage();
+    }
   }, [building_id, planet_id, getCose, getBatcheCost]);
 
   return (
@@ -77,6 +102,7 @@ export const ThingRepairModal: React.FC<{
                   imgHeight={50}
                   imgSrc='/images/commons/icon/icon_minera.png'
                   number={state.stone}
+                  alreadyNumber={nowResource.already_stone}
                   unit={t('Ore')}
                 />
               </Box>
@@ -86,6 +112,7 @@ export const ThingRepairModal: React.FC<{
                   imgHeight={50}
                   imgSrc='/images/commons/icon/icon_energy.png'
                   number={state.energy}
+                  alreadyNumber={nowResource.already_energy}
                   unit={t('Energy')}
                 />
               </Box>
@@ -94,6 +121,7 @@ export const ThingRepairModal: React.FC<{
                 imgHeight={50}
                 imgSrc='/images/commons/icon/icon_spice.png'
                 number={state.population}
+                alreadyNumber={nowResource.already_population}
                 unit={t('Population')}
               />
             </Box>

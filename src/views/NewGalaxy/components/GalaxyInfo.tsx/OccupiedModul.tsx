@@ -386,7 +386,7 @@ const OccupiedModul: React.FC<{
                           {t('Reward Coefficient')}:
                         </SmText>
                         <SmText>
-                          {SubString_1(GetRewardFactor(item?.disapth_box), 3)}%
+                          {SubString_1(item?.income_percent * 100, 6)}%
                         </SmText>
                       </Flex>
                       <Flex alignItems='center'>

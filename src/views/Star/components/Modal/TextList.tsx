@@ -1,6 +1,8 @@
+import BigNumber from 'bignumber.js';
 import React from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text, Image } from 'uikit';
+import { formatLocalisedCompactBalance } from 'utils/formatBalance';
 
 const Group = styled(Flex)`
   flex: 1;
@@ -18,14 +20,40 @@ export const TextList: React.FC<{
   number: string;
   unit: string;
   color?: string;
-}> = ({ imgWidth, imgHeight, imgSrc, number, unit, color = 'textSubtle' }) => {
+  alreadyNumber?: number;
+}> = ({
+  imgWidth,
+  imgHeight,
+  imgSrc,
+  number,
+  unit,
+  color = 'textSubtle',
+  alreadyNumber,
+}) => {
   return (
     <Group>
       <Box width={`${imgWidth}px`} height={`${imgHeight}px`}>
         <Image src={imgSrc} width={imgWidth} height={imgHeight} />
       </Box>
       <Flex alignItems='center'>
-        <Text fontSize='34px'>{number}</Text>
+        {alreadyNumber !== null && (
+          <>
+            <Text
+              fontSize='24px'
+              color={
+                new BigNumber(alreadyNumber).isLessThan(number)
+                  ? 'redText'
+                  : '#fff'
+              }
+            >
+              {formatLocalisedCompactBalance(alreadyNumber)}
+            </Text>
+            <Text fontSize='24px'>&nbsp;/&nbsp;</Text>
+          </>
+        )}
+        <Text fontSize={alreadyNumber !== null ? '24px' : '30px'}>
+          {formatLocalisedCompactBalance(Number(number))}
+        </Text>
         <Text ml='16px' color={color} small>
           {unit}
         </Text>

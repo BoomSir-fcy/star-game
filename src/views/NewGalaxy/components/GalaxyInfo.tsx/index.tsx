@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'state';
 import { useGalaxyList, useGalaxyNftArr } from 'state/galaxy/hooks';
-import { Text, Flex, Box, MarkText } from 'uikit';
+import { Text, Flex, Box, MarkText, Spinner } from 'uikit';
 import { useDispatch } from 'react-redux';
 import {
   fetchGalaxyListAsync,
@@ -14,6 +14,7 @@ import {
   GalaxyItemInfo,
   GalaxyItemInfoTitle,
   ItemGalaxyBox,
+  LoadingBox,
   TextInfoBox,
 } from 'views/NewGalaxy/style';
 import { getFullDisplayBalance } from 'utils/formatBalance';
@@ -31,7 +32,7 @@ const GalaxyInfoIndex: React.FC = () => {
   const paramsQs = useParsedQueryString();
   const InitId = Number(paramsQs?.id);
 
-  const { galaxyList, galaxyNftList } = useStore(p => p.galaxy);
+  const { galaxyList, galaxyNftList, loadingGalaxy } = useStore(p => p.galaxy);
   const [OpenInfo, setOpenInfo] = useState(false);
   const [ShowListModule, setShowListModule] = useState(false);
   const [ActiveGalaxy, setActiveGalaxy] = useState(0);
@@ -188,66 +189,77 @@ const GalaxyInfoIndex: React.FC = () => {
 
   return (
     <Box position='relative' height='calc(100% - 156px)'>
-      <GalaxyInfoBox id='InfoBox'>
-        <Box
-          id='box'
-          width={300}
-          height={300}
-          margin='100px auto'
-          style={{ position: 'relative', transformStyle: 'preserve-3d' }}
-        >
-          {(galaxyList ?? []).map((item, index) => (
-            <ItemGalaxyBox
-              className='imgBox'
-              key={item.id}
-              width={300}
-              height={300}
-              onTouchStart={() => {
-                ChangeActiveGalaxy(item);
-                setOpenInfo(true);
-                setShowListModule(true);
-              }}
-              onClick={() => {
-                ChangeActiveGalaxy(item);
-                setOpenInfo(true);
-                setShowListModule(true);
-              }}
-            >
-              <GalaxyItemInfo
-              // background={`url(/images/galaxy/${index + 1}.png)`}
-              // backgroundRepeat='no-repeat'
-              // backgroundSize='100% 100%'
+      {!loadingGalaxy ? (
+        <GalaxyInfoBox id='InfoBox'>
+          <Box
+            id='box'
+            width={300}
+            height={300}
+            margin='100px auto'
+            style={{ position: 'relative', transformStyle: 'preserve-3d' }}
+          >
+            {(galaxyList ?? []).map((item, index) => (
+              <ItemGalaxyBox
+                className='imgBox'
+                key={item.id}
+                width={300}
+                height={300}
+                onTouchStart={() => {
+                  ChangeActiveGalaxy(item);
+                  setOpenInfo(true);
+                  setShowListModule(true);
+                }}
+                onClick={() => {
+                  ChangeActiveGalaxy(item);
+                  setOpenInfo(true);
+                  setShowListModule(true);
+                }}
               >
-                <TextInfoBox>
-                  <GalaxyItemInfoTitle stripe isRadius>
-                    <Flex justifyContent='center'>
-                      <Text small>{item.name}</Text>
+                <GalaxyItemInfo
+                // background={`url(/images/galaxy/${index + 1}.png)`}
+                // backgroundRepeat='no-repeat'
+                // backgroundSize='100% 100%'
+                >
+                  <TextInfoBox>
+                    <GalaxyItemInfoTitle stripe isRadius>
+                      <Flex justifyContent='center'>
+                        <Text small>{item.name}</Text>
+                      </Flex>
+                    </GalaxyItemInfoTitle>
+                    <Flex mb='6px' justifyContent='space-between'>
+                      <Text small>{t('Galaxy Lord')}</Text>
+                      <MarkText fontSize='14px'>{item.nickname}</MarkText>
                     </Flex>
-                  </GalaxyItemInfoTitle>
-                  <Flex mb='6px' justifyContent='space-between'>
-                    <Text small>{t('Galaxy Lord')}</Text>
-                    <MarkText fontSize='14px'>{item.nickname}</MarkText>
-                  </Flex>
-                  <Flex mb='6px' justifyContent='space-between' flexWrap='wrap'>
-                    <Text small>{t('Current Price')} BNB</Text>
-                    <MarkText fontSize='14px'>
-                      {GetCurrentPrice(galaxyNftList[item.id]?.currentPrice) ||
-                        '---'}
-                    </MarkText>
-                  </Flex>
-                  <Flex mb='6px' justifyContent='space-between'>
-                    <Text small>{t('Total Galaxy CE')}</Text>
-                    <MarkText maxWidth='50%' ellipsis fontSize='14px'>
-                      {item.power}
-                    </MarkText>
-                  </Flex>
-                </TextInfoBox>
-                <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />
-              </GalaxyItemInfo>
-            </ItemGalaxyBox>
-          ))}
-        </Box>
-      </GalaxyInfoBox>
+                    <Flex
+                      mb='6px'
+                      justifyContent='space-between'
+                      flexWrap='wrap'
+                    >
+                      <Text small>{t('Current Price')} BNB</Text>
+                      <MarkText fontSize='14px'>
+                        {GetCurrentPrice(
+                          galaxyNftList[item.id]?.currentPrice,
+                        ) || '---'}
+                      </MarkText>
+                    </Flex>
+                    <Flex mb='6px' justifyContent='space-between'>
+                      <Text small>{t('Total Galaxy CE')}</Text>
+                      <MarkText maxWidth='50%' ellipsis fontSize='14px'>
+                        {item.power}
+                      </MarkText>
+                    </Flex>
+                  </TextInfoBox>
+                  <GalaxyImg src={`/images/galaxy/${index + 1}.png`} />
+                </GalaxyItemInfo>
+              </ItemGalaxyBox>
+            ))}
+          </Box>
+        </GalaxyInfoBox>
+      ) : (
+        <LoadingBox>
+          <Spinner />
+        </LoadingBox>
+      )}
       {OpenInfo && <InfoModule OpenInfo={OpenInfo} setOpenInfo={setOpenInfo} />}
       {ShowListModule && (
         <OccupiedModul

@@ -42,7 +42,8 @@ export const formatAmount = (
   }
   if (!amount) return '-';
   if (displayThreshold && amount < displayThreshold) {
-    return `<${displayThreshold}`;
+    // return `<${displayThreshold}`;
+    return amount;
   }
   if (amount < 1 && !tokenPrecision) {
     return getFirstThreeNonZeroDecimals(amount);
@@ -71,7 +72,7 @@ export const formatAmount = (
 
   // toUpperCase is needed cause numeral doesn't have support for capital K M B out of the box
   return numeral(amountWithPrecision)
-    .format(format)
+    .format(format, Math.floor)
     .toUpperCase()
     .replaceAll('B', 'G');
 };

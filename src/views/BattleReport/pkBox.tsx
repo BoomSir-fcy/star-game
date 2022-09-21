@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { setPKInfo, setPKisFrom, setPKRes } from 'state/game/reducer';
 import { useWeb3React } from '@web3-react/core';
 import { PlunderInfo } from 'state/types';
+import { formatLocalisedCompactBalance } from 'utils/formatBalance';
 import { PkResult } from './components/PkResult';
 
 dayjs.extend(utc);
@@ -65,7 +66,7 @@ export const PkBox: React.FC<{
       } else {
         num = inComeNum;
       }
-      return num;
+      return formatLocalisedCompactBalance(num);
     },
     [isFrom],
   );
@@ -79,7 +80,7 @@ export const PkBox: React.FC<{
       } else {
         num = loseNum;
       }
-      return num;
+      return formatLocalisedCompactBalance(num);
     },
     [isFrom],
   );
