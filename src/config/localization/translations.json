@@ -929,5 +929,6 @@
   "http-error-300036": "Planet cannot join Exploration while doing tasks",
   "http-error-300037": "Planet cannot add tasks while working ",
   "http-error-500004": "You already occupy another Star.",
+  "http-error-500005": "Star Locking",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

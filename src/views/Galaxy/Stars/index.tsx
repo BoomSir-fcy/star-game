@@ -49,6 +49,7 @@ const Stars = () => {
       storage_pool_star: 0,
       pre_box: 0,
       income_percent: 0,
+      open: true,
     };
   }, []);
   const [activeStar, setActiveStar] = useState<Api.Galaxy.StarInfo>(initState);
