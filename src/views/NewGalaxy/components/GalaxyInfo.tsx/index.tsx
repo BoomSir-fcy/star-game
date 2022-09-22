@@ -21,6 +21,7 @@ import { getFullDisplayBalance } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
 import { GalaxyInfo } from 'state/types';
 import { useTranslation } from 'contexts/Localization';
+import { useNavigate } from 'react-router-dom';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import InfoModule from './InfoModule';
 import OccupiedModul from './OccupiedModul';
@@ -28,6 +29,7 @@ import OccupiedModul from './OccupiedModul';
 const GalaxyInfoIndex: React.FC = () => {
   useGalaxyList();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const paramsQs = useParsedQueryString();
   const InitId = Number(paramsQs?.id);
@@ -62,8 +64,9 @@ const GalaxyInfoIndex: React.FC = () => {
       ChangeActiveGalaxy(info[0]);
       setOpenInfo(true);
       setShowListModule(true);
+      navigate('/galaxy', { replace: true });
     }
-  }, [InitId, galaxyList, ChangeActiveGalaxy]);
+  }, [InitId, galaxyList, ChangeActiveGalaxy, navigate]);
 
   useEffect(() => {
     if (galaxyList.length) {
