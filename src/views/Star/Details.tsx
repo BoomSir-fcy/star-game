@@ -242,7 +242,7 @@ const Details = () => {
     if (Upgrade.length) {
       setTimeout(() => {
         building.upgradeBuildingBuilder(Upgrade, true);
-      }, 1000);
+      }, 4000);
     }
     // if (toUpdate) {
     //   setToUpdate(false);
