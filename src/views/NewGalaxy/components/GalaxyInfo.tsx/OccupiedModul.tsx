@@ -136,6 +136,17 @@ const ImgBox = styled(Box)`
   }
 `;
 
+const LockBox = styled(Flex)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 110%;
+  border-radius: 10px;
+`;
+
 const OccupiedModul: React.FC<{
   ShowListModule: boolean;
   setShowListModule: (e) => void;
@@ -344,7 +355,7 @@ const OccupiedModul: React.FC<{
           <>
             <ScrollBox id='ScrollDom'>
               {(galaxyStarList ?? []).map((item, index) => (
-                <Box mb='30px' key={`${item.number}`}>
+                <Box position='relative' mb='30px' key={`${item.number}`}>
                   <Flex
                     justifyContent='space-between'
                     alignItems='center'
@@ -452,7 +463,7 @@ const OccupiedModul: React.FC<{
                             </Button>
                           ) : (
                             <Button
-                              disabled={pending}
+                              disabled={pending || !item.open}
                               variant='gold'
                               height='45px'
                               onClick={() => handleHold(item)}
@@ -489,6 +500,13 @@ const OccupiedModul: React.FC<{
                       )}
                     </Flex>
                   </Flex>
+                  {!item.open && (
+                    <LockBox alignItems='center' justifyContent='center'>
+                      <ImgBox>
+                        <img src='/images/commons/icon/lock.png' alt='' />
+                      </ImgBox>
+                    </LockBox>
+                  )}
                 </Box>
               ))}
             </ScrollBox>
