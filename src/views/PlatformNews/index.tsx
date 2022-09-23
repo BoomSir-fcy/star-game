@@ -150,8 +150,8 @@ const GetPrandk = (t, info, cellar?) => {
             <Text mr='3px'>{t('Ore')}</Text>
             <Text color={plunder_stone >= 0 ? 'progressGreenBar' : 'redText'}>
               <Flex flexWrap='wrap'>
-                {plunder_stone >= 0 ? '+' : ''}
-                {formatLocalisedCompactBalance(plunder_stone)}
+                {plunder_stone >= 0 ? '+' : '-'}
+                {formatLocalisedCompactBalance(Math.abs(plunder_stone))}
                 {cellar && (
                   <Text ml='3px'>
                     <Flex>
@@ -173,8 +173,8 @@ const GetPrandk = (t, info, cellar?) => {
               color={plunder_energy >= 0 ? 'progressGreenBar' : 'redText'}
             >
               <Flex flexWrap='wrap'>
-                {plunder_energy >= 0 ? '+' : ''}
-                {formatLocalisedCompactBalance(plunder_energy)}
+                {plunder_energy >= 0 ? '+' : '-'}
+                {formatLocalisedCompactBalance(Math.abs(plunder_energy))}
                 {cellar && (
                   <Text ml='3px'>
                     <Flex>
@@ -196,8 +196,8 @@ const GetPrandk = (t, info, cellar?) => {
               color={plunder_population >= 0 ? 'progressGreenBar' : 'redText'}
             >
               <Flex flexWrap='wrap'>
-                {plunder_population >= 0 ? '+' : ''}
-                {formatLocalisedCompactBalance(plunder_population)}
+                {plunder_population >= 0 ? '+' : '-'}
+                {formatLocalisedCompactBalance(Math.abs(plunder_population))}
                 {cellar && (
                   <Text ml='3px'>
                     <Flex>
