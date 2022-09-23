@@ -14,7 +14,7 @@ import { AddressZero } from '@ethersproject/constants';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Modal from 'components/Modal';
-import { Flex, Text, Button, Image, Box } from 'uikit';
+import { Flex, Text, Button, Image, Box, Spinner } from 'uikit';
 import {
   useFetchInfoView,
   useFetchUserInfo,
@@ -65,6 +65,16 @@ const Container = styled(Box)`
   height: 940px;
 `;
 
+const LoadingBox = styled(Box)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+`;
+
 const Login = () => {
   const DsgAddress = getDsgAddress();
   const { balance: DSGBalance } = useTokenBalance(DsgAddress);
@@ -94,6 +104,7 @@ const Login = () => {
   const createRef = useRef<ForwardRefRenderProps>(null);
   const [visible, setVisible] = useState(false);
   const [pending, setpending] = useState(false);
+  const [Loading, setLoading] = useState(false);
 
   const handleSign = useCallback(async () => {
     if (createRef?.current?.getState) {
@@ -144,6 +155,7 @@ const Login = () => {
         return;
       }
       setpending(true);
+      setLoading(true);
       if (createRef?.current?.getState) {
         try {
           setpending(false);
@@ -164,6 +176,7 @@ const Login = () => {
             });
             if (Api.isSuccess(result) && result?.data?.register) {
               if (timer.current) clearInterval(timer.current);
+              setLoading(false);
               fetch();
             }
           }, 6000);
@@ -182,6 +195,7 @@ const Login = () => {
       setVisible,
       t,
       setpending,
+      setLoading,
       createRef,
       pending,
       account,
@@ -353,6 +367,11 @@ const Login = () => {
           </Button>
         </EnterBoxMove>
       </Flex>
+      {Loading && (
+        <LoadingBox>
+          <Spinner size={200} />
+        </LoadingBox>
+      )}
       {account && (
         <RegisterModal
           visible={visible}
