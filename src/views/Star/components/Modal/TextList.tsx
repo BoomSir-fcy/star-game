@@ -28,7 +28,7 @@ export const TextList: React.FC<{
   number,
   unit,
   color = 'textSubtle',
-  alreadyNumber,
+  alreadyNumber = null,
 }) => {
   return (
     <Group>
