@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import classNames from 'classnames';
 import { useImmer } from 'use-immer';
@@ -119,6 +119,7 @@ const Details = () => {
   const guideRef = React.useRef(null);
   const ref = React.useRef<HTMLDivElement>(null);
   const [toUpdate, setToUpdate] = React.useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout>>();
 
   const [showDialog, setShowDialog] = React.useState<boolean>(false);
   const [showPrompt, confirmNavigation, cancelNavigation] =
@@ -477,9 +478,17 @@ const Details = () => {
     if (id) {
       getWorkQueue();
     }
-    setTimeout(() => {
+
+    timer.current = setTimeout(() => {
+      console.log('执行', id);
       dispatch(fetchPlanetBuildingsAsync(id));
     }, 2000);
+    return () => {
+      if (timer.current) {
+        console.log('清除', timer.current);
+        clearTimeout(timer.current);
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

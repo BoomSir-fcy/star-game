@@ -440,6 +440,12 @@ class Builder extends EventTarget {
     this.addBuilderText();
   }
 
+  updateSrc(src: string, race: number) {
+    this.race = race;
+    this.resId = src;
+    this.src = getBuilderSpriteRes(race, src);
+  }
+
   // 设置升级中状态
   setIsUpgrade(IsUpgrade: boolean) {
     this.IsUpgrade = IsUpgrade;

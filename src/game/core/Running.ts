@@ -238,7 +238,9 @@ class Running extends EventTarget {
     // setTimeout(() => {
     //   this.runningHandle();
     // }, 500);
-    this.runTrack(track, () => {
+
+    // eslint-disable-next-line
+    return this.runTrack(track, () => {
       this.runningHandle();
     });
   }
@@ -1172,6 +1174,15 @@ class Running extends EventTarget {
       const detail = this.getDetails(this.rounds[round].data, round);
       this.trackDetails.push(...detail);
     });
+    this.trackDetails = this.trackDetails.reduce((prev, curr) => {
+      if (curr.type === descType.TOTAL_INFO) {
+        if (prev[prev.length - 1]?.type !== descType.TOTAL_INFO) {
+          return prev.concat(curr);
+        }
+        return prev;
+      }
+      return prev.concat(curr);
+    }, []);
   }
 
   static attackOfType = {
@@ -1343,7 +1354,10 @@ class Running extends EventTarget {
         );
       }
 
-      if (info.desc_type === descType.TOTAL_INFO) {
+      if (
+        info.desc_type === descType.TOTAL_INFO &&
+        details[details.length - 1]?.type !== descType.TOTAL_INFO
+      ) {
         details.push(
           ...Running.getTotalHpTracks(info.info, `${round}-${_track}`),
         );
