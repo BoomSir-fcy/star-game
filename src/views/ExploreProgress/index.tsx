@@ -85,8 +85,8 @@ const ExploreProgress: React.FC = () => {
         const ItemPlanet = order.find(i => i.planet.id === item.planet_id);
         return {
           ...item,
-          rarity: ItemPlanet.planet.rarity,
-          picture1: ItemPlanet.planet.picture1,
+          rarity: ItemPlanet?.planet?.rarity,
+          picture1: ItemPlanet?.planet?.picture1,
         };
       });
       setPlanetProList(newList);
