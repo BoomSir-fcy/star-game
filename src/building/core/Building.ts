@@ -681,6 +681,7 @@ class Building extends EventTarget {
         }
         builder.id = item.building._id;
         builder.option.id = item.building._id;
+        builder.updateSrc(`${item.building.index}`, item.building.race);
         builder.option.building = {
           ...item.building,
         };
