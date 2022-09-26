@@ -123,7 +123,7 @@ const SmText = styled(Text)`
 `;
 const LoadingBox = styled(Box)`
   position: absolute;
-  left: 56%;
+  left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 `;

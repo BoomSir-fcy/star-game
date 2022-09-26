@@ -61,3 +61,6 @@ export const getBoxAddress = () => {
 export const getGetCoinTextAddress = () => {
   return getAddress(addresses.GetCoinTest);
 };
+export const getGetStkbnbAddress = () => {
+  return getAddress(addresses.stkbnb);
+};

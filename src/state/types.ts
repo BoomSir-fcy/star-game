@@ -100,6 +100,7 @@ export interface MysteryBoxView {
   maxHeld: string; // 每种盲盒最大可持有的数量
   loading?: boolean;
   boxCount: string[]; // 用户持有的各盲盒数量
+  stkBnbRate: string; // stk价格比例  stkBnb价格 = stkBnbRate/10000 * bnb价格
 }
 
 export interface MysteryBoxState {

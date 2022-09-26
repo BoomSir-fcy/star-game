@@ -106,7 +106,10 @@ const BattleReport = () => {
   const [stepsEnabled, setStepsEnabled] = useState(true);
   const [Start_time, setStart_time] = useState<number>(
     moment(Number(paramsQs.starTime) * 1000).unix() ||
-      moment(new Date(new Date().toLocaleDateString()).getTime()).unix(),
+      moment(
+        new Date(new Date().toLocaleDateString()).getTime() -
+          3600 * 1000 * 24 * 7,
+      ).unix(),
   );
   const [End_time, setEnd_time] = useState<number>(
     moment(Number(paramsQs.endTime) * 1000).unix() ||
@@ -139,7 +142,8 @@ const BattleReport = () => {
 
   const HaveDetileGalaxReportList = React.useMemo(() => {
     const arr = GalaxReportList.filter(i => i?.detail?.length !== 0);
-    return arr;
+    const sortList = arr.sort((a, b) => b?.battleTime - a?.battleTime);
+    return sortList;
   }, [GalaxReportList]);
 
   const steps = React.useMemo(
