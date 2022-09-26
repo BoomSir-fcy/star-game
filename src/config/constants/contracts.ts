@@ -67,7 +67,7 @@ const contracts = {
     [ChainId.BSC_TESTNET]: '0x243AfD5010498f91288F1AF749988aF20F88827a',
   },
   stkbnb: {
-    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_MAINNET]: '0xc2E9d07F66A89c44062459A47a0D2Dc038E4fb16',
     [ChainId.BSC_TESTNET]: '0xF7CE8444b3b1c62e785a25343a8B4764198A81B8',
   },
 };
@@ -138,7 +138,7 @@ const contracts2 = {
     [ChainId.BSC_TESTNET]: '0xb9FE7C70a405037C730e31727231623Ab351a0D5',
   },
   stkbnb: {
-    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_MAINNET]: '0xc2E9d07F66A89c44062459A47a0D2Dc038E4fb16',
     [ChainId.BSC_TESTNET]: '0xF7CE8444b3b1c62e785a25343a8B4764198A81B8',
   },
 };
@@ -208,7 +208,7 @@ const contractsBeta = {
     [ChainId.BSC_TESTNET]: '0xb9FE7C70a405037C730e31727231623Ab351a0D5',
   },
   stkbnb: {
-    [ChainId.BSC_MAINNET]: '',
+    [ChainId.BSC_MAINNET]: '0xc2E9d07F66A89c44062459A47a0D2Dc038E4fb16',
     [ChainId.BSC_TESTNET]: '0xF7CE8444b3b1c62e785a25343a8B4764198A81B8',
   },
 };
