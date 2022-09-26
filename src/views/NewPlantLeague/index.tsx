@@ -6,7 +6,7 @@ import { orderInfo } from 'state/types';
 import { useGuide } from 'hooks/useGuide';
 import { useTranslation } from 'contexts/Localization';
 import { Steps, Hints } from 'intro.js-react'; // 引入我们需要的组件
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { storeAction, useStore } from 'state';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ import { setDifficultyToExplore } from 'state/alliance/reducer';
 import 'intro.js/introjs.css';
 import { setTooltipTriggerZIndex } from 'state/user/actions';
 import { setNavZIndex } from 'state/userInfo/reducer';
+import { GlobalVideo } from 'components/Video';
 
 import AlliancePlanet from './components/AlliancePlanet';
 import Explore from './components/Explore';
@@ -56,12 +57,25 @@ const GlobalStyle = createGlobalStyle<{
   
 `;
 
+const RoundStyled = styled(Box)<{ scale?: number }>`
+  position: absolute;
+  left: ${({ scale }) => `${40 * scale}px`};
+  top: ${({ scale }) => `${40 * scale}px`};
+  width: 76%;
+  height: 76%;
+  background: #000;
+  border-radius: 50%;
+  opacity: 0.8;
+  z-index: -1;
+`;
+
 const NewPlantLeague: React.FC = () => {
   useFetchAllianceView_slowRefresh();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const { scale } = useStore(p => p.user);
 
   const { unread_plunder_count, order, alliance } = useStore(
     p => p.alliance.allianceView,
@@ -288,6 +302,21 @@ const NewPlantLeague: React.FC = () => {
           />
         </>
       )}
+      <GlobalVideo
+        width={300}
+        height={300}
+        src='/video/plantLeague.mp4'
+        loop
+        left={0}
+        top={-210}
+        bottom={0}
+        right={0}
+        margin='auto'
+        rotate={0}
+      >
+        <RoundStyled scale={scale} />
+      </GlobalVideo>
+
       <AlliancePlanet
         guidesStep={guides.step}
         setGuide={step => {
