@@ -21,6 +21,7 @@ export const initialState: MysteryBoxState = {
     sold: '0', // 已销售量
     maxHeld: '0', // 每种盲盒最大可持有的数量
     boxCount: [], // 获取用户各盲盒持有的key数量
+    stkBnbRate: '0',
     loading: true,
   },
   openBlind: false, // 开启星球稀有度

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { Layout } from 'components';
 import { Flex, Box, Text } from 'uikit';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -19,7 +19,15 @@ import eventBus from 'utils/eventBus';
 import { useGuide } from 'hooks/useGuide';
 import { Steps } from 'intro.js-react';
 import 'intro.js/introjs.css';
+import {
+  getGetStkbnbAddress,
+  getMysteryBoxAddress,
+} from 'utils/addressHelpers';
+import { useToast } from 'contexts/ToastsContext';
+import { useApprove } from 'components/ApproveButton/hooks';
+
 import BlindInfo from './BlindInfo';
+import { useFetchAllowance } from './hooks';
 
 const GlobalStyle = createGlobalStyle<{
   interactive?: boolean;
@@ -113,7 +121,12 @@ const MysteryBoxNew = () => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { maxSales, sold } = useStore(p => p.mysteryBox.boxView);
-
+  const stkbnbAddr = getGetStkbnbAddress();
+  const MysteryBoxAddress = getMysteryBoxAddress();
+  // const { onApprove } = useRWA(stkbnbAddr);
+  const { toastError, toastSuccess } = useToast();
+  const { onApprove } = useApprove(stkbnbAddr, MysteryBoxAddress);
+  const { fetchAllowance } = useFetchAllowance();
   // 控制是否开启新手指导的
   const location = useLocation();
   const { guides, setGuide } = useGuide(location.pathname);
@@ -134,6 +147,52 @@ const MysteryBoxNew = () => {
       },
     ];
   }, [t]);
+
+  const [approvedNum, setapprovedNum] = useState(0);
+  const [pending, setpending] = useState(false);
+
+  // 获取授权余额
+  const getApproveNum = useCallback(
+    async (addr: string, coinId: string) => {
+      const Num = await fetchAllowance(String(addr), coinId);
+      console.log(Num);
+
+      if (Num) {
+        setapprovedNum(Num);
+      }
+    },
+    [setapprovedNum, fetchAllowance],
+  );
+
+  // 授权
+  const handleApprove = useCallback(async () => {
+    setpending(true);
+    try {
+      await onApprove();
+      toastSuccess(t('Approve Succeeded'));
+    } catch (e) {
+      console.error(e);
+      toastError(t('Approve Failed'));
+    } finally {
+      setpending(false);
+    }
+    getApproveNum(account, stkbnbAddr);
+  }, [
+    account,
+    onApprove,
+    toastSuccess,
+    stkbnbAddr,
+    t,
+    toastError,
+    setpending,
+    getApproveNum,
+  ]);
+
+  React.useEffect(() => {
+    if (account) {
+      getApproveNum(account, stkbnbAddr);
+    }
+  }, [stkbnbAddr, account, getApproveNum]);
 
   React.useEffect(() => {
     return () => {
@@ -269,9 +328,24 @@ const MysteryBoxNew = () => {
         </Flex>
       </Flex>
       <Flex position='fixed' bottom={-300}>
-        <BlindInfo quality={mysteryBoxQualities.ORDINARY} />
-        <BlindInfo quality={mysteryBoxQualities.ADVANCED} />
-        <BlindInfo quality={mysteryBoxQualities.SUPER} />
+        <BlindInfo
+          approvedNum={approvedNum}
+          quality={mysteryBoxQualities.ORDINARY}
+          onApprove={handleApprove}
+          ApprovePending={pending}
+        />
+        <BlindInfo
+          approvedNum={approvedNum}
+          onApprove={handleApprove}
+          quality={mysteryBoxQualities.ADVANCED}
+          ApprovePending={pending}
+        />
+        <BlindInfo
+          approvedNum={approvedNum}
+          onApprove={handleApprove}
+          quality={mysteryBoxQualities.SUPER}
+          ApprovePending={pending}
+        />
       </Flex>
       <PageTitle>
         <Text

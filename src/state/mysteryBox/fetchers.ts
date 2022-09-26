@@ -8,6 +8,10 @@ export const fetchBoxView = async (
   try {
     const contract = getMysteryBoxContract();
     const res = await contract.boxView({ from: account });
+    const stkBnbRateRes = await contract.stkBnbRate();
+
+    console.log(stkBnbRateRes);
+
     return {
       priceBNB: res.priceBNB.map((item: any) => item?.toJSON().hex), // 三种盲盒对应的bnb价格
       seedBlocks: res.seedBlocks.map((item: any) => item?.toJSON().hex), // 三种盲盒对应的预定区块, 与当前区块相差超过230个区块应让用户重新预定
@@ -26,6 +30,7 @@ export const fetchBoxView = async (
       sold: res.sold?.toJSON().hex, // 已销售量
       maxHeld: res.maxHeld?.toJSON().hex, // 每种盲盒最大可持有的数量
       boxCount: [],
+      stkBnbRate: stkBnbRateRes?.toJSON().hex, // stk价格比例  stkBnb价格 = stkBnbRate/10000 * bnb价格
     };
   } catch (error) {
     console.error(error);

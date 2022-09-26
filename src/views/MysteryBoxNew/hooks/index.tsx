@@ -1,7 +1,9 @@
 import BigNumber from 'bignumber.js';
 import { useMysteryBoxContract } from 'hooks/useContract';
 import { useCallback, useEffect } from 'react';
-import { getPlanetContract } from 'utils/contractHelpers';
+import { getMysteryBoxAddress } from 'utils/addressHelpers';
+import { getBep20Contract, getPlanetContract } from 'utils/contractHelpers';
+import { getBalanceNumber } from 'utils/formatBalance';
 
 export const useBuyMysteryBox = () => {
   const contract = useMysteryBoxContract();
@@ -17,8 +19,18 @@ export const useBuyMysteryBox = () => {
     [contract],
   );
 
+  const handleBuyWithStkBnb = useCallback(
+    async (boxId: number, buyNum: number) => {
+      const tx = await contract.buyWithStkBnb(boxId, buyNum);
+      const receipt = await tx.wait();
+      return receipt;
+    },
+    [contract],
+  );
+
   return {
     handleBuy,
+    handleBuyWithStkBnb,
   };
 };
 
@@ -36,5 +48,30 @@ export const useOpenMysteryBox = () => {
 
   return {
     handleOpen,
+  };
+};
+
+export const useFetchAllowance = () => {
+  const MysteryBoxAddress = getMysteryBoxAddress();
+
+  const fetchAllowance = useCallback(
+    async (account: string, token: string) => {
+      try {
+        const erc20Contract = getBep20Contract(token);
+        const allowance = await erc20Contract.allowance(
+          account,
+          MysteryBoxAddress,
+        );
+        return getBalanceNumber(new BigNumber(allowance.toJSON().hex));
+      } catch (error) {
+        console.error(error);
+        return 0;
+      }
+    },
+    [MysteryBoxAddress],
+  );
+
+  return {
+    fetchAllowance,
   };
 };

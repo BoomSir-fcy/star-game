@@ -5,8 +5,8 @@ import {
   MysteryBoxQualities,
 } from 'components/MysteryBoxComNew';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { BackButton, Box, Button, Dots, Flex, Skeleton, Text } from 'uikit';
-import { getWEtherAddress } from 'utils/addressHelpers';
+import { Image, Box, Button, Dots, Flex, Skeleton, Text } from 'uikit';
+import { getGetStkbnbAddress, getWEtherAddress } from 'utils/addressHelpers';
 import { TokenImage } from 'components/TokenImage';
 import { mysteryConfig } from 'components/MysteryBoxComNew/config';
 import { QualityColor } from 'uikit/theme/colors';
@@ -26,22 +26,25 @@ import { useToast } from 'contexts/ToastsContext';
 import eventBus from 'utils/eventBus';
 import 'intro.js/introjs.css';
 import styled from 'styled-components';
+import { FetchApproveNum, useRWA } from 'components/NavPop/hook';
 import { useBuyMysteryBox, useOpenMysteryBox } from './hooks';
 import { queryMintEvent } from './event';
 
 const BlindInfo: React.FC<{
   quality: number;
-}> = ({ quality }) => {
+  approvedNum: number;
+  ApprovePending: boolean;
+  onApprove: () => void;
+}> = ({ quality, approvedNum, onApprove, ApprovePending }) => {
   const { t, getHTML } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [buyNum, setBuyNum] = useState(5);
-
   const { toastError } = useToast();
   useFetchBoxView();
 
-  const { priceBNB, maxHeld, boxCount, loading } = useStore(
+  const { priceBNB, maxHeld, boxCount, loading, stkBnbRate } = useStore(
     p => p.mysteryBox.boxView,
   );
 
@@ -64,6 +67,11 @@ const BlindInfo: React.FC<{
     return getBalanceNumber(new BigNumber(priceBNB[quality]).times(buyNum), 18);
   }, [priceBNB, quality, buyNum]);
 
+  // stkbnb价格
+  const stkPrice = useMemo(() => {
+    return new BigNumber(stkBnbRate).div(10000).times(price).toNumber();
+  }, [price, stkBnbRate]);
+
   // 持有盲盒数量
   const ownedNum = useMemo(() => {
     return new BigNumber(boxCount[quality]).toNumber() || 0;
@@ -71,40 +79,52 @@ const BlindInfo: React.FC<{
 
   // 购买盲盒
   const [handleLoading, setHandleLoading] = useState(false);
-  const { handleBuy } = useBuyMysteryBox();
-  const onHandleBuy = useCallback(async () => {
-    try {
-      setHandleLoading(true);
-      const res = await handleBuy(quality, priceBNB[quality], buyNum);
-      dispatch(fetchUserKeysAsync(account));
-      setHandleLoading(false);
-    } catch (e: any) {
-      setHandleLoading(false);
-      // toastError(
-      //   'Please try again. Confirm the transaction and make sure you are paying enough gas!',
-      // );
-      console.error(e);
-      const msg = e?.data?.message;
-      const errorMsg = msg?.substring(
-        msg?.indexOf('execution reverted: ') + 20,
-      );
-      if (errorMsg) toastError(t(errorMsg));
-      else
-        toastError(
-          'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+  const [handleStkLoading, sethandleStkLoading] = useState(false);
+  const { handleBuy, handleBuyWithStkBnb } = useBuyMysteryBox();
+  const onHandleBuy = useCallback(
+    async type => {
+      try {
+        if (type === 'BNB') {
+          setHandleLoading(true);
+          const res = await handleBuy(quality, priceBNB[quality], buyNum);
+        } else {
+          sethandleStkLoading(true);
+          const res = await handleBuyWithStkBnb(quality, buyNum);
+        }
+        dispatch(fetchUserKeysAsync(account));
+      } catch (e: any) {
+        console.error(e);
+        const msg = e?.data?.message;
+        const errorMsg = msg?.substring(
+          msg?.indexOf('execution reverted: ') + 20,
         );
-    }
-  }, [
-    buyNum,
-    account,
-    quality,
-    handleBuy,
-    priceBNB,
-    setHandleLoading,
-    dispatch,
-    toastError,
-    t,
-  ]);
+        if (errorMsg) toastError(t(errorMsg));
+        else
+          toastError(
+            'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+          );
+      } finally {
+        if (type === 'BNB') {
+          setHandleLoading(false);
+        } else {
+          sethandleStkLoading(false);
+        }
+      }
+    },
+    [
+      buyNum,
+      account,
+      quality,
+      handleBuy,
+      handleBuyWithStkBnb,
+      priceBNB,
+      setHandleLoading,
+      dispatch,
+      toastError,
+      t,
+      sethandleStkLoading,
+    ],
+  );
 
   const { handleOpen } = useOpenMysteryBox();
   const fetchHandle = useCallback(async () => {
@@ -229,64 +249,134 @@ const BlindInfo: React.FC<{
           {t('OpenMysteryBoxDesc2-2')}
         </Text>
       </Flex>
-      <Box mt='20px'>
-        {!existBox && (
-          <Flex justifyContent='center'>
-            <Box width={30}>
-              <TokenImage width={30} height={30} tokenAddress='BNB' />
+      <Flex width='80%' justifyContent='space-around' mt='20px'>
+        {/* bnb */}
+        <Box>
+          <Flex alignItems='center' justifyContent='center'>
+            <Box width={40}>
+              <TokenImage width={40} height={40} tokenAddress='BNB' />
             </Box>
-            <Text ml='15px' fontSize='22px' bold>
-              {t('BNB')}
-            </Text>
-            {loading ? (
-              <Skeleton height={40} />
+            <Box ml='15px'>
+              <Text bold>{t('BNB')}</Text>
+              {loading ? (
+                <Skeleton height={40} />
+              ) : (
+                <Text fontSize='22px' fontStyle='normal' bold mark>
+                  {price}
+                </Text>
+              )}
+            </Box>
+          </Flex>
+          {!existBox && (
+            <Flex mt='28px' justifyContent='center'>
+              <Button
+                width='180px'
+                height='55px'
+                variant='vs'
+                disabled={
+                  handleLoading || loading || !maxNum || handleStkLoading
+                }
+                onClick={() => onHandleBuy('BNB')}
+              >
+                {handleLoading ? (
+                  <Text fontSize='18px' bold>
+                    <Dots>{t('Purchasing')}</Dots>
+                  </Text>
+                ) : (
+                  <Text fontSize='18px' bold>
+                    {t('Buy Blind Box')}
+                  </Text>
+                )}
+              </Button>
+            </Flex>
+          )}
+        </Box>
+        {/* stkbnb */}
+        <Box>
+          <Flex alignItems='center' justifyContent='center'>
+            <Box width={40}>
+              <Image width={40} height={40} src='/images/tokens/stknbnb.svg' />
+            </Box>
+            <Box ml='15px'>
+              <Text bold>{t('stkBNB')}</Text>
+              {loading ? (
+                <Skeleton height={40} />
+              ) : (
+                <Text fontSize='22px' fontStyle='normal' bold mark>
+                  {stkPrice}
+                </Text>
+              )}
+            </Box>
+          </Flex>
+          {!existBox && (
+            <Flex mt='28px' justifyContent='center'>
+              {approvedNum <= 0 ? (
+                <Button
+                  width='180px'
+                  height='55px'
+                  variant='vs'
+                  disabled={ApprovePending || loading}
+                  onClick={() => onApprove()}
+                >
+                  {ApprovePending ? (
+                    <Text fontSize='18px' bold>
+                      <Dots>{t('Approving')}</Dots>
+                    </Text>
+                  ) : (
+                    <Text fontSize='18px' bold>
+                      {t('Approve')}
+                    </Text>
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  width='180px'
+                  height='55px'
+                  variant='vs'
+                  disabled={
+                    handleStkLoading || loading || !maxNum || handleLoading
+                  }
+                  onClick={() => onHandleBuy('stkBNB')}
+                >
+                  {handleStkLoading ? (
+                    <Text fontSize='18px' bold>
+                      <Dots>{t('Purchasing')}</Dots>
+                    </Text>
+                  ) : (
+                    <Text fontSize='18px' bold>
+                      {t('Buy Blind Box')}
+                    </Text>
+                  )}
+                </Button>
+              )}
+            </Flex>
+          )}
+        </Box>
+      </Flex>
+      {existBox && (
+        <Flex mt='20px' justifyContent='center'>
+          <Button
+            width='180px'
+            height='55px'
+            variant='vs'
+            disabled={handleLoading || loading || !ownedNum}
+            onClick={() => {
+              // setVisible(true);
+              handleOpenBox();
+            }}
+          >
+            {handleLoading ? (
+              <Text fontSize='18px' bold>
+                <Dots>{t('Opening')}</Dots>
+              </Text>
             ) : (
-              <Text ml='15px' fontSize='22px' fontStyle='normal' bold mark>
-                {price}
+              <Text fontSize='22px' bold>
+                {t('Open')}
               </Text>
             )}
-          </Flex>
-        )}
-
-        <Flex mt='28px' justifyContent='center'>
-          {existBox ? (
-            <Button
-              width='180px'
-              height='55px'
-              variant='vs'
-              disabled={handleLoading || loading || !ownedNum}
-              onClick={() => {
-                // setVisible(true);
-                handleOpenBox();
-              }}
-            >
-              {handleLoading ? (
-                <Dots>{t('Opening')}</Dots>
-              ) : (
-                <Text fontSize='22px' bold>
-                  {t('Open')}
-                </Text>
-              )}
-            </Button>
-          ) : (
-            <Button
-              width='180px'
-              height='55px'
-              variant='vs'
-              disabled={handleLoading || loading || !maxNum}
-              onClick={onHandleBuy}
-            >
-              {handleLoading ? (
-                <Dots>{t('Purchasing')}</Dots>
-              ) : (
-                <Text fontSize='18px' bold>
-                  {t('Buy Blind Box')}
-                </Text>
-              )}
-            </Button>
-          )}
+          </Button>
         </Flex>
-      </Box>
+      )}
     </Flex>
   );
 };
