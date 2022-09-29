@@ -12,6 +12,7 @@ import { fetchAllianceViewAsync } from 'state/alliance/reducer';
 import { useFetchAllianceView } from 'state/alliance/hooks';
 import { setActivePlanet } from 'state/planet/actions';
 import ModalWrapper from 'components/Modal';
+import { Api } from 'apis';
 
 const DeleteBtnImg = styled.img`
   width: 38px;
@@ -135,6 +136,30 @@ const Alliance: React.FC<{
     toastError,
     dispatch,
   ]);
+
+  const getWork = useCallback(async () => {
+    await Api.AllianceApi.getMyPlanetAlliance()
+      .then(res => {
+        if (Api.isSuccess(res)) {
+          console.log();
+
+          const working = res.data.alliance.working;
+          if (working === 1) {
+            setStopWorkVisible(true);
+            return;
+          }
+          if (ChooseList.length < 5) {
+            setVisible(true);
+            return;
+          }
+
+          ToSetWorking();
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }, [ChooseList, ToSetWorking]);
 
   useEffect(() => {
     if (order?.length) {
@@ -266,16 +291,7 @@ const Alliance: React.FC<{
           variant='purple'
           width='180px'
           onClick={() => {
-            if (alliance.working === 1) {
-              setStopWorkVisible(true);
-              return;
-            }
-            if (ChooseList.length < 5) {
-              setVisible(true);
-              return;
-            }
-
-            ToSetWorking();
+            getWork();
           }}
           height='45px'
           disabled={pending}
