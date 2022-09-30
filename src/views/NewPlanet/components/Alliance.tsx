@@ -138,11 +138,12 @@ const Alliance: React.FC<{
   ]);
 
   const getWork = useCallback(async () => {
+    setpending(true);
     await Api.AllianceApi.getMyPlanetAlliance()
       .then(res => {
-        if (Api.isSuccess(res)) {
-          console.log();
+        setpending(false);
 
+        if (Api.isSuccess(res)) {
           const working = res.data.alliance.working;
           if (working === 1) {
             setStopWorkVisible(true);
@@ -157,6 +158,8 @@ const Alliance: React.FC<{
         }
       })
       .catch(err => {
+        setpending(false);
+
         console.error(err);
       });
   }, [ChooseList, ToSetWorking]);
