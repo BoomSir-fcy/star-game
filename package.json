@@ -1,6 +1,6 @@
 {
   "name": "star-game",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "dependencies": {
     "@asany/sortable": "^0.1.30",
