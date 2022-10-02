@@ -383,7 +383,8 @@ export const getSpriteRes = (race: number, resId: string, index: number) => {
 };
 
 export const getSpriteName = (race: number, resId: string) => {
-  return raceData[race].children.find(item => item.id === Number(resId))?.name;
+  return raceData[race].children.find(item => String(item.id) === String(resId))
+    ?.name;
 };
 
 export const getTipsColorByType = (type: TipsTextType): number | number[] => {
