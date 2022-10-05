@@ -73,7 +73,9 @@ const GalaxyInfoIndex: React.FC = () => {
       const oWrap = document.getElementById('box');
       const InfoBox = document.getElementById('InfoBox');
       const oImg = document.getElementsByClassName('imgBox');
-
+      if (!InfoBox || !oImg) {
+        return;
+      }
       const oImgLength = oImg.length;
       const Deg = 360 / oImgLength;
       let nowX;
