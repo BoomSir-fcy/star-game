@@ -859,6 +859,7 @@
   "workErr6": "Spices production building has no END",
   "workErr7": "Insufficient Storage Tank's resources",
   "workErr8": "Insufficient Storage Tank's END",
+  "Auto_logout_information": "Because of insufficient resources in storage tanks in your alliance or insufficient durability of buildings. This occupation of the planet is over.",
   "******endNew*****@FCY********": "@FCY end of new translation",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",
