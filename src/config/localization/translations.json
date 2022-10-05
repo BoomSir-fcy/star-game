@@ -931,5 +931,6 @@
   "http-error-500004": "You already occupy another Star.",
   "http-error-500005": "Star Locking",
   "http-error-500006": "Requests are too frequent",
+  "http-error-500007": "Insufficient durability or resources, unable to occupy or preempt stars",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }
