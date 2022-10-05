@@ -480,12 +480,10 @@ const Details = () => {
     }
 
     timer.current = setTimeout(() => {
-      console.log('执行', id);
       dispatch(fetchPlanetBuildingsAsync(id));
     }, 2000);
     return () => {
       if (timer.current) {
-        console.log('清除', timer.current);
         clearTimeout(timer.current);
       }
     };

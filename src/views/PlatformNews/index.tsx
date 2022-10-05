@@ -267,6 +267,8 @@ const PlatformNews: React.FC = () => {
         //   return t('遭遇战失败');
         case 7:
           return t('Comprehensive report of Planet Exploration');
+        case 8:
+          return t('System Messages');
         default:
           return t('System Messages');
       }
@@ -287,6 +289,8 @@ const PlatformNews: React.FC = () => {
         return 'occupied';
       case 7:
         return 'planet_icon';
+      case 8:
+        return 'news';
       default:
         return 'news';
     }
@@ -561,7 +565,10 @@ const PlatformNews: React.FC = () => {
                         )}
                       </Flex>
                       {item?.messageType === 0 && (
-                        <Text>{item?.msgContent}</Text>
+                        <Text pt={20}>{item?.msgContent}</Text>
+                      )}
+                      {item?.messageType === 8 && (
+                        <Text pt={20}>{t('Auto_logout_information')}</Text>
                       )}
                       {item?.messageType === 1 && (
                         <Text>
