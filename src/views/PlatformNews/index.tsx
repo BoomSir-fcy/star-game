@@ -579,7 +579,28 @@ const PlatformNews: React.FC = () => {
                         <Text pt={20}>{item?.msgContent}</Text>
                       )}
                       {item?.messageType === 8 && (
-                        <Text pt={20}>{t('Auto_logout_information')}</Text>
+                        <Text pt={20}>
+                          {t('Auto_logout_information')}&nbsp;
+                          <span style={{ color: '#FF3939' }}>
+                            Token:{msgContent?.planet_id} &nbsp;
+                            {msgContent?.type === 1 ? (
+                              <>
+                                [
+                                {t(
+                                  `${
+                                    BuildRaceData[msgContent?.race][
+                                      msgContent?.index
+                                    ].name
+                                  }`,
+                                )}
+                                ] &nbsp;
+                                {t('Insufficient durability')}
+                              </>
+                            ) : (
+                              <>{t('workErr7')}</>
+                            )}
+                          </span>
+                        </Text>
                       )}
                       {item?.messageType === 1 && (
                         <Text>

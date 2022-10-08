@@ -861,6 +861,7 @@
   "workErr7": "储物罐资源不足",
   "workErr8": "储物罐耐久不足",
   "Auto_logout_information": "因为你的联盟中的储罐资源不足或建筑物的耐久性不足,这个星球的占领结束了。",
+  "Insufficient durability": "耐久不足",
   "******endNew*****@FCY********": "@FCY翻译新版结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "http-error-network": "Network error. Please try again later",
