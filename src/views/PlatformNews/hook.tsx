@@ -68,6 +68,10 @@ export interface GalaxyMsg extends ExplorationMsg {
   hold_time?: number;
   old_amount?: number;
   galaxy_id?: number;
+  planet_id?: number;
+  index?: number;
+  race?: number;
+  type?: number;
 }
 
 export const useFetchMessageList = () => {
