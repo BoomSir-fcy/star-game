@@ -134,7 +134,7 @@ const GetPrandk = (t, info, cellar?) => {
             mr='10px'
             color={product_stone >= 0 ? 'progressGreenBar' : 'redText'}
           >
-            {product_stone > 0 ? '+' : '-'}
+            {product_stone >= 0 ? '+' : '-'}
             {formatLocalisedCompactBalance(Math.abs(product_stone))}
           </Text>
           <Text mr='3px'>{t('Energy')}</Text>
@@ -142,14 +142,14 @@ const GetPrandk = (t, info, cellar?) => {
             mr='10px'
             color={product_energy >= 0 ? 'progressGreenBar' : 'redText'}
           >
-            {product_energy > 0 ? '+' : '-'}
+            {product_energy >= 0 ? '+' : '-'}
             {formatLocalisedCompactBalance(Math.abs(product_energy))}
           </Text>
           <Text mr='3px'>{t('Spices')}</Text>
           <Text
             color={product_population >= 0 ? 'progressGreenBar' : 'redText'}
           >
-            {product_population > 0 ? '+' : '-'}
+            {product_population >= 0 ? '+' : '-'}
             {formatLocalisedCompactBalance(Math.abs(product_population))}
           </Text>
         </Flex>
