@@ -130,16 +130,27 @@ const GetPrandk = (t, info, cellar?) => {
         <Text mb='10px'>{t('InboxTypeDesc7-3')}</Text>
         <Flex flexWrap='wrap'>
           <Text mr='3px'>{t('Ore')}</Text>
-          <Text mr='10px' color='progressGreenBar'>
-            +{formatLocalisedCompactBalance(product_stone)}
+          <Text
+            mr='10px'
+            color={product_stone >= 0 ? 'progressGreenBar' : 'redText'}
+          >
+            {product_stone > 0 ? '+' : '-'}
+            {formatLocalisedCompactBalance(Math.abs(product_stone))}
           </Text>
           <Text mr='3px'>{t('Energy')}</Text>
-          <Text mr='10px' color='progressGreenBar'>
-            +{formatLocalisedCompactBalance(product_energy)}
+          <Text
+            mr='10px'
+            color={product_energy >= 0 ? 'progressGreenBar' : 'redText'}
+          >
+            {product_energy > 0 ? '+' : '-'}
+            {formatLocalisedCompactBalance(Math.abs(product_energy))}
           </Text>
           <Text mr='3px'>{t('Spices')}</Text>
-          <Text color='progressGreenBar'>
-            +{formatLocalisedCompactBalance(product_population)}
+          <Text
+            color={product_population >= 0 ? 'progressGreenBar' : 'redText'}
+          >
+            {product_population > 0 ? '+' : '-'}
+            {formatLocalisedCompactBalance(Math.abs(product_population))}
           </Text>
         </Flex>
       </Flex>
