@@ -148,7 +148,7 @@ const MsgList: React.FC<{
 
   // 页面只渲染50条数据
   const renderListLimit = React.useMemo(() => {
-    if (MsgRenderList) return MsgRenderList.slice(-50);
+    if (MsgRenderList) return MsgRenderList.slice(-300);
     return [];
   }, [MsgRenderList]);
 
@@ -211,15 +211,15 @@ const MsgList: React.FC<{
             {i.type === 3 ? (
               <SmText
                 ellipsis
-                color={i?.plunder_info?.stone > 0 ? '#10BA2C' : '#E75652'}
+                color={i?.plunder_info?.success ? '#10BA2C' : '#E75652'}
                 className={
-                  i?.plunder_info?.stone > 0 &&
+                  i?.plunder_info?.success &&
                   msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
               >
-                {i?.plunder_info?.stone > 0 && '+'}{' '}
+                {i?.plunder_info?.success ? '+' : '-'}{' '}
                 {i?.plunder_info?.stone !== 0
                   ? SubString_1(i?.plunder_info?.stone, 3)
                   : '0'}
@@ -252,15 +252,15 @@ const MsgList: React.FC<{
             {i.type === 3 ? (
               <SmText
                 ellipsis
-                color={i?.plunder_info?.energy > 0 ? '#10BA2C' : '#E75652'}
+                color={i?.plunder_info?.success ? '#10BA2C' : '#E75652'}
                 className={
-                  i?.plunder_info?.energy > 0 &&
+                  i?.plunder_info?.success &&
                   msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
               >
-                {i?.plunder_info?.energy > 0 && '+'}{' '}
+                {i?.plunder_info?.success ? '+' : '-'}{' '}
                 {i?.plunder_info?.energy !== 0
                   ? SubString_1(i?.plunder_info?.energy, 3)
                   : '0'}
@@ -293,15 +293,15 @@ const MsgList: React.FC<{
             {i.type === 3 ? (
               <SmText
                 ellipsis
-                color={i?.plunder_info?.spices > 0 ? '#10BA2C' : '#E75652'}
+                color={i?.plunder_info?.success ? '#10BA2C' : '#E75652'}
                 className={
-                  i?.plunder_info?.spices > 0 &&
+                  i?.plunder_info?.success &&
                   msgIndex === renderListLimit.length - 1
                     ? 'addResource'
                     : ''
                 }
               >
-                {i?.plunder_info?.spices > 0 && '+'}{' '}
+                {i?.plunder_info?.success ? '+' : '-'}{' '}
                 {i?.plunder_info?.spices !== 0
                   ? SubString_1(i?.plunder_info?.spices, 3)
                   : '0'}
