@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import numeral from 'numeral';
 
 // Returns first 2 digits after first non-zero decimal
@@ -30,10 +31,11 @@ export const formatAmount = (
 ) => {
   const {
     notation = 'compact',
-    displayThreshold = 0.001,
+    displayThreshold = 0.0000001,
     tokenPrecision = true,
     isInteger,
   } = options || { notation: 'compact' };
+
   if (amount === 0) {
     if (isInteger) {
       return '0';
@@ -42,8 +44,8 @@ export const formatAmount = (
   }
   if (!amount) return '-';
   if (displayThreshold && amount < displayThreshold) {
-    // return `<${displayThreshold}`;
-    return amount;
+    return `< ${displayThreshold}`;
+    // return amount;
   }
   if (amount < 1 && !tokenPrecision) {
     return getFirstThreeNonZeroDecimals(amount);
@@ -55,6 +57,8 @@ export const formatAmount = (
   }
 
   if (amount < 1) {
+    console.log(amount, amount.toFixed(precision));
+
     return amount.toFixed(precision);
   }
 
