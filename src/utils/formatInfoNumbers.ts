@@ -31,7 +31,7 @@ export const formatAmount = (
 ) => {
   const {
     notation = 'compact',
-    displayThreshold = 0.001,
+    displayThreshold = 0.0000001,
     tokenPrecision = true,
     isInteger,
   } = options || { notation: 'compact' };
